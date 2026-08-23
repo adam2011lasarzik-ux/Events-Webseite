@@ -1,0 +1,79 @@
+.buehne {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--a-5);
+  background: var(--tiefblau);
+}
+
+.karte {
+  width: 100%;
+  max-width: 26rem;
+  background: var(--flaeche);
+  border-radius: var(--rund-l);
+  padding: var(--a-7) var(--a-6);
+  box-shadow: var(--schatten);
+}
+
+.marke { margin-bottom: var(--a-5); }
+
+.titel {
+  font-family: var(--schrift-display);
+  font-weight: 800;
+  font-size: var(--gr-l);
+  margin-bottom: var(--a-2);
+}
+
+.text {
+  color: var(--text-leise);
+  font-size: var(--gr-s);
+  margin-bottom: var(--a-6);
+}
+
+.feld {
+  width: 100%;
+  padding: 0.9em 1.1em;
+  border: 2px solid var(--linie);
+  border-radius: var(--rund-m);
+  font-size: var(--gr-l);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+  background: var(--grund);
+  color: var(--text);
+  margin-bottom: var(--a-4);
+}
+.feld:focus-visible {
+  outline: 3px solid var(--courtblau);
+  outline-offset: 2px;
+  border-color: var(--courtblau);
+}
+
+.fehler {
+  color: #B3261E;
+  font-size: var(--gr-s);
+  font-weight: 600;
+  margin-bottom: var(--a-4);
+}
+
+.knopf {
+  width: 100%;
+  padding: 0.9em;
+  border: none;
+  border-radius: var(--pille);
+  background: var(--akzent);
+  color: var(--akzent-text);
+  font-family: var(--schrift-text);
+  font-size: var(--gr-s);
+  font-weight: 700;
+  cursor: pointer;
+}
+.knopf:hover { background: #E4F268; }
+
+.hinweis {
+  margin-top: var(--a-5);
+  font-size: var(--gr-xs);
+  color: var(--text-leise);
+  border-top: 1px solid var(--linie);
+  padding-top: var(--a-4);
+}

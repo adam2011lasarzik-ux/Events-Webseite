@@ -37,6 +37,10 @@ jobs:
       - run: npm run build
         env:
           GITHUB_PAGES_BUILD: "true"
+          # Nur eine Hürde gegen zufällige Besucher, kein echter Schutz
+          # (siehe components/VorschauSperre.tsx) — bei Bedarf hier
+          # jederzeit änderbar.
+          NEXT_PUBLIC_VORSCHAU_PASSWORT: "1234"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./out

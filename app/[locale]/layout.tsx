@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Archivo, Instrument_Sans } from "next/font/google";
 import { Header } from "@/components/Header";
+import { VorschauSperre } from "@/components/VorschauSperre";
 import { Footer } from "@/components/Footer";
 import { texte } from "@/content";
 import { istSprache, sprachen, type Sprache } from "@/lib/i18n";
@@ -72,12 +73,14 @@ export default async function SprachLayout({
   return (
     <html lang={sprache} className={`${display.variable} ${text.variable}`}>
       <body>
-        <a href="#inhalt" className="zumInhalt">
-          {t.nav.sprungmarke}
-        </a>
-        <Header sprache={sprache} t={t} />
-        <main id="inhalt">{children}</main>
-        <Footer sprache={sprache} t={t} />
+        <VorschauSperre>
+          <a href="#inhalt" className="zumInhalt">
+            {t.nav.sprungmarke}
+          </a>
+          <Header sprache={sprache} t={t} />
+          <main id="inhalt">{children}</main>
+          <Footer sprache={sprache} t={t} />
+        </VorschauSperre>
       </body>
     </html>
   );
