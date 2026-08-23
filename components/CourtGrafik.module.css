@@ -1,0 +1,6 @@
+.court { width: 100%; height: auto; display: block; }
+.linie { fill: none; stroke: var(--linienweiss); stroke-width: 0.09; }
+.linieZart { fill: none; stroke: var(--linienweiss); stroke-width: 0.05; opacity: 0.55; }
+.netz { fill: none; stroke: var(--linienweiss); stroke-width: 0.07; opacity: 0.8; }
+.boden { fill: var(--courtblau); }
+.glas { fill: rgba(255, 255, 255, 0.07); }

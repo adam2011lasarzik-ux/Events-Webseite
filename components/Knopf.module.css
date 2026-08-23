@@ -1,0 +1,37 @@
+.knopf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--a-2);
+  padding: 0.9em 1.6em;
+  border: 2px solid transparent;
+  border-radius: var(--pille);
+  font-family: var(--schrift-text);
+  font-size: var(--gr-s);
+  font-weight: 700;
+  line-height: 1.1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.knopf:hover { transform: translateY(-2px); }
+.knopf:active { transform: translateY(0); }
+
+.haupt { background: var(--akzent); color: var(--akzent-text); }
+.haupt:hover { background: #E4F268; }
+
+.zweit {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--linie);
+}
+.zweit:hover { border-color: var(--tiefblau); }
+
+.aufDunkel {
+  background: transparent;
+  color: var(--text-invers);
+  border-color: var(--linie-invers);
+}
+.aufDunkel:hover { border-color: var(--linienweiss); }
+
+.pfeil { font-size: 1.1em; line-height: 1; }

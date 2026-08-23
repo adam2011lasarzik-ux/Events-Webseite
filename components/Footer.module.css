@@ -1,0 +1,54 @@
+.fuss {
+  background: var(--dunkel);
+  color: var(--text-invers);
+  padding-block: var(--a-8) var(--a-6);
+  overflow: hidden;
+}
+.innen {
+  width: min(100% - 2.5rem, var(--breite));
+  margin-inline: auto;
+}
+.raster {
+  display: grid;
+  gap: var(--a-7);
+  grid-template-columns: 1fr;
+}
+.claim {
+  margin-top: var(--a-3);
+  color: rgba(234, 241, 248, 0.7);
+  max-width: 30ch;
+}
+.spalte h3 {
+  font-family: var(--schrift-text);
+  font-size: var(--gr-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--akzent);
+  margin-bottom: var(--a-4);
+}
+.liste { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--a-3); }
+.liste a, .liste span {
+  text-decoration: none;
+  color: rgba(234, 241, 248, 0.82);
+  font-size: var(--gr-s);
+}
+.liste a:hover { color: var(--linienweiss); }
+
+/* Die große Wortmarke am Fuß: VERA steht für VERAnstaltung. */
+.grosseMarke {
+  margin-top: var(--a-9);
+  color: rgba(234, 241, 248, 0.13);
+  line-height: 0.8;
+  user-select: none;
+}
+.abschluss {
+  margin-top: var(--a-6);
+  padding-top: var(--a-5);
+  border-top: 1px solid var(--linie-invers);
+  font-size: var(--gr-xs);
+  color: rgba(234, 241, 248, 0.55);
+}
+@media (min-width: 48rem) {
+  .raster { grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: var(--a-6); }
+}

@@ -1,0 +1,45 @@
+.liste { display: grid; gap: var(--a-2); max-width: 80ch; }
+
+.eintrag {
+  background: var(--flaeche);
+  border-radius: var(--rund-m);
+  overflow: hidden;
+}
+.frage {
+  cursor: pointer;
+  list-style: none;
+  padding: var(--a-5) var(--a-6);
+  font-family: var(--schrift-display);
+  font-weight: 800;
+  font-size: var(--gr-l);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--a-4);
+}
+.frage::-webkit-details-marker { display: none; }
+.zeichen {
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  position: relative;
+  color: var(--courtblau);
+}
+.zeichen::before,
+.zeichen::after {
+  content: "";
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.2s;
+}
+.zeichen::after { transform: rotate(90deg); }
+.eintrag[open] .zeichen::after { transform: rotate(0deg); }
+
+.antwort {
+  padding: 0 var(--a-6) var(--a-6);
+  color: var(--text-leise);
+  max-width: var(--breite-text);
+}

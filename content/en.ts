@@ -1,0 +1,299 @@
+/* All English texts. Mirrors content/de.ts exactly. */
+
+import type { Woerterbuch } from "./de";
+
+export const en: Woerterbuch = {
+  meta: {
+    marke: "VERA",
+    markeLang: "VERAnstaltung",
+    beschreibung:
+      "VERA runs sports and networking events. First up: a padel afternoon in Falkensee " +
+      "for students aged 15 to 21 and their parents.",
+    spracheName: "English",
+    spracheKurz: "EN",
+  },
+
+  nav: {
+    sprungmarke: "Skip to content",
+    hauptmenue: "Main menu",
+    menueOeffnen: "Open menu",
+    menueSchliessen: "Close menu",
+    event: "Event",
+    schulen: "For schools",
+    ueber: "About VERA",
+    faq: "Questions",
+    kontakt: "Contact",
+    spracheWechseln: "Auf Deutsch wechseln",
+  },
+
+  aktion: {
+    anmelden: "Register now",
+    schuelerAnmelden: "Register a student",
+    familieAnmelden: "Register a family",
+    detailsAnsehen: "All event details",
+    zumEvent: "See the event",
+    zurueck: "Back to the home page",
+  },
+
+  hero: {
+    augenbraue: "Padel · Falkensee",
+    titelZeile1: "Never played?",
+    titelZeile2: "That's exactly the point.",
+    text:
+      "An afternoon of padel for students aged 15 to 21 and their parents. Rackets are " +
+      "provided, someone shows you how it works, food and drinks are included.",
+    hinweisFoto: "A photo of the court goes here later",
+  },
+
+  plaetze: {
+    ueberschrift: "Places",
+    wenigeEiner: "Only 1 place left",
+    wenigeMehrere: "Only {n} places left",
+    ausgebucht: "Sold out",
+    gesamt: "{n} places",
+  },
+
+  preise: {
+    ueberschrift: "What it costs",
+    einleitung:
+      "All prices are per person for the day and include VAT. Rackets, balls, coaching, " +
+      "food and drinks are included.",
+    schueler: "Students",
+    schuelerHinweis: "Aged 15 to 21",
+    erwachsener: "Adults",
+    erwachsenerHinweis: "Parents and guests",
+    familie: "Family",
+    familieHinweis: "2 adults + 1 student",
+    familieZusatz: "each additional student {betrag}",
+    ab: "from",
+    proPerson: "per person",
+  },
+
+  padel: {
+    ueberschrift: "So what is padel?",
+    absaetze: [
+      "Padel is tennis's easy-going cousin. You always play four to a court roughly a third " +
+        "the size of a tennis court — enclosed by glass walls the ball bounces off and stays " +
+        "in play.",
+      "You serve underarm, the racket has no strings, and the walls are part of the game " +
+        "rather than the end of it. That's why most people get into a real rally within " +
+        "minutes of starting.",
+    ],
+    fakten: [
+      { zahl: "4", text: "players, always" },
+      { zahl: "20 × 10", text: "metres of court" },
+      { zahl: "0", text: "experience needed" },
+    ],
+  },
+
+  ablauf: {
+    ueberschrift: "How the day works",
+    schritte: [
+      {
+        titel: "Register",
+        text:
+          "Pick who's coming and sign up. Places are limited, and you see the full price " +
+          "before you commit.",
+      },
+      {
+        titel: "Arrive",
+        text:
+          "Rackets and balls are ready for you. There's a short introduction, then everyone " +
+          "is put into groups of four.",
+      },
+      {
+        titel: "Play",
+        text:
+          "You play in groups while coaches give tips. Break at the buffet in between — " +
+          "then back on court.",
+      },
+    ],
+  },
+
+  schulen: {
+    ueberschrift: "For schools",
+    kurz:
+      "Would you like to bring a class or a course? Get in touch and we'll sort out the date, " +
+      "group size and schedule together.",
+    mehr: "More for schools",
+    titel: "Padel for school groups",
+    absaetze: [
+      "The padel afternoon works well for PE courses, project days and class trips. The sport " +
+        "is quick to explain, physically manageable for everyone, and works in mixed groups " +
+        "with very different ability levels.",
+      "At the moment parents register their children themselves and cover the cost. If a " +
+        "single booking through the school suits you better, just ask — we're happy to set " +
+        "that up.",
+      "To plan, it helps us to know: rough group size, year group and your preferred dates.",
+    ],
+    punkte: [
+      "No experience required",
+      "Equipment provided",
+      "Supervision throughout",
+      "Food and drinks included",
+    ],
+  },
+
+  ueber: {
+    ueberschrift: "About VERA",
+    absaetze: [
+      "VERA is short for VERAnstaltung, the German word for event. The name is deliberately " +
+        "plain, because the idea is too: we run days where people try something they wouldn't " +
+        "otherwise have tried.",
+      "It starts with padel in Falkensee — for students and their parents, with no experience, " +
+        "no gear of your own and no club membership needed.",
+      "More events will follow: other sports, and later networking events too. The idea stays " +
+        "the same.",
+    ],
+  },
+
+  faq: {
+    ueberschrift: "Common questions",
+    eintraege: [
+      {
+        frage: "I've never played padel. Is that a problem?",
+        antwort:
+          "Quite the opposite — that's what the day is for. Most people arrive with no " +
+          "experience at all, and coaches explain everything from scratch.",
+      },
+      {
+        frage: "What do I need to bring?",
+        antwort:
+          "Sportswear, clean indoor shoes and a towel. Rackets and balls are provided on site.",
+      },
+      {
+        frage: "My child is under 18. Who registers?",
+        antwort:
+          "A parent or legal guardian registers and confirms the participation. From 18 " +
+          "onwards you can register yourself.",
+      },
+      {
+        frage: "Can parents play too?",
+        antwort:
+          "Yes, absolutely. There's a separate adult price and a cheaper family package. " +
+          "Watching from the side is of course also fine.",
+      },
+      {
+        frage: "How do I pay?",
+        antwort:
+          "We're settling that right now and will announce it well before registration opens. " +
+          "The full price is already visible to you here.",
+      },
+      {
+        frage: "When does registration open?",
+        antwort:
+          "As soon as the date and time are fixed. Drop us a line and we'll let you know.",
+      },
+    ],
+  },
+
+  cta: {
+    ueberschrift: "Ready for your first rally?",
+    text: "Pick who's coming and see what it costs.",
+  },
+
+  anmeldung: {
+    titel: "Registration",
+    einleitung:
+      "Put together who's coming. The price updates instantly below — so you know exactly " +
+      "where you stand before you commit.",
+    frageWen: "Who are you registering?",
+    wahlSelbst: "Myself",
+    wahlSelbstHinweis: "18 and over",
+    wahlKind: "My child",
+    wahlKindHinweis: "As parent or guardian",
+    wahlFamilie: "Family package",
+    wahlFamilieHinweis: "2 adults + students",
+
+    selbstFrage: "Which applies to you?",
+    selbstSchueler: "I'm a student",
+    selbstErwachsener: "I'm an adult",
+
+    kindFrage: "How many students under 18 are you registering?",
+    kindMitkommen: "I'm coming along too",
+
+    familieFrage: "How many students are coming?",
+    familieEnthalten: "2 adults are included in the package",
+
+    anzahlErhoehen: "One more",
+    anzahlVerringern: "One fewer",
+    anzahlSchueler: "Number of students",
+
+    summe: "Total",
+    personEiner: "1 person",
+    personMehrere: "{n} people",
+    inklMwst: "incl. VAT",
+    keineAuswahl: "Choose above who's coming along.",
+
+    nochNichtTitel: "Registration opens shortly",
+    nochNichtText:
+      "The date and time aren't fixed yet. So you can look at the price here, but not yet " +
+      "register bindingly — nothing is sent and nothing is stored. Write to us if you'd like " +
+      "us to tell you when it opens.",
+    nochNichtAktion: "Write to us",
+
+    minderjaehrigTitel: "For participants under 18",
+    minderjaehrigText:
+      "When a parent registers, the registration covers the child. Guardian consent is " +
+      "collected during registration.",
+  },
+
+  kontakt: {
+    ueberschrift: "Contact",
+    einleitung:
+      "Questions about the event, about registering, or about bringing a school class? " +
+      "Just write to us.",
+    email: "Email",
+    telefon: "Phone",
+    ort: "Location",
+  },
+
+  event: {
+    wann: "When",
+    wo: "Where",
+    fuerWen: "Who for",
+    preis: "Price",
+    dabei: "What's included",
+    mitbringen: "What to bring",
+    alter: "Ages {von} to {bis}",
+    naechstesEvent: "Next event",
+  },
+
+  recht: {
+    impressum: "Legal notice",
+    datenschutz: "Privacy",
+    impressumTitel: "Legal notice",
+    datenschutzTitel: "Privacy policy",
+    platzhalterTitel: "This page hasn't been filled in yet",
+    impressumText:
+      "The legally required details go here later: the provider's name and address, contact " +
+      "details and, where applicable, legal form, authorised representatives and register entry.",
+    datenschutzText:
+      "This will later explain which data is collected during registration, what it is used " +
+      "for, how long it is kept and what rights visitors have.",
+    hinweisJurist:
+      "Both texts should be reviewed by a qualified professional before going live. That " +
+      "matters especially because minors take part and payments will be handled later.",
+    keineCookies:
+      "This site sets no cookies, counts no visitors and loads nothing from third-party " +
+      "servers. That's why there's no consent banner here.",
+  },
+
+  platzhalter: {
+    markierung: "Placeholder",
+    datum: "Date to be announced",
+    datumKurz: "Date to follow",
+    zeit: "Time to follow",
+    adresse: "Exact address to follow",
+    email: "contact@example.com",
+    telefon: "Phone number to follow",
+  },
+
+  footer: {
+    claim: "Sports and networking events.",
+    seiten: "Pages",
+    rechtliches: "Legal",
+    kontaktUeberschrift: "Contact",
+    rechte: "© {jahr} VERA. All rights reserved.",
+  },
+};

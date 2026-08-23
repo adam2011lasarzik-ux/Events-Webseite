@@ -1,0 +1,156 @@
+.rechner { display: grid; gap: var(--a-7); }
+
+.frage {
+  font-family: var(--schrift-display);
+  font-weight: 800;
+  font-size: var(--gr-l);
+  margin-bottom: var(--a-4);
+}
+
+/* Ebene 1: Wen meldest du an? */
+.wahlRaster { display: grid; gap: var(--a-3); border: 0; padding: 0; margin: 0; }
+.wahlKarte {
+  display: block;
+  background: var(--flaeche);
+  border: 2px solid transparent;
+  border-radius: var(--rund-m);
+  padding: var(--a-5);
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.wahlKarte:hover { transform: translateY(-2px); }
+.wahlKarte input { position: absolute; opacity: 0; pointer-events: none; }
+.wahlKarte:has(input:checked) { border-color: var(--tiefblau); background: var(--ballgelb); }
+.wahlKarte:has(input:focus-visible) { outline: 3px solid var(--courtblau); outline-offset: 3px; }
+.wahlName {
+  display: block;
+  font-family: var(--schrift-display);
+  font-weight: 800;
+  font-size: var(--gr-l);
+}
+.wahlHinweis {
+  display: block;
+  font-size: var(--gr-s);
+  color: var(--text-leise);
+  margin-top: var(--a-1);
+}
+.wahlKarte:has(input:checked) .wahlHinweis { color: var(--tiefblau); opacity: 0.75; }
+
+/* Ebene 2 */
+.ebene2 {
+  background: var(--flaeche-warm);
+  border-radius: var(--rund-l);
+  padding: var(--a-6);
+}
+.reihen { display: grid; gap: var(--a-4); border: 0; padding: 0; margin: 0; }
+
+.optionZeile {
+  display: flex;
+  align-items: center;
+  gap: var(--a-3);
+  background: var(--flaeche);
+  border: 2px solid transparent;
+  border-radius: var(--rund-m);
+  padding: var(--a-4) var(--a-5);
+  cursor: pointer;
+}
+.optionZeile:has(input:checked) { border-color: var(--tiefblau); }
+.optionZeile:has(input:focus-visible) { outline: 3px solid var(--courtblau); outline-offset: 3px; }
+.optionZeile input { accent-color: var(--courtblau); width: 1.15rem; height: 1.15rem; flex: none; }
+.optionName { font-weight: 600; }
+.optionPreis { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Zähler */
+.zaehler {
+  display: flex;
+  align-items: center;
+  gap: var(--a-4);
+  background: var(--flaeche);
+  border-radius: var(--rund-m);
+  padding: var(--a-4) var(--a-5);
+}
+.zaehlerKnopf {
+  width: 44px; height: 44px;
+  flex: none;
+  border: 2px solid var(--linie);
+  border-radius: 50%;
+  background: transparent;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+.zaehlerKnopf:hover:not(:disabled) { border-color: var(--tiefblau); background: var(--ballgelb); }
+.zaehlerKnopf:disabled { opacity: 0.35; cursor: not-allowed; }
+.zaehlerWert {
+  font-family: var(--schrift-display);
+  font-weight: 900;
+  font-size: var(--gr-xl);
+  font-variant-numeric: tabular-nums;
+  min-width: 2ch;
+  text-align: center;
+}
+.zaehlerText { color: var(--text-leise); font-size: var(--gr-s); }
+.enthalten { margin-top: var(--a-4); font-size: var(--gr-s); color: var(--text-leise); }
+
+/* Summe */
+.summe {
+  background: var(--dunkel);
+  color: var(--text-invers);
+  border-radius: var(--rund-l);
+  padding: var(--a-6);
+}
+.posten { display: grid; gap: var(--a-3); margin-bottom: var(--a-5); }
+.postenZeile {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--a-4);
+  font-size: var(--gr-s);
+  color: rgba(234, 241, 248, 0.8);
+}
+.postenBetrag { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.summeZeile {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--a-4);
+  padding-top: var(--a-5);
+  border-top: 1px solid var(--linie-invers);
+}
+.summeName { font-family: var(--schrift-display); font-weight: 800; font-size: var(--gr-l); }
+.summeBetrag {
+  font-family: var(--schrift-display);
+  font-weight: 900;
+  font-size: clamp(2.2rem, 1.4rem + 3vw, 3.2rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  color: var(--akzent);
+}
+.summeUnten {
+  margin-top: var(--a-3);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--a-4);
+  font-size: var(--gr-s);
+  color: rgba(234, 241, 248, 0.7);
+}
+
+.merker {
+  border: 1px dashed var(--linie);
+  border-radius: var(--rund-m);
+  padding: var(--a-5);
+  background: rgba(23, 93, 156, 0.06);
+}
+.merkerTitel { font-family: var(--schrift-display); font-weight: 800; font-size: var(--gr-l); margin-bottom: var(--a-3); }
+.merkerText { color: var(--text-leise); max-width: var(--breite-text); margin-bottom: var(--a-5); }
+
+@media (min-width: 46rem) {
+  .wahlRaster { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 62rem) {
+  .rechner { grid-template-columns: 1.25fr 0.75fr; align-items: start; gap: var(--a-7); }
+  .oben { grid-column: 1 / -1; }
+  .summe { position: sticky; top: 96px; }
+}

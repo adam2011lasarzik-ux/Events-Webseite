@@ -1,0 +1,29 @@
+.marke {
+  font-family: var(--schrift-display);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: baseline;
+}
+.stark { font-weight: 900; }
+
+/* „nstaltung" führt den Namen zu Ende: VERA steht für VERAnstaltung.
+   Zurückgenommen im Gewicht, damit VERA die Marke bleibt. */
+.leise {
+  font-weight: 400;
+  opacity: 0.42;
+  letter-spacing: -0.01em;
+}
+
+/* Auf schmalen Bildschirmen bleibt nur VERA — sonst wird die
+   Kopfzeile zu eng. */
+.kurzAufKlein .leise { display: none; }
+@media (min-width: 30rem) {
+  .kurzAufKlein .leise { display: inline; }
+}
+
+.gross { font-size: clamp(3rem, 1rem + 13vw, 11rem); }
+.mittel { font-size: var(--gr-xl); }
+.klein { font-size: var(--gr-l); }

@@ -1,0 +1,21 @@
+.raster { display: grid; gap: var(--a-7); align-items: start; }
+.texte { display: grid; gap: var(--a-4); max-width: var(--breite-text); font-size: var(--gr-l); }
+.fakten { display: grid; gap: var(--a-4); }
+.fakt {
+  border-left: 3px solid var(--ballgelb);
+  padding-left: var(--a-4);
+}
+.zahl {
+  font-family: var(--schrift-display);
+  font-weight: 900;
+  font-size: var(--gr-2xl);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  display: block;
+}
+.faktText { color: var(--text-leise); font-size: var(--gr-s); }
+
+@media (min-width: 56rem) {
+  .raster { grid-template-columns: 1.35fr 0.65fr; gap: var(--a-8); }
+}

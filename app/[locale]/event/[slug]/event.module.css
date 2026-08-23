@@ -1,0 +1,44 @@
+.kopf { display: grid; gap: var(--a-6); align-items: center; margin-bottom: var(--a-7); }
+.untertitel { font-size: var(--gr-l); color: var(--text-leise); margin-bottom: var(--a-6); }
+.knoepfe { display: flex; flex-wrap: wrap; align-items: center; gap: var(--a-4); }
+.bild { background: var(--tiefblau); border-radius: var(--rund-l); padding: var(--a-5); }
+
+.daten {
+  display: grid;
+  gap: var(--a-5);
+  padding-block: var(--a-6);
+  border-top: 1px solid var(--linie);
+  border-bottom: 1px solid var(--linie);
+  margin: 0;
+}
+.daten dt {
+  font-size: var(--gr-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-leise);
+  margin-bottom: var(--a-2);
+}
+.daten dd { margin: 0; font-weight: 600; line-height: 1.5; }
+
+.beschreibung { display: grid; gap: var(--a-4); max-width: var(--breite-text); font-size: var(--gr-l); }
+.zweiListen { display: grid; gap: var(--a-6); margin-top: var(--a-7); }
+.listenTitel { margin-bottom: var(--a-4); }
+.liste { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--a-3); }
+.liste li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--a-3);
+  background: var(--flaeche);
+  border-radius: var(--rund-m);
+  padding: var(--a-4) var(--a-5);
+}
+.haken { color: var(--courtblau); font-weight: 800; flex: none; }
+
+@media (min-width: 46rem) {
+  .daten { grid-template-columns: repeat(4, 1fr); }
+  .zweiListen { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 62rem) {
+  .kopf { grid-template-columns: 1.1fr 0.9fr; gap: var(--a-8); }
+}

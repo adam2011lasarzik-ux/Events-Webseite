@@ -1,0 +1,26 @@
+.band {
+  background: var(--dunkel);
+  color: var(--text-invers);
+  border-radius: var(--rund-xl);
+  padding: var(--a-8) var(--a-6);
+  display: grid;
+  gap: var(--a-6);
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.titel { max-width: 18ch; }
+.text { color: rgba(234, 241, 248, 0.78); margin-top: var(--a-4); max-width: 42ch; }
+.knoepfe { display: flex; flex-wrap: wrap; gap: var(--a-3); }
+.courtEcke {
+  position: absolute;
+  right: -8%;
+  bottom: -32%;
+  width: 52%;
+  min-width: 260px;
+  opacity: 0.18;
+  pointer-events: none;
+}
+@media (min-width: 56rem) {
+  .band { grid-template-columns: 1.2fr auto; padding: var(--a-9) var(--a-8); }
+}

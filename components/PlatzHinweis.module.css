@@ -1,0 +1,21 @@
+.hinweis {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--a-2);
+  padding: 0.5em 1em;
+  border-radius: var(--pille);
+  font-size: var(--gr-xs);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.punkt {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+.wenige { background: rgba(216, 232, 74, 0.28); color: var(--tiefblau); }
+.wenige .punkt { background: #8C9B10; }
+.ausgebucht { background: rgba(12, 49, 87, 0.1); color: var(--text-leise); }
+.ausgebucht .punkt { background: var(--text-leise); }
+.aufDunkelTon { background: rgba(216, 232, 74, 0.2); color: var(--akzent); }
+.aufDunkelTon .punkt { background: var(--akzent); }

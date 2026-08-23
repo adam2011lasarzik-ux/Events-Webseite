@@ -1,0 +1,306 @@
+/* Alle deutschen Texte der Seite. */
+
+export const de = {
+  meta: {
+    marke: "VERA",
+    markeLang: "VERAnstaltung",
+    beschreibung:
+      "VERA veranstaltet Sport- und Netzwerkevents. Den Anfang macht ein Padel-Nachmittag " +
+      "in Falkensee für Schüler von 15 bis 21 Jahren und ihre Eltern.",
+    spracheName: "Deutsch",
+    spracheKurz: "DE",
+  },
+
+  nav: {
+    sprungmarke: "Zum Inhalt springen",
+    hauptmenue: "Hauptmenü",
+    menueOeffnen: "Menü öffnen",
+    menueSchliessen: "Menü schließen",
+    event: "Event",
+    schulen: "Für Schulen",
+    ueber: "Über VERA",
+    faq: "Fragen",
+    kontakt: "Kontakt",
+    spracheWechseln: "Switch to English",
+  },
+
+  aktion: {
+    anmelden: "Jetzt anmelden",
+    schuelerAnmelden: "Schüler anmelden",
+    familieAnmelden: "Familie anmelden",
+    detailsAnsehen: "Alle Infos zum Event",
+    zumEvent: "Zum Event",
+    zurueck: "Zurück zur Startseite",
+  },
+
+  hero: {
+    augenbraue: "Padel · Falkensee",
+    titelZeile1: "Nie gespielt?",
+    titelZeile2: "Genau darum geht's.",
+    text:
+      "Ein Nachmittag Padel für Schüler von 15 bis 21 und ihre Eltern. Schläger gibt es vor " +
+      "Ort, jemand zeigt dir alles, Essen und Trinken sind dabei.",
+    hinweisFoto: "Hier kommt später ein Foto vom Court",
+  },
+
+  plaetze: {
+    ueberschrift: "Plätze",
+    wenigeEiner: "Nur noch 1 freier Platz",
+    wenigeMehrere: "Nur noch {n} freie Plätze",
+    ausgebucht: "Ausgebucht",
+    gesamt: "{n} Plätze",
+  },
+
+  preise: {
+    ueberschrift: "Was es kostet",
+    einleitung:
+      "Alle Preise gelten pro Person und Veranstaltungstag, inklusive Mehrwertsteuer. " +
+      "Schläger, Bälle, Betreuung, Essen und Getränke sind enthalten.",
+    schueler: "Schüler",
+    schuelerHinweis: "15 bis 21 Jahre",
+    erwachsener: "Erwachsene",
+    erwachsenerHinweis: "Eltern und Begleitung",
+    familie: "Familie",
+    familieHinweis: "2 Erwachsene + 1 Schüler",
+    familieZusatz: "jeder weitere Schüler {betrag}",
+    ab: "ab",
+    proPerson: "pro Person",
+  },
+
+  padel: {
+    ueberschrift: "Was ist Padel überhaupt?",
+    absaetze: [
+      "Padel ist der entspannte Cousin von Tennis. Gespielt wird immer zu viert auf einem " +
+        "Platz, der etwa ein Drittel so groß ist wie ein Tennisfeld — rundum Glaswände, von " +
+        "denen der Ball abspringt und weiterläuft.",
+      "Der Aufschlag geht von unten, der Schläger hat keine Saiten, und die Wände sind Teil " +
+        "des Spiels statt das Ende davon. Genau deshalb kommen die meisten schon nach ein paar " +
+        "Minuten zum ersten richtigen Ballwechsel.",
+    ],
+    fakten: [
+      { zahl: "4", text: "Spieler, immer" },
+      { zahl: "20 × 10", text: "Meter Platz" },
+      { zahl: "0", text: "Vorkenntnisse nötig" },
+    ],
+  },
+
+  ablauf: {
+    ueberschrift: "So läuft der Tag ab",
+    schritte: [
+      {
+        titel: "Anmelden",
+        text:
+          "Such dir aus, wer mitkommt, und melde dich an. Die Plätze sind begrenzt, " +
+          "und der Preis steht dir vorher klar vor Augen.",
+      },
+      {
+        titel: "Ankommen",
+        text:
+          "Schläger und Bälle liegen bereit. Es gibt eine kurze Einweisung, danach " +
+          "werden die Vierergruppen eingeteilt.",
+      },
+      {
+        titel: "Spielen",
+        text:
+          "Ihr spielt in Gruppen, die Betreuer geben Tipps. Zwischendurch Pause " +
+          "am Buffet — und danach zurück auf den Court.",
+      },
+    ],
+  },
+
+  schulen: {
+    ueberschrift: "Für Schulen",
+    kurz:
+      "Sie möchten den Tag mit einer Klasse oder einem Kurs besuchen? Melden Sie sich, " +
+      "dann stimmen wir Termin, Gruppengröße und Ablauf gemeinsam ab.",
+    mehr: "Mehr für Schulen",
+    titel: "Padel für Schulklassen",
+    absaetze: [
+      "Der Padel-Nachmittag eignet sich gut für Sportkurse, Projekttage und Klassenausflüge. " +
+        "Die Sportart ist schnell erklärt, körperlich für alle machbar und funktioniert auch " +
+        "in gemischten Gruppen mit sehr unterschiedlichem Können.",
+      "Aktuell melden Eltern ihre Kinder selbst an und übernehmen die Kosten. Wenn für Sie " +
+        "eine Sammelbuchung über die Schule besser passt, sprechen Sie uns an — wir richten " +
+        "das gern ein.",
+      "Für die Planung hilft uns: ungefähre Gruppengröße, Jahrgangsstufe und Ihr Wunschzeitraum.",
+    ],
+    punkte: [
+      "Keine Vorkenntnisse nötig",
+      "Ausrüstung wird gestellt",
+      "Betreuung während der gesamten Zeit",
+      "Essen und Getränke inklusive",
+    ],
+  },
+
+  ueber: {
+    ueberschrift: "Über VERA",
+    absaetze: [
+      "VERA steht für VERAnstaltung. Der Name ist bewusst schlicht, weil die Sache es auch " +
+        "sein soll: Wir organisieren Tage, an denen Menschen etwas ausprobieren, das sie sonst " +
+        "nicht ausprobiert hätten.",
+      "Den Anfang macht Padel in Falkensee — für Schüler und ihre Eltern, ohne Vorkenntnisse, " +
+        "ohne eigene Ausrüstung, ohne Vereinsmitgliedschaft.",
+      "Danach kommen weitere Events dazu: andere Sportarten, später auch Veranstaltungen zum " +
+        "Netzwerken. Der Gedanke bleibt derselbe.",
+    ],
+  },
+
+  faq: {
+    ueberschrift: "Häufige Fragen",
+    eintraege: [
+      {
+        frage: "Ich habe noch nie Padel gespielt. Ist das ein Problem?",
+        antwort:
+          "Im Gegenteil, dafür ist der Tag gemacht. Die meisten kommen ohne jede Erfahrung. " +
+          "Betreuer erklären alles von Anfang an.",
+      },
+      {
+        frage: "Was muss ich mitbringen?",
+        antwort:
+          "Sportkleidung, saubere Hallenschuhe und ein Handtuch. Schläger und Bälle bekommst " +
+          "du vor Ort.",
+      },
+      {
+        frage: "Mein Kind ist unter 18. Wer meldet an?",
+        antwort:
+          "Ein Elternteil oder eine erziehungsberechtigte Person meldet an und bestätigt die " +
+          "Teilnahme. Ab 18 kann man sich selbst anmelden.",
+      },
+      {
+        frage: "Können Eltern mitspielen?",
+        antwort:
+          "Ja, ausdrücklich. Es gibt einen eigenen Preis für Erwachsene und ein günstigeres " +
+          "Familienpaket. Zuschauen ist natürlich auch möglich.",
+      },
+      {
+        frage: "Wie bezahle ich?",
+        antwort:
+          "Das legen wir gerade fest und geben es rechtzeitig vor der Anmeldung bekannt. " +
+          "Der Preis steht dir aber jetzt schon vollständig vor Augen.",
+      },
+      {
+        frage: "Wann startet die Anmeldung?",
+        antwort:
+          "Sobald Datum und Uhrzeit feststehen. Schreib uns gern, dann sagen wir dir Bescheid.",
+      },
+    ],
+  },
+
+  cta: {
+    ueberschrift: "Bereit für den ersten Ballwechsel?",
+    text: "Such dir aus, wer mitkommt, und sieh dir an, was es kostet.",
+  },
+
+  anmeldung: {
+    titel: "Anmeldung",
+    einleitung:
+      "Stell zusammen, wer mitkommt. Der Preis rechnet sich unten sofort mit — " +
+      "so weißt du vorher genau, woran du bist.",
+    frageWen: "Wen meldest du an?",
+    wahlSelbst: "Mich selbst",
+    wahlSelbstHinweis: "Ab 18 Jahren",
+    wahlKind: "Mein Kind",
+    wahlKindHinweis: "Als Erziehungsberechtigte:r",
+    wahlFamilie: "Familienpaket",
+    wahlFamilieHinweis: "2 Erwachsene + Schüler",
+
+    selbstFrage: "Was trifft auf dich zu?",
+    selbstSchueler: "Ich bin Schüler",
+    selbstErwachsener: "Ich bin erwachsen",
+
+    kindFrage: "Wie viele Schüler unter 18 meldest du an?",
+    kindMitkommen: "Ich komme selbst mit",
+
+    familieFrage: "Wie viele Schüler kommen mit?",
+    familieEnthalten: "2 Erwachsene sind im Paket enthalten",
+
+    anzahlErhoehen: "Einen mehr",
+    anzahlVerringern: "Einen weniger",
+    anzahlSchueler: "Anzahl Schüler",
+
+    summe: "Gesamt",
+    personEiner: "1 Person",
+    personMehrere: "{n} Personen",
+    inklMwst: "inkl. MwSt.",
+    keineAuswahl: "Wähle oben aus, wer mitkommt.",
+
+    nochNichtTitel: "Die Anmeldung öffnet in Kürze",
+    nochNichtText:
+      "Datum und Uhrzeit stehen noch nicht fest. Deshalb kannst du dich hier zwar den Preis " +
+      "ansehen, aber noch nicht verbindlich anmelden — es wird nichts abgeschickt und nichts " +
+      "gespeichert. Schreib uns, wenn wir dir Bescheid geben sollen, sobald es losgeht.",
+    nochNichtAktion: "Schreib uns",
+
+    minderjaehrigTitel: "Bei Teilnehmern unter 18",
+    minderjaehrigText:
+      "Meldet ein Elternteil an, gilt die Anmeldung für das Kind. Die Einwilligung der " +
+      "Erziehungsberechtigten wird bei der Anmeldung abgefragt.",
+  },
+
+  kontakt: {
+    ueberschrift: "Kontakt",
+    einleitung:
+      "Fragen zum Event, zur Anmeldung oder für eine Schulklasse? Schreib uns einfach.",
+    email: "E-Mail",
+    telefon: "Telefon",
+    ort: "Ort",
+  },
+
+  event: {
+    wann: "Wann",
+    wo: "Wo",
+    fuerWen: "Für wen",
+    preis: "Preis",
+    dabei: "Das ist dabei",
+    mitbringen: "Das bringst du mit",
+    alter: "{von} bis {bis} Jahre",
+    naechstesEvent: "Nächstes Event",
+  },
+
+  recht: {
+    impressum: "Impressum",
+    datenschutz: "Datenschutz",
+    impressumTitel: "Impressum",
+    datenschutzTitel: "Datenschutzerklärung",
+    platzhalterTitel: "Diese Seite ist noch nicht ausgefüllt",
+    impressumText:
+      "Hier stehen später die gesetzlich vorgeschriebenen Angaben: Name und Anschrift des " +
+      "Anbieters, Kontaktdaten und, falls zutreffend, Rechtsform, Vertretungsberechtigte " +
+      "und Registereintrag.",
+    datenschutzText:
+      "Hier steht später, welche Daten bei einer Anmeldung erhoben werden, wozu sie verwendet " +
+      "werden, wie lange sie gespeichert bleiben und welche Rechte Besucher haben.",
+    hinweisJurist:
+      "Beide Texte sollten vor der Veröffentlichung von einer fachkundigen Person geprüft " +
+      "werden. Das gilt besonders, weil Minderjährige teilnehmen und später Zahlungen " +
+      "abgewickelt werden.",
+    keineCookies:
+      "Diese Seite setzt keine Cookies, zählt keine Besucher und lädt nichts von fremden " +
+      "Servern nach. Deshalb gibt es hier auch kein Zustimmungsfenster.",
+  },
+
+  platzhalter: {
+    markierung: "Platzhalter",
+    datum: "Datum wird noch bekannt gegeben",
+    datumKurz: "Termin folgt",
+    zeit: "Uhrzeit folgt",
+    adresse: "Genaue Adresse folgt",
+    email: "kontakt@beispiel.de",
+    telefon: "Telefonnummer folgt",
+  },
+
+  footer: {
+    claim: "Sport- und Netzwerkevents.",
+    seiten: "Seiten",
+    rechtliches: "Rechtliches",
+    kontaktUeberschrift: "Kontakt",
+    rechte: "© {jahr} VERA. Alle Rechte vorbehalten.",
+  },
+};
+
+/**
+ * Die Form des deutschen Wörterbuchs ist die Vorlage für alle Sprachen.
+ * Fehlt in content/en.ts ein Eintrag, meldet TypeScript das sofort —
+ * so kann keine Sprache versehentlich unvollständig bleiben.
+ */
+export type Woerterbuch = typeof de;

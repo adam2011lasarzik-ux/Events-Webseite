@@ -1,0 +1,34 @@
+.liste {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--a-5);
+  counter-reset: schritt;
+}
+.schritt {
+  counter-increment: schritt;
+  background: var(--flaeche);
+  border-radius: var(--rund-l);
+  padding: var(--a-6);
+  position: relative;
+}
+/* Die Nummern stehen hier zu Recht: Der Tag läuft wirklich in
+   dieser Reihenfolge ab. */
+.schritt::before {
+  content: counter(schritt, decimal-leading-zero);
+  font-family: var(--schrift-display);
+  font-weight: 900;
+  font-size: var(--gr-xl);
+  color: var(--courtblau);
+  opacity: 0.35;
+  display: block;
+  margin-bottom: var(--a-4);
+  font-variant-numeric: tabular-nums;
+}
+.titel { margin-bottom: var(--a-3); }
+.text { color: var(--text-leise); }
+
+@media (min-width: 52rem) {
+  .liste { grid-template-columns: repeat(3, 1fr); }
+}

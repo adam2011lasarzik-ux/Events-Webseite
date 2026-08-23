@@ -1,0 +1,68 @@
+.hero {
+  padding-block: var(--a-8) var(--a-9);
+  position: relative;
+  overflow: hidden;
+}
+.innen {
+  width: min(100% - 2.5rem, var(--breite));
+  margin-inline: auto;
+  display: grid;
+  gap: var(--a-7);
+  align-items: center;
+}
+
+.augenbraue {
+  display: inline-block;
+  font-size: var(--gr-xs);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--courtblau);
+  margin-bottom: var(--a-4);
+}
+
+.titel { margin-bottom: var(--a-5); }
+.zeile2 { color: var(--courtblau); display: block; }
+
+.text {
+  font-size: var(--gr-l);
+  color: var(--text-leise);
+  max-width: 46ch;
+  margin-bottom: var(--a-6);
+}
+
+.knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--a-3);
+  align-items: center;
+}
+.platzZeile { margin-top: var(--a-5); }
+
+/* Der Court sitzt in einem Rahmen aus den eigenen Linien — er ist
+   zugleich Bildersatz und Erkennungsmerkmal. */
+.bildbereich {
+  position: relative;
+  border-radius: var(--rund-l);
+  overflow: hidden;
+  background: var(--tiefblau);
+  padding: var(--a-5);
+  box-shadow: var(--schatten);
+}
+.fotoHinweis {
+  position: absolute;
+  left: var(--a-4);
+  bottom: var(--a-4);
+  font-size: var(--gr-xs);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.62);
+  background: rgba(12, 49, 87, 0.6);
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  border-radius: var(--pille);
+  padding: 0.4em 0.9em;
+}
+
+@media (min-width: 62rem) {
+  .innen { grid-template-columns: 1.15fr 0.85fr; gap: var(--a-8); }
+  .hero { padding-block: var(--a-9); }
+}

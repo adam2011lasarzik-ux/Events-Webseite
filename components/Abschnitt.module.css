@@ -1,0 +1,29 @@
+.abschnitt { padding-block: var(--a-9); }
+.dunkel { background: var(--dunkel); color: var(--text-invers); }
+.warm { background: var(--flaeche-warm); }
+
+.innen {
+  width: min(100% - 2.5rem, var(--breite));
+  margin-inline: auto;
+}
+
+.kopf { margin-bottom: var(--a-7); }
+
+.augenbraue {
+  display: inline-block;
+  font-size: var(--gr-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--courtblau);
+  margin-bottom: var(--a-3);
+}
+.dunkel .augenbraue { color: var(--akzent); }
+
+.einleitung {
+  margin-top: var(--a-4);
+  max-width: var(--breite-text);
+  color: var(--text-leise);
+  font-size: var(--gr-l);
+}
+.dunkel .einleitung { color: rgba(234, 241, 248, 0.78); }

@@ -1,0 +1,85 @@
+@import "./tokens.css";
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--grund);
+  color: var(--text);
+  font-family: var(--schrift-text);
+  font-size: var(--gr-m);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--schrift-display);
+  font-weight: 800;
+  /* Archivo kann breiter laufen — das gibt den Überschriften den
+     sportlichen, plakativen Zug. */
+  font-stretch: 112%;
+  line-height: 1.03;
+  letter-spacing: -0.025em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--gr-3xl); }
+h2 { font-size: var(--gr-2xl); }
+h3 { font-size: var(--gr-xl); }
+
+p { margin: 0; text-wrap: pretty; }
+
+a { color: inherit; }
+
+img, svg { max-width: 100%; height: auto; display: block; }
+
+button { font: inherit; color: inherit; }
+
+/* Tastatur-Bedienung muss immer sichtbar sein. */
+:focus-visible {
+  outline: 3px solid var(--courtblau);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.aufDunkel :focus-visible { outline-color: var(--ballgelb); }
+
+/* Nur für Screenreader sichtbar. */
+.nurVorlesen {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Sprungmarke für Tastatur-Nutzer. */
+.zumInhalt {
+  position: absolute;
+  left: var(--a-4);
+  top: -100px;
+  z-index: 100;
+  background: var(--akzent);
+  color: var(--akzent-text);
+  padding: var(--a-3) var(--a-5);
+  border-radius: var(--pille);
+  font-weight: 700;
+  text-decoration: none;
+  transition: top 0.15s;
+}
+.zumInhalt:focus { top: var(--a-4); }
+
+/* Wer im Betriebssystem weniger Bewegung eingestellt hat,
+   bekommt hier auch weniger Bewegung. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

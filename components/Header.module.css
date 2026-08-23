@@ -1,0 +1,109 @@
+.kopf {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--grund) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--linie);
+}
+
+.innen {
+  width: min(100% - 2.5rem, var(--breite));
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--a-4);
+  min-height: 72px;
+}
+
+.markeLink {
+  text-decoration: none;
+  color: var(--text);
+  margin-right: auto;
+  padding-block: var(--a-2);
+}
+
+.menue {
+  display: none;
+  align-items: center;
+  gap: var(--a-5);
+}
+.menue a {
+  text-decoration: none;
+  font-size: var(--gr-s);
+  font-weight: 600;
+  color: var(--text-leise);
+  padding-block: var(--a-2);
+  transition: color 0.15s;
+}
+.menue a:hover { color: var(--text); }
+
+.rechts { display: flex; align-items: center; gap: var(--a-3); }
+
+.sprache {
+  text-decoration: none;
+  font-size: var(--gr-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-leise);
+  border: 1px solid var(--linie);
+  border-radius: var(--pille);
+  padding: 0.45em 0.9em;
+  transition: border-color 0.15s, color 0.15s;
+}
+.sprache:hover { color: var(--text); border-color: var(--tiefblau); }
+
+.anmeldeKnopf { display: none; }
+
+.schalter {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0 10px;
+  background: transparent;
+  border: 1px solid var(--linie);
+  border-radius: var(--rund-s);
+  cursor: pointer;
+}
+.balken {
+  display: block;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.offen .balkenOben { transform: translateY(7px) rotate(45deg); }
+.offen .balkenMitte { opacity: 0; }
+.offen .balkenUnten { transform: translateY(-7px) rotate(-45deg); }
+
+.klappe {
+  border-top: 1px solid var(--linie);
+  background: var(--grund);
+}
+.klappeInnen {
+  width: min(100% - 2.5rem, var(--breite));
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--a-4) var(--a-5);
+  gap: var(--a-1);
+}
+.klappeInnen a {
+  text-decoration: none;
+  font-family: var(--schrift-display);
+  font-weight: 800;
+  font-size: var(--gr-l);
+  color: var(--text);
+  padding-block: var(--a-3);
+  border-bottom: 1px solid var(--linie);
+}
+.klappeAktion { margin-top: var(--a-4); }
+
+@media (min-width: 62rem) {
+  .menue { display: flex; }
+  .anmeldeKnopf { display: inline-flex; }
+  .schalter { display: none; }
+}

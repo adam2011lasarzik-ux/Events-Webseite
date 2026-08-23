@@ -1,0 +1,52 @@
+.karte {
+  display: grid;
+  gap: var(--a-6);
+  background: var(--flaeche);
+  border-radius: var(--rund-l);
+  padding: var(--a-6);
+  box-shadow: var(--schatten);
+}
+.bild {
+  background: var(--tiefblau);
+  border-radius: var(--rund-m);
+  padding: var(--a-4);
+  align-self: start;
+}
+.kategorie {
+  display: inline-block;
+  font-size: var(--gr-xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--courtblau);
+  margin-bottom: var(--a-3);
+}
+.titel { margin-bottom: var(--a-3); }
+.kurz { color: var(--text-leise); margin-bottom: var(--a-5); max-width: 52ch; }
+
+.daten {
+  display: grid;
+  gap: var(--a-4);
+  margin-bottom: var(--a-6);
+  padding-block: var(--a-5);
+  border-top: 1px solid var(--linie);
+  border-bottom: 1px solid var(--linie);
+}
+.datum dt {
+  font-size: var(--gr-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-leise);
+  margin-bottom: var(--a-1);
+}
+.datum dd { margin: 0; font-weight: 600; }
+
+.fuss { display: flex; flex-wrap: wrap; gap: var(--a-4); align-items: center; }
+
+@media (min-width: 40rem) {
+  .daten { grid-template-columns: repeat(3, 1fr); gap: var(--a-5); }
+}
+@media (min-width: 62rem) {
+  .karte { grid-template-columns: 0.85fr 1.15fr; align-items: center; padding: var(--a-7); }
+}

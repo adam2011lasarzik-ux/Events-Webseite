@@ -1,0 +1,58 @@
+.raster { display: grid; gap: var(--a-4); }
+
+.kachel {
+  border-radius: var(--rund-l);
+  padding: var(--a-6);
+  display: flex;
+  flex-direction: column;
+  min-height: 210px;
+  position: relative;
+  overflow: hidden;
+}
+.name {
+  font-family: var(--schrift-display);
+  font-weight: 800;
+  font-size: var(--gr-l);
+  margin-bottom: var(--a-1);
+}
+.hinweis { font-size: var(--gr-s); opacity: 0.72; }
+.betragZeile { margin-top: auto; display: flex; align-items: baseline; gap: var(--a-2); flex-wrap: wrap; }
+.ab { font-size: var(--gr-s); opacity: 0.72; }
+.abOben {
+  display: block;
+  font-size: var(--gr-s);
+  opacity: 0.72;
+  margin-bottom: var(--a-1);
+}
+.betrag {
+  font-family: var(--schrift-display);
+  font-weight: 900;
+  font-size: clamp(2.4rem, 1.4rem + 3vw, 3.4rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+}
+.zusatz { margin-top: var(--a-3); font-size: var(--gr-s); opacity: 0.78; }
+
+.tonSchueler { background: var(--ballgelb); color: var(--tiefblau); }
+.tonErwachsen { background: var(--courtblau); color: var(--linienweiss); }
+.tonFamilie { background: var(--tiefblau); color: var(--text-invers); }
+
+/* Der Ball als großes, ruhiges Zeichen in der Ecke. */
+.ball {
+  position: absolute;
+  right: -28px;
+  bottom: -34px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+.mwst { margin-top: var(--a-5); font-size: var(--gr-s); color: var(--text-leise); }
+
+@media (min-width: 46rem) {
+  .raster { grid-template-columns: repeat(3, 1fr); }
+}

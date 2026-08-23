@@ -1,0 +1,70 @@
+/* ---------------------------------------------------------------
+   VERA — Design-Tokens
+   Alle Farben, Schriftgrößen und Abstände stehen hier an einer
+   Stelle. Wer das Aussehen ändern will, ändert diese Datei.
+   --------------------------------------------------------------- */
+
+:root {
+  /* Farbwelt „Der Platz" — abgeleitet vom echten Padel-Court:
+     Sand aus dem Kunstrasen, das Blau des Bodens, weiße Linien,
+     die gelbgrüne Kugel. */
+  --sand:          #F6F3ED;
+  --sand-tief:     #EBE4D6;
+  --tiefblau:      #0C3157;
+  --tiefblau-hell: #164272;
+  --courtblau:     #175D9C;
+  --ballgelb:      #D8E84A;
+  --linienweiss:   #FFFFFF;
+
+  /* Abgeleitete Rollen */
+  --grund:         var(--sand);
+  --flaeche:       var(--linienweiss);
+  --flaeche-warm:  var(--sand-tief);
+  --text:          var(--tiefblau);
+  --text-leise:    #4C6480;
+  --text-invers:   #EAF1F8;
+  --dunkel:        var(--tiefblau);
+  --akzent:        var(--ballgelb);
+  --akzent-text:   var(--tiefblau);
+  --linie:         rgba(12, 49, 87, 0.14);
+  --linie-invers:  rgba(255, 255, 255, 0.20);
+
+  /* Schriften */
+  --schrift-display: var(--font-display), "Arial Black", "Helvetica Neue", sans-serif;
+  --schrift-text:    var(--font-text), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Schriftgrößen — wachsen flüssig mit der Fensterbreite mit,
+     damit auf dem Smartphone nichts überläuft. */
+  --gr-xs:   0.8125rem;
+  --gr-s:    0.9375rem;
+  --gr-m:    1.0625rem;
+  --gr-l:    clamp(1.15rem, 0.9rem + 0.9vw, 1.4rem);
+  --gr-xl:   clamp(1.5rem, 1.1rem + 1.7vw, 2.1rem);
+  --gr-2xl:  clamp(2rem, 1.3rem + 3vw, 3.1rem);
+  --gr-3xl:  clamp(2.6rem, 1.5rem + 4.4vw, 4.3rem);
+
+  /* Abstände */
+  --a-1: 0.25rem;
+  --a-2: 0.5rem;
+  --a-3: 0.75rem;
+  --a-4: 1rem;
+  --a-5: 1.5rem;
+  --a-6: 2rem;
+  --a-7: 3rem;
+  --a-8: 4rem;
+  --a-9: clamp(3.5rem, 2rem + 6vw, 7rem);
+
+  /* Formen */
+  --rund-s:  10px;
+  --rund-m:  18px;
+  --rund-l:  28px;
+  --rund-xl: 40px;
+  --pille:   999px;
+
+  /* Maße */
+  --breite:      1240px;
+  --breite-text: 62ch;
+
+  --schatten: 0 1px 2px rgba(12, 49, 87, 0.05),
+              0 12px 32px -12px rgba(12, 49, 87, 0.18);
+}

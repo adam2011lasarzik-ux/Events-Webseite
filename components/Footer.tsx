@@ -1,0 +1,56 @@
+import Link from "next/link";
+import { VeraWortmarke } from "./VeraWortmarke";
+import { fuelle, pfad, type Sprache } from "@/lib/i18n";
+import type { Woerterbuch } from "@/content";
+import stil from "./Footer.module.css";
+
+export function Footer({ sprache, t }: { sprache: Sprache; t: Woerterbuch }) {
+  const jahr = new Date().getFullYear();
+
+  return (
+    <footer className={`${stil.fuss} aufDunkel`}>
+      <div className={stil.innen}>
+        <div className={stil.raster}>
+          <div>
+            <VeraWortmarke groesse="mittel" />
+            <p className={stil.claim}>{t.footer.claim}</p>
+          </div>
+
+          <div className={stil.spalte}>
+            <h3>{t.footer.seiten}</h3>
+            <ul className={stil.liste}>
+              <li><Link href={pfad(sprache, "/event/padel-falkensee")}>{t.nav.event}</Link></li>
+              <li><Link href={pfad(sprache, "/anmeldung")}>{t.aktion.anmelden}</Link></li>
+              <li><Link href={pfad(sprache, "/fuer-schulen")}>{t.nav.schulen}</Link></li>
+              <li><Link href={pfad(sprache, "/ueber-vera")}>{t.nav.ueber}</Link></li>
+              <li><Link href={pfad(sprache, "/faq")}>{t.nav.faq}</Link></li>
+            </ul>
+          </div>
+
+          <div className={stil.spalte}>
+            <h3>{t.footer.kontaktUeberschrift}</h3>
+            <ul className={stil.liste}>
+              <li><Link href={pfad(sprache, "/kontakt")}>{t.nav.kontakt}</Link></li>
+              <li><span>{t.platzhalter.email}</span></li>
+              <li><span>Falkensee</span></li>
+            </ul>
+          </div>
+
+          <div className={stil.spalte}>
+            <h3>{t.footer.rechtliches}</h3>
+            <ul className={stil.liste}>
+              <li><Link href={pfad(sprache, "/impressum")}>{t.recht.impressum}</Link></li>
+              <li><Link href={pfad(sprache, "/datenschutz")}>{t.recht.datenschutz}</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className={stil.grosseMarke} aria-hidden="true">
+          <VeraWortmarke groesse="gross" />
+        </div>
+
+        <p className={stil.abschluss}>{fuelle(t.footer.rechte, { jahr })}</p>
+      </div>
+    </footer>
+  );
+}

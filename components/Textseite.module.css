@@ -1,0 +1,22 @@
+.inhalt { display: grid; gap: var(--a-4); max-width: var(--breite-text); font-size: var(--gr-l); }
+.punkte {
+  list-style: none;
+  margin: var(--a-6) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--a-3);
+  max-width: var(--breite-text);
+}
+.punkte li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--a-3);
+  background: var(--flaeche);
+  border-radius: var(--rund-m);
+  padding: var(--a-4) var(--a-5);
+}
+.haken { color: var(--courtblau); font-weight: 800; flex: none; }
+
+@media (min-width: 52rem) {
+  .punkte { grid-template-columns: 1fr 1fr; max-width: 62rem; }
+}
