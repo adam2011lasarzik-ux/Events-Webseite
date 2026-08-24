@@ -6,11 +6,22 @@
   padding: var(--a-6);
   box-shadow: var(--schatten);
 }
+/* Das Foto ist hochkant (2:3). Dieses Verhältnis übernimmt die Fläche
+   exakt, damit object-fit: cover nichts abschneidet, sondern nur
+   Rundungsunterschiede ausgleicht — das ganze Foto bleibt sichtbar. */
 .bild {
-  background: var(--tiefblau);
+  aspect-ratio: 2 / 3;
   border-radius: var(--rund-m);
-  padding: var(--a-4);
+  overflow: hidden;
   align-self: start;
+  max-width: 24rem;
+  margin-inline: auto;
+}
+.foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .kategorie {
   display: inline-block;
@@ -48,5 +59,14 @@
   .daten { grid-template-columns: repeat(3, 1fr); gap: var(--a-5); }
 }
 @media (min-width: 62rem) {
-  .karte { grid-template-columns: 0.85fr 1.15fr; align-items: center; padding: var(--a-7); }
+  /* Schmalere, begrenzte Bildspalte statt der bisherigen 0.85fr — ein
+     hochkantes 2:3-Foto würde die Karte sonst unnötig in die Höhe
+     ziehen. align-items: start statt center, damit das Foto oben an
+     der Textspalte ausgerichtet bleibt. */
+  .karte {
+    grid-template-columns: minmax(14rem, 20rem) 1fr;
+    align-items: start;
+    padding: var(--a-7);
+  }
+  .bild { max-width: none; }
 }

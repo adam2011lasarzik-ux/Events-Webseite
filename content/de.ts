@@ -271,6 +271,7 @@ export const de = {
     dabei: "Das ist dabei",
     mitbringen: "Das bringst du mit",
     naechstesEvent: "Nächstes Event",
+    fotoAlt: "Eine Spielerin mit Schläger auf dem Padel-Court",
   },
 
   recht: {

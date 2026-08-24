@@ -273,6 +273,7 @@ export const en: Woerterbuch = {
     dabei: "What's included",
     mitbringen: "What to bring",
     naechstesEvent: "Next event",
+    fotoAlt: "A player with a racket on the padel court",
   },
 
   recht: {
