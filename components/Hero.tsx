@@ -42,7 +42,7 @@ export function Hero({
           </div>
         </div>
 
-        <div className={stil.bildbereich}>
+        <div className={`${stil.bildbereich} ${heroVideo ? "" : stil.platzhalter}`}>
           {heroVideo ? (
             <HeroVideo
               quelle={oeffentlich(heroVideo)}

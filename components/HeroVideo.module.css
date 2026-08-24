@@ -7,6 +7,10 @@
   border-radius: var(--rund-m);
   overflow: hidden;
   background: var(--tiefblau);
+  /* Dezente Tiefenwirkung statt des früheren dunkelblauen Rahmens —
+     das Video steht damit sauber neben dem Text, ohne Fläche an ein
+     umlaufendes Polster zu verlieren. */
+  box-shadow: var(--schatten);
 }
 
 /* Die Court-Grafik liegt darunter und ist sichtbar, solange das Video
