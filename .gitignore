@@ -10,3 +10,16 @@ npm-debug.log*
 next-env.d.ts
 .vercel
 *.tsbuildinfo
+
+/node_modules/.prisma/client
+
+# Von Prisma erzeugter Code (entsteht beim Bauen neu)
+/generated/
+
+# Von `prisma init` eingespielte Werkzeug-Dokumentation (ca. 500 KB, dreifach
+# abgelegt, u. a. fuer fremde Editoren). Nuetzlich beim Entwickeln, gehoert
+# aber nicht ins Projekt-Repository. Bei Bedarf mit `npx prisma init` wieder da.
+/.agents/
+/.windsurf/
+/skills-lock.json
+/.claude/skills/prisma-*

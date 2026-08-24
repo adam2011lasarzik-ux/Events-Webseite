@@ -1,0 +1,257 @@
+// ─────────────────────────────────────────────────────────────────
+//  VERA — Datenmodell
+//
+//  Drei Ebenen, wie im Skill event-backend-database festgelegt:
+//
+//    Event         die Veranstaltung
+//    Registration  EINE Anmeldung (Buchung) einer anmeldenden Person
+//    Participant   EINE teilnehmende Person, gehört zu einer Anmeldung
+//
+//  Der häufigste Denkfehler wäre, eine Anmeldung mit einer Person
+//  gleichzusetzen. Eine Familienbuchung mit 2 Erwachsenen und 4
+//  Schülern ist EINE Anmeldung mit SECHS Teilnehmern — und belegt
+//  sechs Plätze, nicht einen.
+// ─────────────────────────────────────────────────────────────────
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ── Veranstaltung ────────────────────────────────────────────────
+
+enum EventKategorie {
+  SPORT
+  BUSINESS
+  NETWORKING
+  SCHULE
+  COMMUNITY
+  WORKSHOP
+  FREIZEIT
+  SONSTIGES
+}
+
+/// Redaktioneller Zustand — eine bewusste Entscheidung des Veranstalters.
+/// NICHT zu verwechseln mit „läuft noch / ist vorbei": Ob ein Event in der
+/// Zukunft liegt, gerade läuft oder vorbei ist, ergibt sich aus startAt und
+/// endAt und wird deshalb berechnet, nicht gespeichert. Zwei Quellen für
+/// dieselbe Wahrheit laufen sonst auseinander.
+enum EventStatus {
+  ENTWURF
+  VEROEFFENTLICHT
+  ARCHIVIERT
+}
+
+model Event {
+  id     String @id @default(cuid())
+  /// Teil der Adresse, z. B. /events/padel-falkensee
+  slug   String @unique
+  status EventStatus    @default(ENTWURF)
+  kategorie EventKategorie @default(SONSTIGES)
+
+  // Texte
+  titel          String
+  untertitel     String?
+  /// Kurzfassung für die Karte auf der Startseite
+  karteTitel     String
+  karteKurz      String  @db.Text
+  karteZielgruppe String?
+  /// Kurztext auf der Event-Seite selbst (nicht zu verwechseln mit
+  /// karteKurz, das auf der Startseiten-Karte steht)
+  kurz           String  @db.Text
+  beschreibung   String  @db.Text
+  /// Freies Feld für alles, was nur dieses eine Event betrifft
+  hinweise       String? @db.Text
+
+  // Zeit — null bedeutet „steht noch nicht fest" und wird auf der
+  // Seite als sichtbarer Platzhalter angezeigt.
+  startAt DateTime?
+  endAt   DateTime?
+
+  // Ort
+  ortName String?
+  strasse String?
+  plz     String?
+  stadt   String
+
+  // Medien. Bewusst je Event: eine globale Variable würde jedem
+  // zweiten Event dasselbe Video verpassen.
+  bildUrl  String?
+  videoUrl String?
+
+  // Plätze. maxPersonen zählt PERSONEN, nicht Anmeldungen.
+  // null = unbegrenzt.
+  maxPersonen        Int?
+  /// Ab wie wenigen freien Plätzen die genaue Zahl angezeigt wird
+  schwelleWenigPlaetze Int @default(10)
+
+  // Preise, immer in ganzen Cent. Kommazahlen rechnen bei Geld
+  // ungenau (0.1 + 0.2 ist nicht exakt 0.3).
+  preisSchuelerCents    Int
+  preisErwachsenerCents Int
+
+  // Familienpaket
+  familieAktiv              Boolean @default(false)
+  familieBasisCents         Int?
+  familieEnthaltenErwachsene Int?
+  familieEnthaltenSchueler   Int?
+  familieWeitererSchuelerCents Int?
+  familieMaxSchueler         Int?
+
+  // Anmeldezeitraum (optional)
+  anmeldungAb  DateTime?
+  anmeldungBis DateTime?
+
+  erstelltAm   DateTime @default(now())
+  geaendertAm  DateTime @updatedAt
+
+  anmeldungen Registration[]
+  abschnitte  EventAbschnitt[]
+
+  @@index([status, startAt])
+}
+
+/// Optionale Inhaltsblöcke je Event — Programm, Speaker, Sponsoren,
+/// Anfahrt und was künftige Event-Arten sonst brauchen.
+///
+/// Eigene Tabelle statt eines JSON-Feldes: So bleibt die Struktur
+/// prüfbar und sortierbar, und ein Workshop kann andere Blöcke haben
+/// als ein Sportevent, ohne dass die Event-Tabelle wächst.
+/// (Angelegt, aber noch nicht auf der Webseite angezeigt.)
+model EventAbschnitt {
+  id       String @id @default(cuid())
+  eventId  String
+  event    Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  /// z. B. "programm", "speaker", "sponsoren", "anfahrt"
+  art      String
+  titel    String
+  inhalt   String @db.Text
+  reihenfolge Int  @default(0)
+
+  @@index([eventId, reihenfolge])
+}
+
+// ── Anmeldung (Buchung) ──────────────────────────────────────────
+
+enum Buchungsart {
+  EINZEL
+  FAMILIE
+}
+
+enum AnmeldeStatus {
+  BESTAETIGT
+  WARTELISTE
+  STORNIERT
+}
+
+enum ZahlungsStatus {
+  OFFEN
+  BEZAHLT
+  ERSTATTET
+  TEILWEISE_ERSTATTET
+}
+
+enum ZahlungsWeg {
+  VOR_ORT
+  UEBERWEISUNG
+  ONLINE
+}
+
+model Registration {
+  id      String @id @default(cuid())
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id])
+
+  // Anmeldende Person (nicht zwingend selbst Teilnehmer — ein
+  // Elternteil kann nur das Kind anmelden und bleibt trotzdem
+  // Vertragspartner).
+  kontaktVorname  String
+  kontaktNachname String
+  kontaktEmail    String
+  kontaktTelefon  String?
+
+  buchungsart Buchungsart   @default(EINZEL)
+  status      AnmeldeStatus @default(BESTAETIGT)
+
+  // Minderjährige: Einwilligung der Erziehungsberechtigten ist
+  // Pflicht, sobald Minderjährige dabei sind. Die Foto-Einwilligung
+  // ist davon getrennt und freiwillig — eine Anmeldung darf nicht
+  // daran scheitern, dass jemand keine Fotos möchte.
+  istVormundBuchung   Boolean @default(false)
+  einwilligungVormund Boolean @default(false)
+  einwilligungFotos   Boolean @default(false)
+
+  /// Zum Zeitpunkt der Anmeldung eingefroren. Ändert der Veranstalter
+  /// später den Eventpreis, darf sich der Betrag einer bereits
+  /// erfolgten Anmeldung nicht rückwirkend verändern.
+  gesamtpreisCents Int
+
+  // Zahlungsstatus wird GETRENNT vom Anmeldestatus geführt:
+  // jemand kann angemeldet, aber noch nicht bezahlt haben.
+  zahlungsStatus ZahlungsStatus @default(OFFEN)
+  zahlungsWeg    ZahlungsWeg    @default(ONLINE)
+  /// Referenz des Zahlungsanbieters, für den Abgleich
+  zahlungsReferenz String?
+  bezahlterBetragCents Int?
+  bezahltAm      DateTime?
+
+  angemeldetAm  DateTime  @default(now())
+  reaktiviertAm DateTime?
+  storniertAm   DateTime?
+
+  teilnehmer Participant[]
+
+  /// Duplikatsschutz auf Anmeldungs-Ebene: pro Event und E-Mail-Adresse
+  /// gibt es genau EINE Anmeldung — auch über Stornierungen hinweg.
+  ///
+  /// MySQL kennt keine Teil-Indizes wie PostgreSQL, man kann also nicht
+  /// „nur aktive Anmeldungen müssen eindeutig sein" erzwingen. Deshalb
+  /// der einfachere und robustere Weg: Meldet sich jemand nach einer
+  /// Stornierung erneut an, wird derselbe Datensatz reaktiviert statt
+  /// ein zweiter angelegt. Damit ist die Bedingung immer erfüllt und es
+  /// bleiben keine verwaisten Doppel-Einträge zurück.
+  @@unique([eventId, kontaktEmail])
+  @@index([eventId, status])
+}
+
+// ── Teilnehmende Person ──────────────────────────────────────────
+
+enum TeilnehmerTyp {
+  SCHUELER
+  ERWACHSENER
+}
+
+model Participant {
+  id             String       @id @default(cuid())
+  registrationId String
+  anmeldung      Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  vorname  String
+  nachname String
+  typ      TeilnehmerTyp
+
+  /// Nur das Jahr, nicht das volle Geburtsdatum — bei Minderjährigen
+  /// so sparsam wie möglich mit Daten umgehen.
+  geburtsjahr Int?
+
+  @@index([registrationId])
+}
+
+// ── Verwaltung ───────────────────────────────────────────────────
+
+/// Zugang zum geschützten Adminbereich. Als Tabelle angelegt statt als
+/// Passwort in einer Umgebungsvariable, damit später ein zweiter
+/// Administrator dazukommen kann, ohne das Modell zu ändern.
+/// (Angelegt, die Anmeldung selbst wird in einem späteren Schritt gebaut.)
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  /// Niemals das Passwort selbst, immer nur dessen Hash (bcrypt o. Ä.)
+  passwortHash String
+  erstelltAm   DateTime @default(now())
+  letzterLogin DateTime?
+}

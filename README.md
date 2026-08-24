@@ -1,8 +1,7 @@
 # VERA — Event-Webseite
 
 Webseite für VERA (kurz für **VERA**nstaltung). Erstes Event: ein
-Padel-Nachmittag in Falkensee für Schüler von 15 bis 21 Jahren und ihre
-Eltern.
+Padel-Nachmittag in Falkensee für Schüler, Lehrer und Eltern.
 
 ## Starten
 
