@@ -129,8 +129,8 @@ export function berechnePreis(regeln: Preisregeln, rohAuswahl: Auswahl): Preiser
 }
 
 /** Cent-Betrag als Euro darstellen, z. B. 4200 → „42,00 €". */
-export function alsEuro(cents: number, sprache: string = "de"): string {
-  return new Intl.NumberFormat(sprache === "en" ? "en-IE" : "de-DE", {
+export function alsEuro(cents: number): string {
+  return new Intl.NumberFormat("de-DE", {
     style: "currency",
     currency: "EUR",
   }).format(cents / 100);

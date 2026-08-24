@@ -17,19 +17,14 @@ npm run build    # Prüfen, ob alles fehlerfrei baut
 | Was | Wo |
 |---|---|
 | Datum, Ort, Preise, Plätze | `content/events.ts` |
-| Deutsche Texte | `content/de.ts` |
-| Englische Texte | `content/en.ts` |
+| Alle Texte | `content/de.ts` |
 | Farben, Schriftgrößen, Abstände | `styles/tokens.css` |
 | Fotos | `public/images/` (Anleitung liegt dort) |
-
-**Beide Sprachdateien müssen dieselben Einträge haben.** Fehlt in
-`en.ts` etwas, meldet `npm run build` das sofort — so kann keine
-Sprache unbemerkt unvollständig bleiben.
 
 ## Aufbau
 
 ```
-app/[locale]/     Die Seiten, je einmal unter /de und /en
+app/              Die Seiten (/, /anmeldung, /events/… …)
 components/       Bausteine (Kopfzeile, Event-Karte, Preisrechner …)
 content/          Event-Daten und alle Texte
 lib/              preise.ts (Preisberechnung), plaetze.ts (freie Plätze)
@@ -48,7 +43,6 @@ später verschiedene Beträge. Bei Geld ist das kein Schönheitsfehler.
 ## Was diese Version kann
 
 - Startseite, Event-Detailseite, Für Schulen, Über VERA, FAQ, Kontakt
-- Deutsch und Englisch, umschaltbar
 - Anmeldebereich mit Preisrechner, der live mitrechnet
 - Restplatz-Anzeige (erscheint ab 10 freien Plätzen)
 - Nutzbar ab 320 Pixel Breite, mit Tastatur bedienbar

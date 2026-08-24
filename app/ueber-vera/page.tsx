@@ -3,25 +3,12 @@ import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { CtaBand } from "@/components/CtaBand";
 import { VeraWortmarke } from "@/components/VeraWortmarke";
 import { texte } from "@/content";
-import type { Sprache } from "@/lib/i18n";
 import stil from "@/components/Textseite.module.css";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: Sprache }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  return { title: texte(locale).ueber.ueberschrift };
-}
+export const metadata: Metadata = { title: texte.ueber.ueberschrift };
 
-export default async function UeberSeite({
-  params,
-}: {
-  params: Promise<{ locale: Sprache }>;
-}) {
-  const { locale: sprache } = await params;
-  const t = texte(sprache);
+export default function UeberSeite() {
+  const t = texte;
 
   return (
     <>
@@ -38,7 +25,7 @@ export default async function UeberSeite({
       </Abschnitt>
 
       <Abschnitt>
-        <CtaBand sprache={sprache} t={t} />
+        <CtaBand t={t} />
       </Abschnitt>
     </>
   );

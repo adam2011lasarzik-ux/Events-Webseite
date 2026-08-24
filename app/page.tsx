@@ -3,7 +3,6 @@ import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { VeranstaltungsKarte } from "@/components/VeranstaltungsKarte";
 import { kommendeEvents } from "@/content/events";
 import { texte } from "@/content";
-import type { Sprache } from "@/lib/i18n";
 import stil from "./page.module.css";
 
 /**
@@ -12,22 +11,10 @@ import stil from "./page.module.css";
  * dort). Diese Seite zeigt nur noch eine Karte pro Veranstaltung und
  * bleibt so, auch wenn später weitere Events dazukommen.
  */
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: Sprache }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  return { title: texte(locale).startseite.ueberschrift };
-}
+export const metadata: Metadata = { title: texte.startseite.ueberschrift };
 
-export default async function Startseite({
-  params,
-}: {
-  params: Promise<{ locale: Sprache }>;
-}) {
-  const { locale: sprache } = await params;
-  const t = texte(sprache);
+export default function Startseite() {
+  const t = texte;
   const veranstaltungen = kommendeEvents();
 
   return (
@@ -39,7 +26,7 @@ export default async function Startseite({
       <Abschnitt>
         <div className={stil.raster}>
           {veranstaltungen.map((event) => (
-            <VeranstaltungsKarte key={event.slug} sprache={sprache} t={t} event={event} />
+            <VeranstaltungsKarte key={event.slug} t={t} event={event} />
           ))}
         </div>
         <p className={stil.hinweis}>{t.startseite.weitereFolgen}</p>

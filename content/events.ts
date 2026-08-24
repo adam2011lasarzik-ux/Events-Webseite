@@ -9,7 +9,6 @@
    --------------------------------------------------------------- */
 
 import type { Preisregeln } from "@/lib/preise";
-import type { Sprache } from "@/lib/i18n";
 
 export interface EventOrt {
   name: string | null;
@@ -61,7 +60,7 @@ export interface VeraEvent {
   alterVon: number | null;
   alterBis: number | null;
   preise: Preisregeln;
-  texte: Record<Sprache, EventTexte>;
+  texte: EventTexte;
 }
 
 export const events: VeraEvent[] = [
@@ -94,70 +93,37 @@ export const events: VeraEvent[] = [
       },
     },
     texte: {
-      de: {
-        titel: "Padel für Schüler und Eltern",
-        untertitel: "Ein Nachmittag auf dem Court in Falkensee",
-        kurz:
-          "Padel ausprobieren, ohne vorher etwas zu können. Schläger und Bälle liegen bereit, " +
-          "ein Trainer ist vor Ort, und Essen und Getränke gibt es zwischendurch auch.",
-        lang: [
-          "Der Tag ist für alle gemacht, die noch nie einen Padelschläger in der Hand hatten. " +
-            "Du brauchst keine Vorkenntnisse, keine Ausrüstung und keinen Partner — beides " +
-            "bekommst du vor Ort.",
-          "Betreuer sind den ganzen Nachmittag dabei. Sie erklären die Regeln, zeigen dir die " +
-            "ersten Schläge und geben Tipps, sobald du im Spiel bist. Gespielt wird in " +
-            "Vierergruppen, damit alle oft an den Ball kommen.",
-          "Eltern spielen ausdrücklich mit. Wer lieber zuschaut, findet am Rand einen Platz — " +
-            "Essen und Getränke gibt es für alle.",
-        ],
-        dabei: [
-          "Schläger und Bälle",
-          "Einweisung und Betreuung",
-          "Essen und Getränke",
-          "Spielzeit in Vierergruppen",
-        ],
-        mitbringen: [
-          "Sportkleidung",
-          "Saubere Hallenschuhe",
-          "Ein Handtuch",
-        ],
-        karteTitel: "Padel Event",
-        karteKurz:
-          "Gemeinsam Padel spielen, neue Leute kennenlernen und einen besonderen Abend " +
-          "erleben.",
-        karteZielgruppe: "Für Schüler, Lehrer und Eltern",
-      },
-      en: {
-        titel: "Padel for Students and Parents",
-        untertitel: "An afternoon on the court in Falkensee",
-        kurz:
-          "Try padel without knowing anything about it first. Rackets and balls are provided, " +
-          "a coach is on site, and food and drinks are there too.",
-        lang: [
-          "This day is built for people who have never held a padel racket. No experience, " +
-            "no gear and no partner needed — you get all of it on site.",
-          "Coaches are there all afternoon. They explain the rules, walk you through your " +
-            "first shots and give tips once you are rallying. You play in groups of four so " +
-            "everyone gets plenty of time on the ball.",
-          "Parents are meant to play too. If you would rather watch, there is space courtside — " +
-            "food and drinks are there for everyone.",
-        ],
-        dabei: [
-          "Rackets and balls",
-          "Introduction and coaching",
-          "Food and drinks",
-          "Court time in groups of four",
-        ],
-        mitbringen: [
-          "Sportswear",
-          "Clean indoor shoes",
-          "A towel",
-        ],
-        karteTitel: "Padel Event",
-        karteKurz:
-          "Play padel together, meet new people and have a memorable evening.",
-        karteZielgruppe: "For students, teachers and parents",
-      },
+      titel: "Padel für Schüler und Eltern",
+      untertitel: "Ein Nachmittag auf dem Court in Falkensee",
+      kurz:
+        "Padel ausprobieren, ohne vorher etwas zu können. Schläger und Bälle liegen bereit, " +
+        "ein Trainer ist vor Ort, und Essen und Getränke gibt es zwischendurch auch.",
+      lang: [
+        "Der Tag ist für alle gemacht, die noch nie einen Padelschläger in der Hand hatten. " +
+          "Du brauchst keine Vorkenntnisse, keine Ausrüstung und keinen Partner — beides " +
+          "bekommst du vor Ort.",
+        "Betreuer sind den ganzen Nachmittag dabei. Sie erklären die Regeln, zeigen dir die " +
+          "ersten Schläge und geben Tipps, sobald du im Spiel bist. Gespielt wird in " +
+          "Vierergruppen, damit alle oft an den Ball kommen.",
+        "Eltern spielen ausdrücklich mit. Wer lieber zuschaut, findet am Rand einen Platz — " +
+          "Essen und Getränke gibt es für alle.",
+      ],
+      dabei: [
+        "Schläger und Bälle",
+        "Einweisung und Betreuung",
+        "Essen und Getränke",
+        "Spielzeit in Vierergruppen",
+      ],
+      mitbringen: [
+        "Sportkleidung",
+        "Saubere Hallenschuhe",
+        "Ein Handtuch",
+      ],
+      karteTitel: "Padel Event",
+      karteKurz:
+        "Gemeinsam Padel spielen, neue Leute kennenlernen und einen besonderen Abend " +
+        "erleben.",
+      karteZielgruppe: "Für Schüler, Lehrer und Eltern",
     },
   },
 ];

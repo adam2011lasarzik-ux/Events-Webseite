@@ -11,7 +11,7 @@ import { CtaBand } from "@/components/CtaBand";
 import { Knopf } from "@/components/Knopf";
 import { events, findeEvent, type VeraEvent } from "@/content/events";
 import { texte } from "@/content";
-import { pfad, sprachen, type Sprache } from "@/lib/i18n";
+
 import textStil from "@/components/Textseite.module.css";
 
 /**
@@ -28,40 +28,40 @@ import textStil from "@/components/Textseite.module.css";
  * Abschnitte — das ist spätere Arbeit, kein übersehenes Detail.
  */
 export function generateStaticParams() {
-  return sprachen.flatMap((locale) => events.map((e) => ({ locale, slug: e.slug })));
+  return events.map((e) => ({ slug: e.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: Sprache; slug: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { locale, slug } = await params;
+  const { slug } = await params;
   const event = findeEvent(slug);
   if (!event) return {};
   return {
-    title: event.texte[locale].titel,
-    description: event.texte[locale].kurz,
+    title: event.texte.titel,
+    description: event.texte.kurz,
   };
 }
 
 export default async function EventVollseite({
   params,
 }: {
-  params: Promise<{ locale: Sprache; slug: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { locale: sprache, slug } = await params;
+  const { slug } = await params;
   const event: VeraEvent | undefined = findeEvent(slug);
   if (!event) notFound();
 
-  const t = texte(sprache);
+  const t = texte;
 
   return (
     <>
-      <Hero sprache={sprache} t={t} event={event} />
+      <Hero t={t} event={event} />
 
       <Abschnitt id="event" ton="warm">
-        <EventKarte sprache={sprache} t={t} event={event} />
+        <EventKarte t={t} event={event} />
       </Abschnitt>
 
       <Abschnitt>
@@ -70,7 +70,7 @@ export default async function EventVollseite({
 
       <Abschnitt ton="warm">
         <AbschnittKopf titel={t.preise.ueberschrift} />
-        <PreisKacheln sprache={sprache} t={t} event={event} />
+        <PreisKacheln t={t} event={event} />
       </Abschnitt>
 
       <Abschnitt>
@@ -88,7 +88,7 @@ export default async function EventVollseite({
           ))}
         </ul>
         <div style={{ marginTop: "2rem" }}>
-          <Knopf href={pfad(sprache, "/fuer-schulen")} art="zweit" pfeil>
+          <Knopf href={"/fuer-schulen"} art="zweit" pfeil>
             {t.schulen.mehr}
           </Knopf>
         </div>
@@ -99,7 +99,7 @@ export default async function EventVollseite({
       </Abschnitt>
 
       <Abschnitt>
-        <CtaBand sprache={sprache} t={t} />
+        <CtaBand t={t} />
       </Abschnitt>
     </>
   );

@@ -2,22 +2,20 @@ import { Knopf } from "./Knopf";
 import { PlatzHinweis } from "./PlatzHinweis";
 import { Platzhalter } from "./Platzhalter";
 import { alsEuro } from "@/lib/preise";
-import { alsDatum, pfad, type Sprache } from "@/lib/i18n";
+import { alsDatum } from "@/lib/formate";
 import { oeffentlich } from "@/lib/pfade";
 import type { VeraEvent } from "@/content/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./EventKarte.module.css";
 
 export function EventKarte({
-  sprache,
   t,
   event,
 }: {
-  sprache: Sprache;
   t: Woerterbuch;
   event: VeraEvent;
 }) {
-  const text = event.texte[sprache];
+  const text = event.texte;
 
   return (
     <article className={stil.karte}>
@@ -39,7 +37,7 @@ export function EventKarte({
             <dt>{t.event.wann}</dt>
             <dd>
               {event.datum ? (
-                alsDatum(event.datum, sprache)
+                alsDatum(event.datum)
               ) : (
                 <Platzhalter text={t.platzhalter.datumKurz} markierung={t.platzhalter.markierung} />
               )}
@@ -54,13 +52,13 @@ export function EventKarte({
           <div className={stil.datum}>
             <dt>{t.event.preis}</dt>
             <dd>
-              {t.preise.ab} {alsEuro(event.preise.schuelerCents, sprache)}
+              {t.preise.ab} {alsEuro(event.preise.schuelerCents)}
             </dd>
           </div>
         </dl>
 
         <div className={stil.fuss}>
-          <Knopf href={pfad(sprache, `/event/${event.slug}`)} pfeil>
+          <Knopf href={`/event/${event.slug}`} pfeil>
             {t.aktion.zumEvent}
           </Knopf>
           <PlatzHinweis event={event} t={t} />

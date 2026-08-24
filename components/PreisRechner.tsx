@@ -5,7 +5,7 @@ import { Knopf } from "./Knopf";
 import { FormularVorschau, feldnamen, type VorschauFeldGruppe } from "./FormularVorschau";
 import { alsEuro, berechnePreis, type Auswahl } from "@/lib/preise";
 import { brauchtKontaktdaten, vorschauRollen, type Anmeldeweg } from "@/lib/vorschau";
-import { fuelle, pfad, type Sprache } from "@/lib/i18n";
+import { fuelle } from "@/lib/formate";
 import type { VeraEvent } from "@/content/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./PreisRechner.module.css";
@@ -28,11 +28,9 @@ type SelbstAls = "student" | "adult";
  * derselben Funktion noch einmal nach.
  */
 export function PreisRechner({
-  sprache,
   t,
   event,
 }: {
-  sprache: Sprache;
   t: Woerterbuch;
   event: VeraEvent;
 }) {
@@ -153,7 +151,7 @@ export function PreisRechner({
                 />
                 <span className={stil.optionName}>{t.anmeldung.selbstSchueler}</span>
                 <span className={stil.optionPreis}>
-                  {alsEuro(event.preise.schuelerCents, sprache)}
+                  {alsEuro(event.preise.schuelerCents)}
                 </span>
               </label>
               <label className={stil.optionZeile}>
@@ -165,7 +163,7 @@ export function PreisRechner({
                 />
                 <span className={stil.optionName}>{t.anmeldung.selbstErwachsener}</span>
                 <span className={stil.optionPreis}>
-                  {alsEuro(event.preise.erwachsenerCents, sprache)}
+                  {alsEuro(event.preise.erwachsenerCents)}
                 </span>
               </label>
             </fieldset>
@@ -180,7 +178,7 @@ export function PreisRechner({
                 max={6}
                 setzeWert={setzeKinder}
                 t={t}
-                text={`× ${alsEuro(event.preise.schuelerCents, sprache)}`}
+                text={`× ${alsEuro(event.preise.schuelerCents)}`}
               />
               <label className={stil.optionZeile} style={{ marginTop: "1rem" }}>
                 <input
@@ -190,7 +188,7 @@ export function PreisRechner({
                 />
                 <span className={stil.optionName}>{t.anmeldung.kindMitkommen}</span>
                 <span className={stil.optionPreis}>
-                  + {alsEuro(event.preise.erwachsenerCents, sprache)}
+                  + {alsEuro(event.preise.erwachsenerCents)}
                 </span>
               </label>
             </div>
@@ -227,7 +225,7 @@ export function PreisRechner({
               <span>
                 {p.anzahl} × {postenName[p.bezeichnung] ?? p.bezeichnung}
               </span>
-              <span className={stil.postenBetrag}>{alsEuro(p.summeCents, sprache)}</span>
+              <span className={stil.postenBetrag}>{alsEuro(p.summeCents)}</span>
             </div>
           ))}
         </div>
@@ -236,7 +234,7 @@ export function PreisRechner({
           <span className={stil.summeName}>{t.anmeldung.summe}</span>
           {/* Wird der Betrag geändert, liest ein Screenreader ihn vor. */}
           <span className={stil.summeBetrag} aria-live="polite">
-            {alsEuro(ergebnis.gesamtCents, sprache)}
+            {alsEuro(ergebnis.gesamtCents)}
           </span>
         </div>
 
@@ -254,7 +252,7 @@ export function PreisRechner({
           <p className={stil.merkerText} style={{ color: "rgba(234,241,248,0.75)" }}>
             {t.anmeldung.nochNichtText}
           </p>
-          <Knopf href={pfad(sprache, "/kontakt")} pfeil>
+          <Knopf href={"/kontakt"} pfeil>
             {t.anmeldung.nochNichtAktion}
           </Knopf>
         </div>

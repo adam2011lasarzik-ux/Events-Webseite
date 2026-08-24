@@ -1,5 +1,5 @@
 import { platzstand } from "@/lib/plaetze";
-import { fuelle } from "@/lib/i18n";
+import { fuelle } from "@/lib/formate";
 import type { VeraEvent } from "@/content/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./PlatzHinweis.module.css";

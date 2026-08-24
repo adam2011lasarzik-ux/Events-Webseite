@@ -4,26 +4,24 @@ import Link from "next/link";
 import { useState } from "react";
 import { VeraWortmarke } from "./VeraWortmarke";
 import { Knopf } from "./Knopf";
-import { pfad, type Sprache } from "@/lib/i18n";
 import type { Woerterbuch } from "@/content";
 import stil from "./Header.module.css";
 
-export function Header({ sprache, t }: { sprache: Sprache; t: Woerterbuch }) {
+export function Header({ t }: { t: Woerterbuch }) {
   const [offen, setzeOffen] = useState(false);
-  const andereSprache: Sprache = sprache === "de" ? "en" : "de";
 
   const punkte = [
-    { href: pfad(sprache, "/events/padel-falkensee"), text: t.nav.event },
-    { href: pfad(sprache, "/fuer-schulen"), text: t.nav.schulen },
-    { href: pfad(sprache, "/ueber-vera"), text: t.nav.ueber },
-    { href: pfad(sprache, "/faq"), text: t.nav.faq },
-    { href: pfad(sprache, "/kontakt"), text: t.nav.kontakt },
+    { href: "/events/padel-falkensee", text: t.nav.event },
+    { href: "/fuer-schulen", text: t.nav.schulen },
+    { href: "/ueber-vera", text: t.nav.ueber },
+    { href: "/faq", text: t.nav.faq },
+    { href: "/kontakt", text: t.nav.kontakt },
   ];
 
   return (
     <header className={stil.kopf}>
       <div className={stil.innen}>
-        <Link href={pfad(sprache)} className={stil.markeLink} aria-label="VERA">
+        <Link href="/" className={stil.markeLink} aria-label="VERA">
           <VeraWortmarke groesse="klein" kurzAufKlein />
         </Link>
 
@@ -36,13 +34,8 @@ export function Header({ sprache, t }: { sprache: Sprache; t: Woerterbuch }) {
         </nav>
 
         <div className={stil.rechts}>
-          <Link href={pfad(andereSprache)} className={stil.sprache} lang={andereSprache}>
-            {andereSprache.toUpperCase()}
-            <span className="nurVorlesen"> — {t.nav.spracheWechseln}</span>
-          </Link>
-
           <span className={stil.anmeldeKnopf}>
-            <Knopf href={pfad(sprache, "/anmeldung")}>{t.aktion.anmelden}</Knopf>
+            <Knopf href="/anmeldung">{t.aktion.anmelden}</Knopf>
           </span>
 
           <button
@@ -71,7 +64,7 @@ export function Header({ sprache, t }: { sprache: Sprache; t: Woerterbuch }) {
               </Link>
             ))}
             <span className={stil.klappeAktion}>
-              <Knopf href={pfad(sprache, "/anmeldung")}>{t.aktion.anmelden}</Knopf>
+              <Knopf href="/anmeldung">{t.aktion.anmelden}</Knopf>
             </span>
           </nav>
         </div>

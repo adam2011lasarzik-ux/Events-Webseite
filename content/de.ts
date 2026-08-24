@@ -7,8 +7,6 @@ export const de = {
     beschreibung:
       "VERA veranstaltet Sport- und Netzwerkevents. Den Anfang macht ein Padel-Nachmittag " +
       "in Falkensee für Schüler, Lehrer und Eltern.",
-    spracheName: "Deutsch",
-    spracheKurz: "DE",
   },
 
   nav: {
@@ -21,7 +19,6 @@ export const de = {
     ueber: "Über VERA",
     faq: "Fragen",
     kontakt: "Kontakt",
-    spracheWechseln: "Switch to English",
   },
 
   aktion: {
@@ -328,8 +325,8 @@ export const de = {
 };
 
 /**
- * Die Form des deutschen Wörterbuchs ist die Vorlage für alle Sprachen.
- * Fehlt in content/en.ts ein Eintrag, meldet TypeScript das sofort —
- * so kann keine Sprache versehentlich unvollständig bleiben.
+ * Der Typ ergibt sich aus dem Wörterbuch selbst. Wird oben ein Eintrag
+ * umbenannt oder entfernt, meldet TypeScript sofort jede Stelle, die
+ * ihn noch benutzt.
  */
 export type Woerterbuch = typeof de;

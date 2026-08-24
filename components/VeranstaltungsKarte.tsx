@@ -1,6 +1,6 @@
 import { Knopf } from "./Knopf";
 import { Platzhalter } from "./Platzhalter";
-import { alsDatum, pfad, type Sprache } from "@/lib/i18n";
+import { alsDatum } from "@/lib/formate";
 import { oeffentlich } from "@/lib/pfade";
 import type { VeraEvent } from "@/content/events";
 import type { Woerterbuch } from "@/content";
@@ -17,15 +17,13 @@ import stil from "./VeranstaltungsKarte.module.css";
  * (`/event/[slug]`) — beide behalten ihre eigene, klar getrennte Rolle.
  */
 export function VeranstaltungsKarte({
-  sprache,
   t,
   event,
 }: {
-  sprache: Sprache;
   t: Woerterbuch;
   event: VeraEvent;
 }) {
-  const text = event.texte[sprache];
+  const text = event.texte;
 
   return (
     <article className={stil.karte}>
@@ -45,7 +43,7 @@ export function VeranstaltungsKarte({
               <dt>{t.event.wann}</dt>
               <dd>
                 {event.datum ? (
-                  alsDatum(event.datum, sprache)
+                  alsDatum(event.datum)
                 ) : (
                   <Platzhalter text={t.platzhalter.datumKurz} markierung={t.platzhalter.markierung} />
                 )}
@@ -65,7 +63,7 @@ export function VeranstaltungsKarte({
           </div>
         </dl>
 
-        <Knopf href={pfad(sprache, `/events/${event.slug}`)} pfeil>
+        <Knopf href={`/events/${event.slug}`} pfeil>
           {t.aktion.eventAnsehen}
         </Knopf>
       </div>

@@ -3,25 +3,12 @@ import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { CtaBand } from "@/components/CtaBand";
 import { Platzhalter } from "@/components/Platzhalter";
 import { texte } from "@/content";
-import type { Sprache } from "@/lib/i18n";
 import stil from "@/components/Textseite.module.css";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: Sprache }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  return { title: texte(locale).schulen.ueberschrift };
-}
+export const metadata: Metadata = { title: texte.schulen.ueberschrift };
 
-export default async function SchulenSeite({
-  params,
-}: {
-  params: Promise<{ locale: Sprache }>;
-}) {
-  const { locale: sprache } = await params;
-  const t = texte(sprache);
+export default function SchulenSeite() {
+  const t = texte;
 
   return (
     <>
@@ -50,7 +37,7 @@ export default async function SchulenSeite({
       </Abschnitt>
 
       <Abschnitt>
-        <CtaBand sprache={sprache} t={t} />
+        <CtaBand t={t} />
       </Abschnitt>
     </>
   );

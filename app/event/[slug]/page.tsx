@@ -9,38 +9,38 @@ import { CtaBand } from "@/components/CtaBand";
 import { Knopf } from "@/components/Knopf";
 import { events, findeEvent } from "@/content/events";
 import { texte } from "@/content";
-import { alsDatum, fuelle, pfad, sprachen, type Sprache } from "@/lib/i18n";
+import { alsDatum, fuelle } from "@/lib/formate";
 import stil from "./event.module.css";
 
 export function generateStaticParams() {
-  return sprachen.flatMap((locale) => events.map((e) => ({ locale, slug: e.slug })));
+  return events.map((e) => ({ slug: e.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: Sprache; slug: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { locale, slug } = await params;
+  const { slug } = await params;
   const event = findeEvent(slug);
   if (!event) return {};
   return {
-    title: event.texte[locale].titel,
-    description: event.texte[locale].kurz,
+    title: event.texte.titel,
+    description: event.texte.kurz,
   };
 }
 
 export default async function EventSeite({
   params,
 }: {
-  params: Promise<{ locale: Sprache; slug: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { locale: sprache, slug } = await params;
+  const { slug } = await params;
   const event = findeEvent(slug);
   if (!event) notFound();
 
-  const t = texte(sprache);
-  const text = event.texte[sprache];
+  const t = texte;
+  const text = event.texte;
   const halter = (inhalt: string) => (
     <Platzhalter text={inhalt} markierung={t.platzhalter.markierung} />
   );
@@ -53,7 +53,7 @@ export default async function EventSeite({
             <AbschnittKopf augenbraue={t.event.naechstesEvent} titel={text.titel} haupt />
             <p className={stil.untertitel}>{text.untertitel}</p>
             <div className={stil.knoepfe}>
-              <Knopf href={pfad(sprache, "/anmeldung")} pfeil>
+              <Knopf href={"/anmeldung"} pfeil>
                 {t.aktion.anmelden}
               </Knopf>
               <PlatzHinweis event={event} t={t} />
@@ -68,7 +68,7 @@ export default async function EventSeite({
           <div>
             <dt>{t.event.wann}</dt>
             <dd>
-              {event.datum ? alsDatum(event.datum, sprache) : halter(t.platzhalter.datum)}
+              {event.datum ? alsDatum(event.datum) : halter(t.platzhalter.datum)}
               <br />
               {event.zeitVon && event.zeitBis
                 ? `${event.zeitVon} – ${event.zeitBis}`
@@ -125,11 +125,11 @@ export default async function EventSeite({
 
       <Abschnitt>
         <AbschnittKopf titel={t.preise.ueberschrift} />
-        <PreisKacheln sprache={sprache} t={t} event={event} />
+        <PreisKacheln t={t} event={event} />
       </Abschnitt>
 
       <Abschnitt>
-        <CtaBand sprache={sprache} t={t} />
+        <CtaBand t={t} />
       </Abschnitt>
     </>
   );
