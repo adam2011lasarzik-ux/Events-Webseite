@@ -1,0 +1,15 @@
+/* Ein Feld reicht heute für eine einzige Karte, füllt sich aber von
+   selbst mit weiteren Spalten, sobald mehr Events dazukommen — ohne
+   dass an diesem Layout dann noch etwas geändert werden muss. */
+.raster {
+  display: grid;
+  gap: var(--a-6);
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+}
+
+.hinweis {
+  margin-top: var(--a-6);
+  color: var(--text-leise);
+  font-size: var(--gr-s);
+  text-align: center;
+}

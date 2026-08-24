@@ -25,6 +25,16 @@ export interface EventTexte {
   lang: string[];
   dabei: string[];
   mitbringen: string[];
+  /**
+   * Kurzfassung für die Karte auf der zentralen Event-Übersicht (`/`).
+   * Bewusst getrennt von `titel`/`kurz` (die für die ausführliche
+   * Event-Seite unter `/events/[slug]` gedacht sind) — die Übersicht
+   * braucht knappere, werblichere Sätze. Pflichtfelder: jedes künftige
+   * Event muss eigenen Übersichtskarten-Text mitbringen.
+   */
+  karteTitel: string;
+  karteKurz: string;
+  karteZielgruppe: string;
 }
 
 export interface VeraEvent {
@@ -111,6 +121,11 @@ export const events: VeraEvent[] = [
           "Saubere Hallenschuhe",
           "Ein Handtuch",
         ],
+        karteTitel: "Padel Event",
+        karteKurz:
+          "Gemeinsam Padel spielen, neue Leute kennenlernen und einen besonderen Abend " +
+          "erleben.",
+        karteZielgruppe: "Für Schüler, Lehrer und Eltern",
       },
       en: {
         titel: "Padel for Students and Parents",
@@ -138,13 +153,17 @@ export const events: VeraEvent[] = [
           "Clean indoor shoes",
           "A towel",
         ],
+        karteTitel: "Padel Event",
+        karteKurz:
+          "Play padel together, meet new people and have a memorable evening.",
+        karteZielgruppe: "For students, teachers and parents",
       },
     },
   },
 ];
 
 /**
- * Video im Hero-Bereich der Startseite.
+ * Video im Hero-Bereich der Event-Seite (`/events/[slug]`).
  *
  * Dateiname relativ zu `public/`. Auf `null` gesetzt, erscheint dort
  * stattdessen die Court-Grafik mit Platzhalter-Hinweis.

@@ -30,7 +30,15 @@ export const de = {
     familieAnmelden: "Familie anmelden",
     detailsAnsehen: "Alle Infos zum Event",
     zumEvent: "Zum Event",
+    eventAnsehen: "Event ansehen",
     zurueck: "Zurück zur Startseite",
+  },
+
+  startseite: {
+    ueberschrift: "Unsere Veranstaltungen",
+    einleitung:
+      "Sport- und Netzwerkevents, bei denen du Neues ausprobierst und Leute kennenlernst.",
+    weitereFolgen: "Weitere Veranstaltungen folgen in Kürze.",
   },
 
   hero: {

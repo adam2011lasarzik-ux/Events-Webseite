@@ -32,7 +32,14 @@ export const en: Woerterbuch = {
     familieAnmelden: "Register a family",
     detailsAnsehen: "All event details",
     zumEvent: "See the event",
+    eventAnsehen: "View event",
     zurueck: "Back to the home page",
+  },
+
+  startseite: {
+    ueberschrift: "Our events",
+    einleitung: "Sports and networking events where you try something new and meet people.",
+    weitereFolgen: "More events are coming soon.",
   },
 
   hero: {

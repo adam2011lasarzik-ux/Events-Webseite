@@ -1,16 +1,25 @@
+import type { Metadata } from "next";
 import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
-import { Hero } from "@/components/Hero";
-import { EventKarte } from "@/components/EventKarte";
-import { WasIstPadel } from "@/components/WasIstPadel";
-import { PreisKacheln } from "@/components/PreisKacheln";
-import { Ablauf } from "@/components/Ablauf";
-import { FaqListe } from "@/components/FaqListe";
-import { CtaBand } from "@/components/CtaBand";
-import { Knopf } from "@/components/Knopf";
-import { events } from "@/content/events";
+import { VeranstaltungsKarte } from "@/components/VeranstaltungsKarte";
+import { kommendeEvents } from "@/content/events";
 import { texte } from "@/content";
-import { pfad, type Sprache } from "@/lib/i18n";
-import textStil from "@/components/Textseite.module.css";
+import type { Sprache } from "@/lib/i18n";
+import stil from "./page.module.css";
+
+/**
+ * Die zentrale Event-Übersicht. Bis vor Kurzem lag hier der komplette
+ * Padel-Inhalt direkt — der ist umgezogen nach `/events/[slug]` (siehe
+ * dort). Diese Seite zeigt nur noch eine Karte pro Veranstaltung und
+ * bleibt so, auch wenn später weitere Events dazukommen.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Sprache }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return { title: texte(locale).startseite.ueberschrift };
+}
 
 export default async function Startseite({
   params,
@@ -19,52 +28,21 @@ export default async function Startseite({
 }) {
   const { locale: sprache } = await params;
   const t = texte(sprache);
-  const event = events[0];
+  const veranstaltungen = kommendeEvents();
 
   return (
     <>
-      <Hero sprache={sprache} t={t} event={event} />
-
-      <Abschnitt id="event" ton="warm">
-        <EventKarte sprache={sprache} t={t} event={event} />
+      <Abschnitt ton="warm">
+        <AbschnittKopf titel={t.startseite.ueberschrift} einleitung={t.startseite.einleitung} haupt />
       </Abschnitt>
 
       <Abschnitt>
-        <WasIstPadel t={t} />
-      </Abschnitt>
-
-      <Abschnitt ton="warm">
-        <AbschnittKopf titel={t.preise.ueberschrift} />
-        <PreisKacheln sprache={sprache} t={t} event={event} />
-      </Abschnitt>
-
-      <Abschnitt>
-        <Ablauf t={t} />
-      </Abschnitt>
-
-      <Abschnitt ton="warm">
-        <AbschnittKopf titel={t.schulen.ueberschrift} einleitung={t.schulen.kurz} />
-        <ul className={textStil.punkte}>
-          {t.schulen.punkte.map((punkt) => (
-            <li key={punkt}>
-              <span className={textStil.haken} aria-hidden="true">✓</span>
-              {punkt}
-            </li>
+        <div className={stil.raster}>
+          {veranstaltungen.map((event) => (
+            <VeranstaltungsKarte key={event.slug} sprache={sprache} t={t} event={event} />
           ))}
-        </ul>
-        <div style={{ marginTop: "2rem" }}>
-          <Knopf href={pfad(sprache, "/fuer-schulen")} art="zweit" pfeil>
-            {t.schulen.mehr}
-          </Knopf>
         </div>
-      </Abschnitt>
-
-      <Abschnitt>
-        <FaqListe t={t} />
-      </Abschnitt>
-
-      <Abschnitt>
-        <CtaBand sprache={sprache} t={t} />
+        <p className={stil.hinweis}>{t.startseite.weitereFolgen}</p>
       </Abschnitt>
     </>
   );

@@ -13,7 +13,7 @@ export function Header({ sprache, t }: { sprache: Sprache; t: Woerterbuch }) {
   const andereSprache: Sprache = sprache === "de" ? "en" : "de";
 
   const punkte = [
-    { href: pfad(sprache, "/event/padel-falkensee"), text: t.nav.event },
+    { href: pfad(sprache, "/events/padel-falkensee"), text: t.nav.event },
     { href: pfad(sprache, "/fuer-schulen"), text: t.nav.schulen },
     { href: pfad(sprache, "/ueber-vera"), text: t.nav.ueber },
     { href: pfad(sprache, "/faq"), text: t.nav.faq },
