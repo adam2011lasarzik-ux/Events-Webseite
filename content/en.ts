@@ -80,6 +80,8 @@ export const en: Woerterbuch = {
       "You serve underarm, the racket has no strings, and the walls are part of the game " +
         "rather than the end of it. That's why most people get into a real rally within " +
         "minutes of starting.",
+      "Alongside the doubles courts (4 players, 20 × 10 metres) we also have 2 single " +
+        "courts, where 2 players go head-to-head on a 6 × 10 metre court.",
     ],
     fakten: [
       { zahl: "4", text: "players, always" },

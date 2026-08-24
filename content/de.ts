@@ -78,6 +78,9 @@ export const de = {
       "Der Aufschlag geht von unten, der Schläger hat keine Saiten, und die Wände sind Teil " +
         "des Spiels statt das Ende davon. Genau deshalb kommen die meisten schon nach ein paar " +
         "Minuten zum ersten richtigen Ballwechsel.",
+      "Neben den Doppel-Courts (4 Personen, 20 × 10 Meter) gibt es bei uns zusätzlich 2 " +
+        "Single-Courts: Dort spielen jeweils 2 Personen gegeneinander, auf einer Fläche von " +
+        "6 × 10 Metern.",
     ],
     fakten: [
       { zahl: "4", text: "Spieler, immer" },
