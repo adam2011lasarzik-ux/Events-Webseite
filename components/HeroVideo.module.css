@@ -26,6 +26,12 @@
   height: 100%;
   /* Füllt die Fläche vollständig und schneidet zu, statt zu verzerren. */
   object-fit: cover;
+  /* Das Video ist hochkant, die Fläche liegt quer — sichtbar bleiben rund
+     42 % der Bildhöhe. Mit der Voreinstellung (Mitte) läge der Ausschnitt
+     auf Armen und Schlägern; bei 25 % bleiben in der ganzen Aufnahme
+     Köpfe, Ball und Schläger im Bild. Ausschnitte wurden dafür einzeln
+     aus dem Video gezogen und verglichen. */
+  object-position: center 25%;
   display: block;
   opacity: 0;
   transition: opacity 0.4s ease;

@@ -2,7 +2,11 @@
 
 Hier liegt das Video, das oben rechts auf der Startseite läuft.
 
-## So schaltest du es ein
+Aktuell in Betrieb: **`padel-hero.mp4`** — H.264 High, 720 x 1280,
+7,9 Sekunden, ohne Ton, 1,6 MB. Umgewandelt aus der gelieferten
+`.mov`-Datei, die HEVC/H.265 enthielt (siehe unten, warum das nötig war).
+
+## So tauschst du es aus
 
 1. Lege die Videodatei in diesen Ordner, z. B. `padel-hero.mp4`
 2. Trage sie in `content/events.ts` ein:
@@ -41,3 +45,11 @@ keinen Ton und keine Bedienelemente.
 
 Wer im Gerät „Bewegung reduzieren" eingeschaltet hat, bekommt das Video
 nicht automatisch gestartet und sieht das erste Bild.
+
+## Bildausschnitt
+
+Das Video ist hochkant (9:16), die Fläche auf der Seite ist quer (4:3).
+Sichtbar bleiben deshalb rund 42 % der Bildhöhe. Welcher Teil das ist,
+steht als `object-position` in `components/HeroVideo.module.css`
+(derzeit `center 25%`). Tauschst du das Video gegen ein anderes aus,
+lohnt sich ein Blick, ob der Wert noch passt.

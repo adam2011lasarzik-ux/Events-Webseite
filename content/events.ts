@@ -151,9 +151,11 @@ export const events: VeraEvent[] = [
  *
  * WICHTIG: Die Datei muss MP4 mit H.264 sein. Eine .mov-Datei mit
  * HEVC/H.265 spielt zwar auf iPhone und iPad, bleibt in Chrome und
- * Firefox aber schwarz.
+ * Firefox aber schwarz. Die hier hinterlegte Datei wurde aus genau
+ * diesem Grund aus dem gelieferten HEVC-Original umgewandelt
+ * (H.264 High, yuv420p, 720 x 1280, 7,9 s, 1,6 MB).
  */
-export const heroVideo: string | null = null;
+export const heroVideo: string | null = "/videos/padel-hero.mp4";
 
 export function findeEvent(slug: string): VeraEvent | undefined {
   return events.find((e) => e.slug === slug);
