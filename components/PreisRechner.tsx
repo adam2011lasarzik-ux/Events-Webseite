@@ -4,12 +4,15 @@ import { useMemo, useState } from "react";
 import { Knopf } from "./Knopf";
 import { FormularVorschau, feldnamen, type VorschauFeldGruppe } from "./FormularVorschau";
 import { alsEuro, berechnePreis, type Auswahl } from "@/lib/preise";
+import { brauchtKontaktdaten, vorschauRollen, type Anmeldeweg } from "@/lib/vorschau";
 import { fuelle, pfad, type Sprache } from "@/lib/i18n";
 import type { VeraEvent } from "@/content/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./PreisRechner.module.css";
 
-type FuerWen = "selbst" | "kind" | "familie";
+/** Derselbe Typ, den lib/vorschau.ts erwartet — so können die drei
+ *  Anmeldewege hier und dort nicht auseinanderlaufen. */
+type FuerWen = Anmeldeweg;
 type SelbstAls = "student" | "adult";
 
 /**
@@ -59,39 +62,32 @@ export function PreisRechner({
 
   const ergebnis = useMemo(() => berechnePreis(event.preise, auswahl), [event.preise, auswahl]);
 
-  const namen = feldnamen(t);
-  const kontaktFelder = [namen.vorname, namen.nachname, namen.email, namen.telefon];
-  const nameFelder = [namen.vorname, namen.nachname];
-
   /**
-   * Welche Feldgruppen die spätere Anmeldung abfragen wird — je
-   * Zweig unterschiedlich, aber alle aus denselben Bausteinen
-   * (Kontaktperson / Teilnehmer-Name) zusammengesetzt. Das spiegelt
-   * das Anmeldung-plus-Teilnehmer-Modell aus dem Backend-Skill.
+   * Welche Personen-Bereiche die spätere Anmeldung abfragen wird.
+   *
+   * Die Aufteilung kommt aus lib/vorschau.ts und stützt sich auf
+   * dieselbe `auswahl`, aus der auch der Preis berechnet wird —
+   * dadurch zeigen Zusammenfassung und Vorschau immer denselben
+   * Stand. Hier wird nur noch übersetzt.
    */
   const vorschauGruppen: VorschauFeldGruppe[] = useMemo(() => {
-    if (fuerWen === "kind") {
-      return [
-        { titel: t.anmeldung.vorschau.gruppeSchueler, felder: nameFelder },
-        { titel: t.anmeldung.vorschau.gruppeEltern, felder: kontaktFelder },
-      ];
-    }
-    if (fuerWen === "familie") {
-      const schuelerGruppen: VorschauFeldGruppe[] = Array.from(
-        { length: familienKinder },
-        (_, i) => ({
-          titel: fuelle(t.anmeldung.vorschau.gruppeSchuelerN, { n: i + 1 }),
-          felder: nameFelder,
-        }),
-      );
-      return [
-        { titel: t.anmeldung.vorschau.gruppeAnmeldendePerson, felder: kontaktFelder },
-        { titel: t.anmeldung.vorschau.gruppeWeitererErwachsener, felder: nameFelder },
-        ...schuelerGruppen,
-      ];
-    }
-    return [{ titel: t.anmeldung.vorschau.gruppeMeineAngaben, felder: kontaktFelder }];
-  }, [fuerWen, familienKinder, t, nameFelder, kontaktFelder]);
+    const namen = feldnamen(t);
+    const kontaktFelder = [namen.vorname, namen.nachname, namen.email, namen.telefon];
+    const nameFelder = [namen.vorname, namen.nachname];
+    const v = t.anmeldung.vorschau;
+
+    return vorschauRollen(fuerWen, auswahl).map((rolle) => ({
+      titel:
+        rolle.rolle === "selbst"
+          ? v.gruppeMeineAngaben
+          : rolle.rolle === "elternteil"
+            ? v.gruppeEltern
+            : rolle.rolle === "erwachsener"
+              ? fuelle(v.gruppeErwachsenerN, { n: rolle.nummer })
+              : fuelle(v.gruppeSchuelerN, { n: rolle.nummer }),
+      felder: brauchtKontaktdaten(rolle) ? kontaktFelder : nameFelder,
+    }));
+  }, [fuerWen, auswahl, t]);
 
   const postenName: Record<string, string> = {
     schueler: t.preise.schueler,
