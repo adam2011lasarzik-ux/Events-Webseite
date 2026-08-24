@@ -57,7 +57,8 @@ export const de = {
     ueberschrift: "Was es kostet",
     einleitung:
       "Alle Preise gelten pro Person und Veranstaltungstag, inklusive Mehrwertsteuer. " +
-      "Schläger, Bälle, Betreuung, Essen und Getränke sind enthalten.",
+      "Schläger, Bälle und Betreuung sind im Preis enthalten. Essen und Getränke können " +
+      "vor Ort separat erworben werden.",
     schueler: "Schüler",
     schuelerHinweis: "Kinder und Jugendliche",
     erwachsener: "Erwachsene",

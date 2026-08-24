@@ -58,8 +58,8 @@ export const en: Woerterbuch = {
   preise: {
     ueberschrift: "What it costs",
     einleitung:
-      "All prices are per person for the day and include VAT. Rackets, balls, coaching, " +
-      "food and drinks are included.",
+      "All prices are per person for the day and include VAT. Rackets, balls and coaching " +
+      "are included. Food and drinks can be bought separately on site.",
     schueler: "Students",
     schuelerHinweis: "Children and teens",
     erwachsener: "Adults",
