@@ -143,6 +143,18 @@ export const events: VeraEvent[] = [
   },
 ];
 
+/**
+ * Video im Hero-Bereich der Startseite.
+ *
+ * Dateiname relativ zu `public/`. Auf `null` gesetzt, erscheint dort
+ * stattdessen die Court-Grafik mit Platzhalter-Hinweis.
+ *
+ * WICHTIG: Die Datei muss MP4 mit H.264 sein. Eine .mov-Datei mit
+ * HEVC/H.265 spielt zwar auf iPhone und iPad, bleibt in Chrome und
+ * Firefox aber schwarz.
+ */
+export const heroVideo: string | null = null;
+
 export function findeEvent(slug: string): VeraEvent | undefined {
   return events.find((e) => e.slug === slug);
 }

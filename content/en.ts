@@ -44,6 +44,7 @@ export const en: Woerterbuch = {
       "site — and a coach is there too, happy to answer questions, explain the sport, and " +
       "run a few first exercises with you if you'd like.",
     hinweisFoto: "A photo of the court goes here later",
+    videoBeschreibung: "Short video from the padel court",
   },
 
   plaetze: {

@@ -1,8 +1,10 @@
 import { CourtGrafik } from "./CourtGrafik";
+import { HeroVideo } from "./HeroVideo";
 import { Knopf } from "./Knopf";
 import { PlatzHinweis } from "./PlatzHinweis";
 import { pfad, type Sprache } from "@/lib/i18n";
-import type { VeraEvent } from "@/content/events";
+import { oeffentlich } from "@/lib/pfade";
+import { heroVideo, type VeraEvent } from "@/content/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./Hero.module.css";
 
@@ -41,8 +43,17 @@ export function Hero({
         </div>
 
         <div className={stil.bildbereich}>
-          <CourtGrafik />
-          <span className={stil.fotoHinweis}>{t.hero.hinweisFoto}</span>
+          {heroVideo ? (
+            <HeroVideo
+              quelle={oeffentlich(heroVideo)}
+              beschreibung={t.hero.videoBeschreibung}
+            />
+          ) : (
+            <>
+              <CourtGrafik />
+              <span className={stil.fotoHinweis}>{t.hero.hinweisFoto}</span>
+            </>
+          )}
         </div>
       </div>
     </div>

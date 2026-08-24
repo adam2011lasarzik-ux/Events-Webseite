@@ -32,6 +32,10 @@ const nextConfig = {
         // aus (…github.io/Events-Webseite/), nicht unter der Wurzel.
         basePath: `/${repoName}`,
         assetPrefix: `/${repoName}/`,
+        // Dateien aus `public/` (z. B. das Hero-Video) bekommen den
+        // Unterordner nicht automatisch vorangestellt — lib/pfade.ts
+        // erledigt das und liest den Wert hier aus.
+        env: { NEXT_PUBLIC_BASIS_PFAD: `/${repoName}` },
         images: { unoptimized: true },
       }
     : {

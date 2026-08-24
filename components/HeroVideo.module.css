@@ -1,0 +1,35 @@
+/* Der Videoplatz ersetzt die Court-Grafik im Hero. Das feste
+   Seitenverhältnis verhindert, dass die Seite beim Laden springt. */
+.buehne {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--rund-m);
+  overflow: hidden;
+  background: var(--tiefblau);
+}
+
+/* Die Court-Grafik liegt darunter und ist sichtbar, solange das Video
+   noch lädt — statt einer schwarzen Fläche steht dort das Markenbild. */
+.ruhebild {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--a-4);
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Füllt die Fläche vollständig und schneidet zu, statt zu verzerren. */
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+/* Erst einblenden, wenn wirklich Bilddaten da sind. */
+.sichtbar { opacity: 1; }

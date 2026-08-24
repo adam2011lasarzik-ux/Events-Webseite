@@ -42,6 +42,7 @@ export const de = {
       "ein Trainer ist dabei, der Fragen beantwortet, den Sport erklärt und auf Wunsch erste " +
       "Übungen mit euch macht.",
     hinweisFoto: "Hier kommt später ein Foto vom Court",
+    videoBeschreibung: "Kurzes Video vom Padel-Court",
   },
 
   plaetze: {
