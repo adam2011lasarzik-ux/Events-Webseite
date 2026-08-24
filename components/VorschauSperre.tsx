@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { VeraWortmarke } from "./VeraWortmarke";
 import stil from "./VorschauSperre.module.css";
 
@@ -15,9 +15,13 @@ import stil from "./VorschauSperre.module.css";
  * nicht. Auf der echten, späteren Webseite taucht sie nie auf: Sie
  * wird nur aktiv, wenn NEXT_PUBLIC_VORSCHAU_PASSWORT beim Bauen
  * gesetzt ist, und das setzt ausschließlich der Vorschau-Workflow.
+ *
+ * Bewusst OHNE Speicher (kein localStorage, kein Cookie): Jeder frische
+ * Aufruf der Seite fragt wieder nach dem Passwort. Innerhalb eines
+ * Besuchs bleibt man beim Klicken zwischen den Unterseiten trotzdem
+ * freigeschaltet, weil Next.js dafür die Seite nicht neu lädt — diese
+ * Komponente bleibt beim Wechsel einfach im Speicher.
  */
-
-const SPEICHER_SCHLUESSEL = "vera-vorschau-freigeschaltet";
 
 export function VorschauSperre({ children }: { children: React.ReactNode }) {
   const passwort = process.env.NEXT_PUBLIC_VORSCHAU_PASSWORT;
@@ -37,41 +41,19 @@ function SperreAktiv({
   children: React.ReactNode;
 }) {
   const [freigeschaltet, setzeFreigeschaltet] = useState(false);
-  const [bereitGeprueft, setzeBereitGeprueft] = useState(false);
   const [eingabe, setzeEingabe] = useState("");
   const [fehler, setzeFehler] = useState(false);
-
-  useEffect(() => {
-    try {
-      if (window.localStorage.getItem(SPEICHER_SCHLUESSEL) === "ja") {
-        setzeFreigeschaltet(true);
-      }
-    } catch {
-      // Privater Modus o. Ä. blockiert localStorage — dann eben jedes
-      // Mal neu eingeben, das ist kein Beinbruch.
-    }
-    setzeBereitGeprueft(true);
-  }, []);
 
   const absenden = (e: FormEvent) => {
     e.preventDefault();
     if (eingabe === passwort) {
       setzeFreigeschaltet(true);
       setzeFehler(false);
-      try {
-        window.localStorage.setItem(SPEICHER_SCHLUESSEL, "ja");
-      } catch {
-        // Kein Speicher verfügbar — dann bleibt es für diesen Aufruf
-        // trotzdem freigeschaltet, nur nicht dauerhaft gemerkt.
-      }
     } else {
       setzeFehler(true);
     }
   };
 
-  // Vor der ersten Prüfung nichts anzeigen, damit auf einem bereits
-  // entsperrten Gerät nicht kurz die Sperre aufblitzt.
-  if (!bereitGeprueft) return null;
   if (freigeschaltet) return <>{children}</>;
 
   return (

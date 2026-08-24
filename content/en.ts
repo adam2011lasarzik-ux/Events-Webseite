@@ -8,7 +8,7 @@ export const en: Woerterbuch = {
     markeLang: "VERAnstaltung",
     beschreibung:
       "VERA runs sports and networking events. First up: a padel afternoon in Falkensee " +
-      "for students aged 15 to 21 and their parents.",
+      "for students, teachers and parents.",
     spracheName: "English",
     spracheKurz: "EN",
   },
@@ -40,8 +40,9 @@ export const en: Woerterbuch = {
     titelZeile1: "Never played?",
     titelZeile2: "That's exactly the point.",
     text:
-      "An afternoon of padel for students aged 15 to 21 and their parents. Rackets are " +
-      "provided, someone shows you how it works, food and drinks are included.",
+      "An afternoon of padel for students, teachers and parents. Rackets are provided on " +
+      "site — and a coach is there too, happy to answer questions, explain the sport, and " +
+      "run a few first exercises with you if you'd like.",
     hinweisFoto: "A photo of the court goes here later",
   },
 
@@ -59,7 +60,7 @@ export const en: Woerterbuch = {
       "All prices are per person for the day and include VAT. Rackets, balls, coaching, " +
       "food and drinks are included.",
     schueler: "Students",
-    schuelerHinweis: "Aged 15 to 21",
+    schuelerHinweis: "Children and teens",
     erwachsener: "Adults",
     erwachsenerHinweis: "Parents and guests",
     familie: "Family",
@@ -113,24 +114,25 @@ export const en: Woerterbuch = {
   schulen: {
     ueberschrift: "For schools",
     kurz:
-      "Would you like to bring a class or a course? Get in touch and we'll sort out the date, " +
-      "group size and schedule together.",
+      "Would you like to bring a class or a course? Send us an email — we'll work out the " +
+      "date, group size and schedule individually with you.",
     mehr: "More for schools",
     titel: "Padel for school groups",
     absaetze: [
-      "The padel afternoon works well for PE courses, project days and class trips. The sport " +
-        "is quick to explain, physically manageable for everyone, and works in mixed groups " +
-        "with very different ability levels.",
-      "At the moment parents register their children themselves and cover the cost. If a " +
-        "single booking through the school suits you better, just ask — we're happy to set " +
-        "that up.",
-      "To plan, it helps us to know: rough group size, year group and your preferred dates.",
+      "The padel afternoon works well for PE lessons, project days and class trips. The " +
+        "sport is quick to explain, physically manageable for everyone, and works in mixed " +
+        "groups with very different ability levels.",
+      "A session takes place during school hours, between 8am and 3pm, and lasts 90 " +
+        "minutes. Up to 20 people play on the court at the same time.",
+      "For school groups, booking doesn't happen through the website: date, number of " +
+        "participants and every other detail are arranged individually by email. Just get " +
+        "in touch at the address below.",
     ],
     punkte: [
       "No experience required",
       "Equipment provided",
-      "Supervision throughout",
-      "Food and drinks included",
+      "90 minutes, during school hours (8am–3pm)",
+      "Up to 20 people on the court at once",
     ],
   },
 
@@ -236,6 +238,23 @@ export const en: Woerterbuch = {
     minderjaehrigText:
       "When a parent registers, the registration covers the child. Guardian consent is " +
       "collected during registration.",
+
+    vorschau: {
+      ueberschrift: "What the later form will look like",
+      hinweis:
+        "A preview of what you'll be asked for later. The fields can't be filled in yet — " +
+        "nothing is saved or sent.",
+      labelVorname: "First name",
+      labelNachname: "Last name",
+      labelEmail: "Email address",
+      labelTelefon: "Phone number",
+      gruppeMeineAngaben: "Your details",
+      gruppeSchueler: "Student's details",
+      gruppeEltern: "Parent's / guardian's details",
+      gruppeAnmeldendePerson: "Registering person",
+      gruppeWeitererErwachsener: "Additional adult",
+      gruppeSchuelerN: "Student {n}",
+    },
   },
 
   kontakt: {
@@ -251,11 +270,9 @@ export const en: Woerterbuch = {
   event: {
     wann: "When",
     wo: "Where",
-    fuerWen: "Who for",
     preis: "Price",
     dabei: "What's included",
     mitbringen: "What to bring",
-    alter: "Ages {von} to {bis}",
     naechstesEvent: "Next event",
   },
 

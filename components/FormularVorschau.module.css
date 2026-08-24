@@ -1,0 +1,70 @@
+.box {
+  margin-top: var(--a-6);
+  border: 1px dashed var(--linie);
+  border-radius: var(--rund-l);
+  padding: var(--a-6);
+  background: rgba(23, 93, 156, 0.04);
+}
+
+.kopf {
+  margin-bottom: var(--a-2);
+}
+
+.titel {
+  font-family: var(--schrift-display);
+  font-weight: 800;
+  font-size: var(--gr-l);
+}
+
+.hinweis {
+  color: var(--text-leise);
+  font-size: var(--gr-s);
+  margin-bottom: var(--a-5);
+  max-width: var(--breite-text);
+}
+
+.gruppen {
+  display: grid;
+  gap: var(--a-5);
+}
+
+.gruppe {
+  display: grid;
+  gap: var(--a-3);
+}
+
+.gruppenTitel {
+  font-size: var(--gr-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-leise);
+}
+
+.felder {
+  display: grid;
+  gap: var(--a-3);
+}
+
+.feld { display: grid; gap: var(--a-1); }
+
+.label {
+  font-size: var(--gr-xs);
+  font-weight: 600;
+  color: var(--text-leise);
+}
+
+/* Bewusst "disabled": nur eine Vorschau, keine Eingabe möglich. */
+.eingabe {
+  padding: 0.7em 0.9em;
+  border: 1.5px solid var(--linie);
+  border-radius: var(--rund-s);
+  background: var(--flaeche);
+  color: var(--text-leise);
+  font-size: var(--gr-s);
+  cursor: not-allowed;
+}
+
+@media (min-width: 40rem) {
+  .felder { grid-template-columns: 1fr 1fr; }
+}

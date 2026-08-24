@@ -84,14 +84,6 @@ export default async function EventSeite({
             </dd>
           </div>
           <div>
-            <dt>{t.event.fuerWen}</dt>
-            <dd>
-              {event.alterVon && event.alterBis
-                ? fuelle(t.event.alter, { von: event.alterVon, bis: event.alterBis })
-                : "—"}
-            </dd>
-          </div>
-          <div>
             <dt>{t.plaetze.ueberschrift}</dt>
             <dd>{event.maxPersonen ? fuelle(t.plaetze.gesamt, { n: event.maxPersonen }) : "—"}</dd>
           </div>

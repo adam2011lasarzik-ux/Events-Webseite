@@ -36,7 +36,7 @@
 .haken { color: var(--courtblau); font-weight: 800; flex: none; }
 
 @media (min-width: 46rem) {
-  .daten { grid-template-columns: repeat(4, 1fr); }
+  .daten { grid-template-columns: repeat(3, 1fr); }
   .zweiListen { grid-template-columns: 1fr 1fr; }
 }
 @media (min-width: 62rem) {

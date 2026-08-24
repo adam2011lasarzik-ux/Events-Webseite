@@ -89,7 +89,7 @@ export const events: VeraEvent[] = [
         untertitel: "Ein Nachmittag auf dem Court in Falkensee",
         kurz:
           "Padel ausprobieren, ohne vorher etwas zu können. Schläger und Bälle liegen bereit, " +
-          "jemand zeigt dir alles, und zwischendurch gibt es etwas zu essen.",
+          "ein Trainer ist vor Ort, und Essen und Getränke gibt es zwischendurch auch.",
         lang: [
           "Der Tag ist für alle gemacht, die noch nie einen Padelschläger in der Hand hatten. " +
             "Du brauchst keine Vorkenntnisse, keine Ausrüstung und keinen Partner — beides " +
@@ -117,7 +117,7 @@ export const events: VeraEvent[] = [
         untertitel: "An afternoon on the court in Falkensee",
         kurz:
           "Try padel without knowing anything about it first. Rackets and balls are provided, " +
-          "someone shows you how it works, and there is food along the way.",
+          "a coach is on site, and food and drinks are there too.",
         lang: [
           "This day is built for people who have never held a padel racket. No experience, " +
             "no gear and no partner needed — you get all of it on site.",

@@ -6,7 +6,7 @@ export const de = {
     markeLang: "VERAnstaltung",
     beschreibung:
       "VERA veranstaltet Sport- und Netzwerkevents. Den Anfang macht ein Padel-Nachmittag " +
-      "in Falkensee für Schüler von 15 bis 21 Jahren und ihre Eltern.",
+      "in Falkensee für Schüler, Lehrer und Eltern.",
     spracheName: "Deutsch",
     spracheKurz: "DE",
   },
@@ -38,8 +38,9 @@ export const de = {
     titelZeile1: "Nie gespielt?",
     titelZeile2: "Genau darum geht's.",
     text:
-      "Ein Nachmittag Padel für Schüler von 15 bis 21 und ihre Eltern. Schläger gibt es vor " +
-      "Ort, jemand zeigt dir alles, Essen und Trinken sind dabei.",
+      "Ein Nachmittag Padel für Schüler, Lehrer und Eltern. Schläger gibt es vor Ort — und " +
+      "ein Trainer ist dabei, der Fragen beantwortet, den Sport erklärt und auf Wunsch erste " +
+      "Übungen mit euch macht.",
     hinweisFoto: "Hier kommt später ein Foto vom Court",
   },
 
@@ -57,7 +58,7 @@ export const de = {
       "Alle Preise gelten pro Person und Veranstaltungstag, inklusive Mehrwertsteuer. " +
       "Schläger, Bälle, Betreuung, Essen und Getränke sind enthalten.",
     schueler: "Schüler",
-    schuelerHinweis: "15 bis 21 Jahre",
+    schuelerHinweis: "Kinder und Jugendliche",
     erwachsener: "Erwachsene",
     erwachsenerHinweis: "Eltern und Begleitung",
     familie: "Familie",
@@ -111,24 +112,25 @@ export const de = {
   schulen: {
     ueberschrift: "Für Schulen",
     kurz:
-      "Sie möchten den Tag mit einer Klasse oder einem Kurs besuchen? Melden Sie sich, " +
-      "dann stimmen wir Termin, Gruppengröße und Ablauf gemeinsam ab.",
+      "Sie möchten mit einer Klasse oder einem Kurs vorbeikommen? Schreiben Sie uns eine " +
+      "E-Mail — Termin, Gruppengröße und Ablauf stimmen wir individuell ab.",
     mehr: "Mehr für Schulen",
     titel: "Padel für Schulklassen",
     absaetze: [
-      "Der Padel-Nachmittag eignet sich gut für Sportkurse, Projekttage und Klassenausflüge. " +
-        "Die Sportart ist schnell erklärt, körperlich für alle machbar und funktioniert auch " +
-        "in gemischten Gruppen mit sehr unterschiedlichem Können.",
-      "Aktuell melden Eltern ihre Kinder selbst an und übernehmen die Kosten. Wenn für Sie " +
-        "eine Sammelbuchung über die Schule besser passt, sprechen Sie uns an — wir richten " +
-        "das gern ein.",
-      "Für die Planung hilft uns: ungefähre Gruppengröße, Jahrgangsstufe und Ihr Wunschzeitraum.",
+      "Der Padel-Nachmittag eignet sich gut für Sportunterricht, Projekttage und " +
+        "Klassenausflüge. Die Sportart ist schnell erklärt, körperlich für alle machbar und " +
+        "funktioniert auch in gemischten Gruppen mit sehr unterschiedlichem Können.",
+      "Eine Einheit findet während der Schulzeit statt, zwischen 08:00 und 15:00 Uhr, und " +
+        "dauert 90 Minuten. Auf dem Platz spielen jeweils bis zu 20 Personen gleichzeitig.",
+      "Für Schulklassen läuft die Anmeldung nicht über die Webseite: Termin, Teilnehmerzahl " +
+        "und alle weiteren Details sprechen wir individuell per E-Mail ab. Melden Sie sich " +
+        "einfach unter der unten stehenden Adresse.",
     ],
     punkte: [
       "Keine Vorkenntnisse nötig",
       "Ausrüstung wird gestellt",
-      "Betreuung während der gesamten Zeit",
-      "Essen und Getränke inklusive",
+      "90 Minuten, während der Schulzeit (08:00–15:00 Uhr)",
+      "Bis zu 20 Personen gleichzeitig auf dem Platz",
     ],
   },
 
@@ -235,6 +237,23 @@ export const de = {
     minderjaehrigText:
       "Meldet ein Elternteil an, gilt die Anmeldung für das Kind. Die Einwilligung der " +
       "Erziehungsberechtigten wird bei der Anmeldung abgefragt.",
+
+    vorschau: {
+      ueberschrift: "So sieht das spätere Formular aus",
+      hinweis:
+        "Eine Vorschau der Angaben, die später abgefragt werden. Die Felder lassen sich noch " +
+        "nicht ausfüllen — es wird nichts gespeichert oder übertragen.",
+      labelVorname: "Vorname",
+      labelNachname: "Nachname",
+      labelEmail: "E-Mail-Adresse",
+      labelTelefon: "Telefonnummer",
+      gruppeMeineAngaben: "Deine Angaben",
+      gruppeSchueler: "Angaben zum Schüler",
+      gruppeEltern: "Angaben des Elternteils / Erziehungsberechtigten",
+      gruppeAnmeldendePerson: "Anmeldende Person",
+      gruppeWeitererErwachsener: "Weiterer Erwachsener",
+      gruppeSchuelerN: "Schüler {n}",
+    },
   },
 
   kontakt: {
@@ -249,11 +268,9 @@ export const de = {
   event: {
     wann: "Wann",
     wo: "Wo",
-    fuerWen: "Für wen",
     preis: "Preis",
     dabei: "Das ist dabei",
     mitbringen: "Das bringst du mit",
-    alter: "{von} bis {bis} Jahre",
     naechstesEvent: "Nächstes Event",
   },
 

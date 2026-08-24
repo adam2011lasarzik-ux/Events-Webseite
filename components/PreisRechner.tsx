@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Knopf } from "./Knopf";
+import { FormularVorschau, feldnamen, type VorschauFeldGruppe } from "./FormularVorschau";
 import { alsEuro, berechnePreis, type Auswahl } from "@/lib/preise";
 import { fuelle, pfad, type Sprache } from "@/lib/i18n";
 import type { VeraEvent } from "@/content/events";
@@ -57,6 +58,40 @@ export function PreisRechner({
   }, [fuerWen, selbstAls, kinder, kommeMit, familienKinder]);
 
   const ergebnis = useMemo(() => berechnePreis(event.preise, auswahl), [event.preise, auswahl]);
+
+  const namen = feldnamen(t);
+  const kontaktFelder = [namen.vorname, namen.nachname, namen.email, namen.telefon];
+  const nameFelder = [namen.vorname, namen.nachname];
+
+  /**
+   * Welche Feldgruppen die spätere Anmeldung abfragen wird — je
+   * Zweig unterschiedlich, aber alle aus denselben Bausteinen
+   * (Kontaktperson / Teilnehmer-Name) zusammengesetzt. Das spiegelt
+   * das Anmeldung-plus-Teilnehmer-Modell aus dem Backend-Skill.
+   */
+  const vorschauGruppen: VorschauFeldGruppe[] = useMemo(() => {
+    if (fuerWen === "kind") {
+      return [
+        { titel: t.anmeldung.vorschau.gruppeSchueler, felder: nameFelder },
+        { titel: t.anmeldung.vorschau.gruppeEltern, felder: kontaktFelder },
+      ];
+    }
+    if (fuerWen === "familie") {
+      const schuelerGruppen: VorschauFeldGruppe[] = Array.from(
+        { length: familienKinder },
+        (_, i) => ({
+          titel: fuelle(t.anmeldung.vorschau.gruppeSchuelerN, { n: i + 1 }),
+          felder: nameFelder,
+        }),
+      );
+      return [
+        { titel: t.anmeldung.vorschau.gruppeAnmeldendePerson, felder: kontaktFelder },
+        { titel: t.anmeldung.vorschau.gruppeWeitererErwachsener, felder: nameFelder },
+        ...schuelerGruppen,
+      ];
+    }
+    return [{ titel: t.anmeldung.vorschau.gruppeMeineAngaben, felder: kontaktFelder }];
+  }, [fuerWen, familienKinder, t, nameFelder, kontaktFelder]);
 
   const postenName: Record<string, string> = {
     schueler: t.preise.schueler,
@@ -180,6 +215,8 @@ export function PreisRechner({
             </div>
           )}
         </div>
+
+        <FormularVorschau t={t} gruppen={vorschauGruppen} />
 
         <div className={stil.merker} style={{ marginTop: "1.5rem" }}>
           <h3 className={stil.merkerTitel}>{t.anmeldung.minderjaehrigTitel}</h3>
