@@ -31,6 +31,7 @@ export const LEERES_EVENT: EventVorbelegung = {
   ctaTitel: "",
   ctaText: "",
   theme: "STANDARD",
+  gruenderZeigen: false,
   bloecke: {},
   startAt: "",
   endAt: "",

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { VeranstaltungsKarte } from "@/components/VeranstaltungsKarte";
+import { GruenderBereich } from "@/components/GruenderBereich";
 import { kommendeEvents } from "@/lib/events";
+import { ladeGruender } from "@/lib/einstellungen";
 import { texte } from "@/content";
 import stil from "./page.module.css";
 
@@ -27,6 +29,7 @@ export const metadata: Metadata = { title: texte.startseite.ueberschrift };
 export default async function Startseite() {
   const t = texte;
   const veranstaltungen = await kommendeEvents();
+  const gruender = await ladeGruender();
 
   return (
     <>
@@ -42,6 +45,11 @@ export default async function Startseite() {
         </div>
         <p className={stil.hinweis}>{t.startseite.weitereFolgen}</p>
       </Abschnitt>
+
+      {/* Der Gründerbereich. Auf der zentralen Seite grundsätzlich
+          sichtbar; abschalten lässt er sich im Adminbereich unter
+          „Gründerbereich“. */}
+      {gruender.aufStart && <GruenderBereich t={t} gruender={gruender} ton="warm" />}
     </>
   );
 }

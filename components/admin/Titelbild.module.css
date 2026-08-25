@@ -12,3 +12,15 @@
   border: 1px solid var(--linie);
   margin-bottom: var(--a-1);
 }
+
+/* Das Gründerfoto ist ein Hochformat — im selben Ausschnitt gezeigt
+   wie später auf der Webseite, sonst täuscht die Vorschau. */
+.probeHoch {
+  display: block;
+  width: min(100%, 12rem);
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--rund-s);
+  border: 1px solid var(--linie);
+  margin-bottom: var(--a-1);
+}

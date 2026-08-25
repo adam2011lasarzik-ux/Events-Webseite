@@ -115,6 +115,14 @@ model Event {
   bildUrl  String?
   videoUrl String?
 
+  /// Zeigt diese Eventseite den Gründerbereich?
+  ///
+  /// Standardmäßig aus: Bestehende Veranstaltungen sehen damit
+  /// unverändert aus, bis der Haken bewusst gesetzt wird. Foto, Name
+  /// und Text selbst stehen NICHT hier, sondern einmalig in
+  /// Einstellungen — sie gehören zu VERA, nicht zu einem Event.
+  gruenderZeigen Boolean @default(false)
+
   // Plätze. maxPersonen zählt PERSONEN, nicht Anmeldungen.
   // null = unbegrenzt.
   maxPersonen        Int?
@@ -320,6 +328,36 @@ model AdminSession {
 
   @@index([adminId])
   @@index([laeuftAbAm])
+}
+
+/// Seitenweite Angaben — genau EINE Zeile mit der festen Kennung
+/// "global".
+///
+/// Warum eine eigene Tabelle und nicht das Wörterbuch in content/de.ts:
+/// Diese Angaben soll der Betreiber selbst ändern können, ohne den
+/// Code anzufassen - genauso wie bei den Veranstaltungen.
+///
+/// Warum eine feste Kennung statt einer laufenden Nummer: So kann es
+/// keine zweite Zeile geben, und es braucht keinen Seed-Schritt. Wer
+/// liest, nimmt immer dieselbe; wer schreibt, legt sie beim ersten Mal
+/// an (upsert).
+model Einstellungen {
+  id String @id @default("global")
+
+  // Der Gründerbereich. Steht auf der zentralen VERA-Seite und — je
+  // Event einschaltbar — auf einzelnen Eventseiten.
+  gruenderName     String   @default("Adam Lasarzik")
+  gruenderRolle    String   @default("Gründer von VERA")
+  /// Leer bedeutet: es erscheint ein sichtbar markierter Platzhalter.
+  /// Besser ein erkennbarer Platzhalter als ein erfundener Lebenslauf.
+  gruenderText     String?  @db.Text
+  /// Adresse des hochgeladenen Fotos, z. B. /bilder/ab12....webp.
+  /// Liegt AUSSERHALB von public/ — siehe lib/bilder.ts.
+  gruenderBildUrl  String?
+  /// Auf der zentralen VERA-Seite standardmäßig sichtbar.
+  gruenderAufStart Boolean  @default(true)
+
+  geaendertAm DateTime @updatedAt
 }
 
 // ── Missbrauchsschutz ────────────────────────────────────────────

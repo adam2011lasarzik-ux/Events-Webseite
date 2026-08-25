@@ -44,6 +44,7 @@ Das Passwort wird niemals gespeichert, nur sein Hash (scrypt).
 | Farben, Schriftgrößen, Abstände | `styles/tokens.css` |
 | Aussehen der drei Designs | `styles/themes.css` |
 | Titelbild einer Veranstaltung | **Im Adminbereich** hochladen |
+| Gründerfoto, Name, Bezeichnung, Beschreibung, Sichtbarkeit | **Im Adminbereich** unter `/admin/einstellungen` |
 
 Veranstaltungen brauchen **keine Code-Änderung** mehr. Ein im
 Adminbereich veröffentlichtes Event erscheint sofort auf der Webseite.
@@ -185,6 +186,33 @@ Die Dateien liegen **außerhalb von `public/`** in dem Verzeichnis aus
 > ein Deployment **nicht überschreibt** — sonst sind nach dem nächsten
 > Update alle hochgeladenen Bilder weg.
 
+## Der Gründerbereich
+
+Foto, Name, Bezeichnung und Beschreibungstext gehören zu VERA und nicht
+zu einer einzelnen Veranstaltung. Sie stehen deshalb **einmal** in der
+Tabelle `Einstellungen` (genau eine Zeile mit der Kennung `global`) und
+werden im Adminbereich unter **Gründerbereich** gepflegt.
+
+| Was | Wo |
+|---|---|
+| Foto hochladen oder entfernen | `/admin/einstellungen` |
+| Name und Bezeichnung | `/admin/einstellungen` |
+| Beschreibungstext | `/admin/einstellungen` |
+| Auf der VERA-Startseite anzeigen | `/admin/einstellungen`, Häkchen unten |
+| Auf **einer** Eventseite anzeigen | im jeweiligen Event, Abschnitt **Design** |
+
+Das Foto durchläuft dieselbe Verarbeitung wie ein Titelbild (siehe
+oben): neu berechnet, Metadaten und GPS entfernt, zwei Größen, Ablage
+außerhalb von `public/`.
+
+Voreingestellt ist der Bereich auf der Startseite **an** und auf jeder
+Eventseite **aus** — bestehende Veranstaltungen sehen dadurch
+unverändert aus, bis der Haken bewusst gesetzt wird.
+
+Solange kein Beschreibungstext hinterlegt ist, erscheint ein sichtbar
+markierter Platzhalter. Das ist Absicht: Ein Platzhalter, den man für
+echten Inhalt halten kann, geht irgendwann versehentlich online.
+
 ## Abschnitte einer Veranstaltung
 
 Die Texte auf der Event-Seite gehören zum Event, nicht zur Webseite.
@@ -218,7 +246,16 @@ Business-Design wird daraus eine Zeitschiene.
   Gruppen einsehen, Status und Zahlung verwalten, Personendaten
   löschen, CSV-Export
 - **Drei Designs** je Veranstaltung (siehe oben)
-- Nutzbar ab 320 Pixel Breite, mit Tastatur bedienbar
+- **Gründerbereich** mit Foto, auf der Startseite und je Event
+  einschaltbar
+- Mit Tastatur bedienbar, ab 360 Pixel Breite ohne waagerechtes Scrollen
+
+> **Bekannte Kleinigkeit:** Auf der Startseite scrollt die Seite bei
+> Bildschirmen **unter 360 Pixel** ein Stück nach rechts. Ursache ist
+> `minmax(20rem, 1fr)` im Kartenraster (`app/(seite)/page.module.css`).
+> Betrifft nur sehr alte Geräte (iPhone SE der ersten Generation);
+> gemessen und bewusst noch nicht geändert, weil es das Layout der
+> Startseite berührt.
 
 ## Was diese Version bewusst noch nicht kann
 

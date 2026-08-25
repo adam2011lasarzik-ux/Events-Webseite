@@ -6,6 +6,8 @@ import { EventKarte } from "./EventKarte";
 import { PreisKacheln } from "./PreisKacheln";
 import { CtaBand } from "./CtaBand";
 import { EventBloecke } from "./bloecke/EventBloecke";
+import { GruenderBereich } from "./GruenderBereich";
+import { ladeGruender } from "@/lib/einstellungen";
 import type { VeraEvent } from "@/lib/events";
 import type { Woerterbuch } from "@/content";
 
@@ -22,13 +24,17 @@ import type { Woerterbuch } from "@/content";
  * der Abschnitte sind in jedem Theme identisch: Es ändert sich die
  * Darstellung, nie die Information.
  */
-export function EventSeite({ t, event }: { t: Woerterbuch; event: VeraEvent }) {
+export async function EventSeite({ t, event }: { t: Woerterbuch; event: VeraEvent }) {
   /* Die Preise stehen bewusst NACH dem Vorstellungstext und VOR dem
      Ablauf — genau dort, wo sie auf der Padel-Seite immer standen.
      Wer wissen will, was ihn erwartet, liest erst die Vorstellung;
      wer schon weiß, worum es geht, sucht als Nächstes den Preis. */
   const vorstellung = event.bloecke.filter((b) => b.art === "vorstellung");
   const weitere = event.bloecke.filter((b) => b.art !== "vorstellung");
+
+  /* Nur laden, wenn der Bereich hier auch gezeigt wird — sonst
+     bezahlte jede Eventseite eine Abfrage für nichts. */
+  const gruender = event.gruenderZeigen ? await ladeGruender() : null;
 
   return (
     <ThemeRahmen theme={event.theme}>
@@ -64,6 +70,24 @@ export function EventSeite({ t, event }: { t: Woerterbuch; event: VeraEvent }) {
       </Abschnitt>
 
       <EventBloecke bloecke={weitere} startTon="hell" />
+
+      {/* Der Gründerbereich steht direkt vor dem Abschluss-Aufruf:
+          Erst die Sache, dann der Mensch dahinter, dann die
+          Aufforderung. Ob er erscheint, entscheidet der Haken am
+          Event — voreingestellt ist er aus, damit sich an
+          bestehenden Seiten nichts ändert. */}
+      {gruender && (
+        <GruenderBereich
+          t={t}
+          gruender={gruender}
+          /* Premium schließt dunkel ab. Sonst läuft der Wechsel
+             hell/warm der Inhaltsblöcke einfach weiter, damit die
+             Seite nicht zu einer einzigen Fläche wird. */
+          ton={
+            event.theme === "PREMIUM" ? "dunkel" : weitere.length % 2 === 1 ? "warm" : "hell"
+          }
+        />
+      )}
 
       {/* Premium endet auf einer dunklen Fläche. Das schliesst die
           Seite ab und macht den Übergang zum dunklen Fussbereich

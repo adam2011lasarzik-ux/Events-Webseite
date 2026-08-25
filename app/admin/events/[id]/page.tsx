@@ -54,6 +54,7 @@ export default async function EventBearbeiten({
     ctaTitel: oderLeer(e.ctaTitel),
     ctaText: oderLeer(e.ctaText),
     theme: alsTheme(e.theme),
+    gruenderZeigen: e.gruenderZeigen,
     // Die Blöcke nach Art abgelegt, damit das Formular sie direkt
     // zuordnen kann. Fehlt eine Art, bleibt ihr Feld einfach leer.
     bloecke: Object.fromEntries(

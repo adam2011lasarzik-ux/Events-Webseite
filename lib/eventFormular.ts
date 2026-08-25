@@ -93,6 +93,8 @@ export interface EventDaten {
   kategorie: Kategorie;
   /** Bestimmt ausschließlich das Aussehen der Event-Seite. */
   theme: Theme;
+  /** Zeigt diese Eventseite den Gründerbereich? */
+  gruenderZeigen: boolean;
   titel: string;
   untertitel: string | null;
   karteTitel: string;
@@ -274,6 +276,7 @@ export function pruefeEvent(
       status,
       kategorie,
       theme,
+      gruenderZeigen: roh.gruenderZeigen === "an",
       titel,
       untertitel: oderNull(sauber(roh.untertitel)),
       karteTitel,

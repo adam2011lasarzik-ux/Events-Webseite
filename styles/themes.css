@@ -257,3 +257,29 @@
   border-top: 1px solid var(--linie-invers);
   padding-top: var(--a-6);
 }
+
+/* Premium: der Gründerbereich.
+   Dunkle Fläche (kommt vom Abschnitt), darauf das Foto in einer
+   cremefarbenen Fassung mit einer feinen Champagner-Linie — dasselbe
+   Mittel wie der gravierte Rahmen im Kopfbereich, nur kleiner.
+
+   Gold bleibt auch hier Linie und Fläche, niemals Fließtext. Die
+   Rollenzeile wird nicht eigens gesperrt: Sie liest --label-laufweite,
+   und die steht im Premium ohnehin schon auf 0.26em. */
+[data-theme="premium"] [data-block="gruender"] [data-teil="foto"] {
+  background: var(--flaeche);
+  /* background-clip: Ohne das läge die Cremefläche UNTER der
+     halbdurchsichtigen Goldlinie und würde sie aufhellen, bis sie
+     weiß wirkt — die Linie wäre da und trotzdem nicht zu sehen. */
+  background-clip: padding-box;
+  border: 1px solid rgba(198, 165, 102, 0.75);
+  border-radius: var(--rund-m);
+  padding: var(--a-3);
+  box-shadow: none;
+}
+
+/* Die Champagner-Linie soll die einzige Kante sein — ein zweiter
+   runder Rand am Foto darin wäre eine Kante zu viel. */
+[data-theme="premium"] [data-block="gruender"] [data-teil="foto"] img {
+  border-radius: 2px;
+}

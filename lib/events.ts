@@ -77,6 +77,8 @@ export interface VeraEvent {
   /** Video im Hero-Bereich. Je Event, nicht global. */
   videoUrl: string | null;
   bildUrl: string | null;
+  /** Zeigt diese Eventseite den Gründerbereich? Je Event einschaltbar. */
+  gruenderZeigen: boolean;
   preise: Preisregeln;
   texte: EventTexte;
 }
@@ -143,6 +145,7 @@ function alsAnzeigeEvent(e: DbEvent, belegt: number): VeraEvent {
     belegtePersonen: belegt,
     videoUrl: e.videoUrl,
     bildUrl: e.bildUrl,
+    gruenderZeigen: e.gruenderZeigen,
     preise: {
       schuelerCents: e.preisSchuelerCents,
       erwachsenerCents: e.preisErwachsenerCents,

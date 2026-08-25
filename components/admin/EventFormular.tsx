@@ -35,6 +35,7 @@ export interface EventVorbelegung {
   ctaTitel: string;
   ctaText: string;
   theme: Theme;
+  gruenderZeigen: boolean;
   bloecke: Record<string, { titel: string; inhalt: string }>;
   startAt: string;
   endAt: string;
@@ -327,6 +328,23 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
       {/* ── Design ─────────────────────────────────────────────── */}
       <div className={stil.karte}>
         <ThemeWahl standard={vorbelegung.theme} gewaehlt={theme} setzeGewaehlt={setzeTheme} />
+
+        {/* Der Gründerbereich gehört zur Seitenzusammenstellung, nicht
+            zu den Daten der Veranstaltung — deshalb steht der Haken
+            hier beim Design und nicht bei den Grunddaten. */}
+        <label className={stil.haken} style={{ marginTop: "1.25rem" }}>
+          <input
+            type="checkbox"
+            name="gruenderZeigen"
+            value="an"
+            defaultChecked={vorbelegung.gruenderZeigen}
+          />
+          <span>Gründerbereich auf dieser Eventseite anzeigen</span>
+        </label>
+        <p className={stil.feldHilfe} style={{ marginTop: "0.5rem" }}>
+          Foto, Name und Beschreibungstext pflegst du einmalig unter „Gründerbereich“ in
+          der Kopfleiste. Auf der VERA-Startseite steht der Bereich unabhängig davon.
+        </p>
       </div>
 
       {/* ── Medien ─────────────────────────────────────────────── */}

@@ -1,0 +1,97 @@
+/* Zweispaltig, sobald genug Platz ist — darunter gestapelt, Foto
+   oben. Reine Grid-Regel, kein JavaScript: nutzbar ab 320 px. */
+.raster {
+  display: grid;
+  gap: var(--a-6);
+  align-items: start;
+}
+
+@media (min-width: 48rem) {
+  .raster {
+    /* Feste Bildspalte, damit das Hochformat den Abschnitt nicht
+       übermäßig hoch zieht. */
+    grid-template-columns: minmax(13rem, 20rem) 1fr;
+    gap: var(--a-8);
+    align-items: center;
+  }
+}
+
+/* ── Foto ─────────────────────────────────────────────────────── */
+.bild {
+  position: relative;
+  width: min(100%, 20rem);
+  aspect-ratio: 4 / 5;
+  border-radius: var(--rund-l);
+  overflow: hidden;
+  background: var(--flaeche-warm);
+  box-shadow: var(--schatten);
+}
+
+.bild img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Ohne Foto: ruhige Fläche mit der Wortmarke, statt eines leeren
+   Kastens. Dasselbe Mittel wie in components/EventBild.tsx. */
+.ohneBild {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: var(--dunkel);
+  color: var(--text-invers);
+  padding: var(--a-5);
+}
+
+/* ── Text ─────────────────────────────────────────────────────── */
+.text {
+  max-width: var(--breite-text);
+}
+
+/* Der Abschnittskopf setzt normalerweise den Abstand zu einem ganzen
+   Abschnitt darunter. Hier folgt aber direkt der Name — mit drei
+   Zentimetern Luft dazwischen sähe es aus wie zwei Bereiche. */
+.text > header {
+  margin-bottom: var(--a-5);
+}
+
+.name {
+  font-family: var(--schrift-display);
+  font-weight: var(--display-gewicht);
+  font-stretch: var(--display-weite);
+  letter-spacing: var(--display-laufweite);
+  /* Bewusst eine Stufe kleiner als die Abschnitts-Überschrift: Sonst
+     stehen dort zwei gleich große Zeilen und es sieht aus, als
+     begänne ein zweiter Abschnitt. */
+  font-size: var(--gr-xl);
+  line-height: 1.1;
+  margin: 0;
+}
+
+/* Die Bezeichnung unter dem Namen. Kleine Versalzeile — dasselbe
+   Muster wie die Augenbrauen der Abschnitte. */
+.rolle {
+  display: block;
+  margin-top: var(--a-2);
+  font-size: var(--gr-xs);
+  font-weight: 700;
+  letter-spacing: var(--label-laufweite);
+  text-transform: uppercase;
+  color: var(--zier);
+}
+
+.beschreibung {
+  margin-top: var(--a-5);
+  font-size: var(--gr-l);
+  color: var(--text-leise);
+}
+
+.beschreibung p + p { margin-top: var(--a-4); }
+
+/* Auf dunkler Fläche kehrt sich die Leserichtung um. */
+.aufDunkel .rolle { color: var(--akzent); }
+.aufDunkel .beschreibung { color: rgba(244, 239, 230, 0.82); }
+.aufDunkel .ohneBild { background: var(--flaeche); color: var(--text); }

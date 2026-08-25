@@ -324,6 +324,22 @@ export const de = {
       "Servern nach. Deshalb gibt es hier auch kein Zustimmungsfenster.",
   },
 
+  /**
+   * Der Gründerbereich. Nur die festen Beschriftungen stehen hier —
+   * Name, Bezeichnung, Text und Foto pflegt der Betreiber selbst im
+   * Adminbereich unter „Gründerbereich“ (Tabelle Einstellungen).
+   */
+  gruender: {
+    ueberschrift: "Wer hinter VERA steht",
+    augenbraue: "Über den Gründer",
+    platzhalterText:
+      "Hier stellt sich {name} in zwei bis drei Sätzen vor: warum es VERA gibt und " +
+      "was ihn an diesen Veranstaltungen reizt. Dieser Text lässt sich im Adminbereich " +
+      "unter „Gründerbereich“ ändern.",
+    /** Bildbeschreibung für Screenreader, {name} und {rolle} werden ersetzt. */
+    fotoAlt: "{name}, {rolle}",
+  },
+
   platzhalter: {
     markierung: "Platzhalter",
     datum: "Datum wird noch bekannt gegeben",
