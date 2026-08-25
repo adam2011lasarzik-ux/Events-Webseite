@@ -14,10 +14,19 @@ name: Vorschau auf GitHub Pages
 # laufende Datenbank. Anmeldungen sind hier nicht möglich — dafür
 # braucht es den echten Server beim Hoster.
 
+# PAUSIERT seit dem Einbau der echten Anmeldung.
+#
+# Grund: Next.js unterstuetzt Server-Funktionen nicht zusammen mit dem
+# statischen Export ("Server Actions are not supported with static
+# export"). Sobald die Seite Anmeldungen entgegennimmt, laesst sie sich
+# nicht mehr als reine HTML-Dateien ausliefern.
+#
+# Die Datei bleibt absichtlich erhalten: Sie dokumentiert den bisherigen
+# Weg und liesse sich fuer eine reine Anschau-Version wieder aktivieren.
+# Der eigentliche Livegang laeuft ueber den Hoster, nicht ueber GitHub
+# Pages. Der automatische Ausloeser ist entfernt — der Ablauf startet
+# nur noch, wenn er von Hand angestossen wird.
 on:
-  push:
-    branches:
-      - claude/frontend-design-skill-folder-luremb
   workflow_dispatch:
 
 permissions:

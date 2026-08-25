@@ -255,3 +255,23 @@ model AdminUser {
   erstelltAm   DateTime @default(now())
   letzterLogin DateTime?
 }
+
+// ── Missbrauchsschutz ────────────────────────────────────────────
+
+/// Zählt Anmeldeversuche, um Massen-Einsendungen zu bremsen.
+///
+/// Bewusst in der Datenbank statt im Arbeitsspeicher: Ein Zähler im
+/// Speicher vergisst bei jedem Neustart der Anwendung alles — und
+/// genau darauf würde ein Angreifer warten. Kein externer Dienst
+/// nötig, die vorhandene Datenbank genügt.
+///
+/// Streng von den Event- und Teilnehmerdaten getrennt: Hier stehen
+/// keine Namen, nur eine Kennung (IP-Adresse) und ein Zeitpunkt.
+/// Alte Einträge werden beim Prüfen mit aufgeräumt.
+model AnmeldeVersuch {
+  id        String   @id @default(cuid())
+  kennung   String
+  zeitpunkt DateTime @default(now())
+
+  @@index([kennung, zeitpunkt])
+}

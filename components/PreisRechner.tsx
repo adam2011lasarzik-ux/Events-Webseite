@@ -1,14 +1,18 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Knopf } from "./Knopf";
-import { FormularVorschau, feldnamen, type VorschauFeldGruppe } from "./FormularVorschau";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+import { AnmeldeFelder, type FeldGruppe } from "./AnmeldeFelder";
+import { anmeldungAbsenden } from "@/app/anmeldung/aktion";
+import { brauchtVormundEinwilligung, ANMELDE_STARTZUSTAND } from "@/lib/anmeldung";
 import { alsEuro, berechnePreis, type Auswahl } from "@/lib/preise";
 import { brauchtKontaktdaten, vorschauRollen, type Anmeldeweg } from "@/lib/vorschau";
 import { fuelle } from "@/lib/formate";
 import type { VeraEvent } from "@/lib/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./PreisRechner.module.css";
+import feldStil from "./AnmeldeFelder.module.css";
 
 /** Derselbe Typ, den lib/vorschau.ts erwartet — so können die drei
  *  Anmeldewege hier und dort nicht auseinanderlaufen. */
@@ -68,12 +72,8 @@ export function PreisRechner({
    * dadurch zeigen Zusammenfassung und Vorschau immer denselben
    * Stand. Hier wird nur noch übersetzt.
    */
-  const vorschauGruppen: VorschauFeldGruppe[] = useMemo(() => {
-    const namen = feldnamen(t);
-    const kontaktFelder = [namen.vorname, namen.nachname, namen.email, namen.telefon];
-    const nameFelder = [namen.vorname, namen.nachname];
+  const gruppen: FeldGruppe[] = useMemo(() => {
     const v = t.anmeldung.vorschau;
-
     return vorschauRollen(fuerWen, auswahl).map((rolle) => ({
       titel:
         rolle.rolle === "selbst"
@@ -83,9 +83,26 @@ export function PreisRechner({
             : rolle.rolle === "erwachsener"
               ? fuelle(v.gruppeErwachsenerN, { n: rolle.nummer })
               : fuelle(v.gruppeSchuelerN, { n: rolle.nummer }),
-      felder: brauchtKontaktdaten(rolle) ? kontaktFelder : nameFelder,
+      mitKontakt: brauchtKontaktdaten(rolle),
     }));
   }, [fuerWen, auswahl, t]);
+
+  const [ergebnisAktion, formAktion] = useActionState(anmeldungAbsenden, ANMELDE_STARTZUSTAND);
+
+  /**
+   * Die eingetippten Werte liegen hier, nicht im Browser.
+   *
+   * React leert ein Formular nach jedem Absendeversuch — auch nach
+   * einem abgelehnten. Ohne diesen Zustand stünde jemand, dem nur das
+   * Einwilligungs-Häkchen fehlte, vor einem komplett leeren Formular
+   * und müsste alle Namen erneut eintippen.
+   */
+  const [werte, setzeWerte] = useState<Record<string, string>>({});
+  const [haken, setzeHakenZustand] = useState<Record<string, boolean>>({});
+  const setzeWert = (name: string, wert: string) =>
+    setzeWerte((alt) => ({ ...alt, [name]: wert }));
+  const setzeHaken = (name: string, gesetzt: boolean) =>
+    setzeHakenZustand((alt) => ({ ...alt, [name]: gesetzt }));
 
   const postenName: Record<string, string> = {
     schueler: t.preise.schueler,
@@ -94,8 +111,37 @@ export function PreisRechner({
     familieWeitererSchueler: t.preise.schueler,
   };
 
+  const vormundNoetig = brauchtVormundEinwilligung(fuerWen);
+
   return (
-    <div className={stil.rechner}>
+    /* onReset: React setzt ein Formular nach jedem Absendeversuch
+       zurueck — auch nach einem abgelehnten. Fuer die Auswahlknoepfe
+       oben hiesse das: Die Anzeige springt auf „Mich selbst", waehrend
+       in Wahrheit weiter das Familienpaket gebucht wird. Hier steuert
+       React jedes Feld selbst, ein Zuruecksetzen ist also nie
+       erwuenscht — deshalb wird es unterbunden. */
+    <form action={formAktion} onReset={(e) => e.preventDefault()} className={stil.rechner}>
+      {/* Der Server liest ausschliesslich diese Werte — der angezeigte
+          Preis wird bewusst NICHT mitgeschickt, sondern dort neu
+          berechnet. Ein manipulierter Betrag hat damit keine Wirkung.
+
+          Die sichtbaren Auswahlknöpfe heissen bewusst anders
+          (wahlFuerWen, wahlSelbstAls): Traegen zwei Felder denselben
+          Namen, entscheidet die Reihenfolge im Dokument, welches der
+          Server sieht — eine Falle, die beim naechsten Umbau zuschlaegt. */}
+      <input type="hidden" name="eventSlug" value={event.slug} />
+      <input type="hidden" name="weg" value={fuerWen} />
+      <input type="hidden" name="selbstAls" value={selbstAls} />
+      <input type="hidden" name="schueler" value={auswahl.schueler} />
+      <input type="hidden" name="erwachsene" value={auswahl.erwachsene} />
+
+      {/* Bot-Falle: fuer Menschen nicht erreichbar. */}
+      <div className={feldStil.honigtopf} aria-hidden="true">
+        <label>
+          Webseite
+          <input type="text" name="webseite" tabIndex={-1} autoComplete="off" />
+        </label>
+      </div>
       <div className={stil.oben}>
         <fieldset className={stil.wahlRaster}>
           <legend className={stil.frage}>{t.anmeldung.frageWen}</legend>
@@ -103,7 +149,7 @@ export function PreisRechner({
           <label className={stil.wahlKarte}>
             <input
               type="radio"
-              name="fuerWen"
+              name="wahlFuerWen"
               checked={fuerWen === "selbst"}
               onChange={() => setzeFuerWen("selbst")}
             />
@@ -114,7 +160,7 @@ export function PreisRechner({
           <label className={stil.wahlKarte}>
             <input
               type="radio"
-              name="fuerWen"
+              name="wahlFuerWen"
               checked={fuerWen === "kind"}
               onChange={() => setzeFuerWen("kind")}
             />
@@ -126,7 +172,7 @@ export function PreisRechner({
             <label className={stil.wahlKarte}>
               <input
                 type="radio"
-                name="fuerWen"
+                name="wahlFuerWen"
                 checked={fuerWen === "familie"}
                 onChange={() => setzeFuerWen("familie")}
               />
@@ -145,7 +191,7 @@ export function PreisRechner({
               <label className={stil.optionZeile}>
                 <input
                   type="radio"
-                  name="selbstAls"
+                  name="wahlSelbstAls"
                   checked={selbstAls === "student"}
                   onChange={() => setzeSelbstAls("student")}
                 />
@@ -157,7 +203,7 @@ export function PreisRechner({
               <label className={stil.optionZeile}>
                 <input
                   type="radio"
-                  name="selbstAls"
+                  name="wahlSelbstAls"
                   checked={selbstAls === "adult"}
                   onChange={() => setzeSelbstAls("adult")}
                 />
@@ -210,7 +256,16 @@ export function PreisRechner({
           )}
         </div>
 
-        <FormularVorschau t={t} gruppen={vorschauGruppen} />
+        <AnmeldeFelder
+          t={t}
+          gruppen={gruppen}
+          fehler={ergebnisAktion.fehler}
+          vormundNoetig={vormundNoetig}
+          werte={werte}
+          setzeWert={setzeWert}
+          haken={haken}
+          setzeHaken={setzeHaken}
+        />
 
         <div className={stil.merker} style={{ marginTop: "1.5rem" }}>
           <h3 className={stil.merkerTitel}>{t.anmeldung.minderjaehrigTitel}</h3>
@@ -247,17 +302,32 @@ export function PreisRechner({
           <span>{t.anmeldung.inklMwst}</span>
         </div>
 
-        <div style={{ marginTop: "1.5rem" }}>
-          <h3 className={stil.merkerTitel}>{t.anmeldung.nochNichtTitel}</h3>
+        <div className={feldStil.absendeBereich}>
+          {ergebnisAktion.meldung && (
+            <p className={feldStil.meldung} role="alert">
+              {ergebnisAktion.meldung}
+            </p>
+          )}
+          <AbsendeKnopf text={t.anmeldung.formular.absenden} laeuft={t.anmeldung.formular.laeuft} />
           <p className={stil.merkerText} style={{ color: "rgba(234,241,248,0.75)" }}>
-            {t.anmeldung.nochNichtText}
+            {t.anmeldung.formular.zahlungHinweis}
           </p>
-          <Knopf href={"/kontakt"} pfeil>
-            {t.anmeldung.nochNichtAktion}
-          </Knopf>
         </div>
       </div>
-    </div>
+    </form>
+  );
+}
+
+/**
+ * Eigene Komponente, weil useFormStatus nur INNERHALB des Formulars
+ * funktioniert. Verhindert doppeltes Absenden durch mehrfaches Tippen.
+ */
+function AbsendeKnopf({ text, laeuft }: { text: string; laeuft: string }) {
+  const { pending } = useFormStatus();
+  return (
+    <button type="submit" className={feldStil.absendeKnopf} disabled={pending}>
+      {pending ? laeuft : text}
+    </button>
   );
 }
 

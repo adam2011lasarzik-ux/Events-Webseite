@@ -248,6 +248,24 @@ export const de = {
       "Meldet ein Elternteil an, gilt die Anmeldung für das Kind. Die Einwilligung der " +
       "Erziehungsberechtigten wird bei der Anmeldung abgefragt.",
 
+    formular: {
+      ueberschrift: "Deine Angaben",
+      hinweis:
+        "Wir fragen nur, was wir für die Veranstaltung wirklich brauchen. " +
+        "Deine Daten werden nicht weitergegeben.",
+      freiwillig: "(freiwillig)",
+      einwilligungVormund:
+        "Ich bin erziehungsberechtigt und melde die genannten minderjährigen Personen " +
+        "verbindlich an.",
+      einwilligungFotos:
+        "Bei der Veranstaltung dürfen Fotos gemacht und für VERA verwendet werden.",
+      absenden: "Anmeldung abschicken",
+      laeuft: "Wird gesendet …",
+      zahlungHinweis:
+        "Nach dem Abschicken ist der Platz reserviert. Die Bezahlung richten wir gerade " +
+        "ein — wir melden uns dazu bei dir.",
+    },
+
     vorschau: {
       ueberschrift: "So sieht das spätere Formular aus",
       hinweis:
@@ -262,6 +280,26 @@ export const de = {
       gruppeErwachsenerN: "Erwachsener {n}",
       gruppeSchuelerN: "Schüler {n}",
     },
+  },
+
+  danke: {
+    ueberschrift: "Danke — wir haben deine Anmeldung",
+    einleitung:
+      "Deine Anmeldung ist gespeichert. Hier steht noch einmal, was wir aufgenommen haben.",
+    nummer: "Anmeldenummer",
+    veranstaltung: "Veranstaltung",
+    personen: "Angemeldete Personen",
+    betrag: "Gesamtbetrag",
+    zahlungOffen: "Noch offen",
+    zahlungTitel: "Bezahlung",
+    zahlungText:
+      "Die Online-Bezahlung richten wir gerade ein. Sobald sie bereitsteht, melden wir uns " +
+      "bei dir unter der angegebenen E-Mail-Adresse.",
+    emailTitel: "Bestätigung per E-Mail",
+    emailText:
+      "Eine automatische Bestätigungsmail gibt es noch nicht. Bitte notiere dir bis dahin " +
+      "deine Anmeldenummer.",
+    nichtGefunden: "Diese Anmeldung konnten wir nicht finden.",
   },
 
   kontakt: {

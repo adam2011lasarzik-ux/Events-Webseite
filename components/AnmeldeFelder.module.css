@@ -1,0 +1,139 @@
+.box {
+  margin-top: var(--a-6);
+  border: 1px dashed var(--linie);
+  border-radius: var(--rund-l);
+  padding: var(--a-6);
+  background: rgba(23, 93, 156, 0.04);
+}
+
+.kopf {
+  margin-bottom: var(--a-2);
+}
+
+.titel {
+  font-family: var(--schrift-display);
+  font-weight: 800;
+  font-size: var(--gr-l);
+}
+
+.hinweis {
+  color: var(--text-leise);
+  font-size: var(--gr-s);
+  margin-bottom: var(--a-5);
+  max-width: var(--breite-text);
+}
+
+.gruppen {
+  display: grid;
+  gap: var(--a-5);
+}
+
+.gruppe {
+  display: grid;
+  gap: var(--a-3);
+}
+
+.gruppenTitel {
+  font-size: var(--gr-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-leise);
+}
+
+.felder {
+  display: grid;
+  gap: var(--a-3);
+}
+
+.feld { display: grid; gap: var(--a-1); }
+
+.label {
+  font-size: var(--gr-xs);
+  font-weight: 600;
+  color: var(--text-leise);
+}
+
+/* Bewusst "disabled": nur eine Vorschau, keine Eingabe möglich. */
+.eingabe {
+  padding: 0.7em 0.9em;
+  border: 1.5px solid var(--linie);
+  border-radius: var(--rund-s);
+  background: var(--flaeche);
+  color: var(--text-leise);
+  font-size: var(--gr-s);
+  cursor: not-allowed;
+}
+
+@media (min-width: 40rem) {
+  .felder { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Echte Eingabefelder (vorher nur Attrappe) ── */
+.eingabe:enabled {
+  background: var(--flaeche);
+  color: var(--text);
+  cursor: text;
+}
+.eingabe:enabled:hover { border-color: var(--courtblau); }
+
+.eingabeFehler,
+.eingabeFehler:enabled { border-color: #B3261E; }
+
+.feldFehler {
+  display: block;
+  margin-top: var(--a-1);
+  font-size: var(--gr-xs);
+  color: #B3261E;
+  font-weight: 600;
+}
+
+.einwilligungen {
+  display: grid;
+  gap: var(--a-4);
+  margin-top: var(--a-6);
+  padding-top: var(--a-5);
+  border-top: 1px solid var(--linie);
+}
+.haken {
+  display: flex;
+  gap: var(--a-3);
+  align-items: start;
+  font-size: var(--gr-s);
+  line-height: 1.5;
+  cursor: pointer;
+}
+.haken input { margin-top: 0.25em; flex: none; }
+
+/* Unsichtbare Bot-Falle. Bewusst nicht display:none — manche Bots
+   ueberspringen versteckte Felder gezielt. So steht es im Quelltext
+   wie ein normales Feld, ist fuer Menschen aber nicht erreichbar. */
+.honigtopf {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.absendeBereich { display: grid; gap: var(--a-4); margin-top: var(--a-6); }
+.meldung {
+  padding: var(--a-4) var(--a-5);
+  border-radius: var(--rund-m);
+  background: rgba(179, 38, 30, 0.08);
+  border: 1px solid rgba(179, 38, 30, 0.3);
+  color: #8C1D18;
+  font-weight: 600;
+}
+.absendeKnopf {
+  font: inherit;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  background: var(--akzent);
+  color: var(--akzent-text);
+  padding: var(--a-4) var(--a-6);
+  border-radius: var(--pille);
+  justify-self: start;
+}
+.absendeKnopf:disabled { opacity: 0.6; cursor: progress; }
