@@ -51,7 +51,7 @@ export const de = {
   } as Record<string, string>,
 
   startseite: {
-    ueberschrift: "Unsere Veranstaltungen",
+    ueberschrift: "Unsere Veran­stal­tungen",
     einleitung:
       "Sport- und Netzwerkevents, bei denen du Neues ausprobierst und Leute kennenlernst.",
     weitereFolgen: "Weitere Veranstaltungen folgen in Kürze.",
@@ -306,7 +306,7 @@ export const de = {
     impressum: "Impressum",
     datenschutz: "Datenschutz",
     impressumTitel: "Impressum",
-    datenschutzTitel: "Datenschutzerklärung",
+    datenschutzTitel: "Daten­schutz­erklärung",
     platzhalterTitel: "Diese Seite ist noch nicht ausgefüllt",
     impressumText:
       "Hier stehen später die gesetzlich vorgeschriebenen Angaben: Name und Anschrift des " +

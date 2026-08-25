@@ -146,6 +146,19 @@
 .merkerTitel { font-family: var(--schrift-display); font-weight: 800; font-size: var(--gr-l); margin-bottom: var(--a-3); }
 .merkerText { color: var(--text-leise); max-width: var(--breite-text); margin-bottom: var(--a-5); }
 
+/* Sehr schmale Handys (bis 360 Pixel, also das iPhone SE der ersten
+   Generation und aufgeklappte Falt-Handys).
+
+   Dort brauchen die Optionszeile und die Summenzeile nebeneinander
+   mehr Platz, als das Fenster hergibt — die Anmeldeseite liess sich
+   deshalb seitwärts schieben. Bewusst NUR hier und nicht in der
+   Grundregel: Ab 375 Pixel passt alles, und ein Umbruch, den niemand
+   braucht, würde die Zeilen dort ohne Not auseinanderziehen. */
+@media (max-width: 22.5rem) {
+  .optionZeile { flex-wrap: wrap; }
+  .summeZeile { flex-wrap: wrap; }
+}
+
 @media (min-width: 46rem) {
   .wahlRaster { grid-template-columns: repeat(3, 1fr); }
 }

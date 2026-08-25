@@ -27,6 +27,19 @@ h1, h2, h3, h4 {
   letter-spacing: var(--display-laufweite);
   margin: 0;
   text-wrap: balance;
+
+  /* Deutsche Wörter werden lang: „Veranstaltungen“ ist in dieser breit
+     laufenden Schrift 369 Pixel breit und passt damit auf KEIN Handy
+     unter 389 Pixel — gemessen, nicht geschätzt. Ohne die beiden
+     Zeilen ragt es aus der Seite heraus und man kann sie seitwärts
+     schieben.
+
+     hyphens trennt sauber mit Bindestrich („Veranstal-tungen“); das
+     funktioniert, weil <html lang="de"> gesetzt ist. overflow-wrap ist
+     die Rückfallebene für Browser ohne deutsche Trennregeln und für
+     Wörter, die auch getrennt nicht passen. */
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
 h1 { font-size: var(--gr-3xl); }

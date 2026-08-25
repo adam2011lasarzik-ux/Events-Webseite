@@ -33,3 +33,17 @@ export function fuelle(
     schluessel in werte ? String(werte[schluessel]) : treffer,
   );
 }
+
+/**
+ * Weiche Trennstellen wieder entfernen.
+ *
+ * In den Überschriften stehen weiche Trennstriche (U+00AD). Auf der
+ * Seite sind sie unsichtbar und werden nur benutzt, wenn ein Wort
+ * sonst nicht in seine Zeile passt. Im Seitentitel — also im
+ * Browser-Tab, im Lesezeichen und bei Suchmaschinen — haben sie
+ * nichts verloren: Dort wird nichts umbrochen, das Zeichen bliebe
+ * aber im Text stehen.
+ */
+export function ohneTrennstellen(text: string): string {
+  return text.replace(/\u00AD/g, "");
+}

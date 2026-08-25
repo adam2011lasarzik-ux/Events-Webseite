@@ -4,7 +4,10 @@
 .raster {
   display: grid;
   gap: var(--a-6);
-  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  /* min(): Auf einem sehr schmalen Handy ist die Spalte sonst starr
+     20rem breit, obwohl nur 280 Pixel Platz sind — die Karte ragte
+     dann über den Rand hinaus. Ab etwa 360 Pixel ändert sich nichts. */
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
 }
 
 .hinweis {

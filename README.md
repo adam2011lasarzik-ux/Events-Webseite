@@ -248,14 +248,9 @@ Business-Design wird daraus eine Zeitschiene.
 - **Drei Designs** je Veranstaltung (siehe oben)
 - **Gründerbereich** mit Foto, auf der Startseite und je Event
   einschaltbar
-- Mit Tastatur bedienbar, ab 360 Pixel Breite ohne waagerechtes Scrollen
-
-> **Bekannte Kleinigkeit:** Auf der Startseite scrollt die Seite bei
-> Bildschirmen **unter 360 Pixel** ein Stück nach rechts. Ursache ist
-> `minmax(20rem, 1fr)` im Kartenraster (`app/(seite)/page.module.css`).
-> Betrifft nur sehr alte Geräte (iPhone SE der ersten Generation);
-> gemessen und bewusst noch nicht geändert, weil es das Layout der
-> Startseite berührt.
+- Nutzbar ab 320 Pixel Breite, mit Tastatur bedienbar. Nachgemessen:
+  12 Seiten × 9 Bildschirmbreiten (320 bis 1440) — keine davon lässt
+  sich seitwärts schieben.
 
 ## Was diese Version bewusst noch nicht kann
 
@@ -267,6 +262,31 @@ vorzutäuschen.
 Bestätigungsseite.
 
 **Kein Livebetrieb.** Es gibt noch kein Hosting und keine Domain.
+
+## Lange deutsche Wörter
+
+Die Überschriftenschrift läuft breit — „Veranstaltungen“ ist darin
+369 Pixel breit und passt damit auf kein Handy unter 389 Pixel. Ohne
+Gegenmaßnahme ragt so ein Wort aus der Seite heraus und man kann sie
+seitwärts schieben.
+
+Zwei Dinge verhindern das (`styles/global.css`, bei `h1, h2, h3, h4`):
+
+- `hyphens: auto` trennt sauber mit Bindestrich. Das funktioniert, weil
+  `<html lang="de">` gesetzt ist.
+- `overflow-wrap: break-word` ist die Rückfallebene für Browser ohne
+  deutsche Trennregeln.
+
+Zusätzlich stehen in `content/de.ts` an drei Stellen **weiche
+Trennstriche** (`U+00AD`, unsichtbar). Sie sagen dem Browser, wo er
+trennen darf, falls er keine Trennregeln kennt. Wichtig dabei:
+
+- Nur bei Wörtern, die auf **jedem** Handy zu breit sind. Ein weicher
+  Trennstrich ist auch eine Erlaubnis — bei einem Wort, das ohnehin
+  passt, trennt der Zeilenausgleich dann ohne Not.
+- Im Seitentitel haben sie nichts verloren (Browser-Tab, Lesezeichen,
+  Suchmaschinen). Dafür gibt es `ohneTrennstellen()` in
+  `lib/formate.ts`.
 
 ## Datenschutz
 

@@ -5,6 +5,7 @@ import { GruenderBereich } from "@/components/GruenderBereich";
 import { kommendeEvents } from "@/lib/events";
 import { ladeGruender } from "@/lib/einstellungen";
 import { texte } from "@/content";
+import { ohneTrennstellen } from "@/lib/formate";
 import stil from "./page.module.css";
 
 /**
@@ -24,7 +25,7 @@ export const dynamic = "force-dynamic";
  * dort). Diese Seite zeigt nur noch eine Karte pro Veranstaltung und
  * bleibt so, auch wenn später weitere Events dazukommen.
  */
-export const metadata: Metadata = { title: texte.startseite.ueberschrift };
+export const metadata: Metadata = { title: ohneTrennstellen(texte.startseite.ueberschrift) };
 
 export default async function Startseite() {
   const t = texte;

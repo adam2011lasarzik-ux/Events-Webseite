@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { Platzhalter } from "@/components/Platzhalter";
 import { texte } from "@/content";
+import { ohneTrennstellen } from "@/lib/formate";
 import stil from "@/components/Textseite.module.css";
 
-export const metadata: Metadata = { title: texte.recht.datenschutzTitel };
+export const metadata: Metadata = { title: ohneTrennstellen(texte.recht.datenschutzTitel) };
 
 export default function Seite() {
   const t = texte;
