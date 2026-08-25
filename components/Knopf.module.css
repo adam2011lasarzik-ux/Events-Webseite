@@ -25,7 +25,7 @@
   color: var(--text);
   border-color: var(--linie);
 }
-.zweit:hover { border-color: var(--tiefblau); }
+.zweit:hover { border-color: var(--knopf-rand-aktiv); }
 
 .aufDunkel {
   background: transparent;

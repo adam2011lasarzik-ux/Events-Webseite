@@ -75,6 +75,12 @@
      Hintergrund passen muss: Im Business-Theme ist Courtblau die
      Akzentfarbe — ein Ring in derselben Farbe wäre kaum zu sehen. */
   --fokus: var(--courtblau);
+  /* Auf dunklen Blöcken braucht der Ring eine eigene Farbe. */
+  --fokus-invers: var(--ballgelb);
+  /* Randfarbe des zweitrangigen Knopfes beim Darüberfahren. */
+  --knopf-rand-aktiv: var(--tiefblau);
+  /* Sperrung kleiner Versalzeilen (Augenbrauen, Beschriftungen). */
+  --label-laufweite: 0.14em;
 
   /* Schriftgrößen — wachsen flüssig mit der Fensterbreite mit,
      damit auf dem Smartphone nichts überläuft. */

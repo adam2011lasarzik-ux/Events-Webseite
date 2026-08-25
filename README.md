@@ -42,7 +42,8 @@ Das Passwort wird niemals gespeichert, nur sein Hash (scrypt).
 | Veranstaltungen: Datum, Ort, Preise, Plätze, **Texte, Abschnitte und Design** | **Im Adminbereich** unter `/admin` |
 | Feste Texte der Seite (Navigation, Für-Schulen-Seite, Fragen-Seite) | `content/de.ts` |
 | Farben, Schriftgrößen, Abstände | `styles/tokens.css` |
-| Fotos | `public/images/` (Anleitung liegt dort) |
+| Aussehen der drei Designs | `styles/themes.css` |
+| Titelbild einer Veranstaltung | **Im Adminbereich** hochladen |
 
 Veranstaltungen brauchen **keine Code-Änderung** mehr. Ein im
 Adminbereich veröffentlichtes Event erscheint sofort auf der Webseite.
@@ -81,6 +82,7 @@ Regel einzeln prüfen.
 | `zeit.ts` | Umrechnung deutsche Zeit ↔ gespeicherter Zeitpunkt |
 | `eventInhalte.ts` | Zeilenregeln der Inhaltsblöcke |
 | `themes.ts` | Welche Designs es gibt |
+| `bilder.ts` | Titelbilder prüfen, umrechnen, ablegen |
 
 ### Fünf Regeln, die wichtig sind
 
@@ -115,22 +117,35 @@ die nächste Veranstaltung weiter.
 
 Beim Anlegen wählst du im Adminbereich das Design der Event-Seite:
 
-| Design | Wofür |
-|---|---|
-| **Standard** | Schüler- und Familienveranstaltungen, Freizeit, Padel, Community |
-| **Business** | Unternehmer-Events, Networking, Firmenveranstaltungen, Workshops |
-| **Premium** | Exklusives Networking, VIP- und Abendveranstaltungen |
+| Design | Wofür | Wie es wirkt |
+|---|---|---|
+| **Standard** | Schüler- und Familienveranstaltungen, Freizeit, Padel, Community | Sandton, ballgelbe Knöpfe, sportlich-offen |
+| **Business** | Unternehmer-Events, Networking, Firmenveranstaltungen, Workshops | Fast weiß, Blau trägt alles, sachlich und aufgeräumt |
+| **Premium** | Exklusives Networking, VIP- und Abendveranstaltungen | Großes Foto im Kopfbereich, warmes Creme, Champagner-Akzente |
 
 **Nur das Aussehen ändert sich.** Daten, Preise, Plätze und die Anmeldung
 sind in jedem Design identisch, und das Design lässt sich jederzeit
 umstellen. Kopfzeile, Fußbereich und die rechtlichen Seiten bleiben
 überall gleich — man erkennt weiterhin dieselbe Plattform.
 
-Alle drei Designs benutzen **dieselben fünf Markenfarben**, nur anders
-gewichtet: Standard sandfarben mit ballgelben Knöpfen, Business fast
-weiß mit Blau als Akzent, Premium tiefblau mit elfenbeinfarbener
-Schrift. Der Fließtext bleibt überall Instrument Sans; unterschiedlich
-ist die Auszeichnungsschrift.
+Standard und Business benutzen **dieselben Markenfarben**, nur anders
+gewichtet. **Premium geht bewusst eigene Wege**: warme Neutraltöne und
+Champagner statt des Markenblaus — es soll sich deutlich abheben. Was
+alle drei verbindet, ist der Fließtext (Instrument Sans) sowie
+Kopfzeile, Fußbereich und die rechtlichen Seiten.
+
+### Premium im Besonderen
+
+Das Titelbild füllt den ganzen Kopfbereich. Damit der Text darüber
+**unabhängig vom gewählten Foto** lesbar bleibt, liegt ein dunkler
+Verlauf darüber und der Textrahmen bringt einen eigenen leichten
+Untergrund mit. Beide Werte sind an den Bildpunkten **gemessen**, nicht
+geschätzt: Ohne sie fiel die Überschrift auf 3,2:1 und die goldene
+Zeile auf 2,4:1 — nötig sind 4,5:1.
+
+**Champagner-Gold nur für Haarlinien, Rahmen, Knopfflächen und große
+Zahlen, niemals für Fließtext.** Auf Creme erreicht es den nötigen
+Lesekontrast nicht; als Fläche mit dunkler Schrift dagegen mühelos.
 
 ### Ein weiteres Design ergänzen
 
@@ -143,6 +158,32 @@ Drei Schritte, sonst nichts:
 In `styles/themes.css` werden **nur Design-Variablen** überschrieben —
 keine Klassennamen der Bausteine. Deshalb muss kein Baustein angefasst
 werden, und es können sich keine Regeln gegenseitig aufheben.
+
+## Titelbilder
+
+Im Adminbereich lädst du je Veranstaltung ein Titelbild hoch — auf dem
+iPad öffnet sich dabei die Fotomediathek. Was dabei passiert:
+
+- Die Datei wird **immer neu berechnet**, nie so gespeichert, wie sie
+  ankommt. Das ist der wirksamste Schutz: Was sich nicht als Bild
+  öffnen lässt, kommt nicht durch, und in einer echten Bilddatei
+  eingebetteter Fremdinhalt überlebt das Umrechnen nicht.
+- Die **Drehung aus den Aufnahmedaten wird angewendet**, danach werden
+  die Metadaten verworfen. Fotos vom iPhone tragen GPS-Koordinaten —
+  die haben auf einer öffentlichen Seite nichts verloren.
+- Es entstehen **zwei Größen** (1800 und 900 Pixel breit) als WebP,
+  damit ein Handy nicht das Desktop-Bild lädt.
+- Erlaubt sind JPEG, PNG und WebP bis 10 MB.
+
+Die Dateien liegen **außerhalb von `public/`** in dem Verzeichnis aus
+`BILDER_VERZEICHNIS` (Standard `./daten/bilder`) und werden über
+`/bilder/…` ausgeliefert.
+
+> **Wichtig für den späteren Livegang:** Bei einem Deployment aus Git
+> wird `public/` ersetzt. Deshalb liegen die Bilder daneben.
+> `BILDER_VERZEICHNIS` muss beim Hoster auf ein Verzeichnis zeigen, das
+> ein Deployment **nicht überschreibt** — sonst sind nach dem nächsten
+> Update alle hochgeladenen Bilder weg.
 
 ## Abschnitte einer Veranstaltung
 

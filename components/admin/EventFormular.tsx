@@ -14,6 +14,7 @@ import { type Theme } from "@/lib/themes";
 import { ThemeWahl } from "./ThemeWahl";
 import { texte } from "@/content";
 import stil from "@/app/admin/admin.module.css";
+import bildStil from "./Titelbild.module.css";
 
 export interface EventVorbelegung {
   id: string;
@@ -107,7 +108,9 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
     /* onReset: React leert ein Formular nach jedem Absendeversuch —
        auch nach einem abgelehnten. Ohne diese Sperre wäre ein komplett
        ausgefülltes Event nach einem einzigen Tippfehler weg. */
-    <form action={aktion} onReset={(e) => e.preventDefault()}>
+    /* encType: Ohne diese Angabe schickt der Browser nur den Dateinamen
+       statt der Datei — der Upload käme leer an. */
+    <form action={aktion} onReset={(e) => e.preventDefault()} encType="multipart/form-data">
       <input type="hidden" name="eventId" value={vorbelegung.id} />
 
       {ergebnis.meldung && (
@@ -328,11 +331,50 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
 
       {/* ── Medien ─────────────────────────────────────────────── */}
       <div className={stil.karte}>
-        <p className={stil.formGruppenTitel}>Bild und Video</p>
+        <p className={stil.formGruppenTitel}>Titelbild und Video</p>
+
         <div className={stil.raster}>
-          {feld("bildUrl", "Bild", { hilfe: "Pfad im Ordner public, z. B. /images/event-padel.jpg" })}
-          {feld("videoUrl", "Video im Kopfbereich", { hilfe: "z. B. /videos/padel-hero.mp4" })}
+          <div className={stil.breit}>
+            <Huelle
+              name="titelbild"
+              label="Titelbild"
+              fehler={fehlerZu("titelbild")}
+              hilfe="JPEG, PNG oder WebP, bis 10 MB. Das Bild wird auf Web-Größe gerechnet; Aufnahmeort und andere versteckte Angaben werden dabei entfernt."
+            >
+              {vorbelegung.bildUrl && (
+                <span className={bildStil.aktuell}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={vorbelegung.bildUrl} alt="" className={bildStil.probe} />
+                  <span className={stil.feldHilfe}>Aktuell hinterlegt</span>
+                </span>
+              )}
+              <input
+                id="f-titelbild"
+                className={stil.eingabe}
+                type="file"
+                name="titelbild"
+                accept="image/jpeg,image/png,image/webp"
+              />
+            </Huelle>
+
+            {vorbelegung.bildUrl && (
+              <label className={stil.haken} style={{ marginTop: "0.75rem" }}>
+                <input type="checkbox" name="bildEntfernen" value="an" />
+                <span>Titelbild entfernen</span>
+              </label>
+            )}
+          </div>
+
+          {feld("videoUrl", "Video im Kopfbereich", {
+            breit: true,
+            hilfe: "Pfad im Ordner public, z. B. /videos/padel-hero.mp4. Videos werden nicht über das Formular hochgeladen — dafür sind sie zu groß.",
+          })}
         </div>
+
+        <p className={stil.feldHilfe} style={{ marginTop: "0.75rem" }}>
+          Im Design „Premium" füllt das Titelbild den ganzen Kopfbereich. Ein
+          querformatiges Foto wirkt dort am besten.
+        </p>
       </div>
 
       <div className={stil.knopfReihe}>

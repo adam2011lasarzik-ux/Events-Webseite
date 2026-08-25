@@ -13,7 +13,7 @@
   display: inline-block;
   font-size: var(--gr-xs);
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--label-laufweite);
   text-transform: uppercase;
   color: var(--zier);
   margin-bottom: var(--a-3);

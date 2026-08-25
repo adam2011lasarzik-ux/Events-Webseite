@@ -23,3 +23,9 @@ next-env.d.ts
 /.windsurf/
 /skills-lock.json
 /.claude/skills/prisma-*
+
+# Im Adminbereich hochgeladene Titelbilder. Gehören nicht ins
+# Repository: Sie entstehen im Betrieb und wären bei jedem Deployment
+# ein Konflikt. Beim Hoster zeigt BILDER_VERZEICHNIS auf einen Ordner,
+# den ein Deployment nicht überschreibt.
+/daten/

@@ -13,9 +13,16 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { verlangeAdmin } from "@/lib/adminAuth";
 import { pruefeEvent, type EventErgebnis } from "@/lib/eventFormular";
+import { bildAblegen, bildLoeschen } from "@/lib/bilder";
 
 function text(wert: FormDataEntryValue | null): string {
   return typeof wert === "string" ? wert : "";
+}
+
+/** Die hochgeladene Datei, falls überhaupt eine gewählt wurde. */
+function dateiOderNichts(wert: FormDataEntryValue | null): File | null {
+  // Ein leeres Dateifeld schickt der Browser als File mit 0 Bytes mit.
+  return wert instanceof File && wert.size > 0 ? wert : null;
 }
 
 /** Alle Formularwerte als einfache Zeichenketten einsammeln. */
@@ -37,7 +44,33 @@ export async function eventSpeichern(
   const geprueft = pruefeEvent(alsRoh(formular));
   if (geprueft.fehler) return { fehler: geprueft.fehler };
 
-  const { dabei, mitbringen, bloecke, ...daten } = geprueft.daten;
+  // ── Titelbild ────────────────────────────────────────────────
+  // Vor allem anderen, damit ein abgelehntes Bild nicht dazu führt,
+  // dass die Textfelder schon gespeichert sind und das Bild nicht.
+  const bisher = id
+    ? (await db.event.findUnique({ where: { id }, select: { bildUrl: true } }))?.bildUrl ?? null
+    : null;
+
+  const neueDatei = dateiOderNichts(formular.get("titelbild"));
+  const sollEntfernen = text(formular.get("bildEntfernen")) === "an";
+
+  let bildUrl: string | null = bisher;
+  let altesLoeschen: string | null = null;
+
+  if (neueDatei) {
+    const abgelegt = await bildAblegen(neueDatei);
+    if (abgelegt.fehler) {
+      return { fehler: [{ feld: "titelbild", text: abgelegt.fehler.text }] };
+    }
+    bildUrl = abgelegt.bild.url;
+    altesLoeschen = bisher;
+  } else if (sollEntfernen) {
+    bildUrl = null;
+    altesLoeschen = bisher;
+  }
+
+  const { dabei, mitbringen, bloecke, ...felder } = geprueft.daten;
+  const daten = { ...felder, bildUrl };
 
   // Adresse muss eindeutig bleiben — sie steht in der URL.
   const belegt = await db.event.findUnique({ where: { slug: daten.slug } });
@@ -88,10 +121,17 @@ export async function eventSpeichern(
       });
     }
   } catch (e) {
+    // Ein gerade abgelegtes Bild wieder wegräumen — sonst bliebe eine
+    // Datei liegen, auf die kein Event mehr zeigt.
+    if (neueDatei && bildUrl) await bildLoeschen(bildUrl);
     // Besuchern und Bedienern niemals interne Einzelheiten zeigen.
     console.error("Event speichern fehlgeschlagen:", e);
     return { fehler: [], meldung: "Das Speichern hat nicht geklappt. Bitte noch einmal versuchen." };
   }
+
+  // Erst jetzt, wo alles sicher gespeichert ist: die vorherige Fassung
+  // vom Datenträger nehmen.
+  if (altesLoeschen && altesLoeschen !== bildUrl) await bildLoeschen(altesLoeschen);
 
   redirect(`/admin/events/${eventId}?gespeichert=1`);
 }
@@ -114,7 +154,11 @@ export async function eventEntfernen(formular: FormData): Promise<void> {
     redirect(`/admin/events/${id}?fehler=anmeldungen`);
   }
 
+  // Das Titelbild mit entfernen, sonst bleibt es als verwaiste Datei
+  // liegen und niemand weiss später, wozu es gehörte.
+  const event = await db.event.findUnique({ where: { id }, select: { bildUrl: true } });
   await db.eventAbschnitt.deleteMany({ where: { eventId: id } });
   await db.event.delete({ where: { id } });
+  await bildLoeschen(event?.bildUrl ?? null);
   redirect("/admin");
 }

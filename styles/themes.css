@@ -90,47 +90,59 @@
 }
 
 /* ── Premium ──────────────────────────────────────────────────────
-   Dunkel, ruhig, edel. Der Grund ist ausdrücklich BLAU, nicht
-   schwarz — schwarz mit Goldakzent ist die abgegriffene
-   Luxus-Antwort. Ballgelb kommt genau einmal vor: auf der
-   Hauptaktion. */
+   Warm, ruhig, edel — an einem Rooftop-Abend orientiert und nicht an
+   der Marke: Statt des kühlen Markenblaus stehen hier warmes
+   Fast-Schwarz, Creme und Champagner.
+
+   Der Aufbau folgt hochwertigen Hotel- und Veranstaltungsseiten: ein
+   grosser dunkler Kopfbereich mit dem Foto, darunter Creme für die
+   längeren Inhalte, am Ende wieder ein dunkler Block. Durchgehend
+   dunkel liest sich auf Dauer anstrengend; durchgehend hell verliert
+   den Abendcharakter.
+
+   HARTE REGEL zum Champagner: nur für Haarlinien, Rahmen, Knopfflächen
+   und grosse Zahlen — NIEMALS für Fliesstext. Auf Creme erreicht er
+   den nötigen Lesekontrast nicht; als Fläche mit dunkler Schrift
+   dagegen mühelos. */
 [data-theme="premium"] {
-  --grund:         #081F38;
-  --flaeche:       #0F2C4C;
-  --flaeche-warm:  #0B2542;
+  --grund:         #F6F1E8;
+  --flaeche:       #FFFDF9;
+  --flaeche-warm:  #EDE5D8;
 
-  /* Warmes Elfenbein statt reinem Weiß — es nimmt den Sandton der
-     Marke auf und ist auf Dunkel angenehmer zu lesen. */
-  --text:          #F1EBE0;
-  --text-leise:    #A7BCD2;
-  --text-invers:   #F1EBE0;
-  --dunkel:        #050F1D;
+  --text:          #221E19;
+  --text-leise:    #6B6157;
+  --text-invers:   #F4EFE6;
+  --dunkel:        #141210;
 
-  --akzent:        var(--ballgelb);
-  --akzent-hell:   var(--ballgelb-hell);
-  --akzent-tief:   var(--ballgelb-tief);
-  --akzent-text:   #081F38;
+  --akzent:        #C6A566;
+  --akzent-hell:   #D6B87F;
+  --akzent-tief:   #A98644;
+  --akzent-text:   #1A1611;
 
-  --linie:         rgba(241, 235, 224, 0.18);
-  --linie-invers:  rgba(241, 235, 224, 0.28);
+  --linie:         rgba(34, 30, 25, 0.15);
+  --linie-invers:  rgba(244, 239, 230, 0.24);
 
-  --fokus:         var(--ballgelb);
-  /* Courtblau verschwände auf dem dunklen Grund fast. Das Beiwerk
-     nimmt sich hier über die gedämpfte Textfarbe zurück. */
-  --zier:          var(--text-leise);
+  /* Ein champagnerfarbener Ring wäre auf Creme kaum zu sehen. */
+  --fokus:         #221E19;
+  --fokus-invers:  #E0C892;
+  --knopf-rand-aktiv: #221E19;
 
-  /* Durchgehend dunkel, nur feine Helligkeitsstufen. Das Ballgelb
-     bleibt der Hauptaktion vorbehalten — genau einmal auf der Seite. */
-  --kachel-1:      #123453;
-  --kachel-1-text: var(--text);
-  --kachel-2:      #0F2C4C;
-  --kachel-2-text: var(--text);
-  --kachel-3:      #050F1D;
-  --kachel-3-text: var(--text);
+  /* Beiwerk: ein dunkleres Gold, das auch als kleiner Text noch
+     ausreichend Kontrast auf Creme hat. */
+  --zier:          #8A6D3B;
 
-  /* Instrument Serif — die Serifen-Schwester der Instrument Sans, die
-     die Marke ohnehin im Fließtext benutzt. Elegant, und trotzdem aus
-     derselben Familie. Kein Playfair. */
+  /* Preis-Kacheln als Helligkeitsleiter von Creme nach Nacht — der
+     Preis steigt, die Fläche wird dunkler. */
+  --kachel-1:      #FFFDF9;
+  --kachel-1-text: #221E19;
+  --kachel-2:      #3A322A;
+  --kachel-2-text: #F4EFE6;
+  --kachel-3:      #141210;
+  --kachel-3-text: #F4EFE6;
+
+  /* Instrument Serif für den Titel; die weit gesperrten Versalien für
+     Datum, Ort und Beschriftungen kommen aus der Fliesstextschrift —
+     keine vierte Schriftfamilie nötig. */
   --schrift-display: var(--font-premium), Georgia, "Times New Roman", serif;
 
   /* Eine Serifenschrift will leicht gesetzt sein — fett und breit
@@ -139,22 +151,34 @@
   --display-weite:     100%;
   --display-laufweite: -0.005em;
 
-  --rund-s:  8px;
-  --rund-m:  14px;
-  --rund-l:  20px;
-  --rund-xl: 28px;
+  /* Deutlich weiter gesperrt als sonst: Das ist der Griff, der kleine
+     Versalzeilen hochwertig wirken lässt. */
+  --label-laufweite: 0.26em;
 
-  --a-9: clamp(4.5rem, 2.5rem + 7vw, 9.5rem);
+  /* Klare, fast rechteckige Formen. Runde Pillen wirken freundlich —
+     hier soll es förmlich wirken. */
+  --rund-s:  3px;
+  --rund-m:  6px;
+  --rund-l:  10px;
+  --rund-xl: 12px;
+  --pille:   2px;
 
-  --schatten: 0 1px 2px rgba(0, 0, 0, 0.4),
-              0 24px 60px -28px rgba(0, 0, 0, 0.75);
+  /* Luft ist das wichtigste Mittel dieses Themes — aber gemessen.
+     Bei 11rem oben und unten wirkten kurze Abschnitte leer statt
+     grosszügig; 8,5rem lassen die Seite atmen, ohne zu klaffen. */
+  --a-7: 3.25rem;
+  --a-8: 4.5rem;
+  --a-9: clamp(4rem, 2.5rem + 6vw, 8.5rem);
+
+  --schatten: 0 1px 2px rgba(34, 30, 25, 0.06),
+              0 30px 70px -40px rgba(34, 30, 25, 0.35);
 }
 
-/* Die Fehlerfarben müssen auf dunklem Grund heller werden, sonst
-   verschwinden sie. */
-[data-theme="premium"] {
-  --fehler:      #FF9A93;
-  --fehler-tief: #FFC4BF;
+/* Auf den dunklen Blöcken kehrt sich die Leserichtung um. */
+[data-theme="premium"] .aufDunkel,
+[data-theme="premium"] [data-block="kopf"] {
+  --linie: var(--linie-invers);
+  --zier: #C6A566;
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -197,30 +221,39 @@
   font-weight: 500;
 }
 
-/* Premium: der Linienrahmen.
-   Die weißen Court-Linien sind seit jeher das Gestaltungselement der
-   Marke. Hier werden sie zur Einladungskarte veredelt: eine feine
-   Linie rund um den Kopfbereich, in die das Datum eingesetzt ist. */
-[data-theme="premium"] [data-block="kopf"] {
-  border: 1px solid var(--linie);
-  border-radius: var(--rund-l);
-  padding: var(--a-7) var(--a-6);
-  position: relative;
-}
-[data-theme="premium"] [data-block="kopf"] [data-einsatz] {
-  position: absolute;
-  top: 0;
-  left: var(--a-6);
-  transform: translateY(-50%);
-  background: var(--grund);
-  padding-inline: var(--a-3);
-  font-family: var(--schrift-text);
-  font-size: var(--gr-xs);
-  letter-spacing: 0.16em;
+/* Premium: die Signatur — der gravierte Linienrahmen — sitzt jetzt im
+   eigenen Kopfbereich (components/HeroPremium.module.css). Hier bleibt
+   nur, was die gemeinsamen Bausteine betrifft. */
+
+/* Kleine Versalzeilen weiter sperren als sonst. */
+[data-theme="premium"] [data-block="vorstellung"] [class*="faktText"],
+[data-theme="premium"] [data-block="ablauf"] [data-zeit] {
+  letter-spacing: var(--label-laufweite);
   text-transform: uppercase;
-  color: var(--text-leise);
+  font-size: var(--gr-xs);
 }
 
-/* Auf Dunkel liest sich der Fließtext angenehmer, wenn er ein
+/* Die helle Preis-Kachel braucht eine Kante, sonst schwimmt sie auf
+   dem Creme-Grund. */
+[data-theme="premium"] [class*="tonSchueler"] {
+  border: 1px solid var(--akzent);
+}
+
+/* Auf Dunkel liest sich der Fliesstext angenehmer, wenn er ein
    Quäntchen leichter läuft. */
-[data-theme="premium"] p { letter-spacing: 0.004em; }
+[data-theme="premium"] .aufDunkel p { letter-spacing: 0.004em; }
+
+/* Die Court-Linien sind ein SPORT-Zeichen. Über einem Rooftop-Abend
+   sind sie schlicht falsch — im Premium bleiben sie weg. */
+[data-theme="premium"] [data-zier="court"] { display: none; }
+
+/* Der Abschluss-Aufruf steht im Premium bereits auf dunkler Fläche.
+   Seine eigene dunkle Karte darin wäre Dunkel auf Dunkel — sie tritt
+   deshalb zurück und überlässt der Fläche die Wirkung. */
+[data-theme="premium"] [class*="CtaBand-module"][class*="band"] {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  border-top: 1px solid var(--linie-invers);
+  padding-top: var(--a-6);
+}

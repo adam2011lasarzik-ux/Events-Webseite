@@ -38,7 +38,7 @@ export const LEERES_EVENT: EventVorbelegung = {
   strasse: "",
   plz: "",
   stadt: "",
-  bildUrl: "",
+  bildUrl: "",  // nur zur Anzeige des aktuellen Bildes
   videoUrl: "",
   maxPersonen: "",
   schwelleWenigPlaetze: "10",

@@ -1,0 +1,14 @@
+.aktuell {
+  display: block;
+  margin-bottom: var(--a-3);
+}
+
+.probe {
+  display: block;
+  width: min(100%, 22rem);
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--rund-s);
+  border: 1px solid var(--linie);
+  margin-bottom: var(--a-1);
+}

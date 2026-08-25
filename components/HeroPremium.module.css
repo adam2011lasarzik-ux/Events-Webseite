@@ -1,0 +1,170 @@
+/* ---------------------------------------------------------------
+   Der Premium-Kopfbereich: Foto formatfüllend, Text darüber.
+
+   `svh` statt `vh`: Auf dem iPhone wächst und schrumpft die
+   Adressleiste beim Scrollen. Mit `vh` springt die Höhe dabei, und
+   der Text rutscht sichtbar. `svh` rechnet mit der kleinsten Fassung
+   und bleibt ruhig.
+   --------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  min-height: 78svh;
+  display: grid;
+  align-items: end;
+  background: var(--dunkel);
+  color: var(--text-invers);
+  overflow: hidden;
+}
+
+@media (min-width: 52rem) {
+  .hero { min-height: 86svh; }
+}
+
+.bild,
+.schleier {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.bild > * { width: 100%; height: 100%; }
+
+.foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Etwas oberhalb der Mitte: Auf Veranstaltungsfotos steht das
+     Wesentliche — Menschen, Horizont — selten ganz unten, und unten
+     liegt ohnehin der Text. */
+  object-position: center 40%;
+  display: block;
+}
+
+/* Ohne Foto keine flache Fläche, sondern ein warmer Verlauf: Der
+   Kopfbereich soll auch dann wie ein Auftritt wirken. */
+.ohneBild {
+  background: radial-gradient(120% 90% at 50% 15%, #2A241D 0%, #141210 55%, #0B0A09 100%);
+}
+
+/* Der Verlauf ist die Lebensversicherung dieses Kopfbereichs: Welches
+   Foto hier liegt, entscheidet der Veranstalter — die Lesbarkeit darf
+   nicht davon abhängen. Die Werte sind nicht geschätzt, sondern an den
+   Bildpunkten gemessen: Mit einem helleren Verlauf erreichte die
+   Überschrift nur 3,2:1 statt der geforderten 4,5:1. */
+.schleier {
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(20, 18, 16, 0.74) 0%,
+      rgba(20, 18, 16, 0.48) 30%,
+      rgba(20, 18, 16, 0.60) 62%,
+      rgba(20, 18, 16, 0.94) 100%
+    );
+}
+
+.innen {
+  width: min(100% - 2.5rem, 54rem);
+  margin-inline: auto;
+  padding-block: var(--a-8) var(--a-8);
+}
+
+/* Die Signatur: ein feiner Rahmen aus Champagner-Haarlinien, vom
+   Bildrand eingerückt — die Court-Linien der Marke, zur gravierten
+   Einladungskarte veredelt. */
+.rahmen {
+  border: 1px solid rgba(198, 165, 102, 0.55);
+  /* Zusätzlich zum Verlauf: eine leichte eigene Fläche hinter dem
+     Text. Sie kostet kaum Bildwirkung, sichert aber auch bei einem
+     sehr hellen Foto den Kontrast — der Verlauf allein reichte an der
+     hellsten Stelle nicht. */
+  /* 0,34 ist gemessen, nicht gewählt: Bei 0,26 fiel die goldene Zeile
+     auf dem iPad auf 4,37:1 und damit unter die Grenze; bei 0,44 war
+     vom Foto zu wenig zu sehen. */
+  background: rgba(20, 18, 16, 0.34);
+  padding: var(--a-6) var(--a-5);
+  text-align: center;
+  display: grid;
+  justify-items: center;
+  gap: var(--a-4);
+}
+
+@media (min-width: 40rem) {
+  .rahmen { padding: var(--a-7) var(--a-7); }
+}
+
+.augenbraue {
+  font-size: var(--gr-xs);
+  font-weight: 600;
+  letter-spacing: var(--label-laufweite);
+  text-transform: uppercase;
+  /* Heller als das Champagner der Flächen: Als kleine Schrift über
+     einem Foto braucht Gold mehr Helligkeit, sonst bleibt es unter
+     4,5:1. Gemessen, nicht geschätzt. */
+  color: #EFD9AB;
+}
+
+.titel {
+  font-size: clamp(2.6rem, 1.4rem + 6vw, 5.4rem);
+  line-height: 1.02;
+  margin: 0;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+
+.trenner {
+  width: 4.5rem;
+  height: 1px;
+  background: rgba(198, 165, 102, 0.7);
+}
+
+.datum {
+  font-size: clamp(1.05rem, 0.9rem + 0.7vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: var(--label-laufweite);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.zeit {
+  font-size: var(--gr-s);
+  letter-spacing: var(--label-laufweite);
+  text-transform: uppercase;
+  color: #EFD9AB;
+  margin: 0;
+}
+
+.offen {
+  /* Steht der Termin noch nicht fest, soll das nicht wie ein Datum
+     aussehen. */
+  text-transform: none;
+  letter-spacing: 0.04em;
+  font-style: italic;
+  color: rgba(244, 239, 230, 0.8);
+}
+
+.text {
+  font-size: var(--gr-l);
+  color: rgba(244, 239, 230, 0.88);
+  max-width: 44ch;
+  margin: 0;
+}
+
+.ort {
+  font-size: var(--gr-xs);
+  letter-spacing: var(--label-laufweite);
+  text-transform: uppercase;
+  color: rgba(244, 239, 230, 0.72);
+  margin: 0;
+}
+
+.knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--a-3);
+  justify-content: center;
+  margin-top: var(--a-2);
+}
+
+.platz { min-height: 1px; }

@@ -15,7 +15,7 @@ import stil from "./CtaBand.module.css";
 export function CtaBand({ t, event }: { t: Woerterbuch; event?: VeraEvent }) {
   return (
     <div className={`${stil.band} aufDunkel`}>
-      <div className={stil.courtEcke} aria-hidden="true">
+      <div className={stil.courtEcke} aria-hidden="true" data-zier="court">
         <CourtLinien />
       </div>
       <div>

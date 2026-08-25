@@ -47,7 +47,7 @@ button { font: inherit; color: inherit; }
   outline-offset: 3px;
   border-radius: 4px;
 }
-.aufDunkel :focus-visible { outline-color: var(--ballgelb); }
+.aufDunkel :focus-visible { outline-color: var(--fokus-invers); }
 
 /* Nur für Screenreader sichtbar. */
 .nurVorlesen {

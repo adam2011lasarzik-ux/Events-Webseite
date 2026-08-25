@@ -1,6 +1,7 @@
 import { Abschnitt, AbschnittKopf } from "./Abschnitt";
 import { ThemeRahmen } from "./ThemeRahmen";
 import { Hero } from "./Hero";
+import { HeroPremium } from "./HeroPremium";
 import { EventKarte } from "./EventKarte";
 import { PreisKacheln } from "./PreisKacheln";
 import { CtaBand } from "./CtaBand";
@@ -31,11 +32,26 @@ export function EventSeite({ t, event }: { t: Woerterbuch; event: VeraEvent }) {
 
   return (
     <ThemeRahmen theme={event.theme}>
-      <Hero t={t} event={event} />
+      {/* Premium bekommt einen eigenen Kopfbereich: Dort liegt das Bild
+          HINTER dem Text statt daneben — das lässt sich nicht über
+          Design-Variablen erreichen. Standard und Business behalten
+          dadurch garantiert ihren bisherigen Kopfbereich. */}
+      {event.theme === "PREMIUM" ? (
+        <HeroPremium t={t} event={event} />
+      ) : (
+        <Hero t={t} event={event} />
+      )}
 
-      <Abschnitt id="event" ton="warm">
-        <EventKarte t={t} event={event} />
-      </Abschnitt>
+      {/* Die Event-Karte wiederholt Titel, Termin, Ort und Preis —
+          Angaben, die im Premium-Kopfbereich bereits gross dastehen.
+          Dort ist sie deshalb Unruhe statt Information und entfällt.
+          Die kompakte Detailseite bleibt über „Alle Infos zum Event"
+          im Kopfbereich erreichbar. */}
+      {event.theme !== "PREMIUM" && (
+        <Abschnitt id="event" ton="warm">
+          <EventKarte t={t} event={event} />
+        </Abschnitt>
+      )}
 
       {/* Die Blöcke kommen vom Event, nicht aus dem Wörterbuch.
           Ein Netzwerkabend zeigt hier also seine eigenen Inhalte —
@@ -49,7 +65,10 @@ export function EventSeite({ t, event }: { t: Woerterbuch; event: VeraEvent }) {
 
       <EventBloecke bloecke={weitere} startTon="hell" />
 
-      <Abschnitt>
+      {/* Premium endet auf einer dunklen Fläche. Das schliesst die
+          Seite ab und macht den Übergang zum dunklen Fussbereich
+          ruhig — von Creme direkt ins Dunkle wäre eine harte Kante. */}
+      <Abschnitt ton={event.theme === "PREMIUM" ? "dunkel" : "hell"}>
         <CtaBand t={t} event={event} />
       </Abschnitt>
     </ThemeRahmen>

@@ -10,6 +10,16 @@ const repoName = "Events-Webseite";
 const nextConfig = {
   reactStrictMode: true,
 
+  experimental: {
+    // Titelbilder werden als Teil des Event-Formulars hochgeladen.
+    // Die Voreinstellung für Server-Funktionen liegt bei 1 MB — ein
+    // Foto vom iPhone ist grösser, der Upload bräche also immer ab.
+    // 12 MB lassen Luft über der 10-MB-Grenze aus lib/bilder.ts, damit
+    // eine zu grosse Datei die verständliche Meldung von dort bekommt
+    // und nicht einen nackten Netzwerkfehler.
+    serverActions: { bodySizeLimit: "12mb" },
+  },
+
   // Verrät sonst in jeder Antwort das verwendete Framework. Das nützt
   // niemandem außer jemandem, der nach bekannten Lücken sucht.
   poweredByHeader: false,
