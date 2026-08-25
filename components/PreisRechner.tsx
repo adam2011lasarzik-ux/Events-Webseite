@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { AnmeldeFelder, type FeldGruppe } from "./AnmeldeFelder";
-import { anmeldungAbsenden } from "@/app/anmeldung/aktion";
+import { anmeldungAbsenden } from "@/app/(seite)/anmeldung/aktion";
 import { brauchtVormundEinwilligung, ANMELDE_STARTZUSTAND } from "@/lib/anmeldung";
 import { alsEuro, berechnePreis, type Auswahl } from "@/lib/preise";
 import { brauchtKontaktdaten, vorschauRollen, type Anmeldeweg } from "@/lib/vorschau";

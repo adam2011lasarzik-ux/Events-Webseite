@@ -31,6 +31,25 @@ export const de = {
     zurueck: "Zurück zur Startseite",
   },
 
+  /**
+   * Die Kategorien als deutsche Wörter — an genau einer Stelle.
+   *
+   * Wird auf der Übersichtskarte UND im Adminbereich benutzt. Zwei
+   * getrennte Listen liefen früher oder später auseinander, und dann
+   * hiesse dieselbe Veranstaltung vorne „Netzwerken" und hinten
+   * „Networking".
+   */
+  kategorie: {
+    sport: "Sport",
+    business: "Business",
+    networking: "Netzwerken",
+    schule: "Schule",
+    community: "Community",
+    workshop: "Workshop",
+    freizeit: "Freizeit",
+    sonstiges: "Veranstaltung",
+  } as Record<string, string>,
+
   startseite: {
     ueberschrift: "Unsere Veranstaltungen",
     einleitung:

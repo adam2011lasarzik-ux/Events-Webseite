@@ -1,10 +1,22 @@
 import type { Metadata } from "next";
 import { Archivo, Instrument_Sans } from "next/font/google";
-import { Header } from "@/components/Header";
-import { VorschauSperre } from "@/components/VorschauSperre";
-import { Footer } from "@/components/Footer";
 import { texte } from "@/content";
 import "@/styles/global.css";
+
+/**
+ * Das äußerste Layout — bewusst schlank.
+ *
+ * Hier steht nur, was für JEDE Seite gilt: die Schriften, das
+ * Grundgerüst der Seite und die Grundangaben für Suchmaschinen.
+ * Kopfleiste, Fußbereich und die Vorschau-Sperre gehören NICHT
+ * hierher: Der Adminbereich soll weder die öffentliche Navigation
+ * noch die Vorschau-Passwortabfrage bekommen. Beides liegt deshalb in
+ * app/(seite)/layout.tsx, das nur für den öffentlichen Teil gilt.
+ *
+ * Die Klammern in „(seite)" machen einen Ordner zu einer reinen
+ * Gruppierung: Er taucht in keiner Adresse auf. /anmeldung bleibt
+ * /anmeldung, bekommt aber ein anderes Layout als /admin.
+ */
 
 /**
  * Die Schriften werden beim Bauen heruntergeladen und von der eigenen
@@ -36,16 +48,7 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de" className={`${display.variable} ${text.variable}`}>
-      <body>
-        <VorschauSperre>
-          <a href="#inhalt" className="zumInhalt">
-            {texte.nav.sprungmarke}
-          </a>
-          <Header t={texte} />
-          <main id="inhalt">{children}</main>
-          <Footer t={texte} />
-        </VorschauSperre>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

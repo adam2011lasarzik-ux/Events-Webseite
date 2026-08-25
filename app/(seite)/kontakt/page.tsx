@@ -5,6 +5,17 @@ import { texte } from "@/content";
 import { kommendeEvents } from "@/lib/events";
 import stil from "@/components/Textseite.module.css";
 
+/**
+ * Bei jedem Aufruf frisch aus der Datenbank.
+ *
+ * Bis zum Adminbereich wurden diese Seiten beim Bauen erzeugt. Das
+ * ging, solange Events nur über den Seed entstanden. Jetzt kann ein
+ * Event im Adminbereich veröffentlicht oder geändert werden — und
+ * dann muss es sofort sichtbar sein, nicht erst nach dem nächsten
+ * Bauen.
+ */
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = { title: texte.kontakt.ueberschrift };
 
 export default async function KontaktSeite() {

@@ -203,6 +203,13 @@ model Registration {
   reaktiviertAm DateTime?
   storniertAm   DateTime?
 
+  /// Gesetzt, wenn die Personendaten auf Wunsch gelöscht wurden.
+  /// Eine Stornierung ist KEINE Löschung: sie muss gespeichert
+  /// bleiben, damit Platzzählung und Zahlungsabgleich stimmen. Für das
+  /// echte Löschrecht werden Namen, E-Mail und Telefon überschrieben —
+  /// die Anmeldung selbst bleibt als anonyme Zeile bestehen.
+  anonymisiertAm DateTime?
+
   teilnehmer Participant[]
 
   /// Duplikatsschutz auf Anmeldungs-Ebene: pro Event und E-Mail-Adresse
@@ -250,10 +257,37 @@ model Participant {
 model AdminUser {
   id           String   @id @default(cuid())
   email        String   @unique
-  /// Niemals das Passwort selbst, immer nur dessen Hash (bcrypt o. Ä.)
+  /// Niemals das Passwort selbst, immer nur dessen Hash.
+  /// Verfahren: scrypt aus Node (siehe lib/passwort.ts).
   passwortHash String
   erstelltAm   DateTime @default(now())
   letzterLogin DateTime?
+
+  sitzungen AdminSession[]
+}
+
+/// Eine angemeldete Sitzung im Adminbereich.
+///
+/// Bewusst in der Datenbank und nicht nur als signiertes Cookie: So
+/// lässt sich eine Sitzung wirklich beenden. Ein signiertes Cookie
+/// gilt bis zum Ablaufdatum weiter, auch wenn das Passwort längst
+/// geändert wurde — bei einem Bereich mit Teilnehmerdaten ist das
+/// zu wenig.
+///
+/// Gespeichert wird nur der HASH des Sitzungsschlüssels, nie der
+/// Schlüssel selbst. Aus derselben Überlegung wie bei Passwörtern:
+/// Wer die Datenbank in die Hände bekommt, kann sich damit nicht
+/// anmelden.
+model AdminSession {
+  id         String    @id @default(cuid())
+  adminId    String
+  admin      AdminUser @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  tokenHash  String    @unique
+  erstelltAm DateTime  @default(now())
+  laeuftAbAm DateTime
+
+  @@index([adminId])
+  @@index([laeuftAbAm])
 }
 
 // ── Missbrauchsschutz ────────────────────────────────────────────

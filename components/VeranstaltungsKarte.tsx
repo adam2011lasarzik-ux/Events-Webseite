@@ -1,4 +1,5 @@
 import { CourtGrafik } from "./CourtGrafik";
+import { VeraWortmarke } from "./VeraWortmarke";
 import { Knopf } from "./Knopf";
 import { Platzhalter } from "./Platzhalter";
 import { alsDatum } from "@/lib/formate";
@@ -32,13 +33,29 @@ export function VeranstaltungsKarte({
       <div className={stil.bild}>
         {event.bildUrl ? (
           <img className={stil.foto} src={oeffentlich(event.bildUrl)} alt={t.event.fotoAlt} />
-        ) : (
+        ) : event.kategorie === "sport" ? (
           <CourtGrafik />
+        ) : (
+          /* Ohne eigenes Bild: die Wortmarke statt der Court-Grafik.
+             Ein Padel-Platz über einem Netzwerkabend wäre schlicht
+             falsch — die Grafik gehört zum Sport, nicht zur Marke. */
+          <div className={stil.ohneBild}>
+            {/* „mittel", nicht „gross": Die grosse Fassung wächst mit
+                der Fensterbreite (13vw) und läuft in dieser Kachel aus
+                dem Rahmen — dann fehlte ausgerechnet das „nstaltung",
+                das die Wortmarke erst erklärt. */}
+            <VeraWortmarke groesse="mittel" />
+          </div>
         )}
       </div>
 
       <div className={stil.inhalt}>
-        <span className={stil.kategorie}>{t.event.naechstesEvent}</span>
+        {/* Die Kategorie statt „Nächstes Event": Sobald zwei
+            Veranstaltungen nebeneinander stehen, wäre dieselbe
+            Zeile auf beiden Karten schlicht unwahr. */}
+        <span className={stil.kategorie}>
+          {t.kategorie[event.kategorie] ?? t.kategorie.sonstiges}
+        </span>
         <h3 className={stil.titel}>{text.karteTitel}</h3>
         <p className={stil.kurz}>{text.karteKurz}</p>
 
@@ -63,10 +80,14 @@ export function VeranstaltungsKarte({
               <dd>{event.ort.name ? `${event.ort.name}, ${event.ort.stadt}` : event.ort.stadt}</dd>
             </div>
           </div>
-          <div className={stil.zielgruppe}>
-            <span className={stil.icon} aria-hidden="true">👥</span>
-            <span>{text.karteZielgruppe}</span>
-          </div>
+          {/* Nur zeigen, wenn auch etwas dasteht — sonst schwebt ein
+              Symbol ohne Text in der Karte. */}
+          {text.karteZielgruppe && (
+            <div className={stil.zielgruppe}>
+              <span className={stil.icon} aria-hidden="true">👥</span>
+              <span>{text.karteZielgruppe}</span>
+            </div>
+          )}
         </dl>
 
         <Knopf href={`/events/${event.slug}`} pfeil>

@@ -23,6 +23,18 @@
   border-radius: var(--rund-m);
   overflow: hidden;
 }
+/* Ruhefläche, wenn ein Event (noch) kein eigenes Bild hat. */
+.ohneBild {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: var(--tiefblau);
+  color: var(--text-invers);
+  padding: var(--a-5);
+  text-align: center;
+}
+
 .foto {
   width: 100%;
   height: 100%;

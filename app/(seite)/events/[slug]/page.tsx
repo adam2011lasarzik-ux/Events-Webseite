@@ -9,10 +9,21 @@ import { Ablauf } from "@/components/Ablauf";
 import { FaqListe } from "@/components/FaqListe";
 import { CtaBand } from "@/components/CtaBand";
 import { Knopf } from "@/components/Knopf";
-import { findeEvent, alleSlugs, type VeraEvent } from "@/lib/events";
+import { findeEvent, type VeraEvent } from "@/lib/events";
 import { texte } from "@/content";
 
 import textStil from "@/components/Textseite.module.css";
+
+/**
+ * Bei jedem Aufruf frisch aus der Datenbank.
+ *
+ * Bis zum Adminbereich wurden diese Seiten beim Bauen erzeugt. Das
+ * ging, solange Events nur über den Seed entstanden. Jetzt kann ein
+ * Event im Adminbereich veröffentlicht oder geändert werden — und
+ * dann muss es sofort sichtbar sein, nicht erst nach dem nächsten
+ * Bauen.
+ */
+export const dynamic = "force-dynamic";
 
 /**
  * Die vollständige Event-Seite. Bis vor Kurzem war das die Startseite
@@ -27,10 +38,6 @@ import textStil from "@/components/Textseite.module.css";
  * Ein zweites Event mit anderem Charakter braucht hier vermutlich eigene
  * Abschnitte — das ist spätere Arbeit, kein übersehenes Detail.
  */
-export async function generateStaticParams() {
-  return (await alleSlugs()).map((slug) => ({ slug }));
-}
-
 export async function generateMetadata({
   params,
 }: {

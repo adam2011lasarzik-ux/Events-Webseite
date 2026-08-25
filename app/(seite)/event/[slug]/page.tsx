@@ -7,14 +7,21 @@ import { PlatzHinweis } from "@/components/PlatzHinweis";
 import { Platzhalter } from "@/components/Platzhalter";
 import { CtaBand } from "@/components/CtaBand";
 import { Knopf } from "@/components/Knopf";
-import { findeEvent, alleSlugs } from "@/lib/events";
+import { findeEvent } from "@/lib/events";
 import { texte } from "@/content";
 import { alsDatum, fuelle } from "@/lib/formate";
 import stil from "./event.module.css";
 
-export async function generateStaticParams() {
-  return (await alleSlugs()).map((slug) => ({ slug }));
-}
+/**
+ * Bei jedem Aufruf frisch aus der Datenbank.
+ *
+ * Bis zum Adminbereich wurden diese Seiten beim Bauen erzeugt. Das
+ * ging, solange Events nur über den Seed entstanden. Jetzt kann ein
+ * Event im Adminbereich veröffentlicht oder geändert werden — und
+ * dann muss es sofort sichtbar sein, nicht erst nach dem nächsten
+ * Bauen.
+ */
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,

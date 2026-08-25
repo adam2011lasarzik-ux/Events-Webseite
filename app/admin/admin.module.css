@@ -1,0 +1,274 @@
+/* ---------------------------------------------------------------
+   Adminbereich.
+
+   Bewusst nüchtern und dicht: Das hier ist ein Werkzeug, keine
+   Werbeseite. Es nutzt dieselben Design-Variablen wie die öffentliche
+   Seite, damit es dazugehört — verzichtet aber auf große Typografie
+   und Weißraum, weil hier Listen und Formulare im Vordergrund stehen.
+   --------------------------------------------------------------- */
+
+.rahmen {
+  min-height: 100dvh;
+  background: var(--sand);
+  color: var(--text);
+}
+
+.leiste {
+  background: var(--tiefblau);
+  color: var(--text-invers);
+  padding: var(--a-3) var(--a-4);
+}
+
+.leisteInhalt {
+  max-width: var(--breite);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--a-3) var(--a-5);
+}
+
+.marke {
+  font-family: var(--schrift-display);
+  font-size: var(--gr-m);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: var(--text-invers);
+}
+
+.marke b { color: var(--akzent); font-weight: 800; }
+
+.navi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--a-4);
+  font-size: var(--gr-s);
+}
+
+.navi a { color: var(--text-invers); text-decoration: none; opacity: 0.85; }
+.navi a:hover, .navi a:focus-visible { opacity: 1; text-decoration: underline; }
+
+.rechts { margin-left: auto; display: flex; align-items: center; gap: var(--a-4); }
+.wer { font-size: var(--gr-xs); opacity: 0.75; }
+
+.abmelden {
+  background: none;
+  border: 1px solid var(--linie-invers);
+  color: var(--text-invers);
+  border-radius: var(--pille);
+  padding: 0.35rem 0.9rem;
+  font: inherit;
+  font-size: var(--gr-xs);
+  cursor: pointer;
+}
+.abmelden:hover { background: rgba(255,255,255,0.1); }
+
+.inhalt {
+  max-width: var(--breite);
+  margin: 0 auto;
+  padding: var(--a-6) var(--a-4) var(--a-8);
+}
+
+.titel {
+  font-family: var(--schrift-display);
+  font-size: var(--gr-xl);
+  margin: 0 0 var(--a-2);
+}
+
+.unterzeile { color: var(--text-leise); font-size: var(--gr-s); margin: 0 0 var(--a-5); }
+
+/* ── Karten und Tabellen ─────────────────────────────────────── */
+
+.karte {
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--rund-m);
+  padding: var(--a-4);
+  margin-bottom: var(--a-4);
+}
+
+.karteKopf {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--a-2) var(--a-4);
+  margin-bottom: var(--a-3);
+}
+
+.karteTitel { font-family: var(--schrift-display); font-size: var(--gr-l); margin: 0; }
+
+.zahlen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--a-5);
+  font-size: var(--gr-s);
+  color: var(--text-leise);
+}
+
+.zahl { font-family: var(--schrift-display); font-size: var(--gr-l); color: var(--text); display: block; }
+
+.tabelleUmschlag { overflow-x: auto; }
+
+.tabelle { width: 100%; border-collapse: collapse; font-size: var(--gr-s); }
+.tabelle th, .tabelle td { text-align: left; padding: var(--a-2) var(--a-3); border-bottom: 1px solid var(--linie); vertical-align: top; }
+.tabelle th { font-size: var(--gr-xs); text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-leise); }
+.zahlSpalte { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ── Marken (Status) ─────────────────────────────────────────── */
+
+.marker {
+  display: inline-block;
+  border-radius: var(--pille);
+  padding: 0.15rem 0.6rem;
+  font-size: var(--gr-xs);
+  white-space: nowrap;
+  border: 1px solid var(--linie);
+}
+.markerGut     { background: #E6F4EA; border-color: #A8D5B5; color: #1B5E32; }
+.markerWartet  { background: #FFF4DA; border-color: #E4C77A; color: #6B4C05; }
+.markerAus     { background: #F1F1F1; border-color: #CFCFCF; color: #555; }
+.markerOffen   { background: #FDEBEB; border-color: #E8B4B4; color: #7A2020; }
+
+/* ── Formular ────────────────────────────────────────────────── */
+
+.formGruppe { margin-bottom: var(--a-5); }
+
+.formGruppenTitel {
+  font-size: var(--gr-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-leise);
+  margin: 0 0 var(--a-3);
+  padding-bottom: var(--a-2);
+  border-bottom: 1px solid var(--linie);
+}
+
+.raster {
+  display: grid;
+  gap: var(--a-3) var(--a-4);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 40rem) {
+  .raster { grid-template-columns: 1fr 1fr; }
+  .breit { grid-column: 1 / -1; }
+}
+
+.feld { display: flex; flex-direction: column; gap: var(--a-1); }
+.feldLabel { font-size: var(--gr-xs); font-weight: 600; }
+.feldHilfe { font-size: var(--gr-xs); color: var(--text-leise); }
+
+.eingabe,
+.auswahl,
+.textfeld {
+  font: inherit;
+  font-size: var(--gr-s);
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--linie);
+  border-radius: var(--rund-s);
+  background: var(--flaeche);
+  color: var(--text);
+  width: 100%;
+}
+
+.textfeld { min-height: 7rem; resize: vertical; }
+.eingabe:focus-visible, .auswahl:focus-visible, .textfeld:focus-visible {
+  outline: 2px solid var(--courtblau);
+  outline-offset: 1px;
+}
+.eingabeFehler { border-color: #B3261E; }
+.feldFehler { font-size: var(--gr-xs); color: #B3261E; }
+
+.haken { display: flex; align-items: flex-start; gap: var(--a-2); font-size: var(--gr-s); }
+
+/* ── Knöpfe ──────────────────────────────────────────────────── */
+
+.knopfReihe { display: flex; flex-wrap: wrap; gap: var(--a-3); align-items: center; }
+
+.knopf {
+  font: inherit;
+  font-size: var(--gr-s);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--pille);
+  padding: 0.55rem 1.2rem;
+  background: var(--akzent);
+  color: var(--akzent-text);
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+.knopf:disabled { opacity: 0.55; cursor: default; }
+
+.knopfLeise {
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  color: var(--text);
+}
+
+.knopfKlein { font-size: var(--gr-xs); padding: 0.3rem 0.75rem; }
+
+.knopfGefahr { background: #FDEBEB; border: 1px solid #E8B4B4; color: #7A2020; }
+
+.meldung {
+  border-radius: var(--rund-s);
+  padding: var(--a-3);
+  font-size: var(--gr-s);
+  margin-bottom: var(--a-4);
+}
+.meldungFehler { background: #FDEBEB; border: 1px solid #E8B4B4; color: #7A2020; }
+.meldungGut    { background: #E6F4EA; border: 1px solid #A8D5B5; color: #1B5E32; }
+
+/* ── Anmeldeseite ────────────────────────────────────────────── */
+
+.loginMitte {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--a-5);
+  background: var(--sand);
+}
+
+.loginKarte {
+  width: min(26rem, 100%);
+  background: var(--flaeche);
+  border: 1px solid var(--linie);
+  border-radius: var(--rund-m);
+  padding: var(--a-6);
+  box-shadow: var(--schatten);
+}
+
+.loginMarke {
+  font-family: var(--schrift-display);
+  font-size: var(--gr-l);
+  margin: 0 0 var(--a-1);
+}
+.loginMarke b { font-weight: 800; }
+.loginMarke span { color: var(--text-leise); font-weight: 400; }
+
+/* ── Aufklappbare Anmeldungen ────────────────────────────────── */
+
+.zeile { border-bottom: 1px solid var(--linie); }
+.zeile:last-child { border-bottom: none; }
+
+.zeileKopf {
+  cursor: pointer;
+  list-style: none;
+  padding: var(--a-3) 0;
+  display: grid;
+  gap: var(--a-1) var(--a-4);
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+.zeileKopf::-webkit-details-marker { display: none; }
+
+.zeileName { font-weight: 600; }
+.zeileNeben { font-size: var(--gr-xs); color: var(--text-leise); }
+.zeileRechts { text-align: right; display: flex; flex-direction: column; gap: var(--a-1); align-items: flex-end; }
+.zeileBetrag { font-family: var(--schrift-display); font-variant-numeric: tabular-nums; }
+
+.zeileInhalt { padding: 0 0 var(--a-4); }
+
+.teilnehmerListe { margin: 0 0 var(--a-3); padding-left: 1.2rem; font-size: var(--gr-s); }
+
+.anonym { font-style: italic; color: var(--text-leise); }

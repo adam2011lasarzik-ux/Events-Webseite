@@ -15,6 +15,10 @@
 
 import { db } from "@/lib/db";
 import type { Preisregeln } from "@/lib/preise";
+// Datum und Uhrzeit kommen aus lib/zeit.ts, damit sie in DEUTSCHER
+// Zeit erscheinen. Der Server läuft in UTC — ohne Umrechnung stünde
+// bei einem Event um 14:00 auf der Seite 12:00.
+import { alsIsoDatum, alsUhrzeit } from "@/lib/zeit";
 
 export interface EventOrt {
   name: string | null;
@@ -55,20 +59,6 @@ export interface VeraEvent {
   bildUrl: string | null;
   preise: Preisregeln;
   texte: EventTexte;
-}
-
-/** Aus einem DateTime "14:00" machen. null bleibt null. */
-function alsUhrzeit(wert: Date | null): string | null {
-  if (!wert) return null;
-  return `${String(wert.getHours()).padStart(2, "0")}:${String(wert.getMinutes()).padStart(2, "0")}`;
-}
-
-/** Aus einem DateTime "2026-09-19" machen. null bleibt null. */
-function alsIsoDatum(wert: Date | null): string | null {
-  if (!wert) return null;
-  const m = String(wert.getMonth() + 1).padStart(2, "0");
-  const t = String(wert.getDate()).padStart(2, "0");
-  return `${wert.getFullYear()}-${m}-${t}`;
 }
 
 /** Ein Inhaltsblock je Art, zeilenweise als Liste. */
@@ -177,11 +167,3 @@ export async function findeEvent(slug: string): Promise<VeraEvent | undefined> {
   return alsAnzeigeEvent(roh[0], belegt.get(roh[0].id) ?? 0);
 }
 
-/** Nur die Adressen — für die Seitenerzeugung beim Bauen. */
-export async function alleSlugs(): Promise<string[]> {
-  const roh = await db.event.findMany({
-    where: { status: "VEROEFFENTLICHT" },
-    select: { slug: true },
-  });
-  return roh.map((e) => e.slug);
-}
