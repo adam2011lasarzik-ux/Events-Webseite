@@ -8,6 +8,8 @@
    --------------------------------------------------------------- */
 
 import { ausFormular } from "./zeit";
+import { alsTheme, STANDARD_THEME, type Theme } from "./themes";
+import { BLOCK_ARTEN, type BlockArt } from "./eventInhalte";
 
 export interface Feldfehler {
   feld: string;
@@ -89,6 +91,8 @@ export interface EventDaten {
   slug: string;
   status: Status;
   kategorie: Kategorie;
+  /** Bestimmt ausschließlich das Aussehen der Event-Seite. */
+  theme: Theme;
   titel: string;
   untertitel: string | null;
   karteTitel: string;
@@ -97,6 +101,11 @@ export interface EventDaten {
   kurz: string;
   beschreibung: string;
   hinweise: string | null;
+  heroAugenbraue: string | null;
+  heroTitel: string | null;
+  heroText: string | null;
+  ctaTitel: string | null;
+  ctaText: string | null;
   startAt: Date | null;
   endAt: Date | null;
   ortName: string | null;
@@ -120,6 +129,8 @@ export interface EventDaten {
   /** Zeilenweise, landen als EventAbschnitt in der Datenbank. */
   dabei: string;
   mitbringen: string;
+  /** Die Inhaltsblöcke der Event-Seite: Überschrift und Text je Blockart. */
+  bloecke: { art: BlockArt; titel: string; inhalt: string }[];
 }
 
 const MAX_KURZ = 200;
@@ -166,6 +177,9 @@ export function pruefeEvent(
 
   const status = ausListe(STATUS, sauber(roh.status), "ENTWURF");
   const kategorie = ausListe(KATEGORIEN, sauber(roh.kategorie), "SONSTIGES");
+  // Ein erfundenes Theme fällt still auf Standard zurück, statt die
+  // Datenbank mit einem unbekannten Wert abzuweisen.
+  const theme = alsTheme(sauber(roh.theme));
 
   // ── Preise ───────────────────────────────────────────────────
   const preisSchuelerCents = alsCents(sauber(roh.preisSchueler));
@@ -256,6 +270,7 @@ export function pruefeEvent(
       slug,
       status,
       kategorie,
+      theme,
       titel,
       untertitel: oderNull(sauber(roh.untertitel)),
       karteTitel,
@@ -264,6 +279,11 @@ export function pruefeEvent(
       kurz,
       beschreibung,
       hinweise: oderNull(sauber(roh.hinweise)),
+      heroAugenbraue: oderNull(sauber(roh.heroAugenbraue)),
+      heroTitel: oderNull(sauber(roh.heroTitel)),
+      heroText: oderNull(sauber(roh.heroText)),
+      ctaTitel: oderNull(sauber(roh.ctaTitel)),
+      ctaText: oderNull(sauber(roh.ctaText)),
       startAt,
       endAt,
       ortName: oderNull(sauber(roh.ortName)),
@@ -286,6 +306,16 @@ export function pruefeEvent(
       anmeldungBis,
       dabei: sauber(roh.dabei),
       mitbringen: sauber(roh.mitbringen),
+      // Nur bekannte Blockarten. Die Namen kommen aus dem Formular und
+      // werden hier gegen die feste Liste geprüft, nicht übernommen.
+      bloecke: BLOCK_ARTEN.map((art) => ({
+        art,
+        titel: sauber(roh[`block.${art}.titel`]),
+        inhalt: sauber(roh[`block.${art}.inhalt`]),
+      })),
     },
   };
 }
+
+/** Voreinstellung, damit ein neues Event nicht mit leerem Theme startet. */
+export const STANDARD_EVENT_THEME = STANDARD_THEME;

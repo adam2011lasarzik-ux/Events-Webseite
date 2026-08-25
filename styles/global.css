@@ -1,4 +1,5 @@
 @import "./tokens.css";
+@import "./themes.css";
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -17,12 +18,13 @@ body {
 
 h1, h2, h3, h4 {
   font-family: var(--schrift-display);
-  font-weight: 800;
-  /* Archivo kann breiter laufen — das gibt den Überschriften den
-     sportlichen, plakativen Zug. */
-  font-stretch: 112%;
+  /* Gewicht, Breite und Laufweite kommen aus Variablen, damit ein
+     Theme sie steuern kann. Archivo läuft im Standard breit — das gibt
+     den Überschriften den sportlichen, plakativen Zug. */
+  font-weight: var(--display-gewicht);
+  font-stretch: var(--display-weite);
   line-height: 1.03;
-  letter-spacing: -0.025em;
+  letter-spacing: var(--display-laufweite);
   margin: 0;
   text-wrap: balance;
 }
@@ -41,7 +43,7 @@ button { font: inherit; color: inherit; }
 
 /* Tastatur-Bedienung muss immer sichtbar sein. */
 :focus-visible {
-  outline: 3px solid var(--courtblau);
+  outline: 3px solid var(--fokus);
   outline-offset: 3px;
   border-radius: 4px;
 }

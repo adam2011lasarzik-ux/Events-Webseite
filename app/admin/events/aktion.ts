@@ -37,7 +37,7 @@ export async function eventSpeichern(
   const geprueft = pruefeEvent(alsRoh(formular));
   if (geprueft.fehler) return { fehler: geprueft.fehler };
 
-  const { dabei, mitbringen, ...daten } = geprueft.daten;
+  const { dabei, mitbringen, bloecke, ...daten } = geprueft.daten;
 
   // Adresse muss eindeutig bleiben — sie steht in der URL.
   const belegt = await db.event.findUnique({ where: { slug: daten.slug } });
@@ -64,19 +64,27 @@ export async function eventSpeichern(
       eventId = neu.id;
     }
 
-    // „Was dabei ist" und „Was mitzubringen ist" liegen als eigene
-    // Inhaltsblöcke. Ersetzen statt ändern: So bleibt kein alter Block
-    // zurück, wenn das Feld geleert wurde.
-    await db.eventAbschnitt.deleteMany({
-      where: { eventId, art: { in: ["dabei", "mitbringen"] } },
-    });
-    const bloecke = [
+    // Alle Inhaltsblöcke ersetzen statt ändern: So bleibt kein alter
+    // Block zurück, wenn ein Feld geleert wurde.
+    await db.eventAbschnitt.deleteMany({ where: { eventId } });
+
+    const zuSpeichern = [
       { art: "dabei", titel: "Was dabei ist", inhalt: dabei, reihenfolge: 1 },
       { art: "mitbringen", titel: "Was mitzubringen ist", inhalt: mitbringen, reihenfolge: 2 },
+      // Die Blöcke der Event-Seite. Ohne Text wird ein Block gar nicht
+      // erst angelegt — eine leere Überschrift auf der Seite wäre
+      // schlimmer als ein fehlender Abschnitt.
+      ...bloecke.map((b, i) => ({
+        art: b.art,
+        titel: b.titel,
+        inhalt: b.inhalt,
+        reihenfolge: 10 + i * 10,
+      })),
     ].filter((b) => b.inhalt !== "");
-    if (bloecke.length > 0) {
+
+    if (zuSpeichern.length > 0) {
       await db.eventAbschnitt.createMany({
-        data: bloecke.map((b) => ({ ...b, eventId })),
+        data: zuSpeichern.map((b) => ({ ...b, eventId })),
       });
     }
   } catch (e) {

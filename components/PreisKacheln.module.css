@@ -34,9 +34,9 @@
 }
 .zusatz { margin-top: var(--a-3); font-size: var(--gr-s); opacity: 0.78; }
 
-.tonSchueler { background: var(--ballgelb); color: var(--tiefblau); }
-.tonErwachsen { background: var(--courtblau); color: var(--linienweiss); }
-.tonFamilie { background: var(--tiefblau); color: var(--text-invers); }
+.tonSchueler { background: var(--kachel-1); color: var(--kachel-1-text); }
+.tonErwachsen { background: var(--kachel-2); color: var(--kachel-2-text); }
+.tonFamilie { background: var(--kachel-3); color: var(--kachel-3-text); }
 
 /* Der Ball als großes, ruhiges Zeichen in der Ecke. */
 .ball {

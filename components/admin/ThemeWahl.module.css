@@ -1,0 +1,80 @@
+.feld { border: none; margin: 0; padding: 0; }
+
+.karten {
+  display: grid;
+  gap: var(--a-3);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 46rem) {
+  .karten { grid-template-columns: repeat(3, 1fr); }
+}
+
+.karte {
+  display: block;
+  border: 2px solid var(--linie);
+  border-radius: var(--rund-m);
+  padding: var(--a-3);
+  cursor: pointer;
+  background: var(--flaeche);
+  position: relative;
+}
+
+.karte[data-gewaehlt="ja"] {
+  border-color: var(--tiefblau);
+  box-shadow: 0 0 0 1px var(--tiefblau);
+}
+
+.karte:has(.knopf:focus-visible) {
+  outline: 3px solid var(--fokus);
+  outline-offset: 3px;
+}
+
+/* Der Auswahlknopf bleibt für Tastatur und Screenreader vorhanden,
+   sitzt aber unauffällig in der Ecke — die Karte selbst ist die
+   sichtbare Auswahl. */
+.knopf { position: absolute; top: var(--a-3); right: var(--a-3); }
+
+.probe {
+  display: block;
+  border-radius: var(--rund-s);
+  padding: var(--a-4);
+  margin-bottom: var(--a-3);
+  min-height: 7rem;
+}
+
+.probeTitel {
+  display: block;
+  font-size: 1.35rem;
+  line-height: 1.1;
+  margin-bottom: var(--a-3);
+}
+
+.probeZeile {
+  display: block;
+  height: 5px;
+  border-radius: 3px;
+  background: currentColor;
+  opacity: 0.28;
+  margin-bottom: 6px;
+}
+
+.probeKnopf {
+  display: block;
+  height: 15px;
+  width: 42%;
+  border-radius: 999px;
+  margin-top: var(--a-3);
+}
+
+.name { display: block; font-weight: 700; font-size: var(--gr-s); }
+
+.jetzt {
+  font-size: var(--gr-xs);
+  font-weight: 400;
+  color: var(--text-leise);
+  margin-left: var(--a-2);
+}
+
+.kurz { display: block; font-size: var(--gr-xs); color: var(--text-leise); margin-top: var(--a-1); }
+.passtZu { display: block; font-size: var(--gr-xs); color: var(--text-leise); margin-top: var(--a-2); opacity: 0.85; }

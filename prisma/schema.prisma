@@ -46,12 +46,28 @@ enum EventStatus {
   ARCHIVIERT
 }
 
+/// Das Aussehen der Event-Seite.
+///
+/// Nur die Darstellung ändert sich — Daten, Preise, Plätze und die
+/// Anmeldung bleiben in jedem Theme identisch. Der Standardwert sorgt
+/// dafür, dass bereits vorhandene Veranstaltungen ohne Zutun weiter
+/// aussehen wie bisher.
+///
+/// Ein weiteres Theme braucht künftig genau drei Schritte: ein Wert
+/// hier, ein Eintrag in lib/themes.ts, ein Block in styles/themes.css.
+enum EventTheme {
+  STANDARD
+  BUSINESS
+  PREMIUM
+}
+
 model Event {
   id     String @id @default(cuid())
   /// Teil der Adresse, z. B. /events/padel-falkensee
   slug   String @unique
   status EventStatus    @default(ENTWURF)
   kategorie EventKategorie @default(SONSTIGES)
+  theme  EventTheme     @default(STANDARD)
 
   // Texte
   titel          String
@@ -66,6 +82,22 @@ model Event {
   beschreibung   String  @db.Text
   /// Freies Feld für alles, was nur dieses eine Event betrifft
   hinweise       String? @db.Text
+
+  // Kopfbereich der Event-Seite. Stand früher im globalen Wörterbuch —
+  // dort hätte jedes Event dieselbe Überschrift bekommen („Nie
+  // gespielt?" über einem Unternehmer-Netzwerkabend). Leer bedeutet:
+  // titel bzw. kurz werden verwendet, bestehende Events brechen also
+  // nicht.
+  heroAugenbraue String?
+  heroTitel      String?
+  heroText       String? @db.Text
+
+  // Abschluss-Aufruf am Seitenende. Ebenfalls je Event: „Bereit für
+  // den ersten Ballwechsel?" unter einem Unternehmer-Netzwerkabend
+  // wäre unfreiwillig komisch. Leer = der neutrale Text aus dem
+  // Wörterbuch.
+  ctaTitel       String?
+  ctaText        String? @db.Text
 
   // Zeit — null bedeutet „steht noch nicht fest" und wird auf der
   // Seite als sichtbarer Platzhalter angezeigt.

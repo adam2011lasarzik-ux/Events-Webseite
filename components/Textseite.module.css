@@ -15,7 +15,7 @@
   border-radius: var(--rund-m);
   padding: var(--a-4) var(--a-5);
 }
-.haken { color: var(--courtblau); font-weight: 800; flex: none; }
+.haken { color: var(--zier); font-weight: 800; flex: none; }
 
 @media (min-width: 52rem) {
   .punkte { grid-template-columns: 1fr 1fr; max-width: 62rem; }

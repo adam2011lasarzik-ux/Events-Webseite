@@ -50,7 +50,7 @@
 }
 
 .fehler {
-  color: #B3261E;
+  color: var(--fehler);
   font-size: var(--gr-s);
   font-weight: 600;
   margin-bottom: var(--a-4);
@@ -68,7 +68,7 @@
   font-weight: 700;
   cursor: pointer;
 }
-.knopf:hover { background: #E4F268; }
+.knopf:hover { background: var(--akzent-hell); }
 
 .hinweis {
   margin-top: var(--a-5);

@@ -1,0 +1,41 @@
+/* Die Leiste sitzt fest am oberen Rand, damit der Rückweg auch nach
+   dem Scrollen erreichbar bleibt — eine Vorschau ist lang. */
+.leiste {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--tiefblau);
+  color: var(--text-invers);
+  padding: var(--a-3) var(--a-4);
+}
+
+.leisteInhalt {
+  max-width: var(--breite);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--a-2) var(--a-4);
+  font-size: var(--gr-xs);
+}
+
+.marke {
+  font-family: var(--schrift-display);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ballgelb);
+}
+
+.hinweis { opacity: 0.85; }
+.rechts { margin-left: auto; }
+
+.zurueck {
+  color: var(--text-invers);
+  border: 1px solid var(--linie-invers);
+  border-radius: var(--pille);
+  padding: 0.3rem 0.85rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.zurueck:hover { background: rgba(255, 255, 255, 0.12); }

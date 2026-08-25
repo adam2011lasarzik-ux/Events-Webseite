@@ -21,7 +21,7 @@
 .wahlKarte:hover { transform: translateY(-2px); }
 .wahlKarte input { position: absolute; opacity: 0; pointer-events: none; }
 .wahlKarte:has(input:checked) { border-color: var(--tiefblau); background: var(--ballgelb); }
-.wahlKarte:has(input:focus-visible) { outline: 3px solid var(--courtblau); outline-offset: 3px; }
+.wahlKarte:has(input:focus-visible) { outline: 3px solid var(--fokus); outline-offset: 3px; }
 .wahlName {
   display: block;
   font-family: var(--schrift-display);
@@ -55,8 +55,8 @@
   cursor: pointer;
 }
 .optionZeile:has(input:checked) { border-color: var(--tiefblau); }
-.optionZeile:has(input:focus-visible) { outline: 3px solid var(--courtblau); outline-offset: 3px; }
-.optionZeile input { accent-color: var(--courtblau); width: 1.15rem; height: 1.15rem; flex: none; }
+.optionZeile:has(input:focus-visible) { outline: 3px solid var(--fokus); outline-offset: 3px; }
+.optionZeile input { accent-color: var(--zier); width: 1.15rem; height: 1.15rem; flex: none; }
 .optionName { font-weight: 600; }
 .optionPreis { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
 

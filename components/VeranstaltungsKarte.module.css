@@ -35,7 +35,10 @@
   text-align: center;
 }
 
-.foto {
+/* Gilt für das Foto, das EventBild liefert. Über den Behälter
+   angesprochen, weil der Baustein bewusst keine eigene Klasse setzt:
+   Wie beschnitten wird, weiss nur diese Karte. */
+.bild img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -51,7 +54,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--courtblau);
+  color: var(--zier);
 }
 .titel { margin-top: var(--a-1); }
 .kurz { color: var(--text-leise); max-width: 52ch; margin-top: var(--a-2); }

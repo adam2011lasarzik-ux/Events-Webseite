@@ -57,14 +57,12 @@ export const de = {
     weitereFolgen: "Weitere Veranstaltungen folgen in Kürze.",
   },
 
+  /**
+   * Vom Kopfbereich bleiben nur die Bildbeschreibungen. Überschrift,
+   * Augenbraue und Text kommen seit dem Theme-Umbau vom Event selbst —
+   * sonst stünde über jeder Veranstaltung „Nie gespielt?".
+   */
   hero: {
-    augenbraue: "Padel · Falkensee",
-    titelZeile1: "Nie gespielt?",
-    titelZeile2: "Genau darum geht's.",
-    text:
-      "Ein Nachmittag Padel für Schüler, Lehrer und Eltern. Schläger gibt es vor Ort — und " +
-      "ein Trainer ist dabei, der Fragen beantwortet, den Sport erklärt und auf Wunsch erste " +
-      "Übungen mit euch macht.",
     hinweisFoto: "Hier kommt später ein Foto vom Court",
     videoBeschreibung: "Kurzes Video vom Padel-Court",
   },
@@ -94,49 +92,7 @@ export const de = {
     proPerson: "pro Person",
   },
 
-  padel: {
-    ueberschrift: "Was ist Padel überhaupt?",
-    absaetze: [
-      "Padel ist der entspannte Cousin von Tennis. Gespielt wird immer zu viert auf einem " +
-        "Platz, der etwa ein Drittel so groß ist wie ein Tennisfeld — rundum Glaswände, von " +
-        "denen der Ball abspringt und weiterläuft.",
-      "Der Aufschlag geht von unten, der Schläger hat keine Saiten, und die Wände sind Teil " +
-        "des Spiels statt das Ende davon. Genau deshalb kommen die meisten schon nach ein paar " +
-        "Minuten zum ersten richtigen Ballwechsel.",
-      "Neben den Doppel-Courts (4 Personen, 20 × 10 Meter) gibt es bei uns zusätzlich 2 " +
-        "Single-Courts: Dort spielen jeweils 2 Personen gegeneinander, auf einer Fläche von " +
-        "6 × 10 Metern.",
-    ],
-    fakten: [
-      { zahl: "4", text: "Spieler, immer" },
-      { zahl: "20 × 10", text: "Meter Platz" },
-      { zahl: "0", text: "Vorkenntnisse nötig" },
-    ],
-  },
 
-  ablauf: {
-    ueberschrift: "So läuft der Tag ab",
-    schritte: [
-      {
-        titel: "Anmelden",
-        text:
-          "Such dir aus, wer mitkommt, und melde dich an. Die Plätze sind begrenzt, " +
-          "und der Preis steht dir vorher klar vor Augen.",
-      },
-      {
-        titel: "Ankommen",
-        text:
-          "Schläger und Bälle liegen bereit. Es gibt eine kurze Einweisung, danach " +
-          "werden die Vierergruppen eingeteilt.",
-      },
-      {
-        titel: "Spielen",
-        text:
-          "Ihr spielt in Gruppen, die Betreuer geben Tipps. Zwischendurch Pause " +
-          "am Buffet — und danach zurück auf den Court.",
-      },
-    ],
-  },
 
   schulen: {
     ueberschrift: "Für Schulen",
@@ -217,8 +173,14 @@ export const de = {
     ],
   },
 
+  /**
+   * Der Abschluss-Aufruf, wenn eine Veranstaltung keinen eigenen
+   * mitbringt. Bewusst neutral formuliert: Der padel-typische Satz
+   * („Bereit für den ersten Ballwechsel?") gehört zum Padel-Event und
+   * steht deshalb dort, nicht hier.
+   */
   cta: {
-    ueberschrift: "Bereit für den ersten Ballwechsel?",
+    ueberschrift: "Bereit mitzumachen?",
     text: "Such dir aus, wer mitkommt, und sieh dir an, was es kostet.",
   },
 

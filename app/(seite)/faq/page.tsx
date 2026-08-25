@@ -13,7 +13,7 @@ export default function FaqSeite() {
     <>
       <Abschnitt>
         <AbschnittKopf titel={t.faq.ueberschrift} haupt />
-        <FaqListe t={t} mitKopf={false} />
+        <FaqListe eintraege={t.faq.eintraege} />
       </Abschnitt>
       <Abschnitt>
         <CtaBand t={t} />

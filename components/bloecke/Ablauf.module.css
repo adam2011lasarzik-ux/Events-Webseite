@@ -20,12 +20,28 @@
   font-family: var(--schrift-display);
   font-weight: 900;
   font-size: var(--gr-xl);
-  color: var(--courtblau);
+  color: var(--zier);
   opacity: 0.35;
   display: block;
   margin-bottom: var(--a-4);
   font-variant-numeric: tabular-nums;
 }
+/* Steht eine Uhrzeit dabei, trägt sie die Reihenfolge — dann wäre die
+   laufende Nummer dieselbe Information ein zweites Mal. */
+.schritt:has([data-zeit])::before { display: none; }
+
+/* An die Klasse gebunden, weil CSS-Module verlangen, dass jeder
+   Selektor eine eigene Klasse enthält — sonst wirkte die Regel
+   projektweit. */
+.schritt [data-zeit] {
+  font-family: var(--schrift-daten);
+  font-size: var(--gr-xs);
+  letter-spacing: 0.08em;
+  color: var(--zier);
+  display: block;
+  margin-bottom: var(--a-2);
+}
+
 .titel { margin-bottom: var(--a-3); }
 .text { color: var(--text-leise); }
 

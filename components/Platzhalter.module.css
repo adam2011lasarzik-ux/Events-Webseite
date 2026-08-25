@@ -11,7 +11,7 @@
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--courtblau);
+  color: var(--zier);
   background: rgba(23, 93, 156, 0.1);
   border: 1px dashed rgba(23, 93, 156, 0.45);
   border-radius: var(--rund-s);

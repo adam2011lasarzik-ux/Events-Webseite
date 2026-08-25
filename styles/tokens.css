@@ -16,6 +16,17 @@
   --ballgelb:      #D8E84A;
   --linienweiss:   #FFFFFF;
 
+  /* Hellere und dunklere Fassung des Akzents. Standen früher als feste
+     Werte in Knopf.module.css und PlatzHinweis.module.css — dort
+     konnte ein Theme sie nicht erreichen, und ein Business-Knopf wäre
+     beim Darüberfahren wieder ballgelb geworden. */
+  --ballgelb-hell: #E4F268;
+  --ballgelb-tief: #8C9B10;
+
+  /* Fehlerfarben. Einmal hier statt viermal verstreut. */
+  --fehler:        #B3261E;
+  --fehler-tief:   #8C1D18;
+
   /* Abgeleitete Rollen */
   --grund:         var(--sand);
   --flaeche:       var(--linienweiss);
@@ -25,13 +36,45 @@
   --text-invers:   #EAF1F8;
   --dunkel:        var(--tiefblau);
   --akzent:        var(--ballgelb);
+  --akzent-hell:   var(--ballgelb-hell);
+  --akzent-tief:   var(--ballgelb-tief);
   --akzent-text:   var(--tiefblau);
+  /* Zierfarbe für Beiwerk: Augenbrauen, Schrittnummern, Haken.
+     Getrennt vom Akzent, weil sie sich zurücknehmen soll — der Akzent
+     gehört den Knöpfen. */
+  --zier:          var(--courtblau);
+
+  /* Die drei Preis-Kacheln. Als Variablen, weil jedes Theme sie anders
+     gewichtet: Standard bunt, Business eine ruhige Blau-Leiter,
+     Premium durchgehend dunkel mit feinen Helligkeitsstufen. */
+  --kachel-1:      var(--ballgelb);
+  --kachel-1-text: var(--tiefblau);
+  --kachel-2:      var(--courtblau);
+  --kachel-2-text: var(--linienweiss);
+  --kachel-3:      var(--tiefblau);
+  --kachel-3-text: var(--text-invers);
   --linie:         rgba(12, 49, 87, 0.14);
   --linie-invers:  rgba(255, 255, 255, 0.20);
 
   /* Schriften */
   --schrift-display: var(--font-display), "Arial Black", "Helvetica Neue", sans-serif;
   --schrift-text:    var(--font-text), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* Nutzschrift für Uhrzeiten und Datenbeschriftungen. Standardmäßig
+     dieselbe wie der Fließtext — nur das Business-Theme setzt hier
+     eine eigene ein. */
+  --schrift-daten:   var(--schrift-text);
+
+  /* Wie die Überschriften gesetzt werden. Als Variablen, damit ein
+     Theme sie überschreiben kann: Die breit laufende Archivo passt zum
+     sportlichen Standard, wäre für eine Serifenschrift aber falsch. */
+  --display-gewicht:   800;
+  --display-weite:     112%;
+  --display-laufweite: -0.025em;
+
+  /* Farbe des Tastatur-Fokusrings. Eigene Variable, weil sie zum
+     Hintergrund passen muss: Im Business-Theme ist Courtblau die
+     Akzentfarbe — ein Ring in derselben Farbe wäre kaum zu sehen. */
+  --fokus: var(--courtblau);
 
   /* Schriftgrößen — wachsen flüssig mit der Fensterbreite mit,
      damit auf dem Smartphone nichts überläuft. */

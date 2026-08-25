@@ -17,12 +17,12 @@
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--courtblau);
+  color: var(--zier);
   margin-bottom: var(--a-4);
 }
 
 .titel { margin-bottom: var(--a-5); }
-.zeile2 { color: var(--courtblau); display: block; }
+.zeile2 { color: var(--zier); display: block; }
 
 .text {
   font-size: var(--gr-l);

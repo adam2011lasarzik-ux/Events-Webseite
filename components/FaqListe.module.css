@@ -23,7 +23,7 @@
   width: 1.6rem;
   height: 1.6rem;
   position: relative;
-  color: var(--courtblau);
+  color: var(--zier);
 }
 .zeichen::before,
 .zeichen::after {

@@ -15,7 +15,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--courtblau);
+  color: var(--zier);
   margin-bottom: var(--a-3);
 }
 .dunkel .augenbraue { color: var(--akzent); }

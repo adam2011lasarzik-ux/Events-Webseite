@@ -19,6 +19,8 @@ import type { Preisregeln } from "@/lib/preise";
 // Zeit erscheinen. Der Server läuft in UTC — ohne Umrechnung stünde
 // bei einem Event um 14:00 auf der Seite 12:00.
 import { alsIsoDatum, alsUhrzeit } from "@/lib/zeit";
+import { leseBloecke, type EventBlock } from "@/lib/eventInhalte";
+import { alsTheme, type Theme } from "@/lib/themes";
 
 export interface EventOrt {
   name: string | null;
@@ -31,6 +33,15 @@ export interface EventTexte {
   titel: string;
   untertitel: string;
   kurz: string;
+  /** Kleine Zeile über der Kopf-Überschrift. Leer = Kategorie und Stadt. */
+  heroAugenbraue: string;
+  /** Überschrift im Kopfbereich. Leer im Datensatz = fällt auf `titel` zurück. */
+  heroTitel: string;
+  /** Text im Kopfbereich. Leer im Datensatz = fällt auf `kurz` zurück. */
+  heroText: string;
+  /** Abschluss-Aufruf. Leer = der neutrale Text aus dem Wörterbuch. */
+  ctaTitel: string;
+  ctaText: string;
   lang: string[];
   dabei: string[];
   mitbringen: string[];
@@ -41,8 +52,17 @@ export interface EventTexte {
 }
 
 export interface VeraEvent {
+  /** Nur im Adminbereich gebraucht — Besucher sehen die Kennung nie. */
+  id: string;
   slug: string;
   kategorie: string;
+  /** Bestimmt ausschließlich das Aussehen, nie die Daten. */
+  theme: Theme;
+  /** Redaktioneller Zustand. Öffentlich immer VEROEFFENTLICHT — nur die
+   *  Vorschau im Adminbereich bekommt hier auch ENTWURF zu sehen. */
+  status: string;
+  /** Die Inhaltsblöcke dieser Veranstaltung, in fester Reihenfolge. */
+  bloecke: EventBlock[];
   /** ISO-Datum, z. B. "2026-09-19". null = steht noch nicht fest. */
   datum: string | null;
   zeitVon: string | null;
@@ -108,8 +128,12 @@ async function belegtePlaetze(eventIds: string[]): Promise<Map<string, number>> 
 
 function alsAnzeigeEvent(e: DbEvent, belegt: number): VeraEvent {
   return {
+    id: e.id,
     slug: e.slug,
     kategorie: e.kategorie.toLowerCase(),
+    theme: alsTheme(e.theme),
+    status: e.status,
+    bloecke: leseBloecke(e.abschnitte),
     datum: alsIsoDatum(e.startAt),
     zeitVon: alsUhrzeit(e.startAt),
     zeitBis: alsUhrzeit(e.endAt),
@@ -142,6 +166,13 @@ function alsAnzeigeEvent(e: DbEvent, belegt: number): VeraEvent {
       titel: e.titel,
       untertitel: e.untertitel ?? "",
       kurz: e.kurz,
+      // Leer bedeutet: die allgemeinen Felder übernehmen. So bleiben
+      // Veranstaltungen ohne eigenen Kopftext heil.
+      heroAugenbraue: e.heroAugenbraue?.trim() || "",
+      heroTitel: e.heroTitel?.trim() || e.titel,
+      heroText: e.heroText?.trim() || e.kurz,
+      ctaTitel: e.ctaTitel?.trim() || "",
+      ctaText: e.ctaText?.trim() || "",
       lang: e.beschreibung.split("\n\n").map((a) => a.trim()).filter(Boolean),
       dabei: blockAlsListe(e.abschnitte, "dabei"),
       mitbringen: blockAlsListe(e.abschnitte, "mitbringen"),
@@ -157,6 +188,21 @@ export async function kommendeEvents(): Promise<VeraEvent[]> {
   const roh = await ladeRohEvents({ status: "VEROEFFENTLICHT" });
   const belegt = await belegtePlaetze(roh.map((e) => e.id));
   return roh.map((e) => alsAnzeigeEvent(e, belegt.get(e.id) ?? 0));
+}
+
+/**
+ * Ein Event über seine Kennung — auch als ENTWURF.
+ *
+ * Ausschließlich für die Vorschau im Adminbereich. Bewusst eine eigene
+ * Funktion und kein Zusatzwert an findeEvent(): So kann eine
+ * öffentliche Seite nicht versehentlich einen Entwurf ausliefern, weil
+ * jemand irgendwo ein Häkchen falsch gesetzt hat.
+ */
+export async function findeEventFuerVorschau(id: string): Promise<VeraEvent | undefined> {
+  const roh = await ladeRohEvents({ id });
+  if (roh.length === 0) return undefined;
+  const belegt = await belegtePlaetze([roh[0].id]);
+  return alsAnzeigeEvent(roh[0], belegt.get(roh[0].id) ?? 0);
 }
 
 /** Ein Event über seine Adresse. undefined, wenn es keins gibt. */

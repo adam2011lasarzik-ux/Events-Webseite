@@ -1,0 +1,7 @@
+/* Der Rahmen bringt seinen eigenen Grund mit.
+   Ohne das schiene bei Premium der helle Sandton der Seite durch,
+   sobald ein Abschnitt keinen eigenen Hintergrund setzt. */
+.rahmen {
+  background: var(--grund);
+  color: var(--text);
+}

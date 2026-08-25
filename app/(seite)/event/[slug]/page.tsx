@@ -6,6 +6,7 @@ import { PreisKacheln } from "@/components/PreisKacheln";
 import { PlatzHinweis } from "@/components/PlatzHinweis";
 import { Platzhalter } from "@/components/Platzhalter";
 import { CtaBand } from "@/components/CtaBand";
+import { ThemeRahmen } from "@/components/ThemeRahmen";
 import { Knopf } from "@/components/Knopf";
 import { findeEvent } from "@/lib/events";
 import { texte } from "@/content";
@@ -37,7 +38,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function EventSeite({
+export default async function EventDetailSeite({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -53,14 +54,17 @@ export default async function EventSeite({
   );
 
   return (
-    <>
+    /* Auch die kompakte Detailseite trägt das Theme der Veranstaltung.
+       Sonst spränge das Aussehen, sobald ein Besucher von der großen
+       Seite hierher wechselt. */
+    <ThemeRahmen theme={event.theme}>
       <Abschnitt>
         <div className={stil.kopf}>
           <div>
             <AbschnittKopf augenbraue={t.event.naechstesEvent} titel={text.titel} haupt />
             <p className={stil.untertitel}>{text.untertitel}</p>
             <div className={stil.knoepfe}>
-              <Knopf href={"/anmeldung"} pfeil>
+              <Knopf href={`/events/${event.slug}/anmeldung`} pfeil>
                 {t.aktion.anmelden}
               </Knopf>
               <PlatzHinweis event={event} t={t} />
@@ -136,8 +140,8 @@ export default async function EventSeite({
       </Abschnitt>
 
       <Abschnitt>
-        <CtaBand t={t} />
+        <CtaBand t={t} event={event} />
       </Abschnitt>
-    </>
+    </ThemeRahmen>
   );
 }

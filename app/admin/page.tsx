@@ -91,6 +91,12 @@ export default async function AdminUebersicht() {
                 Bearbeiten
               </Link>
               <Link
+                href={`/admin/events/${e.id}/vorschau`}
+                className={`${stil.knopf} ${stil.knopfLeise}`}
+              >
+                Vorschau
+              </Link>
+              <Link
                 href={`/admin/events/${e.id}/anmeldungen`}
                 className={`${stil.knopf} ${stil.knopfLeise}`}
               >

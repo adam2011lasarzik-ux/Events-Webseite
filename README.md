@@ -39,8 +39,8 @@ Das Passwort wird niemals gespeichert, nur sein Hash (scrypt).
 
 | Was | Wo |
 |---|---|
-| Veranstaltungen: Datum, Ort, Preise, Plätze, Texte | **Im Adminbereich** unter `/admin` |
-| Feste Texte der Seite (FAQ, „Was ist Padel?", Für Schulen) | `content/de.ts` |
+| Veranstaltungen: Datum, Ort, Preise, Plätze, **Texte, Abschnitte und Design** | **Im Adminbereich** unter `/admin` |
+| Feste Texte der Seite (Navigation, Für-Schulen-Seite, Fragen-Seite) | `content/de.ts` |
 | Farben, Schriftgrößen, Abstände | `styles/tokens.css` |
 | Fotos | `public/images/` (Anleitung liegt dort) |
 
@@ -79,6 +79,8 @@ Regel einzeln prüfen.
 | `anmeldung.ts` | Prüfung und Aufbau einer Anmeldung |
 | `eventFormular.ts` | Prüfung des Event-Formulars |
 | `zeit.ts` | Umrechnung deutsche Zeit ↔ gespeicherter Zeitpunkt |
+| `eventInhalte.ts` | Zeilenregeln der Inhaltsblöcke |
+| `themes.ts` | Welche Designs es gibt |
 
 ### Fünf Regeln, die wichtig sind
 
@@ -103,6 +105,66 @@ vorbei. Eine Prüfung dort täuschte Sicherheit vor.
 wird der echte Zeitpunkt (`lib/zeit.ts`). Der Server läuft in UTC —
 ohne Umrechnung stünde bei einem Event um 14:00 auf der Seite 12:00.
 
+**Die Anmeldung gehört zur Veranstaltung**, nicht zur Webseite: Sie
+liegt unter `/events/<adresse>/anmeldung`. Vorher nahm `/anmeldung`
+immer das erste veröffentlichte Event — bei zwei Veranstaltungen hätte
+sich jeder für dieselbe angemeldet. `/anmeldung` ohne Angabe leitet auf
+die nächste Veranstaltung weiter.
+
+## Designs je Veranstaltung
+
+Beim Anlegen wählst du im Adminbereich das Design der Event-Seite:
+
+| Design | Wofür |
+|---|---|
+| **Standard** | Schüler- und Familienveranstaltungen, Freizeit, Padel, Community |
+| **Business** | Unternehmer-Events, Networking, Firmenveranstaltungen, Workshops |
+| **Premium** | Exklusives Networking, VIP- und Abendveranstaltungen |
+
+**Nur das Aussehen ändert sich.** Daten, Preise, Plätze und die Anmeldung
+sind in jedem Design identisch, und das Design lässt sich jederzeit
+umstellen. Kopfzeile, Fußbereich und die rechtlichen Seiten bleiben
+überall gleich — man erkennt weiterhin dieselbe Plattform.
+
+Alle drei Designs benutzen **dieselben fünf Markenfarben**, nur anders
+gewichtet: Standard sandfarben mit ballgelben Knöpfen, Business fast
+weiß mit Blau als Akzent, Premium tiefblau mit elfenbeinfarbener
+Schrift. Der Fließtext bleibt überall Instrument Sans; unterschiedlich
+ist die Auszeichnungsschrift.
+
+### Ein weiteres Design ergänzen
+
+Drei Schritte, sonst nichts:
+
+1. Wert in `enum EventTheme` in `prisma/schema.prisma` aufnehmen (+ Migration)
+2. Eintrag in `THEME_LISTE` in `lib/themes.ts`
+3. Block `[data-theme="…"]` in `styles/themes.css`
+
+In `styles/themes.css` werden **nur Design-Variablen** überschrieben —
+keine Klassennamen der Bausteine. Deshalb muss kein Baustein angefasst
+werden, und es können sich keine Regeln gegenseitig aufheben.
+
+## Abschnitte einer Veranstaltung
+
+Die Texte auf der Event-Seite gehören zum Event, nicht zur Webseite.
+Im Adminbereich gibt es dafür vier Abschnitte: **Vorstellung**,
+**Ablauf**, **Hinweise** und **Häufige Fragen**. Jeder erscheint nur,
+wenn Text darin steht.
+
+Eine Zeilenregel gilt in allen Abschnitten:
+
+| Zeile beginnt mit | Ergebnis |
+|---|---|
+| `- ` | ein Aufzählungspunkt mit Häkchen |
+| `* 20 × 10 \| Meter Platz` | eine Zahlenkachel |
+| `> Mehr erfahren \| /fuer-schulen` | ein Knopf (nur seiteneigene Ziele) |
+| sonst | Fließtext; eine Leerzeile trennt zwei Absätze |
+
+Bei **Ablauf** und **Häufige Fragen** wird stattdessen an den
+senkrechten Strichen geteilt: `Titel | Text` bzw. `Frage | Antwort`.
+Beim Ablauf ist auch `19:00 | Titel | Text` möglich — im
+Business-Design wird daraus eine Zeitschiene.
+
 ## Was diese Version kann
 
 - Zentrale Event-Übersicht, volle Event-Seite je Veranstaltung,
@@ -111,8 +173,10 @@ ohne Umrechnung stünde bei einem Event um 14:00 auf der Seite 12:00.
   Transaktion geprüft, Duplikatsschutz, Bot-Falle, Bremse gegen
   Massen-Einsendungen
 - **Verwaltung** unter `/admin`: Events anlegen und veröffentlichen,
-  Anmeldungen als Gruppen einsehen, Status und Zahlung verwalten,
-  Personendaten löschen, CSV-Export
+  Design und Abschnitte festlegen, Vorschau ansehen, Anmeldungen als
+  Gruppen einsehen, Status und Zahlung verwalten, Personendaten
+  löschen, CSV-Export
+- **Drei Designs** je Veranstaltung (siehe oben)
 - Nutzbar ab 320 Pixel Breite, mit Tastatur bedienbar
 
 ## Was diese Version bewusst noch nicht kann

@@ -1,4 +1,4 @@
-import { CourtGrafik } from "./CourtGrafik";
+import { EventBild } from "./EventBild";
 import { Knopf } from "./Knopf";
 import { PlatzHinweis } from "./PlatzHinweis";
 import { Platzhalter } from "./Platzhalter";
@@ -21,11 +21,7 @@ export function EventKarte({
   return (
     <article className={stil.karte}>
       <div className={stil.bild}>
-        {event.bildUrl ? (
-          <img className={stil.foto} src={oeffentlich(event.bildUrl)} alt={t.event.fotoAlt} />
-        ) : (
-          <CourtGrafik />
-        )}
+        <EventBild event={event} alt={t.event.fotoAlt} />
       </div>
 
       <div>

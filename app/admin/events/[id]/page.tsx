@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { verlangeAdmin } from "@/lib/adminAuth";
 import { centsAlsEingabe } from "@/lib/eventFormular";
+import { alsTheme } from "@/lib/themes";
 import { fuerFormular } from "@/lib/zeit";
 import { eventEntfernen } from "../aktion";
 import { AdminRahmen } from "@/components/admin/AdminRahmen";
@@ -47,6 +48,17 @@ export default async function EventBearbeiten({
     kurz: e.kurz,
     beschreibung: e.beschreibung,
     hinweise: oderLeer(e.hinweise),
+    heroAugenbraue: oderLeer(e.heroAugenbraue),
+    heroTitel: oderLeer(e.heroTitel),
+    heroText: oderLeer(e.heroText),
+    ctaTitel: oderLeer(e.ctaTitel),
+    ctaText: oderLeer(e.ctaText),
+    theme: alsTheme(e.theme),
+    // Die Blöcke nach Art abgelegt, damit das Formular sie direkt
+    // zuordnen kann. Fehlt eine Art, bleibt ihr Feld einfach leer.
+    bloecke: Object.fromEntries(
+      e.abschnitte.map((a) => [a.art, { titel: a.titel, inhalt: a.inhalt }]),
+    ),
     startAt: fuerFormular(e.startAt),
     endAt: fuerFormular(e.endAt),
     ortName: oderLeer(e.ortName),
@@ -77,9 +89,14 @@ export default async function EventBearbeiten({
       titel={e.titel}
       unterzeile={`/events/${e.slug} · ${e._count.anmeldungen} Anmeldung${e._count.anmeldungen === 1 ? "" : "en"}`}
       aktionen={
-        <Link href={`/admin/events/${e.id}/anmeldungen`} className={`${stil.knopf} ${stil.knopfLeise}`}>
-          Anmeldungen ansehen
-        </Link>
+        <>
+          <Link href={`/admin/events/${e.id}/vorschau`} className={stil.knopf}>
+            Vorschau ansehen
+          </Link>
+          <Link href={`/admin/events/${e.id}/anmeldungen`} className={`${stil.knopf} ${stil.knopfLeise}`}>
+            Anmeldungen ansehen
+          </Link>
+        </>
       }
     >
       {gespeichert && (

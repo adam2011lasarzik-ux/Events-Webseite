@@ -1,0 +1,226 @@
+/* ---------------------------------------------------------------
+   Die Design-Themes der Event-Seiten.
+
+   Grundgedanke: ALLE drei Themes benutzen dieselben fünf Markenfarben
+   — nur in anderer Gewichtung. Dadurch bleibt jedes Event erkennbar
+   VERA, statt wie eine fremde Webseite zu wirken.
+
+     Standard  Sand als Grund, blaue Blöcke, ballgelbe Knöpfe
+     Business  fast weißer Grund, Blau trägt alles, Ballgelb nur noch
+               als Fokusring
+     Premium   tiefblauer Grund, elfenbeinfarbene Schrift, Ballgelb
+               genau einmal — für die Hauptaktion
+
+   Hier stehen fast ausschließlich DESIGN-VARIABLEN. Komponenten
+   werden nicht angefasst; sie lesen diese Variablen ohnehin. Das ist
+   auch der Grund, warum keine Klassennamen der Komponenten
+   vorkommen: Sobald zwei Regelwerke um dieselben Abstände streiten,
+   heben sie sich gegenseitig auf.
+
+   Die wenigen Ausnahmen unten sind die SIGNATUR jedes Themes — je ein
+   einziger mutiger Griff. Sie greifen über `data-block`-Attribute,
+   nicht über Klassennamen, weil CSS-Module die Klassennamen beim
+   Bauen umbenennen.
+   --------------------------------------------------------------- */
+
+/* ── Standard ─────────────────────────────────────────────────────
+   Braucht keinen eigenen Block: Es IST der Grundzustand aus
+   tokens.css. Das ist Absicht — so kann am Standard nichts kaputt
+   gehen, wenn ein anderes Theme geändert wird. */
+
+/* ── Business ─────────────────────────────────────────────────────
+   Sachlich und aufgeräumt. Der Sandton weicht einem fast weißen
+   Grund mit einem Hauch Blau; das Courtblau der Marke übernimmt die
+   Rolle des Akzents. Ballgelb verschwindet fast ganz — es bleibt der
+   Fokusring, damit die Tastaturbedienung überall gleich aussieht. */
+[data-theme="business"] {
+  --grund:         #F7F9FB;
+  --flaeche:       #FFFFFF;
+  --flaeche-warm:  #EDF2F7;
+
+  --text:          #0C3157;
+  --text-leise:    #55708C;
+  --text-invers:   #EDF3F9;
+  --dunkel:        #0C3157;
+
+  --akzent:        var(--courtblau);
+  --akzent-hell:   #1E74C0;
+  --akzent-tief:   #10416D;
+  --akzent-text:   #FFFFFF;
+
+  --linie:         rgba(12, 49, 87, 0.13);
+  --linie-invers:  rgba(255, 255, 255, 0.22);
+
+  /* Auf hellem Grund wäre ein ballgelber Ring kaum zu sehen. */
+  --fokus:         #0C3157;
+  --zier:          var(--courtblau);
+
+  /* Eine ruhige Blau-Leiter statt dreier bunter Kacheln. */
+  --kachel-1:      #E7EFF7;
+  --kachel-1-text: #0C3157;
+  --kachel-2:      #175D9C;
+  --kachel-2-text: #FFFFFF;
+  --kachel-3:      #0C3157;
+  --kachel-3-text: #EDF3F9;
+
+  /* IBM Plex Sans: für IBM gezeichnet, technisch und sachlich, mit
+     eigenem Charakter — und bewusst nicht die Standardantwort. */
+  --schrift-display: var(--font-business), "Helvetica Neue", Arial, sans-serif;
+  --schrift-daten:   var(--font-daten), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --display-gewicht:   600;
+  --display-weite:     100%;
+  --display-laufweite: -0.02em;
+
+  /* Deutlich kleinere Radien. Nicht null — kantig ist eine eigene,
+     hier ungewollte Aussage. */
+  --rund-s:  3px;
+  --rund-m:  5px;
+  --rund-l:  8px;
+  --rund-xl: 10px;
+  --pille:   6px;
+
+  /* Mehr Luft: Großzügigkeit ist hier das Mittel, nicht Farbe. */
+  --a-7: 3.5rem;
+  --a-8: 5rem;
+  --a-9: clamp(4.5rem, 2.5rem + 7vw, 9rem);
+
+  --schatten: 0 1px 2px rgba(12, 49, 87, 0.06),
+              0 2px 6px rgba(12, 49, 87, 0.05);
+}
+
+/* ── Premium ──────────────────────────────────────────────────────
+   Dunkel, ruhig, edel. Der Grund ist ausdrücklich BLAU, nicht
+   schwarz — schwarz mit Goldakzent ist die abgegriffene
+   Luxus-Antwort. Ballgelb kommt genau einmal vor: auf der
+   Hauptaktion. */
+[data-theme="premium"] {
+  --grund:         #081F38;
+  --flaeche:       #0F2C4C;
+  --flaeche-warm:  #0B2542;
+
+  /* Warmes Elfenbein statt reinem Weiß — es nimmt den Sandton der
+     Marke auf und ist auf Dunkel angenehmer zu lesen. */
+  --text:          #F1EBE0;
+  --text-leise:    #A7BCD2;
+  --text-invers:   #F1EBE0;
+  --dunkel:        #050F1D;
+
+  --akzent:        var(--ballgelb);
+  --akzent-hell:   var(--ballgelb-hell);
+  --akzent-tief:   var(--ballgelb-tief);
+  --akzent-text:   #081F38;
+
+  --linie:         rgba(241, 235, 224, 0.18);
+  --linie-invers:  rgba(241, 235, 224, 0.28);
+
+  --fokus:         var(--ballgelb);
+  /* Courtblau verschwände auf dem dunklen Grund fast. Das Beiwerk
+     nimmt sich hier über die gedämpfte Textfarbe zurück. */
+  --zier:          var(--text-leise);
+
+  /* Durchgehend dunkel, nur feine Helligkeitsstufen. Das Ballgelb
+     bleibt der Hauptaktion vorbehalten — genau einmal auf der Seite. */
+  --kachel-1:      #123453;
+  --kachel-1-text: var(--text);
+  --kachel-2:      #0F2C4C;
+  --kachel-2-text: var(--text);
+  --kachel-3:      #050F1D;
+  --kachel-3-text: var(--text);
+
+  /* Instrument Serif — die Serifen-Schwester der Instrument Sans, die
+     die Marke ohnehin im Fließtext benutzt. Elegant, und trotzdem aus
+     derselben Familie. Kein Playfair. */
+  --schrift-display: var(--font-premium), Georgia, "Times New Roman", serif;
+
+  /* Eine Serifenschrift will leicht gesetzt sein — fett und breit
+     gelaufen wirkt sie plump statt edel. */
+  --display-gewicht:   400;
+  --display-weite:     100%;
+  --display-laufweite: -0.005em;
+
+  --rund-s:  8px;
+  --rund-m:  14px;
+  --rund-l:  20px;
+  --rund-xl: 28px;
+
+  --a-9: clamp(4.5rem, 2.5rem + 7vw, 9.5rem);
+
+  --schatten: 0 1px 2px rgba(0, 0, 0, 0.4),
+              0 24px 60px -28px rgba(0, 0, 0, 0.75);
+}
+
+/* Die Fehlerfarben müssen auf dunklem Grund heller werden, sonst
+   verschwinden sie. */
+[data-theme="premium"] {
+  --fehler:      #FF9A93;
+  --fehler-tief: #FFC4BF;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   SIGNATUREN — je Theme genau ein mutiger Griff, sonst Ruhe.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Business: die Zeitschiene.
+   Ein Ablauf IST eine Reihenfolge — die Nummerierung trägt also
+   echte Information, sie schmückt nicht. Die Uhrzeiten stehen in der
+   Nutzschrift an einer durchgehenden Haarlinie, wie im gedruckten
+   Programmheft. */
+[data-theme="business"] [data-block="ablauf"] ol {
+  border-left: 1px solid rgba(12, 49, 87, 0.25);
+  padding-left: var(--a-5);
+  display: grid;
+  /* Bewusst EINE Spalte: Im Standard stehen die drei Schritte
+     nebeneinander, hier untereinander an der Linie. Nebeneinander
+     wäre die Schiene nur ein Strich am Rand, keine Zeitachse. */
+  grid-template-columns: 1fr;
+  gap: var(--a-5);
+  max-width: 46rem;
+}
+[data-theme="business"] [data-block="ablauf"] li {
+  background: none;
+  padding: 0;
+}
+[data-theme="business"] [data-block="ablauf"] li > h3 { margin-bottom: var(--a-2); }
+[data-theme="business"] [data-block="ablauf"] li::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--a-5) * -1 - 1px);
+  top: 0.55em;
+  width: 9px;
+  height: 1px;
+  background: var(--akzent);
+}
+[data-theme="business"] [data-block="ablauf"] li { position: relative; }
+[data-theme="business"] [data-block="ablauf"] [data-zeit] {
+  color: var(--akzent);
+  font-weight: 500;
+}
+
+/* Premium: der Linienrahmen.
+   Die weißen Court-Linien sind seit jeher das Gestaltungselement der
+   Marke. Hier werden sie zur Einladungskarte veredelt: eine feine
+   Linie rund um den Kopfbereich, in die das Datum eingesetzt ist. */
+[data-theme="premium"] [data-block="kopf"] {
+  border: 1px solid var(--linie);
+  border-radius: var(--rund-l);
+  padding: var(--a-7) var(--a-6);
+  position: relative;
+}
+[data-theme="premium"] [data-block="kopf"] [data-einsatz] {
+  position: absolute;
+  top: 0;
+  left: var(--a-6);
+  transform: translateY(-50%);
+  background: var(--grund);
+  padding-inline: var(--a-3);
+  font-family: var(--schrift-text);
+  font-size: var(--gr-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-leise);
+}
+
+/* Auf Dunkel liest sich der Fließtext angenehmer, wenn er ein
+   Quäntchen leichter läuft. */
+[data-theme="premium"] p { letter-spacing: 0.004em; }

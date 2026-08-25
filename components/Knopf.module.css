@@ -18,7 +18,7 @@
 .knopf:active { transform: translateY(0); }
 
 .haupt { background: var(--akzent); color: var(--akzent-text); }
-.haupt:hover { background: #E4F268; }
+.haupt:hover { background: var(--akzent-hell); }
 
 .zweit {
   background: transparent;

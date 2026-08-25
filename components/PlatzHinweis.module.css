@@ -14,7 +14,7 @@
   flex: none;
 }
 .wenige { background: rgba(216, 232, 74, 0.28); color: var(--tiefblau); }
-.wenige .punkt { background: #8C9B10; }
+.wenige .punkt { background: var(--akzent-tief); }
 .ausgebucht { background: rgba(12, 49, 87, 0.1); color: var(--text-leise); }
 .ausgebucht .punkt { background: var(--text-leise); }
 .aufDunkelTon { background: rgba(216, 232, 74, 0.2); color: var(--akzent); }

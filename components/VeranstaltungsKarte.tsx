@@ -1,9 +1,7 @@
-import { CourtGrafik } from "./CourtGrafik";
-import { VeraWortmarke } from "./VeraWortmarke";
+import { EventBild } from "./EventBild";
 import { Knopf } from "./Knopf";
 import { Platzhalter } from "./Platzhalter";
 import { alsDatum } from "@/lib/formate";
-import { oeffentlich } from "@/lib/pfade";
 import type { VeraEvent } from "@/lib/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./VeranstaltungsKarte.module.css";
@@ -31,22 +29,7 @@ export function VeranstaltungsKarte({
     <div className={stil.behaelter}>
       <article className={stil.karte}>
       <div className={stil.bild}>
-        {event.bildUrl ? (
-          <img className={stil.foto} src={oeffentlich(event.bildUrl)} alt={t.event.fotoAlt} />
-        ) : event.kategorie === "sport" ? (
-          <CourtGrafik />
-        ) : (
-          /* Ohne eigenes Bild: die Wortmarke statt der Court-Grafik.
-             Ein Padel-Platz über einem Netzwerkabend wäre schlicht
-             falsch — die Grafik gehört zum Sport, nicht zur Marke. */
-          <div className={stil.ohneBild}>
-            {/* „mittel", nicht „gross": Die grosse Fassung wächst mit
-                der Fensterbreite (13vw) und läuft in dieser Kachel aus
-                dem Rahmen — dann fehlte ausgerechnet das „nstaltung",
-                das die Wortmarke erst erklärt. */}
-            <VeraWortmarke groesse="mittel" />
-          </div>
-        )}
+        <EventBild event={event} alt={t.event.fotoAlt} />
       </div>
 
       <div className={stil.inhalt}>

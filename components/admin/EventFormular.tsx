@@ -9,6 +9,9 @@ import {
   STATUS,
   type Feldfehler,
 } from "@/lib/eventFormular";
+import { BLOCK_ARTEN, type BlockArt } from "@/lib/eventInhalte";
+import { type Theme } from "@/lib/themes";
+import { ThemeWahl } from "./ThemeWahl";
 import { texte } from "@/content";
 import stil from "@/app/admin/admin.module.css";
 
@@ -25,6 +28,13 @@ export interface EventVorbelegung {
   kurz: string;
   beschreibung: string;
   hinweise: string;
+  heroAugenbraue: string;
+  heroTitel: string;
+  heroText: string;
+  ctaTitel: string;
+  ctaText: string;
+  theme: Theme;
+  bloecke: Record<string, { titel: string; inhalt: string }>;
   startAt: string;
   endAt: string;
   ortName: string;
@@ -59,7 +69,7 @@ const STATUS_TEXT: Record<string, string> = {
  * Die Kategorienamen kommen aus demselben Wörterbuch wie die
  * öffentliche Übersichtskarte. Zwei getrennte Listen liefen früher
  * oder später auseinander — dann hiesse dieselbe Veranstaltung vorne
- * „Netzwerken" und hinten „Networking".
+ * „Netzwerken“ und hinten „Networking“.
  */
 const KATEGORIE_TEXT = (k: string) => texte.kategorie[k.toLowerCase()] ?? k;
 
@@ -74,6 +84,7 @@ const KATEGORIE_TEXT = (k: string) => texte.kategorie[k.toLowerCase()] ?? k;
 export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }) {
   const [ergebnis, aktion] = useActionState(eventSpeichern, EVENT_STARTZUSTAND);
   const [familieAktiv, setzeFamilieAktiv] = useState(vorbelegung.familieAktiv);
+  const [theme, setzeTheme] = useState<Theme>(vorbelegung.theme);
 
   const fehlerZu = (feld: string) =>
     ergebnis.fehler.find((f: Feldfehler) => f.feld === feld)?.text;
@@ -149,6 +160,38 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
             breit
             pflicht
             hilfe="Ein bis zwei Sätze. Das ist das Erste, was Besucher sehen."
+          />
+        </div>
+      </div>
+
+      {/* ── Kopfbereich ────────────────────────────────────────── */}
+      <div className={stil.karte}>
+        <p className={stil.formGruppenTitel}>Kopfbereich der Event-Seite</p>
+        <div className={stil.raster}>
+          {feld("heroAugenbraue", "Kleine Zeile ganz oben", {
+            hilfe: "z. B. „Padel · Falkensee“. Leer lassen: dann stehen dort Kategorie und Stadt.",
+          })}
+          {feld("heroTitel", "Große Überschrift", {
+            hilfe: "Leer lassen, dann wird der Titel genommen. Ein Punkt oder Fragezeichen in der Mitte setzt den zweiten Teil abgesetzt darunter.",
+          })}
+          <Textfeld
+            name="heroText"
+            label="Text unter der Überschrift"
+            standard={vorbelegung.heroText}
+            fehler={fehlerZu("heroText")}
+            breit
+            hilfe="Leer lassen, dann wird die Kurzbeschreibung genommen."
+          />
+          {feld("ctaTitel", "Abschluss-Aufruf — Überschrift", {
+            breit: true,
+            hilfe: "Der letzte Block der Seite. Leer lassen für den allgemeinen Text.",
+          })}
+          <Textfeld
+            name="ctaText"
+            label="Abschluss-Aufruf — Text"
+            standard={vorbelegung.ctaText}
+            fehler={fehlerZu("ctaText")}
+            breit
           />
         </div>
       </div>
@@ -258,6 +301,31 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
         </div>
       </div>
 
+      {/* ── Inhaltsblöcke ──────────────────────────────────────── */}
+      <div className={stil.karte}>
+        <p className={stil.formGruppenTitel}>Abschnitte auf der Event-Seite</p>
+        <p className={stil.feldHilfe} style={{ marginBottom: "1rem" }}>
+          Jeder Abschnitt erscheint nur, wenn Text darin steht. Die Reihenfolge auf
+          der Seite ist fest: Vorstellung, dann die Preise, dann Ablauf, Hinweise
+          und Fragen.
+        </p>
+        <div className={stil.raster}>
+          {BLOCK_ARTEN.map((art) => (
+            <BlockFelder
+              key={art}
+              art={art}
+              werte={vorbelegung.bloecke[art] ?? { titel: "", inhalt: "" }}
+              fehler={fehlerZu(`block.${art}.inhalt`)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* ── Design ─────────────────────────────────────────────── */}
+      <div className={stil.karte}>
+        <ThemeWahl standard={vorbelegung.theme} gewaehlt={theme} setzeGewaehlt={setzeTheme} />
+      </div>
+
       {/* ── Medien ─────────────────────────────────────────────── */}
       <div className={stil.karte}>
         <p className={stil.formGruppenTitel}>Bild und Video</p>
@@ -271,6 +339,68 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
         <Speichern neu={!vorbelegung.id} />
       </div>
     </form>
+  );
+}
+
+/** Beschriftung und Zeilenregel je Blockart — an einer Stelle. */
+const BLOCK_TEXT: Record<BlockArt, { name: string; titelHilfe: string; hilfe: string }> = {
+  vorstellung: {
+    name: "Vorstellung",
+    titelHilfe: "z. B. „Was ist Padel überhaupt?“",
+    hilfe:
+      "Fließtext; eine Leerzeile trennt zwei Absätze. " +
+      "Eine Zeile wie „* 20 × 10 | Meter Platz“ wird zu einer Zahlenkachel daneben.",
+  },
+  ablauf: {
+    name: "Ablauf",
+    titelHilfe: "z. B. „So läuft der Tag ab“",
+    hilfe:
+      "Ein Schritt je Zeile: „Titel | Text“. " +
+      "Mit Uhrzeit: „19:00 | Titel | Text“ — im Business-Design wird daraus eine Zeitschiene.",
+  },
+  hinweise: {
+    name: "Hinweise",
+    titelHilfe: "z. B. „Für Schulen“",
+    hilfe:
+      "Erst der Einleitungstext. Zeilen mit „- “ werden zu Häkchen-Punkten. " +
+      "Eine Zeile „> Mehr erfahren | /fuer-schulen“ wird zu einem Knopf.",
+  },
+  faq: {
+    name: "Häufige Fragen",
+    titelHilfe: "z. B. „Häufige Fragen“",
+    hilfe: "Eine Frage je Zeile: „Frage | Antwort“.",
+  },
+};
+
+function BlockFelder({
+  art,
+  werte,
+  fehler,
+}: {
+  art: BlockArt;
+  werte: { titel: string; inhalt: string };
+  fehler?: string;
+}) {
+  const b = BLOCK_TEXT[art];
+  return (
+    <div className={stil.breit}>
+      <Feld
+        name={`block.${art}.titel`}
+        label={`${b.name} — Überschrift`}
+        standard={werte.titel}
+        hilfe={b.titelHilfe}
+      />
+      <div style={{ marginTop: "0.75rem" }}>
+        <Textfeld
+          name={`block.${art}.inhalt`}
+          label={`${b.name} — Inhalt`}
+          standard={werte.inhalt}
+          fehler={fehler}
+          breit
+          hilfe={b.hilfe}
+        />
+      </div>
+    </div>
   );
 }
 
