@@ -37,6 +37,12 @@
 
 /* Die große Wortmarke am Fuß: VERA steht für VERAnstaltung. */
 .grosseMarke {
+  /* Macht diesen Kasten zum Bezugsrahmen für die Schriftgröße der
+     Wortmarke (siehe .gross in VeraWortmarke.module.css). Ohne das
+     richtete sie sich nach der FENSTERbreite — und das Fenster ist
+     immer breiter als der Inhaltsbereich, weshalb das Wort links und
+     rechts über den Rand hinauslief und abgeschnitten wurde. */
+  container-type: inline-size;
   margin-top: var(--a-9);
   color: rgba(234, 241, 248, 0.13);
   line-height: 0.8;

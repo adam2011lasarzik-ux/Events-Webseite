@@ -249,8 +249,9 @@ Business-Design wird daraus eine Zeitschiene.
 - **Gründerbereich** mit Foto, auf der Startseite und je Event
   einschaltbar
 - Nutzbar ab 320 Pixel Breite, mit Tastatur bedienbar. Nachgemessen:
-  12 Seiten × 9 Bildschirmbreiten (320 bis 1440) — keine davon lässt
-  sich seitwärts schieben.
+  12 Seiten × 17 Bildschirmbreiten (320 bis 1920) — keine davon lässt
+  sich seitwärts schieben, und die große Wortmarke im Fußbereich steht
+  überall vollständig.
 
 ## Was diese Version bewusst noch nicht kann
 

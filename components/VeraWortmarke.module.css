@@ -24,6 +24,25 @@
   .kurzAufKlein .leise { display: inline; }
 }
 
+/* Die große Wortmarke im Fußbereich — die einzige Stelle, an der
+   groesse="gross" benutzt wird.
+
+   Sie soll den Inhaltsbereich in voller Breite ausfüllen und dabei
+   VOLLSTÄNDIG lesbar bleiben. Vorher richtete sich die Schriftgröße
+   nach der Fensterbreite; das Wort war dadurch je nach Gerät 54 bis
+   121 Pixel breiter als der Platz und wurde mitten im Wort
+   abgeschnitten — gemessen von 320 bis 1024 Pixel.
+
+   Jetzt zählt die Breite des Kastens (cqw = 1 % davon). „VERAnstaltung"
+   ist in dieser Schrift rund das 6,97-fache der Schriftgröße breit;
+   14,2 % der Kastenbreite füllen ihn deshalb zu etwa 99 % aus — voll,
+   aber mit einem Rest Luft, damit eine leicht andere Schriftfassung
+   nicht doch wieder anstößt. Die Obergrenze von 11rem bleibt: Ab etwa
+   1280 Pixel ändert sich dadurch NICHTS an der bisherigen Darstellung.
+
+   Die erste Zeile ist der Rückfall für Browser ohne Kastenbezug; sie
+   wird von der zweiten überschrieben, sobald er unterstützt wird. */
 .gross { font-size: clamp(3rem, 1rem + 13vw, 11rem); }
+.gross { font-size: min(14.2cqw, 11rem); }
 .mittel { font-size: var(--gr-xl); }
 .klein { font-size: var(--gr-l); }
