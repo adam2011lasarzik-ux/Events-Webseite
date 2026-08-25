@@ -3,7 +3,7 @@ import { HeroVideo } from "./HeroVideo";
 import { Knopf } from "./Knopf";
 import { PlatzHinweis } from "./PlatzHinweis";
 import { oeffentlich } from "@/lib/pfade";
-import { heroVideo, type VeraEvent } from "@/content/events";
+import type { VeraEvent } from "@/lib/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./Hero.module.css";
 
@@ -39,10 +39,10 @@ export function Hero({
           </div>
         </div>
 
-        <div className={`${stil.bildbereich} ${heroVideo ? "" : stil.platzhalter}`}>
-          {heroVideo ? (
+        <div className={`${stil.bildbereich} ${event.videoUrl ? "" : stil.platzhalter}`}>
+          {event.videoUrl ? (
             <HeroVideo
-              quelle={oeffentlich(heroVideo)}
+              quelle={oeffentlich(event.videoUrl)}
               beschreibung={t.hero.videoBeschreibung}
             />
           ) : (

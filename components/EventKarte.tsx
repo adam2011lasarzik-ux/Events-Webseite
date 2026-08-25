@@ -1,10 +1,11 @@
+import { CourtGrafik } from "./CourtGrafik";
 import { Knopf } from "./Knopf";
 import { PlatzHinweis } from "./PlatzHinweis";
 import { Platzhalter } from "./Platzhalter";
 import { alsEuro } from "@/lib/preise";
 import { alsDatum } from "@/lib/formate";
 import { oeffentlich } from "@/lib/pfade";
-import type { VeraEvent } from "@/content/events";
+import type { VeraEvent } from "@/lib/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./EventKarte.module.css";
 
@@ -20,11 +21,11 @@ export function EventKarte({
   return (
     <article className={stil.karte}>
       <div className={stil.bild}>
-        <img
-          className={stil.foto}
-          src={oeffentlich("/images/event-padel.jpg")}
-          alt={t.event.fotoAlt}
-        />
+        {event.bildUrl ? (
+          <img className={stil.foto} src={oeffentlich(event.bildUrl)} alt={t.event.fotoAlt} />
+        ) : (
+          <CourtGrafik />
+        )}
       </div>
 
       <div>

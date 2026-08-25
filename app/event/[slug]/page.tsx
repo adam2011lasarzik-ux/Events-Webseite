@@ -7,13 +7,13 @@ import { PlatzHinweis } from "@/components/PlatzHinweis";
 import { Platzhalter } from "@/components/Platzhalter";
 import { CtaBand } from "@/components/CtaBand";
 import { Knopf } from "@/components/Knopf";
-import { events, findeEvent } from "@/content/events";
+import { findeEvent, alleSlugs } from "@/lib/events";
 import { texte } from "@/content";
 import { alsDatum, fuelle } from "@/lib/formate";
 import stil from "./event.module.css";
 
-export function generateStaticParams() {
-  return events.map((e) => ({ slug: e.slug }));
+export async function generateStaticParams() {
+  return (await alleSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -22,7 +22,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const event = findeEvent(slug);
+  const event = await findeEvent(slug);
   if (!event) return {};
   return {
     title: event.texte.titel,
@@ -36,7 +36,7 @@ export default async function EventSeite({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const event = findeEvent(slug);
+  const event = await findeEvent(slug);
   if (!event) notFound();
 
   const t = texte;

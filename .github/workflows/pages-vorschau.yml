@@ -4,8 +4,15 @@ name: Vorschau auf GitHub Pages
 # veröffentlicht sie unter https://<konto>.github.io/Events-Webseite/.
 #
 # Nur eine Vorschau zum Anschauen — nicht der spätere Hostinger-Weg.
-# Version 1 hat ohnehin keine Serverfunktionen (keine Datenbank, kein
-# Formular-Versand), deshalb geht dabei nichts verloren.
+#
+# Seit die Events aus der Datenbank kommen, braucht auch dieser Bau
+# eine Datenbank. GitHub startet dafür unten kurzzeitig eine leere
+# MySQL-Datenbank, füllt sie mit den Startdaten und baut daraus die
+# Seiten. Kostet nichts und läuft nur während des Bauens.
+#
+# WICHTIG: Das Ergebnis ist ein Abzug vom Zeitpunkt des Bauens, keine
+# laufende Datenbank. Anmeldungen sind hier nicht möglich — dafür
+# braucht es den echten Server beim Hoster.
 
 on:
   push:
@@ -27,6 +34,29 @@ concurrency:
 jobs:
   bauen:
     runs-on: ubuntu-latest
+
+    # Kurzlebige Datenbank nur für diesen Bau. Die Zugangsdaten sind
+    # bewusst belanglos: Diese Datenbank existiert nur wenige Minuten,
+    # ist von außen nicht erreichbar und enthält ausschließlich die
+    # öffentlichen Event-Daten aus prisma/seed.ts — niemals echte
+    # Teilnehmerdaten.
+    services:
+      datenbank:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: nur-fuer-diesen-bau
+          MYSQL_DATABASE: vera_vorschau
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -p$MYSQL_ROOT_PASSWORD"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+
+    env:
+      DATABASE_URL: "mysql://root:nur-fuer-diesen-bau@127.0.0.1:3306/vera_vorschau"
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -34,6 +64,15 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+
+      # Tabellen anlegen. `migrate deploy` statt `migrate dev`: es wendet
+      # nur die vorhandenen Migrationsdateien an und braucht keine Rechte
+      # zum Anlegen weiterer Datenbanken.
+      - run: npx prisma migrate deploy
+
+      # Event-Daten einspielen
+      - run: npm run db:seed
+
       - run: npm run build
         env:
           GITHUB_PAGES_BUILD: "true"
@@ -41,6 +80,7 @@ jobs:
           # (siehe components/VorschauSperre.tsx) — bei Bedarf hier
           # jederzeit änderbar.
           NEXT_PUBLIC_VORSCHAU_PASSWORT: "1234"
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./out

@@ -9,7 +9,7 @@ import { Ablauf } from "@/components/Ablauf";
 import { FaqListe } from "@/components/FaqListe";
 import { CtaBand } from "@/components/CtaBand";
 import { Knopf } from "@/components/Knopf";
-import { events, findeEvent, type VeraEvent } from "@/content/events";
+import { findeEvent, alleSlugs, type VeraEvent } from "@/lib/events";
 import { texte } from "@/content";
 
 import textStil from "@/components/Textseite.module.css";
@@ -27,8 +27,8 @@ import textStil from "@/components/Textseite.module.css";
  * Ein zweites Event mit anderem Charakter braucht hier vermutlich eigene
  * Abschnitte — das ist spätere Arbeit, kein übersehenes Detail.
  */
-export function generateStaticParams() {
-  return events.map((e) => ({ slug: e.slug }));
+export async function generateStaticParams() {
+  return (await alleSlugs()).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -37,7 +37,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const event = findeEvent(slug);
+  const event = await findeEvent(slug);
   if (!event) return {};
   return {
     title: event.texte.titel,
@@ -51,7 +51,7 @@ export default async function EventVollseite({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const event: VeraEvent | undefined = findeEvent(slug);
+  const event: VeraEvent | undefined = await findeEvent(slug);
   if (!event) notFound();
 
   const t = texte;

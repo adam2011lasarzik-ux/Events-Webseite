@@ -6,7 +6,7 @@ import { FormularVorschau, feldnamen, type VorschauFeldGruppe } from "./Formular
 import { alsEuro, berechnePreis, type Auswahl } from "@/lib/preise";
 import { brauchtKontaktdaten, vorschauRollen, type Anmeldeweg } from "@/lib/vorschau";
 import { fuelle } from "@/lib/formate";
-import type { VeraEvent } from "@/content/events";
+import type { VeraEvent } from "@/lib/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./PreisRechner.module.css";
 

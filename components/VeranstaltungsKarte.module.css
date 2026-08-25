@@ -1,4 +1,13 @@
+/* Die Karte richtet sich nach ihrer EIGENEN Breite, nicht nach der des
+   Fensters. Bei zwei Karten nebeneinander ist jede nur halb so breit —
+   eine Regel auf Fensterbreite hätte ihr trotzdem das Layout für breite
+   Karten gegeben und das Foto zusammengequetscht. */
+.behaelter {
+  container-type: inline-size;
+}
+
 .karte {
+  height: 100%;
   display: grid;
   gap: var(--a-6);
   background: var(--flaeche);
@@ -65,7 +74,7 @@
 }
 .icon { font-size: var(--gr-l); line-height: 1; }
 
-@media (min-width: 48rem) {
+@container (min-width: 48rem) {
   .karte {
     grid-template-columns: 1.1fr 1fr;
     align-items: center;

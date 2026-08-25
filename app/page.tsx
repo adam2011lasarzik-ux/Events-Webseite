@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { VeranstaltungsKarte } from "@/components/VeranstaltungsKarte";
-import { kommendeEvents } from "@/content/events";
+import { kommendeEvents } from "@/lib/events";
 import { texte } from "@/content";
 import stil from "./page.module.css";
 
@@ -13,9 +13,9 @@ import stil from "./page.module.css";
  */
 export const metadata: Metadata = { title: texte.startseite.ueberschrift };
 
-export default function Startseite() {
+export default async function Startseite() {
   const t = texte;
-  const veranstaltungen = kommendeEvents();
+  const veranstaltungen = await kommendeEvents();
 
   return (
     <>

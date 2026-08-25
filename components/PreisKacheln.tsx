@@ -1,6 +1,6 @@
 import { alsEuro } from "@/lib/preise";
 import { fuelle } from "@/lib/formate";
-import type { VeraEvent } from "@/content/events";
+import type { VeraEvent } from "@/lib/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./PreisKacheln.module.css";
 

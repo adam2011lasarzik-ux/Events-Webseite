@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { PreisRechner } from "@/components/PreisRechner";
-import { events } from "@/content/events";
+import { kommendeEvents } from "@/lib/events";
+import { notFound } from "next/navigation";
 import { texte } from "@/content";
 
 export const metadata: Metadata = { title: texte.anmeldung.titel };
 
-export default function AnmeldeSeite() {
+export default async function AnmeldeSeite() {
   const t = texte;
-  const event = events[0];
+  // Vorerst das erste veröffentlichte Event. Sobald mehrere Events
+  // gleichzeitig laufen, bekommt die Anmeldung das Event über die Adresse.
+  const event = (await kommendeEvents())[0];
+  if (!event) notFound();
 
   return (
     <Abschnitt>

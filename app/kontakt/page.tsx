@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { Platzhalter } from "@/components/Platzhalter";
 import { texte } from "@/content";
-import { events } from "@/content/events";
+import { kommendeEvents } from "@/lib/events";
 import stil from "@/components/Textseite.module.css";
 
 export const metadata: Metadata = { title: texte.kontakt.ueberschrift };
 
-export default function KontaktSeite() {
+export default async function KontaktSeite() {
   const t = texte;
-  const ort = events[0].ort;
+  const ort = (await kommendeEvents())[0]?.ort ?? null;
 
   return (
     <Abschnitt>
@@ -24,7 +24,7 @@ export default function KontaktSeite() {
           <Platzhalter text={t.platzhalter.telefon} markierung={t.platzhalter.markierung} />
         </li>
         <li>
-          <strong>{t.kontakt.ort}:</strong> {ort.stadt}
+          <strong>{t.kontakt.ort}:</strong> {ort?.stadt ?? "Falkensee"}
         </li>
       </ul>
     </Abschnitt>

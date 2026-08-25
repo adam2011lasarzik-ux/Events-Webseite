@@ -1,8 +1,9 @@
+import { CourtGrafik } from "./CourtGrafik";
 import { Knopf } from "./Knopf";
 import { Platzhalter } from "./Platzhalter";
 import { alsDatum } from "@/lib/formate";
 import { oeffentlich } from "@/lib/pfade";
-import type { VeraEvent } from "@/content/events";
+import type { VeraEvent } from "@/lib/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./VeranstaltungsKarte.module.css";
 
@@ -26,9 +27,14 @@ export function VeranstaltungsKarte({
   const text = event.texte;
 
   return (
-    <article className={stil.karte}>
+    <div className={stil.behaelter}>
+      <article className={stil.karte}>
       <div className={stil.bild}>
-        <img className={stil.foto} src={oeffentlich("/images/event-padel.jpg")} alt={t.event.fotoAlt} />
+        {event.bildUrl ? (
+          <img className={stil.foto} src={oeffentlich(event.bildUrl)} alt={t.event.fotoAlt} />
+        ) : (
+          <CourtGrafik />
+        )}
       </div>
 
       <div className={stil.inhalt}>
@@ -67,6 +73,7 @@ export function VeranstaltungsKarte({
           {t.aktion.eventAnsehen}
         </Knopf>
       </div>
-    </article>
+      </article>
+    </div>
   );
 }
