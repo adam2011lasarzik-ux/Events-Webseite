@@ -41,6 +41,8 @@ export function Footer({ t }: { t: Woerterbuch }) {
             <ul className={stil.liste}>
               <li><Link href={"/impressum"}>{t.recht.impressum}</Link></li>
               <li><Link href={"/datenschutz"}>{t.recht.datenschutz}</Link></li>
+              <li><Link href={"/agb"}>{t.recht.agb}</Link></li>
+              <li><Link href={"/widerruf"}>{t.recht.widerruf}</Link></li>
             </ul>
           </div>
         </div>

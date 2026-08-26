@@ -370,6 +370,16 @@ export const de = {
     datenschutzText:
       "Hier steht später, welche Daten bei einer Anmeldung erhoben werden, wozu sie verwendet " +
       "werden, wie lange sie gespeichert bleiben und welche Rechte Besucher haben.",
+    /* Keine Rechtsformulierung, sondern eine Tatsache aus dem eigenen
+       Code (lib/zahlung.ts). Sie steht hier, damit sie beim späteren
+       Ausformulieren nicht vergessen wird — sie ist der einzige Punkt,
+       an dem Daten das Haus verlassen. */
+    datenschutzZahlung:
+      "Beim Bezahlen werden Betrag, Anmeldenummer und E-Mail-Adresse an den Zahlungsanbieter " +
+      "Stripe übermittelt; bezahlt wird ausschließlich auf dessen gesicherter Seite. " +
+      "Kartennummern und Bankdaten erreichen diese Seite zu keinem Zeitpunkt — sie werden " +
+      "hier weder entgegengenommen noch gespeichert. Diese Angabe gehört in die fertige " +
+      "Erklärung.",
     hinweisJurist:
       "Beide Texte sollten vor der Veröffentlichung von einer fachkundigen Person geprüft " +
       "werden. Das gilt besonders, weil Minderjährige teilnehmen und später Zahlungen " +
@@ -377,6 +387,39 @@ export const de = {
     keineCookies:
       "Diese Seite setzt keine Cookies, zählt keine Besucher und lädt nichts von fremden " +
       "Servern nach. Deshalb gibt es hier auch kein Zustimmungsfenster.",
+
+    /* ── AGB und Widerruf ──────────────────────────────────────────
+       Beide werden Pflicht, sobald online bezahlt wird. Sie stehen
+       hier bewusst NUR als sichtbar markierte Platzhalter: Was
+       rechtlich gilt, schreibt eine fachkundige Person, nicht ich.
+       Ein Platzhalter, den man für echten Inhalt halten kann, geht
+       irgendwann versehentlich online. */
+    agb: "AGB",
+    agbTitel: "Allgemeine Geschäftsbedingungen",
+    agbText:
+      "Hier stehen später die Bedingungen, unter denen eine Anmeldung zustande kommt: wer " +
+      "Vertragspartner ist, welche Leistung eine Veranstaltung umfasst, die Preise inklusive " +
+      "Mehrwertsteuer, wie und wann bezahlt wird, was bei Verhinderung gilt, was passiert, " +
+      "wenn eine Veranstaltung ausfällt oder verlegt wird, die Haftung, die Regeln vor Ort " +
+      "und die Besonderheiten bei Minderjährigen.",
+    agbStorno:
+      "In denselben Text gehören die Stornobedingungen: bis wann kostenfrei abgesagt werden " +
+      "kann, welche Gebühr danach anfällt und wie Erstattungen ablaufen. Sie bekommen " +
+      "bewusst keine eigene Seite — sie gehören dorthin, wo auch der Rest des Vertrags steht.",
+
+    widerruf: "Widerruf",
+    widerrufTitel: "Widerrufsbelehrung",
+    widerrufText:
+      "Hier steht später, ob und wie eine Anmeldung widerrufen werden kann, in welcher Frist, " +
+      "wie ein Widerruf erklärt wird und wie bereits gezahltes Geld zurückkommt.",
+    /* Der eine Punkt, der wirklich geprüft gehört. Ich benenne ihn,
+       damit er nicht übersehen wird — entscheiden kann ihn nur eine
+       fachkundige Person. */
+    widerrufHinweis:
+      "Ein Punkt gehört dabei ausdrücklich geprüft: Bei Freizeitveranstaltungen zu einem " +
+      "festen Termin kann das Widerrufsrecht nach § 312g Absatz 2 Nummer 9 BGB " +
+      "ausgeschlossen sein. Ob das für diese Veranstaltungen gilt und wie die Belehrung dann " +
+      "lauten muss, ist eine Rechtsfrage und keine Programmierfrage.",
   },
 
   /**
