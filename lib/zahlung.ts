@@ -126,6 +126,10 @@ export interface Sitzungsstand {
   bezahlt: boolean;
   betragCents: number | null;
   anmeldungId: string | null;
+  /** „open" = noch bezahlbar, „complete" = bezahlt, „expired" = verfallen. */
+  lage: string | null;
+  /** Die Adresse der Bezahlseite, solange sie noch offen ist. */
+  url: string | null;
 }
 
 /**
@@ -142,7 +146,28 @@ export async function sitzungPruefen(sitzungId: string): Promise<Sitzungsstand> 
     bezahlt: sitzung.payment_status === "paid",
     betragCents: sitzung.amount_total ?? null,
     anmeldungId: sitzung.metadata?.anmeldungId ?? sitzung.client_reference_id ?? null,
+    lage: sitzung.status ?? null,
+    url: sitzung.url ?? null,
   };
+}
+
+/**
+ * Eine noch offene Bezahlseite schließen.
+ *
+ * Der eigentliche Schutz vor einer doppelten Abbuchung. Entsteht für
+ * dieselbe Anmeldung eine neue Bezahlseite, darf die alte nicht
+ * weiterhin bezahlbar bleiben — sonst kann jemand zweimal zahlen,
+ * einmal über den alten Link im Verlauf und einmal über den neuen.
+ *
+ * Schlägt das Schließen fehl (die Sitzung ist ohnehin verfallen oder
+ * schon bezahlt), ist das kein Grund, den Vorgang abzubrechen.
+ */
+export async function sitzungSchliessen(sitzungId: string): Promise<void> {
+  try {
+    await stripe().checkout.sessions.expire(sitzungId);
+  } catch (e) {
+    console.warn("Alte Bezahlseite liess sich nicht schliessen:", sitzungId, e);
+  }
 }
 
 /**

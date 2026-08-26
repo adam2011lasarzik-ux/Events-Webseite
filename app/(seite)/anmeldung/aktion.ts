@@ -257,7 +257,8 @@ export async function anmeldungAbsenden(
      bezahlen". Eine Anmeldung darf niemals an der Zahlung scheitern. */
   const bezahlseite = await bezahlseiteFuer(neueId, jetzt);
   if ("url" in bezahlseite) redirect(bezahlseite.url);
-  redirect(`/anmeldung/danke?nr=${neueId}&zahlung=${bezahlseite.fehler}`);
+  const frei = bezahlseite.frei === undefined ? "" : `&frei=${bezahlseite.frei}`;
+  redirect(`/anmeldung/danke?nr=${neueId}&zahlung=${bezahlseite.fehler}${frei}`);
 }
 
 class PlatzFehler extends Error {

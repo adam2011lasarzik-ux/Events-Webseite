@@ -46,7 +46,13 @@ export default async function AdminUebersicht() {
       )}
 
       {events.map((e) => {
-        const frei = e.maxPersonen === null ? null : Math.max(0, e.maxPersonen - e.belegtePersonen);
+        /* Freie Plätze rechnen sich gegen feste Teilnehmer UND
+           laufende Reservierungen — sonst würde ein gerade laufender
+           Bezahlvorgang doppelt verkauft. */
+        const frei =
+          e.maxPersonen === null
+            ? null
+            : Math.max(0, e.maxPersonen - e.belegtePersonen - e.reserviertePersonen);
         return (
           <div key={e.id} className={stil.karte}>
             <div className={stil.karteKopf}>
@@ -60,8 +66,16 @@ export default async function AdminUebersicht() {
             <div className={stil.zahlen}>
               <div>
                 <span className={stil.zahl}>{e.belegtePersonen}</span>
-                belegte Plätze
+                feste Teilnehmer
               </div>
+              {/* Getrennt ausgewiesen: Eine Reservierung hält einen
+                  Platz, ist aber noch keine bestätigte Teilnahme. */}
+              {e.reserviertePersonen > 0 && (
+                <div>
+                  <span className={stil.zahl}>{e.reserviertePersonen}</span>
+                  Plätze reserviert
+                </div>
+              )}
               <div>
                 <span className={stil.zahl}>{frei === null ? "∞" : frei}</span>
                 freie Plätze

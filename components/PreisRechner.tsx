@@ -308,7 +308,20 @@ export function PreisRechner({
               {ergebnisAktion.meldung}
             </p>
           )}
-          <AbsendeKnopf text={t.anmeldung.formular.absenden} laeuft={t.anmeldung.formular.laeuft} />
+          {/* Der Betrag steht IM Knopf. Anmeldung und Bezahlung sind
+              ein Vorgang — niemand soll klicken und erst danach
+              merken, dass jetzt bezahlt wird. Der Betrag hier ist
+              eine Vorschau; verbindlich rechnet der Server erneut. */}
+          <AbsendeKnopf
+            text={
+              ergebnis.gesamtCents > 0
+                ? fuelle(t.anmeldung.formular.absenden, {
+                    betrag: alsEuro(ergebnis.gesamtCents),
+                  })
+                : t.anmeldung.formular.absendenKostenlos
+            }
+            laeuft={t.anmeldung.formular.laeuft}
+          />
           <p className={stil.merkerText} style={{ color: "rgba(234,241,248,0.75)" }}>
             {t.anmeldung.formular.zahlungHinweis}
           </p>

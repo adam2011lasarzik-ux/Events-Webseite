@@ -13,7 +13,13 @@ const worte: Record<string, { text: string; klasse: string }> = {
   VEROEFFENTLICHT: { text: "Veröffentlicht",  klasse: "markerGut" },
   ARCHIVIERT:      { text: "Archiviert",      klasse: "markerAus" },
   // Anmeldung
-  RESERVIERT:      { text: "Platz reserviert", klasse: "markerWartet" },
+  /* Zwei getrennte Lagen, damit auf einen Blick klar ist, ob noch
+     etwas passieren kann. „RESERVIERT_ABGELAUFEN" gibt es in der
+     Datenbank nicht — die Seite leitet den Wert aus der Ablaufzeit ab.
+     Bewusst NICHT „Warteliste": Eine Reservierung ist eine technische
+     Sicherung während der Zahlung, keine Wartelistenposition. */
+  RESERVIERT:            { text: "Bezahlung läuft",      klasse: "markerWartet" },
+  RESERVIERT_ABGELAUFEN: { text: "Nicht abgeschlossen",  klasse: "markerAus" },
   BESTAETIGT:      { text: "Bestätigt",       klasse: "markerGut" },
   WARTELISTE:      { text: "Warteliste",      klasse: "markerWartet" },
   STORNIERT:       { text: "Storniert",       klasse: "markerAus" },

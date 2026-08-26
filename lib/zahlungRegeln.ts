@@ -21,7 +21,9 @@ export type ZahlungAbgelehnt =
   | "unbekannt"
   | "storniert"
   | "bereits-bezahlt"
-  | "kein-betrag";
+  | "kein-betrag"
+  /** Für die ganze Gruppe sind nicht mehr genug Plätze frei. */
+  | "keine-plaetze";
 
 /**
  * Darf für diese Anmeldung eine Bezahlung gestartet werden?
@@ -85,4 +87,26 @@ export function posten(titel: string, personen: number, gesamtCents: number) {
     },
     quantity: 1,
   };
+}
+
+/**
+ * Passt die Gruppe noch hinein?
+ *
+ * Diese Prüfung gehört VOR die Bezahlseite. Sonst kann jemand für
+ * einen Platz bezahlen, den es nicht mehr gibt — und das Geld wieder
+ * herausgeben zu müssen ist der unangenehmste Weg, einen Fehler zu
+ * bemerken.
+ *
+ * `belegtOhneDiese` lässt die eigene Anmeldung bewusst aus: Sie wird
+ * gleich bezahlt, nicht zusätzlich gebucht. Ohne diese Ausnahme stünde
+ * man sich beim zweiten Anlauf selbst im Weg.
+ */
+export function plaetzeReichen(
+  maxPersonen: number | null,
+  belegtOhneDiese: number,
+  personen: number,
+): { reicht: true } | { reicht: false; frei: number } {
+  if (maxPersonen === null) return { reicht: true };
+  const frei = Math.max(0, maxPersonen - belegtOhneDiese);
+  return personen <= frei ? { reicht: true } : { reicht: false, frei };
 }

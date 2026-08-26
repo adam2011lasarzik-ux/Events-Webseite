@@ -20,7 +20,10 @@ export interface EventUeberblick {
   stadt: string;
   maxPersonen: number | null;
   /** Gezählt in PERSONEN, nicht in Anmeldungen. */
+  /** Feste Teilnehmer: bezahlt bzw. bestätigt. Nur die kommen sicher. */
   belegtePersonen: number;
+  /** Personen in laufenden Reservierungen — noch nicht bestätigt. */
+  reserviertePersonen: number;
   /** Anmeldungen, deren Platz gerade für die Zahlung gehalten wird. */
   reservierungen: number;
   wartelistePersonen: number;
@@ -58,7 +61,7 @@ export async function eventUeberblick(): Promise<EventUeberblick[]> {
 
   const jetzt = new Date();
   const leer = () => ({
-    belegtePersonen: 0, wartelistePersonen: 0, reservierungen: 0,
+    belegtePersonen: 0, wartelistePersonen: 0, reserviertePersonen: 0, reservierungen: 0,
     anzahlAnmeldungen: 0, offenCents: 0, bezahltCents: 0,
   });
   const stand = new Map(events.map((e) => [e.id, leer()]));
@@ -69,12 +72,20 @@ export async function eventUeberblick(): Promise<EventUeberblick[]> {
     if (a.status === "STORNIERT") continue;
 
     s.anzahlAnmeldungen += 1;
-    // Eine laufende Reservierung belegt den Platz genauso wie eine
-    // bestätigte Anmeldung — sonst zeigte der Adminbereich mehr freie
-    // Plätze an, als die öffentliche Seite.
+    /* Getrennt gezählt, weil beides etwas anderes bedeutet:
+         belegtePersonen     = feste Teilnehmer, bezahlt/bestätigt
+         reserviertePersonen = Plätze, die gerade für eine laufende
+                               Zahlung gehalten werden
+
+       Für die KAPAZITÄT zählt die Summe — sonst entstünde eine
+       Überbuchung. Für die Frage „wer kommt wirklich?" zählen nur die
+       festen Teilnehmer. */
     const laeuft = a.status === "RESERVIERT" && a.reserviertBis !== null && a.reserviertBis > jetzt;
-    if (a.status === "BESTAETIGT" || laeuft) s.belegtePersonen += a._count.teilnehmer;
-    if (laeuft) s.reservierungen += 1;
+    if (a.status === "BESTAETIGT") s.belegtePersonen += a._count.teilnehmer;
+    if (laeuft) {
+      s.reserviertePersonen += a._count.teilnehmer;
+      s.reservierungen += 1;
+    }
     if (a.status === "WARTELISTE") s.wartelistePersonen += a._count.teilnehmer;
     if (a.zahlungsStatus === "BEZAHLT") s.bezahltCents += a.gesamtpreisCents;
     else s.offenCents += a.gesamtpreisCents;

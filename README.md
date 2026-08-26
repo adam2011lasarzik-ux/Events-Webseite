@@ -200,16 +200,35 @@ Schlüssel ab, der nicht mit `sk_test_` beginnt. Der Echtbetrieb ist
 keine vergessene Einstellung, sondern eine bewusste spätere Änderung an
 dieser einen Stelle.
 
-### Der Ablauf
+### Der Ablauf — EIN Vorgang
+
+Anmeldung und Bezahlung sind für den Besucher **ein** Vorgang. Der Knopf
+sagt das auch: **„Jetzt anmelden & bezahlen – 36,00 €"**, mit dem
+Betrag der aktuellen Auswahl.
 
 ```
-Formular absenden
-  → Anmeldung wird gespeichert, Status „Platz reserviert" (30 Minuten)
+Knopf „Jetzt anmelden & bezahlen – 36,00 €"
+  → Formular serverseitig prüfen
+  → Preis serverseitig NEU berechnen (der Browserwert wird nie gelesen)
+  → Plätze prüfen und für 30 Minuten halten (Status „Bezahlung läuft")
   → weiter zur Bezahlseite von Stripe
       ├─ bezahlt      → Rückmeldung an /zahlung/rueckmeldung
-      │                 → Status „Bestätigt", Zahlung „Bezahlt"
-      └─ abgebrochen  → Danke-Seite mit Knopf „Jetzt bezahlen"
+      │                 → „Bestätigt" + „Bezahlt", Platz endgültig belegt
+      │                 → „Zahlung erfolgreich — deine Anmeldung ist bestätigt"
+      └─ abgebrochen  → „Deine Anmeldung ist noch nicht abgeschlossen"
+                        + Knopf „Jetzt bezahlen" (ohne neue Dateneingabe)
 ```
+
+**Es gibt für den Besucher nur zwei Zustände:**
+
+| Lage | Was er liest |
+|---|---|
+| nicht bezahlt | „Deine Anmeldung ist **noch nicht abgeschlossen**" |
+| bezahlt | „**Zahlung erfolgreich** — deine Anmeldung ist bestätigt" (Gruppe: „ihr seid für das Event angemeldet") |
+
+Vor der Bezahlung erscheint **keine** Zwischenbestätigung — ein „Danke,
+wir haben deine Anmeldung" würde nach fertig klingen, obwohl nichts fest
+ist.
 
 Angeboten werden **Karte, Apple Pay, Google Pay und PayPal**. Apple Pay
 und Google Pay sind bei Stripe keine eigenen Zahlarten zum Anschalten,
@@ -228,6 +247,16 @@ und der Platzprüfung gemeinsam benutzt. Dadurch braucht es **keinen
 Aufräumlauf im Hintergrund**, auf den man sich auf geteiltem Hosting
 ohnehin nicht verlassen könnte.
 
+Die Reservierung ist eine **technische Sicherung während des Bezahlens**
+— keine Anmeldebestätigung und **keine Warteliste**. Sie heißt auf der
+Seite deshalb auch nirgends so. (Die echte Wartelistenfunktion für
+ausgebuchte Events ist davon unberührt.)
+
+**Vor jedem Zahlungsstart werden die Plätze erneut geprüft** — auch beim
+zweiten Anlauf nach einem Abbruch. Reichen sie für die ganze Gruppe
+nicht, wird gar keine Bezahlseite erzeugt. Für einen Platz zu bezahlen,
+den es nicht mehr gibt, wäre der unangenehmste Fehler.
+
 Kostenlose Events überspringen das: Sie sind sofort bestätigt.
 
 ### Zwei Regeln, die nicht verhandelbar sind
@@ -245,6 +274,13 @@ Kostenlose Events überspringen das: Sie sind sofort bestätigt.
 Doppelte Rückmeldungen wirken nicht doppelt: Jede Ereignis-Kennung wird
 in `ZahlungsEreignis` vermerkt.
 
+**Keine zwei bezahlbaren Vorgänge für dieselbe Anmeldung.** Wer zweimal
+tippt, bekommt **dieselbe** Bezahlseite zurück. Muss eine neue entstehen
+(anderer Betrag, alte verfallen), wird die alte vorher mit
+`sessions.expire()` geschlossen — sonst bliebe sie über den Link im
+Verlauf weiterhin bezahlbar. Der Absende-Knopf sperrt sich zusätzlich
+selbst, solange er läuft.
+
 **Wenn die Reservierung abläuft, während das Geld unterwegs ist:** Die
 Anmeldung wird trotzdem bestätigt. Einen bezahlten Platz stillschweigend
 abzulehnen wäre der schlimmere Fehler. Ist das Event dadurch überbucht,
@@ -253,6 +289,18 @@ steht es sichtbar in der Anmeldungsliste.
 **Notausgang:** Im Adminbereich eine Anmeldung von Hand auf „Bezahlt"
 setzen bestätigt sie zugleich und beendet die Reservierung. Das ist auch
 der Weg für Barzahlung und Überweisung.
+
+### Im Adminbereich
+
+Feste Teilnehmer und gehaltene Plätze stehen **getrennt**: Nur bezahlte
+Anmeldungen sind feste Teilnehmer. Für die Kapazität zählt die Summe aus
+beidem — sonst würde ein laufender Bezahlvorgang doppelt verkauft.
+
+| Lage | Marke |
+|---|---|
+| bezahlt und bestätigt | **Bestätigt** |
+| Reservierung läuft | **Bezahlung läuft**, dazu die Ablaufzeit |
+| Reservierung abgelaufen, unbezahlt | **Nicht abgeschlossen** |
 
 ### Was noch offen ist
 

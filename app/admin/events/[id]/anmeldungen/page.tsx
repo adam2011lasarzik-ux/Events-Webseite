@@ -34,13 +34,18 @@ export default async function AnmeldungenSeite({
   // noch läuft — dieselbe Regel wie auf der öffentlichen Seite. Sonst
   // stünden hier mehr freie Plätze als dort.
   const jetzt = new Date();
-  const belegt = anmeldungen
-    .filter(
-      (a) =>
-        a.status === "BESTAETIGT" ||
-        (a.status === "RESERVIERT" && a.reserviertBis !== null && a.reserviertBis > jetzt),
-    )
+  const laeuftNoch = (a: { status: string; reserviertBis: Date | null }) =>
+    a.status === "RESERVIERT" && a.reserviertBis !== null && a.reserviertBis > jetzt;
+
+  // Feste Teilnehmer und gehaltene Plätze getrennt: Beides bedeutet
+  // etwas anderes. Für die Kapazität zählt die Summe.
+  const teilnehmer = anmeldungen
+    .filter((a) => a.status === "BESTAETIGT")
     .reduce((s, a) => s + a.teilnehmer.length, 0);
+  const reserviert = anmeldungen
+    .filter(laeuftNoch)
+    .reduce((s, a) => s + a.teilnehmer.length, 0);
+  const belegt = teilnehmer + reserviert;
   const frei = event.maxPersonen === null ? null : Math.max(0, event.maxPersonen - belegt);
   const ueberbucht = event.maxPersonen !== null && belegt > event.maxPersonen;
 
@@ -50,7 +55,9 @@ export default async function AnmeldungenSeite({
       titel={`Anmeldungen — ${event.titel}`}
       unterzeile={
         `${anmeldungen.length} Anmeldung${anmeldungen.length === 1 ? "" : "en"} · ` +
-        `${belegt} von ${event.maxPersonen ?? "∞"} Plätzen belegt` +
+        `${teilnehmer} feste Teilnehmer` +
+        (reserviert > 0 ? ` · ${reserviert} Plätze reserviert` : "") +
+        ` · ${belegt} von ${event.maxPersonen ?? "∞"} Plätzen belegt` +
         (frei === null ? "" : ` · ${frei} frei`)
       }
       aktionen={
@@ -120,7 +127,14 @@ export default async function AnmeldungenSeite({
                   <div className={stil.zeileRechts}>
                     <span className={stil.zeileBetrag}>{alsEuro(a.gesamtpreisCents)}</span>
                     <span>
-                      <StatusMarker art="anmeldung" wert={a.status} />{" "}
+                      <StatusMarker
+                        art="anmeldung"
+                        wert={
+                          a.status === "RESERVIERT" && !laeuftNoch(a)
+                            ? "RESERVIERT_ABGELAUFEN"
+                            : a.status
+                        }
+                      />{" "}
                       <StatusMarker art="zahlung" wert={a.zahlungsStatus} />
                     </span>
                   </div>

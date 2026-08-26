@@ -21,5 +21,6 @@ export async function zahlungStarten(formular: FormData): Promise<void> {
   const ergebnis = await bezahlseiteFuer(id);
   if ("url" in ergebnis) redirect(ergebnis.url);
 
-  redirect(`/anmeldung/danke?nr=${encodeURIComponent(id)}&zahlung=${ergebnis.fehler}`);
+  const frei = ergebnis.frei === undefined ? "" : `&frei=${ergebnis.frei}`;
+  redirect(`/anmeldung/danke?nr=${encodeURIComponent(id)}&zahlung=${ergebnis.fehler}${frei}`);
 }

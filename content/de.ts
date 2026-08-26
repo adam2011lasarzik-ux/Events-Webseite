@@ -240,11 +240,15 @@ export const de = {
         "verbindlich an.",
       einwilligungFotos:
         "Bei der Veranstaltung dürfen Fotos gemacht und für VERA verwendet werden.",
-      absenden: "Anmeldung abschicken",
-      laeuft: "Wird gesendet …",
+      /* Anmeldung und Bezahlung sind EIN Vorgang. Der Knopf sagt
+         deshalb beides und nennt den Betrag — niemand soll klicken
+         und erst danach merken, dass jetzt bezahlt wird. */
+      absenden: "Jetzt anmelden & bezahlen – {betrag}",
+      absendenKostenlos: "Jetzt verbindlich anmelden",
+      laeuft: "Einen Moment …",
       zahlungHinweis:
-        "Nach dem Abschicken ist der Platz reserviert. Die Bezahlung richten wir gerade " +
-        "ein — wir melden uns dazu bei dir.",
+        "Es geht weiter zur gesicherten Bezahlseite. Kartendaten kommen nie bei uns an. " +
+        "Erst nach erfolgreicher Zahlung ist die Anmeldung bestätigt.",
     },
 
     vorschau: {
@@ -264,6 +268,23 @@ export const de = {
   },
 
   danke: {
+    /* ZWEI Zustände, mehr nicht:
+         bezahlt        → Anmeldung bestätigt
+         nicht bezahlt  → Anmeldung NICHT abgeschlossen
+       Eine Zwischenbestätigung („Danke, wir haben deine Anmeldung")
+       vor der Bezahlung wäre irreführend — sie klingt nach fertig. */
+    /* Überschrift und Unterzeile ergeben zusammen den Satz
+       „Zahlung erfolgreich — deine Anmeldung ist bestätigt".
+       Getrennt, weil der ganze Satz als Überschrift auf einem Handy
+       fünf Zeilen lang wäre und dann eher erschlägt als beruhigt. */
+    bezahltTitel: "Zahlung erfolgreich",
+    bezahltEinleitung:
+      "Deine Anmeldung ist bestätigt. Hier steht noch einmal, was wir aufgenommen haben.",
+    bezahltEinleitungMehrere:
+      "Ihr seid für das Event angemeldet. Hier steht noch einmal, was wir aufgenommen haben.",
+    offenTitel: "Deine Anmeldung ist noch nicht abgeschlossen",
+    offenEinleitung:
+      "Die Zahlung wurde noch nicht abgeschlossen. Dein Platz ist für kurze Zeit reserviert.",
     ueberschrift: "Danke — wir haben deine Anmeldung",
     einleitung:
       "Deine Anmeldung ist gespeichert. Hier steht noch einmal, was wir aufgenommen haben.",
@@ -280,11 +301,22 @@ export const de = {
     zahlungBezahlt: "Bezahlt",
     zahlungBezahltText:
       "Deine Zahlung ist eingegangen und dein Platz ist fest gebucht.",
+    /** Gruppe hat keinen Platz mehr — die Zahlung wird gar nicht erst gestartet. */
+    zahlungKeinePlaetze:
+      "Es sind nur noch {frei} Plätze frei — für {personen} Personen reicht das nicht. " +
+      "Deine Anmeldung ist deshalb nicht zustande gekommen. Schreib uns, wir suchen eine Lösung.",
+    zahlungAusgebucht:
+      "Die Veranstaltung ist inzwischen ausgebucht. Deine Anmeldung ist deshalb nicht " +
+      "zustande gekommen. Schreib uns, wir suchen eine Lösung.",
+    zahlungAbgelaufen: "Reservierung abgelaufen",
+    zahlungAbgelaufenText:
+      "Die Reservierung deines Platzes ist abgelaufen. Du kannst die Bezahlung jederzeit " +
+      "neu starten — wir prüfen dann, ob noch genug Plätze frei sind.",
     zahlungLaeuft: "Zahlung wird geprüft",
     zahlungLaeuftText:
       "Die Bestätigung deiner Zahlung steht noch aus. Das dauert meist nur wenige Augenblicke — " +
       "lade die Seite gleich noch einmal.",
-    zahlungReserviert: "Platz reserviert",
+    zahlungReserviert: "Dein Platz ist kurz reserviert",
     zahlungReserviertText:
       "Wir halten deinen Platz {minuten} Minuten lang frei. Bezahle in dieser Zeit, dann ist " +
       "die Buchung fest.",
