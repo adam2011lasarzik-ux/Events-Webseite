@@ -94,6 +94,35 @@ Sofort, Giropay …). Sie bleiben aus. Der Code fragt ohnehin nur
 `card` und `paypal` an — was hier zusätzlich anginge, würde nie
 angezeigt.
 
+> ### PayPal ist keine Kür — ohne PayPal geht gar nichts
+>
+> Der Code fordert die Zahlarten **fest** an (`lib/zahlung.ts`):
+>
+> ```ts
+> payment_method_types: ["card", "paypal"],
+> ```
+>
+> Das ist Absicht: Nur so erscheinen genau die gewünschten
+> Möglichkeiten und nicht alles, was im Dashboard zufällig
+> angeschaltet ist. Es hat aber eine Folge, die man kennen muss:
+>
+> **Ist PayPal nicht aktiviert, lehnt Stripe die Erzeugung der
+> Bezahlseite komplett ab — dann funktioniert auch die Kartenzahlung
+> nicht.**
+>
+> Der Ablauf bleibt dabei sauber: Die Anmeldung ist längst gespeichert,
+> der Besucher landet auf der Abschluss-Seite mit „noch nicht
+> abgeschlossen" und einem Knopf „Jetzt bezahlen". Es geht nichts
+> verloren — bezahlen könnte er trotzdem nicht.
+>
+> Woran du es erkennst: Im Serverprotokoll steht
+> `Bezahlseite konnte nicht erzeugt werden:` und darunter die Meldung
+> von Stripe, sinngemäß „The payment method type `paypal` is not
+> activated".
+>
+> **Und: Diese Einstellung gilt je Sandbox.** Im allgemeinen Testmodus
+> aktiviert heißt nicht in deiner Sandbox aktiviert.
+
 ---
 
 ## 4. Testschlüssel heraussuchen
