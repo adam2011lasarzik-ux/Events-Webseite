@@ -111,21 +111,60 @@ angezeigt.
 
 ### Wo dieser Schlüssel hingehört — und wo nicht
 
-**Er gehört:** später in die Umgebungsvariablen beim Hoster.
+Drei Orte, sauber getrennt:
 
-**Er gehört NICHT:**
+| | Ort | Wann |
+|---|---|---|
+| **Heute** | Passwort-Manager auf dem iPad (iCloud-Schlüsselbund oder eine Passwort-App) | sofort |
+| **Später** | Umgebungsvariablen beim Hoster | mit dem Hosting |
+| **Nie** | Quelltext · GitHub · Chatverlauf · die Umgebungsvariablen von Claude Code | — |
 
-- in den Quelltext
-- in eine Datei, die nach GitHub hochgeladen wird
-- in einen Chatverlauf — auch nicht in den mit Claude
+Der letzte Punkt überrascht und ist deshalb wichtig. Es liegt nahe, den
+Schlüssel in die **Umgebungsvariablen einer Claude-Code-Cloud-Umgebung**
+einzutragen — dafür sind sie schließlich da. Anthropics eigene
+Dokumentation sagt dazu aber ausdrücklich:
 
-Bis zum Hosting legst du ihn dort ab, wo du auch Passwörter aufbewahrst
-(iCloud-Schlüsselbund, Passwort-App). Er lässt sich im Stripe-Dashboard
-jederzeit neu erzeugen, falls er doch einmal abhandenkommt.
+> „Anyone who uses the environment can read the values, and cloud
+> environments have **no dedicated secrets store**, so **don't add API
+> keys or other credentials**."
+>
+> — [Configure cloud environments](https://code.claude.com/docs/en/cloud-environments#set-environment-variables)
+
+Es ist also kein Geheimnis-Tresor, sondern eine Konfigurationsliste. Sie
+ist der richtige Ort für `NODE_ENV` — und der falsche für einen
+Schlüssel.
+
+Dasselbe gilt für die Datei `.env` in einer Claude-Code-Sitzung: Der
+Arbeitsbehälter wird nach einiger Zeit ohnehin verworfen, und der
+Schlüssel wäre dort nutzlos, weil `api.stripe.com` aus dieser Umgebung
+netzseitig gesperrt ist. In dieser Datei stehen deshalb nur
+Attrappen-Werte für die automatischen Prüfungen.
+
+**Der Notausgang:** Sollte der Schlüssel doch einmal irgendwo landen, wo
+er nicht hingehört — im Stripe-Dashboard unter **Entwickler →
+API-Schlüssel** lässt er sich mit einem Tipp **neu erzeugen**. Der alte
+gilt dann nicht mehr. Das Konto muss dafür nicht angefasst werden.
 
 > Ein Testschlüssel kann kein echtes Geld bewegen. Trotzdem gilt für
 > ihn dieselbe Sorgfalt wie für den echten — sonst gewöhnt man sich das
 > Falsche an.
+
+### Wenn du in einer Sandbox arbeitest
+
+Stripe bietet neben dem einfachen Testmodus auch **Sandboxes** an —
+getrennte Testumgebungen mit eigenen Einstellungen. Die Schlüssel
+beginnen genauso mit `sk_test_`, und der Code nimmt sie unverändert an.
+
+Zwei Dinge sind dort aber anders, und beide fallen sonst erst spät auf:
+
+- **Zahlungsmethoden gelten je Sandbox.** PayPal muss *in dieser*
+  Sandbox aktiviert und Link *in dieser* Sandbox deaktiviert werden.
+  Was im allgemeinen Testmodus eingestellt ist, zählt hier nicht.
+- **Webhooks gelten je Sandbox.** Der Endpunkt aus Schritt 5 wird
+  später in derselben Sandbox eingetragen, aus der auch der Schlüssel
+  stammt. Sonst kommt nie eine Rückmeldung an.
+
+Merke dir also, **in welcher Sandbox** der Schlüssel entstanden ist.
 
 ---
 
