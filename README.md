@@ -45,6 +45,7 @@ Das Passwort wird niemals gespeichert, nur sein Hash (scrypt).
 | Aussehen der drei Designs | `styles/themes.css` |
 | Titelbild einer Veranstaltung | **Im Adminbereich** hochladen |
 | Gründerfoto, Name, Bezeichnung, Beschreibung, Sichtbarkeit | **Im Adminbereich** unter `/admin/einstellungen` |
+| Zahlungsstatus einer Anmeldung | **Im Adminbereich** unter Anmeldungen |
 
 Veranstaltungen brauchen **keine Code-Änderung** mehr. Ein im
 Adminbereich veröffentlichtes Event erscheint sofort auf der Webseite.
@@ -186,6 +187,81 @@ Die Dateien liegen **außerhalb von `public/`** in dem Verzeichnis aus
 > ein Deployment **nicht überschreibt** — sonst sind nach dem nächsten
 > Update alle hochgeladenen Bilder weg.
 
+## Bezahlung (Stripe, zurzeit nur Testbetrieb)
+
+Bezahlt wird **auf der gehosteten Seite von Stripe**, nicht auf dieser
+Webseite. Kartennummern, Prüfziffern und Bankdaten kommen hier nie an
+und werden nirgends gespeichert oder protokolliert. Auf den VERA-Seiten
+läuft **kein** Stripe-Skript — der Zustand ohne Zustimmungsfenster
+bleibt damit erhalten.
+
+**Der Riegel gegen echte Zahlungen:** `lib/zahlung.ts` weist jeden
+Schlüssel ab, der nicht mit `sk_test_` beginnt. Der Echtbetrieb ist
+keine vergessene Einstellung, sondern eine bewusste spätere Änderung an
+dieser einen Stelle.
+
+### Der Ablauf
+
+```
+Formular absenden
+  → Anmeldung wird gespeichert, Status „Platz reserviert" (30 Minuten)
+  → weiter zur Bezahlseite von Stripe
+      ├─ bezahlt      → Rückmeldung an /zahlung/rueckmeldung
+      │                 → Status „Bestätigt", Zahlung „Bezahlt"
+      └─ abgebrochen  → Danke-Seite mit Knopf „Jetzt bezahlen"
+```
+
+Angeboten werden **Karte, Apple Pay, Google Pay und PayPal**. Apple Pay
+und Google Pay sind bei Stripe keine eigenen Zahlarten zum Anschalten,
+sondern die Kartenzahlung — auf dem passenden Gerät als Wallet-Knopf.
+Freigeschaltet werden deshalb `card` und `paypal`.
+
+### Die 30-Minuten-Reservierung
+
+Eine Anmeldung entsteht mit Status `RESERVIERT` und einem Ablaufdatum
+(`reserviertBis`). Der Platz zählt sofort als belegt.
+
+**Läuft die Frist ab, wird nichts gelöscht** — die Anmeldung zählt
+einfach nicht mehr mit. Die Regel steht in `lib/plaetze.ts` als
+`belegtFilter()` und wird von der öffentlichen Seite, dem Adminbereich
+und der Platzprüfung gemeinsam benutzt. Dadurch braucht es **keinen
+Aufräumlauf im Hintergrund**, auf den man sich auf geteiltem Hosting
+ohnehin nicht verlassen könnte.
+
+Kostenlose Events überspringen das: Sie sind sofort bestätigt.
+
+### Zwei Regeln, die nicht verhandelbar sind
+
+1. **Der Zahlungsstatus wird nur durch die Rückmeldung des Anbieters an
+   den Server gesetzt.** Eine Rückleitung im Browser kann jeder selbst
+   in die Adresszeile tippen. Die Danke-Seite fragt zusätzlich
+   serverseitig bei Stripe nach — auch das ist eine Frage vom Server an
+   den Anbieter, keine Behauptung aus dem Browser.
+2. **Der Betrag kommt aus der Datenbank.** Meldet der Anbieter einen
+   anderen Betrag als den bei der Anmeldung eingefrorenen, wird *nicht*
+   auf bezahlt gesetzt; der Adminbereich weist den Fall zur Klärung
+   aus.
+
+Doppelte Rückmeldungen wirken nicht doppelt: Jede Ereignis-Kennung wird
+in `ZahlungsEreignis` vermerkt.
+
+**Wenn die Reservierung abläuft, während das Geld unterwegs ist:** Die
+Anmeldung wird trotzdem bestätigt. Einen bezahlten Platz stillschweigend
+abzulehnen wäre der schlimmere Fehler. Ist das Event dadurch überbucht,
+steht es sichtbar in der Anmeldungsliste.
+
+**Notausgang:** Im Adminbereich eine Anmeldung von Hand auf „Bezahlt"
+setzen bestätigt sie zugleich und beendet die Reservierung. Das ist auch
+der Weg für Barzahlung und Überweisung.
+
+### Was noch offen ist
+
+Ein echter Durchlauf mit einer Stripe-Testkarte braucht eine von außen
+erreichbare Adresse für die Rückmeldung — also das Hosting. Bis dahin
+sind alle eigenen Teile geprüft (Unterschrift, doppelte Meldungen,
+Betragsabgleich, Reservierungsablauf, Testmodus-Riegel), der Klick durch
+Stripes Bezahlseite selbst noch nicht.
+
 ## Der Gründerbereich
 
 Foto, Name, Bezeichnung und Beschreibungstext gehören zu VERA und nicht
@@ -255,9 +331,9 @@ Business-Design wird daraus eine Zeitschiene.
 
 ## Was diese Version bewusst noch nicht kann
 
-**Keine Bezahlung.** Eine Anmeldung entsteht mit dem Zahlungsstatus
-„offen"; die Bestätigungsseite sagt das offen, statt eine Zahlung
-vorzutäuschen.
+**Kein Echtbetrieb bei der Bezahlung.** Die Anbindung an Stripe steht,
+läuft aber ausschließlich im Testmodus (siehe oben). Es fließt kein
+echtes Geld.
 
 **Keine automatischen E-Mails.** Auch das steht so auf der
 Bestätigungsseite.

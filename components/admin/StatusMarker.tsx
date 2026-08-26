@@ -13,6 +13,7 @@ const worte: Record<string, { text: string; klasse: string }> = {
   VEROEFFENTLICHT: { text: "Veröffentlicht",  klasse: "markerGut" },
   ARCHIVIERT:      { text: "Archiviert",      klasse: "markerAus" },
   // Anmeldung
+  RESERVIERT:      { text: "Platz reserviert", klasse: "markerWartet" },
   BESTAETIGT:      { text: "Bestätigt",       klasse: "markerGut" },
   WARTELISTE:      { text: "Warteliste",      klasse: "markerWartet" },
   STORNIERT:       { text: "Storniert",       klasse: "markerAus" },

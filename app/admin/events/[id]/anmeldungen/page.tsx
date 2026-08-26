@@ -29,10 +29,20 @@ export default async function AnmeldungenSeite({
   // Gezählt wird in PERSONEN. Eine Familie mit sechs Leuten belegt
   // sechs Plätze — würde man Anmeldungen zählen, wäre die Anlage voll,
   // während die Seite noch freie Plätze meldet.
+  //
+  // Belegt sind bestätigte Anmeldungen UND Reservierungen, deren Frist
+  // noch läuft — dieselbe Regel wie auf der öffentlichen Seite. Sonst
+  // stünden hier mehr freie Plätze als dort.
+  const jetzt = new Date();
   const belegt = anmeldungen
-    .filter((a) => a.status === "BESTAETIGT")
+    .filter(
+      (a) =>
+        a.status === "BESTAETIGT" ||
+        (a.status === "RESERVIERT" && a.reserviertBis !== null && a.reserviertBis > jetzt),
+    )
     .reduce((s, a) => s + a.teilnehmer.length, 0);
   const frei = event.maxPersonen === null ? null : Math.max(0, event.maxPersonen - belegt);
+  const ueberbucht = event.maxPersonen !== null && belegt > event.maxPersonen;
 
   return (
     <AdminRahmen
@@ -54,6 +64,18 @@ export default async function AnmeldungenSeite({
         </>
       }
     >
+      {/* Eine bezahlte Anmeldung wird niemals stillschweigend
+          abgelehnt — läuft die Reservierung ab, während das Geld
+          unterwegs ist, kann das Event dadurch überbucht werden. Der
+          Fall ist selten, aber er muss sichtbar sein. */}
+      {ueberbucht && (
+        <p className={`${stil.meldung} ${stil.meldungFehler}`} role="alert">
+          Dieses Event ist überbucht: {belegt} Personen bei {event.maxPersonen} Plätzen. Das
+          passiert, wenn eine Zahlung erst nach Ablauf der Reservierung eingeht — bezahlte
+          Plätze werden nie abgelehnt. Bitte klären.
+        </p>
+      )}
+
       {anmeldungen.length === 0 && (
         <div className={stil.karte}>
           <p>Für diese Veranstaltung gibt es noch keine Anmeldungen.</p>
@@ -144,6 +166,33 @@ export default async function AnmeldungenSeite({
                         Fotos erlaubt: {a.einwilligungFotos ? "ja" : "nein"}
                         <br />
                         Nummer: {a.id}
+                        {a.status === "RESERVIERT" && a.reserviertBis && (
+                          <>
+                            <br />
+                            {a.reserviertBis > new Date()
+                              ? `Platz reserviert bis ${alsLesbar(a.reserviertBis)}`
+                              : `Reservierung abgelaufen am ${alsLesbar(a.reserviertBis)} — der Platz ist wieder frei`}
+                          </>
+                        )}
+                        {a.zahlungsReferenz && (
+                          <>
+                            <br />
+                            Zahlungsreferenz: {a.zahlungsReferenz}
+                          </>
+                        )}
+                        {/* Der Anbieter hat einen anderen Betrag
+                            gemeldet, als bei der Anmeldung galt. Das
+                            gehört angesehen, nicht überlesen. */}
+                        {a.bezahlterBetragCents !== null &&
+                          a.zahlungsStatus !== "BEZAHLT" && (
+                            <>
+                              <br />
+                              <strong>
+                                Achtung: gemeldeter Betrag {alsEuro(a.bezahlterBetragCents)},
+                                erwartet {alsEuro(a.gesamtpreisCents)}. Bitte prüfen.
+                              </strong>
+                            </>
+                          )}
                       </p>
                     </div>
                   </div>

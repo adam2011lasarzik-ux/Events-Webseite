@@ -42,3 +42,37 @@ export function passtGruppe(
   if (maxPersonen === null) return true;
   return belegtePersonen + gruppengroesse <= maxPersonen;
 }
+
+/**
+ * Welche Anmeldungen belegen einen Platz?
+ *
+ * Diese Regel steht bewusst an genau EINER Stelle. Sie wird von der
+ * öffentlichen Anzeige (lib/events.ts), vom Adminbereich
+ * (lib/adminDaten.ts) und von der Platzprüfung beim Anmelden benutzt.
+ * Liefen die drei auseinander, zeigte die Seite freie Plätze an,
+ * während die Anlage längst voll ist.
+ *
+ * Belegt sind:
+ *   - bestätigte Anmeldungen
+ *   - Reservierungen, deren Frist noch läuft
+ *
+ * Eine ABGELAUFENE Reservierung zählt nicht mehr — dafür wird nichts
+ * gelöscht und nichts aufgeräumt, die Bedingung vergleicht einfach mit
+ * der Uhrzeit. Ein Aufräumlauf im Hintergrund wäre auf geteiltem
+ * Hosting nicht verlässlich; diese Lösung braucht keinen.
+ */
+export function belegtFilter(jetzt: Date = new Date()) {
+  return {
+    OR: [
+      { status: "BESTAETIGT" as const },
+      { status: "RESERVIERT" as const, reserviertBis: { gt: jetzt } },
+    ],
+  };
+}
+
+/** Wie lange ein Platz gehalten wird, während die Zahlung läuft. */
+export const RESERVIERUNG_MINUTEN = 30;
+
+export function reserviertBis(jetzt: Date = new Date()): Date {
+  return new Date(jetzt.getTime() + RESERVIERUNG_MINUTEN * 60 * 1000);
+}

@@ -183,6 +183,9 @@ enum Buchungsart {
 }
 
 enum AnmeldeStatus {
+  /// Angemeldet, Zahlung läuft. Der Platz ist bis `reserviertBis`
+  /// gehalten und zählt bis dahin als belegt.
+  RESERVIERT
   BESTAETIGT
   WARTELISTE
   STORNIERT
@@ -238,6 +241,16 @@ model Registration {
   zahlungsReferenz String?
   bezahlterBetragCents Int?
   bezahltAm      DateTime?
+
+  /// Bis wann der Platz gehalten wird, solange die Zahlung läuft.
+  /// null = keine laufende Reservierung.
+  ///
+  /// Läuft die Zeit ab, wird NICHTS gelöscht — die Anmeldung zählt
+  /// einfach nicht mehr als belegter Platz (siehe belegtFilter() in
+  /// lib/plaetze.ts). Dadurch braucht es keinen Aufräumlauf im
+  /// Hintergrund, auf den man sich auf geteiltem Hosting ohnehin
+  /// nicht verlassen könnte.
+  reserviertBis DateTime?
 
   angemeldetAm  DateTime  @default(now())
   reaktiviertAm DateTime?
@@ -358,6 +371,23 @@ model Einstellungen {
   gruenderAufStart Boolean  @default(true)
 
   geaendertAm DateTime @updatedAt
+}
+
+/// Jede Rückmeldung des Zahlungsanbieters genau EINMAL verarbeiten.
+///
+/// Stripe schickt eine Meldung notfalls mehrfach — das ist Absicht und
+/// die richtige Vorgehensweise, denn sonst ginge eine Meldung bei einer
+/// Störung verloren. Ohne diese Tabelle würde eine doppelt empfangene
+/// Meldung aber auch doppelt wirken.
+///
+/// Bewusst getrennt von den Anmelde- und Zahlungsdaten und bewusst in
+/// der Datenbank statt im Arbeitsspeicher: Ein Neustart darf nicht dazu
+/// führen, dass eine bereits verarbeitete Meldung wieder als neu gilt.
+model ZahlungsEreignis {
+  /// Die Kennung, die der Zahlungsanbieter vergibt.
+  id          String   @id
+  art         String
+  empfangenAm DateTime @default(now())
 }
 
 // ── Missbrauchsschutz ────────────────────────────────────────────

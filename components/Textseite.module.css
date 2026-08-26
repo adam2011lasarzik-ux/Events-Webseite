@@ -20,3 +20,36 @@
 @media (min-width: 52rem) {
   .punkte { grid-template-columns: 1fr 1fr; max-width: 62rem; }
 }
+
+/* Der Bezahlknopf auf der Danke-Seite.
+
+   Bewusst ein echter <button> in einem Formular und kein Link: Er löst
+   eine Server-Aktion aus, die eine Bezahlseite erzeugt. Das Aussehen
+   entspricht dem Haupt-Knopf der Seite; die Design-Variablen sorgen
+   dafür, dass er in allen drei Designs passt. */
+.zahlKnopf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9em 1.6em;
+  border: 2px solid transparent;
+  border-radius: var(--pille);
+  background: var(--akzent);
+  color: var(--akzent-text);
+  font-family: var(--schrift-text);
+  font-size: var(--gr-s);
+  font-weight: 700;
+  line-height: 1.1;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+.zahlKnopf:hover { background: var(--akzent-hell); transform: translateY(-2px); }
+.zahlKnopf:active { transform: translateY(0); }
+
+.zahlWege {
+  display: block;
+  margin-top: var(--a-3);
+  margin-bottom: var(--a-5);
+  font-size: var(--gr-xs);
+  color: var(--text-leise);
+}

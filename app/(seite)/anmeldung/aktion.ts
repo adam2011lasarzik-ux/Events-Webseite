@@ -16,6 +16,8 @@ import { pruefeUndBaue, type AnmeldeEingabe, type AnmeldeErgebnis } from "@/lib/
 import { vorschauRollen, type Anmeldeweg } from "@/lib/vorschau";
 import { alsAuswahl } from "@/lib/anmeldung";
 import { versuchErlaubt } from "@/lib/ratelimit";
+import { belegtFilter, reserviertBis } from "@/lib/plaetze";
+import { bezahlseiteFuer } from "@/lib/zahlungStart";
 
 function zahl(wert: FormDataEntryValue | null, standard = 0): number {
   const n = Number(wert);
@@ -116,6 +118,11 @@ export async function anmeldungAbsenden(
   const preis = berechnePreis(regeln, anmeldung.auswahl);
   const personenZahl = anmeldung.teilnehmer.length;
 
+  const jetzt = new Date();
+  /* Ein kostenloses Event braucht keine Bezahlung — dort bleibt es
+     beim bisherigen Ablauf: sofort bestätigt, kein Anbieter im Spiel. */
+  const kostenlos = preis.gesamtCents <= 0;
+
   let neueId: string;
 
   try {
@@ -125,9 +132,29 @@ export async function anmeldungAbsenden(
     // durchkommen — ein überbuchtes Event, das erst am
     // Veranstaltungstag auffällt.
     neueId = await db.$transaction(async (tx) => {
+      /* Zuerst nachsehen, ob es für diese Adresse schon eine Anmeldung
+         gibt — VOR der Platzprüfung. Sonst zählte bei einem zweiten
+         Anlauf die eigene noch laufende Reservierung als belegter
+         Platz mit, und man stünde sich selbst im Weg. */
+      const vorhanden = await tx.registration.findUnique({
+        where: {
+          eventId_kontaktEmail: { eventId: event.id, kontaktEmail: anmeldung.kontakt.email },
+        },
+      });
+
       if (event.maxPersonen !== null) {
+        /* Belegt sind bestätigte Anmeldungen UND Reservierungen,
+           deren Frist noch läuft. Die Regel steht in lib/plaetze.ts,
+           damit Anzeige, Adminbereich und diese Prüfung nicht
+           auseinanderlaufen können. */
         const bestaetigte = await tx.registration.findMany({
-          where: { eventId: event.id, status: "BESTAETIGT" },
+          where: {
+            eventId: event.id,
+            ...belegtFilter(jetzt),
+            // Die eigene bestehende Anmeldung nicht mitzählen: Sie wird
+            // gleich ersetzt, nicht ergänzt.
+            ...(vorhanden ? { id: { not: vorhanden.id } } : {}),
+          },
           select: { id: true, _count: { select: { teilnehmer: true } } },
         });
         const belegt = bestaetigte.reduce((s, a) => s + a._count.teilnehmer, 0);
@@ -140,18 +167,16 @@ export async function anmeldungAbsenden(
         }
       }
 
-      const vorhanden = await tx.registration.findUnique({
-        where: {
-          eventId_kontaktEmail: { eventId: event.id, kontaktEmail: anmeldung.kontakt.email },
-        },
-      });
-
       const felder = {
         kontaktVorname: anmeldung.kontakt.vorname,
         kontaktNachname: anmeldung.kontakt.nachname,
         kontaktTelefon: anmeldung.kontakt.telefon,
         buchungsart: anmeldung.buchungsart,
-        status: "BESTAETIGT" as const,
+        /* Der Platz wird gehalten, bis die Zahlung durch ist. Läuft
+           die Frist ab, zählt die Anmeldung einfach nicht mehr als
+           belegter Platz — gelöscht wird nichts. */
+        status: (kostenlos ? "BESTAETIGT" : "RESERVIERT") as "BESTAETIGT" | "RESERVIERT",
+        reserviertBis: kostenlos ? null : reserviertBis(jetzt),
         istVormundBuchung: anmeldung.istVormundBuchung,
         einwilligungVormund: anmeldung.einwilligungVormund,
         einwilligungFotos: anmeldung.einwilligungFotos,
@@ -159,7 +184,13 @@ export async function anmeldungAbsenden(
       };
 
       if (vorhanden) {
-        if (vorhanden.status !== "STORNIERT") throw new DoppeltFehler();
+        /* Weitermachen darf, wer storniert hat — und wer selbst noch
+           in einer Reservierung steckt: Das ist derselbe Mensch, der
+           gerade einen zweiten Anlauf nimmt, weil die Bezahlung nicht
+           geklappt hat. Ihn mit „bereits angemeldet" abzuweisen wäre
+           die schlechteste aller Antworten. */
+        const eigeneReservierung = vorhanden.status === "RESERVIERT";
+        if (vorhanden.status !== "STORNIERT" && !eigeneReservierung) throw new DoppeltFehler();
 
         // Reaktivieren statt einen zweiten Datensatz anlegen — so
         // bleibt es bei genau einer Anmeldung je Person und Event.
@@ -169,7 +200,11 @@ export async function anmeldungAbsenden(
           data: {
             ...felder,
             storniertAm: null,
-            reaktiviertAm: new Date(),
+            // Nur eine echte Rückkehr nach einer Stornierung ist eine
+            // Reaktivierung. Ein zweiter Anlauf innerhalb derselben
+            // Reservierung ist keine.
+            reaktiviertAm:
+              vorhanden.status === "STORNIERT" ? new Date() : vorhanden.reaktiviertAm,
             teilnehmer: { create: anmeldung.teilnehmer },
           },
         });
@@ -212,7 +247,17 @@ export async function anmeldungAbsenden(
     };
   }
 
-  redirect(`/anmeldung/danke?nr=${neueId}`);
+  /* Kostenlos: direkt zur Bestätigung. */
+  if (kostenlos) redirect(`/anmeldung/danke?nr=${neueId}`);
+
+  /* Sonst direkt weiter zur Bezahlseite des Anbieters.
+
+     Klappt das nicht, geht NICHTS verloren: Die Anmeldung ist
+     gespeichert, und auf der Danke-Seite steht ein Knopf „Jetzt
+     bezahlen". Eine Anmeldung darf niemals an der Zahlung scheitern. */
+  const bezahlseite = await bezahlseiteFuer(neueId, jetzt);
+  if ("url" in bezahlseite) redirect(bezahlseite.url);
+  redirect(`/anmeldung/danke?nr=${neueId}&zahlung=${bezahlseite.fehler}`);
 }
 
 class PlatzFehler extends Error {

@@ -14,6 +14,7 @@
    --------------------------------------------------------------- */
 
 import { db } from "@/lib/db";
+import { belegtFilter } from "@/lib/plaetze";
 import type { Preisregeln } from "@/lib/preise";
 // Datum und Uhrzeit kommen aus lib/zeit.ts, damit sie in DEUTSCHER
 // Zeit erscheinen. Der Server läuft in UTC — ohne Umrechnung stünde
@@ -118,7 +119,10 @@ async function belegtePlaetze(eventIds: string[]): Promise<Map<string, number>> 
   if (eventIds.length === 0) return stand;
 
   const anmeldungen = await db.registration.findMany({
-    where: { eventId: { in: eventIds }, status: "BESTAETIGT" },
+    // Bestätigte Anmeldungen UND laufende Reservierungen — die Regel
+    // steht in lib/plaetze.ts, damit Anzeige, Adminbereich und
+    // Platzprüfung nicht auseinanderlaufen können.
+    where: { eventId: { in: eventIds }, ...belegtFilter() },
     select: { eventId: true, _count: { select: { teilnehmer: true } } },
   });
 

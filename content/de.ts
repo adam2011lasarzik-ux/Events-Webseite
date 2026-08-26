@@ -274,8 +274,31 @@ export const de = {
     zahlungOffen: "Noch offen",
     zahlungTitel: "Bezahlung",
     zahlungText:
-      "Die Online-Bezahlung richten wir gerade ein. Sobald sie bereitsteht, melden wir uns " +
-      "bei dir unter der angegebenen E-Mail-Adresse.",
+      "Bezahlt wird auf der gesicherten Seite unseres Zahlungsdienstleisters. Kartendaten " +
+      "kommen nie bei uns an.",
+    /** Zustände nach der Rückkehr von der Bezahlseite. */
+    zahlungBezahlt: "Bezahlt",
+    zahlungBezahltText:
+      "Deine Zahlung ist eingegangen und dein Platz ist fest gebucht.",
+    zahlungLaeuft: "Zahlung wird geprüft",
+    zahlungLaeuftText:
+      "Die Bestätigung deiner Zahlung steht noch aus. Das dauert meist nur wenige Augenblicke — " +
+      "lade die Seite gleich noch einmal.",
+    zahlungReserviert: "Platz reserviert",
+    zahlungReserviertText:
+      "Wir halten deinen Platz {minuten} Minuten lang frei. Bezahle in dieser Zeit, dann ist " +
+      "die Buchung fest.",
+    zahlungAbgebrochen:
+      "Du hast die Bezahlung abgebrochen. Dein Platz ist noch reserviert — du kannst es " +
+      "jederzeit erneut versuchen.",
+    zahlungFehlerAnbieter:
+      "Die Bezahlseite lässt sich gerade nicht öffnen. Deine Anmeldung ist gespeichert; " +
+      "versuche es in ein paar Minuten noch einmal.",
+    zahlungFehlerEingerichtet:
+      "Die Online-Bezahlung ist noch nicht freigeschaltet. Deine Anmeldung ist gespeichert — " +
+      "wir melden uns bei dir unter der angegebenen E-Mail-Adresse.",
+    zahlungKnopf: "Jetzt bezahlen",
+    zahlungWege: "Karte, Apple Pay, Google Pay oder PayPal",
     emailTitel: "Bestätigung per E-Mail",
     emailText:
       "Eine automatische Bestätigungsmail gibt es noch nicht. Bitte notiere dir bis dahin " +

@@ -21,6 +21,8 @@ export interface EventUeberblick {
   maxPersonen: number | null;
   /** Gezählt in PERSONEN, nicht in Anmeldungen. */
   belegtePersonen: number;
+  /** Anmeldungen, deren Platz gerade für die Zahlung gehalten wird. */
+  reservierungen: number;
   wartelistePersonen: number;
   anzahlAnmeldungen: number;
   offenCents: number;
@@ -47,14 +49,16 @@ export async function eventUeberblick(): Promise<EventUeberblick[]> {
     select: {
       eventId: true,
       status: true,
+      reserviertBis: true,
       zahlungsStatus: true,
       gesamtpreisCents: true,
       _count: { select: { teilnehmer: true } },
     },
   });
 
+  const jetzt = new Date();
   const leer = () => ({
-    belegtePersonen: 0, wartelistePersonen: 0,
+    belegtePersonen: 0, wartelistePersonen: 0, reservierungen: 0,
     anzahlAnmeldungen: 0, offenCents: 0, bezahltCents: 0,
   });
   const stand = new Map(events.map((e) => [e.id, leer()]));
@@ -65,7 +69,12 @@ export async function eventUeberblick(): Promise<EventUeberblick[]> {
     if (a.status === "STORNIERT") continue;
 
     s.anzahlAnmeldungen += 1;
-    if (a.status === "BESTAETIGT") s.belegtePersonen += a._count.teilnehmer;
+    // Eine laufende Reservierung belegt den Platz genauso wie eine
+    // bestätigte Anmeldung — sonst zeigte der Adminbereich mehr freie
+    // Plätze an, als die öffentliche Seite.
+    const laeuft = a.status === "RESERVIERT" && a.reserviertBis !== null && a.reserviertBis > jetzt;
+    if (a.status === "BESTAETIGT" || laeuft) s.belegtePersonen += a._count.teilnehmer;
+    if (laeuft) s.reservierungen += 1;
     if (a.status === "WARTELISTE") s.wartelistePersonen += a._count.teilnehmer;
     if (a.zahlungsStatus === "BEZAHLT") s.bezahltCents += a.gesamtpreisCents;
     else s.offenCents += a.gesamtpreisCents;

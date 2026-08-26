@@ -49,6 +49,10 @@ export async function statusSetzen(formular: FormData): Promise<void> {
       // Die Zeitstempel mitführen, damit später nachvollziehbar
       // bleibt, wann was passiert ist.
       storniertAm: neu === "STORNIERT" ? new Date() : null,
+      // Wer von Hand bestätigt oder storniert, beendet damit eine
+      // laufende Reservierung. Bliebe sie stehen, hielte sie den Platz
+      // weiter besetzt, obwohl niemand mehr auf eine Zahlung wartet.
+      reserviertBis: null,
       reaktiviertAm:
         vorhanden.status === "STORNIERT" && neu !== "STORNIERT"
           ? new Date()
@@ -73,6 +77,15 @@ export async function zahlungSetzen(formular: FormData): Promise<void> {
     where: { id },
     data: {
       zahlungsStatus: neu,
+      /* Von Hand als bezahlt markieren bestätigt auch die Anmeldung.
+         Das ist der Weg für Barzahlung und Überweisung — und der
+         Notausgang, falls eine Rückmeldung des Anbieters einmal
+         ausbleibt. Eine bezahlte Anmeldung, die als bloße Reservierung
+         weiterläuft und dann verfällt, wäre die schlechteste
+         Überraschung von allen. */
+      ...(neu === "BEZAHLT" && vorhanden.status === "RESERVIERT"
+        ? { status: "BESTAETIGT" as const, reserviertBis: null }
+        : {}),
       bezahltAm: neu === "BEZAHLT" ? (vorhanden.bezahltAm ?? new Date()) : null,
       // Der Betrag wird NICHT aus dem Formular übernommen, sondern aus
       // der Anmeldung. Was bezahlt wurde, ist der Preis, der bei der
