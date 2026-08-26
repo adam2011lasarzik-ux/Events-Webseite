@@ -71,6 +71,10 @@ export async function POST(anfrage: Request) {
         // bestehen; ihr Platz läuft über reserviertBis von selbst aus.
         break;
 
+      case "checkout.session.async_payment_failed":
+        await fehlgeschlagenVermerken(ereignis.data.object as Stripe.Checkout.Session);
+        break;
+
       case "charge.refunded":
         await erstattungVermerken(ereignis.data.object as Stripe.Charge);
         break;
@@ -141,6 +145,50 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
       bezahlterBetragCents: sitzung.amount_total ?? anmeldung.gesamtpreisCents,
       bezahltAm: new Date(),
     },
+  });
+}
+
+/**
+ * Eine verzögert fehlgeschlagene Zahlung.
+ *
+ * Nicht jede Zahlart entscheidet sich sofort: Bei PayPal und ähnlichen
+ * Wegen meldet der Anbieter erst später, dass es doch nicht geklappt
+ * hat. Ohne diesen Zweig bliebe die Anmeldung stumm reserviert und
+ * hielte den Platz bis zum Ende der halben Stunde besetzt, obwohl
+ * längst feststeht, dass kein Geld kommt.
+ *
+ * Bewusst wird die Anmeldung NICHT gelöscht und NICHT storniert: Der
+ * Mensch soll es noch einmal versuchen können, ohne alles neu
+ * einzutippen. Beendet wird nur die Reservierung — der Platz ist damit
+ * sofort wieder frei, und die Anmeldung erscheint überall als „nicht
+ * abgeschlossen".
+ */
+async function fehlgeschlagenVermerken(sitzung: Stripe.Checkout.Session): Promise<void> {
+  const id = sitzung.metadata?.anmeldungId ?? sitzung.client_reference_id;
+  if (!id) {
+    console.error("Fehlgeschlagene Zahlung ohne Anmeldenummer:", sitzung.id);
+    return;
+  }
+
+  const anmeldung = await db.registration.findUnique({ where: { id } });
+  if (!anmeldung) {
+    console.error("Fehlgeschlagene Zahlung für unbekannte Anmeldung:", id);
+    return;
+  }
+
+  /* Wer schon bezahlt hat, bleibt bezahlt. Käme eine alte
+     Fehlermeldung nach einem geglückten zweiten Anlauf an, würde sie
+     sonst eine bestätigte Anmeldung wieder aufreissen. */
+  if (anmeldung.zahlungsStatus === "BEZAHLT" || anmeldung.status !== "RESERVIERT") return;
+
+  /* Die Frist auf JETZT setzen statt auf null: Die ganze Seite —
+     Platzzählung, Adminliste, Abschluss-Seite — erkennt eine
+     abgelaufene Reservierung genau daran, dass `reserviertBis` in der
+     Vergangenheit liegt (lib/plaetze.ts, belegtFilter). So gilt der
+     Fall überall sofort als beendet, ohne eine zweite Regel dafür. */
+  await db.registration.update({
+    where: { id },
+    data: { reserviertBis: new Date(), zahlungsReferenz: sitzung.id },
   });
 }
 

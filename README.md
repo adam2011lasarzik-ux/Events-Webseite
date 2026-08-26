@@ -302,13 +302,38 @@ beidem — sonst würde ein laufender Bezahlvorgang doppelt verkauft.
 | Reservierung läuft | **Bezahlung läuft**, dazu die Ablaufzeit |
 | Reservierung abgelaufen, unbezahlt | **Nicht abgeschlossen** |
 
+### Einrichten
+
+Die Klick-für-Klick-Anleitung — Konto anlegen, Testmodus, PayPal an,
+Link aus, Testschlüssel, Webhook, Auszahlungskonto — steht in
+**[docs/stripe-einrichten.md](docs/stripe-einrichten.md)**.
+
+Ob alles hinterlegt ist, beantwortet:
+
+```
+npm run zahlung:pruefen
+```
+
+Der Befehl prüft Schlüssel, Webhook-Geheimnis und öffentliche Adresse
+auf Vollständigkeit und Plausibilität, **ohne das Netz zu berühren** —
+er lässt sich also auch auf dem Server gefahrlos laufen. Einen
+Schlüssel gibt er nie im Klartext aus: Ausgaben landen in
+Protokolldateien, und ein Protokoll ist kein sicherer Ort für ein
+Geheimnis.
+
 ### Was noch offen ist
 
 Ein echter Durchlauf mit einer Stripe-Testkarte braucht eine von außen
-erreichbare Adresse für die Rückmeldung — also das Hosting. Bis dahin
-sind alle eigenen Teile geprüft (Unterschrift, doppelte Meldungen,
-Betragsabgleich, Reservierungsablauf, Testmodus-Riegel), der Klick durch
-Stripes Bezahlseite selbst noch nicht.
+erreichbare Adresse für die Rückmeldung — also das Hosting. Zwei Dinge
+gehen ohne sie nicht: Stripe kann keinen Webhook zustellen, und aus der
+Entwicklungsumgebung heraus ist `api.stripe.com` netzseitig gesperrt
+(gemessen, nicht vermutet).
+
+Geprüft sind deshalb alle **eigenen** Teile — Unterschrift, doppelte
+Meldungen, Betragsabgleich, fehlgeschlagene Zahlung, Reservierungsablauf,
+Doppelklick, zweiter Anlauf, Testmodus-Riegel — gegen eine örtliche
+Attrappe des Anbieters. Der Klick durch Stripes echte Bezahlseite bleibt
+bis zum Hosting offen.
 
 ## Der Gründerbereich
 
