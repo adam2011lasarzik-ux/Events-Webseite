@@ -37,9 +37,22 @@ h1, h2, h3, h4 {
      hyphens trennt sauber mit Bindestrich („Veranstal-tungen“); das
      funktioniert, weil <html lang="de"> gesetzt ist. overflow-wrap ist
      die Rückfallebene für Browser ohne deutsche Trennregeln und für
-     Wörter, die auch getrennt nicht passen. */
+     Wörter, die auch getrennt nicht passen. Es greift erst, wenn ein
+     Wort wirklich nicht passt — normale Umbrüche ändert es nicht. */
   hyphens: auto;
-  overflow-wrap: break-word;
+  /* „anywhere", nicht „break-word": Nur `anywhere` verkleinert auch die
+     MINDESTBREITE, die ein Element beansprucht. Mit `break-word` bricht
+     ein langes Wort zwar um, verlangt aber trotzdem seine volle Breite —
+     und schiebt damit die ganze Seite zur Seite.
+
+     Gemessen an „Unternehmerabend": Auf der kompakten Detailseite liess
+     sich die Seite bei 320 Pixel um 64 Pixel schieben, bei 375 noch um 9.
+     Mit `anywhere` bleibt es bei 0.
+
+     Das ist kein Sonderfall: Eventtitel kommen aus der Datenbank und
+     können beliebig lang sein. Weiche Trennstriche im Wörterbuch helfen
+     dort nicht — nur diese Regel. */
+  overflow-wrap: anywhere;
 }
 
 h1 { font-size: var(--gr-3xl); }

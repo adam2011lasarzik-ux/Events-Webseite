@@ -1,4 +1,16 @@
 .kopf { display: grid; gap: var(--a-6); align-items: center; margin-bottom: var(--a-7); }
+
+/* Der Eventtitel kommt aus der Datenbank. Ab 62rem steht er in einer
+   knapp halb so breiten Spalte (Regel ganz unten): „Unternehmerabend"
+   war dort zwischen 1000 und 1200 Pixeln breiter als seine Spalte und
+   wurde von `overflow-wrap: anywhere` mitten im Wort zerlegt.
+
+   Die Obergrenze in `cqi` bindet die Schriftgrösse an die Breite der
+   TEXTSPALTE — nicht an die des ganzen Rasters und nicht ans Fenster,
+   denn nur die Spalte entscheidet, was hineinpasst. Ausserhalb von
+   1000–1200 Pixeln greift sie nicht; dort bleibt alles wie bisher. */
+.kopf > div:first-child { container-type: inline-size; }
+.kopf h1 { font-size: min(var(--gr-3xl), 11cqi); }
 .untertitel { font-size: var(--gr-l); color: var(--text-leise); margin-bottom: var(--a-6); }
 .knoepfe { display: flex; flex-wrap: wrap; align-items: center; gap: var(--a-4); }
 .bild { background: var(--tiefblau); border-radius: var(--rund-l); padding: var(--a-5); }

@@ -12,6 +12,8 @@
   border-radius: var(--rund-l);
   padding: var(--a-6);
   position: relative;
+  /* Messbereich für die Titelgrösse weiter unten. */
+  container-type: inline-size;
 }
 /* Die Nummern stehen hier zu Recht: Der Tag läuft wirklich in
    dieser Reihenfolge ab. */
@@ -42,7 +44,16 @@
   margin-bottom: var(--a-2);
 }
 
-.titel { margin-bottom: var(--a-3); }
+/* Wie bei der Event-Karte: Der Text kommt aus der Datenbank, und die
+   Spalte eines Schritts ist im dreispaltigen Raster schmal. Gemessen
+   an „Ankommen" brach der Titel zwischen 840 und 860 Pixeln mitten im
+   Wort — dort ist der Innenraum eines Schritts nur 187 Pixel breit.
+   `cqi` misst genau diesen Innenraum, nicht die Aussenkante. Ab rund
+   900 Pixeln greift wieder die normale Grösse. */
+.titel {
+  margin-bottom: var(--a-3);
+  font-size: min(var(--gr-xl), 15.8cqi);
+}
 .text { color: var(--text-leise); }
 
 @media (min-width: 52rem) {

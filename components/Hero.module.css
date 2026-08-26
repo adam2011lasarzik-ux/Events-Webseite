@@ -58,6 +58,11 @@
   padding: var(--a-5);
   box-shadow: var(--schatten);
 }
+
+/* Der Kopfbereich ist der einzige Bildkasten ohne festes
+   Seitenverhältnis. Ohne Mindesthöhe fiele die Ersatzfläche (Wortmarke
+   statt Foto) zu einem Streifen zusammen. */
+.bildbereich { min-height: 12rem; }
 .fotoHinweis {
   position: absolute;
   left: var(--a-4);

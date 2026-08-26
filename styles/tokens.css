@@ -90,7 +90,13 @@
   --gr-l:    clamp(1.15rem, 0.9rem + 0.9vw, 1.4rem);
   --gr-xl:   clamp(1.5rem, 1.1rem + 1.7vw, 2.1rem);
   --gr-2xl:  clamp(2rem, 1.3rem + 3vw, 3.1rem);
-  --gr-3xl:  clamp(2.6rem, 1.5rem + 4.4vw, 4.3rem);
+  /* Die Untergrenze von 2.6rem war für 320-Pixel-Handys zu gross:
+     „Unternehmerabend" ist dort 364 Pixel breit, die Spalte aber nur
+     280 — das Wort wurde mitten drin zerlegt. Das `min()` nimmt
+     unterhalb von rund 700 Pixeln die flachere zweite Kurve und ab
+     dort wieder die bisherige, die Grösse ändert sich also nur auf
+     Handys und geht dabei stufenlos ineinander über. */
+  --gr-3xl:  clamp(2rem, min(1.5rem + 4.4vw, 0.7rem + 6.2vw), 4.3rem);
 
   /* Abstände */
   --a-1: 0.25rem;

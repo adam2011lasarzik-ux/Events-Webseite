@@ -46,7 +46,15 @@
   display: block;
 }
 
-.inhalt { display: grid; align-content: start; gap: var(--a-2); }
+/* Eigener Messbereich für den Titel darunter. Die Textspalte ist
+   je nach Kartenzahl unterschiedlich breit — beim Fenster nachzufragen
+   hilft hier nichts. */
+.inhalt {
+  display: grid;
+  align-content: start;
+  gap: var(--a-2);
+  container-type: inline-size;
+}
 
 .kategorie {
   display: inline-block;
@@ -56,7 +64,18 @@
   text-transform: uppercase;
   color: var(--zier);
 }
-.titel { margin-top: var(--a-1); }
+/* Der Titel kommt aus der Datenbank und kann ein langes deutsches
+   Wort enthalten. `overflow-wrap: anywhere` (styles/global.css)
+   verhindert zwar zuverlässig jeden Überlauf, zerlegt das Wort dafür
+   aber an beliebiger Stelle — „Unternehmerabe/nd" stand so auf JEDER
+   Desktop-Breite in der Karte. Die Obergrenze in `cqi` bindet die
+   Schriftgrösse an die Breite der Textspalte: Wörter bis rund
+   16 Zeichen passen dadurch in eine Zeile. Längere werden weiterhin
+   hart getrennt — sie laufen aber nie über. */
+.titel {
+  margin-top: var(--a-1);
+  font-size: min(var(--gr-xl), 9.4cqi);
+}
 .kurz { color: var(--text-leise); max-width: 52ch; margin-top: var(--a-2); }
 
 .daten {

@@ -1,4 +1,7 @@
+/* Eigener Messbereich: Der Block ist auf breiten Seiten zweispaltig,
+   die Überschrift steht dann in der linken Spalte. */
 .band {
+  container-type: inline-size;
   background: var(--dunkel);
   color: var(--text-invers);
   border-radius: var(--rund-xl);
@@ -9,7 +12,14 @@
   position: relative;
   overflow: hidden;
 }
-.titel { max-width: 18ch; }
+/* Bei 320 Pixeln ist „mitzumachen?" 254 Pixel breit, der Kasten aber
+   nur 216 — ohne Obergrenze zerlegte `overflow-wrap: anywhere` das
+   Wort zu „mitzumache/n?". Ab etwa 360 Pixeln greift wieder die
+   normale Grösse. */
+.titel {
+  max-width: 18ch;
+  font-size: min(var(--gr-2xl), 12.4cqi);
+}
 .text { color: rgba(234, 241, 248, 0.78); margin-top: var(--a-4); max-width: 42ch; }
 .knoepfe { display: flex; flex-wrap: wrap; gap: var(--a-3); }
 .courtEcke {

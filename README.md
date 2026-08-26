@@ -372,10 +372,29 @@ Business-Design wird daraus eine Zeitschiene.
 - **Drei Designs** je Veranstaltung (siehe oben)
 - **Gründerbereich** mit Foto, auf der Startseite und je Event
   einschaltbar
-- Nutzbar ab 320 Pixel Breite, mit Tastatur bedienbar. Nachgemessen:
-  12 Seiten × 17 Bildschirmbreiten (320 bis 1920) — keine davon lässt
-  sich seitwärts schieben, und die große Wortmarke im Fußbereich steht
-  überall vollständig.
+- **Durchgehend responsiv**, nutzbar ab 320 Pixel Breite, mit Tastatur
+  bedienbar. Nachgemessen wurde nicht stichprobenweise, sondern
+  fließend: 16 Seiten in allen drei Designs, 320 bis 1920 Pixel in
+  10-Pixel-Schritten, dazu drei Fensterhöhen — 7728 Messungen. Geprüft
+  wird dabei auf vier Dinge:
+
+  | Was | Warum |
+  |---|---|
+  | seitliches Schieben | die naheliegende Prüfung |
+  | abgeschnittene Inhalte | eine Fläche mit `overflow: hidden` schneidet sauber weg — die Seite scrollt nicht, der Inhalt fehlt trotzdem |
+  | überlappende Elemente | Text, der auf Text liegt |
+  | Tippziele und Schriftgrößen | mindestens 44 Pixel bzw. 12 Pixel auf Touch-Breiten |
+
+  Ergebnis: null Funde. Zusätzlich geprüft: Handy im Querformat, flache
+  Fenster und das aufgeklappte Menü.
+
+  **Lange deutsche Wörter** sind dabei der eigentliche Gegner —
+  Eventtitel kommen aus der Datenbank und können beliebig lang sein.
+  Zwei Regeln fangen das ab: `overflow-wrap: anywhere` verhindert jeden
+  Überlauf, und Überschriften mit Inhalten aus der Datenbank bekommen
+  eine Obergrenze in `cqi`, die ihre Schriftgröße an die Breite ihrer
+  eigenen Spalte bindet (Event-Karte, Ablauf-Schritte, Titel der
+  Detailseite, Abschlussblock).
 
 ## Was diese Version bewusst noch nicht kann
 
