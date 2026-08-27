@@ -29,3 +29,7 @@ next-env.d.ts
 # ein Konflikt. Beim Hoster zeigt BILDER_VERZEICHNIS auf einen Ordner,
 # den ein Deployment nicht überschreibt.
 /daten/
+
+# Bildschirmfotos und Messdaten der Prüfungen. Entstehen bei jedem
+# Lauf neu und gehören nicht ins Repository.
+/pruefung/.ausgabe/

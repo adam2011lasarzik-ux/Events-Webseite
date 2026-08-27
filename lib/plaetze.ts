@@ -33,15 +33,16 @@ export function platzstand(
   return { lage: "offen", frei, zahlZeigen: false };
 }
 
-/** Passt eine Gruppe dieser Größe noch hinein? */
-export function passtGruppe(
-  maxPersonen: number | null,
-  belegtePersonen: number,
-  gruppengroesse: number,
-): boolean {
-  if (maxPersonen === null) return true;
-  return belegtePersonen + gruppengroesse <= maxPersonen;
-}
+/* Hier stand einmal `passtGruppe(maxPersonen, belegtePersonen,
+   gruppengroesse)`. Sie wurde von niemandem mehr aufgerufen und
+   beantwortete dieselbe Frage wie `plaetzeReichen()` in
+   lib/zahlungRegeln.ts — nur ohne die Ausnahme für die eigene, gerade
+   zu bezahlende Anmeldung. Zwei Funktionen für dieselbe Frage, von
+   denen die stillere die falschere ist, sind eine Falle für den
+   nächsten Menschen, der hier etwas ändert. Deshalb entfernt.
+
+   Die Frage „passt diese Gruppe noch?" beantwortet ausschliesslich
+   `plaetzeReichen()`. */
 
 /**
  * Welche Anmeldungen belegen einen Platz?

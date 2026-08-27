@@ -484,6 +484,45 @@ ausgefüllt. Beide sollten vor der Veröffentlichung von einer
 fachkundigen Person geprüft werden. Dasselbe gilt für AGB und
 Widerrufsrecht, sobald online bezahlt wird.
 
+## Prüfungen
+
+Rund 350 automatische Prüfungen laufen gegen die echte Datenbank und
+den echten Server — nicht gegen nachgebaute Logik. Sie liegen in
+`pruefung/`; wie man sie startet, steht in
+**[docs/pruefen.md](docs/pruefen.md)**.
+
+```bash
+bash pruefung/alle.sh          # alles, rund zehn Minuten
+npm run typen                  # TypeScript prüfen
+npm run build                  # bauen
+npm run zahlung:pruefen        # Zahlungs-Einrichtung prüfen (ohne Netz)
+```
+
+Einen eigenen Linter gibt es bewusst nicht: `next lint` wurde in
+Next 16 entfernt, und ESLint wäre eine weitere Abhängigkeit in einem
+Projekt, das mit acht auskommt. Geprüft wird über TypeScript im
+strengen Modus, den Bau und die Prüflisten.
+
+## Beim Deployment beachten
+
+- **Node ab 20.9** — steht als `engines` in der `package.json`, weil
+  Next 16 es verlangt. Beim Hoster die Version entsprechend einstellen.
+- **`npm ci` muss die devDependencies mitinstallieren.** Der
+  `postinstall`-Schritt ruft `prisma generate` auf, und die
+  Prisma-**CLI** ist eine devDependency. Mit `--omit=dev` bricht die
+  Installation ab.
+- **Migrationen mit `npm run db:deploy`**, niemals mit `db:migrate`.
+  `prisma migrate dev` ist der Entwicklungsbefehl und kann Daten
+  zurücksetzen; `migrate deploy` wendet nur an, was vorliegt.
+- **`BILDER_VERZEICHNIS`** auf einen Ordner zeigen lassen, den ein
+  Deployment nicht überschreibt (siehe oben unter Titelbilder).
+- **Bekannte Meldung von `npm audit`:** drei Einträge mit hoher
+  Einstufung in `deepmerge-ts → @prisma/config → prisma`. Das betrifft
+  ausschliesslich die **Prisma-CLI** (devDependency, läuft beim Bauen),
+  nicht die ausgelieferte Anwendung. `npm audit fix --force` würde auf
+  Prisma 6 zurückstufen und das Projekt brechen — also nicht ausführen.
+  Zu beobachten, bis Prisma nachzieht.
+
 ## Noch offen
 
 Datum und Uhrzeit des ersten Events · genaue Adresse · Kontaktdaten ·
