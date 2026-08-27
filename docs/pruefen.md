@@ -20,11 +20,17 @@ npm run build
 In `.env` müssen `DATABASE_URL` und `OEFFENTLICHE_ADRESSE` stehen; die
 Vorlage dafür ist `.env.example`.
 
-Für die Browser-Prüfungen wird Playwright gebraucht:
+Für die vier Browser-Prüfungen wird Chromium gebraucht. Playwright
+selbst steht als devDependency in der `package.json` und kommt mit
+`npm install` mit; der Browser wird einmal separat geholt:
 
 ```bash
 npx playwright install chromium
 ```
+
+> **Beim Hoster:** Dort wird der Browser nicht gebraucht. Damit die
+> Installation ihn nicht trotzdem herunterlädt, `npm ci` mit
+> `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1` aufrufen.
 
 ---
 

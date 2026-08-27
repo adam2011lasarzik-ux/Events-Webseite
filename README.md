@@ -510,7 +510,13 @@ strengen Modus, den Bau und die Prüflisten.
 - **`npm ci` muss die devDependencies mitinstallieren.** Der
   `postinstall`-Schritt ruft `prisma generate` auf, und die
   Prisma-**CLI** ist eine devDependency. Mit `--omit=dev` bricht die
-  Installation ab.
+  Installation ab. Setze dabei `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1` —
+  Playwright gehört zu den Prüfungen und braucht auf dem Server keinen
+  Browser:
+
+  ```bash
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm ci
+  ```
 - **Migrationen mit `npm run db:deploy`**, niemals mit `db:migrate`.
   `prisma migrate dev` ist der Entwicklungsbefehl und kann Daten
   zurücksetzen; `migrate deploy` wendet nur an, was vorliegt.
@@ -522,6 +528,25 @@ strengen Modus, den Bau und die Prüflisten.
   nicht die ausgelieferte Anwendung. `npm audit fix --force` würde auf
   Prisma 6 zurückstufen und das Projekt brechen — also nicht ausführen.
   Zu beobachten, bis Prisma nachzieht.
+
+## Rechtliche Seiten
+
+Impressum, Datenschutz, AGB sowie Widerruf und Stornierung sind als
+**sichtbar gekennzeichnete Platzhalter** vorhanden und aus dem
+Fussbereich jeder Seite erreichbar. Was davon fertig ist, was du
+selbst ausfüllen kannst und was fachkundig geprüft gehört, steht in
+**[docs/rechtliches.md](docs/rechtliches.md)**.
+
+Zwei Punkte daraus, weil sie leicht übersehen werden:
+
+- Die Seite heisst **„Widerruf und Stornierung"**, nicht
+  „Widerrufsbelehrung", und enthält bewusst **keine** Standardbelehrung.
+  Bei Freizeitveranstaltungen zu einem festen Termin kann das
+  Widerrufsrecht nach § 312g Abs. 2 Nr. 9 BGB ausgeschlossen sein — die
+  Frage gehört beantwortet, bevor Tickets verkauft werden.
+- Die Angabe **„inkl. MwSt."** steht an fünf Stellen, eine davon auf
+  der Bezahlseite. Ob sie zutrifft, hängt an der Gewerbeanmeldung
+  (§ 19 UStG). Fundstellen in `docs/rechtliches.md`.
 
 ## Noch offen
 

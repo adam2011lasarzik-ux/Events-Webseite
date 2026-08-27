@@ -28,6 +28,7 @@ export default function Seite() {
       </p>
       <div className={stil.inhalt}>
         <p>{t.recht.agbText}</p>
+        <p>{t.recht.agbHinweisPflichtinfos}</p>
         <p>{t.recht.agbStorno}</p>
         <p>{t.recht.hinweisJurist}</p>
       </div>

@@ -374,19 +374,34 @@ export const de = {
        Code (lib/zahlung.ts). Sie steht hier, damit sie beim späteren
        Ausformulieren nicht vergessen wird — sie ist der einzige Punkt,
        an dem Daten das Haus verlassen. */
+    /* Vollständig aufgezählt nach lib/zahlung.ts und
+       lib/zahlungRegeln.ts — der Titel der Veranstaltung und die
+       Personenzahl gehen als Beschriftung des Postens mit. */
     datenschutzZahlung:
-      "Beim Bezahlen werden Betrag, Anmeldenummer und E-Mail-Adresse an den Zahlungsanbieter " +
-      "Stripe übermittelt; bezahlt wird ausschließlich auf dessen gesicherter Seite. " +
+      "Beim Bezahlen werden an den Zahlungsanbieter Stripe übermittelt: der Betrag, die " +
+      "Anmeldenummer, die E-Mail-Adresse sowie der Titel der Veranstaltung und die Anzahl " +
+      "der Personen. Bezahlt wird ausschließlich auf der gesicherten Seite von Stripe. " +
       "Kartennummern und Bankdaten erreichen diese Seite zu keinem Zeitpunkt — sie werden " +
-      "hier weder entgegengenommen noch gespeichert. Diese Angabe gehört in die fertige " +
-      "Erklärung.",
+      "hier weder entgegengenommen noch gespeichert. Welche Rechtsgrundlage gilt, wie lange " +
+      "gespeichert wird und wie der Auftragsverarbeitungsvertrag mit Stripe einzuordnen ist, " +
+      "gehört in die fertige Erklärung.",
     hinweisJurist:
       "Beide Texte sollten vor der Veröffentlichung von einer fachkundigen Person geprüft " +
       "werden. Das gilt besonders, weil Minderjährige teilnehmen und später Zahlungen " +
       "abgewickelt werden.",
+    /* Die frühere Fassung sagte pauschal „diese Seite setzt keine
+       Cookies". Das stimmt nicht: lib/adminAuth.ts setzt für die
+       Anmeldung am Adminbereich das Cookie `vera_admin`. Besucher
+       bekommen keines, und ein technisch notwendiges Sitzungscookie
+       ist auch nicht einwilligungspflichtig — eine absolute Aussage,
+       die nachweislich falsch ist, gehört auf eine Datenschutzseite
+       trotzdem nicht. */
     keineCookies:
-      "Diese Seite setzt keine Cookies, zählt keine Besucher und lädt nichts von fremden " +
-      "Servern nach. Deshalb gibt es hier auch kein Zustimmungsfenster.",
+      "Diese Seite zählt keine Besucher, verfolgt niemanden über andere Seiten hinweg und " +
+      "lädt keine Inhalte von fremden Servern nach — auch die Schriften liegen auf dieser " +
+      "Domain. Es gibt keine Werbe- oder Statistik-Cookies und deshalb auch kein " +
+      "Zustimmungsfenster. Das einzige Cookie entsteht, wenn sich der Betreiber am " +
+      "Verwaltungsbereich anmeldet; es hält nur diese Anmeldung und ist technisch notwendig.",
 
     /* ── AGB und Widerruf ──────────────────────────────────────────
        Beide werden Pflicht, sobald online bezahlt wird. Sie stehen
@@ -396,30 +411,58 @@ export const de = {
        irgendwann versehentlich online. */
     agb: "AGB",
     agbTitel: "Allgemeine Geschäftsbedingungen",
+    /* Die frühere Fassung las sich, als seien AGB Pflicht. Sind sie
+       nicht — ohne eigene AGB gilt schlicht das Gesetz. Pflicht sind
+       dagegen bestimmte Informationen VOR Vertragsschluss im
+       Fernabsatz. Welche das hier sind, entscheidet keine
+       Programmiererin. */
     agbText:
-      "Hier stehen später die Bedingungen, unter denen eine Anmeldung zustande kommt: wer " +
-      "Vertragspartner ist, welche Leistung eine Veranstaltung umfasst, die Preise inklusive " +
-      "Mehrwertsteuer, wie und wann bezahlt wird, was bei Verhinderung gilt, was passiert, " +
-      "wenn eine Veranstaltung ausfällt oder verlegt wird, die Haftung, die Regeln vor Ort " +
-      "und die Besonderheiten bei Minderjährigen.",
+      "Eigene Geschäftsbedingungen sind nicht für jede Webseite vorgeschrieben. Ohne sie " +
+      "gilt das Gesetz. Wenn VERA eigene verwenden soll, gehören sie zum tatsächlichen " +
+      "Ablauf: wer Vertragspartner ist, wann eine Anmeldung verbindlich wird, welche " +
+      "Leistung eine Veranstaltung umfasst, wie und wann bezahlt wird, was bei Verhinderung " +
+      "gilt, was bei Ausfall oder Verlegung passiert, die Haftung, die Regeln vor Ort und " +
+      "die Besonderheiten bei Minderjährigen.",
+    agbHinweisPflichtinfos:
+      "Unabhängig davon gibt es beim Verkauf über das Internet Angaben, die vor dem " +
+      "Absenden der Bestellung erscheinen müssen. Welche das für dieses Eventmodell sind " +
+      "und wo sie stehen müssen, gehört fachkundig geprüft.",
     agbStorno:
-      "In denselben Text gehören die Stornobedingungen: bis wann kostenfrei abgesagt werden " +
-      "kann, welche Gebühr danach anfällt und wie Erstattungen ablaufen. Sie bekommen " +
-      "bewusst keine eigene Seite — sie gehören dorthin, wo auch der Rest des Vertrags steht.",
+      "In denselben Text gehören die Stornobedingungen: ob und bis wann eine Buchung " +
+      "abgesagt werden kann, welche Gebühr dann anfällt und wie Erstattungen ablaufen. Das " +
+      "ist eine vertragliche Regelung und etwas anderes als das gesetzliche Widerrufsrecht " +
+      "(siehe „Widerruf und Stornierung“). Sie bekommen bewusst keine eigene Seite — sie " +
+      "gehören dorthin, wo auch der Rest des Vertrags steht.",
 
-    widerruf: "Widerruf",
-    widerrufTitel: "Widerrufsbelehrung",
+    /* Hiess einmal „Widerruf" / „Widerrufsbelehrung". Beides setzt
+       voraus, dass es ein Widerrufsrecht überhaupt gibt — und genau
+       das steht bei Freizeitveranstaltungen mit festem Termin nicht
+       fest. Ein Seitentitel darf die Frage nicht vorwegnehmen, die
+       die Seite stellt. */
+    widerruf: "Widerruf & Stornierung",
+    widerrufTitel: "Widerruf und Stornierung",
+    widerrufEinleitung:
+      "Zwei Dinge, die oft verwechselt werden — sie haben nichts miteinander zu tun und " +
+      "werden hier deshalb getrennt behandelt.",
+    widerrufUeberschrift: "1. Das gesetzliche Widerrufsrecht",
     widerrufText:
-      "Hier steht später, ob und wie eine Anmeldung widerrufen werden kann, in welcher Frist, " +
-      "wie ein Widerruf erklärt wird und wie bereits gezahltes Geld zurückkommt.",
-    /* Der eine Punkt, der wirklich geprüft gehört. Ich benenne ihn,
-       damit er nicht übersehen wird — entscheiden kann ihn nur eine
-       fachkundige Person. */
+      "Ob für diese Veranstaltungen ein gesetzliches Widerrufsrecht besteht, ist noch nicht " +
+      "geklärt. Deshalb steht hier bewusst KEINE Widerrufsbelehrung: Eine Belehrung über " +
+      "ein Recht, das es womöglich gar nicht gibt, wäre irreführend — eine fehlende " +
+      "Belehrung über ein Recht, das besteht, wäre ein Fehler mit Folgen.",
     widerrufHinweis:
-      "Ein Punkt gehört dabei ausdrücklich geprüft: Bei Freizeitveranstaltungen zu einem " +
-      "festen Termin kann das Widerrufsrecht nach § 312g Absatz 2 Nummer 9 BGB " +
-      "ausgeschlossen sein. Ob das für diese Veranstaltungen gilt und wie die Belehrung dann " +
-      "lauten muss, ist eine Rechtsfrage und keine Programmierfrage.",
+      "Der Grund für die offene Frage: Bei Verträgen über Dienstleistungen im Zusammenhang " +
+      "mit Freizeitbetätigungen, für die ein bestimmter Termin vorgesehen ist, kann das " +
+      "Widerrufsrecht nach § 312g Absatz 2 Nummer 9 BGB ausgeschlossen sein. Ein Padel-" +
+      "Nachmittag an einem festen Datum fällt möglicherweise darunter. Ob das hier zutrifft " +
+      "und wie die Information dann lauten muss, ist eine Rechtsfrage und keine " +
+      "Programmierfrage.",
+    stornoUeberschrift: "2. Stornierung durch Teilnehmende",
+    stornoText:
+      "Davon zu unterscheiden ist die Stornierung: eine vertragliche Regelung, die VERA " +
+      "selbst festlegt — ob eine Buchung abgesagt werden kann, bis wann, zu welchen Kosten " +
+      "und wie das Geld zurückkommt. Sie gilt unabhängig davon, ob ein gesetzliches " +
+      "Widerrufsrecht besteht, und gehört in die Geschäftsbedingungen.",
   },
 
   /**

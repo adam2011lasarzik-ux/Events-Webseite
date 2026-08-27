@@ -17,7 +17,7 @@ const page = await ctx.newPage();
 
 for (const [name, pfad, ueberschrift] of [
   ["AGB", "/agb", "Allgemeine Geschäftsbedingungen"],
-  ["Widerruf", "/widerruf", "Widerrufsbelehrung"],
+  ["Widerruf", "/widerruf", "Widerruf und Stornierung"],
 ]) {
   const antwort = await page.goto(BASIS + pfad, { waitUntil: "networkidle" });
   pruefe(`${name}: Seite ist erreichbar`, antwort.status() === 200, `Antwort ${antwort.status()}`);
@@ -40,9 +40,25 @@ for (const [name, pfad, ueberschrift] of [
 /* Der Punkt, der leicht übersehen wird — und der Grund, warum die
    Seite überhaupt jetzt schon entsteht. */
 await page.goto(BASIS + "/widerruf", { waitUntil: "networkidle" });
+const wText = await page.locator("body").innerText();
 pruefe(
   "Widerruf: benennt die zu prüfende Ausnahme für Freizeitveranstaltungen",
-  (await page.locator("body").innerText()).includes("312g"),
+  wText.includes("312g"),
+);
+/* Der Titel darf die Frage nicht vorwegnehmen: „Widerrufsbelehrung"
+   setzt voraus, dass ein Widerrufsrecht besteht — und genau das ist
+   offen. */
+pruefe(
+  "Widerruf: nennt sich NICHT „Widerrufsbelehrung“",
+  !wText.includes("Widerrufsbelehrung") || wText.includes("KEINE Widerrufsbelehrung"),
+);
+pruefe(
+  "Widerruf: trennt gesetzliches Widerrufsrecht und Stornierung",
+  wText.includes("Widerrufsrecht") && wText.includes("Stornierung"),
+);
+pruefe(
+  "Widerruf: baut KEINE 14-Tage-Belehrung ein",
+  !/14\s*Tag/i.test(wText),
 );
 
 await page.goto(BASIS + "/agb", { waitUntil: "networkidle" });
@@ -58,6 +74,33 @@ pruefe("Datenschutz: nennt jetzt den Zahlungsanbieter", dsText.includes("Stripe"
 pruefe(
   "Datenschutz: sagt, dass Kartendaten diese Seite nie erreichen",
   dsText.includes("Kartennummern"),
+);
+/* Vollständigkeit: An Stripe gehen auch Titel und Personenzahl. */
+pruefe(
+  "Datenschutz: nennt auch Titel und Personenzahl",
+  dsText.includes("Titel der Veranstaltung") && dsText.includes("Anzahl"),
+);
+/* Die frühere Fassung behauptete pauschal „setzt keine Cookies" —
+   das Admin-Cookie gibt es aber. */
+pruefe(
+  "Datenschutz: behauptet NICHT mehr pauschal „keine Cookies“",
+  !/setzt keine Cookies/i.test(dsText),
+);
+pruefe(
+  "Datenschutz: benennt das Cookie des Verwaltungsbereichs",
+  /technisch notwendig/i.test(dsText),
+);
+
+// AGB: dürfen nicht als Pflicht dargestellt werden
+await page.goto(BASIS + "/agb", { waitUntil: "networkidle" });
+const agbText = await page.locator("body").innerText();
+pruefe(
+  "AGB: stellen klar, dass eigene AGB nicht vorgeschrieben sind",
+  /nicht für jede Webseite vorgeschrieben/i.test(agbText),
+);
+pruefe(
+  "AGB: unterscheiden Stornierung vom gesetzlichen Widerrufsrecht",
+  /etwas anderes als das gesetzliche Widerrufsrecht/i.test(agbText),
 );
 
 // Fußbereich auf einer beliebigen Seite
