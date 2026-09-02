@@ -33,14 +33,19 @@ export async function generateMetadata({
   searchParams: Promise<{ nr?: string }>;
 }): Promise<Metadata> {
   const { nr } = await searchParams;
-  if (!nr) return { title: texte.danke.offenTitel };
+  // Die Adresse trägt eine unratbare, aber keine geheime Kennung — der
+  // Besucher braucht sie, um ohne Konto zu seiner Zahlung zurückzufinden.
+  // Eine unratbare Adresse ist trotzdem kein Zugriffsschutz: Gelangt sie
+  // nach außen, darf sie nicht in einer Suchmaschine landen.
+  const robots: Metadata["robots"] = { index: false, follow: false };
+  if (!nr) return { title: texte.danke.offenTitel, robots };
   const anmeldung = await db.registration.findUnique({
     where: { id: nr },
     select: { zahlungsStatus: true, gesamtpreisCents: true },
   });
   const bezahlt =
     anmeldung?.zahlungsStatus === "BEZAHLT" || (anmeldung?.gesamtpreisCents ?? 1) <= 0;
-  return { title: bezahlt ? texte.danke.bezahltTitel : texte.danke.offenTitel };
+  return { title: bezahlt ? texte.danke.bezahltTitel : texte.danke.offenTitel, robots };
 }
 
 /**

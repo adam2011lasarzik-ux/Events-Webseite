@@ -39,6 +39,8 @@
     "typescript": "5.7.2"
   },
   "overrides": {
-    "deepmerge-ts": "^8.0.2"
+    "deepmerge-ts": "^8.0.2",
+    "mariadb": "^3.5.3",
+    "mysql2": "^3.22.0"
   }
 }
