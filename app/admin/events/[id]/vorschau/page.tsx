@@ -59,7 +59,7 @@ export default async function VorschauSeite({
       <Header
         t={texte}
         schulenSlugs={[]}
-        schulenZeigen={event.preise.schuelerAktiv}
+        vorschauEvent={{ slug: event.slug, schuelerAktiv: event.preise.schuelerAktiv }}
       />
       <main>
         <EventSeite t={texte} event={event} />

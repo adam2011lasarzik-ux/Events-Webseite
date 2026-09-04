@@ -8,7 +8,7 @@
    Reine Logik, kein Browser und keine Datenbank nötig. Läuft mit:
      npx tsx pruefung/L/l-schulen.mjs
 */
-import { zeigeSchulen } from "../../lib/navigation.js";
+import { anmeldeZiel, zeigeSchulen } from "../../lib/navigation.js";
 
 // Nur dieses Event hat eine Schüler-Preiskategorie.
 const SLUGS = ["padel-falkensee"];
@@ -53,6 +53,28 @@ pruefe("Ohne Schüler-Events erscheint der Punkt nirgends",
   zeigeSchulen("/events/padel-falkensee", []) === false);
 pruefe("Eine Adresse, die nur so aussieht, zählt nicht",
   zeigeSchulen("/eventsammlung/padel-falkensee", SLUGS) === false);
+
+// ── „Jetzt anmelden": nur, wo eindeutig ist WOFÜR ──────────────
+// Vorher zeigte der Knopf überall auf „/anmeldung", und diese Adresse
+// leitet stillschweigend auf die zeitlich nächste Veranstaltung weiter.
+// Auf der Startseite hätte man sich damit für das falsche Event
+// anmelden können.
+pruefe("Startseite: kein Anmelde-Knopf", anmeldeZiel("/") === null);
+pruefe("Über VERA: kein Anmelde-Knopf", anmeldeZiel("/ueber-vera") === null);
+pruefe("Fragen: kein Anmelde-Knopf", anmeldeZiel("/faq") === null);
+pruefe("Kontakt: kein Anmelde-Knopf", anmeldeZiel("/kontakt") === null);
+pruefe("Für Schulen: kein Anmelde-Knopf", anmeldeZiel("/fuer-schulen") === null);
+pruefe("Impressum: kein Anmelde-Knopf", anmeldeZiel("/impressum") === null);
+pruefe("Abschluss-Seite: kein Anmelde-Knopf", anmeldeZiel("/anmeldung/danke") === null);
+
+pruefe("Event-Seite: führt zur Anmeldung GENAU dieses Events",
+  anmeldeZiel("/events/padel-falkensee") === "/events/padel-falkensee/anmeldung");
+pruefe("Zweites Event: führt zu dessen eigener Anmeldung",
+  anmeldeZiel("/events/vera-padel-event") === "/events/vera-padel-event/anmeldung");
+pruefe("Kompakte Detailseite: führt ebenfalls zum richtigen Event",
+  anmeldeZiel("/event/padel-falkensee") === "/events/padel-falkensee/anmeldung");
+pruefe("Auf der Anmeldeseite selbst: kein Knopf auf sich selbst",
+  anmeldeZiel("/events/padel-falkensee/anmeldung") === null);
 
 console.log(schief.length === 0
   ? `\nAlle ${n} Prüfungen bestanden.`

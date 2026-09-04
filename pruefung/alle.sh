@@ -89,7 +89,7 @@ node "$P/O/o-links.mjs" 2>&1 | tail -3
 # unten und nicht in der `lauf`-Gruppe mit ihrem Datenbank-Vorlauf.
 echo ""
 echo "═══════════════════════════════════════════════"
-echo "  L · Kopfleiste: Für Schulen (16)"
+echo "  L · Kopfleiste: Menü und Anmelden (27)"
 echo "═══════════════════════════════════════════════"
 npx tsx "$P/L/l-schulen.mjs" 2>&1 | tail -3
 

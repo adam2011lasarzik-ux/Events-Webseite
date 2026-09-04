@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { VeraWortmarke } from "./VeraWortmarke";
 import { Knopf } from "./Knopf";
-import { zeigeSchulen } from "@/lib/navigation";
+import { anmeldeZiel, zeigeSchulen } from "@/lib/navigation";
 import type { Woerterbuch } from "@/content";
 import stil from "./Header.module.css";
 
@@ -14,32 +14,40 @@ import stil from "./Header.module.css";
  * Sie kommen aus dem Layout, weil die Leiste selbst im Browser läuft
  * und dort keine Datenbank erreichbar ist.
  *
- * `schulenZeigen` übergeht die Pfad-Regel und wird nur von der
+ * `vorschauEvent` übergeht die Pfad-Regeln und wird nur von der
  * Admin-Vorschau gebraucht: Dort lautet die Adresse
- * „/admin/events/<kennung>/vorschau" und verrät das Event nicht — ohne
- * diese Vorgabe zeigte die Vorschau eine Leiste, die der echten Seite
- * nicht entspricht.
+ * „/admin/events/<kennung>/vorschau" und verrät das gezeigte Event
+ * nicht. Ohne diese Vorgabe zeigte die Vorschau eine Leiste, die es auf
+ * der echten Seite so nicht gibt — und eine Vorschau, die lügt, ist
+ * schlimmer als gar keine.
  */
 export function Header({
   t,
   schulenSlugs,
-  schulenZeigen,
+  vorschauEvent,
 }: {
   t: Woerterbuch;
   schulenSlugs: string[];
-  schulenZeigen?: boolean;
+  vorschauEvent?: { slug: string; schuelerAktiv: boolean };
 }) {
   const [offen, setzeOffen] = useState(false);
   const pfad = usePathname() ?? "/";
+
+  const schulen = vorschauEvent
+    ? vorschauEvent.schuelerAktiv
+    : zeigeSchulen(pfad, schulenSlugs);
+
+  // null = kein Anmelde-Knopf, weil nicht eindeutig wäre, WOFÜR.
+  const anmelden = vorschauEvent
+    ? `/events/${vorschauEvent.slug}/anmeldung`
+    : anmeldeZiel(pfad);
 
   const punkte = [
     // Führt zur Übersicht mit ALLEN Veranstaltungen. Vorher zeigte der
     // Punkt fest auf ein einzelnes Event — wird das archiviert oder
     // gelöscht, landet der Besucher auf einer Fehlerseite.
     { href: "/", text: t.nav.events },
-    ...((schulenZeigen ?? zeigeSchulen(pfad, schulenSlugs))
-      ? [{ href: "/fuer-schulen", text: t.nav.schulen }]
-      : []),
+    ...(schulen ? [{ href: "/fuer-schulen", text: t.nav.schulen }] : []),
     { href: "/ueber-vera", text: t.nav.ueber },
     { href: "/faq", text: t.nav.faq },
     { href: "/kontakt", text: t.nav.kontakt },
@@ -61,9 +69,11 @@ export function Header({
         </nav>
 
         <div className={stil.rechts}>
-          <span className={stil.anmeldeKnopf}>
-            <Knopf href="/anmeldung">{t.aktion.anmelden}</Knopf>
-          </span>
+          {anmelden && (
+            <span className={stil.anmeldeKnopf}>
+              <Knopf href={anmelden}>{t.aktion.anmelden}</Knopf>
+            </span>
+          )}
 
           <button
             type="button"
@@ -90,9 +100,11 @@ export function Header({
                 {p.text}
               </Link>
             ))}
-            <span className={stil.klappeAktion}>
-              <Knopf href="/anmeldung">{t.aktion.anmelden}</Knopf>
-            </span>
+            {anmelden && (
+              <span className={stil.klappeAktion}>
+                <Knopf href={anmelden}>{t.aktion.anmelden}</Knopf>
+              </span>
+            )}
           </nav>
         </div>
       )}
