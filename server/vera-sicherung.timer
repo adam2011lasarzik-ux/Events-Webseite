@@ -1,0 +1,15 @@
+[Unit]
+Description=Startet die VERA-Datenbank-Sicherung jede Nacht
+
+[Timer]
+# 03:30 Uhr Server-Zeit (UTC). Ein Streuwert von bis zu 10 Minuten
+# verhindert, dass alle Backblaze-Kunden mit demselben Zeitplan exakt
+# zur selben Sekunde hochladen.
+OnCalendar=*-*-* 03:30:00
+RandomizedDelaySec=600
+# Holt eine verpasste Sicherung nach dem nächsten Start nach, falls
+# der Server um 03:30 gerade neu gestartet hat oder aus war.
+Persistent=true
+
+[Install]
+WantedBy=timers.target
