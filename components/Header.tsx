@@ -1,18 +1,45 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { VeraWortmarke } from "./VeraWortmarke";
 import { Knopf } from "./Knopf";
+import { zeigeSchulen } from "@/lib/navigation";
 import type { Woerterbuch } from "@/content";
 import stil from "./Header.module.css";
 
-export function Header({ t }: { t: Woerterbuch }) {
+/**
+ * `schulenSlugs` sind die Adressen der Events mit Schüler-Kategorie.
+ * Sie kommen aus dem Layout, weil die Leiste selbst im Browser läuft
+ * und dort keine Datenbank erreichbar ist.
+ *
+ * `schulenZeigen` übergeht die Pfad-Regel und wird nur von der
+ * Admin-Vorschau gebraucht: Dort lautet die Adresse
+ * „/admin/events/<kennung>/vorschau" und verrät das Event nicht — ohne
+ * diese Vorgabe zeigte die Vorschau eine Leiste, die der echten Seite
+ * nicht entspricht.
+ */
+export function Header({
+  t,
+  schulenSlugs,
+  schulenZeigen,
+}: {
+  t: Woerterbuch;
+  schulenSlugs: string[];
+  schulenZeigen?: boolean;
+}) {
   const [offen, setzeOffen] = useState(false);
+  const pfad = usePathname() ?? "/";
 
   const punkte = [
-    { href: "/events/padel-falkensee", text: t.nav.event },
-    { href: "/fuer-schulen", text: t.nav.schulen },
+    // Führt zur Übersicht mit ALLEN Veranstaltungen. Vorher zeigte der
+    // Punkt fest auf ein einzelnes Event — wird das archiviert oder
+    // gelöscht, landet der Besucher auf einer Fehlerseite.
+    { href: "/", text: t.nav.events },
+    ...((schulenZeigen ?? zeigeSchulen(pfad, schulenSlugs))
+      ? [{ href: "/fuer-schulen", text: t.nav.schulen }]
+      : []),
     { href: "/ueber-vera", text: t.nav.ueber },
     { href: "/faq", text: t.nav.faq },
     { href: "/kontakt", text: t.nav.kontakt },

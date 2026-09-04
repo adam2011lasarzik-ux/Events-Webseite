@@ -19,7 +19,7 @@ export function Footer({ t }: { t: Woerterbuch }) {
           <div className={stil.spalte}>
             <h3>{t.footer.seiten}</h3>
             <ul className={stil.liste}>
-              <li><Link href={"/events/padel-falkensee"}>{t.nav.event}</Link></li>
+              <li><Link href={"/"}>{t.nav.events}</Link></li>
               <li><Link href={"/anmeldung"}>{t.aktion.anmelden}</Link></li>
               <li><Link href={"/fuer-schulen"}>{t.nav.schulen}</Link></li>
               <li><Link href={"/ueber-vera"}>{t.nav.ueber}</Link></li>

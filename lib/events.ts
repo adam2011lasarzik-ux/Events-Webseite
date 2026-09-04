@@ -202,6 +202,38 @@ export async function kommendeEvents(): Promise<VeraEvent[]> {
 }
 
 /**
+ * Adressen der veröffentlichten Events MIT Schüler-Preiskategorie.
+ *
+ * Die Kopfleiste braucht das, um „Für Schulen" nur dort zu zeigen, wo
+ * es hingehört (Regel in lib/navigation.ts). Bewusst nur die Adressen
+ * statt ganzer Events: Die Leiste steht auf jeder öffentlichen Seite,
+ * und mehr als den Slug braucht die Entscheidung nicht.
+ */
+export async function slugsMitSchuelern(): Promise<string[]> {
+  try {
+    const roh = await db.event.findMany({
+      where: { status: "VEROEFFENTLICHT", schuelerAktiv: true },
+      select: { slug: true },
+    });
+    return roh.map((e) => e.slug);
+  } catch (e) {
+    // Diese Abfrage steht im Layout und damit auf JEDER öffentlichen
+    // Seite — auch auf Impressum und Datenschutz, die sonst ganz ohne
+    // Datenbank auskommen und beim Bauen fertig erzeugt werden.
+    // Ohne dieses Netz scheiterte der ganze Bau, sobald die Datenbank
+    // gerade nicht erreichbar ist. Das wäre der falsche Preis für
+    // einen Menüpunkt.
+    //
+    // Leere Liste heißt: „Für Schulen" bleibt aus. Auf den Seiten, wo
+    // es wirklich zählt (den Event-Seiten), wird ohnehin bei jedem
+    // Aufruf frisch geladen — dort ist die Datenbank dann erreichbar
+    // oder die Seite kommt sowieso nicht zustande.
+    console.error("Schüler-Events für die Kopfleiste nicht ladbar:", e);
+    return [];
+  }
+}
+
+/**
  * Ein Event über seine Kennung — auch als ENTWURF.
  *
  * Ausschließlich für die Vorschau im Adminbereich. Bewusst eine eigene

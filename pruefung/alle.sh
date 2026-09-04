@@ -85,5 +85,13 @@ echo "  O · Links und Knöpfe (9)"
 echo "═══════════════════════════════════════════════"
 node "$P/O/o-links.mjs" 2>&1 | tail -3
 
+# Reine Regel, braucht weder Datenbank noch Browser — deshalb hier
+# unten und nicht in der `lauf`-Gruppe mit ihrem Datenbank-Vorlauf.
+echo ""
+echo "═══════════════════════════════════════════════"
+echo "  L · Kopfleiste: Für Schulen (16)"
+echo "═══════════════════════════════════════════════"
+npx tsx "$P/L/l-schulen.mjs" 2>&1 | tail -3
+
 echo ""
 echo "FERTIG"

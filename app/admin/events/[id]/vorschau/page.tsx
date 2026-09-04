@@ -56,7 +56,11 @@ export default async function VorschauSeite({
 
       {/* Die Marken-Hülle gehört dazu: Ohne sie zeigte die Vorschau
           eine Seite, die es so nie gibt. */}
-      <Header t={texte} />
+      <Header
+        t={texte}
+        schulenSlugs={[]}
+        schulenZeigen={event.preise.schuelerAktiv}
+      />
       <main>
         <EventSeite t={texte} event={event} />
       </main>

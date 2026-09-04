@@ -14,7 +14,7 @@ export const de = {
     hauptmenue: "Hauptmenü",
     menueOeffnen: "Menü öffnen",
     menueSchliessen: "Menü schließen",
-    event: "Event",
+    events: "Events",
     schulen: "Für Schulen",
     ueber: "Über VERA",
     faq: "Fragen",
