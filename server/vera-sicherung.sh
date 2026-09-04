@@ -27,7 +27,10 @@ DB_PASSWORT=$(cat "$HEIM/.vera_db_password")
 mariadb-dump --single-transaction -u vera -p"$DB_PASSWORT" vera \
   | age -r "$OEFFENTLICHER_SCHLUESSEL" -o "$TMP"
 
-rclone --config "$HEIM/.config/rclone/rclone.conf" copyto "$TMP" "b2vera:vera-sicherungen/$DATEI"
+# Der Bucket heisst "Vera-sicherungen" mit grossem V — Backblaze
+# unterscheidet Gross- und Kleinschreibung, und der Anwendungsschluessel
+# ist genau auf diesen Namen beschraenkt.
+rclone --config "$HEIM/.config/rclone/rclone.conf" copyto "$TMP" "b2vera:Vera-sicherungen/$DATEI"
 
 echo "$(date -Iseconds) OK $DATEI" >> "$STATUS"
 echo "Sicherung erfolgreich: $DATEI"
