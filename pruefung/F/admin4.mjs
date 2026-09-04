@@ -49,6 +49,7 @@ const werte = {
   startAt: "2026-07-18T14:00", endAt: "2026-07-18T22:00",
   status: "ENTWURF", kategorie: "COMMUNITY",
   maxPersonen: "50", schwelleWenigPlaetze: "10",
+  schuelerAktiv: "an",
   preisSchueler: "7,35", preisErwachsener: "14,00",
   familieAktiv: "an", familieBasis: "30,00", familieWeitererSchueler: "6,00",
   familieEnthaltenErwachsene: "2", familieEnthaltenSchueler: "1", familieMaxSchueler: "6",

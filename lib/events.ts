@@ -151,7 +151,11 @@ function alsAnzeigeEvent(e: DbEvent, belegt: number): VeraEvent {
     bildUrl: e.bildUrl,
     gruenderZeigen: e.gruenderZeigen,
     preise: {
-      schuelerCents: e.preisSchuelerCents,
+      schuelerAktiv: e.schuelerAktiv,
+      // Fallback 0 ist rein für den Zahlentyp der Anzeige-Schicht —
+      // ohne Schüler-Kategorie zeigt PreisRechner/PreisKacheln diesen
+      // Wert gar nicht erst an (siehe preise.schuelerAktiv).
+      schuelerCents: e.preisSchuelerCents ?? 0,
       erwachsenerCents: e.preisErwachsenerCents,
       familie:
         e.familieAktiv &&

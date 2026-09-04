@@ -70,6 +70,7 @@ export default async function EventBearbeiten({
     videoUrl: oderLeer(e.videoUrl),
     maxPersonen: zahl(e.maxPersonen),
     schwelleWenigPlaetze: String(e.schwelleWenigPlaetze),
+    schuelerAktiv: e.schuelerAktiv,
     preisSchueler: centsAlsEingabe(e.preisSchuelerCents),
     preisErwachsener: centsAlsEingabe(e.preisErwachsenerCents),
     familieAktiv: e.familieAktiv,

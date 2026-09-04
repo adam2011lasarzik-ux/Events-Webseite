@@ -47,6 +47,7 @@ export interface EventVorbelegung {
   videoUrl: string;
   maxPersonen: string;
   schwelleWenigPlaetze: string;
+  schuelerAktiv: boolean;
   preisSchueler: string;
   preisErwachsener: string;
   familieAktiv: boolean;
@@ -85,6 +86,7 @@ const KATEGORIE_TEXT = (k: string) => texte.kategorie[k.toLowerCase()] ?? k;
  */
 export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }) {
   const [ergebnis, aktion] = useActionState(eventSpeichern, EVENT_STARTZUSTAND);
+  const [schuelerAktiv, setzeSchuelerAktiv] = useState(vorbelegung.schuelerAktiv);
   const [familieAktiv, setzeFamilieAktiv] = useState(vorbelegung.familieAktiv);
   const [theme, setzeTheme] = useState<Theme>(vorbelegung.theme);
 
@@ -277,23 +279,53 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
       <div className={stil.karte}>
         <p className={stil.formGruppenTitel}>Preise (inkl. MwSt.)</p>
         <div className={stil.raster}>
-          {feld("preisSchueler", "Schüler", { pflicht: true, hilfe: "In Euro, z. B. 7,00" })}
-          {feld("preisErwachsener", "Erwachsener", { pflicht: true, hilfe: "In Euro, z. B. 14,00" })}
-
           <div className={stil.breit}>
             <label className={stil.haken}>
               <input
                 type="checkbox"
-                name="familieAktiv"
+                name="schuelerAktiv"
                 value="an"
-                checked={familieAktiv}
-                onChange={(e) => setzeFamilieAktiv(e.target.checked)}
+                checked={schuelerAktiv}
+                onChange={(e) => {
+                  setzeSchuelerAktiv(e.target.checked);
+                  // Ohne Schüler-Kategorie ergäbe ein Familienpaket
+                  // (das immer Schüler enthält) keinen Sinn mehr —
+                  // wird beim Ausschalten mit zurückgesetzt.
+                  if (!e.target.checked) setzeFamilieAktiv(false);
+                }}
               />
-              <span>Familienpaket anbieten</span>
+              <span>Schüler-Preis anbieten</span>
             </label>
+            <p className={stil.feldHilfe} style={{ marginTop: "0.5rem" }}>
+              Aus, wenn dieses Event keine eigene Schüler-Zielgruppe hat (z. B. ein
+              Business-Event) — dann gibt es nur einen Preis, und im Anmeldebereich entfallen
+              „Mein Kind" und das Familienpaket.
+            </p>
           </div>
 
-          {familieAktiv && (
+          {schuelerAktiv &&
+            feld("preisSchueler", "Schüler", { pflicht: true, hilfe: "In Euro, z. B. 7,00" })}
+          {feld("preisErwachsener", schuelerAktiv ? "Erwachsener" : "Preis", {
+            pflicht: true,
+            hilfe: "In Euro, z. B. 14,00",
+          })}
+
+          {schuelerAktiv && (
+            <div className={stil.breit}>
+              <label className={stil.haken}>
+                <input
+                  type="checkbox"
+                  name="familieAktiv"
+                  value="an"
+                  checked={familieAktiv}
+                  onChange={(e) => setzeFamilieAktiv(e.target.checked)}
+                />
+                <span>Familienpaket anbieten</span>
+              </label>
+            </div>
+          )}
+
+          {schuelerAktiv && familieAktiv && (
             <>
               {feld("familieBasis", "Grundpreis Familienpaket", { hilfe: "z. B. 30,00" })}
               {feld("familieWeitererSchueler", "Preis je weiterem Schüler", { hilfe: "z. B. 6,00" })}

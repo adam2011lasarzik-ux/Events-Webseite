@@ -4,7 +4,7 @@ import { pruefeUndBaue } from "../../lib/anmeldung.js";
 import { berechnePreis } from "../../lib/preise.js";
 
 const regeln = {
-  schuelerCents: 700, erwachsenerCents: 1400,
+  schuelerAktiv: true, schuelerCents: 700, erwachsenerCents: 1400,
   familie: { basisCents: 3000, enthalteneErwachsene: 2, enthalteneSchueler: 1,
              weitererSchuelerCents: 600, maxSchueler: 6 },
 };

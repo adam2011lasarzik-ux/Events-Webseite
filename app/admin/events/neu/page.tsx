@@ -43,6 +43,7 @@ export const LEERES_EVENT: EventVorbelegung = {
   videoUrl: "",
   maxPersonen: "",
   schwelleWenigPlaetze: "10",
+  schuelerAktiv: true,
   preisSchueler: "",
   preisErwachsener: "",
   familieAktiv: false,

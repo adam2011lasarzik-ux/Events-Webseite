@@ -121,7 +121,8 @@ export interface EventDaten {
   videoUrl: string | null;
   maxPersonen: number | null;
   schwelleWenigPlaetze: number;
-  preisSchuelerCents: number;
+  schuelerAktiv: boolean;
+  preisSchuelerCents: number | null;
   preisErwachsenerCents: number;
   familieAktiv: boolean;
   familieBasisCents: number | null;
@@ -187,8 +188,11 @@ export function pruefeEvent(
   const theme = alsTheme(sauber(roh.theme));
 
   // ── Preise ───────────────────────────────────────────────────
-  const preisSchuelerCents = alsCents(sauber(roh.preisSchueler));
-  if (preisSchuelerCents === null)
+  // Ohne Schüler-Kategorie gibt es schlicht keinen Schüler-Preis —
+  // das Feld ist dann nicht Pflicht und wird als null gespeichert.
+  const schuelerAktiv = roh.schuelerAktiv === "an";
+  const preisSchuelerCents = schuelerAktiv ? alsCents(sauber(roh.preisSchueler)) : null;
+  if (schuelerAktiv && preisSchuelerCents === null)
     fehler.push({ feld: "preisSchueler", text: "Bitte einen Betrag angeben, z. B. 7,00." });
 
   const preisErwachsenerCents = alsCents(sauber(roh.preisErwachsener));
@@ -196,7 +200,11 @@ export function pruefeEvent(
     fehler.push({ feld: "preisErwachsener", text: "Bitte einen Betrag angeben, z. B. 14,00." });
 
   // ── Familienpaket ────────────────────────────────────────────
-  const familieAktiv = roh.familieAktiv === "an";
+  // Ein Familienpaket enthält immer Schüler — ohne Schüler-Kategorie
+  // ergäbe es keinen Sinn. Serverseitig erzwungen, unabhängig davon,
+  // was im Formular übermittelt wurde (ein manipulierter Aufruf soll
+  // kein inkonsistentes Event erzeugen können).
+  const familieAktiv = schuelerAktiv && roh.familieAktiv === "an";
   let familieBasisCents: number | null = null;
   let familieEnthaltenErwachsene: number | null = null;
   let familieEnthaltenSchueler: number | null = null;
@@ -299,7 +307,8 @@ export function pruefeEvent(
       videoUrl: oderNull(sauber(roh.videoUrl)),
       maxPersonen,
       schwelleWenigPlaetze: schwelle!,
-      preisSchuelerCents: preisSchuelerCents!,
+      schuelerAktiv,
+      preisSchuelerCents,
       preisErwachsenerCents: preisErwachsenerCents!,
       familieAktiv,
       familieBasisCents,

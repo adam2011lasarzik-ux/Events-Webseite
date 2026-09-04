@@ -41,9 +41,14 @@ export function PreisRechner({
   const familie = event.preise.familie;
   const minFamilie = familie?.enthalteneSchueler ?? 1;
   const maxFamilie = familie?.maxSchueler ?? 6;
+  // Ohne Schüler-Kategorie gibt es nur einen Preis: keine Wegewahl,
+  // kein "Mein Kind", kein Familienpaket, keine Schüler/Erwachsener-
+  // Unterscheidung. Serverseitig wird das unabhängig davon in
+  // lib/anmeldung.ts → pruefeUndBaue() nochmal erzwungen.
+  const schuelerAktiv = event.preise.schuelerAktiv;
 
   const [fuerWen, setzeFuerWen] = useState<FuerWen>("selbst");
-  const [selbstAls, setzeSelbstAls] = useState<SelbstAls>("student");
+  const [selbstAls, setzeSelbstAls] = useState<SelbstAls>(schuelerAktiv ? "student" : "adult");
   const [kinder, setzeKinder] = useState(1);
   const [kommeMit, setzeKommeMit] = useState(false);
   const [familienKinder, setzeFamilienKinder] = useState(minFamilie);
@@ -142,50 +147,56 @@ export function PreisRechner({
           <input type="text" name="webseite" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
-      <div className={stil.oben}>
-        <fieldset className={stil.wahlRaster}>
-          <legend className={stil.frage}>{t.anmeldung.frageWen}</legend>
+      {/* Ohne Schüler-Kategorie gibt es nur einen Weg ("Mich selbst") —
+          eine Auswahl mit einer einzigen Option wäre sinnlos, also
+          entfällt die ganze Wegewahl. fuerWen bleibt dadurch immer auf
+          seinem Startwert "selbst" stehen. */}
+      {schuelerAktiv && (
+        <div className={stil.oben}>
+          <fieldset className={stil.wahlRaster}>
+            <legend className={stil.frage}>{t.anmeldung.frageWen}</legend>
 
-          <label className={stil.wahlKarte}>
-            <input
-              type="radio"
-              name="wahlFuerWen"
-              checked={fuerWen === "selbst"}
-              onChange={() => setzeFuerWen("selbst")}
-            />
-            <span className={stil.wahlName}>{t.anmeldung.wahlSelbst}</span>
-            <span className={stil.wahlHinweis}>{t.anmeldung.wahlSelbstHinweis}</span>
-          </label>
-
-          <label className={stil.wahlKarte}>
-            <input
-              type="radio"
-              name="wahlFuerWen"
-              checked={fuerWen === "kind"}
-              onChange={() => setzeFuerWen("kind")}
-            />
-            <span className={stil.wahlName}>{t.anmeldung.wahlKind}</span>
-            <span className={stil.wahlHinweis}>{t.anmeldung.wahlKindHinweis}</span>
-          </label>
-
-          {familie && (
             <label className={stil.wahlKarte}>
               <input
                 type="radio"
                 name="wahlFuerWen"
-                checked={fuerWen === "familie"}
-                onChange={() => setzeFuerWen("familie")}
+                checked={fuerWen === "selbst"}
+                onChange={() => setzeFuerWen("selbst")}
               />
-              <span className={stil.wahlName}>{t.anmeldung.wahlFamilie}</span>
-              <span className={stil.wahlHinweis}>{t.anmeldung.wahlFamilieHinweis}</span>
+              <span className={stil.wahlName}>{t.anmeldung.wahlSelbst}</span>
+              <span className={stil.wahlHinweis}>{t.anmeldung.wahlSelbstHinweis}</span>
             </label>
-          )}
-        </fieldset>
-      </div>
+
+            <label className={stil.wahlKarte}>
+              <input
+                type="radio"
+                name="wahlFuerWen"
+                checked={fuerWen === "kind"}
+                onChange={() => setzeFuerWen("kind")}
+              />
+              <span className={stil.wahlName}>{t.anmeldung.wahlKind}</span>
+              <span className={stil.wahlHinweis}>{t.anmeldung.wahlKindHinweis}</span>
+            </label>
+
+            {familie && (
+              <label className={stil.wahlKarte}>
+                <input
+                  type="radio"
+                  name="wahlFuerWen"
+                  checked={fuerWen === "familie"}
+                  onChange={() => setzeFuerWen("familie")}
+                />
+                <span className={stil.wahlName}>{t.anmeldung.wahlFamilie}</span>
+                <span className={stil.wahlHinweis}>{t.anmeldung.wahlFamilieHinweis}</span>
+              </label>
+            )}
+          </fieldset>
+        </div>
+      )}
 
       <div>
         <div className={stil.ebene2}>
-          {fuerWen === "selbst" && (
+          {fuerWen === "selbst" && schuelerAktiv && (
             <fieldset className={stil.reihen}>
               <legend className={stil.frage}>{t.anmeldung.selbstFrage}</legend>
               <label className={stil.optionZeile}>

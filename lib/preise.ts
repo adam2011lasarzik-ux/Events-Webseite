@@ -27,6 +27,13 @@ export interface Familienpaket {
 }
 
 export interface Preisregeln {
+  /** Hat dieses Event überhaupt eine eigene Schüler-Preiskategorie?
+   *  false = nur EIN Preis (erwachsenerCents), keine „Mein Kind"-/
+   *  Familienpaket-Wege. Die eigentliche Durchsetzung passiert NICHT
+   *  hier (diese Datei kennt den Wert nur zur Weitergabe), sondern in
+   *  lib/anmeldung.ts → pruefeUndBaue(), das ist der Ort, an dem der
+   *  Server „weg"/"selbstAls" vor jeder Rechnung korrigiert. */
+  schuelerAktiv: boolean;
   schuelerCents: number;
   erwachsenerCents: number;
   familie: Familienpaket | null;

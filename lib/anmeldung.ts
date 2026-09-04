@@ -129,8 +129,20 @@ export function alsAuswahl(eingabe: AnmeldeEingabe): Auswahl {
  */
 export function pruefeUndBaue(
   regeln: Preisregeln,
-  eingabe: AnmeldeEingabe,
+  eingabeRoh: AnmeldeEingabe,
 ): { fehler: Feldfehler[] } | { fehler: null; anmeldung: FertigeAnmeldung } {
+  // Bietet dieses Event gar keine Schüler-Preiskategorie an, bestimmt
+  // ausschließlich der Server den Weg — nicht das, was im POST steht.
+  // Ein manipulierter Aufruf mit weg=kind/familie oder
+  // selbstAls=student würde sonst über die Schüler-Preisstufe (bei
+  // so einem Event: kein Preis vorhanden) eine falsche oder kostenlose
+  // Buchung erzeugen. Ab hier wird ausschließlich diese korrigierte
+  // Fassung verwendet, nie mehr eingabeRoh direkt — "Der Server
+  // bestimmt die Struktur, nicht das Formular."
+  const eingabe: AnmeldeEingabe = regeln.schuelerAktiv
+    ? eingabeRoh
+    : { ...eingabeRoh, weg: "selbst", selbstAls: "adult" };
+
   const fehler: Feldfehler[] = [];
 
   // Der Server bestimmt die Struktur, nicht das Formular.

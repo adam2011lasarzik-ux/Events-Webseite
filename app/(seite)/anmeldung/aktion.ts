@@ -64,7 +64,11 @@ export async function anmeldungAbsenden(
   }
 
   const regeln = {
-    schuelerCents: event.preisSchuelerCents,
+    // Fallback 0 ist rein für den Zahlentyp — abgerechnet wird er nie,
+    // weil pruefeUndBaue() bei schuelerAktiv=false jede Anmeldung
+    // serverseitig auf "Mich selbst, Erwachsener" zurückstuft.
+    schuelerAktiv: event.schuelerAktiv,
+    schuelerCents: event.preisSchuelerCents ?? 0,
     erwachsenerCents: event.preisErwachsenerCents,
     familie:
       event.familieAktiv &&

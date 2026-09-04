@@ -49,7 +49,12 @@ export function EventKarte({
           <div className={stil.datum}>
             <dt>{t.event.preis}</dt>
             <dd>
-              {t.preise.ab} {alsEuro(event.preise.schuelerCents)}
+              {t.preise.ab}{" "}
+              {alsEuro(
+                event.preise.schuelerAktiv
+                  ? event.preise.schuelerCents
+                  : event.preise.erwachsenerCents,
+              )}
             </dd>
           </div>
         </dl>

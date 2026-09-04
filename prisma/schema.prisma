@@ -131,7 +131,16 @@ model Event {
 
   // Preise, immer in ganzen Cent. Kommazahlen rechnen bei Geld
   // ungenau (0.1 + 0.2 ist nicht exakt 0.3).
-  preisSchuelerCents    Int
+  //
+  // schuelerAktiv steuert, ob dieses Event überhaupt eine eigene
+  // Schüler-Preiskategorie hat. Standard "an", damit bestehende Events
+  // unverändert bleiben. Ist sie aus, gibt es nur EINEN Preis
+  // (preisErwachsenerCents) — kein "Mein Kind", kein Familienpaket,
+  // keine Erziehungsberechtigten-Einwilligung. preisSchuelerCents ist
+  // deshalb nullable: Ohne Schüler-Kategorie gibt es schlicht keinen
+  // Schüler-Preis.
+  schuelerAktiv         Boolean @default(true)
+  preisSchuelerCents    Int?
   preisErwachsenerCents Int
 
   // Familienpaket

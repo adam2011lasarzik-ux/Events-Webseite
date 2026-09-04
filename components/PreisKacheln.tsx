@@ -17,17 +17,19 @@ export function PreisKacheln({
   return (
     <>
       <div className={stil.raster}>
-        <div className={`${stil.kachel} ${stil.tonSchueler}`}>
-          <span className={stil.ball} aria-hidden="true" />
-          <div>
-            <div className={stil.name}>{t.preise.schueler}</div>
-            <div className={stil.hinweis}>{t.preise.schuelerHinweis}</div>
+        {preise.schuelerAktiv && (
+          <div className={`${stil.kachel} ${stil.tonSchueler}`}>
+            <span className={stil.ball} aria-hidden="true" />
+            <div>
+              <div className={stil.name}>{t.preise.schueler}</div>
+              <div className={stil.hinweis}>{t.preise.schuelerHinweis}</div>
+            </div>
+            <div className={stil.betragZeile}>
+              <span className={stil.betrag}>{alsEuro(preise.schuelerCents)}</span>
+              <span className={stil.ab}>{t.preise.proPerson}</span>
+            </div>
           </div>
-          <div className={stil.betragZeile}>
-            <span className={stil.betrag}>{alsEuro(preise.schuelerCents)}</span>
-            <span className={stil.ab}>{t.preise.proPerson}</span>
-          </div>
-        </div>
+        )}
 
         <div className={`${stil.kachel} ${stil.tonErwachsen}`}>
           <span className={stil.ball} aria-hidden="true" />
