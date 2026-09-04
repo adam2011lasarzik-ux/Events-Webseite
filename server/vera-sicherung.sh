@@ -30,7 +30,13 @@ mariadb-dump --single-transaction -u vera -p"$DB_PASSWORT" vera \
 # Der Bucket heisst "Vera-sicherungen" mit grossem V — Backblaze
 # unterscheidet Gross- und Kleinschreibung, und der Anwendungsschluessel
 # ist genau auf diesen Namen beschraenkt.
-rclone --config "$HEIM/.config/rclone/rclone.conf" copyto "$TMP" "b2vera:Vera-sicherungen/$DATEI"
+#
+# --no-check-dest ist noetig, WEIL der Schluessel nur schreiben darf:
+# Sonst sieht rclone erst am Ziel nach, ob die Datei schon existiert,
+# und dieser Lesezugriff wird (richtigerweise) mit 401 abgewiesen.
+# Ueberschreiben kann dabei nicht passieren — jeder Dateiname traegt
+# einen Zeitstempel auf die Sekunde genau.
+rclone --config "$HEIM/.config/rclone/rclone.conf" copyto --no-check-dest "$TMP" "b2vera:Vera-sicherungen/$DATEI"
 
 echo "$(date -Iseconds) OK $DATEI" >> "$STATUS"
 echo "Sicherung erfolgreich: $DATEI"
