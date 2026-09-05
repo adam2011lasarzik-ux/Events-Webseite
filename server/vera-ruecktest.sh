@@ -29,7 +29,11 @@ chmod 700 "$ARBEIT"
 trap 'rm -rf "$ARBEIT"' EXIT
 
 echo "== 1. Neueste Sicherung suchen =="
-NEUESTE=$(rclone --config "$RCLONE_CONF" lsf "$BUCKET" | sort | tail -1)
+# Nur echte Sicherungen beruecksichtigen. Ohne dieses Muster wuerde
+# eine beliebige andere Datei im Bucket (etwa eine Testdatei) je nach
+# Namen als "neueste Sicherung" gelten und der Rueckspiel-Test liefe
+# gegen die falsche Datei.
+NEUESTE=$(rclone --config "$RCLONE_CONF" lsf "$BUCKET" --include "vera-*.sql.age" | sort | tail -1)
 if [ -z "$NEUESTE" ]; then echo "   Keine Sicherung gefunden — Abbruch."; exit 1; fi
 echo "   $NEUESTE"
 
