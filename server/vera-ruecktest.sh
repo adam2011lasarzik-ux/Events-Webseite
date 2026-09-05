@@ -43,8 +43,13 @@ echo "   $(wc -c < "$ARBEIT/sicherung.age") Bytes verschluesselt geladen"
 
 echo "== 3. Entschluesseln =="
 echo "   Bitte den geheimen Schluessel einfuegen (beginnt mit AGE-SECRET-KEY-1)"
-echo "   und Enter druecken. Die Eingabe wird bewusst NICHT angezeigt."
-read -rs AGE_KEY
+echo "   und Enter druecken."
+echo "   WICHTIG: Die Eingabe ist diesmal SICHTBAR (ein unsichtbares Feld"
+echo "   hat in dieser Webkonsole schon einmal Zeichen verschluckt)."
+echo "   Stelle sicher, dass niemand mitliest. Der Schluessel wird nach"
+echo "   dieser Zeile nicht mehr angezeigt und nirgends gespeichert."
+read -r AGE_KEY
+echo "   ${#AGE_KEY} Zeichen erhalten (muessen 74 sein)"
 umask 077
 printf '%s\n' "$AGE_KEY" > "$ARBEIT/schluessel.txt"
 unset AGE_KEY

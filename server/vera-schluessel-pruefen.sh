@@ -19,9 +19,19 @@ trap 'rm -rf "$ARBEIT"' EXIT
 SERVER_SCHLUESSEL=/home/vera/.config/vera/age-public-key.txt
 
 echo "Bitte den geheimen Schluessel einfuegen (AGE-SECRET-KEY-1...) und Enter."
-echo "Die Eingabe wird nicht angezeigt."
-read -rs EINGABE
 echo ""
+echo "WICHTIG: Die Eingabe ist diesmal SICHTBAR, damit du vor dem"
+echo "Bestaetigen pruefen kannst, ob wirklich der ganze Schluessel"
+echo "angekommen ist (74 Zeichen). Stelle sicher, dass niemand mitliest."
+echo "Nach dieser Pruefung verlaesst der Schluessel den Bildschirm"
+echo "nicht mehr — er wird nirgends gespeichert."
+echo ""
+read -r EINGABE
+echo ""
+echo "Eingefuegt: $EINGABE"
+echo "Pruefe VOR dem Weiterlesen: Zaehlt das wirklich 74 Zeichen,"
+echo "beginnend mit AGE-SECRET-KEY-1? Falls nicht: Strg+C / neu laden"
+echo "und den Befehl erneut ausfuehren."
 
 LAENGE=${#EINGABE}
 echo "== 1. Laenge der Eingabe =="
