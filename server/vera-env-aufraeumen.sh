@@ -44,7 +44,9 @@ ORTE=(
 TREFFER=0
 for ORT in "${ORTE[@]}"; do
   [ -e "$ORT" ] || continue
-  GEFUNDEN=$(grep -rl 'vera-backup\.env' "$ORT" 2>/dev/null)
+  # Das Aufraeum-Skript selbst nennt die Datei natuerlich — es soll sie
+  # ja loeschen. Es darf sich nicht selbst als "Verwendung" zaehlen.
+  GEFUNDEN=$(grep -rl 'vera-backup\.env' "$ORT" 2>/dev/null | grep -v '/vera-env-aufraeumen\.sh$')
   if [ -n "$GEFUNDEN" ]; then
     echo "   VERWENDUNG GEFUNDEN in:"
     printf '     %s\n' $GEFUNDEN
