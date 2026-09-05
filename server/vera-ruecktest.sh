@@ -52,7 +52,21 @@ age -d -i "$ARBEIT/schluessel.txt" -o "$ARBEIT/sicherung.sql" "$ARBEIT/sicherung
 shred -u "$ARBEIT/schluessel.txt"
 echo "   $(wc -c < "$ARBEIT/sicherung.sql") Bytes entschluesselt"
 
-echo "== 4. In die Testdatenbank $TESTDB einspielen =="
+# Sicherheitsriegel: Eine Sicherung, die "USE vera" oder
+# "CREATE DATABASE vera" enthaelt, wuerde beim Einspielen die ECHTE
+# Datenbank treffen, egal in welche Testdatenbank wir sie lenken.
+# mariadb-dump erzeugt solche Anweisungen bei einer einzelnen
+# Datenbank zwar nicht — aber darauf verlassen wir uns hier nicht,
+# sondern pruefen es nach.
+echo "== 4a. Sicherheitspruefung der Sicherungsdatei =="
+if grep -qiE '^[[:space:]]*(USE[[:space:]]|CREATE[[:space:]]+DATABASE)' "$ARBEIT/sicherung.sql"; then
+  echo "   ABBRUCH: Die Datei enthaelt USE-/CREATE-DATABASE-Anweisungen."
+  echo "   Sie koennte damit in die ECHTE Datenbank schreiben."
+  exit 1
+fi
+echo "   Enthaelt keine Datenbank-Umschaltung — Einspielen ist isoliert."
+
+echo "== 4b. In die Testdatenbank $TESTDB einspielen =="
 mariadb -e "DROP DATABASE IF EXISTS \`$TESTDB\`; CREATE DATABASE \`$TESTDB\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 mariadb "$TESTDB" < "$ARBEIT/sicherung.sql"
 echo "   eingespielt"
