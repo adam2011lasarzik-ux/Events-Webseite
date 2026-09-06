@@ -96,12 +96,22 @@ if (
       "dann als falsch ab. In der .env-Datei die Anführungszeichen direkt an den " +
       "ersten und letzten Buchstaben setzen.",
   );
+  /* Der eine Fall, der wirklich gefährlich ist — und der gemessen
+     wurde, nicht vermutet: Next.js liest die .env-Datei mit einer
+     Erweiterung, die "$name" durch andere Variablen ersetzt. Aus
+     "ab$cdef" wird dabei "ab". Die Prüfskripte hier tun das NICHT.
+     Ohne diese Prüfung wäre also alles grün, während die laufende
+     Webseite mit einem verstümmelten Passwort abgewiesen wird —
+     genau die Art Fehler, die erst der ersten echten Anmeldung
+     auffällt. Ein "$" am Ende oder vor einem Sonderzeichen ist
+     dagegen unbedenklich. */
   pruefe(
-    "SMTP_PASSWORT enthält keine Zeichen, die beim Einlesen verändert werden",
-    !/["\\$`]/.test(passwort),
-    'Das Passwort enthält eines dieser Zeichen: " \\ $ ` — die haben in einer ' +
-      ".env-Datei eine eigene Bedeutung und können den Wert unterwegs verändern. " +
-      "Wenn möglich, im Postfach ein Passwort ohne diese Zeichen vergeben.",
+    "SMTP_PASSWORT enthält kein $, das die Webseite als Verweis liest",
+    !/\$[A-Za-z0-9_{]/.test(passwort),
+    "Das Passwort enthält ein $ mit einem Buchstaben, einer Ziffer oder { dahinter. " +
+      "Next.js liest das als Verweis auf eine andere Einstellung und schneidet den " +
+      "Rest weg — die Webseite käme also mit einem falschen Passwort an, obwohl " +
+      "diese Prüfung sonst grün wäre. Bitte im Postfach ein Passwort ohne $ vergeben.",
   );
   pruefe(
     "SMTP_PASSWORT wirkt vollständig",
@@ -154,32 +164,60 @@ console.log(`  Passwort            ${passwort ? nurLaenge(passwort) : "— fehlt
 console.log(`  Absender            ${absender || "— fehlt —"}`);
 console.log(`  Admin-Empfänger     ${adminEmpfaenger() ?? "— fehlt (fällt auf den Absender zurück) —"}`);
 
-/* ── Verbindung wirklich prüfen, wenn alles hinterlegt ist ────── */
+/* ── Verbindung wirklich prüfen ───────────────────────────────── */
 
+/*
+ * Die Verbindung wird IMMER geprüft, sobald alle fünf Werte da sind —
+ * auch dann, wenn oben etwas bemängelt wurde.
+ *
+ * Das war anfangs anders herum gebaut und damit falsch: Ein einzelner
+ * Hinweis hat den eigentlichen Test verhindert, obwohl die Anmeldung
+ * längst nachweislich funktionierte. Ein Hinweis ist eine Vermutung,
+ * die Anmeldung beim Mailserver ist die Antwort — die Antwort darf
+ * nicht an der Vermutung scheitern.
+ */
 async function haupt() {
-  if (schwer > 0) {
-    console.log(`\n${schwer} Punkt(e) offen. Siehe die Hinweise oben.\n`);
+  const vollstaendig = server !== "" && portRoh !== "" && benutzer !== "" && passwort !== "" && absender !== "";
+
+  if (!vollstaendig) {
+    console.log("\nEs fehlen Werte — ohne sie lässt sich die Verbindung nicht prüfen.");
+    console.log(`${schwer} Punkt(e) offen. Siehe die Hinweise oben.\n`);
     process.exit(1);
   }
 
   console.log("\nVerbindung zum Postfach wird geprüft …");
+  let verbindungOk = false;
   try {
     await verbindungPruefen();
-    console.log("✓ Verbindung und Anmeldung erfolgreich.\n");
-    console.log("Alles vollständig. Der E-Mail-Versand ist eingerichtet.\n");
-    process.exit(0);
+    verbindungOk = true;
+    console.log("✓ Verbindung und Anmeldung erfolgreich.");
   } catch (e) {
     console.log("✗ Verbindung oder Anmeldung fehlgeschlagen.");
     console.log(`  → ${e instanceof Error ? e.message : String(e)}`);
     console.log(
       "\n  Mögliche Ursachen: falscher Port, falsches Passwort, oder die Zugangsdaten\n" +
         "  gehören zu einem anderen Postfach als angenommen. Das Passwort selbst wird\n" +
-        "  hier nie angezeigt.\n",
+        "  hier nie angezeigt.",
     );
-    process.exit(1);
   } finally {
     zugangVergessen();
   }
+
+  console.log("");
+  if (verbindungOk && schwer === 0) {
+    console.log("Alles vollständig. Der E-Mail-Versand ist eingerichtet.\n");
+    process.exit(0);
+  }
+  if (verbindungOk) {
+    console.log(
+      `Die Anmeldung funktioniert, aber ${schwer} Punkt(e) sind offen — siehe oben.\n` +
+        "Solange einer davon das Einlesen des Passworts betrifft, kann die laufende\n" +
+        "Webseite trotzdem scheitern, obwohl dieser Test hier gelingt.\n",
+    );
+  } else {
+    console.log(`${schwer} weitere(r) Punkt(e) offen. Siehe die Hinweise oben.\n`);
+  }
+  process.exit(1);
 }
 
 void haupt();

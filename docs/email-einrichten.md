@@ -55,6 +55,24 @@ Optional dazu:
 |---|---|
 | `MAIL_ADMIN_EMPFAENGER` | wohin die Benachrichtigung über neue Anmeldungen geht. Leer = dieselbe Adresse wie `SMTP_ABSENDER`. |
 
+> **Ein Zeichen ist im Postfach-Passwort verboten: `$` mit einem
+> Buchstaben, einer Ziffer oder `{` dahinter.**
+>
+> Next.js liest die `.env`-Datei mit einer Erweiterung, die `$name`
+> durch andere Einstellungen ersetzt — aus `ab$cdef` wird dabei `ab`.
+> Gemessen, nicht vermutet. Die Prüfskripte tun das nicht, also wäre
+> `npm run mail:pruefen` grün, während die laufende Webseite mit einem
+> verstümmelten Passwort abgewiesen würde. `npm run mail:pruefen`
+> erkennt und meldet diesen Fall inzwischen ausdrücklich.
+>
+> Unbedenklich sind dagegen `\`, `` ` ``, `"` und ein `$` am Ende —
+> alle vier wurden gegen den echten Einleser von Next.js geprüft.
+>
+> Passwörter werden mit `server/vera-smtp-passwort-setzen.sh` gesetzt,
+> nie von Hand in der Datei: Das Skript probiert das Passwort erst
+> beim Mailserver aus und schreibt es erst danach, fasst
+> ausschließlich diese eine Zeile an und zeigt das Passwort nirgends.
+
 **Wo diese Werte hingehören — und wo nicht**, genau wie beim
 Zahlungsschlüssel (siehe `docs/stripe-einrichten.md`):
 
