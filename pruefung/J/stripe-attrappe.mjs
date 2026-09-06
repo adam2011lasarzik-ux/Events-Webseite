@@ -11,6 +11,8 @@
 import http from "node:http";
 
 const sitzungen = new Map();
+const erstattungen = new Map();
+const erstattungenNachSchluessel = new Map();
 let zaehler = 0;
 
 export function starte(port = 4242) {
@@ -48,6 +50,14 @@ export function starte(port = 4242) {
             .filter((k) => /^payment_method_types\[\d+\]$/.test(k))
             .sort()
             .map((k) => felder.get(k)),
+          /* Wie beim echten Anbieter: Die Zahlung entsteht erst mit
+             dem Bezahlen. Vorher ist das Feld leer. */
+          payment_intent: null,
+          /* Die Anmeldenummer, die zusaetzlich an die ZAHLUNG gehaengt
+             wird — sie landet beim echten Anbieter an der Zahlung und
+             damit auch an der Erstattung. Genau daran haengt die
+             Zuordnung der Kulanz-Erstattung. */
+          zahlungMetadaten: { anmeldungId: felder.get("payment_intent_data[metadata][anmeldungId]") },
           customer_email: felder.get("customer_email"),
           locale: felder.get("locale"),
           success_url: felder.get("success_url"),
@@ -110,8 +120,54 @@ export function starte(port = 4242) {
         if (sitzung.status !== "open") { antwort.writeHead(410); return antwort.end("geschlossen"); }
         sitzung.payment_status = "paid";
         sitzung.status = "complete";
+        sitzung.payment_intent ??= `pi_test_attrappe_${sitzung.id.split("_").pop()}`;
         antwort.writeHead(302, { location: sitzung.success_url });
         return antwort.end();
+      }
+
+      /* Erstattung.
+
+         Die Attrappe bildet dabei das eine Verhalten nach, auf das es
+         hier ankommt: den WIEDERHOLUNGSSCHLUESSEL. Kommt derselbe
+         Schluessel ein zweites Mal, wird KEINE zweite Erstattung
+         angelegt, sondern die erste zurueckgegeben — genau so haelt es
+         der echte Anbieter. Ohne dieses Verhalten liesse sich der
+         Schutz vor der doppelten Auszahlung nicht pruefen. */
+      if (anfrage.method === "POST" && url.pathname === "/v1/refunds") {
+        const felder = new URLSearchParams(koerper);
+        const zahlungId = felder.get("payment_intent");
+        const schluessel = anfrage.headers["idempotency-key"];
+
+        if (schluessel && erstattungenNachSchluessel.has(schluessel)) {
+          return senden(200, erstattungenNachSchluessel.get(schluessel));
+        }
+
+        const sitzung = [...sitzungen.values()].find((z) => z.payment_intent === zahlungId);
+        if (!sitzung) {
+          return senden(404, {
+            error: { message: "Keine solche Zahlung.", type: "invalid_request_error" },
+          });
+        }
+        if (sitzung.erstattetCents) {
+          return senden(400, {
+            error: { message: "Bereits erstattet.", type: "invalid_request_error" },
+          });
+        }
+
+        zaehler += 1;
+        const erstattung = {
+          id: `re_test_attrappe_${zaehler}`,
+          object: "refund",
+          amount: sitzung.amount_total,
+          currency: "eur",
+          payment_intent: zahlungId,
+          status: "succeeded",
+          metadata: { anmeldungId: felder.get("metadata[anmeldungId]") },
+        };
+        sitzung.erstattetCents = sitzung.amount_total;
+        erstattungen.set(erstattung.id, erstattung);
+        if (schluessel) erstattungenNachSchluessel.set(schluessel, erstattung);
+        return senden(200, erstattung);
       }
 
       /* Steuerung für das Prüfskript — die Attrappe läuft als eigener
@@ -122,6 +178,7 @@ export function starte(port = 4242) {
         if (!sitzung) return senden(404, { fehler: "unbekannt" });
         sitzung.payment_status = "paid";
         sitzung.status = "complete";
+        sitzung.payment_intent ??= `pi_test_attrappe_${sitzung.id.split("_").pop()}`;
         const betrag = url.searchParams.get("betrag");
         if (betrag !== null) sitzung.amount_total = Number(betrag);
         return senden(200, sitzung);

@@ -77,6 +77,9 @@ async function standAbgleichen(anmeldungId: string): Promise<void> {
         reserviertBis: null,
         zahlungsStatus: "BEZAHLT",
         zahlungsWeg: "ONLINE",
+        // Wie im Webhook: ohne die Zahlungskennung wäre später weder
+        // eine Erstattung noch deren Zuordnung möglich.
+        zahlungsAbsicht: stand.zahlungId,
         bezahlterBetragCents: stand.betragCents,
         bezahltAm: new Date(),
       },

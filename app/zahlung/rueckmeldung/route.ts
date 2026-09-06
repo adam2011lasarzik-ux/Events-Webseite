@@ -147,6 +147,13 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
       zahlungsStatus: "BEZAHLT",
       zahlungsWeg: "ONLINE",
       zahlungsReferenz: sitzung.id,
+      /* Die eigentliche Zahlung festhalten. Ohne sie liesse sich
+         später weder eine Erstattung auslösen noch eine
+         Erstattungs-Rückmeldung dieser Buchung zuordnen. */
+      zahlungsAbsicht:
+        typeof sitzung.payment_intent === "string"
+          ? sitzung.payment_intent
+          : (sitzung.payment_intent?.id ?? null),
       bezahlterBetragCents: sitzung.amount_total ?? anmeldung.gesamtpreisCents,
       bezahltAm: new Date(),
     },
@@ -222,15 +229,29 @@ async function fehlgeschlagenVermerken(sitzung: Stripe.Checkout.Session): Promis
 }
 
 async function erstattungVermerken(zahlung: Stripe.Charge): Promise<void> {
-  // Die Zahlung führt zurück auf die Sitzung; über deren Kennung
-  // finden wir die Anmeldung wieder.
-  const sitzungId = typeof zahlung.payment_intent === "string" ? zahlung.payment_intent : null;
+  /* Diese Zuordnung war der eigentliche Fehler.
+     
+     Gespeichert wird die BEZAHLSEITE („cs_…"). Eine Erstattungs-
+     Rückmeldung trägt aber die Charge- und die Zahlungskennung
+     („ch_…", „pi_…") — die Sitzung kommt darin nicht vor. Gesucht
+     wurde also nach Werten, die dort nie stehen konnten. Eine im
+     Dashboard von Hand ausgelöste Kulanz-Erstattung blieb dadurch
+     still wirkungslos: Die Buchung stand weiter auf „bezahlt".
+
+     Die vorhandene Prüfung übersah das, weil sie das Ereignis selbst
+     baut und die Anmeldenummer dabei von Hand mitgibt.
+
+     Jetzt drei Wege, vom sichersten zum schwächsten:
+       1. die an der Zahlung hinterlegte Anmeldenummer
+       2. die gespeicherte Zahlungskennung
+       3. die Charge-Kennung (für Zahlungen ohne Zahlungsabsicht) */
+  const zahlungId = typeof zahlung.payment_intent === "string" ? zahlung.payment_intent : null;
   const anmeldung = await db.registration.findFirst({
     where: {
       OR: [
-        { zahlungsReferenz: zahlung.id },
-        ...(sitzungId ? [{ zahlungsReferenz: sitzungId }] : []),
         ...(zahlung.metadata?.anmeldungId ? [{ id: zahlung.metadata.anmeldungId }] : []),
+        ...(zahlungId ? [{ zahlungsAbsicht: zahlungId }] : []),
+        { zahlungsReferenz: zahlung.id },
       ],
     },
   });

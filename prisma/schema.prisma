@@ -246,8 +246,25 @@ model Registration {
   // jemand kann angemeldet, aber noch nicht bezahlt haben.
   zahlungsStatus ZahlungsStatus @default(OFFEN)
   zahlungsWeg    ZahlungsWeg    @default(ONLINE)
-  /// Referenz des Zahlungsanbieters, für den Abgleich
+  /// Referenz des Zahlungsanbieters, für den Abgleich.
+  /// Das ist die BEZAHLSEITE (Checkout-Sitzung, "cs_…"), nicht die
+  /// Zahlung selbst.
   zahlungsReferenz String?
+
+  /// Die eigentliche Zahlung hinter der Bezahlseite ("pi_…").
+  ///
+  /// Zwei Dinge hängen daran, die mit der Sitzungskennung allein NICHT
+  /// gehen:
+  ///   1. Eine Erstattung auslösen — der Anbieter erstattet eine
+  ///      Zahlung, keine Bezahlseite.
+  ///   2. Eine Erstattungs-Rückmeldung der richtigen Buchung zuordnen.
+  ///      Die Meldung trägt Zahlungs- und Charge-Kennung, aber nicht
+  ///      die Sitzung. Ohne dieses Feld lief eine im Dashboard von
+  ///      Hand ausgelöste Kulanz-Erstattung ins Leere: Die Buchung
+  ///      blieb still auf "bezahlt" stehen.
+  ///
+  /// Optional, weil sie erst mit der Zahlung bekannt wird.
+  zahlungsAbsicht String?
   bezahlterBetragCents Int?
   bezahltAm      DateTime?
 

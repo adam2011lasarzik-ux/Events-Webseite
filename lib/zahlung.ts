@@ -112,6 +112,16 @@ export async function sitzungErstellen(
     // der Rückmeldung zuverlässig mit.
     client_reference_id: anfrage.anmeldungId,
     metadata: { anmeldungId: anfrage.anmeldungId },
+    /* Dieselbe Nummer zusätzlich an die ZAHLUNG hängen, nicht nur an
+       die Bezahlseite.
+       Der Grund ist eine Lücke, die erst beim genauen Nachlesen
+       auffiel: Eine Erstattungs-Rückmeldung trägt Zahlungs- und
+       Charge-Kennung — die Sitzung, die wir speichern, kommt darin
+       nicht vor. Ohne diese Zeile fand eine im Dashboard von Hand
+       ausgelöste Kulanz-Erstattung ihre Buchung nicht wieder und
+       blieb still wirkungslos. Nebenbei steht die Nummer damit auch
+       bei der Zahlung selbst im Dashboard. */
+    payment_intent_data: { metadata: { anmeldungId: anfrage.anmeldungId } },
     success_url: `${basis()}/anmeldung/danke?nr=${anfrage.anmeldungId}&zahlung=zurueck`,
     cancel_url: `${basis()}/anmeldung/danke?nr=${anfrage.anmeldungId}&zahlung=abgebrochen`,
   });
@@ -130,6 +140,8 @@ export interface Sitzungsstand {
   lage: string | null;
   /** Die Adresse der Bezahlseite, solange sie noch offen ist. */
   url: string | null;
+  /** Die eigentliche Zahlung hinter der Bezahlseite („pi_…"). */
+  zahlungId: string | null;
 }
 
 /**
@@ -148,6 +160,10 @@ export async function sitzungPruefen(sitzungId: string): Promise<Sitzungsstand> 
     anmeldungId: sitzung.metadata?.anmeldungId ?? sitzung.client_reference_id ?? null,
     lage: sitzung.status ?? null,
     url: sitzung.url ?? null,
+    zahlungId:
+      typeof sitzung.payment_intent === "string"
+        ? sitzung.payment_intent
+        : (sitzung.payment_intent?.id ?? null),
   };
 }
 
@@ -186,4 +202,49 @@ export function rueckmeldungPruefen(rohtext: string, unterschrift: string | null
     throw new Error("Die Rückmeldung trägt keine Unterschrift.");
   }
   return stripe().webhooks.constructEvent(rohtext, unterschrift, geheimnis);
+}
+
+export interface Erstattungsergebnis {
+  id: string;
+  betragCents: number;
+  /** „succeeded", „pending", „failed" oder „canceled" beim Anbieter. */
+  lage: string | null;
+}
+
+/**
+ * Den vollen Betrag einer Zahlung erstatten.
+ *
+ * Ohne Betragsangabe erstattet der Anbieter die gesamte Zahlung —
+ * genau das ist die Regel: bei rechtzeitiger Stornierung der volle
+ * Betrag, ohne Abzug. Ein Teilbetrag wird hier bewusst nicht
+ * angeboten; Kulanz in anderer Höhe bleibt Handarbeit im Dashboard.
+ *
+ * Der WIEDERHOLUNGSSCHLÜSSEL ist der Kern dieser Funktion. Kommt
+ * derselbe Aufruf ein zweites Mal an — Doppelklick, doppelt
+ * abgeschickt, erneut geladen —, liefert der Anbieter dieselbe
+ * Erstattung zurück, statt ein zweites Mal Geld zu bewegen. Er hält
+ * beim Anbieter rund einen Tag; der dauerhafte Schutz bleibt die
+ * Statusprüfung in der Datenbank, die vor jedem Aufruf steht.
+ *
+ * Der Testmodus-Riegel gilt hier wie überall: stripe() weist jeden
+ * Schlüssel ab, der kein Testschlüssel ist. Eine echte Erstattung ist
+ * damit vor der bewussten Freischaltung nicht möglich.
+ */
+export async function erstattungAusloesen(
+  zahlungId: string,
+  anmeldungId: string,
+): Promise<Erstattungsergebnis> {
+  const erstattung = await stripe().refunds.create(
+    {
+      payment_intent: zahlungId,
+      metadata: { anmeldungId },
+    },
+    { idempotencyKey: `storno-${anmeldungId}` },
+  );
+
+  return {
+    id: erstattung.id,
+    betragCents: erstattung.amount ?? 0,
+    lage: erstattung.status ?? null,
+  };
 }
