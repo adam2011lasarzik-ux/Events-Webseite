@@ -267,6 +267,60 @@ export const de = {
     },
   },
 
+  storno: {
+    titel: "Buchung stornieren",
+    /* Der Link steht ausschliesslich in der Bestaetigungsmail. Passt
+       der Schluessel nicht, wird bewusst NICHT verraten, ob es die
+       Buchung ueberhaupt gibt — sonst liesse sich durch Probieren
+       herausfinden, wer angemeldet ist. */
+    unbekanntTitel: "Diese Buchung können wir nicht öffnen",
+    unbekanntText:
+      "Der Link ist unvollständig oder gilt nicht mehr. Den gültigen Link findest du in " +
+      "deiner Bestätigungsmail. Wenn du nicht weiterkommst, schreib uns.",
+
+    veranstaltung: "Veranstaltung",
+    termin: "Termin",
+    personen: "Angemeldete Personen",
+    betrag: "Gezahlter Betrag",
+    nummer: "Anmeldenummer",
+
+    frageTitel: "Möchtest du diese Buchung stornieren?",
+    frageErstattung:
+      "Der volle Betrag wird zurückerstattet — auf dem Weg, über den du bezahlt hast. " +
+      "Je nach Bank dauert das einige Werktage.",
+    frageOhneErstattung:
+      "Für diese Buchung wurde noch nichts bezahlt. Es wird also auch nichts erstattet.",
+    frageEndgueltig: "Das lässt sich nicht rückgängig machen. Dein Platz wird sofort wieder frei.",
+    knopf: "Buchung jetzt stornieren",
+
+    erfolgTitel: "Deine Buchung ist storniert",
+    erfolgErstattung:
+      "Der volle Betrag ist zur Rückerstattung angewiesen. Je nach Bank dauert es einige " +
+      "Werktage, bis er wieder bei dir ankommt. Eine Bestätigung schicken wir dir per E-Mail.",
+    erfolgOhneErstattung:
+      "Dein Platz ist wieder frei. Eine Bestätigung schicken wir dir per E-Mail.",
+
+    /* Für jeden Grund ein eigener, ehrlicher Satz — „das hat nicht
+       geklappt" hilft niemandem weiter. */
+    zuSpaetTitel: "Dafür ist es zu spät",
+    zuSpaetText:
+      "Selbst stornieren geht bis 24 Stunden vor Beginn der Veranstaltung. Dieser Zeitpunkt " +
+      "ist vorbei. Schreib uns trotzdem, wenn du nicht kommen kannst — dann finden wir eine " +
+      "Lösung.",
+    bereitsStorniertTitel: "Diese Buchung ist bereits storniert",
+    bereitsStorniertText: "Es gibt nichts mehr zu tun. Dein Platz ist frei.",
+    bereitsErstattetTitel: "Für diese Buchung läuft bereits eine Erstattung",
+    bereitsErstattetText:
+      "Hier wurde schon etwas zurückerstattet. Damit nicht versehentlich ein zweites Mal Geld " +
+      "fließt, übernehmen wir das von Hand — schreib uns kurz.",
+    anbieterTitel: "Die Erstattung hat nicht geklappt",
+    anbieterText:
+      "Wir konnten die Rückerstattung gerade nicht auslösen. An deiner Buchung hat sich " +
+      "nichts geändert. Versuch es später noch einmal oder schreib uns.",
+    gebremstTitel: "Zu viele Versuche",
+    gebremstText: "Bitte warte einen Moment und versuch es dann noch einmal.",
+  },
+
   danke: {
     /* ZWEI Zustände, mehr nicht:
          bezahlt        → Anmeldung bestätigt

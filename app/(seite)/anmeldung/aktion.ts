@@ -18,6 +18,7 @@ import { alsAuswahl } from "@/lib/anmeldung";
 import { versuchErlaubt } from "@/lib/ratelimit";
 import { belegtFilter, reserviertBis } from "@/lib/plaetze";
 import { bezahlseiteFuer } from "@/lib/zahlungStart";
+import { neuerStornoSchluessel } from "@/lib/storno";
 import { mailSendenOhneAbbruch, adminEmpfaenger } from "@/lib/mail";
 import { bestaetigungsMail, adminBenachrichtigungsMail, type MailAnmeldung } from "@/lib/mailVorlagen";
 
@@ -211,6 +212,10 @@ export async function anmeldungAbsenden(
             // Reservierung ist keine.
             reaktiviertAm:
               vorhanden.status === "STORNIERT" ? new Date() : vorhanden.reaktiviertAm,
+            /* Einen vorhandenen Schlüssel behalten: Ein bereits
+               verschickter Storno-Link soll weiter gelten. Fehlt er
+               (Buchung von vor dieser Änderung), entsteht er jetzt. */
+            stornoSchluessel: vorhanden.stornoSchluessel ?? neuerStornoSchluessel(),
             teilnehmer: { create: anmeldung.teilnehmer },
           },
         });
@@ -222,6 +227,9 @@ export async function anmeldungAbsenden(
           eventId: event.id,
           kontaktEmail: anmeldung.kontakt.email,
           ...felder,
+          // Der Nachweis für die spätere Selbstbedienungs-Stornierung.
+          // Er steht ausschliesslich im Link der Bestätigungsmail.
+          stornoSchluessel: neuerStornoSchluessel(),
           teilnehmer: { create: anmeldung.teilnehmer },
         },
       });

@@ -11,6 +11,8 @@
    dieselbe Frage.
    --------------------------------------------------------------- */
 
+import { randomBytes, timingSafeEqual } from "node:crypto";
+
 /** Wie lange vor Beginn die Selbstbedienung endet. */
 export const STORNO_VORLAUF_STUNDEN = 24;
 
@@ -84,4 +86,40 @@ export function stornoEntscheidung(
      Reservierung und ein kostenloses Event werden schlicht storniert.
      Der Betrag stammt aus der Datenbank, nie aus dem Browser. */
   return { erlaubt: true, erstatten: lage.zahlungsStatus === "BEZAHLT" && lage.gesamtpreisCents > 0 };
+}
+
+/* ---------------------------------------------------------------
+   Der Storno-Schlüssel.
+
+   Ab hier ist die Datei nicht mehr rein — diese beiden Funktionen
+   brauchen den Zufallsgenerator des Systems. Sie stehen trotzdem
+   hier, weil sie zur selben Sache gehören und sonst verstreut wären.
+   --------------------------------------------------------------- */
+
+/**
+ * Ein neuer Schlüssel für den Storno-Link.
+ *
+ * 32 zufällige Bytes, dieselbe Stärke wie bei den Admin-Sitzungen
+ * (lib/adminAuth.ts). Er ist der Nachweis, dass jemand wirklich diese
+ * Buchung gemacht hat — die Anmeldenummer aus der Adresse der
+ * Abschluss-Seite reicht dafür ausdrücklich nicht.
+ */
+export function neuerStornoSchluessel(): string {
+  return randomBytes(32).toString("base64url");
+}
+
+/**
+ * Zwei Schlüssel vergleichen, ohne über die Zeit zu verraten, wie
+ * weit man gekommen ist.
+ *
+ * Ein gewöhnliches `===` bricht beim ersten abweichenden Zeichen ab.
+ * Aus dem Zeitunterschied lässt sich ein Schlüssel Zeichen für
+ * Zeichen erraten. Dasselbe Vorgehen wie beim Passwortvergleich in
+ * lib/passwort.ts.
+ */
+export function schluesselStimmt(erwartet: string | null, eingang: string | null): boolean {
+  if (!erwartet || !eingang) return false;
+  const a = Buffer.from(erwartet);
+  const b = Buffer.from(eingang);
+  return a.length === b.length && timingSafeEqual(a, b);
 }
