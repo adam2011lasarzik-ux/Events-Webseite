@@ -127,27 +127,43 @@ Muster.
 
 ---
 
-## Ein offener Punkt zur Mehrwertsteuer
+## Mehrwertsteuer: geklärt — Kleinunternehmer nach § 19 UStG 🟩
 
-An **vier** Stellen steht, die Preise seien „inkl. MwSt.":
+**Entscheidung des Betreibers (September 2026):** VERA wird als
+Kleinunternehmen nach **§ 19 UStG** geführt. Es wird **keine
+Umsatzsteuer** berechnet und folglich auch keine ausgewiesen.
 
-| Datei | Wo | Wer sieht es |
-|---|---|---|
-| `content/de.ts` → `preise.einleitung` | Preis-Einleitung auf der Eventseite | alle Besucher |
-| `content/de.ts` → `anmeldung.inklMwst` | Preisrechner im Anmeldeformular | alle Anmelder |
-| `lib/zahlungRegeln.ts` | **Beschriftung auf der Bezahlseite von Stripe** | jeder zahlende Kunde |
-| `components/admin/EventFormular.tsx` | Überschrift im Verwaltungsbereich | nur der Betreiber |
+Das ist keine Formulierungsfrage, sondern eine Pflicht: Wer als
+Kleinunternehmer Umsatzsteuer ausweist, **schuldet sie dem Finanzamt**
+(§ 14c Abs. 2 UStG) — auch wenn er sie nie eingenommen hat. Die
+frühere Angabe „inkl. MwSt." war deshalb nicht nur ungenau, sondern
+ein echtes Risiko.
 
-> **Korrigiert:** Hier stand früher „fünf Stellen", darunter eine im
-> AGB-Platzhalter. Die gibt es dort nicht mehr. Nachgezählt statt
-> abgeschrieben.
+### Was geändert wurde
 
-Ob das zutrifft, hängt an der Gewerbeanmeldung: Als Kleinunternehmer
-nach § 19 UStG dürfte gar keine Mehrwertsteuer ausgewiesen werden.
+| Datei | Wo | Wer sieht es | Neu |
+|---|---|---|---|
+| `content/de.ts` → `preise.einleitung` | Preis-Einleitung auf der Eventseite | alle Besucher | „Es sind Endpreise; gemäß § 19 UStG wird keine Umsatzsteuer berechnet." |
+| `content/de.ts` → `anmeldung.preisHinweis` | Preisrechner im Anmeldeformular | alle Anmelder | „Gesamtpreis" (Schlüssel umbenannt von `inklMwst`) |
+| `lib/zahlungRegeln.ts` | **Beschriftung auf der Bezahlseite von Stripe** | jeder zahlende Kunde | „Gesamtpreis, keine Umsatzsteuer (§ 19 UStG)" |
+| `components/admin/EventFormular.tsx` | Überschrift im Verwaltungsbereich | nur der Betreiber | „Preise (Endpreise, keine USt.)" |
 
-**Ich habe die Aussage nicht geändert** — in die eine wie in die andere
-Richtung wäre es geraten. Sie gehört geklärt, bevor echte Kunden
-bezahlen; die vierte Zeile sieht jeder zahlende Kunde. 🟨 🟥
+Zwei Entscheidungen dabei, die begründet gehören:
+
+- **Der Wörterbuch-Schlüssel heisst jetzt `preisHinweis`, nicht mehr
+  `inklMwst`.** Ein Schlüssel namens `inklMwst` mit dem Inhalt
+  „Gesamtpreis" wäre eine Falle für den Nächsten, der die Datei liest.
+- **Auf der Bezahlseite steht „keine Umsatzsteuer", nicht „ohne
+  Umsatzsteuer".** „Ohne" liest sich wie ein Nettopreis, auf den noch
+  etwas draufkommt. Genau das soll dort niemand denken.
+
+### Wenn sich das je ändert
+
+Überschreitet der Umsatz die Grenzen des § 19 UStG, greift die
+Regelbesteuerung — dann müssen diese vier Stellen **wieder** angepasst
+werden, und zwar bevor der nächste Kunde bezahlt. Prüfliste `N`
+schlägt heute Alarm, sobald eine öffentliche Seite Umsatzsteuer
+behauptet; sie ist dann mit anzupassen.
 
 ---
 
@@ -158,10 +174,11 @@ bezahlen; die vierte Zeile sieht jeder zahlende Kunde. 🟨 🟥
    berücksichtigen 🟥
 3. **Widerrufsrecht klären** (§ 312g Abs. 2 Nr. 9 BGB) und die Seite
    entsprechend füllen 🟥
-4. **Mehrwertsteuer-Aussage** bestätigen oder ändern 🟥
+4. ~~**Mehrwertsteuer-Aussage** bestätigen oder ändern~~ 🟩 **erledigt**
+   (Kleinunternehmer § 19 UStG, vier Stellen korrigiert)
 5. Entscheiden, ob eigene **AGB** verwendet werden — falls ja,
    erstellen und prüfen lassen 🟨
 6. ~~**Stornobedingungen** festlegen~~ 🟩 **erledigt**
 
-Punkt 1 und 4 kannst du selbst liefern. Punkt 2, 3 und 5 gehören
-fachkundig geprüft.
+Punkt 1 kannst du selbst liefern. Punkt 2, 3 und 5 gehören
+fachkundig geprüft. Punkt 4 und 6 sind erledigt.

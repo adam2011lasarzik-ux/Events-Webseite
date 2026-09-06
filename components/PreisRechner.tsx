@@ -310,7 +310,7 @@ export function PreisRechner({
               ? t.anmeldung.personEiner
               : fuelle(t.anmeldung.personMehrere, { n: ergebnis.personen })}
           </span>
-          <span>{t.anmeldung.inklMwst}</span>
+          <span>{t.anmeldung.preisHinweis}</span>
         </div>
 
         <div className={feldStil.absendeBereich}>

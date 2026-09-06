@@ -78,7 +78,8 @@ export const de = {
   preise: {
     ueberschrift: "Was es kostet",
     einleitung:
-      "Alle Preise gelten pro Person und Veranstaltungstag, inklusive Mehrwertsteuer. " +
+      "Alle Preise gelten pro Person und Veranstaltungstag. Es sind Endpreise; gemäß " +
+      "§ 19 UStG wird keine Umsatzsteuer berechnet. " +
       "Schläger, Bälle und Betreuung sind im Preis enthalten. Essen und Getränke können " +
       "vor Ort separat erworben werden.",
     schueler: "Schüler",
@@ -214,7 +215,10 @@ export const de = {
     summe: "Gesamt",
     personEiner: "1 Person",
     personMehrere: "{n} Personen",
-    inklMwst: "inkl. MwSt.",
+    /* Hiess einmal "inklMwst". Als Kleinunternehmer nach § 19 UStG
+       weist VERA keine Umsatzsteuer aus — der alte Name hätte eine
+       Aussage behauptet, die der Wert nicht mehr macht. */
+    preisHinweis: "Gesamtpreis",
     keineAuswahl: "Wähle oben aus, wer mitkommt.",
 
     nochNichtTitel: "Die Anmeldung öffnet in Kürze",

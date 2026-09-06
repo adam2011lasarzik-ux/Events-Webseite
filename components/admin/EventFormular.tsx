@@ -277,7 +277,7 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
 
       {/* ── Preise ─────────────────────────────────────────────── */}
       <div className={stil.karte}>
-        <p className={stil.formGruppenTitel}>Preise (inkl. MwSt.)</p>
+        <p className={stil.formGruppenTitel}>Preise (Endpreise, keine USt.)</p>
         <div className={stil.raster}>
           <div className={stil.breit}>
             <label className={stil.haken}>

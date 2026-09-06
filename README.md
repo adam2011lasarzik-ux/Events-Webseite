@@ -561,9 +561,10 @@ Zwei Punkte daraus, weil sie leicht übersehen werden:
   Bei Freizeitveranstaltungen zu einem festen Termin kann das
   Widerrufsrecht nach § 312g Abs. 2 Nr. 9 BGB ausgeschlossen sein — die
   Frage gehört beantwortet, bevor Tickets verkauft werden.
-- Die Angabe **„inkl. MwSt."** steht an fünf Stellen, eine davon auf
-  der Bezahlseite. Ob sie zutrifft, hängt an der Gewerbeanmeldung
-  (§ 19 UStG). Fundstellen in `docs/rechtliches.md`.
+- **Keine Umsatzsteuer.** VERA ist Kleinunternehmen nach § 19 UStG;
+  die angezeigten Preise sind Endpreise ohne ausgewiesene Umsatzsteuer.
+  Früher stand an vier Stellen „inkl. MwSt." — das ist korrigiert und
+  wird von Prüfliste `N` bei jedem Lauf nachgeprüft.
 
 ## Noch offen
 

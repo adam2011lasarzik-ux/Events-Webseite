@@ -156,6 +156,78 @@ for (const [beschriftung, ziel] of [
   pruefe(`Fußbereich verlinkt „${beschriftung}“`, (await treffer.count()) === 1);
 }
 
+/* ── Umsatzsteuer: keine Seite darf welche behaupten ─────────────
+
+   VERA ist Kleinunternehmen nach § 19 UStG. Wer als Kleinunternehmer
+   Umsatzsteuer AUSWEIST, schuldet sie dem Finanzamt (§ 14c Abs. 2
+   UStG) — auch wenn er sie nie eingenommen hat. Ein versehentlich
+   wieder eingebautes „inkl. MwSt." ist deshalb kein Schönheitsfehler,
+   sondern kostet Geld. Darum wird es hier bei jedem Lauf gesucht.
+
+   Geprüft wird auf JEDER öffentlichen Seite, nicht nur auf den
+   Rechtsseiten: Die alte Angabe stand unter anderem in der
+   Preis-Einleitung und im Preisrechner. */
+
+const VERBOTEN = [
+  /inkl\.?\s*(MwSt|USt|Mehrwertsteuer|Umsatzsteuer)/i,
+  /inklusive\s+(Mehrwert|Umsatz)steuer/i,
+  /zzgl\.?\s*(MwSt|USt|Mehrwertsteuer|Umsatzsteuer)/i,
+  /enthaltene[rn]?\s+(Mehrwert|Umsatz)steuer/i,
+  /\d+\s*%\s*(MwSt|USt|Mehrwertsteuer|Umsatzsteuer)/i,
+];
+
+/* Kleine Breitensuche über die internen Links — dieselbe Idee wie in
+   Prüfliste O, nur ohne deren Knopfprüfung. */
+const gesehen = new Set(["/"]);
+const offen = ["/"];
+const mitSteuer = [];
+let besucht = 0;
+
+while (offen.length) {
+  const pfad = offen.shift();
+  const antwort = await page.goto(BASIS + pfad, { waitUntil: "networkidle" });
+  if (!antwort || antwort.status() !== 200) continue;
+  besucht += 1;
+
+  const text = await page.locator("body").innerText();
+  for (const muster of VERBOTEN) {
+    const treffer = text.match(muster);
+    if (treffer) mitSteuer.push(`${pfad}: „${treffer[0]}"`);
+  }
+
+  const ziele = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
+  for (const ziel of ziele) {
+    if (!ziel || !ziel.startsWith("/")) continue;
+    const rein = ziel.split("#")[0].split("?")[0];
+    if (!rein || gesehen.has(rein)) continue;
+    if (/^\/(admin|bilder|zahlung)\b/.test(rein)) continue;
+    gesehen.add(rein);
+    offen.push(rein);
+  }
+}
+
+pruefe(`Umsatzsteuer: ${besucht} öffentliche Seiten durchsucht`, besucht >= 8, `${besucht} Seiten`);
+pruefe(
+  "Keine öffentliche Seite weist Umsatzsteuer aus",
+  mitSteuer.length === 0,
+  mitSteuer.join(" · "),
+);
+
+/* Die Gegenprobe: Es reicht nicht, dass nichts Falsches dasteht —
+   der Grund muss auch genannt sein, sonst wirkt der Preis unerklärt. */
+await page.goto(BASIS + "/", { waitUntil: "networkidle" });
+const startLinks = await page.$$eval("a[href^='/events/']", (as) => as.map((a) => a.getAttribute("href")));
+if (startLinks.length) {
+  await page.goto(BASIS + startLinks[0].split("#")[0], { waitUntil: "networkidle" });
+  const eventText = await page.locator("body").innerText();
+  pruefe(
+    "Die Eventseite nennt § 19 UStG als Grund",
+    /§\s*19\s*UStG/.test(eventText) && /keine Umsatzsteuer/i.test(eventText),
+  );
+} else {
+  pruefe("Die Eventseite nennt § 19 UStG als Grund", false, "kein Event zum Prüfen gefunden");
+}
+
 await ctx.close();
 await browser.close();
 console.log(`\n${n - schief.length} von ${n} in Ordnung.`);

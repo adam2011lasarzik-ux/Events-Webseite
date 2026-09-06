@@ -82,7 +82,13 @@ export function posten(titel: string, personen: number, gesamtCents: number) {
       unit_amount: gesamtCents,
       product_data: {
         name: titel,
-        description: `${personen} ${personen === 1 ? "Person" : "Personen"} · inkl. MwSt.`,
+        /* Diese Zeile liest JEDER zahlende Kunde auf der Bezahlseite.
+           "Gesamtpreis" statt "ohne Umsatzsteuer": Letzteres liesse
+           sich als Nettopreis missverstehen, auf den noch etwas
+           daraufkommt — das Gegenteil dessen, was gemeint ist. */
+        description:
+          `${personen} ${personen === 1 ? "Person" : "Personen"} · ` +
+          "Gesamtpreis, keine Umsatzsteuer (§ 19 UStG)",
       },
     },
     quantity: 1,
