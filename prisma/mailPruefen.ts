@@ -33,10 +33,16 @@ function pruefe(name: string, gut: boolean, hinweis: string): boolean {
   return gut;
 }
 
-/** Nur so viel vom Wert zeigen, dass er wiedererkennbar bleibt. */
-function angedeutet(wert: string): string {
-  const laenge = `(${wert.length} Zeichen)`;
-  return wert.length <= 4 ? `… ${laenge}` : `${wert.slice(0, 3)}…${wert.slice(-3)} ${laenge}`;
+/**
+ * Vom Passwort wird AUSSCHLIESSLICH die Zeichenzahl gezeigt.
+ *
+ * Kein Ausschnitt, kein Anfang, kein Ende: Diese Ausgabe landet in
+ * Protokolldateien und auf Bildschirmfotos. Die Länge genügt für den
+ * einzigen Zweck, den sie hier hat — zu erkennen, ob der Wert
+ * unterwegs abgeschnitten wurde.
+ */
+function nurLaenge(wert: string): string {
+  return `hinterlegt (${wert.length} Zeichen)`;
 }
 
 const server = (process.env.SMTP_SERVER ?? "").trim();
@@ -144,7 +150,7 @@ console.log("\nHinterlegt:");
 console.log(`  Server              ${server || "— fehlt —"}`);
 console.log(`  Port                ${portRoh || "— fehlt —"}`);
 console.log(`  Benutzer            ${benutzer || "— fehlt —"}`);
-console.log(`  Passwort            ${passwort ? angedeutet(passwort) : "— fehlt —"}`);
+console.log(`  Passwort            ${passwort ? nurLaenge(passwort) : "— fehlt —"}`);
 console.log(`  Absender            ${absender || "— fehlt —"}`);
 console.log(`  Admin-Empfänger     ${adminEmpfaenger() ?? "— fehlt (fällt auf den Absender zurück) —"}`);
 
