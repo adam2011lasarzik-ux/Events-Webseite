@@ -35,7 +35,8 @@ function pruefe(name: string, gut: boolean, hinweis: string): boolean {
 
 /** Nur so viel vom Wert zeigen, dass er wiedererkennbar bleibt. */
 function angedeutet(wert: string): string {
-  return wert.length <= 4 ? "…" : `${wert.slice(0, 3)}…${wert.slice(-6)}`;
+  const laenge = `(${wert.length} Zeichen)`;
+  return wert.length <= 4 ? `… ${laenge}` : `${wert.slice(0, 3)}…${wert.slice(-3)} ${laenge}`;
 }
 
 const server = (process.env.SMTP_SERVER ?? "").trim();
@@ -70,11 +71,40 @@ pruefe(
   benutzer !== "",
   "SMTP_BENUTZER setzen — die volle Postfach-Adresse, z. B. kontakt@veraevents.de.",
 );
-pruefe(
-  "SMTP_PASSWORT ist hinterlegt",
-  passwort !== "",
-  "SMTP_PASSWORT setzen. Niemals ins Repository oder in den Chat schreiben.",
-);
+if (
+  pruefe(
+    "SMTP_PASSWORT ist hinterlegt",
+    passwort !== "",
+    "SMTP_PASSWORT setzen. Niemals ins Repository oder in den Chat schreiben.",
+  )
+) {
+  /* Die häufigste Ursache für „authentication failed" ist nicht ein
+     falsches Passwort, sondern ein beim Eintippen oder Einfügen
+     verändertes. Diese drei Prüfungen finden genau das — ohne das
+     Passwort selbst zu zeigen. */
+  pruefe(
+    "SMTP_PASSWORT hat kein Leerzeichen am Anfang oder Ende",
+    passwort === passwort.trim(),
+    "Am Anfang oder Ende steht ein Leerzeichen (oder ein Zeilenumbruch). Beim " +
+      "Einfügen auf dem iPad passiert das leicht — der Mailserver weist das Passwort " +
+      "dann als falsch ab. In der .env-Datei die Anführungszeichen direkt an den " +
+      "ersten und letzten Buchstaben setzen.",
+  );
+  pruefe(
+    "SMTP_PASSWORT enthält keine Zeichen, die beim Einlesen verändert werden",
+    !/["\\$`]/.test(passwort),
+    'Das Passwort enthält eines dieser Zeichen: " \\ $ ` — die haben in einer ' +
+      ".env-Datei eine eigene Bedeutung und können den Wert unterwegs verändern. " +
+      "Wenn möglich, im Postfach ein Passwort ohne diese Zeichen vergeben.",
+  );
+  pruefe(
+    "SMTP_PASSWORT wirkt vollständig",
+    passwort.length >= 8,
+    `Es sind nur ${passwort.length} Zeichen angekommen — das sieht abgeschnitten aus. ` +
+      "Enthält das Passwort ein #-Zeichen und stehen keine Anführungszeichen darum, " +
+      "wird alles ab dem # als Kommentar verworfen.",
+  );
+}
 
 /* ── 3. Absender ──────────────────────────────────────────────── */
 
