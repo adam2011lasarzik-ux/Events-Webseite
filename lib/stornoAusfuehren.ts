@@ -24,6 +24,8 @@
 import { db } from "./db";
 import { erstattungAusloesen } from "./zahlung";
 import { schluesselStimmt, stornoEntscheidung, type Stornogrund } from "./storno";
+import { mailSendenOhneAbbruch, adminEmpfaenger } from "./mail";
+import { stornoBestaetigungsMail, stornoAdminMail } from "./mailVorlagen";
 
 export type Stornofehler =
   /** Buchung gibt es nicht, oder der Schlüssel passt nicht. Bewusst
@@ -115,7 +117,7 @@ export async function stornoAusfuehren(
 
   const anmeldung = await db.registration.findUnique({
     where: { id: anmeldungId },
-    include: { event: { select: { startAt: true } } },
+    include: { event: true, teilnehmer: true },
   });
   if (!anmeldung) return { erfolg: false, fehler: "unbekannt" };
   if (!schluesselStimmt(anmeldung.stornoSchluessel, schluessel)) {
@@ -172,6 +174,39 @@ export async function stornoAusfuehren(
       ...(erstattet ? { zahlungsStatus: "ERSTATTET" as const } : {}),
     },
   });
+
+  /* Die Mails sind eine Zugabe, kein Teil des Vorgangs: Die
+     Stornierung ist gespeichert und das Geld ist angewiesen — ein
+     Mail-Ausfall darf daran nichts mehr ändern. Deshalb wie überall
+     die schluckende Variante. */
+  const fuerMail = {
+    id: anmeldung.id,
+    kontaktVorname: anmeldung.kontaktVorname,
+    kontaktNachname: anmeldung.kontaktNachname,
+    kontaktEmail: anmeldung.kontaktEmail,
+    kontaktTelefon: anmeldung.kontaktTelefon,
+    gesamtpreisCents: anmeldung.gesamtpreisCents,
+    teilnehmer: anmeldung.teilnehmer,
+  };
+  const fuerMailEvent = {
+    titel: anmeldung.event.titel,
+    startAt: anmeldung.event.startAt,
+    ortName: anmeldung.event.ortName,
+    stadt: anmeldung.event.stadt,
+  };
+
+  await mailSendenOhneAbbruch({
+    an: anmeldung.kontaktEmail,
+    ...stornoBestaetigungsMail(fuerMail, fuerMailEvent, erstattet),
+  });
+
+  const empfaenger = adminEmpfaenger();
+  if (empfaenger) {
+    await mailSendenOhneAbbruch({
+      an: empfaenger,
+      ...stornoAdminMail(fuerMail, fuerMailEvent, erstattet),
+    });
+  }
 
   return { erfolg: true, erstattet, betragCents: anmeldung.gesamtpreisCents };
 }

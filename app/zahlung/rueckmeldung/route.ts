@@ -20,6 +20,7 @@ import { rueckmeldungPruefen, ZahlungNichtEingerichtet } from "@/lib/zahlung";
 import { betragPasst } from "@/lib/zahlungRegeln";
 import { mailSendenOhneAbbruch } from "@/lib/mail";
 import { zahlungsBestaetigungsMail } from "@/lib/mailVorlagen";
+import { stornoLink } from "@/lib/storno";
 
 /* Node-Laufzeit: Die Unterschrift wird über den ROHTEXT gebildet.
    Läge hier ein bereits verarbeiteter Körper vor, ginge die Prüfung
@@ -180,6 +181,9 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
         ortName: anmeldung.event.ortName,
         stadt: anmeldung.event.stadt,
       },
+      // Der Storno-Link — der einzige Weg, auf dem der Schlüssel
+      // den Anmelder erreicht.
+      stornoLink(process.env.OEFFENTLICHE_ADRESSE, anmeldung.id, anmeldung.stornoSchluessel),
     ),
   });
 }

@@ -18,7 +18,7 @@ import { alsAuswahl } from "@/lib/anmeldung";
 import { versuchErlaubt } from "@/lib/ratelimit";
 import { belegtFilter, reserviertBis } from "@/lib/plaetze";
 import { bezahlseiteFuer } from "@/lib/zahlungStart";
-import { neuerStornoSchluessel } from "@/lib/storno";
+import { neuerStornoSchluessel, stornoLink } from "@/lib/storno";
 import { mailSendenOhneAbbruch, adminEmpfaenger } from "@/lib/mail";
 import { bestaetigungsMail, adminBenachrichtigungsMail, type MailAnmeldung } from "@/lib/mailVorlagen";
 
@@ -290,9 +290,20 @@ export async function anmeldungAbsenden(
      über die Webhook-Rückmeldung des Zahlungsanbieters (dort steht
      erst fest, dass wirklich bezahlt wurde). */
   if (kostenlos) {
+    /* Der Storno-Link gehört in die Bestätigung — er ist der einzige
+       Weg, auf dem der Schlüssel den Anmelder erreicht. Fehlt die
+       öffentliche Adresse, bleibt der Abschnitt weg statt kaputt. */
+    const gespeichert = await db.registration.findUnique({
+      where: { id: neueId },
+      select: { stornoSchluessel: true },
+    });
     await mailSendenOhneAbbruch({
       an: anmeldung.kontakt.email,
-      ...bestaetigungsMail(mailAnmeldung, mailEvent),
+      ...bestaetigungsMail(
+        mailAnmeldung,
+        mailEvent,
+        stornoLink(process.env.OEFFENTLICHE_ADRESSE, neueId, gespeichert?.stornoSchluessel),
+      ),
     });
     redirect(`/anmeldung/danke?nr=${neueId}`);
   }

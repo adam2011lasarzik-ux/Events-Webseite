@@ -41,10 +41,32 @@ function teilnehmerListe(teilnehmer: MailTeilnehmer[]): string {
   return teilnehmer.map((t) => `  - ${t.vorname} ${t.nachname}`).join("\n");
 }
 
+/**
+ * Der Storno-Abschnitt am Ende einer Bestätigung.
+ *
+ * Ohne Link (Adresse oder Schlüssel fehlen) bleibt er ganz weg —
+ * lieber kein Hinweis als ein Hinweis auf einen kaputten Link.
+ *
+ * Der Link steht AUSSCHLIESSLICH hier, in der Mail an die anmeldende
+ * Person. Er ist der Nachweis für die Stornierung; wer ihn hat, kann
+ * diese eine Buchung absagen.
+ */
+function stornoAbschnitt(link: string | null | undefined): string[] {
+  if (!link) return [];
+  return [
+    "",
+    "Falls du doch nicht kannst:",
+    "Bis 24 Stunden vor Beginn kannst du hier selbst stornieren, der volle",
+    "Betrag wird dann zurückerstattet.",
+    link,
+  ];
+}
+
 /** Anmeldebestätigung — nur für sofort bestätigte (kostenlose) Anmeldungen. */
 export function bestaetigungsMail(
   anmeldung: MailAnmeldung,
   event: MailEvent,
+  stornoLink?: string | null,
 ): { betreff: string; text: string } {
   return {
     betreff: `Anmeldung bestätigt: ${event.titel}`,
@@ -60,6 +82,7 @@ export function bestaetigungsMail(
       teilnehmerListe(anmeldung.teilnehmer),
       "",
       `Anmeldenummer: ${anmeldung.id}`,
+      ...stornoAbschnitt(stornoLink),
       "",
       "Bis bald,",
       "das VERA-Team",
@@ -71,6 +94,7 @@ export function bestaetigungsMail(
 export function zahlungsBestaetigungsMail(
   anmeldung: MailAnmeldung,
   event: MailEvent,
+  stornoLink?: string | null,
 ): { betreff: string; text: string } {
   return {
     betreff: `Zahlung erhalten: ${event.titel}`,
@@ -87,6 +111,7 @@ export function zahlungsBestaetigungsMail(
       teilnehmerListe(anmeldung.teilnehmer),
       "",
       `Anmeldenummer: ${anmeldung.id}`,
+      ...stornoAbschnitt(stornoLink),
       "",
       "Bis bald,",
       "das VERA-Team",
@@ -115,6 +140,65 @@ export function adminBenachrichtigungsMail(
       "",
       `Betrag: ${alsEuro(anmeldung.gesamtpreisCents)}`,
       `Anmeldenummer: ${anmeldung.id}`,
+    ].join("\n"),
+  };
+}
+
+/** Bestätigung an die anmeldende Person nach einer Stornierung. */
+export function stornoBestaetigungsMail(
+  anmeldung: MailAnmeldung,
+  event: MailEvent,
+  erstattet: boolean,
+): { betreff: string; text: string } {
+  return {
+    betreff: `Stornierung bestätigt: ${event.titel}`,
+    text: [
+      `Hallo ${anmeldung.kontaktVorname},`,
+      "",
+      `deine Buchung für "${event.titel}" ist storniert. Dein Platz ist wieder frei.`,
+      "",
+      ...(erstattet
+        ? [
+            `Der volle Betrag von ${alsEuro(anmeldung.gesamtpreisCents)} ist zur`,
+            "Rückerstattung angewiesen — auf dem Weg, über den du bezahlt hast.",
+            "Je nach Bank dauert es einige Werktage, bis er bei dir ankommt.",
+          ]
+        : ["Für diese Buchung war nichts bezahlt, es wird also auch nichts erstattet."]),
+      "",
+      `Anmeldenummer: ${anmeldung.id}`,
+      "",
+      "Schade, dass es diesmal nicht klappt — vielleicht beim nächsten Mal.",
+      "das VERA-Team",
+    ].join("\n"),
+  };
+}
+
+/** Benachrichtigung an den Veranstalter über eine Stornierung. */
+export function stornoAdminMail(
+  anmeldung: MailAnmeldung,
+  event: MailEvent,
+  erstattet: boolean,
+): { betreff: string; text: string } {
+  return {
+    betreff: `Stornierung: ${event.titel} (${anmeldung.teilnehmer.length} Person${
+      anmeldung.teilnehmer.length === 1 ? "" : "en"
+    })`,
+    text: [
+      `Eine Buchung für "${event.titel}" wurde storniert.`,
+      "",
+      `Kontakt: ${anmeldung.kontaktVorname} ${anmeldung.kontaktNachname}`,
+      `E-Mail: ${anmeldung.kontaktEmail}`,
+      "",
+      "Teilnehmer:",
+      teilnehmerListe(anmeldung.teilnehmer),
+      "",
+      `Betrag: ${alsEuro(anmeldung.gesamtpreisCents)}`,
+      erstattet
+        ? "Erstattung: automatisch angewiesen, voller Betrag."
+        : "Erstattung: keine — für diese Buchung war nichts bezahlt.",
+      `Anmeldenummer: ${anmeldung.id}`,
+      "",
+      `${anmeldung.teilnehmer.length} Platz/Plätze sind wieder frei.`,
     ].join("\n"),
   };
 }

@@ -109,6 +109,31 @@ export function neuerStornoSchluessel(): string {
 }
 
 /**
+ * Die vollständige Adresse des Storno-Links.
+ *
+ * Rein: Die öffentliche Adresse wird hereingereicht, nicht hier aus
+ * der Umgebung gelesen. So bleibt die Funktion prüfbar, und die
+ * E-Mail-Vorlagen bleiben frei von Umgebungswerten.
+ *
+ * null bedeutet: kein Link möglich — dann fehlt entweder die
+ * öffentliche Adresse oder der Schlüssel (bei Buchungen von vor
+ * dieser Änderung). Die Mail wird dann ohne Storno-Abschnitt
+ * verschickt, statt einen kaputten Link zu enthalten.
+ */
+export function stornoLink(
+  basis: string | null | undefined,
+  anmeldungId: string,
+  schluessel: string | null | undefined,
+): string | null {
+  const sauber = (basis ?? "").trim().replace(/\/+$/, "");
+  if (!sauber || !schluessel || !anmeldungId) return null;
+  return (
+    `${sauber}/anmeldung/stornieren` +
+    `?nr=${encodeURIComponent(anmeldungId)}&schluessel=${encodeURIComponent(schluessel)}`
+  );
+}
+
+/**
  * Zwei Schlüssel vergleichen, ohne über die Zeit zu verraten, wie
  * weit man gekommen ist.
  *
