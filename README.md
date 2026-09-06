@@ -421,16 +421,33 @@ Business-Design wird daraus eine Zeitschiene.
   eigenen Spalte bindet (Event-Karte, Ablauf-Schritte, Titel der
   Detailseite, Abschlussblock).
 
+## E-Mail-Versand
+
+Anmeldebestätigung, Zahlungsbestätigung, eine Benachrichtigung an den
+Veranstalter bei jeder neuen Anmeldung, und ein Alarm, wenn die
+nächtliche Datenbank-Sicherung fehlschlägt — alles über
+`lib/mail.ts` (Nodemailer). Solange die fünf `SMTP_*`-Variablen nicht
+gesetzt sind, verschickt die Anwendung **nichts** — ein Bau ohne `.env`
+bricht dadurch nicht ab, und eine Anmeldung oder Zahlung scheitert nie
+an einem Mail-Ausfall (`mailSendenOhneAbbruch`).
+
+Die Klick-für-Klick-Anleitung steht in
+**[docs/email-einrichten.md](docs/email-einrichten.md)**. Ob alles
+hinterlegt ist und das Postfach die Verbindung annimmt, beantwortet:
+
+```
+npm run mail:pruefen
+```
+
 ## Was diese Version bewusst noch nicht kann
 
 **Kein Echtbetrieb bei der Bezahlung.** Die Anbindung an Stripe steht,
 läuft aber ausschließlich im Testmodus (siehe oben). Es fließt kein
 echtes Geld.
 
-**Keine automatischen E-Mails.** Auch das steht so auf der
-Bestätigungsseite.
-
-**Kein Livebetrieb.** Es gibt noch kein Hosting und keine Domain.
+**Rechtstexte sind Platzhalter.** Impressum, Datenschutz, AGB und
+Widerruf sind sichtbar markierte Platzhalter (`docs/rechtliches.md`),
+noch ohne echte Unternehmensdaten.
 
 ## Lange deutsche Wörter
 
@@ -550,9 +567,9 @@ Zwei Punkte daraus, weil sie leicht übersehen werden:
 
 ## Noch offen
 
-Datum und Uhrzeit des ersten Events · genaue Adresse · Kontaktdaten ·
-Impressumsdaten · eigene Fotos · Hosting · Domain · Bezahlung ·
-automatische E-Mails
+Rechtstexte mit echten Unternehmensdaten (Impressum, Datenschutz, AGB,
+Widerruf — sechs offene Punkte, siehe `docs/rechtliches.md`) ·
+Live-Zahlung (bewusst gesperrt, siehe oben) · laufendes Monitoring.
 
 Die inhaltlichen Lücken sind auf der Seite sichtbar als
 **Platzhalter** gekennzeichnet.

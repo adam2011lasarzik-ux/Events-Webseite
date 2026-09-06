@@ -18,6 +18,8 @@ import { alsAuswahl } from "@/lib/anmeldung";
 import { versuchErlaubt } from "@/lib/ratelimit";
 import { belegtFilter, reserviertBis } from "@/lib/plaetze";
 import { bezahlseiteFuer } from "@/lib/zahlungStart";
+import { mailSendenOhneAbbruch, adminEmpfaenger } from "@/lib/mail";
+import { bestaetigungsMail, adminBenachrichtigungsMail, type MailAnmeldung } from "@/lib/mailVorlagen";
 
 function zahl(wert: FormDataEntryValue | null, standard = 0): number {
   const n = Number(wert);
@@ -251,8 +253,41 @@ export async function anmeldungAbsenden(
     };
   }
 
-  /* Kostenlos: direkt zur Bestätigung. */
-  if (kostenlos) redirect(`/anmeldung/danke?nr=${neueId}`);
+  // ── E-Mails: eine angenehme Zugabe, nie ein Grund zum Abbrechen ──
+  // Die Anmeldung steht bereits in der Datenbank; ein Mail-Ausfall
+  // (fehlende Einrichtung ebenso wie ein echter Versandfehler) darf
+  // das nicht rückgängig machen. Deshalb ausschließlich die
+  // schluckende Variante, und ohne await auf den Erfolg zu warten.
+  const mailAnmeldung: MailAnmeldung = {
+    id: neueId,
+    kontaktVorname: anmeldung.kontakt.vorname,
+    kontaktNachname: anmeldung.kontakt.nachname,
+    kontaktEmail: anmeldung.kontakt.email,
+    kontaktTelefon: anmeldung.kontakt.telefon,
+    gesamtpreisCents: preis.gesamtCents,
+    teilnehmer: anmeldung.teilnehmer,
+  };
+  const mailEvent = { titel: event.titel, startAt: event.startAt, ortName: event.ortName, stadt: event.stadt };
+
+  const empfaenger = adminEmpfaenger();
+  if (empfaenger) {
+    await mailSendenOhneAbbruch({
+      an: empfaenger,
+      ...adminBenachrichtigungsMail(mailAnmeldung, mailEvent),
+    });
+  }
+
+  /* Kostenlos: sofort bestätigt, also auch sofort die Bestätigungsmail.
+     Bei einer bezahlpflichtigen Anmeldung folgt die Bestätigung erst
+     über die Webhook-Rückmeldung des Zahlungsanbieters (dort steht
+     erst fest, dass wirklich bezahlt wurde). */
+  if (kostenlos) {
+    await mailSendenOhneAbbruch({
+      an: anmeldung.kontakt.email,
+      ...bestaetigungsMail(mailAnmeldung, mailEvent),
+    });
+    redirect(`/anmeldung/danke?nr=${neueId}`);
+  }
 
   /* Sonst direkt weiter zur Bezahlseite des Anbieters.
 

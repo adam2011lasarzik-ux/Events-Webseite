@@ -18,6 +18,8 @@ import type Stripe from "stripe";
 import { db } from "@/lib/db";
 import { rueckmeldungPruefen, ZahlungNichtEingerichtet } from "@/lib/zahlung";
 import { betragPasst } from "@/lib/zahlungRegeln";
+import { mailSendenOhneAbbruch } from "@/lib/mail";
+import { zahlungsBestaetigungsMail } from "@/lib/mailVorlagen";
 
 /* Node-Laufzeit: Die Unterschrift wird über den ROHTEXT gebildet.
    Läge hier ein bereits verarbeiteter Körper vor, ginge die Prüfung
@@ -104,7 +106,10 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
   }
   if (sitzung.payment_status !== "paid") return;
 
-  const anmeldung = await db.registration.findUnique({ where: { id } });
+  const anmeldung = await db.registration.findUnique({
+    where: { id },
+    include: { event: true, teilnehmer: true },
+  });
   if (!anmeldung) {
     console.error("Rückmeldung für unbekannte Anmeldung:", id);
     return;
@@ -145,6 +150,30 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
       bezahlterBetragCents: sitzung.amount_total ?? anmeldung.gesamtpreisCents,
       bezahltAm: new Date(),
     },
+  });
+
+  // Angenehme Zugabe, kein Grund, die Rückmeldung scheitern zu lassen —
+  // die Zahlung ist bereits verbucht, ein Mail-Ausfall darf das nicht
+  // rückgängig machen.
+  await mailSendenOhneAbbruch({
+    an: anmeldung.kontaktEmail,
+    ...zahlungsBestaetigungsMail(
+      {
+        id: anmeldung.id,
+        kontaktVorname: anmeldung.kontaktVorname,
+        kontaktNachname: anmeldung.kontaktNachname,
+        kontaktEmail: anmeldung.kontaktEmail,
+        kontaktTelefon: anmeldung.kontaktTelefon,
+        gesamtpreisCents: anmeldung.gesamtpreisCents,
+        teilnehmer: anmeldung.teilnehmer,
+      },
+      {
+        titel: anmeldung.event.titel,
+        startAt: anmeldung.event.startAt,
+        ortName: anmeldung.event.ortName,
+        stadt: anmeldung.event.stadt,
+      },
+    ),
   });
 }
 

@@ -14,12 +14,23 @@
 set -euo pipefail
 
 HEIM=/home/vera
+APP=/var/www/vera
 STATUS="$HEIM/.vera-sicherung-status"
 ZEIT=$(date +%Y%m%d_%H%M%S)
 DATEI="vera-${ZEIT}.sql.age"
 TMP=$(mktemp)
 trap 'rm -f "$TMP"' EXIT
-trap 'echo "$(date -Iseconds) FEHLER" >> "$STATUS"' ERR
+
+# Nur bei einem FEHLER wird eine Mail verschickt — bei einer
+# erfolgreichen Sicherung ausdrücklich nicht (Wunsch aus Phase 8).
+# "|| true" hier UND in der aufgerufenen Datei selbst: Schlägt der
+# Mail-Versand fehl (SMTP noch nicht eingerichtet, kein Netz), soll
+# das die eigentliche Fehlermeldung dieses Skripts nicht verdecken.
+alarm() {
+  echo "$(date -Iseconds) FEHLER" >> "$STATUS"
+  ( cd "$APP" && npm run --silent sicherung:alarm -- "Sicherung fehlgeschlagen am $(date -Iseconds)" ) || true
+}
+trap alarm ERR
 
 OEFFENTLICHER_SCHLUESSEL=$(cat "$HEIM/.config/vera/age-public-key.txt")
 DB_PASSWORT=$(cat "$HEIM/.vera_db_password")
