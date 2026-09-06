@@ -5,7 +5,13 @@ import { texte } from "@/content";
 import stil from "@/components/Textseite.module.css";
 
 /**
- * Widerruf und Stornierung — vorerst ein markierter Platzhalter.
+ * Widerruf und Stornierung.
+ *
+ * Abschnitt 1 (gesetzliches Widerrufsrecht) ist weiterhin ein
+ * markierter Platzhalter — die Frage nach § 312g Abs. 2 Nr. 9 BGB ist
+ * offen. Abschnitt 2 und 3 sind dagegen verbindlich: Sie beschreiben
+ * die Stornobedingungen, die der Betreiber festgelegt hat, und den
+ * Ablauf, den die Seite tatsächlich anbietet.
  *
  * Die Seite hiess einmal „Widerrufsbelehrung". Dieser Titel setzt
  * voraus, dass ein Widerrufsrecht besteht — und genau das ist bei
@@ -29,20 +35,33 @@ export default function Seite() {
   return (
     <Abschnitt>
       <AbschnittKopf titel={t.recht.widerrufTitel} haupt />
-      <p style={{ marginBottom: "1.5rem" }}>
-        <Platzhalter text={t.recht.platzhalterTitel} markierung={t.platzhalter.markierung} />
-      </p>
       <div className={stil.inhalt}>
         <p>{t.recht.widerrufEinleitung}</p>
 
         <h2>{t.recht.widerrufUeberschrift}</h2>
+        {/* Die Markierung steht bei Abschnitt 1, nicht über der ganzen
+            Seite: Abschnitt 2 und 3 sind verbindliche Bedingungen. Eine
+            Seite, die geltende Regeln enthält und sich zugleich als
+            „nicht ausgefüllt" bezeichnet, wäre in beide Richtungen
+            irreführend. */}
+        <p>
+          <Platzhalter
+            text={t.recht.widerrufOffenMarke}
+            markierung={t.platzhalter.markierung}
+          />
+        </p>
         <p>{t.recht.widerrufText}</p>
         <p>{t.recht.widerrufHinweis}</p>
 
         <h2>{t.recht.stornoUeberschrift}</h2>
-        <p>{t.recht.stornoText}</p>
+        {t.recht.stornoAbsaetze.map((absatz) => (
+          <p key={absatz.slice(0, 40)}>{absatz}</p>
+        ))}
 
-        <p>{t.recht.hinweisJurist}</p>
+        <h2>{t.recht.absageUeberschrift}</h2>
+        <p>{t.recht.absageText}</p>
+
+        <p>{t.recht.widerrufPruefung}</p>
       </div>
     </Abschnitt>
   );

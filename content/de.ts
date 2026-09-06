@@ -511,12 +511,48 @@ export const de = {
       "Nachmittag an einem festen Datum fällt möglicherweise darunter. Ob das hier zutrifft " +
       "und wie die Information dann lauten muss, ist eine Rechtsfrage und keine " +
       "Programmierfrage.",
+    /* Ab hier KEIN Platzhalter mehr: Das sind die vom Betreiber
+       festgelegten Bedingungen, und sie beschreiben genau das, was die
+       Seite tatsächlich tut. Ändert sich der Ablauf, ändert sich
+       dieser Text mit — sonst steht hier eine Zusage, die die Technik
+       nicht einlöst. */
     stornoUeberschrift: "2. Stornierung durch Teilnehmende",
-    stornoText:
-      "Davon zu unterscheiden ist die Stornierung: eine vertragliche Regelung, die VERA " +
-      "selbst festlegt — ob eine Buchung abgesagt werden kann, bis wann, zu welchen Kosten " +
-      "und wie das Geld zurückkommt. Sie gilt unabhängig davon, ob ein gesetzliches " +
-      "Widerrufsrecht besteht, und gehört in die Geschäftsbedingungen.",
+    stornoAbsaetze: [
+      "Eine Buchung kann bis 24 Stunden vor Beginn der Veranstaltung kostenlos storniert " +
+        "werden. Erstattet wird der volle Betrag, ohne Abzug.",
+      "Die Stornierung läuft über den Link in der Bestätigungsmail. Er führt zu einer Seite, " +
+        "die die Buchung anzeigt; storniert wird erst mit einem Klick auf den Knopf dort. Der " +
+        "volle Betrag wird dann sofort zur Rückerstattung angewiesen — auf dem Weg, über den " +
+        "bezahlt wurde. Je nach Bank dauert es einige Werktage, bis er ankommt. Eine " +
+        "Bestätigung kommt per E-Mail. Der Platz ist sofort wieder frei.",
+      "Ist die Bestätigungsmail nicht mehr auffindbar, genügt eine Nachricht an " +
+        "kontakt@veraevents.de.",
+      "Bei einer Absage weniger als 24 Stunden vor Beginn und bei Nichterscheinen besteht " +
+        "grundsätzlich kein Anspruch auf Erstattung. Die Stornierung über den Link ist dann " +
+        "nicht mehr möglich. Wer verhindert ist, schreibt uns trotzdem — wir finden eine Lösung.",
+      "Solange für eine Veranstaltung noch kein Termin feststeht, ist eine Stornierung " +
+        "jederzeit möglich.",
+      "Ein gebuchter Platz kann nicht auf eine andere Person übertragen werden. Das ist auch " +
+        "nicht nötig: Wer nicht kann, storniert kostenlos, und die andere Person meldet sich " +
+        "selbst an, solange Plätze frei sind.",
+      "Diese Bedingungen legt VERA selbst fest. Sollte darüber hinaus ein gesetzliches " +
+        "Widerrufsrecht bestehen (siehe Abschnitt 1), gilt es unabhängig davon.",
+    ],
+
+    absageUeberschrift: "3. Absage durch VERA",
+    absageText:
+      "Muss eine Veranstaltung ausfallen, wird allen Angemeldeten automatisch der volle " +
+      "Betrag erstattet — ohne dass dafür etwas beantragt werden muss. Die Absage wird so " +
+      "früh wie möglich per E-Mail mitgeteilt.",
+
+    /* Die Markierung gilt jetzt nur noch für Abschnitt 1. Sie über die
+       ganze Seite zu setzen wäre falsch geworden: Abschnitt 2 und 3
+       sind verbindliche Bedingungen, keine Platzhalter. */
+    widerrufOffenMarke: "Dieser Abschnitt ist noch nicht ausgefüllt",
+    widerrufPruefung:
+      "Abschnitt 1 sollte vor der Veröffentlichung von einer fachkundigen Person geprüft " +
+      "werden. Die Stornobedingungen in Abschnitt 2 und 3 legt VERA selbst fest; sie gelten " +
+      "so, wie sie hier stehen.",
   },
 
   /**

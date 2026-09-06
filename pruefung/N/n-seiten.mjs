@@ -61,6 +61,47 @@ pruefe(
   !/14\s*Tag/i.test(wText),
 );
 
+/* Die Stornobedingungen sind seit der Selbstbedienung verbindlich —
+   und müssen beschreiben, was die Seite WIRKLICH tut. Stünde hier
+   noch der alte Satz „genügt eine E-Mail an …", wäre er schlicht
+   falsch. */
+pruefe("Widerruf: nennt die 24-Stunden-Frist", wText.includes("24 Stunden"));
+pruefe(
+  "Widerruf: nennt den Weg über den Link in der Bestätigungsmail",
+  wText.includes("Link in der Bestätigungsmail"),
+);
+pruefe(
+  "Widerruf: verspricht NICHT mehr den alten Weg per E-Mail an uns",
+  !/genügt eine E-Mail an kontakt@/.test(wText),
+);
+pruefe(
+  "Widerruf: sagt, dass der volle Betrag erstattet wird",
+  wText.includes("volle Betrag"),
+);
+pruefe(
+  "Widerruf: regelt den Fall ohne feststehenden Termin",
+  wText.includes("noch kein Termin feststeht"),
+);
+pruefe(
+  "Widerruf: schliesst die Übertragung auf eine andere Person aus",
+  wText.includes("nicht auf eine andere Person übertragen"),
+);
+pruefe(
+  "Widerruf: hat einen eigenen Abschnitt zur Absage durch VERA",
+  wText.includes("Absage durch VERA"),
+);
+
+/* Die Platzhalter-Markierung darf NICHT mehr für die ganze Seite
+   gelten: Abschnitt 2 und 3 sind geltende Bedingungen. */
+pruefe(
+  "Widerruf: bezeichnet sich nicht mehr pauschal als unausgefüllt",
+  !wText.includes("Diese Seite ist noch nicht ausgefüllt"),
+);
+pruefe(
+  "Widerruf: markiert aber weiterhin den offenen Abschnitt 1",
+  wText.includes("Dieser Abschnitt ist noch nicht ausgefüllt"),
+);
+
 await page.goto(BASIS + "/agb", { waitUntil: "networkidle" });
 pruefe(
   "AGB: die Stornobedingungen sind darin genannt",

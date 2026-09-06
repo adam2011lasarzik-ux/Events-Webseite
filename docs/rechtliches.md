@@ -73,7 +73,20 @@ geprüft.
 | **Keine 14-Tage-Belehrung eingebaut** | 🟩 (bewusst) |
 | Klärung, ob § 312g Abs. 2 Nr. 9 BGB greift | 🟨 🟥 |
 | Je nach Ergebnis: Belehrung **oder** Hinweis auf den Ausschluss | 🟨 🟥 |
-| Stornobedingungen festlegen (ob, bis wann, Gebühr, Erstattung) | 🟦 🟨 |
+| **Stornobedingungen festgelegt und auf der Seite** | 🟩 |
+| **Absage durch VERA geregelt** (eigener Abschnitt 3) | 🟩 |
+
+**Erledigt:** Die Stornobedingungen stehen jetzt als verbindlicher Text
+auf der Seite — kostenlose Stornierung bis 24 Stunden vor Beginn,
+voller Betrag zurück, keine Übertragung auf andere Personen, bei
+Absage durch VERA automatische Erstattung. Sie beschreiben genau, was
+die Seite tut: Die Selbstbedienungs-Stornierung ist gebaut und läuft
+über den Link in der Bestätigungsmail.
+
+**Deshalb gilt die Platzhalter-Markierung dort nur noch für Abschnitt
+1.** Eine Seite, die geltende Bedingungen enthält und sich zugleich als
+„noch nicht ausgefüllt" bezeichnet, wäre in beide Richtungen
+irreführend.
 
 **Korrigiert:** Die Seite hiess „Widerrufsbelehrung". Dieser Titel
 setzt voraus, dass ein Widerrufsrecht besteht — und genau das ist
@@ -116,15 +129,18 @@ Muster.
 
 ## Ein offener Punkt zur Mehrwertsteuer
 
-An **fünf** Stellen steht, die Preise seien „inkl. MwSt.":
+An **vier** Stellen steht, die Preise seien „inkl. MwSt.":
 
-| Datei | Wo |
-|---|---|
-| `content/de.ts:81` | Hinweis unter den Preiskacheln |
-| `content/de.ts:217` | Kurzform an der Preisanzeige |
-| `content/de.ts` (AGB-Platzhalter) | Aufzählung dessen, was in AGB gehört |
-| `lib/zahlungRegeln.ts:85` | **Beschriftung auf der Bezahlseite von Stripe** |
-| `components/admin/EventFormular.tsx:278` | Überschrift im Verwaltungsbereich |
+| Datei | Wo | Wer sieht es |
+|---|---|---|
+| `content/de.ts` → `preise.einleitung` | Preis-Einleitung auf der Eventseite | alle Besucher |
+| `content/de.ts` → `anmeldung.inklMwst` | Preisrechner im Anmeldeformular | alle Anmelder |
+| `lib/zahlungRegeln.ts` | **Beschriftung auf der Bezahlseite von Stripe** | jeder zahlende Kunde |
+| `components/admin/EventFormular.tsx` | Überschrift im Verwaltungsbereich | nur der Betreiber |
+
+> **Korrigiert:** Hier stand früher „fünf Stellen", darunter eine im
+> AGB-Platzhalter. Die gibt es dort nicht mehr. Nachgezählt statt
+> abgeschrieben.
 
 Ob das zutrifft, hängt an der Gewerbeanmeldung: Als Kleinunternehmer
 nach § 19 UStG dürfte gar keine Mehrwertsteuer ausgewiesen werden.
@@ -145,7 +161,7 @@ bezahlen; die vierte Zeile sieht jeder zahlende Kunde. 🟨 🟥
 4. **Mehrwertsteuer-Aussage** bestätigen oder ändern 🟥
 5. Entscheiden, ob eigene **AGB** verwendet werden — falls ja,
    erstellen und prüfen lassen 🟨
-6. **Stornobedingungen** festlegen 🟦
+6. ~~**Stornobedingungen** festlegen~~ 🟩 **erledigt**
 
-Punkt 1, 4 und 6 kannst du selbst liefern. Punkt 2, 3 und 5 gehören
+Punkt 1 und 4 kannst du selbst liefern. Punkt 2, 3 und 5 gehören
 fachkundig geprüft.
