@@ -236,7 +236,13 @@ Berechnungsregeln:
 - Einzelbuchung: je Teilnehmer der Preis seines Typs (Schüler oder Erwachsener).
 - Familienpaket: Grundpreis für die enthaltenen Personen, danach ein günstigerer Preis je
   weiterem Schüler, begrenzt durch `familyMaxStudents`.
-- Alle Preise inklusive Mehrwertsteuer ausweisen.
+- Preise immer als **Endpreis** ausweisen: der Betrag, den die Person tatsächlich zahlt,
+  ohne dass später etwas hinzukommt.
+- **Keine Umsatzsteuer ausweisen.** VERA wird als Kleinunternehmen nach § 19 UStG geführt und
+  berechnet keine Umsatzsteuer. Das ist keine Formulierungsfrage: Wer als Kleinunternehmer
+  Umsatzsteuer ausweist, **schuldet sie dem Finanzamt** (§ 14c Abs. 2 UStG) — auch wenn er sie
+  nie eingenommen hat. Sollte der Steuerstatus je wechseln, ist das eine bewusste Änderung an
+  allen Anzeigestellen gemeinsam, nicht eine nebenbei an einer.
 
 ### Duplikatsschutz
 
@@ -389,8 +395,10 @@ Von Anfang an mitdenken, auch wenn zunächst manuell erledigt:
 
 ### Rechtliches
 
-Sobald Geld fließt, sind Impressum, Datenschutzerklärung und AGB Pflicht. Preise müssen inkl.
-Mehrwertsteuer als Gesamtpreis ausgewiesen werden. Der Nutzer ist darauf hinzuweisen, dass
+Sobald Geld fließt, sind Impressum, Datenschutzerklärung und AGB Pflicht. Preise müssen als
+Gesamtpreis (Endpreis) ausgewiesen werden; Umsatzsteuer wird dabei **nicht** ausgewiesen,
+solange die Kleinunternehmerregelung nach § 19 UStG gilt — siehe Abschnitt 3,
+Preisberechnung. Der Nutzer ist darauf hinzuweisen, dass
 Impressum, AGB und Steuerfragen fachkundig geprüft werden sollten — Claude ist kein Anwalt und
 darf keine Rechtsberatung als solche darstellen.
 
