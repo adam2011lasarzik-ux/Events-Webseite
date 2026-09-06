@@ -261,6 +261,20 @@ model Registration {
   /// nicht verlassen könnte.
   reserviertBis DateTime?
 
+  /// Schlüssel für die Selbstbedienungs-Stornierung.
+  ///
+  /// Bewusst NICHT die Anmeldenummer: Die steht in der Adresse der
+  /// Abschluss-Seite und ist laut §8 des Skills ausdrücklich "kein
+  /// Zugriffsschutz". Wer eine fremde Buchung stornieren könnte,
+  /// löste damit eine echte Geldbewegung aus — dafür reicht eine
+  /// unratbare Adresse nicht.
+  ///
+  /// Dieser Schlüssel steht ausschließlich im Storno-Link der
+  /// Bestätigungsmail. Optional, weil bereits bestehende Buchungen
+  /// keinen haben (additive Migration nach §9); neue bekommen ihn
+  /// beim Anlegen.
+  stornoSchluessel String? @unique
+
   angemeldetAm  DateTime  @default(now())
   reaktiviertAm DateTime?
   storniertAm   DateTime?
