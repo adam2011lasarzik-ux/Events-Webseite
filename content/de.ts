@@ -446,10 +446,6 @@ export const de = {
       "hier weder entgegengenommen noch gespeichert. Welche Rechtsgrundlage gilt, wie lange " +
       "gespeichert wird und wie der Auftragsverarbeitungsvertrag mit Stripe einzuordnen ist, " +
       "gehört in die fertige Erklärung.",
-    hinweisJurist:
-      "Beide Texte sollten vor der Veröffentlichung von einer fachkundigen Person geprüft " +
-      "werden. Das gilt besonders, weil Minderjährige teilnehmen und später Zahlungen " +
-      "abgewickelt werden.",
     /* Die frühere Fassung sagte pauschal „diese Seite setzt keine
        Cookies". Das stimmt nicht: lib/adminAuth.ts setzt für die
        Anmeldung am Adminbereich das Cookie `vera_admin`. Besucher

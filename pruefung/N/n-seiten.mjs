@@ -33,7 +33,6 @@ for (const [name, pfad, ueberschrift] of [
     `${name}: ist sichtbar als Platzhalter gekennzeichnet`,
     /platzhalter/i.test(text) && text.includes("noch nicht ausgefüllt"),
   );
-  pruefe(`${name}: verweist auf fachkundige Prüfung`, text.includes("fachkundige"));
   pruefe(`${name}: Seitentitel gesetzt`, (await page.title()).includes(ueberschrift), await page.title());
 }
 
@@ -247,6 +246,39 @@ pruefe(
   "Keine oeffentliche Seite zeigt eine erfundene Kontaktadresse",
   erfunden.length === 0,
   erfunden.join(" · "),
+);
+
+/* Der Satz „Beide Texte sollten vor der Veroeffentlichung von einer
+   fachkundigen Person geprueft werden" stand auf Impressum, AGB und
+   Datenschutz. Er war nie fuer Besucher gedacht, sondern eine Notiz an
+   den Betreiber — und auf einem fertigen Impressum las er sich wie ein
+   Zettel aus der Werkstatt. Sein Platz ist docs/rechtliches.md.
+
+   Die seitenspezifische Fassung auf der Widerrufsseite bleibt
+   ausdruecklich bestehen: Sie sagt, welcher Abschnitt noch offen ist
+   UND dass die Stornobedingungen so gelten, wie sie dort stehen. Das
+   ist eine Aussage fuer Besucher, keine Arbeitsnotiz. */
+const arbeitsnotiz = [];
+for (const pfad of gesehen) {
+  const antwort = await page.goto(BASIS + pfad, { waitUntil: "networkidle" });
+  if (!antwort || antwort.status() !== 200) continue;
+  const text = await page.locator("body").innerText();
+  if (text.includes("Beide Texte sollten vor der Veröffentlichung")) arbeitsnotiz.push(pfad);
+}
+pruefe(
+  "Keine oeffentliche Seite zeigt den internen Arbeitshinweis",
+  arbeitsnotiz.length === 0,
+  arbeitsnotiz.join(" · "),
+);
+
+/* Gegenprobe: Die Widerrufsseite behaelt ihren eigenen, inhaltlichen
+   Hinweis. Ohne diese Zeile koennte ihn jemand beim naechsten
+   Aufraeumen versehentlich mitloeschen. */
+await page.goto(BASIS + "/widerruf", { waitUntil: "networkidle" });
+const widText = await page.locator("body").innerText();
+pruefe(
+  "Widerruf: eigener Hinweis zu Abschnitt 1 bleibt bestehen",
+  widText.includes("Abschnitt 1") && widText.includes("fachkundigen Person"),
 );
 
 await page.goto(BASIS + "/impressum", { waitUntil: "networkidle" });

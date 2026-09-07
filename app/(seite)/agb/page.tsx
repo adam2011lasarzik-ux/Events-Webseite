@@ -30,7 +30,6 @@ export default function Seite() {
         <p>{t.recht.agbText}</p>
         <p>{t.recht.agbHinweisPflichtinfos}</p>
         <p>{t.recht.agbStorno}</p>
-        <p>{t.recht.hinweisJurist}</p>
       </div>
     </Abschnitt>
   );

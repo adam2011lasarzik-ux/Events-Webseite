@@ -60,7 +60,6 @@ export default function Seite() {
           {a.umsatzsteuer}
         </p>
 
-        <p>{t.recht.hinweisJurist}</p>
         <p>{t.recht.keineCookies}</p>
       </div>
     </Abschnitt>

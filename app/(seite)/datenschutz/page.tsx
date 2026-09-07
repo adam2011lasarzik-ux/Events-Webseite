@@ -19,7 +19,6 @@ export default function Seite() {
       <div className={stil.inhalt}>
         <p>{t.recht.datenschutzText}</p>
         <p>{t.recht.datenschutzZahlung}</p>
-        <p>{t.recht.hinweisJurist}</p>
         <p>{t.recht.keineCookies}</p>
       </div>
     </Abschnitt>
