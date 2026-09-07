@@ -147,6 +147,31 @@ Ein Probelauf der Wache, der **nichts verschickt**:
 sudo /usr/local/bin/vera-wache.sh --probe
 ```
 
+Er nennt in der ersten Zeile auch den **Meldeweg**. Steht dort
+„FEHLT", kann die Wache keine Mail verschicken — dann fehlt im
+Anwendungsordner das npm-Skript `system:alarm`, und der
+Anwendungsstand muss nachgezogen werden.
+
+### Warum die Wache laut scheitert statt still weiterzulaufen
+
+Beim Einrichten auf dem Server trat genau der Fall ein: Die Wache war
+installiert, der Probelauf meldete „Alles in Ordnung" — aber das
+npm-Skript für den Versand fehlte im damaligen Anwendungsstand. Der
+erste echte Alarm wäre ins Leere gelaufen.
+
+Der Grund war eine Zeile, die auf `|| true` endete: Scheitert der
+Versand, passiert nichts Sichtbares. Das ist derselbe Fehler, den
+diese Wache bei der Sicherung aufdecken soll — eine Meldung, die
+ausbleibt, sieht von außen aus wie „alles gut".
+
+Deshalb jetzt:
+
+- der Probelauf **zeigt** den Zustand des Meldewegs
+- fehlt er, **beendet sich die Wache mit einem Fehler**, statt
+  weiterzumachen (`systemctl status vera-wache` zeigt das an)
+- scheitert der Versand, steht der vollständige Fehler im Journal,
+  und der Dienst gilt als fehlgeschlagen
+
 ## Protokolle
 
 | Was | Wo | Aufbewahrung |

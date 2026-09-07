@@ -80,6 +80,21 @@ pruefe("Ein zusätzlicher Befund gilt als neuer Zustand",
 pruefe("Es gibt einen Probelauf ohne Versand", wache.includes("--probe"));
 pruefe("Die Adresse laesst sich fuer einen Test ueberschreiben",
   wache.includes("VERA_WACHE_ADRESSE"));
+
+/* Der Fehler, den das Einrichten auf dem Server aufgedeckt hat: Der
+   Meldeweg fehlte dort, und die Wache haette es mit `|| true`
+   verschluckt. Eine Ueberwachung, deren Meldeweg still kaputt ist,
+   ist schlimmer als gar keine — sie taeuscht Sicherheit vor. */
+pruefe("Sie prueft, ob der Meldeweg ueberhaupt vorhanden ist",
+  wache.includes('grep -q \'"system:alarm"\''));
+pruefe("Ein fehlender Meldeweg beendet die Wache mit Fehler",
+  wacheOhneKommentare.includes('if [ "$meldeweg" != "vorhanden" ]') &&
+    wacheOhneKommentare.includes("exit 1"));
+pruefe("Ein fehlgeschlagener Versand wird NICHT mehr verschluckt",
+  !wacheOhneKommentare.includes("system:alarm -- \"$@\" ) || true") &&
+    wache.includes("Der Meldeweg hat nicht funktioniert"));
+pruefe("Der Probelauf zeigt den Zustand des Meldewegs",
+  wache.includes('echo "Meldeweg: $meldeweg"'));
 pruefe("Der Mailversand läuft als vera, nicht als root",
   wache.includes("runuser -u vera"));
 

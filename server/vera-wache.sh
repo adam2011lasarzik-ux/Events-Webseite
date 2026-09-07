@@ -20,7 +20,9 @@
 # ---------------------------------------------------------------
 set -uo pipefail
 
-APP="/var/www/vera"
+# Auch der Anwendungsordner ist überschreibbar — nur zum Prüfen der
+# Wache selbst (VERA_WACHE_APP). Im Betrieb gilt der Standardwert.
+APP="${VERA_WACHE_APP:-/var/www/vera}"
 # Die zu prüfende Adresse lässt sich für einen Test überschreiben:
 #   VERA_WACHE_ADRESSE=https://veraevents.de/gibt-es-nicht vera-wache.sh
 # Damit lässt sich der Alarmweg Ende zu Ende beweisen, OHNE einen
@@ -117,9 +119,25 @@ else
   printf '%s\n' "${befunde[@]}"
 fi
 
+# Ist der Meldeweg überhaupt vorhanden? Ohne diese Zeile fällt ein
+# fehlendes npm-Skript erst im Ernstfall auf — also genau dann, wenn
+# man sich darauf verlässt.
+if grep -q '"system:alarm"' "$APP/package.json" 2>/dev/null; then
+  meldeweg="vorhanden"
+else
+  meldeweg="FEHLT — es kann keine Mail verschickt werden"
+fi
+
 if [ "$PROBE" -eq 1 ]; then
+  echo "Meldeweg: $meldeweg"
   echo "(Probelauf — es wurde nichts verschickt.)"
   exit 0
+fi
+
+if [ "$meldeweg" != "vorhanden" ]; then
+  echo "ACHTUNG: In $APP/package.json fehlt das Skript \"system:alarm\"." >&2
+  echo "Die Wache kann nichts melden. Bitte den Anwendungsstand nachziehen." >&2
+  exit 1
 fi
 
 mkdir -p "$(dirname "$ZUSTANDSDATEI")"
@@ -132,12 +150,26 @@ echo "$jetzt" > "$ZUSTANDSDATEI"
 # verschickt: Dort gehört die Anwendung hin, dort liegt die .env, und
 # npm als root im Anwendungsordner laufen zu lassen hinterlässt
 # root-eigene Dateien, über die spätere Deployments stolpern.
+#
+# HIER STAND EINMAL `|| true`. Das war derselbe Fehler, den diese
+# Wache bei der Sicherung aufdecken soll: Scheitert der Versand,
+# passiert nichts Sichtbares — und eine Überwachung, deren Meldeweg
+# still kaputt ist, ist schlimmer als gar keine, weil sie Sicherheit
+# vortäuscht. Genau das ist beim Einrichten passiert: Der Alarmweg
+# fehlte auf dem Server, und der Probelauf hat es nicht bemerkt.
 melde_per_mail() {
-  ( cd "$APP" && runuser -u vera -- env HOME=/home/vera npm run --silent system:alarm -- "$@" ) || true
+  local ausgabe
+  if ausgabe=$( cd "$APP" && runuser -u vera -- env HOME=/home/vera \
+       npm run --silent system:alarm -- "$@" 2>&1 ); then
+    return 0
+  fi
+  echo "ACHTUNG: Der Meldeweg hat nicht funktioniert — es wurde KEINE Mail verschickt." >&2
+  echo "$ausgabe" >&2
+  return 1
 }
 
 if [ "$jetzt" = "ok" ]; then
-  melde_per_mail --entwarnung
+  melde_per_mail --entwarnung || exit 1
 else
-  melde_per_mail "${befunde[@]}"
+  melde_per_mail "${befunde[@]}" || exit 1
 fi
