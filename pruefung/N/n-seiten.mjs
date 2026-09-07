@@ -313,6 +313,31 @@ pruefe(
   !/\bDE\s?\d{9}\b/.test(impText),
 );
 
+/* ── Kein Reservierungsversprechen an den Kunden ────────────────
+
+   VERA bietet keine Reservierung an: Anmeldung und Bezahlung sind ein
+   Vorgang, gekauft ist erst mit erfolgreicher Zahlung. Der Platz wird
+   zwar 30 Minuten lang mitgezaehlt, damit er waehrend des laufenden
+   Zahlungsvorgangs nicht weggeht — das ist eine technische
+   Absicherung, keine Leistung, die zugesagt wird.
+
+   Die Abschluss-Seite sagte dem Kunden aber genau das Gegenteil
+   ("Dein Platz ist fuer kurze Zeit reserviert"). Diese Pruefung
+   verhindert, dass so eine Formulierung zurueckkehrt. */
+const versprechen = [];
+for (const pfad of gesehen) {
+  const antwort = await page.goto(BASIS + pfad, { waitUntil: "networkidle" });
+  if (!antwort || antwort.status() !== 200) continue;
+  const text = await page.locator("body").innerText();
+  const treffer = text.match(/reserviert|Reservierung/i);
+  if (treffer) versprechen.push(`${pfad}: „${treffer[0]}"`);
+}
+pruefe(
+  "Keine oeffentliche Seite verspricht dem Kunden eine Reservierung",
+  versprechen.length === 0,
+  versprechen.join(" · "),
+);
+
 await ctx.close();
 await browser.close();
 console.log(`\n${n - schief.length} von ${n} in Ordnung.`);

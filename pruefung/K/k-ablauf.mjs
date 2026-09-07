@@ -181,8 +181,16 @@ await frischeLage();
   pruefe("9 · … und die Plätze sind wieder frei", (await belegteJetzt()) === 0);
 
   const seite = alsText(await (await fetch(`${BASIS}/anmeldung/danke?nr=${a.anmeldung.id}`)).text());
-  pruefe("9 · Die Seite zeigt „Reservierung abgelaufen“ statt einer Bestätigung",
-    seite.includes("Reservierung abgelaufen") && seite.includes("noch nicht abgeschlossen"));
+  /* Der Wortlaut hat sich bewusst geändert: Die Seite sprach früher von
+     einer „Reservierung", obwohl VERA keine anbietet. Geprüft wird
+     weiterhin dasselbe Verhalten — die Seite darf nach Ablauf der
+     Zahlfrist keine Bestätigung zeigen —, nur mit dem neuen Wortlaut.
+     Zusätzlich wird sichergestellt, dass das alte Wort nicht
+     zurückkommt. */
+  pruefe("9 · Die Seite zeigt „Zahlung nicht abgeschlossen“ statt einer Bestätigung",
+    seite.includes("Zahlung nicht abgeschlossen") && seite.includes("noch nicht abgeschlossen"));
+  pruefe("9 · … und verspricht dabei keine Reservierung",
+    !/reserviert|Reservierung/i.test(seite));
 }
 
 // ── 10./11. Letzte Plätze ──────────────────────────────────────

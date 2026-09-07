@@ -167,12 +167,12 @@ export default async function AbschlussSeite({
         : zahlung === "zurueck"
           ? { titel: t.danke.zahlungLaeuft, text: t.danke.zahlungLaeuftText }
           : zahlung === "abgebrochen"
-            ? { titel: t.danke.zahlungReserviert, text: t.danke.zahlungAbgebrochen }
+            ? { titel: t.danke.zahlungNochOffen, text: t.danke.zahlungAbgebrochen }
             : zahlung === "nicht-eingerichtet"
               ? { titel: t.danke.zahlungTitel, text: t.danke.zahlungFehlerEingerichtet }
               : zahlung === "anbieter"
                 ? { titel: t.danke.zahlungTitel, text: t.danke.zahlungFehlerAnbieter }
-                : { titel: t.danke.zahlungReserviert, text: t.danke.zahlungReserviertText };
+                : { titel: t.danke.zahlungNochOffen, text: t.danke.zahlungNochOffenText };
 
   return (
     <Abschnitt>

@@ -342,7 +342,8 @@ export const de = {
       "Ihr seid für das Event angemeldet. Hier steht noch einmal, was wir aufgenommen haben.",
     offenTitel: "Deine Anmeldung ist noch nicht abgeschlossen",
     offenEinleitung:
-      "Die Zahlung wurde noch nicht abgeschlossen. Dein Platz ist für kurze Zeit reserviert.",
+      "Der Kauf ist noch nicht abgeschlossen. Schließe die Zahlung ab, dann ist dein Platz " +
+      "gebucht.",
     ueberschrift: "Danke — wir haben deine Anmeldung",
     einleitung:
       "Deine Anmeldung ist gespeichert. Hier steht noch einmal, was wir aufgenommen haben.",
@@ -366,21 +367,25 @@ export const de = {
     zahlungAusgebucht:
       "Die Veranstaltung ist inzwischen ausgebucht. Deine Anmeldung ist deshalb nicht " +
       "zustande gekommen. Schreib uns, wir suchen eine Lösung.",
-    zahlungAbgelaufen: "Reservierung abgelaufen",
+    zahlungAbgelaufen: "Zahlung nicht abgeschlossen",
     zahlungAbgelaufenText:
-      "Die Reservierung deines Platzes ist abgelaufen. Du kannst die Bezahlung jederzeit " +
-      "neu starten — wir prüfen dann, ob noch genug Plätze frei sind.",
+      "Die Zahlung wurde nicht rechtzeitig abgeschlossen. Du kannst sie jederzeit neu " +
+      "starten — wir prüfen dann, ob noch genug Plätze frei sind.",
     zahlungLaeuft: "Zahlung wird geprüft",
     zahlungLaeuftText:
       "Die Bestätigung deiner Zahlung steht noch aus. Das dauert meist nur wenige Augenblicke — " +
       "lade die Seite gleich noch einmal.",
-    zahlungReserviert: "Dein Platz ist kurz reserviert",
-    zahlungReserviertText:
-      "Wir halten deinen Platz {minuten} Minuten lang frei. Bezahle in dieser Zeit, dann ist " +
-      "die Buchung fest.",
+    zahlungNochOffen: "Zahlung noch offen",
+    /* Hier stand "Wir halten deinen Platz {minuten} Minuten lang frei."
+       Zwei Fehler in einem Satz: Er stellte das Halten des Platzes als
+       zugesagte Leistung dar (VERA bietet keine Reservierung an), und
+       {minuten} wurde nirgends ersetzt — der Platzhalter stand wörtlich
+       auf der Seite. */
+    zahlungNochOffenText:
+      "Schließe die Zahlung jetzt ab — danach ist dein Platz verbindlich gebucht.",
     zahlungAbgebrochen:
-      "Du hast die Bezahlung abgebrochen. Dein Platz ist noch reserviert — du kannst es " +
-      "jederzeit erneut versuchen.",
+      "Es wurde nichts gekauft und nichts abgebucht. Du kannst die Zahlung jederzeit " +
+      "abschließen.",
     zahlungFehlerAnbieter:
       "Die Bezahlseite lässt sich gerade nicht öffnen. Deine Anmeldung ist gespeichert; " +
       "versuche es in ein paar Minuten noch einmal.",
