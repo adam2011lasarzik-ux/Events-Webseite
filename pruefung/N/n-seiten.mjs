@@ -228,6 +228,59 @@ if (startLinks.length) {
   pruefe("Die Eventseite nennt § 19 UStG als Grund", false, "kein Event zum Prüfen gefunden");
 }
 
+/* ── Impressum: echte Angaben statt erfundener ──────────────────
+
+   Die Adresse „kontakt@beispiel.de" stand monatelang im Fussbereich
+   JEDER Seite — und dort, anders als auf der Kontaktseite, ohne
+   Platzhalter-Markierung. Sie las sich wie eine gueltige Adresse.
+   Genau das darf nicht zurueckkommen, deshalb wird bei jedem Lauf
+   ueber alle oeffentlichen Seiten danach gesucht. */
+
+const erfunden = [];
+for (const pfad of gesehen) {
+  const antwort = await page.goto(BASIS + pfad, { waitUntil: "networkidle" });
+  if (!antwort || antwort.status() !== 200) continue;
+  const text = await page.locator("body").innerText();
+  if (/beispiel\.de/i.test(text)) erfunden.push(pfad);
+}
+pruefe(
+  "Keine oeffentliche Seite zeigt eine erfundene Kontaktadresse",
+  erfunden.length === 0,
+  erfunden.join(" · "),
+);
+
+await page.goto(BASIS + "/impressum", { waitUntil: "networkidle" });
+const impText = await page.locator("body").innerText();
+
+pruefe("Impressum: nennt § 5 DDG", /§\s*5\s*DDG/.test(impText));
+pruefe("Impressum: nennt den Anbieter namentlich", impText.includes("Adam Maurice Lasarzik"));
+pruefe("Impressum: nennt die echte E-Mail-Adresse", impText.includes("kontakt@veraevents.de"));
+pruefe(
+  "Impressum: erklaert die Kleinunternehmerregelung",
+  /§\s*19\s*UStG/.test(impText) && /keine Umsatzsteuer/i.test(impText),
+);
+
+/* Die beiden offenen Felder muessen ERKENNBAR offen sein — und sie
+   muessen vor dem Livegang verschwinden. Solange sie da sind, sind
+   sie markiert; das ist der Zweck dieser beiden Pruefungen. */
+pruefe("Impressum: Anschrift ist als Platzhalter markiert", /Geschäftsanschrift folgt/.test(impText));
+pruefe("Impressum: Telefonnummer ist als Platzhalter markiert", /Telefonnummer folgt/.test(impText));
+
+/* Der Aufbau der Seite ist der endgueltige. Ein Banner „diese Seite
+   ist noch nicht ausgefuellt" gehoert deshalb NICHT darauf — anders
+   als bei AGB und Widerruf, wo der ganze Text noch fehlt. */
+pruefe(
+  "Impressum: traegt keinen Unfertig-Banner mehr",
+  !impText.includes("noch nicht ausgefüllt"),
+);
+
+/* Keine erfundene Steuernummer und keine erfundene USt-IdNr.:
+   Solange ungeklaert ist, ob eine vorliegt, darf keine dastehen. */
+pruefe(
+  "Impressum: keine erfundene Umsatzsteuer-Identifikationsnummer",
+  !/\bDE\s?\d{9}\b/.test(impText),
+);
+
 await ctx.close();
 await browser.close();
 console.log(`\n${n - schief.length} von ${n} in Ordnung.`);

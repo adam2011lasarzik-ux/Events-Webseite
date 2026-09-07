@@ -27,12 +27,13 @@ export default async function KontaktSeite() {
       <AbschnittKopf titel={t.kontakt.ueberschrift} haupt einleitung={t.kontakt.einleitung} />
       <ul className={stil.punkte}>
         <li>
-          <strong>{t.kontakt.email}:</strong>{" "}
-          <Platzhalter text={t.platzhalter.email} markierung={t.platzhalter.markierung} />
+          <strong>{t.kontakt.email}:</strong> {t.anbieter.email}
         </li>
         <li>
           <strong>{t.kontakt.telefon}:</strong>{" "}
-          <Platzhalter text={t.platzhalter.telefon} markierung={t.platzhalter.markierung} />
+          {t.anbieter.telefon ?? (
+            <Platzhalter text={t.anbieter.telefonFolgt} markierung={t.platzhalter.markierung} />
+          )}
         </li>
         <li>
           <strong>{t.kontakt.ort}:</strong> {ort?.stadt ?? "Falkensee"}

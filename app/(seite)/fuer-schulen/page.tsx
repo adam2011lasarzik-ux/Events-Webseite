@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { CtaBand } from "@/components/CtaBand";
-import { Platzhalter } from "@/components/Platzhalter";
 import { texte } from "@/content";
 import stil from "@/components/Textseite.module.css";
 
@@ -30,7 +29,7 @@ export default function SchulenSeite() {
             <span className={stil.haken} aria-hidden="true">✓</span>
             <span>
               <strong style={{ whiteSpace: "nowrap" }}>{t.kontakt.email}:</strong>{" "}
-              <Platzhalter text={t.platzhalter.email} markierung={t.platzhalter.markierung} />
+              {t.anbieter.email}
             </span>
           </li>
         </ul>

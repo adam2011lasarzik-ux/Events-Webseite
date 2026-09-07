@@ -421,10 +421,13 @@ export const de = {
     impressumTitel: "Impressum",
     datenschutzTitel: "Daten­schutz­erklärung",
     platzhalterTitel: "Diese Seite ist noch nicht ausgefüllt",
-    impressumText:
-      "Hier stehen später die gesetzlich vorgeschriebenen Angaben: Name und Anschrift des " +
-      "Anbieters, Kontaktdaten und, falls zutreffend, Rechtsform, Vertretungsberechtigte " +
-      "und Registereintrag.",
+    /* Beschriftungen des Impressums. Der frühere `impressumText`
+       („Hier stehen später die vorgeschriebenen Angaben …") ist
+       entfallen: Die Angaben stehen jetzt wirklich dort. */
+    impressumAngaben: "Angaben gemäß § 5 DDG",
+    impressumAnschrift: "Anschrift",
+    impressumKontakt: "Kontakt",
+    impressumUmsatzsteuer: "Umsatzsteuer",
     datenschutzText:
       "Hier steht später, welche Daten bei einer Anmeldung erhoben werden, wozu sie verwendet " +
       "werden, wie lange sie gespeichert bleiben und welche Rechte Besucher haben.",
@@ -575,14 +578,47 @@ export const de = {
     fotoAlt: "{name}, {rolle}",
   },
 
+  /* ── Die echten Anbieterdaten ─────────────────────────────────
+     Die EINZIGE Stelle im Projekt, an der Name und Kontaktwege des
+     Anbieters stehen. Impressum, Fussbereich und Kontaktseite lesen
+     von hier. Vorher lag die Adresse verstreut und war im Fussbereich
+     nicht einmal als Platzhalter markiert — sie sah dort aus wie eine
+     echte Adresse, obwohl sie erfunden war.
+
+     `null` heisst: liegt noch nicht vor und wird sichtbar als
+     Platzhalter angezeigt. NIEMALS einen erfundenen Wert eintragen —
+     ein Impressum mit einer falschen Angabe ist schlechter als eines
+     mit einer erkennbaren Luecke. */
+  anbieter: {
+    markeHinweis: "VERA ist ein Angebot von",
+    name: "Adam Maurice Lasarzik",
+
+    /* Ladungsfaehige Geschaeftsanschrift. Muss vor dem produktiven
+       Betrieb gesetzt sein; ein Postfach genuegt dafuer nicht. */
+    anschrift: null as string | null,
+    anschriftFolgt: "Geschäftsanschrift folgt",
+
+    telefon: null as string | null,
+    telefonFolgt: "Telefonnummer folgt",
+
+    email: "kontakt@veraevents.de",
+
+    /* Es steht bewusst KEINE Umsatzsteuer-Identifikationsnummer hier,
+       solange nicht geprueft ist, ob ueberhaupt eine vorliegt. Die
+       Steuernummer vom Finanzamt gehoert NICHT ins Impressum — die
+       steht nur auf Rechnungen. Beides zu verwechseln ist ein
+       haeufiger Fehler. */
+    umsatzsteuer:
+      "Als Kleinunternehmen nach § 19 UStG wird keine Umsatzsteuer berechnet und daher " +
+      "auch keine ausgewiesen.",
+  },
+
   platzhalter: {
     markierung: "Platzhalter",
     datum: "Datum wird noch bekannt gegeben",
     datumKurz: "Termin folgt",
     zeit: "Uhrzeit folgt",
     adresse: "Genaue Adresse folgt",
-    email: "kontakt@beispiel.de",
-    telefon: "Telefonnummer folgt",
   },
 
   footer: {

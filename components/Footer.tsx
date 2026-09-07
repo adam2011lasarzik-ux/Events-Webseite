@@ -30,7 +30,7 @@ export function Footer({ t }: { t: Woerterbuch }) {
             <h3>{t.footer.kontaktUeberschrift}</h3>
             <ul className={stil.liste}>
               <li><Link href={"/kontakt"}>{t.nav.kontakt}</Link></li>
-              <li><span>{t.platzhalter.email}</span></li>
+              <li><span>{t.anbieter.email}</span></li>
               <li><span>Falkensee</span></li>
             </ul>
           </div>

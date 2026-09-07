@@ -23,11 +23,46 @@ von einer fachkundigen Person kommen muss.
 | Punkt | Stand |
 |---|---|
 | Seite vorhanden, erreichbar, im Fussbereich verlinkt | 🟩 |
-| Als Platzhalter sichtbar gekennzeichnet | 🟩 |
-| Name, Anschrift, Kontakt, ggf. Rechtsform und Registereintrag | 🟦 🟥 |
+| Rechtsform geklärt: **Einzelunternehmen**, kein Registereintrag | 🟩 |
+| Name: **Adam Maurice Lasarzik** (keine Geschäftsbezeichnung angemeldet) | 🟩 |
+| E-Mail: **kontakt@veraevents.de** — echt, in Betrieb | 🟩 |
+| Umsatzsteuer: Kleinunternehmen nach § 19 UStG, keine ausgewiesen | 🟩 |
+| **Ladungsfähige Anschrift** | 🟥 **offen** |
+| **Telefonnummer** | 🟥 **offen** |
+| Umsatzsteuer-Identifikationsnummer | 🟦 ungeklärt, bewusst leer |
 
-Ohne Impressum darf die Seite nicht öffentlich gehen. Die Angaben
-kommen nach der Gewerbeanmeldung von dir.
+**Die zwei offenen Felder sind der letzte Blocker für den Livegang.**
+Ohne ladungsfähige Anschrift darf die Seite nicht mit Ticketverkauf
+öffentlich gehen. Beide erscheinen bis dahin sichtbar als Platzhalter;
+Prüfliste `N` schlägt an, wenn sie stillschweigend verschwinden.
+
+**Warum sie offen sind:** Der Betreiber möchte weder Privatanschrift
+noch private Mobilnummer veröffentlichen. Das ist berechtigt, ändert
+aber nichts an der Pflicht — der Weg ist eine gemietete, ausdrücklich
+**ladungsfähige** Geschäftsanschrift (nicht „Impressumsservice", nicht
+Postfach) und eine getrennte Geschäftsnummer.
+
+**Zur USt-IdNr.:** Es steht bewusst **keine** dort, solange ungeklärt
+ist, ob eine vorliegt. Eine erfundene wäre schlimmer als keine, und
+die Steuernummer vom Finanzamt gehört nicht ins Impressum — die steht
+nur auf Rechnungen.
+
+**Bewusst nicht enthalten:** der Standardbaustein zur
+EU-Streitschlichtungsplattform (eingestellt, der Link zeigt ins Leere)
+und der Hinweis nach § 36 VSBG (gilt erst ab mehr als zehn
+Beschäftigten). Beides bei einer fachkundigen Prüfung gegenprüfen.
+
+### Wo die Daten gepflegt werden
+
+Alle Anbieterdaten stehen an **einer** Stelle: `content/de.ts` →
+`anbieter`. Impressum, Fussbereich und Kontaktseite lesen von dort.
+`null` bedeutet „liegt noch nicht vor" und erscheint sichtbar als
+Platzhalter.
+
+Vorher lag die erfundene Adresse `kontakt@beispiel.de` an drei Stellen
+— im Fussbereich **jeder** Seite sogar ohne Platzhalter-Markierung, wo
+sie sich wie eine gültige Adresse las. Sie ist entfernt; Prüfliste `N`
+sucht bei jedem Lauf danach.
 
 ## Datenschutzerklärung · `/datenschutz`
 
@@ -169,7 +204,8 @@ behauptet; sie ist dann mit anzupassen.
 
 ## Kurzfassung: was vor dem Livegang zwingend fehlt
 
-1. **Impressumsdaten** eintragen 🟥
+1. **Impressumsdaten**: Name, Kontakt und Aufbau stehen 🟩 — es fehlen
+   noch **ladungsfähige Anschrift** und **Telefonnummer** 🟥
 2. **Datenschutzerklärung** ausformulieren, Stripe und Minderjährige
    berücksichtigen 🟥
 3. **Widerrufsrecht klären** (§ 312g Abs. 2 Nr. 9 BGB) und die Seite
