@@ -203,6 +203,51 @@ export function stornoAdminMail(
   };
 }
 
+/**
+ * Störungsmeldung der Serverüberwachung.
+ *
+ * Wird nur beim WECHSEL des Zustands verschickt, nicht bei jedem
+ * Durchlauf — eine Mail alle 15 Minuten liest nach dem dritten Mal
+ * niemand mehr, und dann geht die eine wichtige unter.
+ */
+export function systemAlarmMail(befunde: string[]): { betreff: string; text: string } {
+  const anzahl = befunde.length;
+  return {
+    betreff: `VERA: Störung auf dem Server (${anzahl} ${anzahl === 1 ? "Befund" : "Befunde"})`,
+    text: [
+      "Die Überwachung hat auf dem Server eine Störung festgestellt.",
+      "",
+      ...befunde.map((b) => `  - ${b}`),
+      "",
+      "Nachsehen lässt sich das in der Webkonsole mit:",
+      "",
+      "  vera-status",
+      "",
+      "Sobald alles wieder in Ordnung ist, kommt eine Entwarnung.",
+      "Bis dahin wird nicht erneut gemailt, außer es kommt ein neuer",
+      "Befund hinzu.",
+    ].join("\n"),
+  };
+}
+
+/** Entwarnung — der Gegenpol zur Störungsmeldung. */
+export function systemEntwarnungMail(): { betreff: string; text: string } {
+  return {
+    betreff: "VERA: Störung behoben",
+    text: [
+      "Die Überwachung meldet wieder alles in Ordnung:",
+      "",
+      "  - alle Dienste laufen",
+      "  - die Webseite antwortet über HTTPS",
+      "  - genug Speicherplatz",
+      "  - das Zertifikat ist gültig",
+      "  - die Datenbank-Sicherung ist aktuell",
+      "",
+      "Es ist nichts weiter zu tun.",
+    ].join("\n"),
+  };
+}
+
 /** Alarm-Mail für die nächtliche Datenbank-Sicherung — nur bei Fehlern. */
 export function sicherungsAlarmMail(zeitpunkt: string, meldung: string): { betreff: string; text: string } {
   return {

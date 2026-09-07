@@ -98,4 +98,10 @@ echo "════════════════════════�
 npx tsx "$P/L/l-schulen.mjs" 2>&1 | tail -3
 
 echo ""
+echo "═══════════════════════════════════════════════"
+echo "  Q · Überwachung (Mail-Texte und Wächter-Logik)"
+echo "═══════════════════════════════════════════════"
+npx tsx "$P/Q/q-wache.mjs" 2>&1 | tail -3
+
+echo ""
 echo "FERTIG"

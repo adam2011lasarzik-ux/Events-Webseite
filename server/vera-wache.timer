@@ -1,0 +1,13 @@
+[Unit]
+Description=Startet die VERA-Wache alle 15 Minuten
+
+[Timer]
+# Erster Lauf 3 Minuten nach dem Hochfahren: So merkt die Wache auch
+# einen Dienst, der nach einem Neustart nicht wieder angelaufen ist.
+OnBootSec=3min
+OnUnitActiveSec=15min
+# Kein Persistent=true: Eine verpasste Prüfung nachzuholen bringt
+# nichts — geprüft wird der Zustand JETZT, nicht der von gestern.
+
+[Install]
+WantedBy=timers.target

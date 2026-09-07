@@ -1,0 +1,9 @@
+[Unit]
+Description=Prüft, ob VERA läuft, erreichbar ist und genug Platz hat
+After=network-online.target
+
+[Service]
+Type=oneshot
+# Läuft als root: Nur so ist das Let's-Encrypt-Zertifikat lesbar.
+# Die Mail verschickt das Skript selbst als Benutzer "vera".
+ExecStart=/usr/local/bin/vera-wache.sh

@@ -18,7 +18,8 @@
     "admin": "tsx --env-file=.env prisma/adminAnlegen.ts",
     "zahlung:pruefen": "tsx --env-file=.env prisma/zahlungPruefen.ts",
     "mail:pruefen": "tsx --env-file=.env prisma/mailPruefen.ts",
-    "sicherung:alarm": "tsx --env-file=.env prisma/sicherungsAlarmSenden.ts"
+    "sicherung:alarm": "tsx --env-file=.env prisma/sicherungsAlarmSenden.ts",
+    "system:alarm": "tsx --env-file=.env prisma/systemAlarmSenden.ts"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.9.1",
