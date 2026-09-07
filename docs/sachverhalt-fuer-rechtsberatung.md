@@ -243,6 +243,25 @@ eigenen Domain ausgeliefert, es wird nichts von fremden Servern
 geladen. Das einzige Cookie entsteht, wenn sich der Betreiber selbst am
 Verwaltungsbereich anmeldet.
 
+**Server-Protokolle.** Der Webserver (Nginx) schreibt für jeden Aufruf
+eine Zeile mit **IP-Adresse**, Zeitpunkt, aufgerufener Adresse,
+Browserkennung und Verweisquelle — die Voreinstellung von Ubuntu. Die
+Anwendung selbst protokolliert nur technische Fehler, keine
+Personendaten, keine Passwörter, keine Zahlungsdaten.
+
+Eine **Aufbewahrungsfrist für diese Protokolle ist bisher nicht
+festgelegt** (Ubuntu dreht sie standardmäßig wöchentlich und hält
+mehrere Wochen vor). Ob die Aufbewahrung verkürzt oder die IP-Adresse
+gekürzt werden sollte, ist eine der Fragen an die Beratung.
+
+**Erreichbarkeitsprüfung durch einen Dritten.** Seit dem 7. September
+2026 ruft **UptimeRobot** alle fünf Minuten die öffentliche Startseite
+auf, um einen Ausfall zu melden. Der Dienst erhält dabei nur, was jeder
+Besucher auch bekommt — die öffentliche Seite. Es werden **keine
+Besucher- oder Teilnehmerdaten** übermittelt. UptimeRobot bietet eine
+Auftragsverarbeitungsvereinbarung an; ob eine solche hier nötig ist,
+gehört mit geprüft.
+
 **Serverstandort:** eigener virtueller Server bei Hostinger, bei der
 Bestellung wurde ein EU-Standort gewählt. Die genaue Region ist vom
 Betreiber im Kundenkonto zu bestätigen, bevor sie in der
@@ -314,8 +333,9 @@ irreführend wäre.
 **Frage 2 — Datenschutzerklärung.**
 Auf Grundlage von Abschnitt 7: Welche Rechtsgrundlagen sind je
 Verarbeitung anzugeben, welche Speicherdauern sind angemessen (es gibt
-bisher keine Löschfrist), und wie ist das Verhältnis zu Stripe
-einzuordnen? Zu berücksichtigen: Es nehmen Minderjährige teil, und die
+bisher weder für die Anmeldedaten noch für die **Server-Protokolle mit
+IP-Adressen** eine Löschfrist), und wie sind die beiden Dienstleister —
+**Stripe** und **UptimeRobot** — einzuordnen? Zu berücksichtigen: Es nehmen Minderjährige teil, und die
 Foto-Einwilligung ist getrennt und freiwillig.
 
 **Frage 3 — Eigene AGB: ja oder nein?**
