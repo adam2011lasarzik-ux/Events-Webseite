@@ -75,6 +75,17 @@ existieren aber noch nicht.
 
 ## 3. Der Buchungsablauf im Einzelnen
 
+**Anmeldung und Bezahlung sind ein einziger Vorgang.** VERA bietet
+**keine Reservierung** an: Es gibt keine Möglichkeit, einen Platz
+vorzumerken und später oder gar nicht zu bezahlen. Das Ticket ist erst
+mit der **erfolgreichen Zahlung** verbindlich gekauft.
+
+Dass der Platz für 30 Minuten intern mitgezählt wird (Schritt 4), ist
+ausschließlich eine technische Absicherung **des laufenden
+Kaufvorgangs** — damit der Platz nicht an jemand anderen geht, während
+der Kunde auf der Bezahlseite steht. Es ist keine Leistung, die dem
+Kunden angeboten oder zugesagt wird.
+
 Dies ist der technisch tatsächlich umgesetzte Ablauf.
 
 **Schritt 1 — Auswahl.** Der Besucher wählt auf der Eventseite, wen er
@@ -100,19 +111,25 @@ ein Geburtsjahr vor, das Formular fragt es derzeit nicht ab.
 „Jetzt anmelden & bezahlen – 50,00 €". Bei einer kostenlosen
 Veranstaltung stünde dort „Jetzt verbindlich anmelden".
 
-**Schritt 4 — Reservierung.** Der Server prüft die freien Plätze
-innerhalb einer Datenbank-Transaktion und speichert die Anmeldung mit
-dem Status **RESERVIERT**. Der Platz wird **30 Minuten** gehalten. Es
-ist zu diesem Zeitpunkt **nicht** bezahlt und die Anmeldung gilt intern
-nicht als bestätigt.
+**Schritt 4 — Anmeldung speichern, Platz während der Zahlung halten.**
+Der Server prüft die freien Plätze innerhalb einer Datenbank-Transaktion
+und speichert die Anmeldung. Sie gilt zu diesem Zeitpunkt **weder als
+bestätigt noch als bezahlt**; ein Ticket ist damit nicht erworben.
+
+Damit der Platz nicht an jemand anderen geht, solange der Kunde auf der
+Bezahlseite steht, wird er intern **30 Minuten** lang mitgezählt.
+Läuft diese Zeit ab, zählt der Platz automatisch wieder als frei;
+gelöscht wird dabei nichts. Der interne Datenbankstatus heißt
+`RESERVIERT` — **dieser technische Name beschreibt das Halten während
+des Kaufvorgangs, keine dem Kunden angebotene Reservierung.**
 
 **Schritt 5 — Bezahlseite.** Der Besucher wird zur gehosteten
 Bezahlseite von **Stripe** weitergeleitet (Einzelheiten in Abschnitt 4).
 
 **Schritt 6 — Bestätigung.** Erst wenn Stripe dem Server über eine
 signaturgeprüfte Rückmeldung den Zahlungseingang meldet, wird die
-Anmeldung auf **BESTÄTIGT** und **BEZAHLT** gesetzt und die Reservierung
-aufgehoben. Die bloße Rückleitung des Browsers gilt **nicht** als
+Anmeldung auf **BESTÄTIGT** und **BEZAHLT** gesetzt und das Halten des
+Platzes beendet. **Erst hier ist das Ticket verbindlich gekauft.** Die bloße Rückleitung des Browsers gilt **nicht** als
 Zahlungsnachweis; der Betrag wird zusätzlich mit dem gespeicherten
 Betrag abgeglichen.
 
@@ -123,8 +140,12 @@ Veranstalter erhält eine Benachrichtigung.
 **Wenn die Zahlung abgebrochen wird oder fehlschlägt:** Die Anmeldung
 bleibt bestehen und wird auf einer Abschluss-Seite als *„noch nicht
 abgeschlossen"* dargestellt, mit einem Knopf „Jetzt bezahlen". Es
-erscheint ausdrücklich **kein** „Danke"-Text. Läuft die Reservierung ab,
-zählt der Platz automatisch wieder als frei.
+erscheint ausdrücklich **kein** „Danke"-Text — es ist nichts gekauft.
+Der Kunde kann den Kauf über diesen Knopf fortsetzen; das ist die
+Fortsetzung desselben Vorgangs, keine Einlösung einer Reservierung.
+Läuft die Haltezeit ab, zählt der Platz automatisch wieder als frei,
+und beim nächsten Anlauf wird erneut geprüft, ob überhaupt noch genug
+Plätze vorhanden sind.
 
 **Doppelbuchungsschutz:** Pro Veranstaltung und E-Mail-Adresse gibt es
 genau eine Anmeldung. Meldet sich jemand nach einer Stornierung erneut
@@ -205,8 +226,9 @@ ausdrücklich dagegen entschieden.
 **Je Anmeldung:** Vorname, Nachname, E-Mail-Adresse, Telefonnummer
 (freiwillig), Buchungsart, Status, die beiden Einwilligungen, der
 eingefrorene Gesamtpreis, Zahlungsstatus und -weg, die Referenzen des
-Zahlungsanbieters, gezahlter Betrag und Zahlungszeitpunkt, Ablauf der
-Reservierung, Zeitpunkte von Anmeldung, Reaktivierung und Stornierung.
+Zahlungsanbieters, gezahlter Betrag und Zahlungszeitpunkt, der Zeitpunkt
+bis zu dem der Platz während der Zahlung gehalten wird, Zeitpunkte von
+Anmeldung, Reaktivierung und Stornierung.
 
 **Je teilnehmender Person:** Vorname, Nachname, Typ (Schüler oder
 Erwachsener), optional ein Geburtsjahr (wird derzeit nicht abgefragt).
@@ -247,6 +269,14 @@ Datenbanksicherungen werden derzeit 180 Tage aufbewahrt.
 
 Alle vier Seiten sind aus dem Fußbereich **jeder** Seite erreichbar,
 also auch aus dem Anmeldeformular und der Abschluss-Seite.
+
+**Offener Punkt beim Wortlaut:** Auf der Abschluss-Seite steht derzeit
+noch an vier Stellen das Wort „reserviert" (z. B. „Dein Platz ist für
+kurze Zeit reserviert"). Das beschreibt zwar den technischen Vorgang
+zutreffend, kann aber den Eindruck einer angebotenen Reservierung
+erwecken — was ausdrücklich **nicht** gemeint ist (siehe Abschnitt 3).
+Der Betreiber hat entschieden, diese Formulierungen anzupassen; der
+Ablauf selbst bleibt unverändert.
 
 Es gibt **kein** Pflicht-Häkchen „AGB akzeptiert". Solange die AGB ein
 Platzhalter sind, wäre ein solches Häkchen ohne Inhalt. Das Formular
