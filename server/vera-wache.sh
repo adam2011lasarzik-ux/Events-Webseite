@@ -21,7 +21,12 @@
 set -uo pipefail
 
 APP="/var/www/vera"
-ADRESSE="https://veraevents.de/"
+# Die zu prüfende Adresse lässt sich für einen Test überschreiben:
+#   VERA_WACHE_ADRESSE=https://veraevents.de/gibt-es-nicht vera-wache.sh
+# Damit lässt sich der Alarmweg Ende zu Ende beweisen, OHNE einen
+# laufenden Dienst anzuhalten. Ein Alarm, der nie ausgelöst hat, ist
+# kein Alarm — aber dafür muss man nicht die Webseite abschalten.
+ADRESSE="${VERA_WACHE_ADRESSE:-https://veraevents.de/}"
 ZUSTANDSDATEI="/var/lib/vera-wache/zustand"
 SICHERUNGSSTATUS="/home/vera/.vera-sicherung-status"
 ZERTIFIKAT="/etc/letsencrypt/live/veraevents.de/fullchain.pem"

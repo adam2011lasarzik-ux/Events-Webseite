@@ -59,7 +59,7 @@ const wacheOhneKommentare = wache
   .filter((z) => !z.trim().startsWith("#"))
   .join("\n");
 pruefe("Sie prüft über die ÖFFENTLICHE Adresse, nicht über localhost",
-  wacheOhneKommentare.includes('ADRESSE="https://veraevents.de/"') &&
+  wacheOhneKommentare.includes('${VERA_WACHE_ADRESSE:-https://veraevents.de/}') &&
     !wacheOhneKommentare.includes("127.0.0.1") &&
     wacheOhneKommentare.includes('"$ADRESSE"'));
 pruefe("Sie prüft den Speicherplatz", wache.includes("df -P /"));
@@ -78,6 +78,8 @@ pruefe("Sie meldet nur beim Wechsel des Zustands",
 pruefe("Ein zusätzlicher Befund gilt als neuer Zustand",
   wache.includes("sha256sum"));
 pruefe("Es gibt einen Probelauf ohne Versand", wache.includes("--probe"));
+pruefe("Die Adresse laesst sich fuer einen Test ueberschreiben",
+  wache.includes("VERA_WACHE_ADRESSE"));
 pruefe("Der Mailversand läuft als vera, nicht als root",
   wache.includes("runuser -u vera"));
 
