@@ -98,6 +98,21 @@ pruefe("Der Probelauf zeigt den Zustand des Meldewegs",
 pruefe("Der Mailversand läuft als vera, nicht als root",
   wache.includes("runuser -u vera"));
 
+/* ── Der Versand selbst ─────────────────────────────────────────
+
+   Der Alarm-Versand ist der einzige Ort im Projekt, an dem ein
+   Mail-Fehler NICHT geschluckt werden darf. Ueberall sonst ist die
+   Mail eine Zugabe zu einem abgeschlossenen Vorgang; hier ist sie der
+   Vorgang. Das wurde auf dem Server bewiesen -- Exit-Code 0 sagte
+   "gelaufen", nicht "angekommen". */
+const senden = readFileSync(new URL("../../prisma/systemAlarmSenden.ts", import.meta.url), "utf8");
+pruefe("Der Alarm-Versand bricht bei einem Fehler ab",
+  senden.includes("await mailSenden(") && !senden.includes("mailSendenOhneAbbruch"));
+pruefe("Ein Fehler beim Versand setzt einen Fehler-Exit-Code",
+  senden.split("process.exitCode = 1").length - 1 >= 2);
+pruefe("Ohne Empfaenger gilt die Ueberwachung als ausgefallen",
+  senden.includes("kein Versand möglich"));
+
 console.log("");
 if (schlecht === 0) { console.log(`Alle ${gut} Prüfungen bestanden.\n`); process.exit(0); }
 console.log(`${gut} von ${gut + schlecht} bestanden, ${schlecht} fehlgeschlagen.\n`);

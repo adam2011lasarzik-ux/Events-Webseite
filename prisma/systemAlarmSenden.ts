@@ -6,19 +6,31 @@
        npm run system:alarm -- "Befund 1" "Befund 2" …
        npm run system:alarm -- --entwarnung
 
-   Wie beim Sicherungs-Alarm die schluckende Variante: Wenn schon der
-   Server klemmt, soll nicht zusätzlich das Meldeskript abbrechen —
-   der Fehler steht dann immer noch im Journal.
+   ANDERS als beim Sicherungs-Alarm wird hier die ABBRECHENDE Variante
+   benutzt, und das ist der ganze Punkt: Bei einer Anmeldebestätigung
+   darf ein Mail-Ausfall die Buchung nicht kaputtmachen — dort ist die
+   Mail eine Zugabe. Hier ist der Versand die gesamte Aufgabe. Schluckt
+   man den Fehler, bleibt eine Wache übrig, die brav ihren Zustand
+   notiert und niemanden erreicht, und der Exit-Code sagt trotzdem
+   "in Ordnung".
+
+   Deshalb: Scheitert der Versand, endet dieses Skript mit Fehler. Die
+   Wache meldet das ins Journal, und `systemctl status vera-wache`
+   zeigt den Dienst als fehlgeschlagen.
    --------------------------------------------------------------- */
 
-import { mailSendenOhneAbbruch, adminEmpfaenger } from "../lib/mail";
+import { mailSenden, adminEmpfaenger } from "../lib/mail";
 import { systemAlarmMail, systemEntwarnungMail } from "../lib/mailVorlagen";
 
 async function haupt() {
   const argumente = process.argv.slice(2);
   const empfaenger = adminEmpfaenger();
   if (!empfaenger) {
-    console.error("Überwachung: keine E-Mail-Adresse hinterlegt, kein Versand.");
+    /* Kein Empfänger heißt: Die Wache kann niemanden erreichen. Das
+       ist kein Randfall, den man wegloggt — das ist ein Ausfall der
+       Überwachung selbst. */
+    console.error("Überwachung: keine E-Mail-Adresse hinterlegt, kein Versand möglich.");
+    process.exitCode = 1;
     return;
   }
 
@@ -30,10 +42,15 @@ async function haupt() {
     return;
   }
 
-  await mailSendenOhneAbbruch({
-    an: empfaenger,
-    ...(entwarnung ? systemEntwarnungMail() : systemAlarmMail(befunde)),
-  });
+  try {
+    await mailSenden({
+      an: empfaenger,
+      ...(entwarnung ? systemEntwarnungMail() : systemAlarmMail(befunde)),
+    });
+  } catch (e) {
+    console.error("Überwachung: Der Versand der Meldung ist fehlgeschlagen.", e);
+    process.exitCode = 1;
+  }
 }
 
 void haupt();

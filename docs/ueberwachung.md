@@ -171,6 +171,16 @@ Deshalb jetzt:
   weiterzumachen (`systemctl status vera-wache` zeigt das an)
 - scheitert der Versand, steht der vollständige Fehler im Journal,
   und der Dienst gilt als fehlgeschlagen
+- und der Versand selbst bricht bei einem Fehler ab, statt ihn zu
+  schlucken
+
+Der letzte Punkt ist eine Ausnahme von der Regel, die sonst im ganzen
+Projekt gilt. Überall sonst schluckt der Mailversand seine Fehler
+absichtlich: Eine Anmeldebestätigung, die nicht ankommt, darf niemals
+eine bereits bezahlte Buchung kaputtmachen. Beim Alarm ist es
+umgekehrt — dort **ist** die Mail der ganze Vorgang. Aufgefallen ist
+das beim Test auf dem Server: Der Exit-Code sagte „gelaufen", nicht
+„angekommen"; bewiesen hat es erst der Blick ins Postfach.
 
 ## Protokolle
 
