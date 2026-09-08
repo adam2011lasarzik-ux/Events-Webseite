@@ -33,3 +33,8 @@ next-env.d.ts
 # Bildschirmfotos und Messdaten der Prüfungen. Entstehen bei jedem
 # Lauf neu und gehören nicht ins Repository.
 /pruefung/.ausgabe/
+
+# Wegwerf-Skripte einzelner Prüfläufe. Eines ist einmal ins
+# Repository gerutscht, weil der Behälter mitten im Lauf neu startete
+# und das Aufräumen nie dran kam.
+pruefung/.*-temp.*
