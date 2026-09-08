@@ -244,15 +244,20 @@ geladen. Das einzige Cookie entsteht, wenn sich der Betreiber selbst am
 Verwaltungsbereich anmeldet.
 
 **Server-Protokolle.** Der Webserver (Nginx) schreibt für jeden Aufruf
-eine Zeile mit **IP-Adresse**, Zeitpunkt, aufgerufener Adresse,
-Browserkennung und Verweisquelle — die Voreinstellung von Ubuntu. Die
-Anwendung selbst protokolliert nur technische Fehler, keine
-Personendaten, keine Passwörter, keine Zahlungsdaten.
+eine Zeile mit Zeitpunkt, aufgerufener Adresse, Browserkennung,
+Verweisquelle und Host-Kennung.
 
-Eine **Aufbewahrungsfrist für diese Protokolle ist bisher nicht
-festgelegt** (Ubuntu dreht sie standardmäßig wöchentlich und hält
-mehrere Wochen vor). Ob die Aufbewahrung verkürzt oder die IP-Adresse
-gekürzt werden sollte, ist eine der Fragen an die Beratung.
+**Die IP-Adresse wird seit dem 8. September 2026 gekürzt
+gespeichert:** Die letzte Stelle wird verworfen (`179.198.201.39` →
+`179.198.201.0`). Die einzelne Person ist damit nicht mehr
+bestimmbar, die grobe Herkunft bleibt erkennbar.
+
+Aufbewahrung, am Server abgelesen: Nginx-Protokolle werden **täglich
+gedreht und 14 Generationen** vorgehalten (rund zwei Wochen); das
+System-Journal ist auf **7 Tage** und höchstens 1 GB begrenzt.
+
+Die Anwendung selbst protokolliert nur technische Fehler — keine
+Personendaten, keine Passwörter, keine Zahlungsdaten.
 
 **Erreichbarkeitsprüfung durch einen Dritten.** Seit dem 7. September
 2026 ruft **UptimeRobot** alle fünf Minuten die öffentliche Startseite
@@ -333,8 +338,9 @@ irreführend wäre.
 **Frage 2 — Datenschutzerklärung.**
 Auf Grundlage von Abschnitt 7: Welche Rechtsgrundlagen sind je
 Verarbeitung anzugeben, welche Speicherdauern sind angemessen (es gibt
-bisher weder für die Anmeldedaten noch für die **Server-Protokolle mit
-IP-Adressen** eine Löschfrist), und wie sind die beiden Dienstleister —
+bisher für die Anmeldedaten keine Löschfrist; für die Server-Protokolle
+gelten 14 Tage bzw. 7 Tage mit gekürzter IP-Adresse), und wie sind die
+beiden Dienstleister —
 **Stripe** und **UptimeRobot** — einzuordnen? Zu berücksichtigen: Es nehmen Minderjährige teil, und die
 Foto-Einwilligung ist getrennt und freiwillig.
 

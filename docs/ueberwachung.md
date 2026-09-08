@@ -186,30 +186,57 @@ das beim Test auf dem Server: Der Exit-Code sagte „gelaufen", nicht
 
 | Was | Wo | Aufbewahrung |
 |---|---|---|
-| Anwendung (Fehler, `console.error`) | `journalctl -u vera` | begrenzt durch die Größe des Journals |
-| Zugriffe und Fehler von Nginx | `/var/log/nginx/` | von `logrotate` gedreht |
-| Wache und Sicherung | `journalctl -u vera-wache` bzw. `-u vera-sicherung` | wie oben |
+| Anwendung (Fehler, `console.error`) | `journalctl -u vera` | **7 Tage**, höchstens 1 GB |
+| Zugriffe und Fehler von Nginx | `/var/log/nginx/` | täglich gedreht, **14 Generationen** |
+| Wache und Sicherung | `journalctl -u vera-wache` bzw. `-u vera-sicherung` | wie das Journal oben |
+
+Die Zahlen sind am Server abgelesen, nicht geschätzt. Das Journal war
+bereits begrenzt (`SystemMaxUse=1G`, `MaxRetentionSec=7day`,
+`SystemMaxFileSize=100M`, komprimiert) und liegt dauerhaft unter
+`/var/log/journal` — es übersteht also einen Neustart. Für Nginx
+existiert eine Logrotate-Regel (täglich, 14 Generationen, komprimiert).
+
+**An beidem wurde nichts geändert.** Beim Nachsehen war es bereits
+richtig eingestellt; eine „Korrektur" hätte nur Risiko ohne Nutzen
+gebracht.
 
 **Was NICHT protokolliert wird:** Passwörter, Schlüssel oder
 Zahlungsdaten. Fehler der Anwendung werden serverseitig festgehalten;
 Besucher bekommen nie interne Einzelheiten zu sehen.
 
-**Offener Punkt — Nginx protokolliert IP-Adressen.** Das ist die
-Voreinstellung von Ubuntu und betrifft personenbezogene Daten. Vor dem
-Livegang ist zu entscheiden, ob die Aufbewahrung verkürzt oder die
-letzte Stelle der Adresse verworfen wird. Das gehört zur
-Datenschutzerklärung (siehe `docs/rechtliches.md`, Punkt 2) und ist
-Teil der Fragen an die rechtliche Prüfung.
+### IP-Adressen im Nginx-Protokoll — gekürzt seit 08.09.2026
 
-**Vorbereitet, aber bewusst noch nicht aktiv:**
-`server/nginx-protokoll-kuerzen.conf` kürzt die letzte Stelle der
-IP-Adresse im Protokoll. Der Einbau steht als Anleitung im Kopf der
-Datei; es ist eine Zwei-Minuten-Sache, sobald entschieden ist.
+Nginx schrieb in der Voreinstellung für jeden Aufruf die **vollständige
+IP-Adresse** mit. Bei täglicher Rotation und 14 Generationen lagen diese
+personenbezogenen Daten rund zwei Wochen auf dem Server, auch von
+Besuchern, die sich nie angemeldet haben.
 
-Wichtig dabei, weil es leicht verwechselt wird: **Die Bremse gegen
-Massenanmeldungen benutzt dieses Protokoll nicht.** Sie wertet die
-Kopfzeile `X-Forwarded-For` in der Anwendung aus. Das Kürzen im
-Protokoll schwächt den Missbrauchsschutz also nicht ab.
+Seit dem 8. September 2026 wird die letzte Stelle verworfen:
+
+```
+179.198.201.39   →   179.198.201.0
+```
+
+Die Herkunft bleibt grob erkennbar — nützlich, wenn man einen Angriff
+nachvollziehen will —, die einzelne Person nicht mehr. Zusätzlich wird
+jetzt die **Host-Kennung** mitgeschrieben (`host=veraevents.de`); sie
+fehlte vorher, weshalb sich ein einzelner 404 auf der Startseite nicht
+mehr zuordnen liess.
+
+**Der Missbrauchsschutz ist davon nicht betroffen — auf dem Server
+geprüft, nicht angenommen.** Die Bremse (5 Anmeldeversuche je Stunde,
+10 am Admin-Login) liest die Kopfzeile `X-Forwarded-For`, die Nginx an
+die Anwendung weitergibt. Die dafür zuständige Zeile
+`proxy_set_header X-Forwarded-For $remote_addr;` steht unverändert im
+Server-Block und wurde nach der Umstellung erneut nachgezählt.
+
+Konfiguration: `server/nginx-protokoll-kuerzen.conf`. Im Kopf der Datei
+stehen zwei Fallen, in die ich beim Einbau gelaufen bin — die
+Reihenfolge der `include`-Anweisung und die täuschende erste
+Protokollzeile nach einem `reload`.
+
+**Rückweg:** `/etc/nginx/nginx.conf.vor-ip-kuerzung` ist die
+unveränderte Kopie von vorher.
 
 ## Prüfliste für den Server
 

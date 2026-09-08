@@ -72,7 +72,7 @@ sucht bei jedem Lauf danach.
 | **Cookie-Aussage korrigiert** — siehe unten | 🟩 |
 | **Stripe vollständig benannt** — Betrag, Anmeldenummer, E-Mail, Titel der Veranstaltung, Personenzahl | 🟩 |
 | Ausformulierte Erklärung: Rechtsgrundlagen, Speicherdauern, Betroffenenrechte | 🟨 🟥 |
-| **Server-Protokolle mit IP-Adressen** — Nginx schreibt sie mit, keine Löschfrist festgelegt | 🟥 **offen** |
+| **Server-Protokolle**: IP-Adresse wird gekürzt (letzte Stelle verworfen), Aufbewahrung 14 Tage | 🟩 **erledigt** |
 | **UptimeRobot** als zweiter Dienstleister benennen | 🟨 |
 | Auftragsverarbeitung mit Stripe einordnen | 🟨 |
 | Besonderheiten bei Minderjährigen | 🟨 |
