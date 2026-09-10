@@ -220,3 +220,24 @@ behauptet; sie ist dann mit anzupassen.
 
 Punkt 1 kannst du selbst liefern. Punkt 2, 3 und 5 gehören
 fachkundig geprüft. Punkt 4 und 6 sind erledigt.
+
+---
+
+## Wie die offenen Punkte beschafft werden — geändert im September 2026
+
+Der frühere Plan sah **eine anwaltliche Beratung** vor, die die Punkte 2,
+3 und 5 gemeinsam klärt. Der Betreiber hat entschieden, das in der
+Gründungsphase **nicht** zu tun — die Kosten sind zu hoch. Stattdessen
+soll ein professioneller **Rechtstexte-Service** genutzt werden.
+
+Was das konkret heißt, welche Angaben ein solcher Dienst braucht und
+worauf bei der Anbieterwahl zu achten ist, steht in
+**`docs/rechtstexte-beschaffung.md`**.
+
+`docs/sachverhalt-fuer-rechtsberatung.md` bleibt gültig und wird **nicht**
+hinfällig: Der Sachverhalt ist derselbe, unabhängig davon, wer ihn
+beurteilt. Die Datei ist jetzt die Vorlage für den Fragebogen des
+Dienstes.
+
+**An den Seiten selbst ändert das nichts.** Die Platzhalter bleiben
+sichtbar markiert, bis echte Texte vorliegen.
