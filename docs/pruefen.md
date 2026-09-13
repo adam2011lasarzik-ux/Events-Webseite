@@ -74,6 +74,18 @@ bash pruefung/alle.sh
 
 Läuft rund zehn Minuten und gibt je Liste eine Zusammenfassung aus.
 
+**Das Skript prüft zuerst, ob alle drei Prozesse antworten** (4242, 3213,
+3249) und bricht sonst mit einem Satz ab, der sagt welcher fehlt. Am Ende
+steht eine Bilanz — bei einem Fehlschlag der Name der Liste und ein
+Exitcode ungleich null.
+
+Das war einmal anders und ist teuer geworden: Der Kopf des Skripts nannte
+den dritten Server nicht, die Listen `N` und `O` stürzten deshalb bei
+jedem Sammellauf ab, und weil jede Liste durch `| tail` lief, ging ihr
+Exitcode verloren — am Ende stand trotzdem „FERTIG". 57 Prüfungen fielen
+still aus. Ein Prüfwerkzeug, das Abstürze verschluckt, ist schlimmer als
+keines: Es erzeugt Vertrauen, das es nicht deckt.
+
 ## Einzeln
 
 ```bash

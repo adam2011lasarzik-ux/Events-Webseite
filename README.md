@@ -323,17 +323,28 @@ Geheimnis.
 
 ### Was noch offen ist
 
-Ein echter Durchlauf mit einer Stripe-Testkarte braucht eine von außen
-erreichbare Adresse für die Rückmeldung — also das Hosting. Zwei Dinge
-gehen ohne sie nicht: Stripe kann keinen Webhook zustellen, und aus der
-Entwicklungsumgebung heraus ist `api.stripe.com` netzseitig gesperrt
-(gemessen, nicht vermutet).
-
-Geprüft sind deshalb alle **eigenen** Teile — Unterschrift, doppelte
-Meldungen, Betragsabgleich, fehlgeschlagene Zahlung, Reservierungsablauf,
+Geprüft sind alle **eigenen** Teile — Unterschrift, doppelte Meldungen,
+Betragsabgleich, fehlgeschlagene Zahlung, Reservierungsablauf,
 Doppelklick, zweiter Anlauf, Testmodus-Riegel — gegen eine örtliche
-Attrappe des Anbieters. Der Klick durch Stripes echte Bezahlseite bleibt
-bis zum Hosting offen.
+Attrappe des Anbieters. Aus der Entwicklungsumgebung heraus ist
+`api.stripe.com` netzseitig gesperrt (gemessen, nicht vermutet), deshalb
+die Attrappe.
+
+**Offen bleibt der Klick durch Stripes echte Bezahlseite** mit der
+Testkarte `4242 4242 4242 4242`, dazu ein Abbruch, eine fehlgeschlagene
+Karte und eine Test-Erstattung.
+
+Das war lange unmöglich, weil eine von außen erreichbare Adresse für die
+Rückmeldung fehlte. **Seit dem Hosting gilt das nicht mehr:**
+`https://veraevents.de` ist erreichbar, das Zertifikat steht, und die
+Route `/zahlung/rueckmeldung` wartet. Es fehlen nur noch zwei Eintragungen
+im Stripe-Bereich — die Webhook-Adresse und das `whsec_`-Geheimnis als
+Umgebungsvariable auf dem Server. `npm run zahlung:pruefen` sagt jederzeit,
+welche der drei Angaben noch fehlt.
+
+Der **Testmodus-Riegel bleibt geschlossen**, bis dieser Durchlauf
+vollständig geglückt ist und die Rechtstexte vorliegen. Ein Schlüssel, der
+nicht mit `sk_test_` beginnt, wird abgewiesen.
 
 ## Der Gründerbereich
 

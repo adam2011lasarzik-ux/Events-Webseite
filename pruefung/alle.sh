@@ -5,14 +5,26 @@
 #  Aufruf aus dem Projektordner:
 #      bash pruefung/alle.sh
 #
-#  Voraussetzungen (siehe docs/pruefen.md):
-#    - Datenbank läuft, .env ist gefüllt
-#    - `npm run build` ist gelaufen
-#    - Ein Server läuft auf Port 3213 mit den Testwerten für die
-#      Zahlung, dazu die Anbieter-Attrappe auf Port 4242
+#  Voraussetzungen (siehe docs/pruefen.md) — DREI Prozesse, nicht zwei:
+#    - Datenbank läuft, .env ist gefüllt, `npm run build` ist gelaufen
+#    - Port 4242: die Attrappe des Zahlungsanbieters
+#    - Port 3213: ein Server MIT den Zahlungs-Testwerten
+#    - Port 3249: ein Server OHNE Sonderwerte (Seiten, Links)
 #
 #  Zwischen den Läufen werden Anmeldungen geleert: Zwei Listen, die
 #  sich denselben Datenstand teilen, gehen einander sonst in die Quere.
+#
+#  ── Warum dieses Skript seine Voraussetzungen selbst prüft ──
+#
+#  Es tat das lange nicht, und das hat es zu einem Werkzeug gemacht,
+#  das lügt: Der Kopf nannte nur 3213 und 4242, der dritte Server
+#  fehlte. Die Listen N und O laufen aber gegen 3249. Ohne ihn stürzten
+#  beide mit "ERR_CONNECTION_REFUSED" ab — und weil jede Liste durch
+#  `| tail` lief, ging ihr Exitcode verloren und am Ende stand trotzdem
+#  "FERTIG". 57 Prüfungen fielen bei jedem Sammellauf still aus.
+#
+#  Deshalb jetzt: Ports vorab prüfen und abbrechen, Exitcode jeder
+#  Liste auswerten, und am Schluss eine Bilanz statt eines Grußworts.
 # ---------------------------------------------------------------
 set -u
 cd "$(dirname "$0")/.." || exit 1
@@ -26,12 +38,65 @@ export ZAHLUNG_TEST_HOST=127.0.0.1
 export ZAHLUNG_TEST_PORT=4242
 export OEFFENTLICHE_ADRESSE=http://127.0.0.1:3213
 
-lauf () {
+# ── Voraussetzungen prüfen, bevor irgendetwas läuft ──────────────
+#
+# Lieber hier abbrechen mit einem Satz, der sagt was fehlt, als
+# mitten im Lauf mit einem Stapelabzug, der nach Produktfehler
+# aussieht und keiner ist.
+fehlt=0
+pruefe_port () {
+  local port="$1" zweck="$2"
+  if ! curl -s -o /dev/null --max-time 5 "http://127.0.0.1:$port/"; then
+    echo "✗ Port $port antwortet nicht — $zweck"
+    fehlt=1
+  fi
+}
+pruefe_port 4242 "die Attrappe des Zahlungsanbieters"
+pruefe_port 3213 "Server MIT Zahlungs-Testwerten"
+pruefe_port 3249 "Server OHNE Sonderwerte (Listen N und O)"
+if [ "$fehlt" -ne 0 ]; then
+  echo ""
+  echo "ABBRUCH: Es fehlen Prozesse. docs/pruefen.md sagt, wie man sie startet."
+  echo "Ein Lauf ohne sie wäre kein Beweis, sondern ein Zufallsergebnis."
+  exit 1
+fi
+
+gelaufen=0
+gescheitert=0
+gescheiterte_listen=""
+
+# Gemeinsamer Kern von `lauf` und `lauf_rein`: ausführen, Exitcode
+# festhalten (NICHT durch die Pipe verlieren), Ausschnitt zeigen.
+#
+# tail -6 statt -4: Die Schlusszeile mancher Listen stand sonst
+# ausserhalb des Ausschnitts und sah aus wie ein Fehlschlag.
+fuehre_aus () {
   local name="$1"; shift
+  local ausgabe code
+  ausgabe=$("$@" 2>&1)
+  code=$?
+  printf '%s\n' "$ausgabe" | tail -6
+
+  gelaufen=$((gelaufen + 1))
+  if [ "$code" -ne 0 ]; then
+    gescheitert=$((gescheitert + 1))
+    gescheiterte_listen="${gescheiterte_listen}  · ${name} (Exitcode ${code})"$'\n'
+    echo ""
+    echo "✗ FEHLGESCHLAGEN: $name"
+  fi
+}
+
+kopf () {
   echo ""
   echo "═══════════════════════════════════════════════"
-  echo "  $name"
+  echo "  $1"
   echo "═══════════════════════════════════════════════"
+}
+
+# Listen, die einen sauberen Datenstand und einen Testzugang brauchen.
+lauf () {
+  local name="$1"; shift
+  kopf "$name"
 
   # Die Vorbereitung darf NICHT stillschweigend scheitern.
   #
@@ -51,57 +116,54 @@ lauf () {
     exit 1
   fi
 
-  # tail -6 statt -4: Die Schlusszeile mancher Listen stand sonst
-  # ausserhalb des Ausschnitts und sah aus wie ein Fehlschlag.
-  npx tsx --env-file=.env "$@" 2>&1 | tail -6
+  fuehre_aus "$name" npx tsx --env-file=.env "$@"
 }
 
-lauf "E/H · Anmeldung (32)"                 "$P/H/pruefe.mjs"
+# Listen ohne Datenbank-Vorlauf (reine Regeln, Seiten, Links).
+lauf_rein () {
+  local name="$1"; shift
+  kopf "$name"
+  fuehre_aus "$name" "$@"
+}
+
+lauf "E/H · Anmeldung"                 "$P/H/pruefe.mjs"
 lauf "E/H · Preis-Invarianten"              "$P/H/invariante.mjs"
-lauf "F · Adminzugang, Sitzungen (13)"      "$P/H/admin3.mjs"
-lauf "F · Aktionen ohne Sitzung (7)"        "$P/H/admin2.mjs"
-lauf "F · Anmeldungen, CSV, Löschen (26)"   "$P/H/admin5.mjs"
-lauf "F · Event-Formular (14)"              "$P/F/admin4.mjs"
-lauf "G · Themes und Inhalte (18)"          "$P/H/g1.mjs"
-lauf "G · Anmeldung je Event (20)"          "$P/H/g2.mjs"
-lauf "H · Bild-Upload (20)"                 "$P/H/h-upload.mjs"
-lauf "I · Gründerbereich (29)"              "$P/I/i-gruender.mjs"
-lauf "J · Zahlung und Reservierung (38)"    "$P/J/j-zahlung.mjs"
-lauf "J · Adminbereich Zahlung (9)"         "$P/J/j-admin.mjs"
-lauf "J · Browser Zahlung (12)"             "$P/J/j-browser.mjs"
-lauf "K · Ablauf, die 15 Fälle (32)"        "$P/K/k-ablauf.mjs"
-lauf "K · Browser Ende zu Ende (13)"        "$P/K/k-browser.mjs"
-lauf "M · Fehlgeschlagene Zahlung (15)"     "$P/M/m-fehlschlag.mjs"
-lauf "P · Storno-Regeln (24)"               "$P/P/p-storno-regeln.mjs"
-lauf "P · Storno-Mails (21)"                "$P/P/p-storno-mails.mjs"
-lauf "P · Erstattung und Kulanz (11)"       "$P/P/p-erstattung.mjs"
-lauf "P · Storno von Ende zu Ende (25)"     "$P/P/p-storno-ablauf.mjs"
+lauf "F · Adminzugang, Sitzungen"      "$P/H/admin3.mjs"
+lauf "F · Aktionen ohne Sitzung"        "$P/H/admin2.mjs"
+lauf "F · Anmeldungen, CSV, Löschen"   "$P/H/admin5.mjs"
+lauf "F · Event-Formular"              "$P/F/admin4.mjs"
+lauf "G · Themes und Inhalte"          "$P/H/g1.mjs"
+lauf "G · Anmeldung je Event"          "$P/H/g2.mjs"
+lauf "H · Bild-Upload"                 "$P/H/h-upload.mjs"
+lauf "I · Gründerbereich"              "$P/I/i-gruender.mjs"
+lauf "J · Zahlung und Reservierung"    "$P/J/j-zahlung.mjs"
+lauf "J · Adminbereich Zahlung"         "$P/J/j-admin.mjs"
+lauf "J · Browser Zahlung"             "$P/J/j-browser.mjs"
+lauf "K · Ablauf, die 15 Fälle"        "$P/K/k-ablauf.mjs"
+lauf "K · Browser Ende zu Ende"        "$P/K/k-browser.mjs"
+lauf "M · Fehlgeschlagene Zahlung"     "$P/M/m-fehlschlag.mjs"
+lauf "P · Storno-Regeln"               "$P/P/p-storno-regeln.mjs"
+lauf "P · Storno-Mails"                "$P/P/p-storno-mails.mjs"
+lauf "P · Erstattung und Kulanz"       "$P/P/p-erstattung.mjs"
+lauf "P · Storno von Ende zu Ende"     "$P/P/p-storno-ablauf.mjs"
 
+# Diese beiden laufen gegen den Server OHNE Sonderwerte (Port 3249).
+lauf_rein "N · Rechtsseiten"           node "$P/N/n-seiten.mjs"
+lauf_rein "O · Links und Knöpfe"        node "$P/O/o-links.mjs"
+
+# Reine Regeln, brauchen weder Datenbank noch Browser.
+lauf_rein "L · Kopfleiste: Menü und Anmelden" npx tsx "$P/L/l-schulen.mjs"
+lauf_rein "Q · Überwachung (Mail-Texte und Wächter-Logik)" npx tsx "$P/Q/q-wache.mjs"
+
+# ── Bilanz ───────────────────────────────────────────────────────
 echo ""
 echo "═══════════════════════════════════════════════"
-echo "  N · Rechtsseiten (18)"
+if [ "$gescheitert" -eq 0 ]; then
+  echo "  FERTIG — $gelaufen Listen, alle in Ordnung"
+  echo "═══════════════════════════════════════════════"
+  exit 0
+fi
+echo "  NICHT IN ORDNUNG — $gescheitert von $gelaufen Listen"
 echo "═══════════════════════════════════════════════"
-node "$P/N/n-seiten.mjs" 2>&1 | tail -3
-
-echo ""
-echo "═══════════════════════════════════════════════"
-echo "  O · Links und Knöpfe (9)"
-echo "═══════════════════════════════════════════════"
-node "$P/O/o-links.mjs" 2>&1 | tail -3
-
-# Reine Regel, braucht weder Datenbank noch Browser — deshalb hier
-# unten und nicht in der `lauf`-Gruppe mit ihrem Datenbank-Vorlauf.
-echo ""
-echo "═══════════════════════════════════════════════"
-echo "  L · Kopfleiste: Menü und Anmelden (27)"
-echo "═══════════════════════════════════════════════"
-npx tsx "$P/L/l-schulen.mjs" 2>&1 | tail -3
-
-echo ""
-echo "═══════════════════════════════════════════════"
-echo "  Q · Überwachung (Mail-Texte und Wächter-Logik)"
-echo "═══════════════════════════════════════════════"
-npx tsx "$P/Q/q-wache.mjs" 2>&1 | tail -3
-
-echo ""
-echo "FERTIG"
+printf '%s' "$gescheiterte_listen"
+exit 1
