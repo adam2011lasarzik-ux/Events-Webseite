@@ -9,8 +9,10 @@
    --------------------------------------------------------------- */
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { verlangeAdmin } from "@/lib/adminAuth";
+import { stornoDurchAdmin } from "@/lib/stornoAusfuehren";
 
 const ANMELDE_STATUS = ["BESTAETIGT", "WARTELISTE", "STORNIERT"] as const;
 const ZAHLUNGS_STATUS = ["OFFEN", "BEZAHLT", "ERSTATTET", "TEILWEISE_ERSTATTET"] as const;
@@ -150,4 +152,46 @@ export async function anonymisieren(formular: FormData): Promise<void> {
   });
 
   auffrischen(vorhanden.eventId);
+}
+
+/**
+ * Stornieren UND das Geld zurueckgeben — der Weg, der wirklich alles tut.
+ *
+ * Warum es diese Aktion zusaetzlich zu statusSetzen gibt: Dort wird nur
+ * ein Vermerk umgestellt. Kein Geld bewegt sich, keine Mail geht raus.
+ * Storniert der Veranstalter nach einem Anruf ueber statusSetzen, behaelt
+ * er die Zahlung — ohne dass irgendetwas darauf hinweist. Und wer
+ * anschliessend von Hand "Erstattet" anklickt, hat dann eine Liste, die
+ * ueber Geld die Unwahrheit sagt.
+ *
+ * Diese Aktion benutzt denselben Kern wie die Selbstbedienung des Kunden
+ * (lib/stornoAusfuehren.ts): erst erstatten, dann speichern, dann beide
+ * Mails. Scheitert die Erstattung beim Anbieter, bleibt die Buchung
+ * unveraendert bestehen und der Veranstalter bekommt es zu sehen.
+ */
+export async function stornierenUndErstatten(formular: FormData): Promise<void> {
+  await verlangeAdmin();
+
+  const id = text(formular.get("anmeldungId"));
+  if (!id) return;
+
+  const vorhanden = await db.registration.findUnique({
+    where: { id },
+    select: { eventId: true },
+  });
+  if (!vorhanden) return;
+
+  const ergebnis = await stornoDurchAdmin(id);
+  auffrischen(vorhanden.eventId);
+
+  /* Rueckmeldung ueber die Adresse statt ueber einen Zustand im
+     Browser: Die Seite funktioniert damit auch ohne JavaScript, wie
+     alles andere im Adminbereich auch. */
+  const hinweis = ergebnis.erfolg
+    ? ergebnis.erstattet
+      ? "erstattet"
+      : "storniert"
+    : `fehler-${ergebnis.fehler}`;
+
+  redirect(`/admin/events/${vorhanden.eventId}/anmeldungen?hinweis=${hinweis}`);
 }

@@ -186,6 +186,12 @@ export function starte(port = 4242) {
       if (anfrage.method === "GET" && url.pathname === "/steuerung/sitzungen") {
         return senden(200, [...sitzungen.values()]);
       }
+      /* Die verzeichneten Erstattungen zum Nachsehen. Ohne diesen
+         Endpunkt kann eine Prüfung nur die eigene Datenbank befragen —
+         und bestätigte damit sich selbst statt des Vorgangs. */
+      if (anfrage.method === "GET" && url.pathname === "/steuerung/erstattungen") {
+        return senden(200, [...erstattungen.values()]);
+      }
 
       senden(404, { error: { message: `Unbekannt: ${anfrage.method} ${url.pathname}`, type: "invalid_request_error" } });
     });

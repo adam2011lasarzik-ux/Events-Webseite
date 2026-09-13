@@ -149,13 +149,26 @@ export function stornoBestaetigungsMail(
   anmeldung: MailAnmeldung,
   event: MailEvent,
   erstattet: boolean,
+  /* Hat der Veranstalter storniert statt des Kunden? Dann muss die
+     Mail das sagen. Eine Bestätigung für etwas, das man selbst nie
+     veranlasst hat, liest sich sonst wie ein Fehler im System — und
+     der Satz "schade, dass es nicht klappt" wäre schlicht daneben.
+     Voreinstellung false, damit der Kundenweg unverändert bleibt. */
+  durchVeranstalter: boolean = false,
 ): { betreff: string; text: string } {
   return {
-    betreff: `Stornierung bestätigt: ${event.titel}`,
+    betreff: durchVeranstalter
+      ? `Deine Buchung wurde storniert: ${event.titel}`
+      : `Stornierung bestätigt: ${event.titel}`,
     text: [
       `Hallo ${anmeldung.kontaktVorname},`,
       "",
-      `deine Buchung für "${event.titel}" ist storniert. Dein Platz ist wieder frei.`,
+      ...(durchVeranstalter
+        ? [
+            `wir mussten deine Buchung für "${event.titel}" stornieren.`,
+            "Dein Platz ist damit wieder frei.",
+          ]
+        : [`deine Buchung für "${event.titel}" ist storniert. Dein Platz ist wieder frei.`]),
       "",
       ...(erstattet
         ? [
@@ -167,7 +180,9 @@ export function stornoBestaetigungsMail(
       "",
       `Anmeldenummer: ${anmeldung.id}`,
       "",
-      "Schade, dass es diesmal nicht klappt — vielleicht beim nächsten Mal.",
+      ...(durchVeranstalter
+        ? ["Bei Fragen dazu antworte einfach auf diese E-Mail."]
+        : ["Schade, dass es diesmal nicht klappt — vielleicht beim nächsten Mal."]),
       "das VERA-Team",
     ].join("\n"),
   };

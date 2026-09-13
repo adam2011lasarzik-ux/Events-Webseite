@@ -5,7 +5,12 @@ import { verlangeAdmin } from "@/lib/adminAuth";
 import { anmeldungenZuEvent } from "@/lib/adminDaten";
 import { alsEuro } from "@/lib/preise";
 import { alsLesbar } from "@/lib/zeit";
-import { statusSetzen, zahlungSetzen, anonymisieren } from "@/app/admin/anmeldungen/aktion";
+import {
+  statusSetzen,
+  zahlungSetzen,
+  anonymisieren,
+  stornierenUndErstatten,
+} from "@/app/admin/anmeldungen/aktion";
 import { AdminRahmen } from "@/components/admin/AdminRahmen";
 import { StatusMarker } from "@/components/admin/StatusMarker";
 import stil from "../../../admin.module.css";
@@ -15,11 +20,14 @@ export const metadata = { title: "Anmeldungen" };
 
 export default async function AnmeldungenSeite({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ hinweis?: string }>;
 }) {
   const admin = await verlangeAdmin();
   const { id } = await params;
+  const { hinweis } = await searchParams;
 
   const event = await db.event.findUnique({ where: { id } });
   if (!event) notFound();
@@ -71,6 +79,8 @@ export default async function AnmeldungenSeite({
         </>
       }
     >
+      <StornoHinweis hinweis={hinweis} />
+
       {/* Eine bezahlte Anmeldung wird niemals stillschweigend
           abgelehnt — läuft die Reservierung ab, während das Geld
           unterwegs ist, kann das Event dadurch überbucht werden. Der
@@ -211,6 +221,29 @@ export default async function AnmeldungenSeite({
                     </div>
                   </div>
 
+                  {a.status !== "STORNIERT" && (
+                    <form action={stornierenUndErstatten} style={{ marginBottom: "1rem" }}>
+                      <input type="hidden" name="anmeldungId" value={a.id} />
+                      <button type="submit" className={`${stil.knopf} ${stil.knopfKlein}`}>
+                        {a.zahlungsStatus === "BEZAHLT" && a.gesamtpreisCents > 0
+                          ? `Stornieren und ${alsEuro(a.gesamtpreisCents)} erstatten`
+                          : "Stornieren"}
+                      </button>
+                      <span className={stil.feldHilfe} style={{ marginLeft: "0.75rem" }}>
+                        {a.zahlungsStatus === "BEZAHLT" && a.gesamtpreisCents > 0
+                          ? "Das Geld geht zurück, der Platz wird frei, und beide bekommen eine E-Mail."
+                          : "Für diese Buchung ist nichts bezahlt — es wird nur storniert und benachrichtigt."}
+                      </span>
+                    </form>
+                  )}
+
+                  {/* Darunter die reinen Vermerke. Sie bewegen KEIN Geld
+                      und verschicken KEINE Mail — das muss dranstehen,
+                      sonst liest sich "Stornieren" hier wie der Knopf
+                      darüber und "Erstattet" wie eine Überweisung. */}
+                  <p className={stil.feldHilfe} style={{ marginBottom: "0.25rem" }}>
+                    Nur den Vermerk ändern (kein Geld, keine E-Mail):
+                  </p>
                   <div className={stil.knopfReihe}>
                     <StatusKnoepfe id={a.id} aktuell={a.status} />
                   </div>
@@ -298,5 +331,55 @@ function ZahlungsKnoepfe({ id, aktuell }: { id: string; aktuell: string }) {
         </form>
       ))}
     </>
+  );
+}
+
+/**
+ * Rueckmeldung nach einer Stornierung durch den Veranstalter.
+ *
+ * Kommt ueber die Adresse herein (?hinweis=…), damit die Seite ohne
+ * JavaScript auskommt wie der ganze uebrige Adminbereich. Unbekannte
+ * Werte werden stillschweigend verworfen — in der Adresszeile steht,
+ * was jemand hineinschreibt, und das gehoert nicht ungeprueft auf die
+ * Seite.
+ */
+function StornoHinweis({ hinweis }: { hinweis?: string }) {
+  if (!hinweis) return null;
+
+  const meldungen: Record<string, { text: string; fehler: boolean }> = {
+    erstattet: {
+      text: "Storniert. Der Betrag ist zur Rückerstattung angewiesen, beide E-Mails sind raus.",
+      fehler: false,
+    },
+    storniert: {
+      text: "Storniert. Für diese Buchung war nichts bezahlt, es wurde also nichts erstattet.",
+      fehler: false,
+    },
+    "fehler-anbieter": {
+      text:
+        "Der Zahlungsanbieter hat die Erstattung nicht angenommen. Es wurde NICHTS geändert — " +
+        "die Buchung steht unverändert da. Bitte im Stripe-Bereich nachsehen.",
+      fehler: true,
+    },
+    "fehler-bereits-storniert": {
+      text: "Diese Buchung war bereits storniert. Es wurde nichts geändert.",
+      fehler: true,
+    },
+    "fehler-unbekannt": {
+      text: "Diese Buchung wurde nicht gefunden. Es wurde nichts geändert.",
+      fehler: true,
+    },
+  };
+
+  const m = meldungen[hinweis];
+  if (!m) return null;
+
+  return (
+    <p
+      className={`${stil.meldung} ${m.fehler ? stil.meldungFehler : stil.meldungGut}`}
+      role={m.fehler ? "alert" : "status"}
+    >
+      {m.text}
+    </p>
   );
 }

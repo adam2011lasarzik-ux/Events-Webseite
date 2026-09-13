@@ -23,7 +23,12 @@
 
 import { db } from "./db";
 import { erstattungAusloesen } from "./zahlung";
-import { schluesselStimmt, stornoEntscheidung, type Stornogrund } from "./storno";
+import {
+  schluesselStimmt,
+  stornoEntscheidung,
+  adminStornoEntscheidung,
+  type Stornogrund,
+} from "./storno";
 import { mailSendenOhneAbbruch, adminEmpfaenger } from "./mail";
 import { stornoBestaetigungsMail, stornoAdminMail } from "./mailVorlagen";
 
@@ -115,10 +120,7 @@ export async function stornoAusfuehren(
 ): Promise<Stornoergebnis> {
   if (!anmeldungId || !schluessel) return { erfolg: false, fehler: "unbekannt" };
 
-  const anmeldung = await db.registration.findUnique({
-    where: { id: anmeldungId },
-    include: { event: true, teilnehmer: true },
-  });
+  const anmeldung = await buchungLaden(anmeldungId);
   if (!anmeldung) return { erfolg: false, fehler: "unbekannt" };
   if (!schluesselStimmt(anmeldung.stornoSchluessel, schluessel)) {
     return { erfolg: false, fehler: "unbekannt" };
@@ -135,14 +137,55 @@ export async function stornoAusfuehren(
   );
   if (!entscheidung.erlaubt) return { erfolg: false, fehler: entscheidung.grund };
 
+  return vollziehen(anmeldung, entscheidung.erstatten, jetzt, false);
+}
+
+/* ---------------------------------------------------------------
+   Ab hier: was sich beide Wege teilen.
+
+   Die Selbstbedienung und die Stornierung durch den Veranstalter
+   unterscheiden sich NUR darin, wer fragen darf und ob eine Frist
+   gilt. Was danach passiert — erstatten, speichern, benachrichtigen —
+   ist identisch und steht deshalb genau einmal hier.
+
+   Eine zweite Umsetzung daneben waere der sichere Weg zu zwei
+   Verhalten: Es genuegt, eine davon spaeter zu aendern und die andere
+   zu vergessen, und schon storniert der eine Weg mit Erstattung und
+   der andere ohne.
+   --------------------------------------------------------------- */
+
+/** Buchung mit allem laden, was fuer Erstattung und Mails noetig ist. */
+async function buchungLaden(anmeldungId: string) {
+  return db.registration.findUnique({
+    where: { id: anmeldungId },
+    include: { event: true, teilnehmer: true },
+  });
+}
+
+type GeladeneBuchung = NonNullable<Awaited<ReturnType<typeof buchungLaden>>>;
+
+/**
+ * Die Stornierung wirklich vollziehen.
+ *
+ * Die Reihenfolge ist der Kern: erst das Geld, dann der Status, dann
+ * die Mails. Scheitert die Erstattung, bleibt die Buchung bestehen —
+ * andersherum stuende sie auf "storniert und erstattet", waehrend das
+ * Geld noch da ist.
+ */
+async function vollziehen(
+  anmeldung: GeladeneBuchung,
+  sollErstatten: boolean,
+  jetzt: Date,
+  durchVeranstalter: boolean,
+): Promise<Stornoergebnis> {
   /* ── Erstatten, BEVOR etwas gespeichert wird ─────────────────── */
   let erstattet = false;
-  if (entscheidung.erstatten) {
+  if (sollErstatten) {
     if (!anmeldung.zahlungsAbsicht) {
       /* Bezahlt, aber ohne festgehaltene Zahlung — das kann nur eine
          Buchung von vor dieser Änderung sein. Automatisch erstatten
          lässt sich da nichts; der Veranstalter erledigt es von Hand. */
-      console.error(`Storno ohne Zahlungskennung (Anmeldung ${anmeldungId})`);
+      console.error(`Storno ohne Zahlungskennung (Anmeldung ${anmeldung.id})`);
       return { erfolg: false, fehler: "anbieter" };
     }
     try {
@@ -150,13 +193,13 @@ export async function stornoAusfuehren(
       /* „pending" kommt bei manchen Zahlarten vor und wird später
          bestätigt. Beides gilt als angenommen; „failed" nicht. */
       if (ergebnis.lage !== "succeeded" && ergebnis.lage !== "pending") {
-        console.error(`Erstattung nicht angenommen (Anmeldung ${anmeldungId}): ${ergebnis.lage}`);
+        console.error(`Erstattung nicht angenommen (Anmeldung ${anmeldung.id}): ${ergebnis.lage}`);
         return { erfolg: false, fehler: "anbieter" };
       }
       erstattet = true;
     } catch (e) {
       // Besuchern niemals interne Einzelheiten zeigen (Skill §7/§15).
-      console.error(`Erstattung fehlgeschlagen (Anmeldung ${anmeldungId}):`, e);
+      console.error(`Erstattung fehlgeschlagen (Anmeldung ${anmeldung.id}):`, e);
       return { erfolg: false, fehler: "anbieter" };
     }
   }
@@ -197,7 +240,7 @@ export async function stornoAusfuehren(
 
   await mailSendenOhneAbbruch({
     an: anmeldung.kontaktEmail,
-    ...stornoBestaetigungsMail(fuerMail, fuerMailEvent, erstattet),
+    ...stornoBestaetigungsMail(fuerMail, fuerMailEvent, erstattet, durchVeranstalter),
   });
 
   const empfaenger = adminEmpfaenger();
@@ -209,4 +252,37 @@ export async function stornoAusfuehren(
   }
 
   return { erfolg: true, erstattet, betragCents: anmeldung.gesamtpreisCents };
+}
+
+/**
+ * Stornierung durch den Veranstalter — aus dem Adminbereich heraus.
+ *
+ * Kein Storno-Schluessel und keine 24-Stunden-Frist: Der Zugang ist in
+ * der aufrufenden Aktion mit verlangeAdmin() geprueft, und wer die
+ * Veranstaltung durchfuehrt, darf ueber seine eigenen Plaetze auch aus
+ * Kulanz noch entscheiden.
+ *
+ * Erstattet wird ohne Rueckfrage, wenn bezahlt wurde. Das ist bewusst
+ * nicht waehlbar: Ein Knopf "stornieren ohne zu erstatten" wuerde im
+ * Alltag genau dann gedrueckt, wenn es schnell gehen muss — und das
+ * Geld bliebe unbemerkt liegen.
+ */
+export async function stornoDurchAdmin(
+  anmeldungId: string,
+  jetzt: Date = new Date(),
+): Promise<Stornoergebnis> {
+  if (!anmeldungId) return { erfolg: false, fehler: "unbekannt" };
+
+  const anmeldung = await buchungLaden(anmeldungId);
+  if (!anmeldung) return { erfolg: false, fehler: "unbekannt" };
+
+  const entscheidung = adminStornoEntscheidung({
+    status: anmeldung.status,
+    zahlungsStatus: anmeldung.zahlungsStatus,
+    gesamtpreisCents: anmeldung.gesamtpreisCents,
+    startAt: anmeldung.event.startAt,
+  });
+  if (!entscheidung.erlaubt) return { erfolg: false, fehler: entscheidung.grund };
+
+  return vollziehen(anmeldung, entscheidung.erstatten, jetzt, true);
 }

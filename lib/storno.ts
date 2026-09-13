@@ -148,3 +148,46 @@ export function schluesselStimmt(erwartet: string | null, eingang: string | null
   const b = Buffer.from(eingang);
   return a.length === b.length && timingSafeEqual(a, b);
 }
+
+/* ---------------------------------------------------------------
+   Die Stornierung durch den Veranstalter.
+
+   Bewusst eine EIGENE Regel neben stornoEntscheidung() und keine
+   Aufweichung davon: Die beiden beantworten verschiedene Fragen.
+
+   Die Selbstbedienung fragt „darf der Kunde das jetzt noch selbst?"
+   und antwortet ab 24 Stunden vor Beginn mit Nein. Der Veranstalter
+   fragt „will ich das tun?" — und darf aus Kulanz auch danach noch
+   stornieren und erstatten. Ihm die Frist entgegenzuhalten wäre
+   sinnlos: Sie schützt seine Planung, nicht ihn selbst.
+
+   Was auch für ihn gilt, weil es nicht um Erlaubnis geht, sondern um
+   Geld: Auf eine bereits erstattete Buchung wird KEIN zweites Mal
+   erstattet. Das ergibt sich hier von selbst — erstattet wird nur bei
+   Zahlungsstatus BEZAHLT, und der ist nach einer Erstattung nicht
+   mehr gesetzt.
+   --------------------------------------------------------------- */
+
+export type AdminStornogrund = "bereits-storniert";
+
+export type AdminStornoentscheidung =
+  | { erlaubt: true; erstatten: boolean }
+  | { erlaubt: false; grund: AdminStornogrund };
+
+/**
+ * Darf der Veranstalter diese Buchung stornieren — und fliesst dabei
+ * Geld zurück?
+ *
+ * Keine Frist, kein Schlüssel. Der Zugang ist an anderer Stelle
+ * geprüft (verlangeAdmin), und wer die Veranstaltung durchführt,
+ * entscheidet über seine eigenen Plätze.
+ */
+export function adminStornoEntscheidung(lage: Buchungslage): AdminStornoentscheidung {
+  if (lage.status === "STORNIERT") {
+    return { erlaubt: false, grund: "bereits-storniert" };
+  }
+  return {
+    erlaubt: true,
+    erstatten: lage.zahlungsStatus === "BEZAHLT" && lage.gesamtpreisCents > 0,
+  };
+}

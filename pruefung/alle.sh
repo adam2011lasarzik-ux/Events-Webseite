@@ -146,6 +146,7 @@ lauf "P · Storno-Regeln"               "$P/P/p-storno-regeln.mjs"
 lauf "P · Storno-Mails"                "$P/P/p-storno-mails.mjs"
 lauf "P · Erstattung und Kulanz"       "$P/P/p-erstattung.mjs"
 lauf "P · Storno von Ende zu Ende"     "$P/P/p-storno-ablauf.mjs"
+lauf "P · Storno durch den Veranstalter" "$P/P/p-admin-storno.mjs"
 
 # Diese beiden laufen gegen den Server OHNE Sonderwerte (Port 3249).
 lauf_rein "N · Rechtsseiten"           node "$P/N/n-seiten.mjs"
