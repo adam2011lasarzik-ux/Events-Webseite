@@ -201,12 +201,43 @@ export async function anmeldungAbsenden(
 
         // Reaktivieren statt einen zweiten Datensatz anlegen — so
         // bleibt es bei genau einer Anmeldung je Person und Event.
+        /* Eine Rückkehr nach einer Stornierung ist ein NEUER Anlauf —
+           die Spuren der alten Zahlung gehören nicht dazu.
+
+           Ohne dieses Zurücksetzen behielte die Zeile Zahlungsstatus,
+           Betrag, Zeitpunkt und Zahlungskennung der längst erstatteten
+           Zahlung. Zwei Folgen, beide schlecht: Im Adminbereich stünde
+           eine unbezahlte Buchung als „erstattet" — und die Rückmeldung
+           des Anbieters verbuchte eine neue Zahlung gar nicht mehr, weil
+           sie nur von OFFEN aus auf „bezahlt" wechselt. Der Kunde hätte
+           bezahlt und wäre trotzdem nicht bestätigt.
+
+           NICHT beim zweiten Anlauf innerhalb derselben Reservierung:
+           dort wird die vorhandene Bezahlseite bewusst wiederverwendet,
+           damit keine zweite Sitzung und damit keine doppelte Abbuchung
+           entsteht (lib/zahlungStart.ts).
+
+           Eine stornierte, aber noch BEZAHLTE Buchung bleibt ebenfalls
+           unangetastet: Dort liegt das Geld noch bei uns. Das gehört
+           angesehen, nicht stillschweigend überschrieben. */
+        const zahlungZuruecksetzen =
+          vorhanden.status === "STORNIERT" && vorhanden.zahlungsStatus !== "BEZAHLT";
+
         await tx.participant.deleteMany({ where: { registrationId: vorhanden.id } });
         await tx.registration.update({
           where: { id: vorhanden.id },
           data: {
             ...felder,
             storniertAm: null,
+            ...(zahlungZuruecksetzen
+              ? {
+                  zahlungsStatus: "OFFEN" as const,
+                  zahlungsAbsicht: null,
+                  zahlungsReferenz: null,
+                  bezahlterBetragCents: null,
+                  bezahltAm: null,
+                }
+              : {}),
             // Nur eine echte Rückkehr nach einer Stornierung ist eine
             // Reaktivierung. Ein zweiter Anlauf innerhalb derselben
             // Reservierung ist keine.

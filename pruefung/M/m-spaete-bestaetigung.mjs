@@ -160,6 +160,56 @@ pruefe("… ebenso der eingegangene Betrag",
 pruefe("… und der Platz bleibt frei", (await belegte(event.id)) === 0,
   `${await belegte(event.id)} belegt`);
 
+/* ═══ Teil 4: nach Storno und Erstattung erneut anmelden ═════════
+   Genau der Weg, den ein Kunde nimmt, der es sich anders überlegt:
+   storniert, Geld zurück, und zwei Wochen später bucht er doch. Der
+   Duplikatsschutz reaktiviert dabei DIESELBE Zeile, statt eine zweite
+   anzulegen. Die Spuren der alten, erstatteten Zahlung müssen dabei
+   verschwinden — sonst verbucht die Rückmeldung die neue Zahlung
+   nicht, und der Kunde hätte bezahlt, ohne bestätigt zu sein. */
+await db.registration.update({
+  where: { id: roh.id },
+  data: {
+    status: "STORNIERT", zahlungsStatus: "ERSTATTET",
+    storniertAm: new Date(), reserviertBis: null,
+    zahlungsAbsicht: "pi_alt_erstattet", bezahlterBetragCents: 2500, bezahltAm: new Date(),
+  },
+});
+
+await absenden(
+  { eventSlug: "padel-falkensee", weg: "selbst", selbstAls: "adult", webseite: "",
+    ...personen([
+      { vorname: "Nina", nachname: "Spaet", email: "nina.spaet@example.org", telefon: "030222" },
+    ]) },
+  neueIp(),
+);
+const erneut = await db.registration.findFirstOrThrow({
+  where: { kontaktEmail: "nina.spaet@example.org" },
+});
+
+pruefe("Die erneute Anmeldung reaktiviert dieselbe Zeile",
+  erneut.id === roh.id && (await db.registration.count({
+    where: { kontaktEmail: "nina.spaet@example.org" } })) === 1);
+pruefe("… als frische Reservierung", erneut.status === "RESERVIERT", erneut.status);
+pruefe("… mit zurückgesetztem Zahlungsstatus", erneut.zahlungsStatus === "OFFEN",
+  erneut.zahlungsStatus);
+pruefe("… ohne die Spuren der alten, erstatteten Zahlung",
+  erneut.zahlungsAbsicht === null && erneut.bezahlterBetragCents === null
+    && erneut.bezahltAm === null,
+  `${erneut.zahlungsAbsicht} / ${erneut.bezahlterBetragCents} / ${erneut.bezahltAm}`);
+
+const neuBezahlt = await rueckmeldung(bezahltEreignis(
+  "evt_m_spaet_5", "checkout.session.completed",
+  { sitzung: erneut.zahlungsReferenz ?? "cs_neu_pruefung", anmeldungId: erneut.id,
+    betrag: erneut.gesamtpreisCents, zahlung: "pi_neu_pruefung" }));
+const bestaetigt = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
+pruefe("Die NEUE Zahlung wird verbucht — der Kunde ist bestätigt",
+  neuBezahlt.status === 200 && bestaetigt.status === "BESTAETIGT"
+    && bestaetigt.zahlungsStatus === "BEZAHLT",
+  `${bestaetigt.status} / ${bestaetigt.zahlungsStatus}`);
+pruefe("… mit der neuen Zahlungskennung, nicht der alten",
+  bestaetigt.zahlungsAbsicht === "pi_neu_pruefung", bestaetigt.zahlungsAbsicht ?? "keine");
+
 // ── Aufräumen ───────────────────────────────────────────────────
 await db.participant.deleteMany({});
 await db.registration.deleteMany({});
