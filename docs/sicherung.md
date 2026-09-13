@@ -182,8 +182,31 @@ es gibt kein Protokoll darüber, wer wann was entfernt hat. Für den
 Testbetrieb unerheblich, für den Echtbetrieb mit Kundendaten ein Punkt
 für die Liste.
 
-## Was noch offen ist
+## `/etc/vera-backup.env` — entfernt (geprüft am 13.09.2026)
 
-- **`/etc/vera-backup.env` aufräumen.** Enthält eine ungenutzte Kopie
-  der Backblaze-Zugangsdaten und den zweiten, falschen
-  `AGE_RECIPIENT`. Kein Skript verwendet die Datei.
+Diese Datei stammte nicht aus dem VERA-Aufbau. Sie enthielt eine
+ungenutzte Zweitkopie der Backblaze-Zugangsdaten und einen zweiten,
+**falschen** `AGE_RECIPIENT` — genau die Verwechslung, an der der erste
+Rückspiel-Test scheiterte.
+
+Sie ist entfernt. Am 13.09.2026 nachgeprüft:
+
+- `/etc/vera-backup.env` existiert nicht mehr.
+- Kein Sicherungs-, Rückspiel- oder Überwachungsskript, keine
+  systemd-Unit und kein Cron-Eintrag verweist darauf.
+- Eine Suche über das gesamte Dateisystem
+  (`find / -xdev -name "*vera-backup*"`) findet keine Kopie — auch
+  keine Sicherheitskopie an anderer Stelle.
+- Die nächtliche Sicherung ist seitdem jede Nacht durchgelaufen. Das
+  Entfernen hat nichts beeinträchtigt.
+
+Das Hilfsskript `/usr/local/bin/vera-env-aufraeumen.sh` bleibt liegen.
+Es prüft zuerst an dreizehn Stellen, ob die Datei irgendwo verwendet
+wird, bricht bei auch nur einem Treffer ab und löscht dann **nichts**;
+fehlt die Datei, meldet es „Nichts zu tun" und beendet sich. Ein
+erneuter Aufruf ist damit folgenlos.
+
+Es gibt damit **einen** gültigen Verschlüsselungs-Schlüssel: den
+öffentlichen Teil in `/home/vera/.config/vera/age-public-key.txt` und
+seinen geheimen Gegenpart im Passwort-Manager. Kommt je ein zweiter
+dazu, gilt die Lehre von oben — sofort klären, welcher der gültige ist.
