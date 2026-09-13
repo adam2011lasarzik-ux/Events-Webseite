@@ -226,6 +226,19 @@ export interface Erstattungsergebnis {
  * beim Anbieter rund einen Tag; der dauerhafte Schutz bleibt die
  * Statusprüfung in der Datenbank, die vor jedem Aufruf steht.
  *
+ * In den Schlüssel gehört die ZAHLUNG, nicht nur die Buchung. Vorher
+ * stand dort allein die Anmeldenummer — und das ging im Betrieb schief:
+ * Eine Buchungszeile wird bei einer erneuten Anmeldung nach einer
+ * Stornierung wiederverwendet. Die zweite Stornierung wollte dann eine
+ * ANDERE Zahlung erstatten, schickte aber denselben Schlüssel. Der
+ * Anbieter weist das ab — gleicher Schlüssel, andere Angaben —, und
+ * zwar einen ganzen Tag lang. Für den Kunden sah es aus, als täte der
+ * Knopf gar nichts.
+ *
+ * Mit der Zahlungskennung im Schlüssel bleibt der Doppelklick-Schutz
+ * genau dort, wo er hingehört (dieselbe Erstattung derselben Zahlung),
+ * und eine echte zweite Erstattung wird nicht mehr blockiert.
+ *
  * Der Testmodus-Riegel gilt hier wie überall: stripe() weist jeden
  * Schlüssel ab, der kein Testschlüssel ist. Eine echte Erstattung ist
  * damit vor der bewussten Freischaltung nicht möglich.
@@ -239,7 +252,7 @@ export async function erstattungAusloesen(
       payment_intent: zahlungId,
       metadata: { anmeldungId },
     },
-    { idempotencyKey: `storno-${anmeldungId}` },
+    { idempotencyKey: `storno-${anmeldungId}-${zahlungId}` },
   );
 
   return {

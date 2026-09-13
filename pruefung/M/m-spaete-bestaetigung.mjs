@@ -19,6 +19,7 @@ import { absenden, personen, BASIS } from "../K/senden.mjs";
 import { db } from "../../lib/db.js";
 import { belegtFilter } from "../../lib/plaetze.js";
 import { bezahlseiteFuer } from "../../lib/zahlungStart.js";
+import { stornoDurchAdmin } from "../../lib/stornoAusfuehren.js";
 
 const GEHEIMNIS = "whsec_pruefgeheimnis_nur_lokal";
 const stripe = new Stripe("sk_test_pruefung_ohne_echtes_konto");
@@ -269,6 +270,70 @@ pruefe("… belebt eine stornierte Buchung aber NICHT wieder",
   `${nachSeitenaufruf.status} / ${nachSeitenaufruf.zahlungsStatus}`);
 pruefe("… und der Platz bleibt frei", (await belegte(event.id)) === 0,
   `${await belegte(event.id)} belegt`);
+
+/* ═══ Teil 6: zweimal buchen, zweimal stornieren ══════════════════
+   Der Weg, der im Betrieb scheiterte. Eine Buchungszeile wird bei der
+   erneuten Anmeldung wiederverwendet — die zweite Stornierung erstattet
+   deshalb eine ANDERE Zahlung als die erste. Der Wiederholungsschlüssel
+   an den Anbieter enthielt frueher nur die Anmeldenummer und war damit
+   beide Male gleich. Der Anbieter wies die zweite Erstattung ab
+   ("idempotency_error"), einen ganzen Tag lang — fuer den Kunden sah
+   es aus, als taete der Storno-Knopf nichts. */
+const anbieter =
+  `http://${process.env.ZAHLUNG_TEST_HOST ?? "127.0.0.1"}:${process.env.ZAHLUNG_TEST_PORT ?? 4242}`;
+
+/** Bezahlseite anlegen, beim Anbieter bezahlen, Rueckmeldung schicken. */
+async function durchbezahlen(lauf) {
+  await bezahlseiteFuer(roh.id, new Date());
+  const a = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
+  await fetch(`${anbieter}/steuerung/klick-bezahlt/${a.zahlungsReferenz}`, { redirect: "manual" });
+  const sitzung = await (
+    await fetch(`${anbieter}/v1/checkout/sessions/${a.zahlungsReferenz}`)
+  ).json();
+  await rueckmeldung(bezahltEreignis(`evt_m_zweimal_${lauf}`, "checkout.session.completed", {
+    sitzung: a.zahlungsReferenz, anmeldungId: roh.id,
+    betrag: a.gesamtpreisCents, zahlung: sitzung.payment_intent,
+  }));
+  return sitzung.payment_intent;
+}
+
+await db.registration.update({
+  where: { id: roh.id },
+  data: {
+    status: "RESERVIERT", zahlungsStatus: "OFFEN",
+    storniertAm: null, reserviertBis: new Date(Date.now() + 30 * 60 * 1000),
+    zahlungsAbsicht: null, zahlungsReferenz: null, bezahlterBetragCents: null, bezahltAm: null,
+  },
+});
+
+const ersteZahlung = await durchbezahlen(1);
+const ersterStorno = await stornoDurchAdmin(roh.id);
+pruefe("Erste Buchung: Stornierung mit Erstattung",
+  ersterStorno.erfolg === true && ersterStorno.erstattet === true,
+  JSON.stringify(ersterStorno));
+
+/* Erneut anmelden — dieselbe Zeile, frische Zahlung. */
+await absenden(
+  { eventSlug: "padel-falkensee", weg: "selbst", selbstAls: "adult", webseite: "",
+    ...personen([
+      { vorname: "Nina", nachname: "Spaet", email: "nina.spaet@example.org", telefon: "030222" },
+    ]) },
+  neueIp(),
+);
+const zweiteZahlung = await durchbezahlen(2);
+pruefe("Die zweite Zahlung ist eine andere als die erste",
+  Boolean(zweiteZahlung) && zweiteZahlung !== ersteZahlung,
+  `${ersteZahlung} → ${zweiteZahlung}`);
+
+const zweiterStorno = await stornoDurchAdmin(roh.id);
+pruefe("Zweite Buchung: Stornierung wird NICHT vom Wiederholungsschlüssel blockiert",
+  zweiterStorno.erfolg === true && zweiterStorno.erstattet === true,
+  JSON.stringify(zweiterStorno));
+
+const nachZweitem = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
+pruefe("… und die Buchung steht auf storniert und erstattet",
+  nachZweitem.status === "STORNIERT" && nachZweitem.zahlungsStatus === "ERSTATTET",
+  `${nachZweitem.status} / ${nachZweitem.zahlungsStatus}`);
 
 // ── Aufräumen ───────────────────────────────────────────────────
 await db.participant.deleteMany({});

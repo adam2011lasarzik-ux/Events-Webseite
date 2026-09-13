@@ -139,7 +139,24 @@ export function starte(port = 4242) {
         const schluessel = anfrage.headers["idempotency-key"];
 
         if (schluessel && erstattungenNachSchluessel.has(schluessel)) {
-          return senden(200, erstattungenNachSchluessel.get(schluessel));
+          const frueher = erstattungenNachSchluessel.get(schluessel);
+          /* Derselbe Schluessel mit ANDEREN Angaben wird abgewiesen —
+             so haelt es der echte Anbieter. Dass die Attrappe das lange
+             nicht tat, hat einen echten Fehler verdeckt: Der
+             Wiederholungsschluessel enthielt nur die Anmeldenummer, und
+             die zweite Erstattung derselben (wiederverwendeten)
+             Buchungszeile scheiterte im Betrieb — hier aber nie. */
+          if (frueher.zahlungId !== zahlungId) {
+            return senden(400, {
+              error: {
+                message:
+                  "Schluessel fuer idempotente Anfragen koennen nur mit denselben " +
+                  `Parametern verwendet werden. Anderer Schluessel als '${schluessel}' noetig.`,
+                type: "idempotency_error",
+              },
+            });
+          }
+          return senden(200, frueher.erstattung);
         }
 
         const sitzung = [...sitzungen.values()].find((z) => z.payment_intent === zahlungId);
@@ -166,7 +183,7 @@ export function starte(port = 4242) {
         };
         sitzung.erstattetCents = sitzung.amount_total;
         erstattungen.set(erstattung.id, erstattung);
-        if (schluessel) erstattungenNachSchluessel.set(schluessel, erstattung);
+        if (schluessel) erstattungenNachSchluessel.set(schluessel, { erstattung, zahlungId });
         return senden(200, erstattung);
       }
 
