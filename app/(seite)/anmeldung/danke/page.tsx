@@ -62,7 +62,20 @@ export async function generateMetadata({
  */
 async function standAbgleichen(anmeldungId: string): Promise<void> {
   const anmeldung = await db.registration.findUnique({ where: { id: anmeldungId } });
-  if (!anmeldung || anmeldung.zahlungsStatus === "BEZAHLT") return;
+  if (!anmeldung) return;
+
+  /* Dieselben zwei Wachposten wie in app/zahlung/rueckmeldung (dort
+     steht die ausführliche Begründung): Eine stornierte Buchung wird
+     nie wiederbelebt, und nur eine OFFENE Zahlung darf auf „bezahlt"
+     wechseln.
+
+     Hier wiegt es besonders: Diese Seite ist ohne Anmeldung erreichbar.
+     Wer nach seiner Stornierung den alten Link noch einmal öffnet —
+     aus der Mail, dem Verlauf, einem Lesezeichen — hätte seine
+     erstattete Buchung sonst mit einem bloßen Seitenaufruf
+     zurückgeholt. */
+  if (anmeldung.status === "STORNIERT") return;
+  if (anmeldung.zahlungsStatus !== "OFFEN") return;
   if (!anmeldung.zahlungsReferenz) return;
 
   try {

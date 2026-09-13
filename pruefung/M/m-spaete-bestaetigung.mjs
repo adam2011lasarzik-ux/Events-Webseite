@@ -18,6 +18,7 @@ import Stripe from "stripe";
 import { absenden, personen, BASIS } from "../K/senden.mjs";
 import { db } from "../../lib/db.js";
 import { belegtFilter } from "../../lib/plaetze.js";
+import { bezahlseiteFuer } from "../../lib/zahlungStart.js";
 
 const GEHEIMNIS = "whsec_pruefgeheimnis_nur_lokal";
 const stripe = new Stripe("sk_test_pruefung_ohne_echtes_konto");
@@ -209,6 +210,65 @@ pruefe("Die NEUE Zahlung wird verbucht — der Kunde ist bestätigt",
   `${bestaetigt.status} / ${bestaetigt.zahlungsStatus}`);
 pruefe("… mit der neuen Zahlungskennung, nicht der alten",
   bestaetigt.zahlungsAbsicht === "pi_neu_pruefung", bestaetigt.zahlungsAbsicht ?? "keine");
+
+/* ═══ Teil 5: die Abschluss-Seite als zweite Tür ══════════════════
+   Sie fragt beim Anbieter nach und darf selbst auf „bezahlt"
+   schreiben. Sie ist OHNE Anmeldung erreichbar — wer nach seiner
+   Stornierung den alten Link noch einmal öffnet (Mail, Verlauf,
+   Lesezeichen), hätte seine erstattete Buchung sonst mit einem
+   blossen Seitenaufruf zurückgeholt.
+
+   Die Bezahlseite wird dafür WIRKLICH beim Anbieter angelegt und dort
+   als bezahlt markiert. Eine erfundene Kennung liefe in eine
+   Fehlermeldung — die Prüfung bestünde dann aus dem falschen Grund
+   und wäre wertlos. Genau das ist beim ersten Anlauf passiert. */
+await db.registration.update({
+  where: { id: roh.id },
+  data: {
+    status: "RESERVIERT", zahlungsStatus: "OFFEN",
+    storniertAm: null, reserviertBis: new Date(Date.now() + 30 * 60 * 1000),
+    zahlungsAbsicht: null, zahlungsReferenz: null, bezahlterBetragCents: null, bezahltAm: null,
+  },
+});
+
+await bezahlseiteFuer(roh.id, new Date());
+const mitSitzung = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
+pruefe("Vorbedingung: eine echte Bezahlseite ist angelegt",
+  Boolean(mitSitzung.zahlungsReferenz), mitSitzung.zahlungsReferenz ?? "keine");
+
+const attrappe =
+  `http://${process.env.ZAHLUNG_TEST_HOST ?? "127.0.0.1"}:${process.env.ZAHLUNG_TEST_PORT ?? 4242}`;
+const markiert = await fetch(
+  `${attrappe}/steuerung/klick-bezahlt/${mitSitzung.zahlungsReferenz}`,
+  { redirect: "manual" },
+);
+pruefe("Vorbedingung: beim Anbieter gilt sie als bezahlt",
+  markiert.status === 302, `Antwort ${markiert.status}`);
+
+/* Jetzt storniert und erstattet — die Rückmeldung des Anbieters wird
+   absichtlich NICHT geschickt, es geht allein um den Seitenaufruf. */
+await db.registration.update({
+  where: { id: roh.id },
+  data: {
+    status: "STORNIERT", zahlungsStatus: "ERSTATTET",
+    storniertAm: new Date(), reserviertBis: null,
+  },
+});
+
+/* Mit `zahlung=zurueck` — nur dann fragt die Seite beim Anbieter nach.
+   Genau diese Adresse steht nach einer Zahlung im Verlauf und in der
+   Adresszeile; sie wird erneut aufgerufen, wenn jemand zurückblättert
+   oder den Tab später wieder öffnet. */
+const seite = await fetch(`${BASIS}/anmeldung/danke?nr=${roh.id}&zahlung=zurueck`);
+await seite.text();
+const nachSeitenaufruf = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
+
+pruefe("Die Abschluss-Seite ist erreichbar", seite.status === 200, `Antwort ${seite.status}`);
+pruefe("… belebt eine stornierte Buchung aber NICHT wieder",
+  nachSeitenaufruf.status === "STORNIERT" && nachSeitenaufruf.zahlungsStatus === "ERSTATTET",
+  `${nachSeitenaufruf.status} / ${nachSeitenaufruf.zahlungsStatus}`);
+pruefe("… und der Platz bleibt frei", (await belegte(event.id)) === 0,
+  `${await belegte(event.id)} belegt`);
 
 // ── Aufräumen ───────────────────────────────────────────────────
 await db.participant.deleteMany({});
