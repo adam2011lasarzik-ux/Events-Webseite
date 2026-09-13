@@ -38,6 +38,13 @@ export ZAHLUNG_TEST_HOST=127.0.0.1
 export ZAHLUNG_TEST_PORT=4242
 export OEFFENTLICHE_ADRESSE=http://127.0.0.1:3213
 
+# ── Riegel vor der echten Datenbank ──────────────────────────────
+#
+# Muss VOR allem anderen greifen. Das Repository liegt auch auf dem
+# Produktionsserver; ein Lauf von dort aus würde echte Buchungen
+# löschen. Die Begründung steht in pruefung/schutz.mjs.
+node --env-file=.env "$P/schutz.mjs" || exit 1
+
 # ── Voraussetzungen prüfen, bevor irgendetwas läuft ──────────────
 #
 # Lieber hier abbrechen mit einem Satz, der sagt was fehlt, als
@@ -157,6 +164,7 @@ lauf_rein "O · Links und Knöpfe"        node "$P/O/o-links.mjs"
 # Reine Regeln, brauchen weder Datenbank noch Browser.
 lauf_rein "L · Kopfleiste: Menü und Anmelden" npx tsx "$P/L/l-schulen.mjs"
 lauf_rein "Q · Überwachung (Mail-Texte und Wächter-Logik)" npx tsx "$P/Q/q-wache.mjs"
+lauf_rein "R · Riegel vor der echten Datenbank" node "$P/R/r-schutz.mjs"
 
 # ── Bilanz ───────────────────────────────────────────────────────
 echo ""

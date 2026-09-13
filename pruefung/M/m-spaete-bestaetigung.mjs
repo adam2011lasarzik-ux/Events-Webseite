@@ -14,6 +14,9 @@
    späte Meldung gibt es dort nicht. Genau deshalb steht der Fall hier.
 
    Voraussetzungen: Datenbank, Attrappe auf 4242, Server auf 3213. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import Stripe from "stripe";
 import { absenden, personen, BASIS } from "../K/senden.mjs";
 import { db } from "../../lib/db.js";

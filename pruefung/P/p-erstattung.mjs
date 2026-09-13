@@ -13,6 +13,9 @@
    Voraussetzungen: Datenbank läuft, Attrappe auf 4242, Server auf 3213.
    --------------------------------------------------------------- */
 
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { db } from "../../lib/db.ts";
 import { erstattungAusloesen, sitzungPruefen, zugangVergessen } from "../../lib/zahlung.ts";
 import { belegtFilter } from "../../lib/plaetze.ts";

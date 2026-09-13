@@ -1,4 +1,7 @@
 /* Anmeldung: falsches Passwort, unbekannte Adresse, Bremse, Abmelden. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { anmelden, hole, sende, actionFelder } from "./admin-senden.mjs";
 import { db } from "../../lib/db.js";
 

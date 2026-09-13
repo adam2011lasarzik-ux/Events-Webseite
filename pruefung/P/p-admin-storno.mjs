@@ -22,6 +22,9 @@
    Voraussetzungen: Datenbank laeuft, Attrappe auf 4242, Server 3213.
    --------------------------------------------------------------- */
 
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { db } from "../../lib/db.ts";
 import { adminStornoEntscheidung, stornoEntscheidung } from "../../lib/storno.ts";
 import { stornoDurchAdmin } from "../../lib/stornoAusfuehren.ts";

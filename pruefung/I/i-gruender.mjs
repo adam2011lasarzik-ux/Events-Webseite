@@ -1,4 +1,7 @@
 /* Der Gründerbereich: Anzeige, Schalter, Formular, Upload, Zugang. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { anmelden, hole, sende, actionFelder, alsText, BASIS } from "./admin-senden.mjs";

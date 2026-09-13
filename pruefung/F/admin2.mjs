@@ -1,5 +1,8 @@
 /* Der Kern der Sicherheitsprüfung: Server-Aktionen ohne gültige Sitzung.
    Wer nur die Seiten prüft, prüft die Türen und lässt die Fenster offen. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { anmelden, hole, sende, actionFelder } from "./admin-senden.mjs";
 import { db } from "../../lib/db.js";
 

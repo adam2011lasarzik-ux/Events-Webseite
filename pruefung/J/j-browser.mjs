@@ -3,6 +3,9 @@
    Der Anbieter ist eine Ersatzseite (Attrappe) — der Klick durch
    Stripes echte Bezahlseite bleibt offen, bis es ein Hosting gibt.
    Alles davor und danach ist echt. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { chromium } from "playwright";
 import fs from "node:fs";
 import { db } from "../../lib/db.js";

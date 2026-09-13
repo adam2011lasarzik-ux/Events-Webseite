@@ -1,4 +1,7 @@
 /* Fachliche Prüfung: Event anlegen, veröffentlichen, Anmeldungen verwalten. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { anmelden, hole, sende, actionFelder, BASIS } from "./admin-senden.mjs";
 import { db } from "../../lib/db.js";
 

@@ -4,6 +4,9 @@
    api.stripe.com aus dieser Umgebung gesperrt ist. Geprüft wird damit
    alles, wofür wir verantwortlich sind: Reservierung, Unterschrift,
    doppelte Meldungen, Betragsabgleich, Statuswechsel, Riegel. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import Stripe from "stripe";
 import { absenden, personen, BASIS, ANMELDEPFAD } from "./senden.mjs";
 import { db } from "../../lib/db.js";

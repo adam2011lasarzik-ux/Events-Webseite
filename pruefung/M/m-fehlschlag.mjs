@@ -5,6 +5,9 @@
    die Anmeldung den Platz nicht bis zum Ende der halben Stunde
    weiter blockieren — sie muss aber erhalten bleiben, damit ein
    zweiter Anlauf ohne neue Eingabe möglich ist. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import Stripe from "stripe";
 import { absenden, personen, BASIS } from "../K/senden.mjs";
 import { db } from "../../lib/db.js";

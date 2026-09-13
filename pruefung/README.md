@@ -48,3 +48,29 @@ und es gibt dort keine öffentliche Adresse, an die Stripe eine
 Rückmeldung zustellen könnte. Geprüft wird deshalb alles, wofür dieses
 Projekt verantwortlich ist. Der Klick durch Stripes echte Bezahlseite
 mit einer Testkarte kommt hinzu, sobald die Seite online ist.
+
+## Der Riegel vor der echten Datenbank
+
+Die Listen **löschen** — Anmeldungen, Teilnehmer, Bremszähler,
+Zahlungsereignisse. Das müssen sie, sonst gehen zwei Listen mit
+demselben Datenstand einander in die Quere.
+
+Dieses Repository liegt auch auf dem Produktionsserver. Ohne Schutz
+hätte ein Lauf von dort aus alle echten Buchungen gelöscht, ohne
+Rückfrage. `pruefung/schutz.mjs` verhindert das: Er lässt nur
+`vera_dev` und `vera_test` durch, und nur, wenn die öffentliche
+Adresse auf den eigenen Rechner zeigt. Beide Prüfungen müssen
+zustimmen.
+
+**Regel für neue Listen:** Wer `deleteMany` benutzt, bindet als erste
+Zeile den Riegel ein:
+
+```js
+import "../schutz.mjs";   // aus einem Unterordner
+import "./schutz.mjs";    // direkt in pruefung/
+```
+
+Dass das niemand vergisst, prüft `R/r-schutz.mjs` — die Liste zählt
+alle löschenden Dateien und meldet jede ohne Riegel. Sie prüft
+ausserdem den Riegel selbst, indem sie ihn mit verschiedenen
+Umgebungen startet.

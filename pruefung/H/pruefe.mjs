@@ -4,6 +4,9 @@
 
    Jeder Punkt kommt aus dem Plan (Abschnitt „Schritt E — Verifikation").
    --------------------------------------------------------------- */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { absenden, personen } from "./senden.mjs";
 import { db } from "../../lib/db.js";
 import { berechnePreis } from "../../lib/preise.js";

@@ -7,6 +7,9 @@
    Voraussetzungen: Datenbank läuft, Attrappe auf 4242, Server auf 3213.
    --------------------------------------------------------------- */
 
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { db } from "../../lib/db.ts";
 import { sitzungErstellen, sitzungPruefen } from "../../lib/zahlung.ts";
 import { neuerStornoSchluessel } from "../../lib/storno.ts";

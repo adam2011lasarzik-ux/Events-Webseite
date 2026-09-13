@@ -11,6 +11,9 @@
    Voraussetzungen: Datenbank läuft. Kein Server, kein Browser nötig.
    --------------------------------------------------------------- */
 
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { db } from "../../lib/db.ts";
 import { anmeldungLoeschbar } from "../../lib/anmeldungLoeschbar.ts";
 import { execSync } from "node:child_process";

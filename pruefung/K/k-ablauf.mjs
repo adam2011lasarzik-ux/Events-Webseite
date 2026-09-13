@@ -1,5 +1,8 @@
 /* Anmeldung und Bezahlung als EIN Vorgang — die 15 geforderten Fälle,
    soweit sie ohne Browser prüfbar sind. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import Stripe from "stripe";
 import { absenden, personen, BASIS } from "./senden.mjs";
 import { alsText } from "./admin-senden.mjs";

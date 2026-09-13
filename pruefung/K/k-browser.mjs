@@ -1,4 +1,7 @@
 /* Der Weg im Browser — so, wie ein Besucher ihn erlebt. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { chromium } from "playwright";
 import fs from "node:fs";
 import { db } from "../../lib/db.js";

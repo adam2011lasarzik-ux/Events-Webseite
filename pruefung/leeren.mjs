@@ -19,6 +19,9 @@
    Aufruf:  npx tsx --env-file=.env pruefung/leeren.mjs
    (`.mjs` wie die übrigen Prüfskripte — nur so ist `await` auf oberster
    Ebene erlaubt.) */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "./schutz.mjs";
+
 import { db } from "../lib/db.js";
 
 await db.participant.deleteMany({});

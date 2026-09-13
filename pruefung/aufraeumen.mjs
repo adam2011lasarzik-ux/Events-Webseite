@@ -12,6 +12,9 @@
    versehentlich gelöschtes echtes Event wäre ein teurer Fehler für ein
    bisschen Bequemlichkeit. Kommt eine neue Prüfliste mit einem neuen
    Testevent dazu, gehört sein Kürzel hierher. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "./schutz.mjs";
+
 import { db } from "../lib/db.js";
 import { bildLoeschen } from "../lib/bilder.js";
 

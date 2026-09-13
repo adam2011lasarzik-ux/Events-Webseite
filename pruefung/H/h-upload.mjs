@@ -1,4 +1,7 @@
 /* Titelbild-Upload: Annahme, Ablehnung, Datenschutz, Aufräumen. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { anmelden, hole, sende, actionFelder, BASIS } from "./admin-senden.mjs";

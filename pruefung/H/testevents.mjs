@@ -1,5 +1,8 @@
 /* Legt die Prüf-Events an: je eins mit Business und Premium.
    Idempotent — mehrfaches Ausführen ändert nichts. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { db } from "../../lib/db.js";
 
 const gemeinsam = {

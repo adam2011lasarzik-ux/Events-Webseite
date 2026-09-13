@@ -1,4 +1,7 @@
 /* Der Adminbereich muss die Reservierung und die Zahlung zeigen. */
+/* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
+import "../schutz.mjs";
+
 import { anmelden, hole, alsText } from "./admin-senden.mjs";
 import { absenden, personen } from "./senden.mjs";
 import { db } from "../../lib/db.js";
