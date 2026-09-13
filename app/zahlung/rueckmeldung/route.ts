@@ -99,6 +99,13 @@ export async function POST(anfrage: Request) {
   return new Response("Angenommen.", { status: 200 });
 }
 
+/** Die Zahlungskennung („pi_…") aus einer Bezahlseite holen. */
+function zahlungsAbsichtVon(sitzung: Stripe.Checkout.Session): string | null {
+  return typeof sitzung.payment_intent === "string"
+    ? sitzung.payment_intent
+    : (sitzung.payment_intent?.id ?? null);
+}
+
 async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void> {
   const id = sitzung.metadata?.anmeldungId ?? sitzung.client_reference_id;
   if (!id) {
@@ -115,7 +122,43 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
     console.error("Rückmeldung für unbekannte Anmeldung:", id);
     return;
   }
-  if (anmeldung.zahlungsStatus === "BEZAHLT") return;
+  /* Eine bereits stornierte Buchung wird NIE wiederbelebt.
+
+     Das war ein echter Fehler, gefunden im Testbetrieb: PayPal
+     bestätigt verzögert. Wer nach der Zahlung storniert, aber bevor
+     die Nachmeldung eintrifft, landete hier mit einer stornierten und
+     bereits erstatteten Buchung — und sie wurde zurückgeschrieben auf
+     "bestätigt" und "bezahlt". Sie stand danach wieder als Teilnehmer
+     in der Liste, obwohl das Geld längst zurück war. Bei Karten fiel
+     das nie auf: die bestätigen sofort, eine späte Meldung gibt es
+     dort nicht.
+
+     Die Zahlungskennungen werden trotzdem festgehalten. Ohne sie
+     liesse sich eine später von Hand ausgelöste Erstattung dieser
+     Buchung nicht mehr zuordnen (siehe erstattungVermerken). Status
+     und Zahlungsstatus bleiben unangetastet. */
+  if (anmeldung.status === "STORNIERT") {
+    console.error(
+      `Zahlungsmeldung für eine bereits stornierte Anmeldung (${id}, Sitzung ${sitzung.id}). ` +
+        "Status unverändert gelassen — bitte prüfen, ob Geld zurückgezahlt werden muss.",
+    );
+    await db.registration.update({
+      where: { id },
+      data: {
+        zahlungsReferenz: sitzung.id,
+        zahlungsAbsicht: zahlungsAbsichtVon(sitzung) ?? anmeldung.zahlungsAbsicht,
+        bezahlterBetragCents: sitzung.amount_total ?? anmeldung.bezahlterBetragCents,
+      },
+    });
+    return;
+  }
+
+  /* Nur eine OFFENE Zahlung darf auf "bezahlt" wechseln. Vorher stand
+     hier allein `=== "BEZAHLT"` — dadurch rutschten ERSTATTET und
+     TEILWEISE_ERSTATTET durch und wurden zurückgedreht. Die
+     Schwesterfunktion fehlgeschlagenVermerken prüft seit jeher auch
+     den Anmeldestatus; hier fehlte das. */
+  if (anmeldung.zahlungsStatus !== "OFFEN") return;
 
   /* Betragsabgleich. Weicht der Betrag ab, wird NICHT auf bezahlt
      gesetzt — entweder wurde am Ablauf manipuliert, oder zwei Vorgänge
@@ -151,10 +194,7 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
       /* Die eigentliche Zahlung festhalten. Ohne sie liesse sich
          später weder eine Erstattung auslösen noch eine
          Erstattungs-Rückmeldung dieser Buchung zuordnen. */
-      zahlungsAbsicht:
-        typeof sitzung.payment_intent === "string"
-          ? sitzung.payment_intent
-          : (sitzung.payment_intent?.id ?? null),
+      zahlungsAbsicht: zahlungsAbsichtVon(sitzung),
       bezahlterBetragCents: sitzung.amount_total ?? anmeldung.gesamtpreisCents,
       bezahltAm: new Date(),
     },
