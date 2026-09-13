@@ -99,6 +99,15 @@ export default async function StornoSeite({
           ? { titel: t.storno.bereitsStorniertTitel, text: t.storno.bereitsStorniertText }
           : { titel: t.storno.bereitsErstattetTitel, text: t.storno.bereitsErstattetText });
 
+  /* Bei laufender Sperre den Knopf NICHT weiter anbieten: Die Aktion
+     leitet auf dieselbe Adresse zurück, die Seite sähe danach
+     identisch aus — es entstünde der Eindruck, der Knopf tue nichts,
+     und jeder weitere Klick machte es schlimmer.
+
+     Bewusst als eigener Wert neben zeigtKnopf: Nur die unverkürzte
+     Zuweisung `= ansicht.entscheidung.erlaubt` verengt den Typ weiter
+     unten auf den Zweig mit `erstatten`. */
+  const gesperrt = ergebnis === "gebremst";
   const zeigtKnopf = ansicht.entscheidung.erlaubt;
 
   return (
@@ -132,7 +141,7 @@ export default async function StornoSeite({
         <h2 style={{ fontSize: "var(--gr-xl)" }}>{lage.titel}</h2>
         {lage.text && <p>{lage.text}</p>}
 
-        {zeigtKnopf && (
+        {zeigtKnopf && !gesperrt && (
           <>
             <p>
               {ansicht.entscheidung.erstatten

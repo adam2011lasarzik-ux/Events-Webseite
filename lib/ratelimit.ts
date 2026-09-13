@@ -44,9 +44,21 @@ export async function versuchErlaubt(
     where: { kennung, zeitpunkt: { gte: grenze } },
   });
 
-  await db.anmeldeVersuch.create({ data: { kennung } });
+  /* Nur ZUGELASSENE Versuche zaehlen.
 
-  return bisher < max;
+     Vorher wurde jeder Aufruf eingetragen, auch der bereits
+     abgewiesene. Damit schob jeder weitere Klick das Zeitfenster nach
+     hinten — wer einmal gebremst war, kam durch Probieren nie wieder
+     heraus, sondern immer tiefer hinein. Im Testbetrieb sind so 48
+     Eintraege entstanden und die Sperre lag Stunden in der Zukunft.
+
+     Sicherheitlich kostet das nichts: Ein abgewiesener Aufruf kehrt
+     um, bevor er irgendetwas prueft oder ausloest — er kann also
+     weder Schluessel durchprobieren noch Arbeit verursachen. */
+  const erlaubt = bisher < max;
+  if (erlaubt) await db.anmeldeVersuch.create({ data: { kennung } });
+
+  return erlaubt;
 }
 
 /**

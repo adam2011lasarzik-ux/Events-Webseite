@@ -322,7 +322,8 @@ export const de = {
       "Wir konnten die Rückerstattung gerade nicht auslösen. An deiner Buchung hat sich " +
       "nichts geändert. Versuch es später noch einmal oder schreib uns.",
     gebremstTitel: "Zu viele Versuche",
-    gebremstText: "Bitte warte einen Moment und versuch es dann noch einmal.",
+    gebremstText:
+      "Zum Schutz vor Missbrauch sind nur wenige Versuche je Stunde möglich. Bitte versuch es in etwa einer Stunde noch einmal — oder schreib uns kurz, dann stornieren wir für dich.",
   },
 
   danke: {
