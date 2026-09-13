@@ -77,6 +77,24 @@ Eine Sicherung, die nie zurückgespielt wurde, ist keine Sicherung.
 Er fasst die echte Datenbank nicht an — er spielt in eine getrennte
 Testdatenbank ein, zählt nach und räumt sie wieder ab.
 
+**Wie das Ergebnis zu lesen ist.** Der Test vergleicht die Sicherung mit
+dem **aktuellen** Stand der Datenbank, nicht mit dem Stand zum Zeitpunkt
+der Sicherung. Wer ihn tagsüber startet, nachdem gearbeitet wurde,
+bekommt deshalb zwangsläufig „ABWEICHUNGEN GEFUNDEN" — in jeder Tabelle,
+die sich seit 03:30 Uhr geändert hat. Entscheidend ist nicht die
+Gesamtmeldung, sondern die **Richtung**:
+
+| | Bedeutung |
+|---|---|
+| Live hat **mehr** Zeilen als die Sicherung | seit der Sicherung kamen Daten dazu — normal |
+| Sicherung hat **mehr** Zeilen als Live | live fehlt etwas — das gehört geprüft |
+
+**Automatisch überwacht wird die Sicherung ohnehin.** Die Wache prüft
+alle 15 Minuten, ob der Vermerk in `/home/vera/.vera-sicherung-status`
+jünger als 48 Stunden ist, ob er auf `FEHLER` endet und ob er überhaupt
+existiert — bei jedem dieser Fälle geht eine E-Mail raus. Siehe
+`docs/ueberwachung.md`.
+
 ## Im Ernstfall: eine Sicherung wirklich zurückspielen
 
 Bewusst kein Skript — das soll man mit wachem Kopf tun.
@@ -128,12 +146,44 @@ Zwei Lehren:
    gespeicherten geheimen Schlüssel mit dem, den der Server benutzt.
    Das dauert zehn Sekunden und hätte den Fehlschlag sofort gezeigt.
 
+## Rückspiel-Test vom 13.09.2026 — erfolgreich
+
+Der erste vollständige Durchlauf nach dem Zwischenfall oben:
+
+| Schritt | Ergebnis |
+|---|---|
+| Sicherung `vera-20260913_033505.sql.age` von Backblaze geladen | 26 980 Bytes |
+| Mit dem Schlüssel aus dem Passwort-Manager entschlüsselt | 26 780 Bytes |
+| Sicherheitsprüfung auf `USE`/`CREATE DATABASE` | keine gefunden, Einspielen isoliert |
+| In `vera_ruecktest` eingespielt | ohne Fehler |
+| Testdatenbank danach wieder entfernt | ja |
+
+**Damit ist die Schlüssel-Verwechslung vom 04./05.09. erledigt:** Der im
+Passwort-Manager hinterlegte geheime Schlüssel ist der richtige, und die
+Sicherungen sind nachweislich wiederherstellbar.
+
+Der Test meldete dabei „ABWEICHUNGEN GEFUNDEN". Das war erwartbar und
+kein Datenverlust — er lief um 20:00 Uhr gegen eine Sicherung von 03:35
+Uhr, dazwischen lag ein Tag mit Zahlungs- und Storno-Tests. Abweichungen
+gab es genau in den vier Tabellen, in denen an diesem Tag gearbeitet
+wurde (`Registration`, `Participant`, `ZahlungsEreignis`,
+`AnmeldeVersuch`), und überall hatte die Live-Datenbank **mehr** Zeilen.
+Alles Unberührte — `Event`, `EventAbschnitt`, `AdminUser`, `Settings`,
+`_prisma_migrations` — stimmte exakt überein.
+
+Eine Anmeldung stand in der Sicherung und fehlte live. Nachgeprüft durch
+direktes Auslesen der entschlüsselten Sicherung: Es war eine am 06.09.
+um 13:59 Uhr angelegte und um 16:11 Uhr desselben Tages stornierte
+Testbuchung ohne Zahlungsspur, die im Lauf des 13.09. aufgeräumt wurde.
+
+**Nebenbefund:** Dass dafür eine Sicherung entschlüsselt werden musste,
+liegt daran, dass das Löschen einer Anmeldung keine Spur hinterlässt —
+es gibt kein Protokoll darüber, wer wann was entfernt hat. Für den
+Testbetrieb unerheblich, für den Echtbetrieb mit Kundendaten ein Punkt
+für die Liste.
+
 ## Was noch offen ist
 
-- **Alarm bei ausbleibender Sicherung.** Bricht die nächtliche
-  Sicherung ab, steht das zwar im Protokoll (`journalctl -u
-  vera-sicherung.service`) und in der Statusdatei, aber niemand wird
-  benachrichtigt. Das kommt mit Phase 8 (E-Mail-Versand).
 - **`/etc/vera-backup.env` aufräumen.** Enthält eine ungenutzte Kopie
   der Backblaze-Zugangsdaten und den zweiten, falschen
   `AGE_RECIPIENT`. Kein Skript verwendet die Datei.
