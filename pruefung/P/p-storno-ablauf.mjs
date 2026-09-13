@@ -160,11 +160,40 @@ pruefe(
 
 /* ── 4. Kein zweites Mal ────────────────────────────────────────── */
 
+/* Wie viele Erstattungen beim Anbieter verzeichnet sind — VOR dem
+   zweiten Versuch. Nur die eigene Datenbank zu befragen genügt hier
+   nicht: Sie bestätigte damit sich selbst, nicht den Vorgang. */
+const erstattungenVorher = (await (await fetch(`${ATTRAPPE}/steuerung/erstattungen`)).json()).length;
+
 const e2 = await stornoAusfuehren(a.id, a.schluessel);
 pruefe(
   "Ein zweiter Versuch wird abgelehnt",
   !e2.erfolg && e2.fehler === "bereits-storniert",
   e2.erfolg ? "erfolgreich" : e2.fehler,
+);
+
+/* Der eigentliche Punkt: abgelehnt heisst NICHTS BEWEGT.
+
+   Bisher prüfte diese Liste nur die Fehlermeldung. Dass dabei auch
+   wirklich kein zweites Mal Geld angewiesen wurde, stand nirgends —
+   und genau das ist die Frage, die zählt. Auch mehrfaches Absenden
+   darf die Zahl beim Anbieter nicht erhöhen. */
+for (let i = 0; i < 3; i += 1) await stornoAusfuehren(a.id, a.schluessel);
+const erstattungenNachher = (await (await fetch(`${ATTRAPPE}/steuerung/erstattungen`)).json()).length;
+pruefe(
+  "… und beim Anbieter entsteht KEINE zweite Erstattung, auch nach mehrfachem Absenden",
+  erstattungenNachher === erstattungenVorher,
+  `vorher ${erstattungenVorher}, nachher ${erstattungenNachher}`,
+);
+
+/* Und der Zeitstempel der Stornierung bleibt unangetastet — eine
+   zweite Ausführung waere daran selbst dann zu erkennen, wenn sie
+   am Ende dasselbe schriebe. */
+const aNochmal = await db.registration.findUnique({ where: { id: a.id } });
+pruefe(
+  "… und der Storno-Zeitpunkt wird nicht überschrieben",
+  aNochmal.storniertAm.getTime() === aNach.storniertAm.getTime(),
+  `${aNach.storniertAm.toISOString()} → ${aNochmal.storniertAm.toISOString()}`,
 );
 
 /* ── 5. Die 24-Stunden-Grenze am echten Ablauf ───────────────────── */
