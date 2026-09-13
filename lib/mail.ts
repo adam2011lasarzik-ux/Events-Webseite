@@ -55,6 +55,25 @@ function transport(): Transporter {
     // Das ist bei Hostinger die vorgesehene Kombination für 465.
     secure: port === 465,
     auth: { user: benutzer, pass: passwort },
+
+    /* Zeitgrenzen — ohne sie wartet nodemailer nach seinen Vorgaben
+       bis zu zwei Minuten auf die Verbindung und bis zu zehn auf den
+       Versand.
+
+       Das ist nicht nur langsam, es ist gefährlich: Die Mails gelten
+       hier überall ausdrücklich als Zugabe und werden deshalb mit
+       mailSendenOhneAbbruch verschickt — aber sie laufen INNERHALB der
+       Aktion, die der Mensch angestossen hat. Hängt der Mailserver,
+       hängt damit auch sein Knopf, und zwar ohne jede Rückmeldung.
+       Beim Stornieren wiegt das am schwersten: Erstattung und
+       Speicherung sind dann längst erledigt, und der Kunde sieht
+       trotzdem nichts und drückt erneut.
+
+       Lieber nach wenigen Sekunden ohne Mail weitermachen als den
+       Vorgang blockieren. Der Fehlschlag wird protokolliert. */
+    connectionTimeout: 10_000,
+    greetingTimeout: 10_000,
+    socketTimeout: 20_000,
   });
   abgesenderCache = absender;
   return zugang;
