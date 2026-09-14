@@ -548,6 +548,40 @@ strengen Modus, den Bau und die Prüflisten.
 - **Migrationen mit `npm run db:deploy`**, niemals mit `db:migrate`.
   `prisma migrate dev` ist der Entwicklungsbefehl und kann Daten
   zurücksetzen; `migrate deploy` wendet nur an, was vorliegt.
+- **Nach jeder Schema-Änderung `npx prisma generate` — auch ohne
+  `npm ci`.** *(Zwischenfall am 14.09.2026: Der Dienst kam nach einem
+  Deployment mit neuer Tabelle nicht mehr hoch — „Could not find a
+  production build", danach ein Typfehler auf genau das neue Modell.)*
+
+  `prisma generate` läuft normalerweise automatisch mit, weil
+  `postinstall` es aufruft (siehe `npm ci` oben) — **aber nur, wenn
+  `npm ci` tatsächlich läuft.** Ein Deployment, das nur `git pull`
+  macht und `npm ci` überspringt, weil sich keine Abhängigkeit
+  geändert hat, überspringt damit auch `prisma generate`. Der
+  TypeScript-Bau bricht dann mit einem Fehler wie
+  „Die Eigenschaft '…' existiert nicht im Typ 'PrismaClient'" ab, und
+  das alte `.next` bleibt zurück oder wird gelöscht — der Dienst findet
+  danach gar keinen Bau mehr und startet in einer Schleife neu.
+
+  Die richtige Reihenfolge nach einer Schema-Änderung:
+  ```bash
+  git pull
+  npm run db:deploy       # wendet die Migration an
+  npx prisma generate     # aktualisiert die Client-Typen — NICHT vergessen
+  npm run build
+  systemctl restart vera
+  ```
+  Nach dem Bau lohnt sich ein kurzer Blick, ob wirklich etwas entstanden
+  ist, statt nur dem Exit-Code zu vertrauen (der bei einer Weiterleitung
+  durch `| tail` ohnehin nicht den echten Befehl widerspiegelt):
+  ```bash
+  ls -la .next/BUILD_ID
+  ```
+  Läuft ein Kontroll-Bau versehentlich als `root` statt als der
+  Anwendungsbenutzer, hinterlässt er root-eigene Dateien in `.next`,
+  die der Anwendungsbenutzer nicht mehr löschen kann — im Zweifel
+  `.next` einmal als `root` entfernen (`rm -rf`, root darf das) und
+  danach ausschliesslich als Anwendungsbenutzer neu bauen.
 - **`BILDER_VERZEICHNIS`** auf einen Ordner zeigen lassen, den ein
   Deployment nicht überschreibt (siehe oben unter Titelbilder).
 - **Bekannte Meldung von `npm audit`:** drei Einträge mit hoher
