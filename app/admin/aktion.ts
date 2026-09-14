@@ -8,10 +8,24 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { passtPasswort, hashen } from "@/lib/passwort";
-import { sitzungStarten, sitzungBeenden, alleSitzungenBeenden, verlangeAdmin } from "@/lib/adminAuth";
+import {
+  sitzungStarten,
+  sitzungBeenden,
+  alleSitzungenBeenden,
+  verlangeAdmin,
+  zweiterFaktorPruefungStarten,
+  zweiterFaktorPruefungAktuell,
+  zweiterFaktorPruefungBeenden,
+  type LaufendePruefung,
+} from "@/lib/adminAuth";
 import { protokolliere, PROTOKOLL_AKTIONEN } from "@/lib/adminProtokoll";
 import type { LoginErgebnis } from "@/lib/adminLogin";
-import { loginKontoVersuchErlaubt, loginVersuchErlaubt } from "@/lib/ratelimit";
+import {
+  loginKontoVersuchErlaubt,
+  loginVersuchErlaubt,
+  zweiterFaktorVersuchErlaubt,
+} from "@/lib/ratelimit";
+import { totpCodeStimmt, backupCodeStimmt } from "@/lib/zweiterFaktor";
 
 /**
  * Ein Blindwert, gegen den geprüft wird, wenn es die E-Mail-Adresse
@@ -42,6 +56,18 @@ export async function anmelden(
   _bisher: LoginErgebnis,
   formular: FormData,
 ): Promise<LoginErgebnis> {
+  /* Welcher Schritt gemeint ist, entscheidet sich AUSSCHLIESSLICH an
+     serverseitigem Zustand (dem Zwischenschritt-Cookie) — nicht an
+     einem Client-Zustand. So funktioniert der zweite Schritt auch
+     ohne JavaScript: Ein erneutes Absenden nach einem Seitenneuaufbau
+     landet wieder an derselben Stelle, weil das Formular selbst
+     (siehe LoginFormular.tsx) ebenfalls aus dem servergelieferten
+     Zustand ableitet, welche Felder es zeigt. */
+  const laufendePruefung = await zweiterFaktorPruefungAktuell();
+  if (laufendePruefung && formular.get("code") !== null) {
+    return zweitenFaktorPruefen(laufendePruefung, formular);
+  }
+
   const email = text(formular.get("email")).trim().toLowerCase();
   const passwort = text(formular.get("passwort"));
 
@@ -82,6 +108,70 @@ export async function anmelden(
     return { meldung: "E-Mail-Adresse oder Passwort stimmt nicht." };
   }
 
+  if (admin.zweiterFaktorAktiv) {
+    // Bewusst NOCH KEINE Sitzung und noch kein „letzterLogin" — beides
+    // erst, wenn auch der zweite Faktor stimmt. Bis dahin berechtigt
+    // dieses Cookie zu nichts außer der Eingabe des Codes.
+    await zweiterFaktorPruefungStarten(admin.id);
+    return { zweiterFaktorNoetig: true };
+  }
+
+  await db.adminUser.update({
+    where: { id: admin.id },
+    data: { letzterLogin: new Date() },
+  });
+  await sitzungStarten(admin.id);
+
+  redirect("/admin");
+}
+
+/**
+ * Der zweite Schritt: Passwort stand schon fest, jetzt der TOTP- oder
+ * Backup-Code.
+ *
+ * Nicht exportiert — erreichbar ausschließlich über `anmelden()`
+ * oben, das anhand des Zwischenschritt-Cookies entscheidet, ob dieser
+ * Zweig gemeint ist. Ein einziger exportierter Einstiegspunkt hält
+ * die Formular-Anbindung (LoginFormular.tsx) einfach: ein Formular,
+ * eine Aktion.
+ */
+async function zweitenFaktorPruefen(
+  pruefung: LaufendePruefung,
+  formular: FormData,
+): Promise<LoginErgebnis> {
+  if (!(await zweiterFaktorVersuchErlaubt(pruefung.id))) {
+    return { meldung: ZU_VIELE, zweiterFaktorNoetig: true };
+  }
+
+  const eingabe = text(formular.get("code")).trim();
+  if (!eingabe) {
+    return { meldung: "Bitte den Code eingeben.", zweiterFaktorNoetig: true };
+  }
+
+  const admin = await db.adminUser.findUnique({ where: { id: pruefung.adminId } });
+
+  // Zwischen den beiden Schritten könnte der zweite Faktor
+  // deaktiviert worden sein (an einem anderen Gerät, oder über die
+  // Kommandozeile bei einem verlorenen Zugang) — dann ist der
+  // Zwischenschritt hinfällig, ganz gleich, was hier eingegeben wird.
+  if (!admin || !admin.zweiterFaktorAktiv || !admin.zweiterFaktorGeheimnis) {
+    await zweiterFaktorPruefungBeenden();
+    return { meldung: "E-Mail-Adresse oder Passwort stimmt nicht." };
+  }
+
+  const ziffern = eingabe.replace(/\D/g, "");
+  const stimmt =
+    ziffern.length === 6
+      ? totpCodeStimmt(admin.zweiterFaktorGeheimnis, ziffern)
+      : ziffern.length === 10
+        ? await backupCodeStimmt(admin.id, ziffern)
+        : false;
+
+  if (!stimmt) {
+    return { meldung: "Der Code stimmt nicht.", zweiterFaktorNoetig: true };
+  }
+
+  await zweiterFaktorPruefungBeenden();
   await db.adminUser.update({
     where: { id: admin.id },
     data: { letzterLogin: new Date() },

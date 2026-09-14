@@ -113,3 +113,24 @@ export function loginKontoVersuchErlaubt(email: string): Promise<boolean> {
     LOGIN_FENSTER_MINUTEN,
   );
 }
+
+/**
+ * Bremse für den zweiten Faktor.
+ *
+ * Ein sechsstelliger TOTP-Code hat eine Million mögliche Werte — ohne
+ * Bremse liesse sich das in vertretbarer Zeit durchprobieren, sobald
+ * jemand ein gestohlenes Passwort hat und nur noch am zweiten Faktor
+ * scheitert. Eigene, engere Kennung je Zwischenschritt statt je
+ * Konto: Der Zwischenschritt selbst läuft ohnehin nach wenigen
+ * Minuten ab (siehe lib/adminAuth.ts), die Bremse muss ihn nur für
+ * seine kurze Lebenszeit schützen.
+ *
+ * Die Kennung ist die interne Datenbank-ID des Zwischenschritts —
+ * keine E-Mail-Adresse, kein Personenbezug, muss also nicht gehasht
+ * werden.
+ */
+export const ZWEITER_FAKTOR_MAX = 8;
+
+export function zweiterFaktorVersuchErlaubt(pruefungId: string): Promise<boolean> {
+  return versuchErlaubt(`2fa:${pruefungId}`, ZWEITER_FAKTOR_MAX, LOGIN_FENSTER_MINUTEN);
+}

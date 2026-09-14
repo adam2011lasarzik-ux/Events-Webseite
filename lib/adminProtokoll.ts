@@ -39,6 +39,9 @@ export const PROTOKOLL_AKTIONEN = {
   einstellungenGespeichert: "einstellungen.gespeichert",
   csvExport: "csv.export",
   zugangUeberallAbgemeldet: "zugang.ueberall-abgemeldet",
+  zweiterFaktorEingerichtet: "zugang.zweiter-faktor-eingerichtet",
+  zweiterFaktorDeaktiviert: "zugang.zweiter-faktor-deaktiviert",
+  zweiterFaktorBackupCodesErneuert: "zugang.zweiter-faktor-codes-erneuert",
 } as const;
 
 export type ProtokollAktion = (typeof PROTOKOLL_AKTIONEN)[keyof typeof PROTOKOLL_AKTIONEN];

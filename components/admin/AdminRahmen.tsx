@@ -35,6 +35,7 @@ export function AdminRahmen({
             <Link href="/admin">Übersicht</Link>
             <Link href="/admin/events/neu">Neues Event</Link>
             <Link href="/admin/einstellungen">Gründerbereich</Link>
+            <Link href="/admin/zweiter-faktor">Zweiter Faktor</Link>
             <Link href="/">Zur Webseite</Link>
           </nav>
           <div className={stil.rechts}>

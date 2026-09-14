@@ -42,11 +42,26 @@ async function main() {
   const vorhanden = await db.adminUser.findUnique({ where: { email: sauber } });
 
   if (vorhanden) {
-    await db.adminUser.update({ where: { id: vorhanden.id }, data: { passwortHash } });
+    /* Zusammen mit dem Passwort auch den zweiten Faktor abschalten.
+       Diese Kommandozeile ist der Notausgang, wenn jemand sich selbst
+       ausgesperrt hat — und der häufigste Grund dafür ist, dass sowohl
+       das Gerät mit der Authenticator-App als auch die Backup-Codes
+       nicht mehr zu erreichen sind. Bliebe der zweite Faktor aktiv,
+       wäre der Zugang trotz neuem Passwort weiterhin verschlossen. */
+    await db.$transaction([
+      db.adminUser.update({
+        where: { id: vorhanden.id },
+        data: { passwortHash, zweiterFaktorGeheimnis: null, zweiterFaktorAktiv: false },
+      }),
+      db.adminZweiterFaktorCode.deleteMany({ where: { adminId: vorhanden.id } }),
+    ]);
     // Alle offenen Sitzungen beenden: Wer das Passwort ändert, will in
     // aller Regel genau das — jemanden aussperren.
     const weg = await db.adminSession.deleteMany({ where: { adminId: vorhanden.id } });
-    console.log(`Passwort für ${sauber} geändert. ${weg.count} offene Sitzung(en) beendet.`);
+    console.log(
+      `Passwort für ${sauber} geändert. ${weg.count} offene Sitzung(en) beendet. ` +
+        `Der zweite Faktor wurde dabei deaktiviert — er muss nach dem Anmelden neu eingerichtet werden.`,
+    );
   } else {
     await db.adminUser.create({ data: { email: sauber, passwortHash } });
     console.log(`Zugang für ${sauber} angelegt.`);

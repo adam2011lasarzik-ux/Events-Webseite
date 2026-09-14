@@ -356,7 +356,19 @@ model AdminUser {
   erstelltAm   DateTime @default(now())
   letzterLogin DateTime?
 
-  sitzungen AdminSession[]
+  /// Das TOTP-Geheimnis (Base32), erst gesetzt, sobald die Einrichtung
+  /// mit einem gültigen Code bestätigt wurde. Vorher steht hier nichts
+  /// — ein begonnener, aber nie bestätigter Versuch soll nicht dazu
+  /// führen, dass sich jemand aus dem eigenen Konto aussperrt.
+  zweiterFaktorGeheimnis String?
+  /// Erst NACH der Bestätigung "an". Erst dieser Schalter verlangt den
+  /// zweiten Faktor beim Anmelden — nicht schon das blosse Vorhandensein
+  /// eines Geheimnisses.
+  zweiterFaktorAktiv     Boolean  @default(false)
+
+  sitzungen       AdminSession[]
+  zweiterFaktorCodes      AdminZweiterFaktorCode[]
+  zweiterFaktorPruefungen AdminZweiterFaktorPruefung[]
 }
 
 /// Eine angemeldete Sitzung im Adminbereich.
@@ -372,6 +384,46 @@ model AdminUser {
 /// Wer die Datenbank in die Hände bekommt, kann sich damit nicht
 /// anmelden.
 model AdminSession {
+  id         String    @id @default(cuid())
+  adminId    String
+  admin      AdminUser @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  tokenHash  String    @unique
+  erstelltAm DateTime  @default(now())
+  laeuftAbAm DateTime
+
+  @@index([adminId])
+  @@index([laeuftAbAm])
+}
+
+/// Ein Backup-Code für den zweiten Faktor — der Notausgang, wenn das
+/// Gerät mit der Authenticator-App nicht zur Hand ist.
+///
+/// Wie beim Passwort steht hier NIE der Code selbst, nur sein Hash
+/// (dasselbe Verfahren, lib/passwort.ts). Ein benutzter Code bleibt
+/// als Zeile stehen (benutztAm gesetzt) statt gelöscht zu werden — so
+/// lässt sich ein zweiter Versuch mit demselben Code ohne zusätzliche
+/// Abfrage abweisen.
+model AdminZweiterFaktorCode {
+  id         String    @id @default(cuid())
+  adminId    String
+  admin      AdminUser @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  codeHash   String
+  erstelltAm DateTime  @default(now())
+  benutztAm  DateTime?
+
+  @@index([adminId])
+}
+
+/// Der Zwischenschritt "Passwort stimmt, der Code fehlt noch".
+///
+/// Ein eigener, kurzlebiger Zustand statt eines Feldes an der
+/// eigentlichen Sitzung: Die richtige Sitzung (AdminSession) darf es
+/// erst NACH dem zweiten Faktor geben. Sonst wäre ein Cookie schon vor
+/// der vollständigen Anmeldung etwas wert.
+///
+/// Wie bei AdminSession steht im Cookie nur ein Zufallsschlüssel, hier
+/// nur dessen Hash.
+model AdminZweiterFaktorPruefung {
   id         String    @id @default(cuid())
   adminId    String
   admin      AdminUser @relation(fields: [adminId], references: [id], onDelete: Cascade)

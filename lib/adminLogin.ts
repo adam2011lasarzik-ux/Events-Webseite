@@ -16,6 +16,14 @@
 /** Was das Anmeldeformular nach einem Versuch zurückbekommt. */
 export interface LoginErgebnis {
   meldung?: string;
+  /**
+   * Passwort war richtig, es fehlt noch der zweite Faktor. Bestimmt,
+   * welcher Teil des Formulars als Nächstes erscheint — rein aus
+   * diesem Wert abgeleitet, nicht aus einem eigenen Client-Zustand,
+   * damit der Schritt auch ohne JavaScript funktioniert (ein erneutes
+   * Absenden liefert wieder denselben Zustand aus der Datenbank).
+   */
+  zweiterFaktorNoetig?: boolean;
 }
 
 export const LOGIN_STARTZUSTAND: LoginErgebnis = {};

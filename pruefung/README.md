@@ -11,7 +11,7 @@ Wie man sie startet, steht in **[../docs/pruefen.md](../docs/pruefen.md)**.
 | Ordner | Inhalt | Anzahl |
 |---|---|---|
 | `E`, `H` | Anmeldung: Preise, Plätze, Überbuchung, Duplikate, manipulierte Werte, Honigtopf, Bremse | 32 |
-| `F`, `H` | Adminbereich: Zugang, Sitzungen, Aktionen ohne Sitzung, CSV, Anonymisieren, Event-Formular | 60 |
+| `F`, `H` | Adminbereich: Zugang, Sitzungen, Aktionen ohne Sitzung, CSV, Anonymisieren, Event-Formular, zweiter Faktor (TOTP) | 86 |
 | `G`, `H` | Designs, Inhaltsblöcke, Anmeldung je Event | 38 |
 | `H` | Bild-Upload: Formate, Grössen, EXIF/GPS, getarnte Dateien, Pfad-Tricks | 20 |
 | `I` | Gründerbereich, Kontraste, Wortmarke | 29 |

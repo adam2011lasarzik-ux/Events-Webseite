@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { aktuellerAdmin } from "@/lib/adminAuth";
+import { aktuellerAdmin, zweiterFaktorPruefungAktuell } from "@/lib/adminAuth";
 import { LoginFormular } from "@/components/admin/LoginFormular";
+import { LOGIN_STARTZUSTAND } from "@/lib/adminLogin";
 import stil from "../admin.module.css";
 
 export const metadata: Metadata = {
@@ -26,6 +27,16 @@ export default async function LoginSeite({
      Abmelden — man erführe nie, ob es gewirkt hat. */
   const { abgemeldet } = await searchParams;
 
+  /* Steht schon ein gültiger Zwischenschritt, zeigt das Formular
+     gleich die Code-Eingabe — auch nach einem Neuladen der Seite.
+     Ohne das fiele ein Neuladen mitten im zweiten Schritt auf die
+     Passwortabfrage zurück, obwohl der Zwischenschritt serverseitig
+     noch gilt. */
+  const laufendePruefung = await zweiterFaktorPruefungAktuell();
+  const startZustand = laufendePruefung
+    ? { ...LOGIN_STARTZUSTAND, zweiterFaktorNoetig: true }
+    : LOGIN_STARTZUSTAND;
+
   return (
     <div className={stil.loginMitte}>
       <div className={stil.loginKarte}>
@@ -39,7 +50,7 @@ export default async function LoginSeite({
             Du bist jetzt auf allen Geräten abgemeldet.
           </p>
         )}
-        <LoginFormular />
+        <LoginFormular startZustand={startZustand} />
       </div>
     </div>
   );

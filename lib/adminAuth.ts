@@ -27,6 +27,15 @@ import { redirect } from "next/navigation";
 import { db } from "./db";
 
 const COOKIE = "vera_admin";
+/** Der Zwischenschritt "Passwort stimmt, Code fehlt noch" — eigenes, kürzeres Cookie. */
+const PRUEFUNG_COOKIE = "vera_admin_2fa";
+/**
+ * Wie lange der Zwischenschritt gilt, bevor die Anmeldung neu
+ * beginnen muss. Bewusst kurz: Es ist nur die Zeit, die jemand
+ * braucht, um die App zu öffnen und den Code abzutippen — nicht die
+ * Dauer einer ganzen Sitzung.
+ */
+const PRUEFUNG_MINUTEN = 5;
 /**
  * Wie lange eine Anmeldung gilt, bevor sie erneut nötig wird.
  *
@@ -146,4 +155,66 @@ export async function verlangeAdmin(): Promise<AngemeldeterAdmin> {
   const admin = await aktuellerAdmin();
   if (!admin) redirect("/admin/login");
   return admin;
+}
+
+/* ---------------------------------------------------------------
+   Der Zwischenschritt für den zweiten Faktor.
+
+   Dasselbe Muster wie die eigentliche Sitzung oben: im Browser ein
+   zufälliger Schlüssel, in der Datenbank nur dessen Hash. Der
+   Unterschied ist die Bedeutung: Diese "Sitzung" berechtigt zu NICHTS
+   außer der Eingabe des zweiten Faktors. Erst wenn der stimmt,
+   entsteht über sitzungStarten() die richtige Sitzung.
+   --------------------------------------------------------------- */
+
+export interface LaufendePruefung {
+  id: string;
+  adminId: string;
+}
+
+/** Beginnt den Zwischenschritt und setzt das eigene Cookie dafür. */
+export async function zweiterFaktorPruefungStarten(adminId: string): Promise<void> {
+  const schluessel = randomBytes(32).toString("base64url");
+  const laeuftAbAm = new Date(Date.now() + PRUEFUNG_MINUTEN * 60_000);
+
+  await db.adminZweiterFaktorPruefung.deleteMany({ where: { laeuftAbAm: { lt: new Date() } } });
+  await db.adminZweiterFaktorPruefung.create({
+    data: { adminId, tokenHash: alsHash(schluessel), laeuftAbAm },
+  });
+
+  const keks = await cookies();
+  keks.set(PRUEFUNG_COOKIE, schluessel, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    expires: laeuftAbAm,
+  });
+}
+
+/** Der laufende Zwischenschritt, falls es einen gibt und er noch gilt. */
+export async function zweiterFaktorPruefungAktuell(): Promise<LaufendePruefung | null> {
+  const keks = await cookies();
+  const schluessel = keks.get(PRUEFUNG_COOKIE)?.value;
+  if (!schluessel) return null;
+
+  const eintrag = await db.adminZweiterFaktorPruefung.findUnique({
+    where: { tokenHash: alsHash(schluessel) },
+  });
+  if (!eintrag) return null;
+  if (eintrag.laeuftAbAm.getTime() < Date.now()) {
+    await db.adminZweiterFaktorPruefung.delete({ where: { id: eintrag.id } }).catch(() => {});
+    return null;
+  }
+  return { id: eintrag.id, adminId: eintrag.adminId };
+}
+
+/** Beendet den Zwischenschritt — nach Erfolg, Abbruch oder Fehlschlag gleichermaßen. */
+export async function zweiterFaktorPruefungBeenden(): Promise<void> {
+  const keks = await cookies();
+  const schluessel = keks.get(PRUEFUNG_COOKIE)?.value;
+  if (schluessel) {
+    await db.adminZweiterFaktorPruefung.deleteMany({ where: { tokenHash: alsHash(schluessel) } });
+  }
+  keks.delete(PRUEFUNG_COOKIE);
 }
