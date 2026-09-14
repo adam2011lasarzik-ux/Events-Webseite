@@ -11,6 +11,8 @@
    und ein Zeitpunkt.
    --------------------------------------------------------------- */
 
+import { createHash } from "node:crypto";
+
 import { db } from "./db";
 
 /** Wie viele Versuche je Kennung im Zeitfenster erlaubt sind. */
@@ -77,4 +79,37 @@ export const LOGIN_FENSTER_MINUTEN = 15;
 
 export function loginVersuchErlaubt(ip: string): Promise<boolean> {
   return versuchErlaubt(`admin:${ip}`, LOGIN_MAX, LOGIN_FENSTER_MINUTEN);
+}
+
+/**
+ * Bremse je Admin-KONTO — zusätzlich zu der je IP-Adresse.
+ *
+ * Die Bremse darüber zählt je Absender-Adresse. Wer die Versuche über
+ * viele verschiedene Adressen verteilt, wird davon nicht gebremst:
+ * Jede Adresse bringt ihr eigenes Kontingent mit. Diese zweite Bremse
+ * zählt deshalb je Konto und begrenzt die Gesamtzahl der Versuche,
+ * ganz gleich, woher sie kommen.
+ *
+ * Die Grenze liegt bewusst HÖHER als die je Adresse (20 statt 10). So
+ * läuft ein Administrator, der sich mehrfach vertippt, zuerst in seine
+ * eigene Adressgrenze und sperrt sich nicht das Konto aus. Wer das
+ * Konto absichtlich sperrt, erreicht höchstens fünfzehn Minuten Pause
+ * — die Sperre läuft von selbst ab, es bleibt nichts zurück.
+ *
+ * Die E-Mail-Adresse wird NICHT im Klartext abgelegt: In der Tabelle
+ * landet nur ein Hash davon. Gezählt wird damit genauso zuverlässig,
+ * aber der Spam-Schutz sammelt keine Adressen, die er nicht braucht.
+ */
+export const LOGIN_KONTO_MAX = 20;
+
+/** Vorsilbe der Kennung — auch für die Prüfskripte nachvollziehbar. */
+export const LOGIN_KONTO_VORSILBE = "admin-konto:";
+
+export function loginKontoVersuchErlaubt(email: string): Promise<boolean> {
+  const abdruck = createHash("sha256").update(email).digest("hex").slice(0, 32);
+  return versuchErlaubt(
+    `${LOGIN_KONTO_VORSILBE}${abdruck}`,
+    LOGIN_KONTO_MAX,
+    LOGIN_FENSTER_MINUTEN,
+  );
 }

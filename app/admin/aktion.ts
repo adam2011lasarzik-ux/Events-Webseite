@@ -10,7 +10,7 @@ import { db } from "@/lib/db";
 import { passtPasswort, hashen } from "@/lib/passwort";
 import { sitzungStarten, sitzungBeenden } from "@/lib/adminAuth";
 import type { LoginErgebnis } from "@/lib/adminLogin";
-import { loginVersuchErlaubt } from "@/lib/ratelimit";
+import { loginKontoVersuchErlaubt, loginVersuchErlaubt } from "@/lib/ratelimit";
 
 /**
  * Ein Blindwert, gegen den geprüft wird, wenn es die E-Mail-Adresse
@@ -32,6 +32,11 @@ function text(wert: FormDataEntryValue | null): string {
   return typeof wert === "string" ? wert : "";
 }
 
+/* Dieselbe Meldung für BEIDE Bremsen. Welche von ihnen gegriffen hat,
+   geht den Absender nichts an — und als Konstante können die beiden
+   Texte nicht auseinanderlaufen. */
+const ZU_VIELE = "Zu viele Anmeldeversuche. Bitte in einigen Minuten noch einmal versuchen.";
+
 export async function anmelden(
   _bisher: LoginErgebnis,
   formular: FormData,
@@ -44,11 +49,23 @@ export async function anmelden(
     kopf.get("x-forwarded-for")?.split(",")[0]?.trim() || kopf.get("x-real-ip") || "unbekannt";
 
   if (!(await loginVersuchErlaubt(ip))) {
-    return { meldung: "Zu viele Anmeldeversuche. Bitte in einigen Minuten noch einmal versuchen." };
+    return { meldung: ZU_VIELE };
   }
 
   if (!email || !passwort) {
     return { meldung: "Bitte E-Mail-Adresse und Passwort angeben." };
+  }
+
+  /* Zweite Bremse, diesmal je Konto statt je Adresse. Sie fängt genau
+     den Fall, den die erste nicht sieht: Versuche, die über viele
+     verschiedene Adressen verteilt kommen.
+
+     Bewusst AUCH für unbekannte Adressen und bewusst VOR dem Blick in
+     die Datenbank: Würde nur bei vorhandenen Konten gezählt, verriete
+     die Sperre, welche Adressen es gibt — genau das, was die
+     einheitliche Fehlermeldung weiter unten verhindern soll. */
+  if (!(await loginKontoVersuchErlaubt(email))) {
+    return { meldung: ZU_VIELE };
   }
 
   const admin = await db.adminUser.findUnique({ where: { email } });

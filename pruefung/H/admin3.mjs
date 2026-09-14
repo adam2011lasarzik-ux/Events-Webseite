@@ -49,9 +49,54 @@ pruefe("Nach 10 Fehlversuchen greift die Bremse", gebremst === 3,
 
 // Die Bremse des Adminbereichs darf die des Anmeldeformulars nicht leeren.
 const kennungen = await db.anmeldeVersuch.groupBy({ by: ["kennung"], _count: true });
-pruefe("Die Bremse zählt unter eigener Kennung (admin:…)",
-  kennungen.every((k) => k.kennung.startsWith("admin:")),
+pruefe("Die Bremsen zählen unter eigenen Kennungen (admin:… / admin-konto:…)",
+  kennungen.every(
+    (k) => k.kennung.startsWith("admin:") || k.kennung.startsWith("admin-konto:"),
+  ),
   kennungen.map((k) => `${k.kennung}=${k._count}`).join(", "));
+
+// ── Bremse je KONTO, über viele Adressen hinweg ────────────────
+/* Die Bremse oben zählt je Absender-Adresse. Wer über viele Adressen
+   verteilt probiert, umgeht sie vollständig: Jede Adresse bringt ihr
+   eigenes Kontingent mit. Genau dieser Fall wird hier nachgestellt —
+   23 Versuche von 23 VERSCHIEDENEN Adressen, alle auf dasselbe Konto.
+   Ohne die Konto-Bremse käme kein einziger davon durch die Sperre. */
+await db.anmeldeVersuch.deleteMany({});
+const KONTO_MAX = 20;
+let kontoGebremst = 0;
+for (let i = 1; i <= KONTO_MAX + 3; i += 1) {
+  const r = await anmelden(
+    "test-admin@vera.example",
+    "immer-falsch-lang",
+    `198.51.100.${i}`,
+  );
+  if (r.antwort.text.includes("Zu viele Anmeldeversuche")) kontoGebremst += 1;
+}
+pruefe(
+  `Nach ${KONTO_MAX} Versuchen greift die Bremse auch über verschiedene IP-Adressen`,
+  kontoGebremst === 3,
+  `${kontoGebremst} von ${KONTO_MAX + 3} abgewiesen`,
+);
+
+const kontoKennungen = await db.anmeldeVersuch.groupBy({ by: ["kennung"], _count: true });
+const kontoZaehler = kontoKennungen.filter((k) => k.kennung.startsWith("admin-konto:"));
+pruefe("… unter genau EINER Konto-Kennung, unabhängig von der Adresse",
+  kontoZaehler.length === 1 && kontoZaehler[0]._count === KONTO_MAX,
+  kontoZaehler.map((k) => `${k.kennung}=${k._count}`).join(", ") || "keine");
+
+/* Datenschutz: Der Spam-Schutz braucht keine E-Mail-Adressen. In der
+   Tabelle darf deshalb nur ein Hash stehen, nicht die Adresse selbst. */
+const alleKennungen = (await db.anmeldeVersuch.findMany({ select: { kennung: true } }))
+  .map((k) => k.kennung);
+pruefe("Die E-Mail-Adresse steht NICHT im Klartext in der Bremsen-Tabelle",
+  alleKennungen.every((k) => !k.includes("test-admin") && !k.includes("@")));
+
+/* Eine Sperre darf immer nur das eine Konto treffen. Sonst könnte
+   jemand mit einer erfundenen Adresse den echten Zugang mitsperren. */
+const anderes = await anmelden("zweiter-admin@vera.example", "immer-falsch-lang", "203.0.113.7");
+pruefe("Ein anderes Konto ist von der Sperre NICHT betroffen",
+  !anderes.antwort.text.includes("Zu viele Anmeldeversuche"),
+  anderes.antwort.text.includes("stimmt nicht") ? "normale Absage" : "unerwartete Antwort");
 
 // ── Abmelden ───────────────────────────────────────────────────
 await db.anmeldeVersuch.deleteMany({});
