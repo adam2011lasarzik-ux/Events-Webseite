@@ -8,6 +8,7 @@
 
 import { db } from "@/lib/db";
 import { aktuellerAdmin } from "@/lib/adminAuth";
+import { protokolliere, PROTOKOLL_AKTIONEN } from "@/lib/adminProtokoll";
 import { anmeldungenZuEvent } from "@/lib/adminDaten";
 import { alsLesbar } from "@/lib/zeit";
 
@@ -40,7 +41,8 @@ export async function GET(
   // Kein redirect() wie bei den Seiten: Hier ist eine klare Absage
   // richtig, damit niemand aus Versehen eine HTML-Seite als Tabelle
   // herunterlädt.
-  if (!(await aktuellerAdmin())) {
+  const admin = await aktuellerAdmin();
+  if (!admin) {
     return new Response("Nicht angemeldet.", { status: 401 });
   }
 
@@ -95,6 +97,18 @@ export async function GET(
   // liest. Ohne es steht dort „Schler".
   const inhalt = "﻿" + zeilen.join("\r\n") + "\r\n";
   const datum = new Date().toISOString().slice(0, 10);
+
+  /* Der Export ist die Stelle, an der Teilnehmerdaten das System
+     verlassen — als Datei, die danach niemand mehr nachverfolgen
+     kann. Genau deshalb gehört er ins Protokoll. Festgehalten wird
+     nur, WIE VIELE Zeilen herausgingen, nicht welche. */
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.csvExport,
+    zielArt: "Event",
+    zielId: id,
+    detail: `${anmeldungen.length} Anmeldungen, ${zeilen.length - 1} Zeilen`,
+  });
 
   return new Response(inhalt, {
     headers: {

@@ -18,6 +18,7 @@
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { verlangeAdmin } from "@/lib/adminAuth";
+import { protokolliere, PROTOKOLL_AKTIONEN } from "@/lib/adminProtokoll";
 import { pruefeGruender, type GruenderErgebnis } from "@/lib/gruenderFormular";
 import { EINSTELLUNGEN_ID } from "@/lib/einstellungen";
 import { bildAblegen, bildLoeschen } from "@/lib/bilder";
@@ -44,7 +45,7 @@ export async function gruenderSpeichern(
   _bisher: GruenderErgebnis,
   formular: FormData,
 ): Promise<GruenderErgebnis> {
-  await verlangeAdmin();
+  const admin = await verlangeAdmin();
 
   const geprueft = pruefeGruender(alsRoh(formular));
   if (geprueft.fehler) return { fehler: geprueft.fehler };
@@ -99,6 +100,12 @@ export async function gruenderSpeichern(
   // Erst jetzt, wo alles sicher gespeichert ist: die vorherige Fassung
   // vom Datenträger nehmen.
   if (altesLoeschen && altesLoeschen !== gruenderBildUrl) await bildLoeschen(altesLoeschen);
+
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.einstellungenGespeichert,
+    zielArt: "Einstellungen",
+  });
 
   redirect("/admin/einstellungen?gespeichert=1");
 }

@@ -430,6 +430,44 @@ model ZahlungsEreignis {
   empfangenAm DateTime @default(now())
 }
 
+/// Wer hat wann was im Adminbereich getan.
+///
+/// Zweck: Ein Zugriff auf Teilnehmerdaten — ansehen, ändern, löschen,
+/// exportieren — soll nachvollziehbar sein. Ohne das lässt sich nach
+/// einem Vorfall nicht sagen, was passiert ist; einmal mussten wir
+/// dafür bereits eine verschlüsselte Sicherung entschlüsseln.
+///
+/// Bewusst OHNE Personendaten der Teilnehmer: Es stehen nur Kennungen
+/// darin, keine Namen, keine E-Mail-Adressen, keine Telefonnummern.
+/// Ein Protokoll, das selbst zur Datensammlung wird, verschlimmert
+/// genau das Problem, das es lösen soll.
+///
+/// Bewusst OHNE Fremdschlüssel auf AdminUser: Wird ein Zugang
+/// entfernt, soll sein Protokoll bestehen bleiben. Ein Protokoll, das
+/// sich mit dem Handelnden zusammen löschen lässt, ist keines.
+model AdminProtokoll {
+  id        String   @id @default(cuid())
+  zeitpunkt DateTime @default(now())
+
+  /// Wer gehandelt hat — nur die Kennung. Die E-Mail-Adresse steht
+  /// bereits in AdminUser und wird hier nicht noch einmal abgelegt.
+  adminId String
+
+  /// Was getan wurde, z. B. "anmeldung.status" oder "csv.export".
+  aktion String
+
+  /// Woran: Art und Kennung des betroffenen Datensatzes.
+  zielArt String?
+  zielId  String?
+
+  /// Kurzer, personenfreier Zusatz — etwa der neue Status oder eine
+  /// Anzahl. Niemals ein Name und niemals eine Adresse.
+  detail String?
+
+  @@index([zeitpunkt])
+  @@index([adminId, zeitpunkt])
+}
+
 // ── Missbrauchsschutz ────────────────────────────────────────────
 
 /// Zählt Anmeldeversuche, um Massen-Einsendungen zu bremsen.

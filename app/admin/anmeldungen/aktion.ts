@@ -12,6 +12,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { verlangeAdmin } from "@/lib/adminAuth";
+import { protokolliere, PROTOKOLL_AKTIONEN } from "@/lib/adminProtokoll";
 import { stornoDurchAdmin } from "@/lib/stornoAusfuehren";
 
 const ANMELDE_STATUS = ["BESTAETIGT", "WARTELISTE", "STORNIERT"] as const;
@@ -35,7 +36,7 @@ function auffrischen(eventId: string) {
 }
 
 export async function statusSetzen(formular: FormData): Promise<void> {
-  await verlangeAdmin();
+  const admin = await verlangeAdmin();
 
   const id = text(formular.get("anmeldungId"));
   const neu: AnmeldeStatus | null = ausListe(ANMELDE_STATUS, text(formular.get("status")));
@@ -62,11 +63,19 @@ export async function statusSetzen(formular: FormData): Promise<void> {
     },
   });
 
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.anmeldungStatus,
+    zielArt: "Registration",
+    zielId: id,
+    detail: `${vorhanden.status} → ${neu}`,
+  });
+
   auffrischen(vorhanden.eventId);
 }
 
 export async function zahlungSetzen(formular: FormData): Promise<void> {
-  await verlangeAdmin();
+  const admin = await verlangeAdmin();
 
   const id = text(formular.get("anmeldungId"));
   const neu: ZahlungsStatus | null = ausListe(ZAHLUNGS_STATUS, text(formular.get("zahlungsStatus")));
@@ -96,6 +105,14 @@ export async function zahlungSetzen(formular: FormData): Promise<void> {
     },
   });
 
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.anmeldungZahlung,
+    zielArt: "Registration",
+    zielId: id,
+    detail: `${vorhanden.zahlungsStatus} → ${neu}`,
+  });
+
   auffrischen(vorhanden.eventId);
 }
 
@@ -114,7 +131,7 @@ export async function zahlungSetzen(formular: FormData): Promise<void> {
  * deshalb auch niemand mehr löscht.
  */
 export async function anonymisieren(formular: FormData): Promise<void> {
-  await verlangeAdmin();
+  const admin = await verlangeAdmin();
 
   const id = text(formular.get("anmeldungId"));
   if (!id) return;
@@ -151,6 +168,17 @@ export async function anonymisieren(formular: FormData): Promise<void> {
     });
   });
 
+  /* Hier ist das Protokoll besonders wichtig: Nach dem
+     Anonymisieren lässt sich aus der Anmeldung selbst nicht mehr
+     ablesen, dass und wann jemand sie entfernt hat. Der Eintrag hält
+     genau das fest — ohne Namen, nur mit der Kennung. */
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.anmeldungAnonymisiert,
+    zielArt: "Registration",
+    zielId: id,
+  });
+
   auffrischen(vorhanden.eventId);
 }
 
@@ -170,7 +198,7 @@ export async function anonymisieren(formular: FormData): Promise<void> {
  * unveraendert bestehen und der Veranstalter bekommt es zu sehen.
  */
 export async function stornierenUndErstatten(formular: FormData): Promise<void> {
-  await verlangeAdmin();
+  const admin = await verlangeAdmin();
 
   const id = text(formular.get("anmeldungId"));
   if (!id) return;
@@ -192,6 +220,14 @@ export async function stornierenUndErstatten(formular: FormData): Promise<void> 
       ? "erstattet"
       : "storniert"
     : `fehler-${ergebnis.fehler}`;
+
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.anmeldungStorniert,
+    zielArt: "Registration",
+    zielId: id,
+    detail: hinweis,
+  });
 
   redirect(`/admin/events/${vorhanden.eventId}/anmeldungen?hinweis=${hinweis}`);
 }

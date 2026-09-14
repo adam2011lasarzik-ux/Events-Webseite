@@ -12,6 +12,7 @@
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { verlangeAdmin } from "@/lib/adminAuth";
+import { protokolliere, PROTOKOLL_AKTIONEN } from "@/lib/adminProtokoll";
 import { pruefeEvent, type EventErgebnis } from "@/lib/eventFormular";
 import { bildAblegen, bildLoeschen } from "@/lib/bilder";
 
@@ -38,7 +39,7 @@ export async function eventSpeichern(
   _bisher: EventErgebnis,
   formular: FormData,
 ): Promise<EventErgebnis> {
-  await verlangeAdmin();
+  const admin = await verlangeAdmin();
 
   const id = text(formular.get("eventId"));
   const geprueft = pruefeEvent(alsRoh(formular));
@@ -133,6 +134,14 @@ export async function eventSpeichern(
   // vom Datenträger nehmen.
   if (altesLoeschen && altesLoeschen !== bildUrl) await bildLoeschen(altesLoeschen);
 
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.eventGespeichert,
+    zielArt: "Event",
+    zielId: eventId,
+    detail: id ? "geändert" : "neu angelegt",
+  });
+
   redirect(`/admin/events/${eventId}?gespeichert=1`);
 }
 
@@ -145,7 +154,7 @@ export async function eventSpeichern(
  * „Archiviert" der richtige Weg.
  */
 export async function eventEntfernen(formular: FormData): Promise<void> {
-  await verlangeAdmin();
+  const admin = await verlangeAdmin();
   const id = text(formular.get("eventId"));
   if (!id) redirect("/admin");
 
@@ -160,5 +169,13 @@ export async function eventEntfernen(formular: FormData): Promise<void> {
   await db.eventAbschnitt.deleteMany({ where: { eventId: id } });
   await db.event.delete({ where: { id } });
   await bildLoeschen(event?.bildUrl ?? null);
+
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.eventEntfernt,
+    zielArt: "Event",
+    zielId: id,
+  });
+
   redirect("/admin");
 }
