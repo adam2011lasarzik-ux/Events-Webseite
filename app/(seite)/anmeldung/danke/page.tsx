@@ -118,7 +118,10 @@ export default async function AbschlussSeite({
   const anmeldung = nr
     ? await db.registration.findUnique({
         where: { id: nr },
-        include: { event: true, teilnehmer: true },
+        // Nur die ANZAHL der Teilnehmer wird gebraucht (siehe unten) —
+        // ihre Namen werden hier bewusst nicht mehr geladen, nicht nur
+        // nicht mehr angezeigt.
+        include: { event: true, _count: { select: { teilnehmer: true } } },
       })
     : null;
 
@@ -135,7 +138,7 @@ export default async function AbschlussSeite({
     );
   }
 
-  const personen = anmeldung.teilnehmer.length;
+  const personen = anmeldung._count.teilnehmer;
   const mehrere = personen > 1;
   const kostenlos = anmeldung.gesamtpreisCents <= 0;
   const bezahlt = anmeldung.zahlungsStatus === "BEZAHLT" || kostenlos;
@@ -202,9 +205,13 @@ export default async function AbschlussSeite({
         </div>
         <div>
           <dt><strong>{t.danke.personen}:</strong></dt>
-          <dd style={{ margin: 0 }}>
-            {anmeldung.teilnehmer.map((p) => `${p.vorname} ${p.nachname}`).join(", ")}
-          </dd>
+          {/* Nur die Anzahl, keine Namen — dieselbe Zurückhaltung wie auf
+              der Storno-Seite (storno.personen). Die Seite ist über eine
+              unratbare, aber nicht geheime Kennung erreichbar (siehe
+              generateMetadata oben); die Projektvorgabe „nur das
+              Nötigste" verlangt hier bewusst weniger als den vollen
+              Namen jedes Teilnehmers. */}
+          <dd style={{ margin: 0 }}>{personen}</dd>
         </div>
         <div>
           <dt><strong>{t.danke.betrag}:</strong></dt>

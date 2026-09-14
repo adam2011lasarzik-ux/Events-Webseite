@@ -143,6 +143,15 @@ await frischeLage();
   pruefe("2 · Familienpaket ist danach bestätigt und bezahlt",
     nach.status === "BESTAETIGT" && nach.zahlungsStatus === "BEZAHLT");
   pruefe("3 · … und belegt weiterhin genau vier Plätze", (await belegteJetzt()) === 4);
+
+  /* Sicherheitsfund E aus der Prüfung des Adminbereichs: Die
+     Bestätigungsseite ist über eine unratbare, aber nicht geheime
+     Anmeldenummer erreichbar (die per E-Mail verschickt wird). Sie
+     darf deshalb nur die Personenzahl zeigen, keine Namen. */
+  const bestaetigung = alsText(await (await fetch(`${BASIS}/anmeldung/danke?nr=${a.anmeldung.id}`)).text());
+  pruefe("Sicherheit · Bestätigungsseite zeigt die Personenzahl", bestaetigung.includes("4"));
+  pruefe("Sicherheit · … aber KEINE Teilnehmernamen",
+    !["Mama", "Papa", "Muster", "Eins", "Zwei"].some((name) => bestaetigung.includes(name)));
 }
 
 // ── 5.–7. Abbruch und zweiter Anlauf ───────────────────────────
