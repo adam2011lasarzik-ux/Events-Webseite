@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { abmelden } from "@/app/admin/aktion";
+import { abmelden, ueberallAbmelden } from "@/app/admin/aktion";
 import type { AngemeldeterAdmin } from "@/lib/adminAuth";
 import stil from "@/app/admin/admin.module.css";
 
@@ -42,6 +42,19 @@ export function AdminRahmen({
             <form action={abmelden}>
               <button type="submit" className={stil.abmelden}>
                 Abmelden
+              </button>
+            </form>
+            {/* Der Notausgang, wenn ein Gerät abhandengekommen ist:
+                beendet die Anmeldung auf ALLEN Geräten, nicht nur
+                hier. Bewusst unscheinbarer gesetzt als der normale
+                Knopf — er ist der seltenere Fall. */}
+            <form action={ueberallAbmelden}>
+              <button
+                type="submit"
+                className={stil.abmeldenAlle}
+                title="Beendet die Anmeldung auf allen Geräten"
+              >
+                Überall abmelden
               </button>
             </form>
           </div>

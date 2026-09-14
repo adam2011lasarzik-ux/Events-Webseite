@@ -8,7 +8,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { passtPasswort, hashen } from "@/lib/passwort";
-import { sitzungStarten, sitzungBeenden } from "@/lib/adminAuth";
+import { sitzungStarten, sitzungBeenden, alleSitzungenBeenden, verlangeAdmin } from "@/lib/adminAuth";
+import { protokolliere, PROTOKOLL_AKTIONEN } from "@/lib/adminProtokoll";
 import type { LoginErgebnis } from "@/lib/adminLogin";
 import { loginKontoVersuchErlaubt, loginVersuchErlaubt } from "@/lib/ratelimit";
 
@@ -93,4 +94,30 @@ export async function anmelden(
 export async function abmelden(): Promise<void> {
   await sitzungBeenden();
   redirect("/admin/login");
+}
+
+/**
+ * Auf allen Geräten abmelden.
+ *
+ * Beendet jede offene Sitzung dieses Zugangs, nicht nur die des
+ * eigenen Browsers. Gedacht für den Fall, dass ein Gerät verloren
+ * geht — oder einfach für das gute Gefühl, nach der Arbeit an einem
+ * fremden Rechner alles hinter sich zuzumachen.
+ *
+ * Die Zugangsprüfung steht auch hier am Anfang: Ohne Sitzung soll
+ * niemand fremde Sitzungen beenden können. Das wäre zwar kein
+ * Datendiebstahl, aber eine bequeme Art, den Betreiber aus seinem
+ * eigenen Bereich auszusperren.
+ */
+export async function ueberallAbmelden(): Promise<void> {
+  const admin = await verlangeAdmin();
+  const anzahl = await alleSitzungenBeenden(admin.id);
+
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.zugangUeberallAbgemeldet,
+    detail: `${anzahl} Sitzung(en) beendet`,
+  });
+
+  redirect("/admin/login?abgemeldet=alle");
 }

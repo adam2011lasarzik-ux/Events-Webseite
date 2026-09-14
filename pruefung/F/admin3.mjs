@@ -125,6 +125,92 @@ const nachWechsel = await hole("/admin", s2.cookie);
 pruefe("Passwortwechsel beendet offene Sitzungen", nachWechsel.ziel === "/admin/login",
   `Ziel ${nachWechsel.ziel ?? "—"}`);
 
+// ── Sitzungsdauer ──────────────────────────────────────────────
+/* Eine zu lange Sitzung ist der Grund, warum ein einmal abgegriffenes
+   Cookie tagelang weiterwirkt. Geprüft wird die tatsächlich in der
+   Datenbank hinterlegte Frist, nicht die Konstante im Code. */
+await db.adminSession.deleteMany({});
+const sDauer = await anmelden("test-admin@vera.example", RICHTIG, "192.0.2.30");
+const frisch = await db.adminSession.findFirstOrThrow({ orderBy: { id: "desc" } });
+const tage = (frisch.laeuftAbAm.getTime() - Date.now()) / 86_400_000;
+pruefe("Eine neue Sitzung läuft nach höchstens zwei Tagen ab",
+  tage > 1.9 && tage < 2.1, `${tage.toFixed(2)} Tage`);
+/* Bewusst eine Grenze, die 2 von 7 wirklich unterscheidet: „< 7"
+   wäre auch bei sieben Tagen erfüllt, weil zwischen dem Anlegen der
+   Sitzung und dieser Messung Zeit vergeht. */
+pruefe("… und nicht mehr eine ganze Woche wie früher", tage < 3,
+  `${tage.toFixed(2)} Tage, früher 7`);
+
+// ── Überall abmelden ───────────────────────────────────────────
+/* Der Notausgang bei einem verlorenen Gerät. Nachgestellt mit zwei
+   Anmeldungen von zwei Adressen — also zwei „Geräten". */
+const geraetA = sDauer;
+const geraetB = await anmelden("test-admin@vera.example", RICHTIG, "192.0.2.31");
+pruefe("Zwei Geräte sind gleichzeitig angemeldet",
+  geraetA.cookie !== null && geraetB.cookie !== null &&
+  (await db.adminSession.count()) === 2,
+  `${await db.adminSession.count()} Sitzungen`);
+
+/* Ein zweiter Zugang, der NICHT betroffen sein darf. Sonst wäre der
+   Knopf eine bequeme Art, andere auszusperren. */
+/* Erst wegräumen, falls ein abgebrochener Lauf ihn stehen ließ —
+   sonst scheitert der nächste Lauf an der doppelten Adresse, und der
+   Grund wäre im Ergebnis nicht zu sehen. */
+await db.adminSession.deleteMany({ where: { admin: { email: "fremd-sitzung@vera.example" } } });
+await db.adminUser.deleteMany({ where: { email: "fremd-sitzung@vera.example" } });
+const fremd = await db.adminUser.create({
+  data: { email: "fremd-sitzung@vera.example", passwortHash: "scrypt$0$0$0$x$x" },
+});
+await db.adminSession.create({
+  data: {
+    adminId: fremd.id,
+    tokenHash: "nur-zum-mitzaehlen-kein-echter-hash",
+    laeuftAbAm: new Date(Date.now() + 86_400_000),
+  },
+});
+
+const adminSeite = await hole("/admin", geraetA.cookie);
+const alleFelder = actionFelder(adminSeite.html, "Überall abmelden");
+const antwort = await sende("/admin", alleFelder, {}, geraetA.cookie);
+
+const eigene = await db.adminSession.count({ where: { admin: { email: "test-admin@vera.example" } } });
+pruefe("„Überall abmelden“ entfernt ALLE eigenen Sitzungen", eigene === 0,
+  `${eigene} übrig`);
+pruefe("… und bestätigt es auf der Anmeldeseite",
+  antwort.ziel === "/admin/login?abgemeldet=alle", `Ziel ${antwort.ziel ?? "—"}`);
+
+const aWeg = await hole("/admin", geraetA.cookie);
+const bWeg = await hole("/admin", geraetB.cookie);
+pruefe("… beide Geräte sind ausgesperrt, nicht nur das eine",
+  aWeg.ziel === "/admin/login" && bWeg.ziel === "/admin/login",
+  `A ${aWeg.ziel ?? "—"}, B ${bWeg.ziel ?? "—"}`);
+
+pruefe("… die Sitzung eines ANDEREN Zugangs bleibt bestehen",
+  (await db.adminSession.count({ where: { adminId: fremd.id } })) === 1);
+
+const protokoll = await db.adminProtokoll.findMany({
+  where: { aktion: "zugang.ueberall-abgemeldet" },
+});
+pruefe("… und der Vorgang steht im Protokoll", protokoll.length === 1,
+  protokoll[0]?.detail ?? "kein Eintrag");
+
+/* Ohne Sitzung darf niemand fremde Sitzungen beenden. */
+await db.adminSession.deleteMany({ where: { adminId: fremd.id } });
+await db.adminSession.create({
+  data: {
+    adminId: fremd.id,
+    tokenHash: "zweiter-zaehler-kein-echter-hash",
+    laeuftAbAm: new Date(Date.now() + 86_400_000),
+  },
+});
+await sende("/admin", alleFelder, {}, null);
+pruefe("Ohne Sitzung beendet der Aufruf gar nichts",
+  (await db.adminSession.count({ where: { adminId: fremd.id } })) === 1);
+
+await db.adminSession.deleteMany({ where: { adminId: fremd.id } });
+await db.adminUser.delete({ where: { id: fremd.id } });
+await db.adminProtokoll.deleteMany({});
+
 // ── Kein Klartext-Passwort in der Datenbank ────────────────────
 const admin = await db.adminUser.findFirstOrThrow();
 pruefe("In der Datenbank steht nur ein scrypt-Hash",

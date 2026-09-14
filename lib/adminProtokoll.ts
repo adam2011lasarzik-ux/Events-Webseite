@@ -38,6 +38,7 @@ export const PROTOKOLL_AKTIONEN = {
   eventEntfernt: "event.entfernt",
   einstellungenGespeichert: "einstellungen.gespeichert",
   csvExport: "csv.export",
+  zugangUeberallAbgemeldet: "zugang.ueberall-abgemeldet",
 } as const;
 
 export type ProtokollAktion = (typeof PROTOKOLL_AKTIONEN)[keyof typeof PROTOKOLL_AKTIONEN];

@@ -63,6 +63,28 @@
 }
 .abmelden:hover { background: rgba(255,255,255,0.1); }
 
+/* Der seltenere Weg: als Textknopf, damit er den gewohnten
+   Abmelden-Knopf nicht verdrängt. */
+.abmeldenAlle {
+  background: none;
+  border: none;
+  color: var(--text-invers);
+  font: inherit;
+  font-size: var(--gr-xs);
+  opacity: 0.75;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0.35rem 0;
+}
+.abmeldenAlle:hover { opacity: 1; }
+
+.loginHinweis {
+  margin: 0 0 var(--a-4);
+  font-size: var(--gr-xs);
+  color: var(--text-leise);
+  text-align: center;
+}
+
 .inhalt {
   max-width: var(--breite);
   margin: 0 auto;

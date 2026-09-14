@@ -27,8 +27,17 @@ import { redirect } from "next/navigation";
 import { db } from "./db";
 
 const COOKIE = "vera_admin";
-/** Wie lange eine Anmeldung gilt, bevor sie erneut nötig wird. */
-export const SITZUNG_TAGE = 7;
+/**
+ * Wie lange eine Anmeldung gilt, bevor sie erneut nötig wird.
+ *
+ * Zwei Tage statt der früheren sieben. Der Grund ist einfach: Ein
+ * Cookie, das jemandem in die Hände fällt, funktioniert genau so
+ * lange, wie diese Zahl sagt — eine Woche ist dafür zu großzügig.
+ * Zwei Tage sind kurz genug, dass ein abhandengekommener Zugang
+ * schnell wertlos wird, und lang genug, dass man sich nicht bei jedem
+ * Blick in die Anmeldungen neu anmelden muss.
+ */
+export const SITZUNG_TAGE = 2;
 
 const alsHash = (schluessel: string) =>
   createHash("sha256").update(schluessel).digest("hex");
@@ -81,6 +90,28 @@ export async function sitzungBeenden(): Promise<void> {
     await db.adminSession.deleteMany({ where: { tokenHash: alsHash(schluessel) } });
   }
   keks.delete(COOKIE);
+}
+
+/**
+ * Beendet ALLE Sitzungen dieses Zugangs — auf jedem Gerät.
+ *
+ * Der Notausgang für den Fall, dass ein Gerät verloren geht oder der
+ * Verdacht besteht, dass jemand mitliest. Bisher ging das nur über
+ * einen Passwortwechsel auf der Kommandozeile des Servers — also
+ * ausgerechnet dann nicht, wenn man unterwegs ist und kein Terminal
+ * zur Hand hat.
+ *
+ * Weil die Sitzungen in der Datenbank stehen und im Cookie nur ein
+ * Schlüssel, genügt dafür ein Löschen: Jedes andere Gerät fällt beim
+ * nächsten Klick auf das Anmeldeformular zurück. Bei einem bloß
+ * signierten Cookie ginge das nicht — es gälte bis zum Ablaufdatum
+ * weiter, ganz gleich, was der Server davon hält.
+ */
+export async function alleSitzungenBeenden(adminId: string): Promise<number> {
+  const weg = await db.adminSession.deleteMany({ where: { adminId } });
+  // Auch das Cookie dieses Geräts wegnehmen — es zeigt jetzt ins Leere.
+  (await cookies()).delete(COOKIE);
+  return weg.count;
 }
 
 /**
