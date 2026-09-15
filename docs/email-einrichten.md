@@ -159,7 +159,24 @@ eine **echte** Anmeldung auf der Webseite, gemeinsam durchgeklickt:
 |---|---|---|
 | Bestätigung an die anmeldende Person, kostenloser Weg | **angekommen** | im Postfach gesehen |
 | Admin-Benachrichtigung „Neue Anmeldung" | **verschickt, kein Fehlschlag** | Protokoll, siehe unten |
-| Zahlungsbestätigung | **offen** | braucht die echte Testzahlung (Phase 12) |
+| Zahlungsbestätigung | **angekommen** | im Postfach gesehen, bestätigt am 15.09.2026 |
+
+**Zur Zahlungsbestätigung.** Die echte Testzahlung selbst fand am
+13.09.2026 statt (siehe „Ergebnis vom 13.09.2026" in
+`docs/stripe-einrichten.md` — drei `checkout.session.completed` in der
+Produktivdatenbank, signaturgeprüft). Ob die dabei verschickte
+Zahlungsbestätigung tatsächlich ankam, liess sich im Nachhinein nicht
+mehr sicher sagen; am 15.09.2026 hat der Betreiber sein Postfach direkt
+geprüft und den Eingang bestätigt. Das ist der stärkere Beleg als ein
+Protokolleintrag: Das Journal zeigt nur, dass der Versand nicht
+fehlgeschlagen ist — der Blick ins Postfach zeigt, dass die Mail
+tatsächlich dort liegt.
+
+Damit sind jetzt alle drei Mailarten aus diesem Abschnitt belegt
+angekommen. Offen bleibt weiterhin nur, was in keinem Fall aus dem
+Server ablesbar ist: Spam-Einordnung oder ein späterer Bounce — dafür
+gibt es keine Methode außer dem eigenen Blick ins Postfach, der hier
+bereits erfolgt ist.
 
 **Wie die Admin-Benachrichtigung belegt ist.** Sie liess sich im
 Nachhinein nicht mehr aus der Erinnerung sagen, deshalb wurde am

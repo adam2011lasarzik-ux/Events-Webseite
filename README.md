@@ -464,11 +464,11 @@ hinterlegt ist und das Postfach die Verbindung annimmt, beantwortet:
 npm run mail:pruefen
 ```
 
-**Der Versand ist am 14.09.2026 im Echtbetrieb geprüft worden** —
-kostenloser Anmeldeweg, Bestätigung und Admin-Benachrichtigung. Was
-dabei belegt wurde und was ausdrücklich noch offen ist (die
-Zahlungsbestätigung, die erst mit der echten Testzahlung kommt), steht
-unter „Ergebnis vom 14.09.2026" in derselben Datei.
+**Der Versand ist im Echtbetrieb geprüft worden** — kostenloser
+Anmeldeweg und Admin-Benachrichtigung am 14.09.2026, die
+Zahlungsbestätigung am 13.09.2026 verschickt und am 15.09.2026 im
+Postfach bestätigt. Alle drei Mailarten sind damit belegt angekommen —
+Einzelheiten unter „Ergebnis vom 14.09.2026" in derselben Datei.
 
 ## Was diese Version bewusst noch nicht kann
 
