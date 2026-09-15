@@ -450,6 +450,12 @@ hinterlegt ist und das Postfach die Verbindung annimmt, beantwortet:
 npm run mail:pruefen
 ```
 
+**Der Versand ist am 14.09.2026 im Echtbetrieb geprüft worden** —
+kostenloser Anmeldeweg, Bestätigung und Admin-Benachrichtigung. Was
+dabei belegt wurde und was ausdrücklich noch offen ist (die
+Zahlungsbestätigung, die erst mit der echten Testzahlung kommt), steht
+unter „Ergebnis vom 14.09.2026" in derselben Datei.
+
 ## Was diese Version bewusst noch nicht kann
 
 **Kein Echtbetrieb bei der Bezahlung.** Die Anbindung an Stripe steht,

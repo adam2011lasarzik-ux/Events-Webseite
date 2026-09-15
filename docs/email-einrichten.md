@@ -153,6 +153,44 @@ eine **echte** Anmeldung auf der Webseite, gemeinsam durchgeklickt:
    `MAIL_ADMIN_EMPFAENGER` ankommen.
 4. Testanmeldung danach im Adminbereich wieder entfernen.
 
+### Ergebnis vom 14.09.2026
+
+| Was | Stand | Beleg |
+|---|---|---|
+| Bestätigung an die anmeldende Person, kostenloser Weg | **angekommen** | im Postfach gesehen |
+| Admin-Benachrichtigung „Neue Anmeldung" | **verschickt, kein Fehlschlag** | Protokoll, siehe unten |
+| Zahlungsbestätigung | **offen** | braucht die echte Testzahlung (Phase 12) |
+
+**Wie die Admin-Benachrichtigung belegt ist.** Sie liess sich im
+Nachhinein nicht mehr aus der Erinnerung sagen, deshalb wurde am
+15.09.2026 das Protokoll des Dienstes gelesen:
+
+```
+journalctl -u vera --since "2026-09-14 00:00" --until "2026-09-15 00:00" \
+  | grep -i "Mail-Versand fehlgeschlagen"
+```
+
+Kein Treffer. **Das allein wäre wertlos** — ein leeres Ergebnis kann
+auch heissen, dass der Tag längst weggerotiert ist. Deshalb die
+Gegenprobe: Der 14.09. steht mit **5192 Zeilen** im Journal, und die
+älteste Zeile überhaupt stammt vom **12.09.** Der Tag liegt also
+vollständig vor und wurde nicht abgeschnitten; erst dadurch wird aus
+„nichts gefunden" ein „es gab nichts zu finden".
+
+Daraus folgt, dass die Admin-Mail hinausging: `mailSendenOhneAbbruch`
+protokolliert **jeden** echten Versandfehler (`lib/mail.ts`), die
+Admin-Benachrichtigung geht in `app/(seite)/anmeldung/aktion.ts`
+**vor** der Bestätigung an die anmeldende Person hinaus, und SMTP war
+an diesem Tag nachweislich vollständig eingerichtet — sonst wäre auch
+die Bestätigung nicht angekommen.
+
+**Was damit NICHT bewiesen ist:** dass die Mail im Posteingang gelandet
+ist. Das Protokoll endet bei der Annahme durch den Mailserver; was
+danach geschieht — Spam-Ordner, ein späterer Bounce — steht dort nicht.
+Dieselbe Unterscheidung wie beim Wächter in `docs/ueberwachung.md`: der
+Exit-Code sagte „gelaufen", nicht „angekommen"; bewiesen hat es erst
+der Blick ins Postfach.
+
 ---
 
 ## Der Sicherungs-Alarm
