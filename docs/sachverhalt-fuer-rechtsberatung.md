@@ -278,7 +278,35 @@ Für ein Löschverlangen gibt es eine eigene Funktion, die Namen, E-Mail
 und Telefonnummer **der Anmeldung und aller Teilnehmer** überschreibt;
 die Buchung bleibt als anonyme Zeile bestehen. **Eine automatische
 Löschfrist ist bisher nicht festgelegt.** Verschlüsselte
-Datenbanksicherungen werden derzeit 180 Tage aufbewahrt.
+Datenbanksicherungen werden derzeit 180 Tage aufbewahrt (Einzelheiten
+dazu im folgenden Absatz).
+
+**Datenbank-Sicherung bei einem Dritten (Backblaze B2).** Jede Nacht
+wird die gesamte Datenbank gesichert und zu **Backblaze B2**
+hochgeladen — einem Cloud-Speicherdienst des US-Unternehmens Backblaze,
+Inc. Dabei verlassen dieselben personenbezogenen Daten wie in der
+Datenbank (Namen, E-Mail-Adressen, Telefonnummern, Teilnehmerangaben,
+Zahlungsbezüge) einmal täglich den Server.
+
+Die Datei wird **vor** dem Hochladen mit einem `age`-Schlüsselpaar
+verschlüsselt; Backblaze erhält ausschließlich die verschlüsselte
+Datei, keinen Klartext. Der zum Entschlüsseln nötige geheime Schlüssel
+liegt **nicht** auf dem Server und **nicht** bei Backblaze, sondern
+ausschließlich im Passwort-Manager des Betreibers — Backblaze selbst
+kann die Sicherungen also nicht lesen.
+
+Hochgeladene Sicherungen sind 90 Tage lang durch eine Objektsperre vor
+Löschung geschützt (auch gegen jemanden, der Schreibzugriff auf das
+Konto erlangt); nach 180 Tagen räumt Backblaze ältere Sicherungen
+automatisch ab.
+
+**Offen für die Prüfung:** Backblaze bietet eine
+Auftragsverarbeitungsvereinbarung an; ob eine solche hier nötig ist und
+wie der Transfer in ein Drittland (USA) einzuordnen ist — trotz der
+Verschlüsselung, die einen lesenden Zugriff durch Backblaze technisch
+ausschließt —, gehört mit geprüft. Die genaue Speicherregion des
+verwendeten Buckets ist vom Betreiber noch zu bestätigen, bevor sie in
+der Datenschutzerklärung benannt wird.
 
 ---
 
@@ -339,10 +367,12 @@ irreführend wäre.
 Auf Grundlage von Abschnitt 7: Welche Rechtsgrundlagen sind je
 Verarbeitung anzugeben, welche Speicherdauern sind angemessen (es gibt
 bisher für die Anmeldedaten keine Löschfrist; für die Server-Protokolle
-gelten 14 Tage bzw. 7 Tage mit gekürzter IP-Adresse), und wie sind die
-beiden Dienstleister —
-**Stripe** und **UptimeRobot** — einzuordnen? Zu berücksichtigen: Es nehmen Minderjährige teil, und die
-Foto-Einwilligung ist getrennt und freiwillig.
+gelten 14 Tage bzw. 7 Tage mit gekürzter IP-Adresse, für Datenbank-
+Sicherungen bei Backblaze B2 180 Tage), und wie sind die drei
+Dienstleister — **Stripe**, **UptimeRobot** und **Backblaze B2** (siehe
+Abschnitt 7, Datenbank-Sicherung) — einzuordnen, insbesondere Backblaze
+als US-Unternehmen? Zu berücksichtigen: Es nehmen Minderjährige teil,
+und die Foto-Einwilligung ist getrennt und freiwillig.
 
 **Frage 3 — Eigene AGB: ja oder nein?**
 Falls ja, sollen sie insbesondere abdecken:
