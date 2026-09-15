@@ -22,7 +22,7 @@ sollst.
 | 4 | Testschlüssel heraussuchen und sicher ablegen | jetzt |
 | 5 | Webhook eintragen | **erst mit Domain** |
 | 6 | Werte beim Hoster hinterlegen und prüfen | **erst mit Hosting** |
-| 7 | Testzahlung durchklicken | **erst mit Hosting** |
+| 7 | Testzahlung durchklicken | **erledigt am 13.09.2026** |
 | 8 | Geschäftskonto als Auszahlungskonto | **erst nach der Gewerbeanmeldung** |
 
 Die Schritte 1–4 kosten nichts und brauchen keine Unternehmensdaten.
@@ -278,6 +278,44 @@ beliebige Ziffern. Name und Adresse: frei erfunden.
    die Daten neu eingegeben werden müssen
 6. Zweimal schnell tippen → nur **eine** Bezahlseite, keine doppelte
    Abbuchung
+
+### Ergebnis vom 13.09.2026 — durchgeführt und belegt
+
+Der Durchlauf hat stattgefunden. Beleg ist **nicht** die Erinnerung,
+sondern die Tabelle `ZahlungsEreignis` in der Produktivdatenbank. In
+die schreibt ausschließlich `app/zahlung/rueckmeldung/route.ts`, und
+zwar **erst nachdem die kryptografische Unterschrift von Stripe
+geprüft wurde**. Ein Eintrag dort beweist, dass Stripe den Server
+wirklich erreicht hat.
+
+Am 15.09.2026 lesend abgefragt:
+
+| Ereignis | Anzahl | Zeitraum |
+|---|---|---|
+| `checkout.session.completed` | **3** | 13.09.2026, 12:35–15:13 |
+| `charge.refunded` | **3** | 13.09.2026, 13:05–16:13 |
+| `checkout.session.expired` | 1 | 15.09.2026, 17:05 |
+
+**Alles im Testmodus:** Die gespeicherten Referenzen beginnen mit
+`cs_test_`, die Zahlungsabsicht mit `pi_3UFCw`. Kein einziges
+`cs_live_` — es ist zu keinem Zeitpunkt echtes Geld geflossen.
+Das Webhook-Geheimnis ist auf dem Server hinterlegt.
+
+Damit sind die beiden wichtigsten Wege Ende zu Ende bewiesen: **eine
+Zahlung geht durch und wird bestätigt**, und **eine Erstattung kommt
+an und wird verarbeitet**. Beides über Stripes echte Bezahlseite, nicht
+gegen die örtliche Attrappe.
+
+**Was dieser Beleg NICHT zeigt** — und was deshalb weiterhin nur durch
+die automatischen Prüflisten abgedeckt ist, nicht durch einen Klick auf
+der echten Seite:
+
+- der Abbruch (Punkt 3 oben) und die abgelehnte Karte (Punkt 4) — beide
+  erzeugen kein Webhook-Ereignis, hinterlassen also keine Spur in dieser
+  Tabelle
+- `checkout.session.async_payment_failed` (verspätet fehlgeschlagene
+  PayPal-Zahlung) ist nie eingetroffen — der Fall ist im Code behandelt
+  und durch Prüfliste `M` abgedeckt, aber nie echt ausgelöst worden
 
 ---
 

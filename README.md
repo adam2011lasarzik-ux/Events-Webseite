@@ -345,21 +345,20 @@ Attrappe des Anbieters. Aus der Entwicklungsumgebung heraus ist
 `api.stripe.com` netzseitig gesperrt (gemessen, nicht vermutet), deshalb
 die Attrappe.
 
-**Offen bleibt der Klick durch Stripes echte Bezahlseite** mit der
-Testkarte `4242 4242 4242 4242`, dazu ein Abbruch, eine fehlgeschlagene
-Karte und eine Test-Erstattung.
+**Der Klick durch Stripes echte Bezahlseite ist am 13.09.2026 erfolgt**
+und belegt: In der Produktivdatenbank stehen drei
+`checkout.session.completed` und drei `charge.refunded` — Ereignisse, die
+nur nach bestandener Signaturprüfung gespeichert werden. Alle Referenzen
+beginnen mit `cs_test_`, es ist kein echtes Geld geflossen. Einzelheiten
+unter „Ergebnis vom 13.09.2026" in `docs/stripe-einrichten.md`.
 
-Das war lange unmöglich, weil eine von außen erreichbare Adresse für die
-Rückmeldung fehlte. **Seit dem Hosting gilt das nicht mehr:**
-`https://veraevents.de` ist erreichbar, das Zertifikat steht, und die
-Route `/zahlung/rueckmeldung` wartet. Es fehlen nur noch zwei Eintragungen
-im Stripe-Bereich — die Webhook-Adresse und das `whsec_`-Geheimnis als
-Umgebungsvariable auf dem Server. `npm run zahlung:pruefen` sagt jederzeit,
-welche der drei Angaben noch fehlt.
+Nicht durch einen echten Klick abgedeckt, sondern weiterhin nur durch die
+Prüflisten: der **Abbruch** und die **abgelehnte Karte** — beide erzeugen
+kein Webhook-Ereignis und hinterlassen deshalb keine nachprüfbare Spur.
 
-Der **Testmodus-Riegel bleibt geschlossen**, bis dieser Durchlauf
-vollständig geglückt ist und die Rechtstexte vorliegen. Ein Schlüssel, der
-nicht mit `sk_test_` beginnt, wird abgewiesen.
+Der **Testmodus-Riegel bleibt geschlossen**, bis die Rechtstexte vorliegen
+und der Echtbetrieb bewusst freigeschaltet wird. Ein Schlüssel, der nicht
+mit `sk_test_` beginnt, wird abgewiesen.
 
 ## Der Gründerbereich
 

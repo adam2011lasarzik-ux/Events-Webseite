@@ -140,9 +140,10 @@ anlegt.
 
 ## Was diese Prüfungen NICHT abdecken
 
-- **Der Klick durch Stripes echte Bezahlseite.** Dafür braucht es eine
-  öffentlich erreichbare Adresse — also das Hosting. Siehe
-  `docs/stripe-einrichten.md`.
+- **Der Klick durch Stripes echte Bezahlseite.** Diese Listen prüfen
+  gegen eine örtliche Attrappe. Der Durchlauf über die echte Bezahlseite
+  ist am 13.09.2026 separat erfolgt und belegt — siehe „Ergebnis vom
+  13.09.2026" in `docs/stripe-einrichten.md`.
 - **Safari.** Gemessen wird in Chromium. Safari rechnet bei `svh` und
   der Adressleiste etwas anders und kennt deutsche Silbentrennung, die
   Chromium hier nicht hat.
