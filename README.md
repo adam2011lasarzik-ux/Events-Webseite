@@ -18,6 +18,21 @@ Vorher `.env` anlegen — welche Werte hineingehören, steht in
 
 Das Projekt braucht eine **MySQL- oder MariaDB-Datenbank**.
 
+## ⚠️ Die öffentliche Seite ist zurzeit passwortgeschützt
+
+Seit dem 15.09.2026 liegt eine Passwortabfrage vor der gesamten
+öffentlichen Webseite, damit vor dem Livegang niemand Fremdes die Seite
+sieht oder Tickets kauft. Sie läuft in Nginx, **nicht** in der
+Anwendung — am Code ändert sie nichts.
+
+Stripe-Webhook, Let's Encrypt und der Adminbereich sind ausgenommen.
+Der Adminbereich bleibt unverändert durch seinen eigenen Login mit
+zweitem Faktor geschützt.
+
+**Diese Sperre muss vor dem ersten echten Event wieder weg.** Wie das
+geht — vier Befehle, rund zehn Sekunden, ohne Ausfall — steht in
+**[docs/sperre.md](docs/sperre.md)**.
+
 ## Zugang zur Verwaltung
 
 Der Adminbereich liegt unter `/admin`. Es gibt bewusst **keine
@@ -588,6 +603,16 @@ strengen Modus, den Bau und die Prüflisten.
   die der Anwendungsbenutzer nicht mehr löschen kann — im Zweifel
   `.next` einmal als `root` entfernen (`rm -rf`, root darf das) und
   danach ausschliesslich als Anwendungsbenutzer neu bauen.
+- **Nach `systemctl reload nginx` ein paar Sekunden warten, bevor man
+  misst.** *(Zwischenfall am 15.09.2026 beim Einrichten der
+  Passwortsperre.)* Der Befehl kehrt sofort zurück, während Nginx seine
+  Arbeitsprozesse erst austauscht — ein `curl` unmittelbar danach wird
+  unter Umständen noch vom **alten** Prozess mit der **alten**
+  Konfiguration bedient. Die Messung meldete damals `200`, obwohl die
+  Sperre bereits richtig konfiguriert war, und löste eine falsche
+  Fehlersuche aus. Im Zweifel zeigt `nginx -T`, was der laufende Nginx
+  wirklich geladen hat — im Gegensatz zu `nginx -t`, das nur die
+  Dateien auf der Platte prüft.
 - **`BILDER_VERZEICHNIS`** auf einen Ordner zeigen lassen, den ein
   Deployment nicht überschreibt (siehe oben unter Titelbilder).
 - **Bekannte Meldung von `npm audit`:** drei Einträge mit hoher
