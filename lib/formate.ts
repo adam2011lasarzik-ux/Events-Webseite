@@ -47,3 +47,22 @@ export function fuelle(
 export function ohneTrennstellen(text: string): string {
   return text.replace(/\u00AD/g, "");
 }
+
+/**
+ * Aus der angezeigten Telefonnummer die wählbare Fassung für einen
+ * tel:-Link machen: „+49 3323 0219825" wird zu „+4933230219825".
+ *
+ * Angezeigt wird die lesbare Schreibweise mit Leerzeichen, gewählt
+ * die zusammenhängende — ein Telefon kann mit Leerzeichen und
+ * Bindestrichen nichts anfangen. Das Pluszeichen bleibt stehen: Es
+ * ist die Landesvorwahl und gehört zur Nummer.
+ *
+ * Die Nummer steht damit an genau EINER Stelle im Wörterbuch
+ * (`anbieter.telefon`) und wird an zwei Stellen angezeigt —
+ * Impressum und Kontaktseite. Ohne diesen Helfer müsste jede von
+ * ihnen die Umwandlung selbst machen, und die beiden könnten
+ * auseinanderlaufen.
+ */
+export function telefonLink(nummer: string): string {
+  return `tel:${nummer.replace(/[^\d+]/g, "")}`;
+}

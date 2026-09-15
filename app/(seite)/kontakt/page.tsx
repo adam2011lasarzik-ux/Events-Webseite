@@ -3,6 +3,7 @@ import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { Platzhalter } from "@/components/Platzhalter";
 import { texte } from "@/content";
 import { kommendeEvents } from "@/lib/events";
+import { telefonLink } from "@/lib/formate";
 import stil from "@/components/Textseite.module.css";
 
 /**
@@ -31,7 +32,11 @@ export default async function KontaktSeite() {
         </li>
         <li>
           <strong>{t.kontakt.telefon}:</strong>{" "}
-          {t.anbieter.telefon ?? (
+          {/* Auf dem Handy wählt der Link direkt — genau hier sucht
+              jemand die Nummer, der gerade anrufen will. */}
+          {t.anbieter.telefon ? (
+            <a href={telefonLink(t.anbieter.telefon)}>{t.anbieter.telefon}</a>
+          ) : (
             <Platzhalter text={t.anbieter.telefonFolgt} markierung={t.platzhalter.markierung} />
           )}
         </li>

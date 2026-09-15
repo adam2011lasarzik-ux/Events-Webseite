@@ -292,11 +292,38 @@ pruefe(
   /§\s*19\s*UStG/.test(impText) && /keine Umsatzsteuer/i.test(impText),
 );
 
-/* Die beiden offenen Felder muessen ERKENNBAR offen sein — und sie
-   muessen vor dem Livegang verschwinden. Solange sie da sind, sind
-   sie markiert; das ist der Zweck dieser beiden Pruefungen. */
-pruefe("Impressum: Anschrift ist als Platzhalter markiert", /Geschäftsanschrift folgt/.test(impText));
-pruefe("Impressum: Telefonnummer ist als Platzhalter markiert", /Telefonnummer folgt/.test(impText));
+/* Diese beiden Pruefungen standen frueher andersherum: Sie
+   kontrollierten, dass die zwei offenen Felder ERKENNBAR offen sind.
+   Seit dem 15.09.2026 liegen die echten Angaben vor — jetzt
+   kontrollieren sie, dass die Angaben wirklich dastehen UND der
+   Platzhalter verschwunden ist.
+
+   Beide Haelften sind noetig. Nur auf die Anschrift zu pruefen wuerde
+   uebersehen, wenn daneben weiterhin „folgt" steht; nur auf das
+   Fehlen des Platzhalters zu pruefen wuerde ein leeres Feld
+   durchlassen. Ein Impressum ohne ladungsfaehige Anschrift ist der
+   Fehler, den diese Liste verhindern soll. */
+pruefe(
+  "Impressum: die Geschäftsanschrift steht vollständig da",
+  impText.includes("Mühlenstr. 8a") && impText.includes("14167 Berlin"),
+);
+pruefe(
+  "Impressum: kein Anschrift-Platzhalter mehr",
+  !/Geschäftsanschrift folgt/.test(impText),
+);
+pruefe("Impressum: die Telefonnummer steht da", impText.includes("+49 3323 0219825"));
+pruefe(
+  "Impressum: kein Telefon-Platzhalter mehr",
+  !/Telefonnummer folgt/.test(impText),
+);
+
+/* Die Nummer soll auf dem Handy waehlbar sein. Geprueft wird das
+   Ziel des Links, nicht nur seine Anwesenheit: Leerzeichen darin
+   wuerden das Waehlen verhindern. */
+pruefe(
+  "Impressum: die Telefonnummer ist ein wählbarer tel:-Link",
+  (await page.locator('a[href="tel:+4933230219825"]').count()) > 0,
+);
 
 /* Der Aufbau der Seite ist der endgueltige. Ein Banner „diese Seite
    ist noch nicht ausgefuellt" gehoert deshalb NICHT darauf — anders
@@ -312,6 +339,22 @@ pruefe(
   "Impressum: keine erfundene Umsatzsteuer-Identifikationsnummer",
   !/\bDE\s?\d{9}\b/.test(impText),
 );
+
+/* ── Dieselbe Nummer auf der Kontaktseite ───────────────────────
+
+   Die Telefonnummer steht im Woerterbuch an einer Stelle, wird aber
+   an ZWEI Stellen angezeigt — Impressum und Kontaktseite. Der
+   tel:-Link ist dabei in beiden Seiten eigener Code; genau so etwas
+   laeuft mit der Zeit auseinander. Deshalb wird die Kontaktseite
+   hier mitgeprueft, obwohl sie keine Rechtsseite ist. */
+await page.goto(BASIS + "/kontakt", { waitUntil: "networkidle" });
+const kontaktText = await page.locator("body").innerText();
+pruefe("Kontakt: nennt dieselbe Telefonnummer", kontaktText.includes("+49 3323 0219825"));
+pruefe(
+  "Kontakt: die Nummer ist auch dort wählbar",
+  (await page.locator('a[href="tel:+4933230219825"]').count()) > 0,
+);
+pruefe("Kontakt: kein Telefon-Platzhalter mehr", !/Telefonnummer folgt/.test(kontaktText));
 
 /* ── Kein Reservierungsversprechen an den Kunden ────────────────
 

@@ -33,6 +33,7 @@ const gesehen = new Set(["/"]);
 const warteschlange = ["/"];
 const seiten = [];
 const externe = new Set();
+const geraeteZiele = new Set();
 const knopfProbleme = [];
 
 while (warteschlange.length) {
@@ -78,6 +79,15 @@ while (warteschlange.length) {
     } catch {
       continue;
     }
+    /* tel: und mailto: sind keine fremden Server, sondern eine
+       Übergabe an das Gerät des Besuchers — es geht kein einziger
+       Aufruf ins Netz. Sie werden getrennt gesammelt und unten
+       einzeln geprüft, damit die Regel „nichts von fremden Servern"
+       scharf bleibt: javascript: oder data: fielen hier weiterhin auf. */
+    if (u.protocol !== "http:" && u.protocol !== "https:") {
+      geraeteZiele.add(z.aufgeloest);
+      continue;
+    }
     if (u.origin !== BASIS) {
       externe.add(u.origin + u.pathname);
       continue;
@@ -119,6 +129,17 @@ for (const p of ["/impressum", "/datenschutz", "/agb", "/widerruf"]) {
    von fremden Servern und verlinkt (ausser evtl. Karten) nichts. */
 console.log(`\nFremde Ziele: ${externe.size === 0 ? "keine" : [...externe].join(", ")}`);
 pruefe("Keine unerwarteten fremden Verlinkungen", externe.size === 0, [...externe].join(", ") || "keine");
+
+/* Geräte-Verweise: erlaubt sind ausschliesslich tel: und mailto:.
+   Alles andere (javascript:, data:, intent: …) wäre ein Fund. */
+const fremdeSchemata = [...geraeteZiele].filter(
+  (z) => !z.startsWith("tel:") && !z.startsWith("mailto:"),
+);
+pruefe(
+  "Nur tel:/mailto: als Geräte-Verweise, kein javascript: oder data:",
+  fremdeSchemata.length === 0,
+  fremdeSchemata.join(", ") || [...geraeteZiele].join(", ") || "keine",
+);
 
 /* Ein 404 muss eine echte 404-Antwort liefern, keine 200-Seite mit
    „nicht gefunden" — sonst indexieren Suchmaschinen Geisterseiten. */

@@ -27,20 +27,26 @@ von einer fachkundigen Person kommen muss.
 | Name: **Adam Maurice Lasarzik** (keine Geschäftsbezeichnung angemeldet) | 🟩 |
 | E-Mail: **kontakt@veraevents.de** — echt, in Betrieb | 🟩 |
 | Umsatzsteuer: Kleinunternehmen nach § 19 UStG, keine ausgewiesen | 🟩 |
-| **Ladungsfähige Anschrift** | 🟥 **offen** |
-| **Telefonnummer** | 🟥 **offen** |
+| **Ladungsfähige Anschrift**: Mühlenstr. 8a, 14167 Berlin | 🟩 **eingetragen (15.09.2026)** |
+| **Telefonnummer**: +49 3323 0219825 | 🟩 **eingetragen (15.09.2026)** |
 | Umsatzsteuer-Identifikationsnummer | 🟦 ungeklärt, bewusst leer |
 
-**Die zwei offenen Felder sind der letzte Blocker für den Livegang.**
-Ohne ladungsfähige Anschrift darf die Seite nicht mit Ticketverkauf
-öffentlich gehen. Beide erscheinen bis dahin sichtbar als Platzhalter;
-Prüfliste `N` schlägt an, wenn sie stillschweigend verschwinden.
+**Beide Felder sind seit dem 15.09.2026 gefüllt.** Der Betreiber hat
+eine getrennte Geschäftsanschrift und eine geschäftliche Rufnummer
+geliefert; sie stehen im Impressum und — die Nummer — auf der
+Kontaktseite.
 
-**Warum sie offen sind:** Der Betreiber möchte weder Privatanschrift
-noch private Mobilnummer veröffentlichen. Das ist berechtigt, ändert
-aber nichts an der Pflicht — der Weg ist eine gemietete, ausdrücklich
-**ladungsfähige** Geschäftsanschrift (nicht „Impressumsservice", nicht
-Postfach) und eine getrennte Geschäftsnummer.
+**Die Prüfungen stehen jetzt andersherum.** Vorher kontrollierte
+Prüfliste `N`, dass die zwei Felder *erkennbar offen* sind. Jetzt
+kontrolliert sie, dass die Angaben wirklich dastehen **und** kein
+Platzhalter mehr daneben steht — dazu, dass die Nummer ein wählbarer
+`tel:`-Link ist, auf beiden Seiten.
+
+**Was damit NICHT beantwortet ist:** ob die eingetragene Anschrift im
+Rechtssinn *ladungsfähig* ist. Das lässt sich nicht aus dem Code
+beurteilen und gehört zu den Punkten, die der Rechtstexte-Dienst
+bestätigen muss. Ein Postfach oder ein reiner „Impressumsservice"
+genügt dafür nicht.
 
 **Zur USt-IdNr.:** Es steht bewusst **keine** dort, solange ungeklärt
 ist, ob eine vorliegt. Eine erfundene wäre schlimmer als keine, und
@@ -206,8 +212,9 @@ behauptet; sie ist dann mit anzupassen.
 
 ## Kurzfassung: was vor dem Livegang zwingend fehlt
 
-1. **Impressumsdaten**: Name, Kontakt und Aufbau stehen 🟩 — es fehlen
-   noch **ladungsfähige Anschrift** und **Telefonnummer** 🟥
+1. ~~**Impressumsdaten**: ladungsfähige Anschrift und Telefonnummer~~
+   🟩 **erledigt (15.09.2026)** — eingetragen, angezeigt und geprüft;
+   ob die Anschrift ladungsfähig ist, bestätigt der Rechtstexte-Dienst
 2. **Datenschutzerklärung** ausformulieren, Stripe und Minderjährige
    berücksichtigen 🟥
 3. **Widerrufsrecht klären** (§ 312g Abs. 2 Nr. 9 BGB) und die Seite
@@ -218,8 +225,8 @@ behauptet; sie ist dann mit anzupassen.
    erstellen und prüfen lassen 🟨
 6. ~~**Stornobedingungen** festlegen~~ 🟩 **erledigt**
 
-Punkt 1 kannst du selbst liefern. Punkt 2, 3 und 5 gehören
-fachkundig geprüft. Punkt 4 und 6 sind erledigt.
+Punkt 2, 3 und 5 gehören fachkundig geprüft. Punkt 1, 4 und 6 sind
+erledigt.
 
 ---
 

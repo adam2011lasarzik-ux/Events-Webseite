@@ -1,6 +1,8 @@
+import { Fragment } from "react";
 import type { Metadata } from "next";
 import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { Platzhalter } from "@/components/Platzhalter";
+import { telefonLink } from "@/lib/formate";
 import { texte } from "@/content";
 import stil from "@/components/Textseite.module.css";
 
@@ -42,8 +44,23 @@ export default function Seite() {
 
         <p>
           <strong>{t.recht.impressumAnschrift}</strong>
-          <br />
-          {a.anschrift ?? <Platzhalter text={a.anschriftFolgt} markierung={marke} />}
+          {/* Jede Zeile der Anschrift steht untereinander, wie in
+              einem Impressum üblich. Der Zeilenumbruch gehört vor die
+              Zeile, nicht dahinter — so bleibt der Aufbau derselbe wie
+              beim Platzhalter darunter. */}
+          {a.anschrift ? (
+            a.anschrift.map((zeile) => (
+              <Fragment key={zeile}>
+                <br />
+                {zeile}
+              </Fragment>
+            ))
+          ) : (
+            <>
+              <br />
+              <Platzhalter text={a.anschriftFolgt} markierung={marke} />
+            </>
+          )}
         </p>
 
         <p>
@@ -51,7 +68,12 @@ export default function Seite() {
           <br />
           {t.kontakt.email}: {a.email}
           <br />
-          {t.kontakt.telefon}: {a.telefon ?? <Platzhalter text={a.telefonFolgt} markierung={marke} />}
+          {t.kontakt.telefon}:{" "}
+          {a.telefon ? (
+            <a href={telefonLink(a.telefon)}>{a.telefon}</a>
+          ) : (
+            <Platzhalter text={a.telefonFolgt} markierung={marke} />
+          )}
         </p>
 
         <p>

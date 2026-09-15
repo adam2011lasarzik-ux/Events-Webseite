@@ -595,12 +595,22 @@ export const de = {
     markeHinweis: "VERA ist ein Angebot von",
     name: "Adam Maurice Lasarzik",
 
-    /* Ladungsfaehige Geschaeftsanschrift. Muss vor dem produktiven
-       Betrieb gesetzt sein; ein Postfach genuegt dafuer nicht. */
-    anschrift: null as string | null,
+    /* Ladungsfaehige Geschaeftsanschrift, zeilenweise — genau so,
+       wie sie im Impressum untereinander stehen soll.
+
+       Der Typ bleibt nullbar, obwohl jetzt ein Wert dasteht: `null`
+       heisst weiterhin „liegt nicht vor" und erscheint als sichtbarer
+       Platzhalter. Diese Rueckfallebene bleibt bewusst erhalten —
+       sie ist es, die eine fehlende Pflichtangabe unmoeglich still
+       verschwinden laesst. */
+    anschrift: ["Mühlenstr. 8a", "14167 Berlin"] as string[] | null,
     anschriftFolgt: "Geschäftsanschrift folgt",
 
-    telefon: null as string | null,
+    /* In der lesbaren Schreibweise, in der sie auch angezeigt wird.
+       Die waehlbare Fassung fuer den tel:-Link entsteht daraus in
+       lib/formate.ts — ein Telefon kann mit Leerzeichen nichts
+       anfangen, ein Mensch liest sie damit aber besser. */
+    telefon: "+49 3323 0219825" as string | null,
     telefonFolgt: "Telefonnummer folgt",
 
     email: "kontakt@veraevents.de",
