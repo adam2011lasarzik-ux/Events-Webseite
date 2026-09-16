@@ -33,6 +33,9 @@ teilen.
 .claude/skills/haftungsbegrenzung-pruefen-und-formulieren/SKILL.md
                 └── references/haftungsausnahmen.md, schadensumfang-und-obergrenze.md
 .claude/agb-recht-pruefer/zitierweise.md          ← von allen drei geteilt
+.claude/agb-recht-pruefer/QUELLEN.md              ← von agb-pruefung-kaltstart
+.claude/agb-recht-pruefer/PRUEFLOGIK.md           ← von agb-pruefung-kaltstart
+.claude/agb-recht-pruefer/KLAUSELFAMILIEN.md      ← von agb-pruefung-kaltstart
 .claude/agb-recht-pruefer/LICENSE-MIT, LICENSE-APACHE
 ```
 
@@ -43,7 +46,7 @@ Kommentar-Randnummern aus Modellwissen.
 
 ## Änderungen am Originaltext
 
-**Genau eine, dreimal angewendet.** In den drei Skills, die auf
+**Nur Pfade, kein Inhalt.** In den drei Skills, die auf
 `zitierweise.md` verweisen, wurde der Pfad angepasst:
 
 ```
@@ -53,7 +56,22 @@ Kommentar-Randnummern aus Modellwissen.
 Im Original lag die Datei drei Ebenen über dem Skill
 (`<repo>/references/`). Hier gibt es diese Verschachtelung nicht — ohne
 die Anpassung zeigte der Verweis auf `/home/user/Events-Webseite/references/`
-und damit ins Leere. **Am Inhalt der Skills wurde nichts geändert.**
+und damit ins Leere.
+
+Dieselbe Anpassung noch einmal in `agb-pruefung-kaltstart/SKILL.md`, dort
+für die drei Quellenanker:
+
+```
+references/QUELLEN.md   →   ../../agb-recht-pruefer/QUELLEN.md
+```
+
+Diese drei standen im Original **in Backticks statt als Markdown-Link**
+und sind meiner ersten Vollständigkeitsprüfung deshalb entgangen — die
+suchte nur nach `[…](…)`. Der Fehler lag in der Prüfung, nicht im
+Skill. Die Dateien liegen jetzt neben `zitierweise.md`, weil sie wie
+diese aus der Wurzelebene des Herkunftspakets stammen.
+
+**Am Inhalt der Skills und der Referenzen wurde nichts geändert.**
 
 ## Zwei Verweise zeigen bewusst ins Leere
 

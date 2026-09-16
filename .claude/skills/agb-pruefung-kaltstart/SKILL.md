@@ -65,4 +65,4 @@ Starte mit einem Arbeitsprodukt, nicht mit einer Inventarliste: Kurzvermerk, Fri
 
 ## Quellenanker
 
-Siehe `references/QUELLEN.md`, `references/PRUEFLOGIK.md` und `references/KLAUSELFAMILIEN.md`.
+Siehe `../../agb-recht-pruefer/QUELLEN.md`, `../../agb-recht-pruefer/PRUEFLOGIK.md` und `../../agb-recht-pruefer/KLAUSELFAMILIEN.md`.
