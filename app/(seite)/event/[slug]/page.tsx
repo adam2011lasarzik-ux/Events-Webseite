@@ -91,7 +91,13 @@ export default async function EventDetailSeite({
             <dd>
               {event.ort.name ?? halter(t.platzhalter.adresse)}
               <br />
-              {event.ort.stadt}
+              {event.ort.strasse && (
+                <>
+                  {event.ort.strasse}
+                  <br />
+                </>
+              )}
+              {event.ort.plz ? `${event.ort.plz} ${event.ort.stadt}` : event.ort.stadt}
             </dd>
           </div>
           <div>
