@@ -4,9 +4,12 @@ Diese Datei hält fest, welche fremden Claude-Skills für die Arbeit an VERAs
 Rechtstexten taugen, welche nicht, und was vor einer Nutzung zu korrigieren
 wäre.
 
-> **Nichts davon ist installiert.** Alle Repositories wurden nur als
-> Lesekopien nach `/tmp` geholt und dort untersucht. Eine Installation
-> ist ein eigener Schritt und braucht die Freigabe des Betreibers.
+> **Stand 16.09.2026: Die vier empfohlenen Skills sind installiert.** Der
+> Betreiber hat sie nach dieser Prüfung freigegeben; sie liegen unter
+> `.claude/skills/`, der Herkunftsnachweis mit vollständigem Commit steht
+> in `.claude/agb-recht-pruefer/HERKUNFT.md`. **Alles andere in diesem
+> Bericht ist nicht installiert** — jene Repositories wurden nur als
+> Lesekopien untersucht.
 
 > **Kein Rechtsrat.** Geprüft wurde die *Qualität der Werkzeuge*, nicht die
 > Richtigkeit einzelner Rechtsaussagen darin. Ein guter Prüf-Skill ersetzt
