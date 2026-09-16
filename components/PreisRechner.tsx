@@ -9,6 +9,7 @@ import { brauchtVormundEinwilligung, ANMELDE_STARTZUSTAND } from "@/lib/anmeldun
 import { alsEuro, berechnePreis, type Auswahl } from "@/lib/preise";
 import { brauchtKontaktdaten, vorschauRollen, type Anmeldeweg } from "@/lib/vorschau";
 import { fuelle } from "@/lib/formate";
+import { oeffentlich } from "@/lib/pfade";
 import type { VeraEvent } from "@/lib/events";
 import type { Woerterbuch } from "@/content";
 import stil from "./PreisRechner.module.css";
@@ -278,10 +279,20 @@ export function PreisRechner({
           setzeHaken={setzeHaken}
         />
 
-        <div className={stil.merker} style={{ marginTop: "1.5rem" }}>
-          <h3 className={stil.merkerTitel}>{t.anmeldung.minderjaehrigTitel}</h3>
-          <p className={stil.merkerText}>{t.anmeldung.minderjaehrigText}</p>
-        </div>
+        {vormundNoetig && (
+          <div className={stil.merker} style={{ marginTop: "1.5rem" }}>
+            <h3 className={stil.merkerTitel}>{t.anmeldung.minderjaehrigTitel}</h3>
+            <p className={stil.merkerText}>{t.anmeldung.minderjaehrigText}</p>
+            <a
+              className={stil.merkerLink}
+              href={oeffentlich("/dokumente/einverstaendniserklaerung-minderjaehrige.pdf")}
+              target="_blank"
+              rel="noopener"
+            >
+              {t.anmeldung.minderjaehrigDownload}
+            </a>
+          </div>
+        )}
       </div>
 
       <div className={`${stil.summe} aufDunkel`}>

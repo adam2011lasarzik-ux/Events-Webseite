@@ -145,6 +145,14 @@
 }
 .merkerTitel { font-family: var(--schrift-display); font-weight: 800; font-size: var(--gr-l); margin-bottom: var(--a-3); }
 .merkerText { color: var(--text-leise); max-width: var(--breite-text); margin-bottom: var(--a-5); }
+.merkerLink {
+  display: inline-block;
+  font-weight: 700;
+  color: var(--courtblau);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+.merkerLink:hover { color: var(--tiefblau); }
 
 /* Sehr schmale Handys (bis 360 Pixel, also das iPhone SE der ersten
    Generation und aufgeklappte Falt-Handys).

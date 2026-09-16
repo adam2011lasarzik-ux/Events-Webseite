@@ -230,8 +230,11 @@ export const de = {
 
     minderjaehrigTitel: "Bei Teilnehmern unter 18",
     minderjaehrigText:
-      "Meldet ein Elternteil an, gilt die Anmeldung für das Kind. Die Einwilligung der " +
-      "Erziehungsberechtigten wird bei der Anmeldung abgefragt.",
+      "Meldet ein Elternteil an, gilt die Anmeldung für das Kind. Die Einwilligung hier auf " +
+      "der Webseite reicht dafür allein nicht aus: Zusätzlich ist eine unterschriebene " +
+      "Einverständniserklärung auf Papier zum Event mitzubringen — ohne sie ist eine " +
+      "Teilnahme nicht möglich.",
+    minderjaehrigDownload: "Einverständniserklärung herunterladen (PDF)",
 
     formular: {
       ueberschrift: "Deine Angaben",
@@ -244,10 +247,10 @@ export const de = {
         "verbindlich an.",
       einwilligungFotos:
         "Bei der Veranstaltung dürfen Fotos gemacht und für VERA verwendet werden.",
-      /* Anmeldung und Bezahlung sind EIN Vorgang. Der Knopf sagt
-         deshalb beides und nennt den Betrag — niemand soll klicken
-         und erst danach merken, dass jetzt bezahlt wird. */
-      absenden: "Jetzt anmelden & bezahlen – {betrag}",
+      /* Anmeldung und Bezahlung sind EIN Vorgang. Der Knopf nennt
+         deshalb den Betrag — niemand soll klicken und erst danach
+         merken, dass jetzt bezahlt wird. */
+      absenden: "Zur Bezahlung – {betrag}",
       absendenKostenlos: "Jetzt verbindlich anmelden",
       laeuft: "Einen Moment …",
       zahlungHinweis:
@@ -393,7 +396,7 @@ export const de = {
     zahlungFehlerEingerichtet:
       "Die Online-Bezahlung ist noch nicht freigeschaltet. Deine Anmeldung ist gespeichert — " +
       "wir melden uns bei dir unter der angegebenen E-Mail-Adresse.",
-    zahlungKnopf: "Jetzt bezahlen",
+    zahlungKnopf: "Bezahlen",
     zahlungWege: "Karte, Apple Pay, Google Pay oder PayPal",
     emailTitel: "Bestätigung per E-Mail",
     emailText:
