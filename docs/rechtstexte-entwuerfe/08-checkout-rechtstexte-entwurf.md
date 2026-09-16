@@ -1,0 +1,397 @@
+# 08 — Rechtstexte im Bestellvorgang (Entwurf)
+
+> **Status:** Entwurf, Version 1 vom 16.09.2026. **Nicht anwaltlich geprüft.**
+>
+> Dieses Dokument ist das praktischste der zehn: Es enthält konkrete
+> Textvorschläge für Bildschirmelemente und benennt die Stelle im Code,
+> an der sie stehen müssten. **Nichts davon wurde eingebaut** — der
+> Auftrag verlangt ausdrücklich, noch nichts auf der Website zu ändern.
+
+---
+
+## Der heutige Ablauf — nachgezeichnet aus dem Code
+
+```
+/events/<slug>/anmeldung
+  │
+  ├─ Wen meldest du an?        Mich selbst · Mein Kind · Familienpaket
+  ├─ Anzahl und Art            Zähler, Preis rechnet live mit
+  ├─ Deine Angaben             Vorname, Nachname, E-Mail, Telefon (freiwillig)
+  ├─ Häkchen                   Einwilligung Erziehungsberechtigte (Pflicht bei Kind/Familie)
+  │                            Einwilligung Fotos (freiwillig)
+  ├─ Zusammenfassung           Einzelposten, Gesamtsumme
+  ├─ [ Zur Bezahlung – 50,00 € ]        ← components/PreisRechner.tsx:337
+  └─ Hinweis                   „Es geht weiter zur gesicherten Bezahlseite …"
+        │
+        └─ Stripe (gehostete Seite)
+              ├─ bezahlt     → Webhook → BESTÄTIGT → Bestätigungsmail
+              └─ abgebrochen → /anmeldung/danke?zahlung=abgebrochen
+```
+
+**Was fehlt, auf einen Blick:**
+
+| | vorhanden? |
+|---|---|
+| Bestellübersicht mit Einzelposten | ✅ ja |
+| Gesamtpreis vor dem Absenden | ✅ ja |
+| Hinweis, dass Zahlungsdaten nicht bei VERA ankommen | ✅ ja |
+| Getrennte, freiwillige Fotoeinwilligung | ✅ ja (Text unzureichend, siehe Dokument 06) |
+| Einwilligung Erziehungsberechtigte | ✅ ja |
+| **Eindeutig beschrifteter Bestellbutton** | ⚠️ **fraglich** |
+| **Hinweis auf und Bestätigung der AGB** | ❌ **nein** |
+| **Link zu Datenschutz und Widerruf beim Bestellvorgang** | ❌ nur in der Fußzeile |
+| **Angabe der wesentlichen Merkmale der Leistung im Bestellvorgang** | ⚠️ zu prüfen |
+
+---
+
+## C-1 ⚠️ Die Beschriftung der Bestellschaltfläche
+
+### Die Norm
+
+**§ 312j Abs. 3 BGB:** Bei einem Verbrauchervertrag im elektronischen
+Geschäftsverkehr über eine entgeltliche Leistung muss der Unternehmer
+die Bestellsituation so gestalten, dass der Verbraucher mit seiner
+Bestellung ausdrücklich bestätigt, dass er sich zu einer Zahlung
+verpflichtet. Erfolgt die Bestellung über eine Schaltfläche, ist diese
+Pflicht **nur dann** erfüllt, wenn die Schaltfläche gut lesbar mit
+nichts anderem als den Wörtern **„zahlungspflichtig bestellen"** oder
+mit einer **entsprechend eindeutigen Formulierung** beschriftet ist.
+
+**§ 312j Abs. 4 BGB:** Wird gegen Absatz 3 verstoßen, **kommt der
+Vertrag nicht zustande.**
+
+### Der heutige Wortlaut
+
+```
+content/de.ts → anmeldung.formular.absenden
+  "Zur Bezahlung – {betrag}"
+
+content/de.ts → anmeldung.formular.absendenKostenlos
+  "Jetzt verbindlich anmelden"          ← nur bei kostenlosen Veranstaltungen
+
+content/de.ts → danke.zahlungKnopf
+  "Bezahlen"                            ← zweiter Anlauf auf der Abschluss-Seite
+```
+
+### Bewertung
+
+**„Zur Bezahlung – 50,00 €" ist als Bestellbutton zweifelhaft.**
+
+Die Formulierung beschreibt einen **Navigationsschritt** („es geht
+weiter zur Bezahlung"), nicht die **Abgabe einer zahlungspflichtigen
+Bestellung**. Das ist genau die Unterscheidung, auf die es ankommt: Die
+Beurteilung richtet sich nach dem geprüften Stand ausschließlich nach
+dem Wortlaut der Schaltfläche.
+
+Nach den recherchierten Entscheidungen wurden unter anderem als **nicht
+ausreichend** angesehen: „Bestellung aufgeben", „Bestellen" (allein),
+„Senden" sowie Beschriftungen der Form „mit … bezahlen". Die letzte
+Gruppe liegt „Zur Bezahlung" und „Bezahlen" sprachlich nahe.
+
+Als **ausreichend** angesehen wurde beispielsweise „Jetzt verbindlich
+anmelden! (zahlungspflichtiger Reisevertrag)" — weil daraus die
+Zahlungspflicht hervorgeht.
+
+> **Zur Einordnung:** Diese Recherche stützt sich auf zusammenfassende
+> Fachbeiträge, nicht auf die Entscheidungen im Volltext — der Zugriff
+> auf die amtlichen Quellen war aus dieser Arbeitsumgebung gesperrt
+> (siehe Prüfprotokoll, Abschnitt „Grenzen der Quellenprüfung").
+> **Die Bewertung ist als Prüfauftrag zu lesen, nicht als Ergebnis.**
+
+**Der frühere Wortlaut war näher an der Anforderung:** „Jetzt anmelden &
+bezahlen – 50,00 €". Die Änderung auf „Zur Bezahlung" war eine bewusste
+Entscheidung des Unternehmers und wird hier **nicht eigenmächtig
+rückgängig gemacht** — sie wird vorgelegt.
+
+### Vorschläge
+
+`[VOR VERWENDUNG KLÄREN: Eine Fassung auswählen und fachlich bestätigen
+lassen.]`
+
+| Variante | Wortlaut | Anmerkung |
+|---|---|---|
+| **V1 — wörtlich** | `Zahlungspflichtig anmelden` | der sicherste Weg; entspricht dem Gesetzeswortlaut in angepasster Form |
+| **V2 — mit Betrag** | `Zahlungspflichtig anmelden – 50,00 €` | Betrag bleibt sichtbar. Vorsicht: § 312j Abs. 3 verlangt „nichts anderem als"; ob ein Betragszusatz zulässig ist, gehört bestätigt |
+| **V3 — nah am bisherigen Ton** | `Jetzt anmelden & zahlungspflichtig bestellen` | verbindet die Marken­sprache mit dem Gesetzeswortlaut |
+| **V4 — der frühere Wortlaut** | `Jetzt anmelden & bezahlen – 50,00 €` | war vorher im Einsatz; näher als „Zur Bezahlung", aber nicht offensichtlich ausreichend |
+
+**Empfehlung:** V1 oder V2, und die Frage nach dem Betragszusatz
+ausdrücklich mitprüfen lassen. Der Betrag steht ohnehin unmittelbar
+darüber in der Zusammenfassung.
+
+**Für kostenlose Veranstaltungen** bleibt „Jetzt verbindlich anmelden"
+richtig — ohne Entgelt greift § 312j Abs. 3 BGB nicht, und ein
+Zahlungshinweis wäre dort falsch.
+
+**Für die Schaltfläche auf der Abschluss-Seite** („Bezahlen", zweiter
+Anlauf): `[VOR VERWENDUNG KLÄREN: Ist das eine erneute Bestellung im
+Sinne von § 312j Abs. 3 BGB oder nur die Fortsetzung eines bereits
+abgegebenen Bestellvorgangs? Nach dem Ablauf im Code ist die Anmeldung
+zu diesem Zeitpunkt bereits gespeichert — was für Letzteres spricht.
+Vorsorglich könnte auch dort „Zahlungspflichtig bestellen" stehen.]`
+
+### Umsetzung
+
+```
+content/de.ts → anmeldung.formular.absenden      (eine Zeile)
+content/de.ts → danke.zahlungKnopf               (eine Zeile)
+pruefung/K/k-browser.mjs, pruefung/J/j-browser.mjs   ← Prüfskripte
+                                                      suchen nach dem
+                                                      alten Text und
+                                                      müssen mitgeändert
+                                                      werden
+```
+
+> ⚠️ **Die beiden Prüfskripte nicht vergessen.** Sie sind bei der
+> letzten Umbenennung bereits einmal stehen geblieben und haben die
+> Testläufe zum Absturz gebracht.
+
+---
+
+## C-2 ❌ Hinweis auf und Bestätigung der Teilnahmebedingungen
+
+### Warum das der wichtigste Punkt ist
+
+**§ 305 Abs. 2 BGB** verlangt für die Einbeziehung von AGB einen
+**ausdrücklichen Hinweis** bei Vertragsschluss und die Möglichkeit
+zumutbarer Kenntnisnahme. Die Rechtstexte stehen heute ausschließlich in
+der Fußzeile. Ein Fußzeilenlink wird verbreitet **nicht** als
+ausdrücklicher Hinweis angesehen.
+
+**Folge:** Es gelten die Teilnahmebedingungen nicht — auch nicht die
+Ziffern, die VERA schützen sollen (Storno, Ausschluss bei Fehlverhalten,
+Haftungsbegrenzung).
+
+### Warum es heute bewusst fehlt
+
+Ein Pflichthäkchen, das auf eine Platzhalterseite zeigt, wäre eine
+Attrappe. Die bisherige Entscheidung, es wegzulassen, war richtig —
+**solange** Abschnitt 1 der AGB ein Platzhalter ist.
+
+**Sie ist falsch, sobald der vollständige Text steht.**
+
+### Vorschlag
+
+Unmittelbar **über** der Bestellschaltfläche, nicht in der Fußzeile:
+
+> ☐ Ich habe die
+> [Teilnahmebedingungen](/agb) und die
+> [Informationen zu Widerruf und Stornierung](/widerruf) gelesen und
+> bin mit ihnen einverstanden. Die
+> [Datenschutzerklärung](/datenschutz) habe ich zur Kenntnis genommen.
+
+**Drei Gestaltungsregeln dazu:**
+
+1. **Nicht vorangekreuzt.** Ein vorangekreuztes Häkchen ist keine
+   Bestätigung.
+2. **Die Datenschutzerklärung wird nur zur Kenntnis genommen, nicht
+   „akzeptiert".** Sie ist eine Information nach Art. 13 DSGVO, keine
+   Vereinbarung. Ein „Ich stimme der Datenschutzerklärung zu" ist ein
+   verbreiteter Fehler und erweckt den falschen Eindruck einer
+   Einwilligung.
+3. **Links öffnen in einem neuen Tab**, damit die ausgefüllten
+   Formulardaten nicht verloren gehen.
+
+### Alternative ohne Häkchen
+
+Ein Häkchen ist nicht zwingend. Es genügt auch ein gut sichtbarer
+Hinweis unmittelbar über der Schaltfläche:
+
+> Mit dem Absenden erkennen Sie die [Teilnahmebedingungen](/agb) an und
+> bestätigen, die [Datenschutzerklärung](/datenschutz) zur Kenntnis
+> genommen zu haben.
+
+`[VOR VERWENDUNG KLÄREN: Häkchen oder Hinweistext? Das Häkchen ist
+besser nachweisbar — es lässt sich zusammen mit der Anmeldung speichern.
+Der Hinweistext ist bequemer. Diese Abwägung gehört in die fachliche
+Prüfung.]`
+
+### Umsetzung
+
+```
+components/FormularVorschau.tsx     neues Häkchen, Muster: einwilligungVormund
+lib/anmeldung.ts                    Feld + Pflichtprüfung
+                                    (Zeilen 37–38, 203–205, 224–227 zeigen
+                                     das Muster; ein drittes Feld fügt sich
+                                     ohne Umbau ein)
+prisma/schema.prisma                Feld an Registration + Migration
+                                    — damit die Zustimmung nachweisbar ist
+content/de.ts                       Text
+```
+
+> ✅ **Der Platz ist bereits vorbereitet.** Die Struktur mit
+> `einwilligungVormund` und `einwilligungFotos` nimmt ein drittes Feld
+> ohne Umbau auf.
+
+---
+
+## C-3 ⚠️ Wesentliche Merkmale der Leistung im Bestellvorgang
+
+**§ 312j Abs. 2 BGB** verlangt, dass der Unternehmer dem Verbraucher
+bestimmte Informationen **unmittelbar bevor** dieser seine Bestellung
+abgibt, klar und hervorgehoben zur Verfügung stellt — insbesondere die
+wesentlichen Merkmale der Leistung und den Gesamtpreis.
+
+**Heutiger Stand:** Die Zusammenfassung zeigt Einzelposten und
+Gesamtsumme. Was die Veranstaltung **inhaltlich** umfasst, steht auf der
+Eventseite — also eine Ebene davor.
+
+`[VOR VERWENDUNG KLÄREN: Genügt das, oder müssen die wesentlichen
+Merkmale in der Zusammenfassung wiederholt werden?]`
+
+**Vorschlag für den vorsorglichen Fall** — eine kompakte Zeile über der
+Zusammenfassung:
+
+> **Ihre Anmeldung**
+> {Titel der Veranstaltung}
+> {Datum}, {Uhrzeit} · {Ort}
+> Enthalten: {die auf der Eventseite als enthalten ausgewiesenen
+> Leistungen}
+
+**Technisch verfügbar:** Titel, `startAt`, `endAt`, `ortName`, `stadt`
+und die Abschnitte vom Typ „dabei" liegen alle am Event
+(`prisma/schema.prisma`). Die Zeile ließe sich ohne neue Datenfelder
+erzeugen.
+
+---
+
+## C-4 Bestellbestätigung (E-Mail)
+
+**Heutiger Stand** (`lib/mailVorlagen.ts`):
+
+| Mail | Betreff | Wann |
+|---|---|---|
+| Anmeldung bestätigt | `Anmeldung bestätigt: {Titel}` | nur bei kostenlosen Veranstaltungen |
+| Zahlung erhalten | `Zahlung erhalten: {Titel}` | nach geprüfter Rückmeldung |
+| Stornierung bestätigt | — | nach Stornierung |
+
+> ✅ **Der Ablauf ist richtig gebaut.** Bei kostenpflichtigen
+> Veranstaltungen kommt die Bestätigung **erst**, wenn die Zahlung
+> bestätigt ist — nicht schon beim Absenden. Alles andere wäre eine
+> Bestätigung, bevor feststeht, dass bezahlt wurde.
+
+### ⚠️ Zweiter Prüfdurchgang: die Mails wurden Zeile für Zeile gelesen
+
+**Ergebnis — der erste Entwurf war hier zu vorsichtig. Es ist keine
+Prüffrage, sondern ein bestätigter Befund:**
+
+| Was | in `bestaetigungsMail` | in `zahlungsBestaetigungsMail` |
+|---|---|---|
+| Anrede, Eventtitel, Termin, Ort | ✅ | ✅ |
+| angemeldete Personen | ✅ | ✅ |
+| Anmeldenummer | ✅ | ✅ |
+| Stornolink | ✅ | ✅ |
+| Gesamtbetrag | ❌ **fehlt** | ✅ |
+| **Anbieterangaben** (Name, Anschrift) | ❌ **fehlt** | ❌ **fehlt** |
+| **Teilnahmebedingungen** | ❌ **fehlt** | ❌ **fehlt** |
+| **Informationen zu Widerruf/Stornierung** | ❌ **fehlt** | ❌ **fehlt** |
+| Hinweis Kleinunternehmerregelung | ❌ fehlt | ❌ fehlt |
+| Stornofrist im Klartext | ❌ fehlt | ❌ fehlt |
+
+Beide Mails enden mit „Bis bald, das VERA-Team". Eine Volltextsuche nach
+`Lasarzik`, `Mühlenstr`, `Impressum`, `AGB`, `Teilnahmebedingungen` und
+`Widerruf` in `lib/mailVorlagen.ts` ergibt **keinen einzigen Treffer.**
+
+**Warum das wiegt:** Nach **§ 312f Abs. 2 BGB** hat der Unternehmer dem
+Verbraucher bei Fernabsatzverträgen eine Bestätigung des Vertrags **auf
+einem dauerhaften Datenträger** zur Verfügung zu stellen, die die
+Vertragsbestimmungen einschließlich der einbezogenen AGB und die nach
+Art. 246a EGBGB geschuldeten Informationen enthält. Eine E-Mail ist ein
+dauerhafter Datenträger — die heutigen Mails enthalten diese Angaben
+aber nicht.
+
+**Was in die Bestätigungsmail gehört:**
+
+- [ ] vollständige Anbieterangaben (Name, Anschrift, E-Mail)
+- [x] Veranstaltung, Datum, Uhrzeit, Ort — *vorhanden*
+- [x] alle angemeldeten Personen — *vorhanden*
+- [ ] Einzelposten und Gesamtbetrag (**in der kostenlosen Fassung fehlt
+      der Betrag ganz** — bei 0,00 € verschmerzbar, aber inkonsistent)
+- [ ] Hinweis auf die Kleinunternehmerregelung
+- [ ] **die Teilnahmebedingungen im Volltext oder als Anlage**
+- [ ] **Informationen zu Widerruf und Stornierung**
+- [ ] Stornofrist im Klartext („kostenlos bis TT.MM. HH:MM")
+- [x] Stornolink — *vorhanden*
+- [ ] Kontaktweg für Rückfragen
+
+> **Ein Link auf die Website genügt möglicherweise nicht**, weil sich
+> deren Inhalt ändern kann. Der sichere Weg ist der Volltext in der Mail
+> oder ein angehängtes PDF. `[VOR VERWENDUNG KLÄREN: welche Form?]`
+>
+> **Reihenfolge:** Dieser Punkt ist erst umsetzbar, wenn die
+> Teilnahmebedingungen fertig sind — vorher gäbe es nichts anzuhängen.
+
+---
+
+## C-5 Storno- und Absage-E-Mail
+
+**Entwurf Storno-Bestätigung:**
+
+> **Betreff:** Stornierung bestätigt: {Titel}
+>
+> Hallo {Vorname},
+>
+> Ihre Anmeldung zu **{Titel}** am {Datum} ist storniert.
+>
+> **Erstattet werden {Betrag}** — der volle Betrag, ohne Abzug. Die
+> Rückzahlung ist angewiesen und läuft auf demselben Weg zurück, über
+> den Sie bezahlt haben. Je nach Bank dauert die Gutschrift einige
+> Werktage.
+>
+> Der Platz ist wieder frei. Wenn Sie es sich anders überlegen, können
+> Sie sich jederzeit neu anmelden, solange Plätze verfügbar sind.
+>
+> Viele Grüße
+> VERA
+>
+> —
+> Adam Maurice Lasarzik · Mühlenstr. 8a · 14167 Berlin
+> kontakt@veraevents.de
+
+**Entwurf Absage durch VERA:**
+
+> **Betreff:** Abgesagt: {Titel} am {Datum}
+>
+> Hallo {Vorname},
+>
+> **{Titel} am {Datum} muss leider ausfallen.** Das tut uns leid.
+>
+> `[VOR VERWENDUNG KLÄREN: Soll der Grund genannt werden? Eine
+> Absagemail ohne Grund wirkt nachlässig; ein Pflichtfeld „Grund" im
+> Adminbereich wäre dafür nötig.]`
+>
+> **Ihr Geld bekommen Sie automatisch zurück.** Wir haben die
+> Erstattung von {Betrag} bereits angewiesen — Sie müssen nichts tun.
+> Die Rückzahlung läuft auf demselben Weg zurück, über den Sie bezahlt
+> haben, und braucht je nach Bank einige Werktage.
+>
+> Sobald ein Ersatztermin feststeht, melden wir uns.
+>
+> Viele Grüße
+> VERA
+>
+> —
+> Adam Maurice Lasarzik · Mühlenstr. 8a · 14167 Berlin
+> kontakt@veraevents.de
+
+> **Zum Ton:** Die wichtigste Information — das Geld kommt automatisch
+> zurück — steht fett und weit oben. Wer eine Absage liest, will genau
+> das wissen, und zwar sofort.
+
+---
+
+## C-6 Übersicht der Änderungen im Bestellvorgang
+
+| # | Änderung | Datei | Abhängig von | Aufwand |
+|---|---|---|---|---|
+| 1 | Beschriftung der Bestellschaltfläche | `content/de.ts` + 2 Prüfskripte | fachliche Prüfung C-1 | klein |
+| 2 | Häkchen/Hinweis zu den Teilnahmebedingungen | `FormularVorschau.tsx`, `lib/anmeldung.ts`, Schema, `content/de.ts` | **fertige AGB** | mittel |
+| 3 | Fotoeinwilligung: neuer Text | `content/de.ts` | Dokument 06 | klein |
+| 4 | Fotoeinwilligung: Zusatz bei Minderjährigen | `FormularVorschau.tsx` | Dokument 06 | klein |
+| 5 | Wesentliche Merkmale in der Zusammenfassung | `PreisRechner.tsx` | fachliche Prüfung C-3 | mittel |
+| 6 | Teilnahmebedingungen in die Bestätigungsmail | `lib/mailVorlagen.ts` | **fertige AGB** | mittel |
+| 7 | Stornofrist im Klartext in die Mail | `lib/mailVorlagen.ts` | — | klein |
+| 8 | Falls Widerrufsrecht besteht: Belehrung im Bestellvorgang und Widerrufsfunktion | mehrere | Dokument 07, W-a | **groß** |
+
+**Nichts davon wurde umgesetzt.** Punkt 2, 6 und 8 hängen an
+Entscheidungen, die noch nicht getroffen sind.
