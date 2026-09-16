@@ -2,7 +2,30 @@
    gekennzeichnet, im Fußbereich verlinkt — und ohne erfundenen
    Rechtstext. */
 import { chromium } from "playwright";
+import zlib from "node:zlib";
 const BASIS = "http://127.0.0.1:3249";
+
+/** Die Seiteninhalte einer PDF auspacken, damit der Text prüfbar wird.
+ *  Die Datei nutzt inkrementelle Updates — deshalb wird JEDER Stream
+ *  gelesen. Ein überschatteter alter Stand faellt dabei mit auf, und
+ *  genau das ist gewollt: Eine gestrichene Zusage darf auch als Leiche
+ *  nicht in der Datei liegen bleiben. */
+function entpackePdfText(roh) {
+  let text = "";
+  const muster = /\/Filter \[ \/FlateDecode \] \/Length (\d+)\s*>>\s*stream\r?\n/g;
+  const latin = roh.toString("latin1");
+  let treffer;
+  while ((treffer = muster.exec(latin)) !== null) {
+    const laenge = Number(treffer[1]);
+    const start = treffer.index + treffer[0].length;
+    try {
+      text += zlib.inflateSync(roh.subarray(start, start + laenge)).toString("latin1");
+    } catch {
+      /* Schriftschnitte und andere Binaerdaten — nicht von Belang. */
+    }
+  }
+  return text;
+}
 let n = 0;
 const schief = [];
 const pruefe = (name, ok, zusatz = "") => {
@@ -28,10 +51,20 @@ for (const [name, pfad, ueberschrift] of [
   );
   /* Die Marke wird per CSS in Grossbuchstaben gesetzt (text-transform),
      und innerText gibt den GERENDERTEN Text zurück — deshalb ohne
-     Rücksicht auf Gross- und Kleinschreibung vergleichen. */
+     Rücksicht auf Gross- und Kleinschreibung vergleichen.
+
+     Beide Seiten tragen die Markierung inzwischen ABSCHNITTSWEISE:
+     Widerruf seit den Stornobedingungen, AGB seit dem Abschnitt
+     „Teilnahme Minderjähriger". Eine Seite, die geltende Bedingungen
+     enthält und sich zugleich als „noch nicht ausgefüllt" bezeichnet,
+     wäre in beide Richtungen irreführend. */
   pruefe(
-    `${name}: ist sichtbar als Platzhalter gekennzeichnet`,
-    /platzhalter/i.test(text) && text.includes("noch nicht ausgefüllt"),
+    `${name}: markiert den offenen Abschnitt sichtbar als Platzhalter`,
+    /platzhalter/i.test(text) && text.includes("Dieser Abschnitt ist noch nicht ausgefüllt"),
+  );
+  pruefe(
+    `${name}: bezeichnet sich nicht mehr pauschal als unausgefüllt`,
+    !text.includes("Diese Seite ist noch nicht ausgefüllt"),
   );
   pruefe(`${name}: Seitentitel gesetzt`, (await page.title()).includes(ueberschrift), await page.title());
 }
@@ -109,7 +142,10 @@ pruefe(
 
 // Datenschutz: die Tatsache zur Zahlung ist ergänzt
 await page.goto(BASIS + "/datenschutz", { waitUntil: "networkidle" });
-const dsText = await page.locator("body").innerText();
+/* Weiche Trennstellen (­) raus: Sie stehen in den Überschriften,
+   damit lange Komposita auf dem Handy mit Bindestrich umbrechen. Für
+   einen Wortlaut-Vergleich wären sie unsichtbare Stolperfallen. */
+const dsText = (await page.locator("body").innerText()).replace(/­/g, "");
 pruefe("Datenschutz: nennt jetzt den Zahlungsanbieter", dsText.includes("Stripe"));
 pruefe(
   "Datenschutz: sagt, dass Kartendaten diese Seite nie erreichen",
@@ -131,6 +167,45 @@ pruefe(
   /technisch notwendig/i.test(dsText),
 );
 
+/* ── Einverständniserklärungen für Minderjährige ─────────────────
+
+   Dieser Abschnitt ist verbindlich und muss mit der
+   Datenschutzinformation auf Seite 2 des Papierformulars
+   übereinstimmen. Geprüft werden die Punkte, an denen ein
+   Auseinanderlaufen teuer wäre: Gesundheitsdaten, Rechtsgrundlage
+   dafür, die Rolle der Halle und die 30-Tage-Frist. */
+pruefe(
+  "Datenschutz: hat einen eigenen Abschnitt zu den Einverständniserklärungen",
+  dsText.includes("Einverständniserklärungen für minderjährige Teilnehmer"),
+);
+pruefe(
+  "Datenschutz: nennt die Gesundheitsangaben als freiwillig",
+  /Allergien, Erkrankungen oder erforderlichen Notfallmedikamenten sind[\s\S]{0,20}freiwillig/i.test(
+    dsText,
+  ),
+);
+pruefe(
+  "Datenschutz: nennt die Einwilligung nach Art. 9 Abs. 2 Buchst. a DSGVO",
+  /Art\.\s*9\s*Abs\.\s*1?\s*2?\s*Buchst\.\s*a/i.test(dsText),
+);
+pruefe(
+  "Datenschutz: nennt Art. 6 Abs. 1 Buchst. b und f DSGVO",
+  /Art\.\s*6\s*Abs\.\s*1\s*Buchst\.\s*b/i.test(dsText) &&
+    /Art\.\s*6\s*Abs\.\s*1\s*Buchst\.\s*f/i.test(dsText),
+);
+pruefe(
+  "Datenschutz: stellt klar, dass die Location keine Kopie behält",
+  /behält keine Kopie und verwendet die Angaben nicht für eigene Zwecke/i.test(dsText),
+);
+pruefe(
+  "Datenschutz: nennt die 30-Tage-Frist für Gesundheitsangaben",
+  /spätestens 30 Tage nach Veranstaltungsende/i.test(dsText),
+);
+pruefe(
+  "Datenschutz: grenzt den Abschnitt auf das Formular ein",
+  /Angaben auf der Einverständniserklärung/i.test(dsText),
+);
+
 // AGB: dürfen nicht als Pflicht dargestellt werden
 await page.goto(BASIS + "/agb", { waitUntil: "networkidle" });
 const agbText = await page.locator("body").innerText();
@@ -141,6 +216,50 @@ pruefe(
 pruefe(
   "AGB: unterscheiden Stornierung vom gesetzlichen Widerrufsrecht",
   /etwas anderes als das gesetzliche Widerrufsrecht/i.test(agbText),
+);
+
+/* ── Teilnahme Minderjähriger ───────────────────────────────────
+
+   Der Abschnitt ist verbindlich, nicht Platzhalter. Geprüft wird
+   nicht nur, DASS er da ist, sondern dass die tragenden Aussagen
+   darin stehen — und dass die alte Fassung mit pauschalem
+   Haftungsausschluss nicht zurückkehrt. */
+pruefe(
+  "AGB: enthalten den Abschnitt „Teilnahme Minderjähriger“",
+  agbText.includes("Teilnahme Minderjähriger"),
+);
+pruefe(
+  "AGB: verlangen die Zustimmung einer erziehungsberechtigten Person",
+  /nur mit Zustimmung einer erziehungsberechtigten Person/i.test(agbText),
+);
+pruefe(
+  "AGB: nennen die Abgabe spätestens beim Check-in",
+  /spätestens beim Check-in abgegeben/i.test(agbText),
+);
+/* Umgedreht am 16.09.2026: Hier stand einmal, die AGB müssten eine
+   elektronische Übermittlung ausdrücklich zulassen. Es gibt keine —
+   weder eine Upload-Funktion noch eine Einreichung per Mail. Der Satz
+   hätte Eltern nach einem Weg suchen lassen, den es nicht gibt, und
+   ist auf allen vier Stellen gestrichen. Diese Prüfung hält ihn fern. */
+pruefe(
+  "AGB: versprechen KEINE elektronische Übermittlung",
+  !/elektronische Übermittlung/i.test(agbText),
+);
+pruefe(
+  "AGB: weisen Hin- und Rückweg der erziehungsberechtigten Person zu",
+  /Hin- und Rückwegs ist die erziehungsberechtigte Person verantwortlich/i.test(agbText),
+);
+pruefe(
+  "AGB: begrenzen die Betreuung auf Check-in bis Veranstaltungsende",
+  /beginnt mit dem vereinbarten Check-in und endet mit dem offiziellen Veranstaltungsende/i.test(
+    agbText,
+  ),
+);
+pruefe(
+  "AGB: schliessen die Haftung für Leben, Körper und Gesundheit NICHT aus",
+  /Verletzung des Lebens, des Körpers oder der Gesundheit[\s\S]{0,140}nicht ausgeschlossen oder beschränkt/i.test(
+    agbText,
+  ),
 );
 
 // Fußbereich auf einer beliebigen Seite
@@ -379,6 +498,151 @@ pruefe(
   "Keine oeffentliche Seite verspricht dem Kunden eine Reservierung",
   versprechen.length === 0,
   versprechen.join(" · "),
+);
+
+/* ── Die Einverständniserklärung als Datei ───────────────────────
+
+   Das Formular ist ein Rechtsdokument und wird deshalb hier
+   mitgeprüft, nicht in einer der Anmelde-Listen. Geprüft wird die
+   Auslieferung selbst — dass die Adresse im Text steht, sagt nichts
+   darüber, ob dahinter wirklich eine PDF liegt. */
+const PDF_PFAD = "/dokumente/einverstaendniserklaerung-minderjaehrige.pdf";
+const pdfAntwort = await ctx.request.get(BASIS + PDF_PFAD);
+pruefe("Einverständniserklärung: Datei wird ausgeliefert", pdfAntwort.status() === 200,
+  `Antwort ${pdfAntwort.status()}`);
+pruefe(
+  "Einverständniserklärung: wird als PDF ausgeliefert",
+  (pdfAntwort.headers()["content-type"] ?? "").includes("application/pdf"),
+  pdfAntwort.headers()["content-type"],
+);
+const pdfRoh = await pdfAntwort.body();
+pruefe("Einverständniserklärung: ist eine gültige PDF", pdfRoh.subarray(0, 5).toString() === "%PDF-");
+/* Zwei Seiten: Formular und Datenschutzinformation nach Art. 13
+   DSGVO. Eine einseitige Datei wäre die alte Fassung — genau der
+   Fehler, den ein „hat ja funktioniert" durchrutschen liesse. */
+const seitenZahl = (pdfRoh.toString("latin1").match(/\/Type\s*\/Page[^s]/g) ?? []).length;
+pruefe("Einverständniserklärung: hat zwei Seiten", seitenZahl === 2, `${seitenZahl} Seiten`);
+
+/* ── Eine Domain, eine E-Mail-Adresse ────────────────────────────
+
+   Das Formular kam mit `vera-events.de` und `info@vera-events.de` —
+   beides gibt es nicht. In Betrieb sind `veraevents.de` (DNS,
+   Zertifikat, OEFFENTLICHE_ADRESSE) und `kontakt@veraevents.de`
+   (Impressum, Mailversand). Zwei Schreibweisen derselben Marke sind
+   der Fehler, den niemand bemerkt, bis eine Antwort ausbleibt:
+   Deshalb wird die PDF hier mitgeprüft, nicht nur die Seiten. */
+const pdfText = pdfRoh.toString("latin1");
+pruefe(
+  "Einverständniserklärung: keine abweichende Domain-Schreibweise",
+  !/vera-events\.de/i.test(pdfText),
+);
+/* Der Text der PDF liegt komprimiert in den Seiteninhalten. Ohne das
+   Entpacken würde diese Prüfung auch dann bestehen, wenn der Satz
+   wieder darin stünde — sie prüfte dann nämlich gar nichts. */
+const pdfSeitentext = entpackePdfText(pdfRoh);
+pruefe(
+  "Einverständniserklärung: Seitentext lesbar entpackt",
+  /Check-in/i.test(pdfSeitentext),
+  `${pdfSeitentext.length} Zeichen`,
+);
+pruefe(
+  "Einverständniserklärung: verspricht KEINE elektronische Übermittlung",
+  !/elektronische/i.test(pdfSeitentext) && !/bermittlung bleibt/i.test(pdfSeitentext),
+);
+pruefe(
+  "Einverständniserklärung: keine fremde VERA-Adresse",
+  !/(info|hallo|mail)@vera[-a-z0-9]*\.de/i.test(pdfText),
+);
+
+const domainTreffer = [];
+for (const pfad of gesehen) {
+  const antwort = await page.goto(BASIS + pfad, { waitUntil: "networkidle" });
+  if (!antwort || antwort.status() !== 200) continue;
+  const text = await page.locator("body").innerText();
+  const falsch = text.match(/vera-events\.de|(?:info|hallo|mail)@vera[-a-z0-9]*\.de/i);
+  if (falsch) domainTreffer.push(`${pfad}: „${falsch[0]}"`);
+}
+pruefe(
+  "Keine öffentliche Seite nennt eine abweichende Domain oder Adresse",
+  domainTreffer.length === 0,
+  domainTreffer.join(" · "),
+);
+
+/* ── Der Hinweis im Anmeldebereich ───────────────────────────────
+
+   Er darf ausschliesslich bei den Wegen mit Minderjährigen
+   erscheinen. Bei „Mich selbst" wäre er falsch — dort ist der
+   Teilnehmer volljährig. */
+await page.goto(BASIS + "/", { waitUntil: "networkidle" });
+const eventLinks = await page.$$eval("a[href^='/events/']", (as) => as.map((a) => a.getAttribute("href")));
+const eventPfad = eventLinks.length ? eventLinks[0].split("#")[0].replace(/\/$/, "") : null;
+
+if (!eventPfad) {
+  pruefe("Anmeldebereich: Event zum Prüfen gefunden", false, "kein Event verlinkt");
+} else {
+  await page.goto(`${BASIS + eventPfad}/anmeldung`, { waitUntil: "networkidle" });
+  const HINWEIS = "Einverständniserklärung für Minderjährige erforderlich";
+
+  // „Mich selbst" ist der Startzustand.
+  const selbstText = await page.locator("body").innerText();
+  pruefe(
+    "Anmeldebereich: kein Minderjährigen-Hinweis bei „Mich selbst“",
+    !selbstText.includes(HINWEIS),
+  );
+
+  for (const weg of ["Mein Kind", "Familienpaket"]) {
+    const wahl = page.getByText(weg, { exact: true });
+    if ((await wahl.count()) === 0) {
+      pruefe(`Anmeldebereich: Weg „${weg}“ vorhanden`, false, "Auswahl nicht gefunden");
+      continue;
+    }
+    await wahl.first().click();
+    await page.waitForTimeout(200);
+    const text = await page.locator("body").innerText();
+    pruefe(`Anmeldebereich: Hinweis erscheint bei „${weg}“`, text.includes(HINWEIS));
+    pruefe(
+      `Anmeldebereich: Hinweis verlangt die Abgabe beim Check-in („${weg}“)`,
+      /spätestens beim Check-in abgegeben/i.test(text),
+    );
+    pruefe(
+      `Anmeldebereich: Hinweis sagt, dass die Online-Anmeldung nicht genügt („${weg}“)`,
+      /Online-Anmeldung allein ersetzt die unterschriebene Erklärung nicht/i.test(text),
+    );
+    const link = page.locator(`a[href="${PDF_PFAD}"]`);
+    pruefe(`Anmeldebereich: Download-Link zeigt auf die Datei („${weg}“)`, (await link.count()) === 1);
+  }
+}
+
+/* ── Formulierungen, die nicht zurückkehren dürfen ────────────────
+
+   Die erste Fassung der Einverständniserklärung kam von einem
+   anderen Werkzeug und enthielt einen pauschalen Haftungsverzicht
+   samt Personenschäden sowie die Forderung nach einem Original auf
+   Papier. Beides ist ersetzt. Ein Text, der beides wieder behauptet,
+   widerspräche dem Formular und den AGB — deshalb wird bei jedem
+   Lauf über alle öffentlichen Seiten danach gesucht. */
+const ALTFORMULIERUNGEN = [
+  /Haftungsverzicht/i,
+  /keine Haftung (wird )?übernommen/i,
+  /keine Haftung für (Sach|Personen)schäden/i,
+  /Original[^.]{0,40}(mitbringen|mitgebracht)/i,
+  /Online-Einwilligung genügt/i,
+  /Hin- und Rückweg[^.]{0,60}durch VERA/i,
+];
+const altTreffer = [];
+for (const pfad of gesehen) {
+  const antwort = await page.goto(BASIS + pfad, { waitUntil: "networkidle" });
+  if (!antwort || antwort.status() !== 200) continue;
+  const text = await page.locator("body").innerText();
+  for (const muster of ALTFORMULIERUNGEN) {
+    const treffer = text.match(muster);
+    if (treffer) altTreffer.push(`${pfad}: „${treffer[0]}"`);
+  }
+}
+pruefe(
+  "Keine öffentliche Seite enthält die ersetzten Formulierungen",
+  altTreffer.length === 0,
+  altTreffer.join(" · "),
 );
 
 await ctx.close();

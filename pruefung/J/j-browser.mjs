@@ -34,7 +34,7 @@ async function anmeldenImBrowser(page, email) {
   await page.locator('input[name="person.0.vorname"]').fill("Test");
   await page.locator('input[name="person.0.nachname"]').fill("Person");
   await page.locator('input[name="person.0.email"]').fill(email);
-  await page.getByRole("button", { name: /anmelden & bezahlen|Anmeldung abschicken/i }).click();
+  await page.getByRole("button", { name: /Zur Bezahlung/i }).click();
   /* Die Weiterleitung führt auf eine FREMDE Adresse. Der Browser lädt
      dafür die ganze Seite neu; „networkidle" ist auf der alten Seite
      schon vorher erreicht und käme zu früh. */
@@ -58,14 +58,15 @@ async function anmeldenImBrowser(page, email) {
      reserviert", sondern klar „noch nicht abgeschlossen" — die
      Reservierung ist seitdem reine Technik und keine Bestätigung. */
   pruefe("Der Platz bleibt reserviert und es gibt einen zweiten Anlauf",
-    text.includes("noch nicht abgeschlossen") && text.includes("Jetzt bezahlen"));
+    text.includes("noch nicht abgeschlossen") &&
+      (await page.getByRole("button", { name: "Bezahlen", exact: true }).count()) === 1);
   pruefe("Der Betrag steht als offen da", text.includes("Noch offen"));
   await page.screenshot({ path: `${AUS}/danke-abgebrochen-handy.png`, fullPage: true });
 
   // Zweiter Anlauf über den Knopf
-  await page.getByRole("button", { name: /Jetzt bezahlen/i }).click();
+  await page.getByRole("button", { name: "Bezahlen", exact: true }).click();
   await page.waitForURL(/\/bezahlseite\//, { timeout: 20000 });
-  pruefe("Der Knopf „Jetzt bezahlen“ führt wieder zum Anbieter",
+  pruefe("Der Knopf „Bezahlen“ führt wieder zum Anbieter",
     page.url().includes("/bezahlseite/"), page.url());
   await ctx.close();
 }
@@ -84,7 +85,8 @@ async function anmeldenImBrowser(page, email) {
   pruefe("Die Seite zeigt die Zahlung als eingegangen",
     text.includes("Bezahlt") && text.includes("fest gebucht"),
     text.split("\n").find((z) => z.includes("Bezahlt")) ?? "—");
-  pruefe("Kein Bezahlknopf mehr", !text.includes("Jetzt bezahlen"));
+  pruefe("Kein Bezahlknopf mehr",
+    (await page.getByRole("button", { name: "Bezahlen", exact: true }).count()) === 0);
   await page.screenshot({ path: `${AUS}/danke-bezahlt-handy.png`, fullPage: true });
   await ctx.close();
 }
@@ -105,7 +107,8 @@ async function anmeldenImBrowser(page, email) {
     { waitUntil: "networkidle" });
   const text = await page.locator("body").innerText();
   pruefe("Eine selbst getippte Rückkehr macht NICHT bezahlt",
-    !text.includes("fest gebucht") && text.includes("Jetzt bezahlen"));
+    !text.includes("fest gebucht") &&
+      (await page.getByRole("button", { name: "Bezahlen", exact: true }).count()) === 1);
   await ctx.close();
 }
 

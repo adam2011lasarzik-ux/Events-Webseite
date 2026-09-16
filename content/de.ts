@@ -228,13 +228,23 @@ export const de = {
       "gespeichert. Schreib uns, wenn wir dir Bescheid geben sollen, sobald es losgeht.",
     nochNichtAktion: "Schreib uns",
 
-    minderjaehrigTitel: "Bei Teilnehmern unter 18",
+    /* Der Wortlaut ist vom Betreiber vorgegeben und stimmt mit der
+       Einverständniserklärung (public/dokumente/) und dem AGB-Abschnitt
+       „Teilnahme Minderjähriger" wörtlich überein.
+
+       Hier stand einmal „Eine von VERA Events angebotene elektronische
+       Übermittlung bleibt möglich." Der Satz ist gestrichen: Es gibt
+       keinen elektronischen Weg — weder eine Upload-Funktion noch eine
+       Einreichung per Mail. Er hätte Eltern nach etwas suchen lassen,
+       das es nicht gibt. Die Erklärung wird ausgedruckt, unterschrieben
+       und am Empfang der Veranstaltungslocation abgegeben. */
+    minderjaehrigTitel: "Einverständniserklärung für Minderjährige erforderlich",
     minderjaehrigText:
-      "Meldet ein Elternteil an, gilt die Anmeldung für das Kind. Die Einwilligung hier auf " +
-      "der Webseite reicht dafür allein nicht aus: Zusätzlich ist eine unterschriebene " +
-      "Einverständniserklärung auf Papier zum Event mitzubringen — ohne sie ist eine " +
-      "Teilnahme nicht möglich.",
-    minderjaehrigDownload: "Einverständniserklärung herunterladen (PDF)",
+      "Für minderjährige Teilnehmer muss die Einverständniserklärung vollständig ausgefüllt " +
+      "und von einer erziehungsberechtigten Person unterschrieben werden. Sie muss spätestens " +
+      "beim Check-in abgegeben werden. Die Online-Anmeldung allein ersetzt die unterschriebene " +
+      "Erklärung nicht.",
+    minderjaehrigDownload: "Einverständniserklärung herunterladen",
 
     formular: {
       ueberschrift: "Deine Angaben",
@@ -437,6 +447,17 @@ export const de = {
     impressumAnschrift: "Anschrift",
     impressumKontakt: "Kontakt",
     impressumUmsatzsteuer: "Umsatzsteuer",
+    /* Wie bei den AGB: Seit die Seite einen verbindlichen Abschnitt
+       enthält, gehört die Platzhalter-Markierung an den offenen Teil
+       und nicht mehr über die ganze Seite. */
+    datenschutzAllgemeinUeberschrift: "1. Allgemeine Erklärung",
+    /* ­ ist eine WEICHE Trennstelle: unsichtbar, solange das Wort
+       passt, und ein Bindestrich, sobald umgebrochen werden muss. Ohne
+       sie bricht „Einverständniserklärungen" auf dem Handy mitten im
+       Wort ohne Bindestrich um — dasselbe Mittel steht schon im Titel
+       der Seite (`datenschutzTitel`). Wer den Wortlaut vergleicht,
+       entfernt sie vorher mit ohneTrennstellen() aus lib/formate.ts. */
+    datenschutzOffenMarke: "Dieser Abschnitt ist noch nicht ausgefüllt",
     datenschutzText:
       "Hier steht später, welche Daten bei einer Anmeldung erhoben werden, wozu sie verwendet " +
       "werden, wie lange sie gespeichert bleiben und welche Rechte Besucher haben.",
@@ -469,6 +490,66 @@ export const de = {
       "Zustimmungsfenster. Das einzige Cookie entsteht, wenn sich der Betreiber am " +
       "Verwaltungsbereich anmeldet; es hält nur diese Anmeldung und ist technisch notwendig.",
 
+    /* ── Einverständniserklärungen für Minderjährige ────────────────
+       KEIN Platzhalter: Dieser Abschnitt beschreibt eine Verarbeitung,
+       die tatsächlich stattfindet, und ist mit der
+       Datenschutzinformation auf Seite 2 der Einverständniserklärung
+       (public/dokumente/) wörtlich abgestimmt. Die beiden dürfen nur
+       gemeinsam geändert werden — stünde auf dem Formular etwas
+       anderes als hier, wäre eine der beiden Angaben falsch.
+
+       Der Einleitungssatz grenzt den Abschnitt bewusst auf das
+       Papierformular ein: Geburtsdatum, Mobilnummer und
+       Gesundheitsangaben werden dort erhoben, NICHT im
+       Online-Anmeldeformular (siehe lib/anmeldung.ts — dieses kennt
+       nur Vorname, Nachname, E-Mail und Telefon). Ohne die Eingrenzung
+       behauptete die Erklärung eine Erhebung, die es online nicht
+       gibt. */
+    datenschutzMinderjaehrigUeberschrift:
+      "2. Einverständnis­erklärungen für minderjährige Teilnehmer",
+    datenschutzMinderjaehrigEinleitung:
+      "Dieser Abschnitt betrifft die Angaben auf der Einverständniserklärung, die für " +
+      "minderjährige Teilnehmer abgegeben wird.",
+    datenschutzMinderjaehrigAbsaetze: [
+      "Bei der Anmeldung und Teilnahme minderjähriger Personen verarbeitet VERA Events " +
+        "insbesondere den Namen und das Geburtsdatum des minderjährigen Teilnehmers, den " +
+        "Namen und die Mobilnummer der erziehungsberechtigten Person, gegebenenfalls deren " +
+        "E-Mail-Adresse, Angaben zur Veranstaltung sowie freiwillige Angaben zu Allergien, " +
+        "Erkrankungen oder erforderlichen Notfallmedikamenten.",
+      "Die Verarbeitung erfolgt zur Entgegennahme des Formulars am Empfang, zur Organisation " +
+        "und Durchführung der Veranstaltung, zur Prüfung der Teilnahmeberechtigung, zur " +
+        "Kontaktaufnahme während der Veranstaltung, zur Gewährleistung der Sicherheit, zur " +
+        "Notfallhilfe und zur Dokumentation der erteilten Einverständniserklärung.",
+      "Rechtsgrundlagen für die teilnahmebezogenen Daten sind Art. 6 Abs. 1 Buchst. b DSGVO " +
+        "und, hinsichtlich Erreichbarkeit, Sicherheit und Dokumentation, Art. 6 Abs. 1 " +
+        "Buchst. f DSGVO. In einem akuten Notfall kann die Verarbeitung außerdem auf Art. 6 " +
+        "Abs. 1 Buchst. d DSGVO gestützt werden.",
+      "Angaben zu Allergien, Erkrankungen oder erforderlichen Notfallmedikamenten sind " +
+        "freiwillig. Soweit solche Gesundheitsdaten angegeben werden, erfolgt ihre " +
+        "Verarbeitung aufgrund einer ausdrücklichen Einwilligung gemäß Art. 9 Abs. 2 " +
+        "Buchst. a in Verbindung mit Art. 6 Abs. 1 Buchst. a DSGVO. In einem akuten Notfall " +
+        "kann Art. 9 Abs. 2 Buchst. c DSGVO Anwendung finden. Die Einwilligung kann jederzeit " +
+        "mit Wirkung für die Zukunft widerrufen werden.",
+      "Mitarbeiter der jeweiligen Veranstaltungslocation dürfen die Formulare am Empfang " +
+        "ausschließlich für VERA Events entgegennehmen, kurzfristig sicher verwahren und " +
+        "vollständig an VERA Events weitergeben. Die Veranstaltungslocation behält keine " +
+        "Kopie und verwendet die Angaben nicht für eigene Zwecke.",
+      "Zugriff erhalten im Übrigen nur Personen, die die Daten für die " +
+        "Veranstaltungsdurchführung benötigen. Im Notfall können erforderliche Angaben an " +
+        "Rettungsdienst oder medizinisches Personal weitergegeben werden. Eine sonstige " +
+        "Weitergabe erfolgt nur, wenn hierfür eine gesetzliche Verpflichtung besteht.",
+      "Freiwillige Gesundheitsangaben werden grundsätzlich spätestens 30 Tage nach " +
+        "Veranstaltungsende gelöscht oder vernichtet. Die übrigen Angaben werden gelöscht, " +
+        "sobald sie für die genannten Zwecke nicht mehr erforderlich sind. Eine längere " +
+        "Speicherung erfolgt nur, soweit sie zur Geltendmachung, Ausübung oder Verteidigung " +
+        "von Rechtsansprüchen erforderlich ist oder gesetzliche Aufbewahrungspflichten " +
+        "bestehen.",
+      "Die erforderlichen Pflichtangaben werden für die Teilnahme Minderjähriger benötigt. " +
+        "Die E-Mail-Adresse und Gesundheitsangaben sind freiwillig. Ohne erforderliche " +
+        "Pflichtangaben kann die Teilnahme abgelehnt werden. Im Übrigen gelten die in der " +
+        "Datenschutzerklärung aufgeführten Rechte der betroffenen Personen.",
+    ],
+
     /* ── AGB und Widerruf ──────────────────────────────────────────
        Beide werden Pflicht, sobald online bezahlt wird. Sie stehen
        hier bewusst NUR als sichtbar markierte Platzhalter: Was
@@ -482,13 +563,23 @@ export const de = {
        dagegen bestimmte Informationen VOR Vertragsschluss im
        Fernabsatz. Welche das hier sind, entscheidet keine
        Programmiererin. */
+    /* Die Überschrift kam mit dem Abschnitt „Teilnahme Minderjähriger"
+       dazu: Sobald eine Seite einen verbindlichen und einen offenen
+       Teil hat, muss erkennbar sein, welcher welcher ist. */
+    /* Weiche Trennstelle wie bei der Datenschutzseite — siehe dort. */
+    agbAllgemeinUeberschrift: "1. Allgemeine Vertrags­bedingungen",
+    agbOffenMarke: "Dieser Abschnitt ist noch nicht ausgefüllt",
+    /* Endete früher auf „… und die Besonderheiten bei Minderjährigen".
+       Das steht seit Abschnitt 2 wirklich dort — der Satz hätte es
+       weiterhin als offen ausgewiesen und der eigenen Seite
+       widersprochen. */
     agbText:
       "Eigene Geschäftsbedingungen sind nicht für jede Webseite vorgeschrieben. Ohne sie " +
       "gilt das Gesetz. Wenn VERA eigene verwenden soll, gehören sie zum tatsächlichen " +
       "Ablauf: wer Vertragspartner ist, wann eine Anmeldung verbindlich wird, welche " +
       "Leistung eine Veranstaltung umfasst, wie und wann bezahlt wird, was bei Verhinderung " +
-      "gilt, was bei Ausfall oder Verlegung passiert, die Haftung, die Regeln vor Ort und " +
-      "die Besonderheiten bei Minderjährigen.",
+      "gilt, was bei Ausfall oder Verlegung passiert, die Haftung und die Regeln vor Ort. " +
+      "Die Teilnahme Minderjähriger ist bereits in Abschnitt 2 geregelt.",
     agbHinweisPflichtinfos:
       "Unabhängig davon gibt es beim Verkauf über das Internet Angaben, die vor dem " +
       "Absenden der Bestellung erscheinen müssen. Welche das für dieses Eventmodell sind " +
@@ -499,6 +590,50 @@ export const de = {
       "ist eine vertragliche Regelung und etwas anderes als das gesetzliche Widerrufsrecht " +
       "(siehe „Widerruf und Stornierung“). Sie bekommen bewusst keine eigene Seite — sie " +
       "gehören dorthin, wo auch der Rest des Vertrags steht.",
+
+    /* ── Teilnahme Minderjähriger ───────────────────────────────────
+       KEIN Platzhalter: Das sind vom Betreiber festgelegte Bedingungen.
+       Sie beschreiben denselben Ablauf wie die Einverständniserklärung
+       (public/dokumente/) und der Hinweis im Anmeldebereich — die drei
+       Stellen sind wörtlich aufeinander abgestimmt und dürfen nur
+       gemeinsam geändert werden.
+
+       Der letzte Absatz ist die EINZIGE Haftungsregelung im Projekt.
+       Er schliesst nichts aus, sondern verweist auf das Gesetz und
+       stellt klar, dass für Leben, Körper, Gesundheit sowie Vorsatz und
+       grobe Fahrlässigkeit nichts beschränkt wird. Ein pauschaler
+       Haftungsausschluss stand hier nie und gehört auch nicht her. */
+    agbMinderjaehrigUeberschrift: "2. Teilnahme Minderjähriger",
+    agbMinderjaehrigAbsaetze: [
+      "Minderjährige dürfen an einer Veranstaltung nur mit Zustimmung einer " +
+        "erziehungsberechtigten Person teilnehmen. Die anmeldende beziehungsweise " +
+        "unterschreibende Person bestätigt, erziehungsberechtigt und zur Abgabe der " +
+        "erforderlichen Erklärungen berechtigt zu sein. Soweit die Zustimmung einer weiteren " +
+        "sorgeberechtigten Person erforderlich ist, muss diese ebenfalls vorliegen.",
+      "Die von VERA Events bereitgestellte Einverständniserklärung muss vollständig " +
+        "ausgefüllt, unterschrieben und spätestens beim Check-in abgegeben werden. Liegt die " +
+        "erforderliche Erklärung bei Veranstaltungsbeginn nicht vor, kann die Teilnahme des " +
+        "Minderjährigen abgelehnt werden. Gesetzliche und vertragliche Erstattungsansprüche " +
+        "bleiben unberührt.",
+      "Für die Organisation des Hin- und Rückwegs ist die erziehungsberechtigte Person " +
+        "verantwortlich. Die Betreuung durch VERA Events beginnt mit dem vereinbarten " +
+        "Check-in und endet mit dem offiziellen Veranstaltungsende, soweit nicht " +
+        "ausdrücklich etwas anderes vereinbart wurde.",
+      "Minderjährige Teilnehmer müssen die Sicherheits-, Verhaltens- und Hausregeln sowie " +
+        "die Anweisungen des Veranstaltungs-, Betreuungs- und Hallenpersonals beachten. Bei " +
+        "erheblichen oder wiederholten Regelverstößen kann der Teilnehmer von der weiteren " +
+        "Teilnahme ausgeschlossen werden. Die erziehungsberechtigte Person muss während der " +
+        "Veranstaltung unter der angegebenen Mobilnummer erreichbar sein und den " +
+        "Minderjährigen erforderlichenfalls zeitnah abholen.",
+      "Bei einem Unfall oder akuten gesundheitlichen Problem dürfen angemessene " +
+        "Erste-Hilfe-Maßnahmen eingeleitet und bei Bedarf Rettungsdienst oder ärztliche " +
+        "Hilfe verständigt werden. Die erziehungsberechtigte Person beziehungsweise der " +
+        "angegebene Notfallkontakt wird schnellstmöglich informiert.",
+      "Für die Haftung von VERA Events gelten die gesetzlichen Vorschriften. Insbesondere " +
+        "wird die Haftung für Schäden aus der Verletzung des Lebens, des Körpers oder der " +
+        "Gesundheit sowie für vorsätzlich oder grob fahrlässig verursachte Schäden nicht " +
+        "ausgeschlossen oder beschränkt.",
+    ],
 
     /* Hiess einmal „Widerruf" / „Widerrufsbelehrung". Beides setzt
        voraus, dass es ein Widerrufsrecht überhaupt gibt — und genau

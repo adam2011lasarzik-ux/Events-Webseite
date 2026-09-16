@@ -5,11 +5,20 @@ import { texte } from "@/content";
 import stil from "@/components/Textseite.module.css";
 
 /**
- * Allgemeine Geschäftsbedingungen — vorerst ein markierter Platzhalter.
+ * Allgemeine Geschäftsbedingungen.
  *
- * Die Seite entsteht jetzt, obwohl der Text noch fehlt: Adresse,
- * Verlinkung im Fußbereich und Gerüst stehen damit, und am Tag des
- * Livegangs ist nur noch Text einzusetzen statt umzubauen.
+ * Abschnitt 1 (der allgemeine Vertragstext) ist weiterhin ein
+ * markierter Platzhalter — ob VERA eigene AGB verwendet, ist offen.
+ * Abschnitt 2 ist dagegen verbindlich: Die Regeln für die Teilnahme
+ * Minderjähriger hat der Betreiber festgelegt, und sie beschreiben
+ * denselben Ablauf wie die Einverständniserklärung und der Hinweis im
+ * Anmeldebereich.
+ *
+ * Deshalb steht die Markierung seit dieser Ergänzung bei Abschnitt 1
+ * statt über der ganzen Seite — dasselbe Muster wie auf der
+ * Widerrufsseite. Eine Seite, die geltende Bedingungen enthält und
+ * sich zugleich als „noch nicht ausgefüllt" bezeichnet, wäre in beide
+ * Richtungen irreführend.
  *
  * Die Stornobedingungen bekommen bewusst KEINE eigene Adresse. Sie
  * gehören in denselben Vertragstext; eine eigene Seite dafür würde die
@@ -23,13 +32,19 @@ export default function Seite() {
   return (
     <Abschnitt>
       <AbschnittKopf titel={t.recht.agbTitel} haupt />
-      <p style={{ marginBottom: "1.5rem" }}>
-        <Platzhalter text={t.recht.platzhalterTitel} markierung={t.platzhalter.markierung} />
-      </p>
       <div className={stil.inhalt}>
+        <h2>{t.recht.agbAllgemeinUeberschrift}</h2>
+        <p>
+          <Platzhalter text={t.recht.agbOffenMarke} markierung={t.platzhalter.markierung} />
+        </p>
         <p>{t.recht.agbText}</p>
         <p>{t.recht.agbHinweisPflichtinfos}</p>
         <p>{t.recht.agbStorno}</p>
+
+        <h2>{t.recht.agbMinderjaehrigUeberschrift}</h2>
+        {t.recht.agbMinderjaehrigAbsaetze.map((absatz) => (
+          <p key={absatz.slice(0, 40)}>{absatz}</p>
+        ))}
       </div>
     </Abschnitt>
   );

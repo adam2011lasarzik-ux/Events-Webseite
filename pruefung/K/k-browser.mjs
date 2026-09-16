@@ -54,10 +54,10 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
   await formularAusfuellen(page, `knopf-${Date.now()}@example.org`);
-  const knopf = page.getByRole("button", { name: /anmelden & bezahlen/i });
+  const knopf = page.getByRole("button", { name: /Zur Bezahlung/i });
   const beschriftung = (await knopf.textContent()) ?? "";
-  pruefe("Der Knopf sagt „anmelden & bezahlen“ und nennt den Betrag",
-    /anmelden & bezahlen/i.test(beschriftung) && /7,00/.test(beschriftung), beschriftung.trim());
+  pruefe("Der Knopf sagt „Zur Bezahlung“ und nennt den Betrag",
+    /Zur Bezahlung/i.test(beschriftung) && /7,00/.test(beschriftung), beschriftung.trim());
 
   await page.screenshot({ path: `${AUS}/knopf-einzel-handy.png`, fullPage: true });
   await ctx.close();
@@ -71,7 +71,7 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   await formularAusfuellen(page, email, { familie: true });
 
   const summe = (await page.locator('[class*="summeBetrag"]').first().textContent()) ?? "";
-  const knopf = page.getByRole("button", { name: /anmelden & bezahlen/i });
+  const knopf = page.getByRole("button", { name: /Zur Bezahlung/i });
   const beschriftung = (await knopf.textContent()) ?? "";
   const betrag = summe.replace(/\s/g, "");
   pruefe("Familienpaket: der Betrag im Knopf ist derselbe wie in der Summe",
@@ -91,7 +91,8 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   pruefe("Nach dem Bezahlen: „Zahlung erfolgreich“ im Plural",
     text.includes("Zahlung erfolgreich") && text.includes("Ihr seid für das Event angemeldet"),
     text.split("\n")[0]);
-  pruefe("… und kein Bezahlknopf mehr", !text.includes("Jetzt bezahlen"));
+  pruefe("… und kein Bezahlknopf mehr",
+    (await page.getByRole("button", { name: "Bezahlen", exact: true }).count()) === 0);
   await page.screenshot({ path: `${AUS}/bezahlt-familie-handy.png`, fullPage: true });
   await ctx.close();
 }
@@ -101,7 +102,7 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
   await formularAusfuellen(page, `einzel-${Date.now()}@example.org`);
-  await page.getByRole("button", { name: /anmelden & bezahlen/i }).click({ force: true });
+  await page.getByRole("button", { name: /Zur Bezahlung/i }).click({ force: true });
   await page.waitForURL(/\/bezahlseite\//, { timeout: 20000 });
   await page.click("#bezahlen");
   await page.waitForURL(/\/anmeldung\/danke/, { timeout: 20000 });
@@ -118,7 +119,7 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
   await formularAusfuellen(page, `abbruch-${Date.now()}@example.org`);
-  await page.getByRole("button", { name: /anmelden & bezahlen/i }).click({ force: true });
+  await page.getByRole("button", { name: /Zur Bezahlung/i }).click({ force: true });
   await page.waitForURL(/\/bezahlseite\//, { timeout: 20000 });
   await page.click("#abbrechen");
   await page.waitForURL(/\/anmeldung\/danke/, { timeout: 20000 });
@@ -128,11 +129,12 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
     text.includes("noch nicht abgeschlossen"), text.split("\n")[0]);
   pruefe("… kein „Danke“ und kein „bestätigt“",
     !text.includes("Danke —") && !text.includes("Anmeldung ist bestätigt"));
-  pruefe("… und ein Knopf „Jetzt bezahlen“", text.includes("Jetzt bezahlen"));
+  pruefe("… und ein Knopf „Bezahlen“",
+    (await page.getByRole("button", { name: "Bezahlen", exact: true }).count()) === 1);
   await page.screenshot({ path: `${AUS}/offen-handy.png`, fullPage: true });
 
   // Zweiter Anlauf
-  await page.getByRole("button", { name: /Jetzt bezahlen/i }).click({ force: true });
+  await page.getByRole("button", { name: "Bezahlen", exact: true }).click({ force: true });
   await page.waitForURL(/\/bezahlseite\//, { timeout: 20000 });
   pruefe("Der Knopf führt zurück zum Anbieter", page.url().includes("/bezahlseite/"));
   await ctx.close();

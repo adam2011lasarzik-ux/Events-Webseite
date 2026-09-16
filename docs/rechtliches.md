@@ -81,7 +81,23 @@ sucht bei jedem Lauf danach.
 | **Server-Protokolle**: IP-Adresse wird gekürzt (letzte Stelle verworfen), Aufbewahrung 14 Tage | 🟩 **erledigt** |
 | **UptimeRobot** als zweiter Dienstleister benennen | 🟨 |
 | Auftragsverarbeitung mit Stripe einordnen | 🟨 |
-| Besonderheiten bei Minderjährigen | 🟨 |
+| **Einverständniserklärungen für Minderjährige**: eigener Abschnitt 2 | 🟩 **eingetragen (16.09.2026)** |
+
+**Neu seit dem 16.09.2026:** Die Seite hat einen zweiten, **verbindlichen**
+Abschnitt „Einverständniserklärungen für minderjährige Teilnehmer" —
+Datenarten, Zwecke, Rechtsgrundlagen (Art. 6 Abs. 1 Buchst. b, f und d,
+für Gesundheitsangaben Art. 9 Abs. 2 Buchst. a bzw. c DSGVO), Rolle der
+Veranstaltungslocation, Speicherdauern und Pflicht- bzw. Freiwilligkeit.
+
+Er ist **wörtlich abgestimmt** mit der Datenschutzinformation auf Seite 2
+der Einverständniserklärung (`public/dokumente/`). Beide dürfen nur
+gemeinsam geändert werden — stünde auf dem Formular etwas anderes als auf
+der Seite, wäre eine der beiden Angaben falsch.
+
+**Deshalb steht die Platzhalter-Markierung jetzt bei Abschnitt 1** statt
+über der ganzen Seite, genau wie auf der Widerrufsseite. Eine Seite, die
+eine geltende Regelung enthält und sich zugleich als „noch nicht
+ausgefüllt" bezeichnet, wäre in beide Richtungen irreführend.
 
 **Korrigiert:** Dort stand „Diese Seite setzt keine Cookies". Das war
 falsch — `lib/adminAuth.ts` setzt für die Anmeldung am
@@ -100,6 +116,24 @@ zutrifft.
 | Hinweis auf Pflichtangaben vor Vertragsschluss im Fernabsatz | 🟩 (als offene Frage benannt) |
 | Entscheidung, ob VERA eigene AGB verwendet | 🟦 🟨 |
 | Falls ja: Text passend zum tatsächlichen Buchungsablauf | 🟨 🟥 |
+| **Abschnitt 2 „Teilnahme Minderjähriger"** — verbindlich | 🟩 **eingetragen (16.09.2026)** |
+
+**Neu seit dem 16.09.2026:** Abschnitt 2 regelt die Teilnahme
+Minderjähriger: Zustimmung der erziehungsberechtigten Person, Abgabe der
+Einverständniserklärung spätestens beim Check-in (elektronische
+Übermittlung bleibt möglich), Verantwortung für den Hin- und Rückweg,
+Betreuungszeitraum von Check-in bis Veranstaltungsende, Hausregeln und
+Ausschluss, Erste Hilfe — und die Haftung.
+
+**Der Haftungsabsatz ist die einzige Haftungsregelung im Projekt.** Er
+schliesst nichts aus, sondern verweist auf die gesetzlichen Vorschriften
+und stellt ausdrücklich klar, dass für Leben, Körper, Gesundheit sowie
+Vorsatz und grobe Fahrlässigkeit nichts beschränkt wird. Ein pauschaler
+Haftungsausschluss stand auf der Seite nie und gehört auch nicht dorthin;
+Prüfliste `N` sucht bei jedem Lauf danach.
+
+**Die Platzhalter-Markierung gilt dadurch nur noch für Abschnitt 1** —
+dasselbe Muster wie bei Widerruf und Datenschutz.
 
 **Korrigiert:** Der Platzhalter las sich, als seien AGB Pflicht. Sind
 sie nicht — ohne eigene AGB gilt das Gesetz. Etwas anderes sind die
@@ -170,6 +204,54 @@ Muster.
 
 ---
 
+## Einverständniserklärung für Minderjährige · vier Stellen, ein Wortlaut
+
+Die Regelung steht an **vier** Stellen, und sie müssen zusammenpassen:
+
+| Stelle | Datei |
+|---|---|
+| Das Formular selbst (2 Seiten, mit Art.-13-Information) | `public/dokumente/einverstaendniserklaerung-minderjaehrige.pdf` |
+| Hinweis im Anmeldebereich, nur bei „Mein Kind“ und „Familienpaket“ | `content/de.ts` → `anmeldung.minderjaehrig*`, angezeigt in `components/PreisRechner.tsx` |
+| AGB, Abschnitt 2 „Teilnahme Minderjähriger“ | `content/de.ts` → `recht.agbMinderjaehrig*` |
+| Datenschutz, Abschnitt 2 | `content/de.ts` → `recht.datenschutzMinderjaehrig*` |
+
+**Wird eine geändert, müssen alle vier angesehen werden.** Prüfliste `N`
+vergleicht die tragenden Aussagen (Check-in, Hin- und Rückweg,
+Betreuungszeitraum, Gesundheitsangaben, 30-Tage-Frist) und schlägt an,
+wenn eine davon verschwindet.
+
+**Gestrichen am 16.09.2026:** An allen vier Stellen stand der Satz „Eine
+von VERA Events angebotene elektronische Übermittlung bleibt möglich."
+Es gibt keine — weder eine Upload-Funktion für Besucher (die Website hat
+überhaupt keine, Uploads kann nur der Verwaltungsbereich) noch eine
+Einreichung per Mail. Der Satz hätte Eltern nach einem Weg suchen lassen,
+den es nicht gibt. Die Erklärung wird **ausgedruckt, unterschrieben und
+am Empfang der Veranstaltungslocation abgegeben** — sonst nichts.
+Prüfliste `N` hält den Satz jetzt fern, auch in der PDF.
+
+### Umgang mit den Formularen vor Ort
+
+Die Veranstaltungslocation nimmt die Formulare **ausschliesslich für VERA
+Events** entgegen. Genau das steht so auf dem Formular und in der
+Datenschutzerklärung — und muss deshalb auch so gelebt werden:
+
+- am Empfang geschützt entgegennehmen, **nicht offen auslegen**
+- **nicht fotografieren und nicht kopieren**
+- kurzfristig geschützt verwahren (verschlossen, nicht einsehbar)
+- **vollständig** an VERA Events übergeben
+- **keine Ausfertigung in der Halle zurückbehalten**
+
+**Technisch gibt es dazu nichts zu tun.** Die ausgefüllten Formulare
+werden **nicht** digitalisiert, nicht hochgeladen und nirgends
+gespeichert — es gibt im Projekt keine Funktion dafür, und es soll
+vorerst auch keine geben. Deshalb steht dieser Ablauf hier in der Doku
+und nicht als Anzeige im Verwaltungsbereich: Dort gibt es keinen
+Check-in-Bereich, an den er gehören würde. Käme je eine digitale
+Ablage hinzu, wären Aufbewahrung, Zugriff und Löschfrist **vorher** zu
+klären — Gesundheitsangaben sind besondere Daten nach Art. 9 DSGVO.
+
+---
+
 ## Mehrwertsteuer: geklärt — Kleinunternehmer nach § 19 UStG 🟩
 
 **Entscheidung des Betreibers (September 2026):** VERA wird als
@@ -215,8 +297,9 @@ behauptet; sie ist dann mit anzupassen.
 1. ~~**Impressumsdaten**: ladungsfähige Anschrift und Telefonnummer~~
    🟩 **erledigt (15.09.2026)** — eingetragen, angezeigt und geprüft;
    ob die Anschrift ladungsfähig ist, bestätigt der Rechtstexte-Dienst
-2. **Datenschutzerklärung** ausformulieren, Stripe und Minderjährige
-   berücksichtigen 🟥
+2. **Datenschutzerklärung** ausformulieren (Abschnitt 1); Stripe ist
+   benannt, die Minderjährigen haben seit dem 16.09.2026 einen eigenen
+   verbindlichen Abschnitt 🟥
 3. **Widerrufsrecht klären** (§ 312g Abs. 2 Nr. 9 BGB) und die Seite
    entsprechend füllen 🟥
 4. ~~**Mehrwertsteuer-Aussage** bestätigen oder ändern~~ 🟩 **erledigt**
