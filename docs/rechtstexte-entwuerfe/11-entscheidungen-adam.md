@@ -83,25 +83,28 @@ stellt (2×), Foto-Zwecke (3×).
 
 | # | Frage | Art | Status |
 |---|---|---|---|
-| **3.1** | **Wer führt die Aufsicht über Minderjährige?** | ⬜ | **✅ 17.09.2026** |
-| 3.2 | Zuständige Personen vor Ort | ⬜ | ✅ 17.09.2026 |
-| 3.13 | **neu:** Erkennbarkeit Minderjähriger vor Ort | ⬜ | ✅ 17.09.2026 |
-| 3.14 | **neu:** Check-out-Variante | ⬜ | ✅ 17.09.2026 |
-| 3.15 | **neu:** Anreiz zum Abmelden | ⬜ | ✅ 17.09.2026 |
-| 3.16 | **neu:** Ausgestaltung der Garderobe | ⬜ | ✅ 17.09.2026 |
-| 3.17 | **neu:** Wertsachenregelung und Haftung für abgegebene Sachen | ⬜ ⚖️ | ⬜ |
-| 3.18 | **neu:** Deckt die Haftpflicht Obhutsschäden ab? | 🔎 | ⬜ |
+| **3.1** | **Wer führt die Aufsicht über Minderjährige?** | ⬜ | **✅ 17.09.2026 — später durch 3.20 ersetzt** |
+| 3.2 | Zuständige Personen vor Ort | ⬜ | ⚠️ durch 3.20 überholt |
+| 3.13 | **neu:** Erkennbarkeit Minderjähriger vor Ort | ⬜ | ⚠️ Zweck entfallen — siehe 3.21 |
+| 3.14 | **neu:** Check-out-Variante | ⬜ | ⚠️ durch 3.20 hinfällig |
+| 3.15 | **neu:** Anreiz zum Abmelden | ⬜ | ⚠️ durch 3.20 hinfällig |
+| 3.16 | **neu:** Ausgestaltung der Garderobe | ⬜ | ⚠️ zu überprüfen — siehe 3.21 |
+| 3.17 | **neu:** Wertsachenregelung und Haftung für abgegebene Sachen | ⬜ ⚖️ | ✅ hinfällig — keine Verwahrung |
+| 3.20 | **neu:** Grundmodell der Aufsicht | ⬜ | ✅ 17.09.2026 |
+| 3.21 | **neu:** Bleiben Garderobe und Armband ohne Check-out? | ⬜ | ✅ 17.09.2026 — beides entfällt |
+| 3.22 | **neu:** Inhalt der Sicherheitseinweisung | ⬜ | ✅ 17.09.2026 |
+| 3.18 | **neu:** Deckt die Haftpflicht Obhutsschäden ab? | 🔎 | ✅ hinfällig — keine Verwahrung |
 | 3.3 | Rückweg-Feld ins Formular aufnehmen? | ⬜ | ✅ erledigt durch 3.10/3.19 |
 | 3.4 | Hinweis zu vorsätzlicher Beschädigung aufnehmen? | ⬜ ⚖️ | ⬜ |
 | 3.5 | Hausordnung der Veranstaltungslocation im Wortlaut | 🔎 | ⬜ |
 | 3.6 | Schuhwerk-Vorgabe der Location | 🔎 | ⬜ |
-| 3.7 | Alkohol bei Veranstaltungen: Ausschank, Mitbringen, beides nicht? | ⬜ | ⬜ |
+| 3.7 | Alkohol bei Veranstaltungen: Ausschank, Mitbringen, beides nicht? | ⬜ | ⬜ ← jetzt |
 | 3.8 | Geeigneter Bereich für ausgeschlossene Minderjährige bis zur Abholung? | 🔎 | ⬜ |
-| 3.9 | **neu:** Wie lautet der Kontaktprozess bei Verlassen ohne Abmeldung? | ⬜ | ⬜ ← jetzt |
+| 3.9 | **neu:** Kontaktprozess — jetzt nur noch für Notfälle | ⬜ | ⬜ |
 | 3.10 | **neu:** Mindestalter und selbstständige An-/Abreise | ⬜ | ✅ 17.09.2026 |
 | 3.19 | **neu:** Zwei Wege — mit und ohne Begleitung | ⬜ | ✅ 17.09.2026 |
 | 3.11 | **neu:** Woher kennt VERA beim Check-in das Alter? | ⬜ | ✅ erledigt — aus den Formularen |
-| 3.12 | **neu:** Aufbewahrungsdauer der Anwesenheitsliste | ⬜ | ⬜ |
+| 3.12 | **neu:** Aufbewahrungsdauer der Anwesenheitsliste | ⬜ | ✅ hinfällig — keine Liste mehr |
 
 # Gruppe 4 — Vor Foto- und Videoaufnahmen
 
@@ -625,3 +628,172 @@ prüfen könnte.
 Acht Entscheidungen getroffen (3.1, 3.2, 3.10, 3.13, 3.14, 3.15, 3.16,
 3.19), zwei Fragen haben sich dabei von selbst erledigt (3.3, 3.11).
 Der Minderjährigen-Ablauf steht damit weitgehend.
+
+
+---
+
+## 3.20 — Grundmodell der Aufsicht · entschieden am 17.09.2026
+
+> ### ⚠️ Diese Entscheidung hebt mehrere frühere auf
+> Alles, was zwischen 3.1 und 3.19 zur Aufsichtsübernahme entschieden
+> wurde, steht unter dieser Entscheidung. Was aufgehoben ist, ist unten
+> einzeln benannt. **Beim Überarbeiten der Entwürfe gilt 3.20 — nicht
+> die früheren Abschnitte.**
+
+### Der Anlass
+
+Adam fragte, wie große Veranstaltungen das lösen, bei denen ein
+Elternzettel nötig ist, das Gelände aber ohne Abmeldung verlassen werden
+kann.
+
+**Die Antwort erklärt den Unterschied:** Solche Veranstalter übernehmen
+die Aufsicht gar nicht erst. Der verbreitete „Muttizettel" bei Konzerten
+und Festivals überträgt die Erziehungsbeauftragung auf eine namentlich
+benannte volljährige **Begleitperson**, nicht auf den Veranstalter. Der
+Veranstalter prüft nur, ob der Zettel vorliegt. Er beaufsichtigt
+niemanden — deshalb muss sich auch niemand abmelden. Der Zettel regelt
+dort Jugendschutzfragen, nicht die Aufsicht.
+
+`[VOR VERWENDUNG KLÄREN: Die genaue Einordnung nach dem
+Jugendschutzgesetz gehört in die fachliche Prüfung. Der Gesetzestext war
+aus dieser Arbeitsumgebung nicht im Original abrufbar.]`
+
+**Der nähere Vergleich für VERA ist nicht das Festival, sondern die
+Kletter- oder Trampolinhalle:** Einverständnis der Eltern,
+Sicherheitseinweisung, Hausregeln — aber keine Aufsicht über Einzelne
+und freies Gehen.
+
+### Die Entscheidung
+
+**Gewählt: Anlagenmodell — VERA übernimmt keine Aufsicht über
+unbegleitete Minderjährige.**
+
+### Was damit entfällt
+
+| Aufgehoben | war entschieden in |
+|---|---|
+| Aufsichtsübernahme von Check-in bis Check-out | 3.1 |
+| Einzeln dokumentierter Check-out | 3.14 |
+| Abmeldepflicht beim Verlassen | 3.1, 3.14 |
+| Anreiz zum Abmelden (Garderobe als Zug) | 3.15 |
+| Zwei getrennte Rollen wegen des Ortsproblems | 3.2 |
+| Kontaktprozess bei Verlassen ohne Abmeldung | 3.9 (bleibt für Notfälle) |
+| Anwesenheitsliste als Aufsichtsnachweis | 3.1 |
+
+### Was bleibt — und teilweise wichtiger wird
+
+| Bleibt | Warum |
+|---|---|
+| **Einverständniserklärung der Eltern** | Zustimmung zur Teilnahme, Notfallkontakt, freiwillige Gesundheitsangaben. Nicht mehr Aufsichtsdokument |
+| **Sicherheitseinweisung** | **Wird zur zentralen Pflicht.** Im Anlagenmodell ist sie das, was VERA schuldet — neue Frage 3.22 |
+| **Hausordnung und Verhaltensregeln** | unverändert, Dokument 09 |
+| **Verkehrssicherungspflicht** | unberührt — sie hat mit Aufsicht nichts zu tun |
+| **Notfallkontakt der Eltern** | unverändert nötig: Bei einer Verletzung muss jemand erreichbar sein |
+| **Ansprechpersonen vor Ort** | anwesend und erkennbar — aber als Ansprechpartner, nicht als Aufsicht |
+| **Zwei Wege begleitet/unbegleitet** (3.19) | im Kern ja: Ist ein Elternteil da, führt es die Aufsicht. Ist keines da, führt sie **niemand** — das muss im Text klar stehen |
+
+### ⚠️ Das Risiko dieser Wahl, einmal benannt
+
+Euer Event ist nicht ganz eine Kletterhalle: Es wird gezielt an Schüler
+vermarktet, die Eltern melden das Kind an, VERA stellt Trainer und
+Ausrüstung. Das spricht eher für eine Aufsichtsübernahme als ein
+Laufkundschaftsbetrieb — und durch Entscheidung 3.10 (kein
+Mindestalter) können auch deutlich jüngere Kinder unbegleitet kommen.
+
+**Eine Aufsichtspflicht entsteht aus der tatsächlichen Übernahme, nicht
+aus dem Text.** Wenn vor Ort faktisch beaufsichtigt wird, hilft die
+Formulierung nicht.
+
+**Was daraus folgt, ist kein Widerspruch, sondern eine Auflage:** Die
+Texte müssen ausdrücklich und gut sichtbar sagen, dass VERA keine
+Aufsicht übernimmt — im Anmeldebereich, in der Einverständniserklärung
+und in den Teilnahmebedingungen. Ein Elternteil, das ein Kind anmeldet,
+muss das **vor** der Buchung wissen, nicht erst am Empfang.
+
+**Gehört ausdrücklich in die fachliche Prüfung:** ob das Anlagenmodell
+bei einem gezielt an Schüler vermarkteten Format und ohne Mindestalter
+trägt. Das ist die wichtigste rechtliche Frage dieses ganzen Blocks.
+
+
+---
+
+## 3.21 — Garderobe und Armband · entschieden am 17.09.2026
+
+**Gewählt: beides entfällt vollständig.**
+
+Beide hatten ihren Zweck im Aufsichtsmechanismus. Mit Entscheidung 3.20
+ist dieser Zweck entfallen — von der bewachten Garderobe wäre nur die
+Verwahrungshaftung übrig geblieben, ohne den Nutzen.
+
+**Damit erledigen sich vier Fragen ersatzlos:** 3.12
+(Aufbewahrungsdauer der Anwesenheitsliste), 3.13 (Erkennbarkeit),
+3.17 (Wertsachenregelung), 3.18 (Obhutsversicherung).
+
+**Für Jacken und Taschen gelten die Einrichtungen der
+Veranstaltungslocation.** VERA nimmt nichts entgegen. In Dokument 09,
+Ziffer 8, bleibt es deshalb bei der ursprünglichen Fassung — sie war
+für genau diesen Fall geschrieben.
+
+---
+
+## Konsolidierter Stand des Minderjährigen-Blocks (17.09.2026)
+
+| | |
+|---|---|
+| **Aufsicht** | VERA übernimmt sie **nicht** — Anlagenmodell (3.20) |
+| **Mindestalter** | keins; die Eltern entscheiden mit ihrer Unterschrift (3.10) |
+| **Unbegleitet** | Einverständniserklärung, Sicherheitseinweisung, Hausregeln. Kein Check-out, kein Abmelden |
+| **Begleitet** | Elternteil anwesend und aufsichtsführend; Kurznotiz statt Formular (3.19) |
+| **Entfallen** | Armband, Garderobe, Abmeldung, Anwesenheitsliste, Kontaktprozess bei Fehlen |
+| **VERA schuldet** | Verkehrssicherheit, **Sicherheitseinweisung**, Ausrüstung, Ansprechpersonen, Notfallhilfe |
+
+> **Die tragende Pflicht ist jetzt die Sicherheitseinweisung.** Sie
+> ersetzt die Aufsicht als zentrale Leistung. Findet sie nicht statt
+> oder taugt sie nichts, bleibt nur die Verkehrssicherungspflicht — und
+> dann steht VERA im Schadensfall schlechter da als mit dem
+> aufwendigen Modell. Das ist der Preis der Vereinfachung und muss
+> bewusst getragen werden.
+
+
+---
+
+## 3.22 — Sicherheitseinweisung · entschieden am 17.09.2026
+
+**Gewählt: Pflicht für alle Teilnehmenden, kurz und dokumentiert.**
+
+Vor dem ersten Spielen erhält jede teilnehmende Person eine Einweisung
+von drei bis fünf Minuten, in Gruppen beim Einstieg. **Wer sie nicht
+mitgemacht hat, spielt nicht.**
+
+### Inhalt
+
+- Schlägerführung auf engem Raum
+- Wände, Glaselemente und Zäune als Teil der Spielfläche
+- vorgeschriebenes Schuhwerk
+- Verhalten bei Unwohlsein: Spiel unterbrechen, Bescheid sagen
+- Verletzungen sofort melden, auch geringfügige
+- wer die Ansprechpersonen sind und wo sie zu finden sind
+
+### Dokumentation
+
+Auf der Veranstaltungscheckliste (Dokument 12) wird vermerkt, **dass und
+wann** die Einweisung stattgefunden hat, mit dem Kürzel der
+durchführenden Person. Keine Unterschriftenliste der Teilnehmenden —
+das wäre Aufwand ohne zusätzlichen Wert.
+
+### Warum die Dokumentation hier wirklich zählt
+
+Im Anlagenmodell ist die Einweisung die **zentrale Pflicht** von VERA.
+Sie ist das, was an die Stelle der Aufsicht tritt. Im Schadensfall ist
+die Frage nicht, ob eine Aufsichtsperson danebenstand, sondern ob
+ordnungsgemäß eingewiesen wurde. Ein Vermerk auf der Checkliste ist
+dafür der einfachste Nachweis, den es gibt.
+
+### Folge für die Texte
+
+| Dokument | Was zu ergänzen ist |
+|---|---|
+| **09** Hausordnung | neue Ziffer: Teilnahme am Spielbetrieb setzt die Einweisung voraus |
+| **03** Teilnahmebedingungen | die Einweisung als Leistung von VERA benennen — sie ist Teil dessen, was geschuldet wird, und gehört damit auch in die Kernpflichten der Haftungsziffer |
+| **05** Minderjährigenformular | Hinweis für Eltern: VERA weist ein, beaufsichtigt aber nicht |
+| **12** Checkliste | Vermerk mit Uhrzeit und Kürzel |
