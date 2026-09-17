@@ -55,7 +55,9 @@ stellt (2×), Foto-Zwecke (3×).
 | 1.9 | Rolle von Stripe: Verantwortlicher oder Auftragsverarbeiter? | ⚖️ | ⬜ |
 | 1.10 | Drittlandbezug Stripe und Backblaze: welche Garantien? | ⚖️ | ⬜ |
 | 1.11 | Ist ein AV-Vertrag mit UptimeRobot nötig? | ⚖️ | ⬜ |
-| 1.12 | Regelaufbewahrungsfrist für Anmeldedaten | ⬜ | ⬜ ← jetzt |
+| 1.12 | Regelaufbewahrungsfrist für Anmeldedaten | ⬜ | ⏸ Vorarbeit in Dok. 12, Entscheidung offen |
+| 1.14 | **neu:** Frist für vollständige Einverständniserklärungen | ⚖️ | ⏸ wartet auf fachliche Bestätigung |
+| 1.15 | **neu:** Reduzierter Nachweis nach Stufe 1 — zulässig? | ⚖️ | ⏸ wartet auf fachliche Bestätigung |
 | 1.13 | Anschrift der Berliner Aufsichtsbehörde | 🔎 | ⬜ |
 
 # Gruppe 2 — Vor dem ersten B2C-Ticketverkauf
@@ -1054,3 +1056,67 @@ Aufsichtsübernahme. „Wir weisen sie nicht hinaus" ist keine.
 | 3.6 | Vorgeschriebenes Schuhwerk | Hausordnung der Location |
 | 3.25 | Gaststättenrechtliche Erlaubnis | erst für Stufe 2 |
 | 3.28 | Belehrung nach § 43 IfSG für die Speisenabgabe | Gesundheitsamt |
+
+
+---
+
+## 1.12 / 1.14 / 1.15 — Aufbewahrungsfristen · Vorarbeit statt Entscheidung (17.09.2026)
+
+Adam hat die pauschale Frist abgelehnt und stattdessen verlangt:
+getrennte Fristen nach Datenart, eine fachliche Klärung zur
+Einverständniserklärung, und ausdrücklich **keine Implementierung**.
+
+**Ergebnis liegt in Dokument 12:**
+
+| Teil | Inhalt |
+|---|---|
+| **I** | Bestandsaufnahme — neun Orte, vier davon bisher unbegrenzt |
+| **II** | Fristentabelle nach fünfzehn Datenarten, mit Rechtsgrund und Vorgang |
+| **III** | Fachliche Einschätzung zur Einverständniserklärung und zum reduzierten Nachweis |
+
+### Die Feststellung, die das Zwischenergebnis korrigiert
+
+In Teil II hatte ich die 30-Jahres-Frist des § 199 Abs. 2 BGB als
+Argument für eine **lange** Aufbewahrung der Formulare angeführt. **Das
+trägt bei genauerer Betrachtung nicht.** Die Einverständniserklärung
+beweist die Zustimmung — bei einem Personenschaden ist aber die
+**Pflichtverletzung** strittig, nicht die Zustimmung. Die Fälle, für die
+das Formular wirklich das Beweismittel ist, werden zeitnah geltend
+gemacht.
+
+Das eigentliche Langzeit-Beweismittel ist die
+**Veranstaltungscheckliste** — und die enthält keine personenbezogenen
+Daten, kann also unbefristet aufbewahrt werden.
+
+**Regel, die sich daraus ergibt:** nicht-personenbezogene Nachweise
+lang, personenbezogene kurz.
+
+### Vorgeschlagenes Konzept, noch nicht entschieden
+
+| Stufe | Was | Wie lange |
+|---|---|---|
+| 1 | vollständiges Formular | 3 Jahre zum Jahresende |
+| 2 | reduzierter Nachweis (Name, Veranstaltung, Datum, Vermerke) | weitere 7 Jahre |
+| 3 | Veranstaltungscheckliste ohne Namen | unbefristet |
+| — | Gesundheitsangaben | 30 Tage, unverändert |
+
+**Zulässigkeit des gestuften Vorgehens:** durch **DIN 66398**
+(Löschkonzept mit Löschklassen) als anerkanntes Verfahren belegt, und
+durch die Feststellung gestützt, dass die Rechtfertigung nach
+Art. 17 Abs. 3 Buchst. e DSGVO mit zunehmendem Zeitablauf schwächer wird.
+
+### Steuerliche Aufbewahrung — bestätigt unberührt
+
+Die Anonymisierungsfunktion fasst kein steuerrelevantes Feld an.
+Kontaktdaten und Buchungssatz sind vollständig getrennt. Einzige
+Ausnahme: eine ausgestellte Rechnung mit Namen wäre selbst ein
+Buchungsbeleg und bliebe mitsamt Namen erhalten — deshalb offene
+Frage L-2, ob VERA überhaupt Rechnungen ausstellt.
+
+### Status
+
+⛔ **Nichts implementiert.** Keine Frist gesetzt, keine automatische
+Löschung eingerichtet, kein Code geändert. Die Formulare werden
+unverändert weiter aufbewahrt, bis die Fristen fachlich bestätigt sind —
+eine zu lange Aufbewahrung lässt sich heilen, eine zu frühe Vernichtung
+nicht.

@@ -343,3 +343,188 @@ Bau, sondern die Entscheidung über Nummer 6.
 | L-3 | Ist VERA buchführungspflichtig, oder reicht die Einnahmenüberschussrechnung? Das ändert nichts an den acht Jahren für Belege, wohl aber am Umfang der übrigen Unterlagen |
 | L-4 | Wo werden Papierformulare zwischen Veranstaltung und Vernichtung aufbewahrt, und wie werden sie vernichtet? |
 | L-5 | Sollen die drei Fristen für Kontaktdaten, Adminprotokoll und Postfach gleich lang sein? Einheitlichkeit erleichtert die Erklärung erheblich |
+
+---
+
+# Teil III — Einverständniserklärungen: Aufbewahrung und reduzierter Nachweis
+
+> **Stand: 17.09.2026.** Auf ausdrückliche Anforderung erstellt: erst die
+> fachliche Klärung, dann die Frist.
+>
+> ⚠️ **Das ist keine Rechtsberatung.** Es ist eine begründete
+> Einschätzung mit benannten Quellen, die vor der Umsetzung fachkundig
+> zu bestätigen ist. **Nichts wurde implementiert, keine Frist gesetzt,
+> keine automatische Löschung eingerichtet.**
+>
+> **Quellenlage unverändert:** `gesetze-im-internet.de` und `dejure.org`
+> sind aus dieser Arbeitsumgebung gesperrt. Alle Normangaben stammen aus
+> Suchergebnissen und Fachbeiträgen.
+
+---
+
+## 1. Auf welcher Grundlage darf überhaupt länger aufbewahrt werden?
+
+**Art. 17 Abs. 3 Buchst. e DSGVO.** Die Löschpflicht gilt nicht, soweit
+die Daten „zur Geltendmachung, Ausübung oder Verteidigung von
+Rechtsansprüchen erforderlich" sind. Das ist die Grundlage für
+Beweisvorsorge — und zugleich ihre Grenze, denn sie verlangt
+*Erforderlichkeit*.
+
+**Zwei Feststellungen aus den geprüften Fachbeiträgen sind dabei
+entscheidend:**
+
+1. Die Interessenabwägung darf **nicht abstrakt** erfolgen. Sie muss die
+   Interessen der betroffenen Person und die **Wahrscheinlichkeit**
+   berücksichtigen, dass Ansprüche tatsächlich geltend gemacht werden.
+2. **„Mit zunehmendem Zeitablauf wird diese Rechtfertigung schwächer."**
+
+> **Punkt 2 ist die Antwort auf die gestellte Frage.** Wenn die
+> Rechtfertigung mit der Zeit schwächer wird, ist der richtige Umgang
+> nicht „alles behalten" oder „alles löschen", sondern **den Bestand
+> mit der Zeit zu verringern.** Genau das ist ein reduzierter Nachweis.
+
+---
+
+## 2. Ist ein gestufter, reduzierter Nachweis zulässig?
+
+**Ja — und er ist nicht nur zulässig, sondern das anerkannte Vorgehen.**
+
+**DIN 66398** („Leitlinie zur Entwicklung eines Löschkonzepts mit
+Ableitung von Löschfristen für personenbezogene Daten", Mai 2016) ist
+der in Deutschland maßgebliche Standard dafür. Ihr Kern ist genau diese
+Systematik:
+
+- Datenarten werden **Löschklassen** zugeordnet,
+- jede Klasse hat eine **Regelfrist** und einen definierten Startzeitpunkt,
+- unterschiedliche Datenarten desselben Vorgangs dürfen **unterschiedlich
+  lange** aufbewahrt werden.
+
+Ein Löschkonzept, das ein Formular nach drei Jahren durch einen
+reduzierten Nachweis ersetzt, ist damit kein Behelf, sondern ein
+lehrbuchmäßiger Anwendungsfall von Art. 5 Abs. 1 Buchst. c
+(Datenminimierung) und Buchst. e DSGVO (Speicherbegrenzung).
+
+---
+
+## 3. ⚠️ Die Feststellung, die das Ergebnis dreht
+
+In Teil II hatte ich § 199 Abs. 2 BGB — die 30-jährige Höchstfrist für
+Personenschäden — als Argument für eine **lange** Aufbewahrung der
+Formulare angeführt. **Bei genauerer Betrachtung trägt dieses Argument
+nicht, jedenfalls nicht für das Formular.**
+
+**Der Grund: Die Einverständniserklärung beweist die falsche Tatsache.**
+
+| Streitfall | Was strittig ist | Beweist das Formular das? |
+|---|---|---|
+| Ein Teilnehmer verletzt sich | Hat VERA eine Pflicht verletzt — Verkehrssicherung, Einweisung, Ausrüstung? | **nein** |
+| Ein Elternteil sagt, das Kind sei ohne Zustimmung dort gewesen | Lag eine Zustimmung vor? | **ja** |
+| Streit über die selbstständige Abreise | War sie erlaubt? | **ja** |
+
+Bei einem **Personenschaden** ist der umkämpfte Punkt regelmäßig die
+Pflichtverletzung, nicht die Zustimmung. Dass die Eltern der Teilnahme
+zugestimmt haben, hilft VERA dort wenig — eine Zustimmung zur Teilnahme
+ist keine Einwilligung in eine Pflichtverletzung.
+
+Die beiden Streitfälle, für die das Formular **wirklich** das
+Beweismittel ist, haben eine andere Eigenschaft: **Sie werden zeitnah
+geltend gemacht.** Ein Elternteil, das von der Teilnahme nichts wusste,
+meldet sich in Tagen oder Wochen, nicht nach acht Jahren.
+
+> **Folge:** Die Wahrscheinlichkeit, dass das vollständige Formular nach
+> Jahren noch gebraucht wird, ist **gering** — und genau diese
+> Wahrscheinlichkeit verlangt die Abwägung nach Art. 17 Abs. 3 Buchst. e
+> DSGVO zu berücksichtigen. Das spricht für eine **kürzere** Frist als
+> in Teil II angenommen.
+
+---
+
+## 4. Was das eigentliche Langzeit-Beweismittel ist
+
+Wenn der umkämpfte Punkt die **Pflichtverletzung** ist, dann ist das
+wertvolle Beweismittel nicht das Formular, sondern der Nachweis, dass
+VERA seine Pflichten erfüllt hat:
+
+- dass die **Sicherheitseinweisung** stattgefunden hat (Entscheidung 3.22),
+- wer sie durchgeführt hat und wann,
+- dass die Ausrüstung in Ordnung war,
+- welche Regeln galten.
+
+**Das steht auf der Veranstaltungscheckliste — und die enthält keine
+personenbezogenen Daten.**
+
+> ✅ **Damit löst sich das Spannungsfeld fast vollständig auf.** Das
+> Beweismittel, das man lange braucht, ist nicht personenbezogen und
+> kann unbefristet aufbewahrt werden. Das Beweismittel, das
+> personenbezogen ist, braucht man nur kurz.
+>
+> **Regel: nicht-personenbezogene Nachweise lang, personenbezogene kurz.**
+
+---
+
+## 5. Empfehlung
+
+| Stufe | Was | Wie lange | Grundlage |
+|---|---|---|---|
+| **1** | **Vollständiges Formular** — Name, Geburtsdatum, Mobilnummer, Zustimmungen | **3 Jahre zum Jahresende** nach der Veranstaltung | §§ 195, 199 Abs. 1 BGB; Art. 17 Abs. 3 Buchst. e DSGVO |
+| **2** | **Reduzierter Nachweis** — Name der minderjährigen Person, Veranstaltung, Datum, Vermerk „Zustimmung lag vor" und „selbstständiges Verlassen gestattet/nicht gestattet" | **weitere 7 Jahre** (bis 10 Jahre gesamt) | Art. 6 Abs. 1 Buchst. f DSGVO, abnehmende Rechtfertigung nach Art. 17 Abs. 3 Buchst. e DSGVO |
+| **3** | **Veranstaltungscheckliste** — Einweisung, Ablauf, Personal, ohne Teilnehmernamen | **unbefristet** | kein Personenbezug, daher keine Löschpflicht |
+| **—** | **Gesundheitsangaben** | **30 Tage** nach Veranstaltungsende | unverändert; bereits geltende Zusage |
+
+**Warum Stufe 2 sieben Jahre und nicht dreißig:** Dreißig Jahre wären
+mit der abnehmenden Rechtfertigung nicht zu begründen. Zehn Jahre
+gesamt liegen in der Größenordnung der längsten handels- und
+steuerrechtlichen Fristen und sind damit ein Maß, das sich erklären
+lässt. Es bleibt eine Wertung.
+
+**Warum Stufe 2 überhaupt:** Sie kostet fast nichts — eine Zeile je
+Teilnehmer — und deckt den einzigen Fall ab, in dem das Formular
+tatsächlich zählt.
+
+---
+
+## 6. Steuerliche Aufbewahrung — ausdrücklich unberührt
+
+> **Anforderung von Adam, wörtlich:** „Alle gesetzlichen
+> Aufbewahrungspflichten für Rechnungen, Buchungsbelege und sonstige
+> steuerrelevante Unterlagen müssen unabhängig von der Anonymisierung
+> der Teilnehmerdaten eingehalten werden."
+
+**Das ist mit dem Konzept vereinbar, und zwar ohne Kompromiss.** Die
+beiden Bereiche berühren sich nicht:
+
+| | Anonymisierung der Teilnehmerdaten | Steuerliche Aufbewahrung |
+|---|---|---|
+| **Betrifft** | `kontaktVorname`, `kontaktNachname`, `kontaktEmail`, `kontaktTelefon`, Teilnehmernamen | Betrag, Datum, Zahlungsstatus, Zahlungsreferenz, Belege, Kontoauszüge, Stripe-Abrechnungen |
+| **Frist** | 3 Jahre | **8 Jahre** (Belege, § 147 Abs. 3 AO) bzw. **10 Jahre** (Abschlüsse) |
+| **Vorgang** | überschreiben | unverändert behalten |
+
+Die vorhandene Anonymisierungsfunktion fasst **kein einziges**
+steuerrelevantes Feld an — geprüft in `app/admin/anmeldungen/aktion.ts`.
+
+> ⚠️ **Eine Ausnahme, die beachtet werden muss:** Enthält ein Dokument
+> selbst einen Namen **und ist es zugleich ein Buchungsbeleg** — etwa
+> eine ausgestellte Rechnung —, dann gilt für dieses Dokument die
+> steuerliche Frist **mitsamt dem Namen.** Die Anonymisierung darf es
+> nicht erfassen.
+>
+> `[VOR VERWENDUNG KLÄREN (L-2): Stellt VERA überhaupt Rechnungen mit
+> Namen aus? Gegenüber Privatpersonen besteht dafür in der Regel keine
+> Pflicht. Falls nein, tritt dieser Fall nicht ein und die Trennung ist
+> vollständig sauber.]`
+
+---
+
+## 7. Was jetzt zu tun ist — und was ausdrücklich nicht
+
+| | |
+|---|---|
+| ✅ **Getan** | fachliche Einschätzung mit Quellen, gestuftes Konzept vorgeschlagen |
+| ⛔ **Nicht getan, wie angewiesen** | keine Frist gesetzt, keine automatische Löschung eingerichtet, kein Code geändert |
+| ⚖️ **Vor der Umsetzung** | Bestätigung der Stufen 1 und 2 durch die fachkundige Prüfung — insbesondere der Abwägung nach Art. 17 Abs. 3 Buchst. e DSGVO und der Frage, ob der reduzierte Nachweis in dieser Form ausreicht |
+| 📋 **Danach** | Löschkonzept nach DIN 66398 als eigenes Dokument, mit den Löschklassen aus Teil II |
+
+**Die Formulare werden bis dahin unverändert aufbewahrt.** Es wird
+nichts vernichtet, solange die Frist nicht bestätigt ist — das ist die
+sichere Richtung, weil eine zu lange Aufbewahrung sich heilen lässt, eine
+zu frühe Vernichtung nicht.
