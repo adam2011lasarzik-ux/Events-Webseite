@@ -10,6 +10,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { anmeldungAnonymisieren } from "@/lib/anonymisieren";
 import { db } from "@/lib/db";
 import { verlangeAdmin } from "@/lib/adminAuth";
 import { protokolliere, PROTOKOLL_AKTIONEN } from "@/lib/adminProtokoll";
@@ -139,34 +140,16 @@ export async function anonymisieren(formular: FormData): Promise<void> {
   const vorhanden = await db.registration.findUnique({ where: { id } });
   if (!vorhanden || vorhanden.anonymisiertAm) return;
 
-  await db.$transaction(async (tx) => {
-    const teilnehmer = await tx.participant.findMany({
-      where: { registrationId: id },
-      select: { id: true },
-    });
+  /* Die eigentliche Arbeit steht in lib/anonymisieren.ts und wird vom
+     nächtlichen Löschlauf gemeinsam mit diesem Knopf benutzt.
 
-    for (const [i, t] of teilnehmer.entries()) {
-      await tx.participant.update({
-        where: { id: t.id },
-        data: { vorname: "Gelöscht", nachname: `Teilnehmer ${i + 1}`, geburtsjahr: null },
-      });
-    }
-
-    await tx.registration.update({
-      where: { id },
-      data: {
-        kontaktVorname: "Gelöscht",
-        kontaktNachname: "Anmeldung",
-        // Die E-Mail-Adresse muss je Event eindeutig bleiben, sonst
-        // scheitert eine zweite Anonymisierung an der Eindeutigkeit.
-        // Deshalb die Anmeldenummer als Platzhalter — sie ist bereits
-        // eindeutig und enthält keine Personendaten.
-        kontaktEmail: `geloescht+${id}@invalid`,
-        kontaktTelefon: null,
-        anonymisiertAm: new Date(),
-      },
-    });
-  });
+     Vorher stand sie hier ein zweites Mal. Zwei Umsetzungen desselben
+     Vorgangs laufen irgendwann auseinander — und dann löscht der eine
+     Weg ein Feld, das der andere stehen lässt, ohne dass es jemandem
+     auffällt. Bei einer Löschung ist das der teuerste Fehler: Er sieht
+     wie Erfolg aus. */
+  const getan = await anmeldungAnonymisieren(id);
+  if (!getan) return;
 
   /* Hier ist das Protokoll besonders wichtig: Nach dem
      Anonymisieren lässt sich aus der Anmeldung selbst nicht mehr

@@ -62,26 +62,26 @@ enum EventTheme {
 }
 
 model Event {
-  id     String @id @default(cuid())
+  id        String         @id @default(cuid())
   /// Teil der Adresse, z. B. /events/padel-falkensee
-  slug   String @unique
-  status EventStatus    @default(ENTWURF)
+  slug      String         @unique
+  status    EventStatus    @default(ENTWURF)
   kategorie EventKategorie @default(SONSTIGES)
-  theme  EventTheme     @default(STANDARD)
+  theme     EventTheme     @default(STANDARD)
 
   // Texte
-  titel          String
-  untertitel     String?
+  titel           String
+  untertitel      String?
   /// Kurzfassung für die Karte auf der Startseite
-  karteTitel     String
-  karteKurz      String  @db.Text
+  karteTitel      String
+  karteKurz       String  @db.Text
   karteZielgruppe String?
   /// Kurztext auf der Event-Seite selbst (nicht zu verwechseln mit
   /// karteKurz, das auf der Startseiten-Karte steht)
-  kurz           String  @db.Text
-  beschreibung   String  @db.Text
+  kurz            String  @db.Text
+  beschreibung    String  @db.Text
   /// Freies Feld für alles, was nur dieses eine Event betrifft
-  hinweise       String? @db.Text
+  hinweise        String? @db.Text
 
   // Kopfbereich der Event-Seite. Stand früher im globalen Wörterbuch —
   // dort hätte jedes Event dieselbe Überschrift bekommen („Nie
@@ -96,8 +96,8 @@ model Event {
   // den ersten Ballwechsel?" unter einem Unternehmer-Netzwerkabend
   // wäre unfreiwillig komisch. Leer = der neutrale Text aus dem
   // Wörterbuch.
-  ctaTitel       String?
-  ctaText        String? @db.Text
+  ctaTitel String?
+  ctaText  String? @db.Text
 
   // Zeit — null bedeutet „steht noch nicht fest" und wird auf der
   // Seite als sichtbarer Platzhalter angezeigt.
@@ -125,9 +125,9 @@ model Event {
 
   // Plätze. maxPersonen zählt PERSONEN, nicht Anmeldungen.
   // null = unbegrenzt.
-  maxPersonen        Int?
+  maxPersonen          Int?
   /// Ab wie wenigen freien Plätzen die genaue Zahl angezeigt wird
-  schwelleWenigPlaetze Int @default(10)
+  schwelleWenigPlaetze Int  @default(10)
 
   // Preise, immer in ganzen Cent. Kommazahlen rechnen bei Geld
   // ungenau (0.1 + 0.2 ist nicht exakt 0.3).
@@ -144,19 +144,19 @@ model Event {
   preisErwachsenerCents Int
 
   // Familienpaket
-  familieAktiv              Boolean @default(false)
-  familieBasisCents         Int?
-  familieEnthaltenErwachsene Int?
-  familieEnthaltenSchueler   Int?
+  familieAktiv                 Boolean @default(false)
+  familieBasisCents            Int?
+  familieEnthaltenErwachsene   Int?
+  familieEnthaltenSchueler     Int?
   familieWeitererSchuelerCents Int?
-  familieMaxSchueler         Int?
+  familieMaxSchueler           Int?
 
   // Anmeldezeitraum (optional)
   anmeldungAb  DateTime?
   anmeldungBis DateTime?
 
-  erstelltAm   DateTime @default(now())
-  geaendertAm  DateTime @updatedAt
+  erstelltAm  DateTime @default(now())
+  geaendertAm DateTime @updatedAt
 
   anmeldungen Registration[]
   abschnitte  EventAbschnitt[]
@@ -172,14 +172,14 @@ model Event {
 /// als ein Sportevent, ohne dass die Event-Tabelle wächst.
 /// (Angelegt, aber noch nicht auf der Webseite angezeigt.)
 model EventAbschnitt {
-  id       String @id @default(cuid())
-  eventId  String
-  event    Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  id          String @id @default(cuid())
+  eventId     String
+  event       Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
   /// z. B. "programm", "speaker", "sponsoren", "anfahrt"
-  art      String
-  titel    String
-  inhalt   String @db.Text
-  reihenfolge Int  @default(0)
+  art         String
+  titel       String
+  inhalt      String @db.Text
+  reihenfolge Int    @default(0)
 
   @@index([eventId, reihenfolge])
 }
@@ -244,8 +244,8 @@ model Registration {
 
   // Zahlungsstatus wird GETRENNT vom Anmeldestatus geführt:
   // jemand kann angemeldet, aber noch nicht bezahlt haben.
-  zahlungsStatus ZahlungsStatus @default(OFFEN)
-  zahlungsWeg    ZahlungsWeg    @default(ONLINE)
+  zahlungsStatus   ZahlungsStatus @default(OFFEN)
+  zahlungsWeg      ZahlungsWeg    @default(ONLINE)
   /// Referenz des Zahlungsanbieters, für den Abgleich.
   /// Das ist die BEZAHLSEITE (Checkout-Sitzung, "cs_…"), nicht die
   /// Zahlung selbst.
@@ -264,9 +264,9 @@ model Registration {
   ///      blieb still auf "bezahlt" stehen.
   ///
   /// Optional, weil sie erst mit der Zahlung bekannt wird.
-  zahlungsAbsicht String?
+  zahlungsAbsicht      String?
   bezahlterBetragCents Int?
-  bezahltAm      DateTime?
+  bezahltAm            DateTime?
 
   /// Bis wann der Platz gehalten wird, solange die Zahlung läuft.
   /// null = keine laufende Reservierung.
@@ -302,6 +302,16 @@ model Registration {
   /// echte Löschrecht werden Namen, E-Mail und Telefon überschrieben —
   /// die Anmeldung selbst bleibt als anonyme Zeile bestehen.
   anonymisiertAm DateTime?
+
+  /**
+   * ── Löschkonzept ────────────────────────────────────────────────
+   * Klasse und Fälligkeit stehen am Datensatz selbst, damit der
+   * nächtliche Lauf keine Regeln raten muss. `faelligAm` wird bei
+   * jedem Lauf aus dem Veranstaltungsdatum neu berechnet — ändert
+   * sich der Termin, wandert die Fälligkeit mit.
+   */
+  loeschklasse Loeschklasse @default(ANMELDEDATEN)
+  faelligAm    DateTime?
 
   teilnehmer Participant[]
 
@@ -348,12 +358,12 @@ model Participant {
 /// Administrator dazukommen kann, ohne das Modell zu ändern.
 /// (Angelegt, die Anmeldung selbst wird in einem späteren Schritt gebaut.)
 model AdminUser {
-  id           String   @id @default(cuid())
-  email        String   @unique
+  id           String    @id @default(cuid())
+  email        String    @unique
   /// Niemals das Passwort selbst, immer nur dessen Hash.
   /// Verfahren: scrypt aus Node (siehe lib/passwort.ts).
   passwortHash String
-  erstelltAm   DateTime @default(now())
+  erstelltAm   DateTime  @default(now())
   letzterLogin DateTime?
 
   /// Das TOTP-Geheimnis (Base32), erst gesetzt, sobald die Einrichtung
@@ -364,9 +374,9 @@ model AdminUser {
   /// Erst NACH der Bestätigung "an". Erst dieser Schalter verlangt den
   /// zweiten Faktor beim Anmelden — nicht schon das blosse Vorhandensein
   /// eines Geheimnisses.
-  zweiterFaktorAktiv     Boolean  @default(false)
+  zweiterFaktorAktiv     Boolean @default(false)
 
-  sitzungen       AdminSession[]
+  sitzungen               AdminSession[]
   zweiterFaktorCodes      AdminZweiterFaktorCode[]
   zweiterFaktorPruefungen AdminZweiterFaktorPruefung[]
 }
@@ -451,16 +461,16 @@ model Einstellungen {
 
   // Der Gründerbereich. Steht auf der zentralen VERA-Seite und — je
   // Event einschaltbar — auf einzelnen Eventseiten.
-  gruenderName     String   @default("Adam Lasarzik")
-  gruenderRolle    String   @default("Gründer von VERA")
+  gruenderName     String  @default("Adam Lasarzik")
+  gruenderRolle    String  @default("Gründer von VERA")
   /// Leer bedeutet: es erscheint ein sichtbar markierter Platzhalter.
   /// Besser ein erkennbarer Platzhalter als ein erfundener Lebenslauf.
-  gruenderText     String?  @db.Text
+  gruenderText     String? @db.Text
   /// Adresse des hochgeladenen Fotos, z. B. /bilder/ab12....webp.
   /// Liegt AUSSERHALB von public/ — siehe lib/bilder.ts.
   gruenderBildUrl  String?
   /// Auf der zentralen VERA-Seite standardmäßig sichtbar.
-  gruenderAufStart Boolean  @default(true)
+  gruenderAufStart Boolean @default(true)
 
   geaendertAm DateTime @updatedAt
 }
@@ -538,4 +548,194 @@ model AnmeldeVersuch {
   zeitpunkt DateTime @default(now())
 
   @@index([kennung, zeitpunkt])
+}
+
+/**
+ * =================================================================
+ * LÖSCHKONZEPT
+ * Umsetzung von docs/rechtstexte-entwuerfe/13-loeschkonzept.md.
+ * Grundgedanke: Jeder Datensatz trägt seine Löschklasse und sein
+ * Fälligkeitsdatum selbst. Der nächtliche Lauf muss dadurch keine
+ * Regeln raten — er liest, was am Datensatz steht, prüft die Sperre
+ * und handelt.
+ * Die Klasse STEUERUNTERLAGEN ist bewusst Teil der Aufzählung, wird
+ * vom Löschlauf aber NIEMALS angefasst. Sie existiert, damit sich
+ * steuerrelevante Datensätze ausdrücklich kennzeichnen lassen — und
+ * damit ein späterer Lauf sie erkennbar überspringt, statt sie
+ * mangels Kennzeichnung zu übersehen.
+ * =================================================================
+ */
+
+enum Loeschklasse {
+  /// K1 — Gesundheits- und Notfallangaben. 7 Tage nach Veranstaltungsende.
+  GESUNDHEITSANGABEN
+  /// K2 — vollständige Einverständniserklärungen. 3 Jahre ab Jahresende.
+  EINVERSTAENDNIS_VOLL
+  /// K3 — reduzierter Zustimmungsnachweis. 10 Jahre ab Jahresende.
+  ZUSTIMMUNGSNACHWEIS
+  /// K4 — Anmelde- und Check-in-Daten. 3 Jahre ab Jahresende.
+  ANMELDEDATEN
+  /// K5 — Veranstaltungs- und Sicherheitscheckliste. 3 Jahre, dann Personenbezug entfernen.
+  CHECKLISTE
+  /// K6 — Vorfall- und Versicherungsakte. Nach Abschluss je nach Einstufung.
+  VORFALLAKTE
+  /// K7 — steuerrelevant. Wird vom Löschlauf NIEMALS angefasst.
+  STEUERUNTERLAGEN
+}
+
+enum Sperrgrund {
+  UNFALL
+  BESCHWERDE
+  RUECKBUCHUNG
+  VERSICHERUNG
+  RECHTSSTREIT
+}
+
+/// Einstufung eines Vorfalls — bestimmt die Aufbewahrungsdauer nach Abschluss.
+enum VorfallEinstufung {
+  /// Regelfall: 10 Jahre nach Abschluss.
+  LEICHT
+  /// Personen- oder Gesundheitsschaden: bis 30 Jahre (§ 199 Abs. 2 BGB).
+  SCHWER
+}
+
+enum VorfallStatus {
+  OFFEN
+  ABGESCHLOSSEN
+}
+
+/// Setzt die automatische Löschung für EINZELNE Datensätze aus.
+///
+/// Ohne diese Tabelle darf kein Löschlauf scharf geschaltet werden:
+/// Sonst vernichtet er genau die Unterlagen, die im Streitfall
+/// gebraucht werden.
+model Loeschsperre {
+  id String @id @default(cuid())
+
+  /// "Registration" | "Vorfall" | "Checkliste" | "Zustimmungsnachweis"
+  zielArt String
+  zielId  String
+
+  grund Sperrgrund
+
+  /// true = vom System gesetzt (z. B. bei Erstattung), false = von Hand.
+  automatisch Boolean @default(false)
+
+  gesetztAm  DateTime @default(now())
+  /// AdminUser-Kennung oder "system".
+  gesetztVon String
+  notiz      String?  @db.Text
+
+  aufgehobenAm  DateTime?
+  aufgehobenVon String?
+
+  @@index([zielArt, zielId, aufgehobenAm])
+}
+
+/// Vorfall-, Beschwerde- und Versicherungsakte.
+///
+/// Solange `status` OFFEN ist, wird nichts gelöscht — weder die Akte
+/// noch die von ihr gesperrten Datensätze.
+model Vorfall {
+  id String @id @default(cuid())
+
+  eventId        String?
+  registrationId String?
+
+  titel        String
+  beschreibung String? @db.Text
+
+  /// Im Adminbereich sichtbar und von Hand änderbar.
+  einstufung VorfallEinstufung @default(LEICHT)
+  status     VorfallStatus     @default(OFFEN)
+
+  eroeffnetAm     DateTime  @default(now())
+  abgeschlossenAm DateTime?
+
+  /// Wird beim Abschluss berechnet: 10 Jahre (LEICHT) bzw. 30 (SCHWER).
+  faelligAm    DateTime?
+  loeschklasse Loeschklasse @default(VORFALLAKTE)
+
+  erstelltVon String
+
+  @@index([status, faelligAm])
+}
+
+/// Der reduzierte Zustimmungsnachweis (Stufe 2 des Stufenplans).
+///
+/// Entsteht, wenn die vollständige Einverständniserklärung nach drei
+/// Jahren vernichtet wird. Enthält bewusst KEIN Geburtsdatum, KEINE
+/// Mobilnummer und KEINE Gesundheitsangaben.
+model Zustimmungsnachweis {
+  id String @id @default(cuid())
+
+  eventId                  String
+  veranstaltungAm          DateTime
+  /// Name der minderjährigen Person — der einzige Personenbezug.
+  teilnehmerName           String
+  zustimmungLagVor         Boolean  @default(true)
+  selbstVerlassenGestattet Boolean  @default(false)
+
+  angelegtAm   DateTime     @default(now())
+  faelligAm    DateTime
+  loeschklasse Loeschklasse @default(ZUSTIMMUNGSNACHWEIS)
+
+  @@index([faelligAm])
+}
+
+/// Veranstaltungs- und Sicherheitscheckliste.
+///
+/// Enthält mit `einweisungKuerzel` ein personenbezogenes Datum von
+/// Beschäftigten. Nach drei Jahren wird dieses Feld unwiderruflich
+/// geleert; nur die dann wirklich anonyme Sicherheitsdokumentation
+/// bleibt erhalten.
+model Checkliste {
+  id String @id @default(cuid())
+
+  eventId         String
+  durchgefuehrtAm DateTime
+
+  /// PERSONENBEZUG. Wird beim Anonymisieren auf null gesetzt.
+  einweisungKuerzel String?
+  /// Freitext zum Ablauf. Kann Personenbezug enthalten, wird mit geleert.
+  notiz             String? @db.Text
+
+  /// Anonyme Sicherheitsdokumentation — bleibt dauerhaft erhalten.
+  einweisungErfolgt Boolean @default(false)
+  teilnehmerAnzahl  Int?
+
+  anonymisiertAm DateTime?
+  faelligAm      DateTime
+  loeschklasse   Loeschklasse @default(CHECKLISTE)
+
+  @@index([faelligAm, anonymisiertAm])
+}
+
+/// Protokoll jedes Löschlaufs — ohne unnötige personenbezogene Inhalte.
+///
+/// Festgehalten werden Kennungen, niemals Namen, E-Mail-Adressen oder
+/// Telefonnummern. Ein Protokoll, das die Daten enthält, die es zu
+/// löschen half, wäre die Löschung rückgängig machende Kopie.
+model Loeschprotokoll {
+  id        String   @id @default(cuid())
+  zeitpunkt DateTime @default(now())
+
+  /// Gruppiert alle Einträge eines Laufs.
+  laufId String
+
+  klasse  Loeschklasse
+  zielArt String
+  /// Kennung des Datensatzes. KEIN Name, KEINE E-Mail.
+  zielId  String
+
+  /// "anonymisiert" | "geloescht" | "uebersprungen" | "faellig"
+  aktion String
+  /// Bei "uebersprungen": der Sperrgrund. Sonst leer.
+  grund  String?
+
+  /// true = Trockenlauf, es wurde nichts verändert.
+  probelauf Boolean @default(false)
+
+  @@index([laufId])
+  @@index([zeitpunkt])
 }

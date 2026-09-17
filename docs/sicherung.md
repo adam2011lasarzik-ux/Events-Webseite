@@ -54,7 +54,34 @@ nachweislich abgewiesen.
   wirklich unlöschbar — auch für jemanden, der den Server samt
   Schreib-Zugang übernommen hat.
 - **Aufbewahrung 180 Tage**: Danach räumt Backblaze alte Sicherungen
-  automatisch ab, damit der Speicher nicht endlos wächst.
+  automatisch ab, damit der Speicher nicht endlos wächst. Das ist
+  zugleich der Grund, warum eine Löschung auch in den Sicherungen
+  ankommt: Spätestens nach 180 Tagen gibt es keine Kopie mehr, in der
+  die gelöschten Angaben noch stünden.
+
+## Nach einer Wiederherstellung: der Löschlauf muss nachziehen
+
+Eine Sicherung ist ein Abbild von gestern — mitsamt der Daten, die
+seitdem gelöscht wurden. Spielt man sie zurück, sind Namen,
+E-Mail-Adressen und Telefonnummern wieder da, die jemand hat löschen
+lassen. **Ohne diesen Schritt wäre jede Wiederherstellung eine stille
+Rücknahme aller Löschungen.**
+
+Deshalb, in dieser Reihenfolge:
+
+```bash
+sudo systemctl stop vera
+# … Sicherung einspielen …
+sudo /usr/local/bin/vera-nach-wiederherstellung.sh
+sudo systemctl start vera
+```
+
+Das Skript zieht die Migrationen nach, zeigt erst einen Probelauf,
+führt nach Bestätigung den Löschlauf aus und erinnert am Schluss
+daran, was es **nicht** wiederherstellen kann: eine von Hand gesetzte
+Löschsperre, die nach dem Zeitpunkt der Sicherung entstanden ist. Die
+Einzelheiten stehen in
+[`loeschkonzept-betrieb.md`](loeschkonzept-betrieb.md).
 
 ## Regelmäßig prüfen
 

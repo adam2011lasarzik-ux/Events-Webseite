@@ -42,6 +42,17 @@ await db.participant.deleteMany({});
 await db.registration.deleteMany({});
 await db.anmeldeVersuch.deleteMany({});
 await db.zahlungsEreignis.deleteMany({});
+
+/* Die Tabellen des Löschkonzepts. Ein Protokolleintrag oder eine
+   Sperre aus einer Prüfung hat im Echtbetrieb nichts verloren: Die
+   eine sähe nach einem Löschlauf aus, den es nie gab, die andere
+   hielte im Zweifel echte Daten von der Löschung ab. */
+await db.loeschprotokoll.deleteMany({});
+await db.loeschsperre.deleteMany({});
+await db.vorfall.deleteMany({});
+await db.checkliste.deleteMany({});
+await db.zustimmungsnachweis.deleteMany({});
+
 await db.adminSession.deleteMany({});
 const zugaenge = await db.adminUser.deleteMany({ where: TESTZUGAENGE });
 

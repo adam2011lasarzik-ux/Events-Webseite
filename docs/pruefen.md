@@ -103,6 +103,15 @@ node pruefung/L/l-quer.mjs
 
 # Jeder Link und jeder Knopf
 node pruefung/O/o-links.mjs
+
+# Löschkonzept: die Regeln allein, ohne Datenbank
+npx tsx pruefung/S/s-fristen.mjs
+
+# Löschkonzept gegen die echte Datenbank: jede Klasse, jede Sperre
+npx tsx --env-file=.env pruefung/S/s-loeschlauf.mjs
+
+# Zugang zu Löschlauf und Vorfällen (braucht den Server auf 3213)
+npx tsx --env-file=.env pruefung/S/s-zugang.mjs
 ```
 
 Bildschirmfotos und Messdaten landen in `pruefung/.ausgabe/` — dieser

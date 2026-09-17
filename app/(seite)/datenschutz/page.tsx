@@ -14,6 +14,11 @@ import stil from "@/components/Textseite.module.css";
  * tatsächlich stattfindet: die Angaben auf der
  * Einverständniserklärung für minderjährige Teilnehmer.
  *
+ * Abschnitt 3 beschreibt die Speicherdauer und die automatische
+ * Löschung. Auch er ist verbindlich und kein Platzhalter: Er gibt
+ * wieder, was lib/loeschfristen.ts und lib/loeschlauf.ts tatsächlich
+ * tun.
+ *
  * Die Markierung steht deshalb seit dieser Ergänzung bei Abschnitt 1
  * statt über der ganzen Seite — dasselbe Muster wie auf der
  * Widerrufs- und der AGB-Seite.
@@ -41,6 +46,12 @@ export default function Seite() {
         <h2>{t.recht.datenschutzMinderjaehrigUeberschrift}</h2>
         <p>{t.recht.datenschutzMinderjaehrigEinleitung}</p>
         {t.recht.datenschutzMinderjaehrigAbsaetze.map((absatz) => (
+          <p key={absatz.slice(0, 40)}>{absatz}</p>
+        ))}
+
+        <h2>{t.recht.datenschutzLoeschungUeberschrift}</h2>
+        <p>{t.recht.datenschutzLoeschungEinleitung}</p>
+        {t.recht.datenschutzLoeschungAbsaetze.map((absatz) => (
           <p key={absatz.slice(0, 40)}>{absatz}</p>
         ))}
       </div>

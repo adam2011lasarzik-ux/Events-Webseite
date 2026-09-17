@@ -42,6 +42,12 @@ export const PROTOKOLL_AKTIONEN = {
   zweiterFaktorEingerichtet: "zugang.zweiter-faktor-eingerichtet",
   zweiterFaktorDeaktiviert: "zugang.zweiter-faktor-deaktiviert",
   zweiterFaktorBackupCodesErneuert: "zugang.zweiter-faktor-codes-erneuert",
+  loeschsperreGesetzt: "loeschsperre.gesetzt",
+  loeschsperreAufgehoben: "loeschsperre.aufgehoben",
+  loeschlaufProbe: "loeschlauf.probe",
+  loeschlaufEcht: "loeschlauf.echt",
+  vorfallAngelegt: "vorfall.angelegt",
+  vorfallGeaendert: "vorfall.geaendert",
 } as const;
 
 export type ProtokollAktion = (typeof PROTOKOLL_AKTIONEN)[keyof typeof PROTOKOLL_AKTIONEN];

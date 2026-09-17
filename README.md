@@ -621,6 +621,37 @@ strengen Modus, den Bau und die Prüflisten.
   Prisma 6 zurückstufen und das Projekt brechen — also nicht ausführen.
   Zu beobachten, bis Prisma nachzieht.
 
+## Automatische Löschung
+
+Personenbezogene Daten werden nicht dauerhaft gespeichert. Ein
+nächtlicher Lauf (`vera-loeschlauf.timer`, 04:15 UTC — bewusst **nach**
+der Sicherung) anonymisiert oder löscht, was fällig ist:
+
+| | Datenart | Frist | danach |
+|---|---|---|---|
+| **K1** | Gesundheits- und Notfallangaben | 7 Tage nach der Veranstaltung | Papier vernichten (Erinnerung) |
+| **K2** | vollständige Einverständniserklärungen | 3 Jahre ab Jahresende | Papier vernichten (Erinnerung) |
+| **K3** | reduzierter Zustimmungsnachweis | 10 Jahre ab Jahresende | löschen |
+| **K4** | Anmelde- und Check-in-Daten | 3 Jahre ab Jahresende | anonymisieren |
+| **K5** | Veranstaltungschecklisten | 3 Jahre ab Jahresende | Personenbezug unwiderruflich entfernen |
+| **K6** | Vorfall- und Versicherungsakten | 10 Jahre ab **Abschluss**, bei schwerem Personenschaden bis 30 | löschen |
+| **K7** | Steuerunterlagen (§ 147 AO) | 10 / 8 / 6 Jahre | **niemals vom Löschlauf angefasst** |
+
+Einzelne Datensätze lassen sich sperren — automatisch bei Erstattung
+und offenem Vorfall, von Hand bei Beschwerde, Versicherungsfall und
+Rechtsstreit. Im Adminbereich unter **`/admin/loeschen`** stehen die
+Vorschau, die offenen Sperren und das Protokoll; unter
+**`/admin/vorfaelle`** die Akten samt ihrer Einstufung.
+
+```bash
+npm run loeschen:vorschau   # zeigt nur, verändert nichts
+npm run loeschen            # führt es aus
+```
+
+Wie das im Betrieb läuft, was nach einer Wiederherstellung zu tun ist
+und was bewusst offen bleibt, steht in
+**[docs/loeschkonzept-betrieb.md](docs/loeschkonzept-betrieb.md)**.
+
 ## Rechtliche Seiten
 
 Impressum, Datenschutz, AGB sowie Widerruf und Stornierung sind als

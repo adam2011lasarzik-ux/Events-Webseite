@@ -21,6 +21,8 @@ Wie man sie startet, steht in **[../docs/pruefen.md](../docs/pruefen.md)**.
 | `M` | Fehlgeschlagene Zahlung | 15 |
 | `N` | Rechtsseiten: erreichbar, als Platzhalter gekennzeichnet, verlinkt | 18 |
 | `O` | Jeder Link und jeder Knopf auf jeder öffentlichen Seite | 9 |
+| `R` | Der Riegel vor der echten Datenbank | 12 |
+| `S` | Löschkonzept: Fristen je Klasse, jede Sperrsituation, Probelauf, Steuerriegel, Protokoll, Zugang | 98 |
 
 ## Zu den Schlüsseln in diesen Dateien
 

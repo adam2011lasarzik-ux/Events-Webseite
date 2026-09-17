@@ -1,0 +1,16 @@
+[Unit]
+Description=Löscht und anonymisiert fällige Daten nach dem Löschkonzept
+After=network-online.target mariadb.service
+Requires=mariadb.service
+
+[Service]
+Type=oneshot
+# Läuft als "vera", nicht als root: Der Lauf braucht nur die
+# Datenbank und das Projektverzeichnis. Ein Löschjob mit
+# Systemrechten wäre die falsche Antwort auf jede Frage.
+User=vera
+Group=vera
+WorkingDirectory=/var/www/vera
+ExecStart=/usr/local/bin/vera-loeschlauf.sh
+NoNewPrivileges=true
+PrivateTmp=true

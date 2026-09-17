@@ -82,6 +82,8 @@ sucht bei jedem Lauf danach.
 | **UptimeRobot** als zweiter Dienstleister benennen | 🟨 |
 | Auftragsverarbeitung mit Stripe einordnen | 🟨 |
 | **Einverständniserklärungen für Minderjährige**: eigener Abschnitt 2 | 🟩 **eingetragen (16.09.2026)** |
+| **Speicherdauer und Löschung**: eigener Abschnitt 3 | 🟩 **eingetragen (17.09.2026)** |
+| Rechtliche Prüfung der einzelnen Löschfristen | 🟨 |
 
 **Neu seit dem 16.09.2026:** Die Seite hat einen zweiten, **verbindlichen**
 Abschnitt „Einverständniserklärungen für minderjährige Teilnehmer" —
@@ -106,6 +108,33 @@ und ein technisch notwendiges Sitzungscookie ist auch nicht
 einwilligungspflichtig; eine nachweislich falsche absolute Aussage
 gehört trotzdem nicht auf eine Datenschutzseite. Jetzt steht dort, was
 zutrifft.
+
+**Neu seit dem 17.09.2026:** Ein dritter, ebenfalls **verbindlicher**
+Abschnitt „Speicherdauer und Löschung". Er beschreibt keine Absicht,
+sondern das, was der Code tatsächlich tut: die sieben Löschklassen aus
+`lib/loeschfristen.ts`, den nächtlichen Lauf aus `lib/loeschlauf.ts`,
+die Löschsperren, die Behandlung der Sicherungen und das Protokoll ohne
+Personenbezug. Ändert sich dort eine Zahl, gehört sie hier
+mitgeändert — sonst behauptet die Erklärung etwas, das nachweisbar
+nicht stimmt.
+
+**Nicht geprüft ist, ob jede einzelne Frist rechtlich die richtige
+ist.** Die Begründungen stehen in
+`docs/rechtstexte-entwuerfe/13-loeschkonzept.md`, die offenen Punkte in
+dessen Abschnitt 6. Das ist die Grenze dessen, was ohne fachkundige
+Prüfung feststehen kann.
+
+**Ein Widerspruch dabei, der aufgefallen ist und benannt gehört:**
+Abschnitt 2 nannte für freiwillige Gesundheitsangaben „spätestens
+30 Tage nach Veranstaltungsende". Das Löschkonzept setzt **sieben Tage**
+um. Sieben liegen innerhalb von dreißig — beides ist also zugleich
+zutreffend, und die kürzere Frist ist bei Gesundheitsdaten die richtige
+Richtung. Auf der Seite steht jetzt die tatsächlich geltende Frist von
+sieben Tagen. **Das unterschriebene Formular
+(`public/dokumente/einverstaendniserklaerung-minderjaehrige.pdf`) nennt
+weiterhin dreißig Tage** — beim nächsten Neusatz des Formulars gehört
+die Zahl angeglichen. Bis dahin ist keine der beiden Angaben falsch,
+aber nur eine ist genau.
 
 ## Allgemeine Geschäftsbedingungen · `/agb`
 

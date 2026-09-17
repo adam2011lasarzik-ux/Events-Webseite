@@ -173,7 +173,8 @@ pruefe(
    Datenschutzinformation auf Seite 2 des Papierformulars
    übereinstimmen. Geprüft werden die Punkte, an denen ein
    Auseinanderlaufen teuer wäre: Gesundheitsdaten, Rechtsgrundlage
-   dafür, die Rolle der Halle und die 30-Tage-Frist. */
+   dafür, die Rolle der Halle und die Löschfrist für
+   Gesundheitsangaben. */
 pruefe(
   "Datenschutz: hat einen eigenen Abschnitt zu den Einverständniserklärungen",
   dsText.includes("Einverständniserklärungen für minderjährige Teilnehmer"),
@@ -197,9 +198,42 @@ pruefe(
   "Datenschutz: stellt klar, dass die Location keine Kopie behält",
   /behält keine Kopie und verwendet die Angaben nicht für eigene Zwecke/i.test(dsText),
 );
+/* Frist geändert am 17.09.2026: Das Löschkonzept setzt SIEBEN Tage um
+   (lib/loeschfristen.ts → GESUNDHEIT_TAGE), die Seite nannte vorher
+   „spätestens 30 Tage". Sieben liegen innerhalb von dreißig — falsch
+   war die alte Angabe also nicht, nur ungenau. Geprüft wird jetzt die
+   Frist, die tatsächlich gilt.
+
+   Das unterschriebene Papierformular nennt weiterhin dreißig Tage;
+   beim nächsten Neusatz gehört die Zahl angeglichen. Solange das nicht
+   geschehen ist, prüft diese Liste bewusst NICHT auf Wortgleichheit
+   mit dem Formular — sie prüft, dass die Seite die Frist nennt, die
+   der Code einhält. */
 pruefe(
-  "Datenschutz: nennt die 30-Tage-Frist für Gesundheitsangaben",
-  /spätestens 30 Tage nach Veranstaltungsende/i.test(dsText),
+  "Datenschutz: nennt die Löschfrist für Gesundheitsangaben (sieben Tage)",
+  /spätestens sieben Tage nach Veranstaltungsende/i.test(dsText),
+);
+pruefe(
+  "Datenschutz: hat einen Abschnitt zu Speicherdauer und Löschung",
+  dsText.includes("Speicherdauer und Löschung"),
+);
+pruefe(
+  "Datenschutz: nennt die Aufbewahrung der Steuerunterlagen ausdrücklich getrennt",
+  /§ 147 der Abgabenordnung/i.test(dsText) &&
+    /von der automatischen Löschung ausdrücklich nicht erfasst/i.test(dsText),
+);
+pruefe(
+  "Datenschutz: benennt die Löschsperren mit Grund, Datum und Person",
+  /Grund, Datum und verantwortlicher Person/i.test(dsText),
+);
+pruefe(
+  "Datenschutz: sagt, was mit Sicherungen und Wiederherstellungen passiert",
+  /180 Tagen automatisch gelöscht/i.test(dsText) &&
+    /wird die Löschung unmittelbar danach erneut ausgeführt/i.test(dsText),
+);
+pruefe(
+  "Datenschutz: sagt, dass das Löschprotokoll keine Namen enthält",
+  /keine Namen, E-Mail-Adressen oder Telefonnummern/i.test(dsText),
 );
 pruefe(
   "Datenschutz: grenzt den Abschnitt auf das Formular ein",

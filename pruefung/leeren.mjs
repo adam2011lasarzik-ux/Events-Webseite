@@ -29,5 +29,15 @@ await db.registration.deleteMany({});
 await db.anmeldeVersuch.deleteMany({});
 await db.zahlungsEreignis.deleteMany({});
 
-console.log("Anmeldungen, Bremsen und Zahlungsereignisse geleert.");
+/* Die Tabellen des Löschkonzepts ebenfalls. Bliebe hier eine Sperre
+   aus einem vorigen Lauf stehen, hielte sie in der nächsten Liste
+   einen Datensatz fest, der eigentlich gelöscht werden müsste — und
+   die Liste meldete einen Fehler, den es nicht gibt. */
+await db.loeschsperre.deleteMany({});
+await db.loeschprotokoll.deleteMany({});
+await db.vorfall.deleteMany({});
+await db.checkliste.deleteMany({});
+await db.zustimmungsnachweis.deleteMany({});
+
+console.log("Anmeldungen, Bremsen, Zahlungsereignisse und Löschtabellen geleert.");
 process.exit(0);

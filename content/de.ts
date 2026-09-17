@@ -538,8 +538,22 @@ export const de = {
         "Veranstaltungsdurchführung benötigen. Im Notfall können erforderliche Angaben an " +
         "Rettungsdienst oder medizinisches Personal weitergegeben werden. Eine sonstige " +
         "Weitergabe erfolgt nur, wenn hierfür eine gesetzliche Verpflichtung besteht.",
-      "Freiwillige Gesundheitsangaben werden grundsätzlich spätestens 30 Tage nach " +
-        "Veranstaltungsende gelöscht oder vernichtet. Die übrigen Angaben werden gelöscht, " +
+      /* Hier stand „spätestens 30 Tage". Das Löschkonzept setzt SIEBEN
+         Tage um (lib/loeschfristen.ts → GESUNDHEIT_TAGE). Sieben Tage
+         sind kein Widerspruch zu einer Obergrenze von dreißig — sie
+         liegen darunter, und weniger ist bei Gesundheitsdaten die
+         richtige Richtung. Eine Erklärung, die eine längere Frist
+         nennt als die, die tatsächlich gilt, ist aber ungenau, und
+         Ungenauigkeit gehört hier nicht hin.
+
+         ACHTUNG BEIM NÄCHSTEN ÄNDERN: Das unterschriebene Formular
+         (public/dokumente/einverstaendniserklaerung-minderjaehrige.pdf)
+         nennt weiterhin dreißig Tage. Beides ist zugleich zutreffend,
+         weil sieben innerhalb von dreißig liegen — beim nächsten
+         Neusatz des Formulars gehört die Zahl trotzdem angeglichen. */
+      "Freiwillige Gesundheitsangaben werden spätestens sieben Tage nach Veranstaltungsende " +
+        "gelöscht oder vernichtet, sofern kein Vorfall dokumentiert ist, der eine längere " +
+        "Aufbewahrung erforderlich macht. Die übrigen Angaben werden gelöscht, " +
         "sobald sie für die genannten Zwecke nicht mehr erforderlich sind. Eine längere " +
         "Speicherung erfolgt nur, soweit sie zur Geltendmachung, Ausübung oder Verteidigung " +
         "von Rechtsansprüchen erforderlich ist oder gesetzliche Aufbewahrungspflichten " +
@@ -548,6 +562,62 @@ export const de = {
         "Die E-Mail-Adresse und Gesundheitsangaben sind freiwillig. Ohne erforderliche " +
         "Pflichtangaben kann die Teilnahme abgelehnt werden. Im Übrigen gelten die in der " +
         "Datenschutzerklärung aufgeführten Rechte der betroffenen Personen.",
+    ],
+
+    /* ── Speicherdauer und Löschung ────────────────────────────────
+       KEIN Platzhalter. Dieser Abschnitt beschreibt, was der Code
+       wirklich tut: die Fristen aus lib/loeschfristen.ts, den
+       nächtlichen Lauf aus lib/loeschlauf.ts und die Löschsperren aus
+       der Tabelle Loeschsperre. Ändert sich dort eine Zahl, gehört sie
+       hier mitgeändert — sonst behauptet die Erklärung etwas, das
+       nachweisbar nicht stimmt.
+
+       Bewusst OHNE juristische Würdigung der einzelnen Fristen: Was
+       hier steht, ist die Beschreibung der tatsächlichen Verarbeitung.
+       Ob jede Frist rechtlich die richtige ist, gehört fachkundig
+       geprüft — das steht so auch in docs/rechtliches.md. */
+    datenschutzLoeschungUeberschrift: "3. Speicherdauer und Löschung",
+    datenschutzLoeschungEinleitung:
+      "Daten werden nicht länger gespeichert, als es der jeweilige Zweck und die gesetzlichen " +
+      "Aufbewahrungspflichten erfordern. Welche Frist gilt, hängt von der Art der Angaben ab; " +
+      "die Löschung läuft automatisch.",
+    datenschutzLoeschungAbsaetze: [
+      "Gesundheits- und Notfallangaben auf der Einverständniserklärung werden spätestens " +
+        "sieben Tage nach Ende der Veranstaltung vernichtet.",
+      "Vollständige Einverständniserklärungen für minderjährige Teilnehmer werden drei Jahre " +
+        "ab dem Ende des Kalenderjahres der Veranstaltung aufbewahrt und danach vernichtet. " +
+        "Anschließend kann ein reduzierter Nachweis darüber aufbewahrt werden, dass eine " +
+        "Zustimmung vorlag; er enthält kein Geburtsdatum, keine Mobilnummer und keine " +
+        "Gesundheitsangaben.",
+      "Anmeldedaten sowie Anwesenheitsangaben zu An- und Abmeldung werden drei Jahre ab dem " +
+        "Ende des Kalenderjahres der Veranstaltung aufbewahrt. Danach werden Name, " +
+        "E-Mail-Adresse und Telefonnummer überschrieben; die Buchung selbst bleibt ohne " +
+        "Personenbezug bestehen, weil Betrag und Datum zu den steuerlichen Unterlagen gehören.",
+      "Veranstaltungs- und Sicherheitschecklisten werden drei Jahre ab dem Ende des " +
+        "Kalenderjahres aufbewahrt. Danach werden alle personenbezogenen und mittelbar " +
+        "zuordenbaren Angaben — insbesondere Mitarbeiterkürzel und Freitextnotizen — " +
+        "unwiderruflich entfernt. Nur die dann tatsächlich anonyme Sicherheitsdokumentation " +
+        "bleibt erhalten.",
+      "Unterlagen zu einem Vorfall, einer Beschwerde oder einem Versicherungsfall werden " +
+        "nicht automatisch gelöscht, solange der Vorgang offen ist. Nach seinem Abschluss " +
+        "werden sie zehn Jahre aufbewahrt; bei schweren Personen- oder Gesundheitsschäden " +
+        "höchstens dreißig Jahre.",
+      "Rechnungen, Buchungsbelege und sonstige steuerrelevante Unterlagen unterliegen den " +
+        "gesetzlichen Aufbewahrungsfristen nach § 147 der Abgabenordnung. Sie werden von der " +
+        "automatischen Löschung ausdrücklich nicht erfasst und bleiben unabhängig davon " +
+        "erhalten, ob die übrigen Angaben zu derselben Anmeldung bereits gelöscht wurden.",
+      "Einzelne Datensätze können von der automatischen Löschung ausgenommen werden, wenn " +
+        "ein Unfall, eine Beschwerde, eine Rückbuchung, ein Versicherungsfall oder ein " +
+        "dokumentierter Rechtsstreit dies erfordert. Eine solche Sperre wird mit Grund, " +
+        "Datum und verantwortlicher Person festgehalten und wieder aufgehoben, sobald der " +
+        "Grund entfallen ist.",
+      "Zur Ausfallsicherheit werden verschlüsselte Sicherungen der Datenbank erstellt. Sie " +
+        "werden nach spätestens 180 Tagen automatisch gelöscht. Muss eine Sicherung " +
+        "eingespielt werden, wird die Löschung unmittelbar danach erneut ausgeführt, damit " +
+        "bereits gelöschte Daten nicht dauerhaft wieder in Gebrauch kommen.",
+      "Über jeden Löschlauf wird ein Protokoll geführt. Es enthält bewusst keine Namen, " +
+        "E-Mail-Adressen oder Telefonnummern, sondern nur die Kennung des betroffenen " +
+        "Datensatzes, die Datenart und die durchgeführte Maßnahme.",
     ],
 
     /* ── AGB und Widerruf ──────────────────────────────────────────

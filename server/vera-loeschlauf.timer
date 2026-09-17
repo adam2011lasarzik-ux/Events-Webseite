@@ -1,0 +1,17 @@
+[Unit]
+Description=Startet den VERA-Löschlauf jede Nacht
+
+[Timer]
+# 04:15 Uhr Server-Zeit (UTC) — bewusst NACH der Sicherung um 03:30
+# samt deren Streuwert von bis zu 10 Minuten. So enthält die Sicherung
+# dieses Tages noch den Stand VOR der Löschung: Geht ein Lauf daneben,
+# ist der vorherige Stand nicht verloren.
+OnCalendar=*-*-* 04:15:00
+RandomizedDelaySec=300
+# Holt einen verpassten Lauf nach. Anders als bei der Wache bringt das
+# hier etwas: Eine Frist, die gestern ablief, ist heute immer noch
+# abgelaufen — die Löschung gehört nachgeholt, nicht übersprungen.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

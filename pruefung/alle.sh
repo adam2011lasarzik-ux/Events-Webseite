@@ -158,6 +158,8 @@ lauf "P · Erstattung und Kulanz"       "$P/P/p-erstattung.mjs"
 lauf "P · Storno von Ende zu Ende"     "$P/P/p-storno-ablauf.mjs"
 lauf "P · Storno durch den Veranstalter" "$P/P/p-admin-storno.mjs"
 lauf "P · Anmeldung endgueltig loeschen" "$P/P/p-anmeldung-loeschen.mjs"
+lauf "S · Loeschlauf je Klasse und Sperre" "$P/S/s-loeschlauf.mjs"
+lauf "S · Zugang zu Loeschen und Vorfaellen" "$P/S/s-zugang.mjs"
 
 # Diese beiden laufen gegen den Server OHNE Sonderwerte (Port 3249).
 lauf_rein "N · Rechtsseiten"           node "$P/N/n-seiten.mjs"
@@ -167,6 +169,7 @@ lauf_rein "O · Links und Knöpfe"        node "$P/O/o-links.mjs"
 lauf_rein "L · Kopfleiste: Menü und Anmelden" npx tsx "$P/L/l-schulen.mjs"
 lauf_rein "Q · Überwachung (Mail-Texte und Wächter-Logik)" npx tsx "$P/Q/q-wache.mjs"
 lauf_rein "R · Riegel vor der echten Datenbank" node "$P/R/r-schutz.mjs"
+lauf_rein "S · Loeschfristen (reine Regeln)" npx tsx "$P/S/s-fristen.mjs"
 
 # ── Bilanz ───────────────────────────────────────────────────────
 echo ""
