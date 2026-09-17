@@ -55,7 +55,7 @@ stellt (2×), Foto-Zwecke (3×).
 | 1.9 | Rolle von Stripe: Verantwortlicher oder Auftragsverarbeiter? | ⚖️ | ⬜ |
 | 1.10 | Drittlandbezug Stripe und Backblaze: welche Garantien? | ⚖️ | ⬜ |
 | 1.11 | Ist ein AV-Vertrag mit UptimeRobot nötig? | ⚖️ | ⬜ |
-| 1.12 | Regelaufbewahrungsfrist für Anmeldedaten | ⬜ | ⬜ |
+| 1.12 | Regelaufbewahrungsfrist für Anmeldedaten | ⬜ | ⬜ ← jetzt |
 | 1.13 | Anschrift der Berliner Aufsichtsbehörde | 🔎 | ⬜ |
 
 # Gruppe 2 — Vor dem ersten B2C-Ticketverkauf
@@ -100,11 +100,13 @@ stellt (2×), Foto-Zwecke (3×).
 | 3.6 | Schuhwerk-Vorgabe der Location | 🔎 | ⬜ |
 | 3.7 | Alkohol bei Veranstaltungen | ⬜ | ✅ 17.09.2026 |
 | 3.23 | **neu:** Alterskontrolle am Ausschank | ⬜ | ✅ 17.09.2026 |
-| 3.24 | **neu:** Wer schenkt aus — VERA oder die Location? | ⬜ | ⬜ ← jetzt |
+| 3.24 | **neu:** Wer verkauft Speisen und Getränke? | ⬜ | ✅ 17.09.2026 |
+| 3.26 | **neu:** Darf Alkohol mitgebracht werden? | ⬜ | ✅ 17.09.2026 — nein |
+| 3.28 | **neu:** Belehrung nach § 43 IfSG für die Speisenabgabe | 🔎 ⚖️ | ⬜ |
 | 3.27 | **neu:** Ankunftsvorgang | ⬜ | ✅ 17.09.2026 |
-| 3.25 | **neu:** Gaststättenrechtliche Erlaubnis oder Gestattung | ⚖️ | ⬜ |
-| 3.26 | **neu:** Darf Alkohol mitgebracht werden? | ⬜ | ⬜ |
-| 3.8 | Geeigneter Bereich für ausgeschlossene Minderjährige bis zur Abholung? | 🔎 | ⬜ |
+| 3.25 | **neu:** Gaststättenrechtliche Erlaubnis oder Gestattung | ⚖️ | ⏸ erst für Stufe 2 |
+
+| 3.8 + 3.9 | Vorzeitiges Gehen eines unbegleiteten Minderjährigen | ⬜ | ✅ 17.09.2026 |
 | 3.9 | **neu:** Kontaktprozess — jetzt nur noch für Notfälle | ⬜ | ⬜ |
 | 3.10 | **neu:** Mindestalter und selbstständige An-/Abreise | ⬜ | ✅ 17.09.2026 |
 | 3.19 | **neu:** Zwei Wege — mit und ohne Begleitung | ⬜ | ✅ 17.09.2026 |
@@ -913,3 +915,142 @@ Einverständniserklärung gehört:
 |---|---|
 | keine Unterschrift der Jugendlichen | ✅ erfüllt — es unterschreiben nur die Eltern auf der Erklärung |
 | Elternzustimmung zur selbstständigen An- und Abreise online möglich | **weitgehend gegenstandslos** durch 3.20 — VERA hat das Kind nie in Obhut, es kommt und geht frei. Was die Eltern zustimmen, ist die **Teilnahme**; das steht bereits in der Online-Anmeldung und auf der Erklärung |
+
+
+---
+
+## 3.24 — Wer verkauft Speisen und Getränke · entschieden am 17.09.2026
+
+**Gewählt: gestuft.**
+
+> „Jetzt am Anfang nur Speisen und Getränke und später Alkohol."
+
+| Stufe | Wer verkauft was | Was VERA dafür braucht |
+|---|---|---|
+| **Stufe 1 — jetzt** | VERA verkauft **Speisen und alkoholfreie Getränke**. Alkohol läuft ausschließlich über die Gastronomie der Veranstaltungslocation | keine gaststättenrechtliche Erlaubnis. Zu klären: Belehrung nach § 43 IfSG (neue Frage 3.28) |
+| **Stufe 2 — später** | VERA verkauft **auch Alkohol** | gaststättenrechtliche Erlaubnis oder befristete Gestattung; geschultes Personal; volle Jugendschutzverantwortung am Ausschank |
+
+### Was das für die Texte bedeutet
+
+**Die Entwürfe beschreiben Stufe 1.** Die heutige Preisangabe in
+`content/de.ts` passt bereits:
+
+> „Schläger, Bälle und Betreuung sind im Preis enthalten. Essen und
+> Getränke können vor Ort separat erworben werden."
+
+Der Satz trägt sowohl den Verkauf durch VERA als auch den durch die
+Halle — **hier ist nichts zu ändern.**
+
+### ⚠️ Auslöser für eine spätere Textänderung
+
+**Der Übergang zu Stufe 2 ist kein stiller Schritt.** Sobald VERA selbst
+Alkohol verkauft, sind fällig:
+
+1. gaststättenrechtliche Erlaubnis oder Gestattung (3.25),
+2. eine Regelung zur Alterskontrolle **durch VERA** — die Entscheidung
+   aus 3.23 (Kontrolle an der Theke) liegt dann bei VERA statt bei der
+   Halle,
+3. eine Prüfung, ob das Armband für Volljährige doch gebraucht wird —
+   die Argumente aus 3.23 gelten dann für VERA selbst,
+4. Anpassung der Hausordnung (Dokument 09, Ziffer 5).
+
+Das gehört als Merkposten in die Veranstaltungscheckliste, damit es
+beim ersten Bierverkauf nicht übersehen wird.
+
+### Neue offene Frage 3.28
+
+Wer **unverpackte Lebensmittel** abgibt, braucht in der Regel eine
+Belehrung nach § 43 Infektionsschutzgesetz durch das Gesundheitsamt.
+Das betrifft Stufe 1 **sofort**, nicht erst später.
+`[VOR VERWENDUNG KLÄREN: Welche Speisen genau? Verpackt oder offen?
+Die Antwort entscheidet, ob eine Belehrung nötig ist.]`
+
+
+---
+
+## 3.26 — Mitgebrachter Alkohol · entschieden am 17.09.2026
+
+**Gewählt: nicht gestattet.**
+
+Ohne diese Regel wäre die Ausweiskontrolle an der Theke (3.23)
+wirkungslos — wer selbst mitbringt, geht an ihr vorbei. Und da VERA
+keine Aufsicht übernimmt (3.20), schaut niemand gezielt hin. Bei einem
+Format mit Schülern ist das der praktisch wahrscheinlichste
+Jugendschutzfall.
+
+**Gehört in Dokument 09, Ziffer 5.** Der dortige Platzhalter wird durch
+diese Regel ersetzt:
+
+> Das Mitbringen alkoholischer Getränke auf das Veranstaltungsgelände
+> ist nicht gestattet. Alkoholische Getränke sind ausschließlich über
+> die Gastronomie der Veranstaltungslocation erhältlich.
+
+`[VOR VERWENDUNG KLÄREN: Abgleichen, ob die Hausordnung der Location
+dasselbe vorsieht — Hallen mit eigener Gastronomie tun das fast immer.
+Dann ist die Regel nur zu übernehmen, nicht neu zu setzen. Offene
+Frage 3.5.]`
+
+
+---
+
+## 3.8 / 3.9 — Vorzeitiges Gehen · entschieden am 17.09.2026
+
+### Grundsatz von Adam, wörtlich
+
+> „Wir bleiben konsequent beim Jumphaus-/Anlagenmodell. Bitte alle
+> weiteren Regelungen darauf aufbauen. Bei Unwohlsein oder Verletzung
+> werden die Eltern/der Notfallkontakt informiert und je nach Situation
+> Erste Hilfe geleistet. Bei einem Ausschluss wegen Fehlverhaltens
+> werden die Eltern informiert. Berücksichtige dabei die von den Eltern
+> erteilte Erlaubnis zum selbstständigen Verlassen. Bitte keine
+> Regelungen einbauen, die unnötig wieder eine dauerhafte Aufsicht oder
+> Betreuung durch VERA voraussetzen."
+
+> ### 📌 Dieser Grundsatz gilt für alle weiteren Entscheidungen
+> Er ist kein Einzelfall, sondern die Richtschnur für die Überarbeitung
+> sämtlicher Entwürfe. **Keine Regelung darf eine dauerhafte Aufsicht
+> voraussetzen.**
+
+### Die Regel
+
+| Fall | Was geschieht |
+|---|---|
+| **Unwohlsein oder Verletzung** | Erste Hilfe je nach Situation, bei Bedarf Rettungsdienst. Eltern beziehungsweise Notfallkontakt werden informiert |
+| **Ausschluss wegen Fehlverhaltens** | Eltern werden informiert |
+| **Gehen** | richtet sich nach der von den Eltern erteilten Erlaubnis zum selbstständigen Verlassen |
+
+### Die eine Formulierungsfrage, die dabei sauber gelöst werden muss
+
+Haben die Eltern das selbstständige Verlassen **nicht** erlaubt und soll
+die Person vorzeitig gehen, kann VERA sie nicht hinausschicken. Sie
+bleibt, bis jemand sie abholt.
+
+**Das wird als Unterlassen formuliert, nicht als Leistung:**
+
+> Hat die erziehungsberechtigte Person das selbstständige Verlassen
+> nicht gestattet, weisen wir die minderjährige Person nicht des
+> Geländes. Eine Beaufsichtigung während dieser Zeit übernehmen wir
+> nicht.
+
+Der Unterschied ist nicht sprachliche Feinheit: „Wir betreuen sie bis
+zur Abholung" wäre eine zugesagte Leistung und damit eine
+Aufsichtsübernahme. „Wir weisen sie nicht hinaus" ist keine.
+
+### Was damit **nicht** eingebaut wird
+
+- kein benannter Warte- oder Aufenthaltsbereich
+- keine Zusage, jemanden im Blick zu behalten
+- keine Eskalationsstufen mit Zeitgrenzen
+- keine Suche auf dem Gelände
+
+---
+
+## Restliche Punkte aus Gruppe 3 — keine Entscheidungen, sondern Nachschlagen
+
+| # | Was nachzuschlagen ist | Wo |
+|---|---|---|
+| 3.4 | Hinweis zu vorsätzlicher Beschädigung — kleine Entscheidung, später | — |
+| 3.5 | Hausordnung der Veranstaltungslocation im Wortlaut | Location |
+| 3.6 | Vorgeschriebenes Schuhwerk | Hausordnung der Location |
+| 3.25 | Gaststättenrechtliche Erlaubnis | erst für Stufe 2 |
+| 3.28 | Belehrung nach § 43 IfSG für die Speisenabgabe | Gesundheitsamt |
