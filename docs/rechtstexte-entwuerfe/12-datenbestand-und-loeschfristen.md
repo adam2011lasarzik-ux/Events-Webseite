@@ -226,3 +226,120 @@ der bestehenden.
    die technische Löschung Kosmetik.
 4. **Das Postfach ist der größte ungeregelte Bestand** — dort liegt bei
    jeder Anmeldung ein vollständiger Datensatz, zeitlich unbegrenzt.
+
+---
+
+# Teil II — Fristen nach Datenart
+
+> **Stand: 17.09.2026.** Auf Wunsch von Adam getrennt nach Datenart
+> statt einer pauschalen Frist.
+>
+> ⚠️ **Quellenlage:** `gesetze-im-internet.de` und `dejure.org` sind aus
+> dieser Arbeitsumgebung netzwerkseitig gesperrt. Alle Normangaben
+> stammen aus Suchergebnissen und Fachbeiträgen, **nicht aus dem
+> abgerufenen amtlichen Text.** Jede Frist ist vor der Umsetzung im
+> Original nachzulesen und fachlich zu bestätigen.
+>
+> **Nichts wurde implementiert.**
+
+## Der Schlüssel: Beleg und Kontaktdaten trennen
+
+Die steuerliche Aufbewahrung betrifft den **Buchungsbeleg** — Betrag,
+Datum, Zahlungsbezug, Steuerausweis. Sie verlangt **nicht** die
+Telefonnummer eines Teilnehmers.
+
+Daraus folgt das ganze Konzept: **Kontaktdaten werden anonymisiert,
+der Buchungssatz bleibt vollständig.** Beides ist gleichzeitig möglich.
+
+> ✅ **Die vorhandene Anonymisierungsfunktion ist bereits genau so
+> gebaut.** Sie überschreibt `kontaktVorname`, `kontaktNachname`,
+> `kontaktEmail`, `kontaktTelefon` sowie alle Teilnehmernamen — und
+> lässt `gesamtpreisCents`, `bezahlterBetragCents`, `bezahltAm`,
+> `angemeldetAm`, `zahlungsReferenz` und die Personenzahl unangetastet.
+> Es braucht keine neue Funktion, nur einen zeitgesteuerten Aufruf.
+
+---
+
+## Die Tabelle
+
+| # | Datenart | Frist | Rechtsgrund / Zweck | Danach |
+|---|---|---|---|---|
+| **1** | **Kontaktdaten der anmeldenden Person** (Name, E-Mail, Telefon) | **keine gesetzliche Pflicht.** Empfehlung: bis zum Ablauf der regelmäßigen Verjährung — 3 Jahre zum Jahresende | Art. 6 Abs. 1 Buchst. b DSGVO; Nachweis- und Verteidigungsfähigkeit, §§ 195, 199 Abs. 1 BGB | **anonymisieren** |
+| **2** | **Teilnehmernamen** | wie 1 | wie 1 | **anonymisieren** |
+| **3** | **Einwilligungsnachweise** (Vormund, Fotos — die beiden Häkchen) | solange die Einwilligung wirkt, danach bis Verjährung | Art. 7 Abs. 1 DSGVO — Nachweispflicht des Verantwortlichen | **anonymisieren**, Häkchenwert bleibt ohne Personenbezug |
+| **4** | **Buchungs- und Zahlungsdaten** (Betrag, Datum, Zahlungsstatus, Stripe-Referenz) | **8 Jahre** | § 147 Abs. 3 AO — Buchungsbelege, seit 01.01.2025 acht statt zehn Jahre (4. Bürokratieentlastungsgesetz) | **behalten**, ohne Personenbezug |
+| **5** | **Rechnungen und steuerliche Unterlagen** | **8 Jahre** (Belege) bzw. **10 Jahre** (Jahresabschlüsse, Inventare, Organisationsunterlagen) | § 147 AO, § 257 HGB | **behalten** |
+| **6** | **Einverständniserklärungen Minderjähriger** (Papier, ohne Gesundheitsangaben) | **offen — Entscheidung nötig.** Siehe Abwägung unten | Nachweis der Zustimmung; §§ 195, 199 Abs. 1 BGB gegen § 199 Abs. 2 BGB | **vernichten** |
+| **7** | **Gesundheitsangaben auf dem Formular** | **30 Tage nach Veranstaltungsende** | Art. 9 Abs. 2 Buchst. a DSGVO, Datenminimierung. **Bereits geltende Zusage** in Datenschutz Abschnitt 2 | **vernichten** — gilt unverändert |
+| **8** | **E-Mail-Benachrichtigungen an den Veranstalter** | wie 1 — 3 Jahre. Keine gesetzliche Aufbewahrungspflicht, da kein Handelsbrief | Art. 6 Abs. 1 Buchst. f DSGVO | **löschen** per Postfachregel |
+| **9** | **Bestätigungs- und Stornomails an Teilnehmende** (Ordner „Gesendet") | wie 8 | wie 8 | **löschen** per Postfachregel |
+| **10** | **Server-Protokolle** | 14 Tage Nginx, 7 Tage Journal | Art. 6 Abs. 1 Buchst. f DSGVO — Betriebssicherheit | **löschen**, läuft bereits automatisch |
+| **11** | **Missbrauchsschutz** (IP im Klartext) | 60 Minuten | Art. 6 Abs. 1 Buchst. f DSGVO | **löschen**, läuft bereits automatisch |
+| **12** | **Verschlüsselte Sicherungen** | 180 Tage | technische Ausfallsicherheit | **verfallen automatisch** |
+| **13** | **CSV-Exporte und ausgedruckte Anwesenheitslisten** | so kurz wie möglich — Empfehlung: **nach der Veranstaltung vernichten** | kein eigener Zweck über die Veranstaltung hinaus | **vernichten** |
+| **14** | **Protokoll des Adminbereichs** | Empfehlung 12 Monate | Art. 6 Abs. 1 Buchst. f DSGVO — Nachvollziehbarkeit | **löschen** |
+| **15** | **Fotos von Teilnehmenden** | richtet sich nach der Einwilligung | Gruppe 4, noch offen | **löschen** |
+
+---
+
+## Die eine Frist, die wirklich abgewogen werden muss: Nummer 6
+
+**Das Spannungsfeld.**
+
+Die Einverständniserklärung ist der Nachweis, dass die
+erziehungsberechtigte Person der Teilnahme zugestimmt hat — und, nach
+dem Anlagenmodell, dem selbstständigen Verlassen.
+
+| Für eine **kurze** Frist | Für eine **lange** Frist |
+|---|---|
+| Datenminimierung, Art. 5 Abs. 1 Buchst. c DSGVO | **§ 199 Abs. 2 BGB:** Schadensersatz wegen Verletzung von Leben, Körper, Gesundheit oder Freiheit verjährt **absolut erst nach 30 Jahren** ab dem Ereignis — kenntnisunabhängig |
+| Papierlagerung ist unpraktisch | Bei einer Sportveranstaltung mit Minderjährigen ist genau das der realistische Streitfall |
+| 3 Jahre decken den weit überwiegenden Teil ab | Ohne Formular lässt sich nach Jahren nicht mehr belegen, dass zugestimmt wurde |
+
+**Drei gangbare Wege:**
+
+1. **3 Jahre zum Jahresende.** Deckt die regelmäßige Verjährung ab.
+   Restrisiko: ein Personenschaden, der später geltend gemacht wird.
+2. **10 Jahre.** Deutlich längerer Schutz bei überschaubarem Bestand —
+   ein Ordner je Veranstaltung. Braucht eine tragfähige Begründung in
+   der Datenschutzerklärung.
+3. **Gestuft:** Das vollständige Formular 3 Jahre, danach nur noch ein
+   reduzierter Nachweis (Name, Veranstaltung, Datum, „Zustimmung lag
+   vor") für die restliche Zeit. Datensparsam **und** beweisfähig.
+
+> **Empfehlung: Weg 3.** Er löst das Spannungsfeld, statt es zu einer
+> Seite hin aufzulösen. Er ist aber der einzige der drei, der eine
+> bewusste organisatorische Umsetzung braucht.
+>
+> ⚖️ **Diese Frist gehört ausdrücklich in die fachliche Prüfung.** Die
+> Abwägung zwischen Datenminimierung und Beweisvorsorge bei
+> Personenschäden ist eine juristische Wertung, keine technische.
+
+---
+
+## Was das für die Umsetzung bedeutet
+
+| Ort | Automatisierbar? | Was zu bauen wäre |
+|---|---|---|
+| Datenbank, Nummern 1–3 | **ja** | nächtlicher Lauf, der fällige Anmeldungen an die vorhandene Funktion übergibt |
+| Datenbank, Nummern 4–5 | — | nichts; der Buchungssatz bleibt ohnehin |
+| Nummer 14 | **ja** | im selben Lauf |
+| Nummern 8–9 (Postfach) | **teilweise** | Regel im Postfach bei Hostinger, nicht in der Anwendung |
+| Nummern 10–12 | **läuft bereits** | nichts |
+| Nummern 6–7, 13 (Papier) | **nein** | organisatorische Regel, gehört in die Veranstaltungscheckliste |
+
+**Der Aufwand liegt bei einem Skript und einem systemd-Timer** nach dem
+Muster von `vera-sicherung.timer`. Die eigentliche Arbeit ist nicht der
+Bau, sondern die Entscheidung über Nummer 6.
+
+---
+
+## Offene Punkte dieser Tabelle
+
+| # | Frage |
+|---|---|
+| L-1 | **Frist für die Einverständniserklärungen** — 3 Jahre, 10 Jahre oder gestuft? |
+| L-2 | Stellt VERA überhaupt Rechnungen aus? Gegenüber Privatpersonen besteht dafür in der Regel keine Pflicht. Falls ja, gilt Nummer 5 mit Namen |
+| L-3 | Ist VERA buchführungspflichtig, oder reicht die Einnahmenüberschussrechnung? Das ändert nichts an den acht Jahren für Belege, wohl aber am Umfang der übrigen Unterlagen |
+| L-4 | Wo werden Papierformulare zwischen Veranstaltung und Vernichtung aufbewahrt, und wie werden sie vernichtet? |
+| L-5 | Sollen die drei Fristen für Kontaktdaten, Adminprotokoll und Postfach gleich lang sein? Einheitlichkeit erleichtert die Erklärung erheblich |
