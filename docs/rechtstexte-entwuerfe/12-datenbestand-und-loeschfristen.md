@@ -280,6 +280,11 @@ der Buchungssatz bleibt vollständig.** Beides ist gleichzeitig möglich.
 | **14** | **Protokoll des Adminbereichs** | Empfehlung 12 Monate | Art. 6 Abs. 1 Buchst. f DSGVO — Nachvollziehbarkeit | **löschen** |
 | **15** | **Fotos von Teilnehmenden** | richtet sich nach der Einwilligung | Gruppe 4, noch offen | **löschen** |
 
+> **Hinweis:** Diese Tabelle ist die erste Fassung. Die verbindliche,
+> nach Datenklassen gegliederte Fassung mit Startzeitpunkten,
+> Löschaktionen und Löschsperre steht in **Dokument 13 —
+> Löschkonzept.** Bei Abweichungen gilt Dokument 13.
+
 ---
 
 ## Die eine Frist, die wirklich abgewogen werden muss: Nummer 6
@@ -450,15 +455,29 @@ VERA seine Pflichten erfüllt hat:
 - dass die Ausrüstung in Ordnung war,
 - welche Regeln galten.
 
-**Das steht auf der Veranstaltungscheckliste — und die enthält keine
-personenbezogenen Daten.**
+**Das steht auf der Veranstaltungscheckliste.**
 
-> ✅ **Damit löst sich das Spannungsfeld fast vollständig auf.** Das
-> Beweismittel, das man lange braucht, ist nicht personenbezogen und
-> kann unbefristet aufbewahrt werden. Das Beweismittel, das
-> personenbezogen ist, braucht man nur kurz.
+> ### ⚠️ Korrektur vom 17.09.2026
 >
-> **Regel: nicht-personenbezogene Nachweise lang, personenbezogene kurz.**
+> **Hier stand ursprünglich, die Checkliste enthalte keine
+> personenbezogenen Daten und könne unbefristet aufbewahrt werden. Das
+> war falsch.**
+>
+> Sie enthält **Mitarbeiterkürzel** — und ein Kürzel, das VERA einer
+> Person zuordnen kann, ist ein personenbezogenes Datum nach
+> Art. 4 Nr. 1 DSGVO. Pseudonymisierung ist keine Anonymisierung. Es
+> sind **Beschäftigtendaten**, und sie brauchen eine Frist.
+>
+> Hinzu kommt eine mittelbare Zuordenbarkeit: Datum und Event-ID lassen
+> sich mit der Anwesenheitsliste verknüpfen, solange diese existiert.
+>
+> **Die korrigierte Fassung steht in Dokument 13, Klasse 5:**
+> Aussonderungsprüffrist 3 Jahre, Löschfrist 10 Jahre.
+
+**Die Regel gilt trotzdem — nur abgeschwächt:** Das Beweismittel, das
+man lange braucht, ist *weniger* personenbezogen und kann *länger*
+aufbewahrt werden. Das Beweismittel mit vollem Personenbezug braucht man
+nur kurz. Aber „unbefristet" gibt es hier nicht.
 
 ---
 
@@ -468,7 +487,7 @@ personenbezogenen Daten.**
 |---|---|---|---|
 | **1** | **Vollständiges Formular** — Name, Geburtsdatum, Mobilnummer, Zustimmungen | **3 Jahre zum Jahresende** nach der Veranstaltung | §§ 195, 199 Abs. 1 BGB; Art. 17 Abs. 3 Buchst. e DSGVO |
 | **2** | **Reduzierter Nachweis** — Name der minderjährigen Person, Veranstaltung, Datum, Vermerk „Zustimmung lag vor" und „selbstständiges Verlassen gestattet/nicht gestattet" | **weitere 7 Jahre** (bis 10 Jahre gesamt) | Art. 6 Abs. 1 Buchst. f DSGVO, abnehmende Rechtfertigung nach Art. 17 Abs. 3 Buchst. e DSGVO |
-| **3** | **Veranstaltungscheckliste** — Einweisung, Ablauf, Personal, ohne Teilnehmernamen | **unbefristet** | kein Personenbezug, daher keine Löschpflicht |
+| **3** | **Veranstaltungscheckliste** — Einweisung, Ablauf, Personal, ohne Teilnehmernamen | **10 Jahre**, Prüfung nach 3 — *korrigiert, siehe Dokument 13 Klasse 5* | Art. 6 Abs. 1 Buchst. f DSGVO; enthält Beschäftigtendaten |
 | **—** | **Gesundheitsangaben** | **30 Tage** nach Veranstaltungsende | unverändert; bereits geltende Zusage |
 
 **Warum Stufe 2 sieben Jahre und nicht dreißig:** Dreißig Jahre wären

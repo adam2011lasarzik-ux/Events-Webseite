@@ -57,7 +57,9 @@ stellt (2×), Foto-Zwecke (3×).
 | 1.11 | Ist ein AV-Vertrag mit UptimeRobot nötig? | ⚖️ | ⬜ |
 | 1.12 | Regelaufbewahrungsfrist für Anmeldedaten | ⬜ | ⏸ Vorarbeit in Dok. 12, Entscheidung offen |
 | 1.14 | **neu:** Frist für vollständige Einverständniserklärungen | ⚖️ | ⏸ wartet auf fachliche Bestätigung |
-| 1.15 | **neu:** Reduzierter Nachweis nach Stufe 1 — zulässig? | ⚖️ | ⏸ wartet auf fachliche Bestätigung |
+| 1.15 | **neu:** Reduzierter Nachweis nach Stufe 1 — zulässig? | ⚖️ | ✅ zulässig (DIN 66398), Dauer offen |
+| 1.16 | **neu:** Stufenplan grundsätzlich umsetzen | ⬜ | ✅ 17.09.2026 |
+| 1.17 | **neu:** Frist für die Veranstaltungscheckliste | ⬜ ⚖️ | ⏸ Vorschlag in Dok. 13 Klasse 5 |
 | 1.13 | Anschrift der Berliner Aufsichtsbehörde | 🔎 | ⬜ |
 
 # Gruppe 2 — Vor dem ersten B2C-Ticketverkauf
@@ -1120,3 +1122,70 @@ Löschung eingerichtet, kein Code geändert. Die Formulare werden
 unverändert weiter aufbewahrt, bis die Fristen fachlich bestätigt sind —
 eine zu lange Aufbewahrung lässt sich heilen, eine zu frühe Vernichtung
 nicht.
+
+
+---
+
+## 1.16 — Stufenplan und Löschkonzept · 17.09.2026
+
+**Adam hat den Stufenplan grundsätzlich freigegeben** und zugleich eine
+Aussage von mir korrigiert.
+
+### ⚠️ Die Korrektur — Adam hatte recht
+
+Ich hatte in Dokument 12, Teil III geschrieben, die
+Veranstaltungscheckliste enthalte keine personenbezogenen Daten und
+könne **unbefristet** aufbewahrt werden. **Das war falsch.**
+
+Sie enthält **Mitarbeiterkürzel**. Ein Kürzel, das VERA einer Person
+zuordnen kann, ist ein personenbezogenes Datum nach Art. 4 Nr. 1 DSGVO —
+Pseudonymisierung ist keine Anonymisierung. Es sind Beschäftigtendaten.
+Dazu kommt eine mittelbare Zuordenbarkeit über Datum und Event-ID in
+Verbindung mit der Anwesenheitsliste.
+
+**Korrigiert an beiden Stellen:** in Dokument 12, Teil III (mit
+sichtbarem Korrekturvermerk) und in der Fristentabelle. Die verbindliche
+Fassung steht in Dokument 13, Klasse 5 — **Aussonderungsprüffrist
+3 Jahre, Löschfrist 10 Jahre.**
+
+### Was entstanden ist
+
+**Dokument 13 — Löschkonzept**, aufgebaut nach DIN 66398 mit sieben
+Datenklassen. Je Klasse: Prüffrist, Löschfrist, Startzeitpunkt,
+Rechtsgrundlage, automatische Aktion, Ausnahmen. Bei unsicherer
+Grundlage zwei Varianten mit Empfehlung.
+
+**Kern des Konzepts ist die Löschsperre** — sie setzt die Löschung für
+**einzelne Datensätze** aus, bei Unfall, Beschwerde, Rückbuchung,
+Versicherungsfall oder drohendem Rechtsstreit. Ohne sie darf keine
+automatische Löschung scharf geschaltet werden.
+
+### Belegt und offen
+
+| Klasse | Grundlage |
+|---|---|
+| 1 Gesundheitsangaben (7 Tage) | ✅ belegt, ohne weitere Klärung umsetzbar |
+| 2 Vollständige Erklärungen (3 Jahre) | ✅ belegt |
+| 7 Steuerunterlagen (10/8/6 Jahre) | ✅ belegt — § 147 Abs. 3 und 4 AO |
+| 3, 4, 5, 6 | ⚖️ **keine endgültige Frist**, je zwei Varianten mit Empfehlung |
+
+### Wo die 30-Jahres-Frist tatsächlich hingehört
+
+In Teil III hatte ich § 199 Abs. 2 BGB für die Einverständniserklärungen
+verworfen — sie beweisen die Zustimmung, strittig ist aber die
+Pflichtverletzung. **Für die Vorfallakte (Klasse 6) gilt das Gegenteil:**
+Sie dokumentiert genau den Hergang. Dort ist die Frist als Variante B
+aufgenommen, ebenfalls ohne endgültige Festlegung.
+
+### Steuerdaten — technisch getrennt, wie verlangt
+
+Die Anonymisierung fasst kein steuerrelevantes Feld an (geprüft in
+`app/admin/anmeldungen/aktion.ts`). Zusätzlich als Regel aufgenommen:
+**Rechnungen mit Namen werden nicht anonymisiert, solange ihre
+gesetzliche Frist läuft** — sie sind selbst Buchungsbeleg.
+
+### Status
+
+⛔ **Nichts implementiert.** Keine Frist gesetzt, kein Code geändert,
+keine Löschung eingerichtet. Sieben offene Punkte in Dokument 13,
+Abschnitt 6.
