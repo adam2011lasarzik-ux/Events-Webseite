@@ -22,7 +22,8 @@
     "system:alarm": "tsx --env-file=.env prisma/systemAlarmSenden.ts",
     "anmeldung:loeschen": "tsx --env-file=.env prisma/anmeldungLoeschen.ts",
     "loeschen:vorschau": "tsx --env-file=.env prisma/loeschlauf.ts",
-    "loeschen": "tsx --env-file=.env prisma/loeschlauf.ts --echt"
+    "loeschen": "tsx --env-file=.env prisma/loeschlauf.ts --echt",
+    "papier:erinnern": "tsx --env-file=.env prisma/papiererinnerung.ts"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.9.1",

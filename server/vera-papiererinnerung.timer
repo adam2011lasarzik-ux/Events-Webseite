@@ -1,0 +1,16 @@
+[Unit]
+Description=Startet die Papiererinnerung einmal im Monat
+
+[Timer]
+# Am 1. jedes Monats um 08:00 UTC — vormittags deutscher Zeit, also
+# zu einer Stunde, zu der die Mail auch gelesen wird. Nachts wäre sie
+# bis zum Abend unter zwanzig anderen begraben.
+OnCalendar=*-*-01 08:00:00
+RandomizedDelaySec=1800
+# Nachholen, wenn der Server am Monatsersten aus war. Eine
+# Aufbewahrungsfrist, die gestern ablief, ist heute immer noch
+# abgelaufen.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -25,7 +25,12 @@ Dieses Dokument beschreibt nur den laufenden Betrieb.
 
 **K1 und K2 liegen auf Papier.** Die Anwendung kann sie nicht
 vernichten — sie erinnert nur daran. Das ist keine Lücke der Umsetzung,
-sondern die Eigenschaft von Papier.
+sondern die Eigenschaft von Papier. Die Erinnerung kommt **monatlich
+per Mail** über `vera-papiererinnerung.timer` (1. des Monats, 08:00
+UTC) und nur dann, wenn wirklich etwas ansteht — eine monatliche Mail
+„nichts zu tun" wird nach dem dritten Mal ungelesen weggeklickt, und
+dann auch die vierte, in der etwas steht. Sie nennt Klasse,
+Veranstaltung, Fälligkeit und Anzahl, aber **keine Namen**.
 
 **K7 ist der Riegel.** `entscheide()` in `lib/loeschfristen.ts` prüft
 die Steuerrelevanz an **erster** Stelle, noch vor der Sperre. Wer die
@@ -52,6 +57,7 @@ weil zufällig keine Sperre darauf lag. Die Reihenfolge ist:
 | `app/admin/vorfaelle/` | Vorfälle anlegen, einstufen, abschließen. |
 | `server/vera-loeschlauf.*` | Der nächtliche Lauf als systemd-Dienst. |
 | `server/vera-nach-wiederherstellung.sh` | Nach dem Einspielen einer Sicherung. |
+| `prisma/papiererinnerung.ts`, `server/vera-papiererinnerung.*` | Monatliche Erinnerung an Papierunterlagen. |
 
 ### Datenbanktabellen
 
@@ -107,20 +113,10 @@ erfolgreicher Lauf schickt ausdrücklich keine.
 
 ### Einrichtung auf dem Server
 
-```bash
-sudo cp /var/www/vera/server/vera-loeschlauf.sh /usr/local/bin/
-sudo chmod +x /usr/local/bin/vera-loeschlauf.sh
-sudo cp /var/www/vera/server/vera-loeschlauf.service /etc/systemd/system/
-sudo cp /var/www/vera/server/vera-loeschlauf.timer   /etc/systemd/system/
-sudo cp /var/www/vera/server/vera-nach-wiederherstellung.sh /usr/local/bin/
-sudo chmod +x /usr/local/bin/vera-nach-wiederherstellung.sh
-sudo systemctl daemon-reload
-sudo systemctl enable --now vera-loeschlauf.timer
-
-# Einmal von Hand, um zu sehen dass es läuft:
-sudo systemctl start vera-loeschlauf.service
-journalctl -u vera-loeschlauf.service -n 60
-```
+Schritt für Schritt, mit Sicherungskontrolle, Trockenlauf und
+Gegenprobe, steht das in
+**[`loeschkonzept-produktivsetzung.md`](loeschkonzept-produktivsetzung.md)**.
+Das ist der Weg, der beim ersten Mal zu gehen ist.
 
 ---
 
@@ -226,6 +222,9 @@ npx tsx --env-file=.env pruefung/S/s-loeschlauf.mjs   # 42 Prüfungen
 
 # Zugangsschutz (braucht den Server auf Port 3213):
 npx tsx --env-file=.env pruefung/S/s-zugang.mjs       # 17 Prüfungen
+
+# Monatliche Papiererinnerung:
+npx tsx --env-file=.env pruefung/S/s-papier.mjs       # 11 Prüfungen
 ```
 
 Geprüft wird unter anderem: jede Klasse, jeder der fünf Sperrgründe,
@@ -234,6 +233,43 @@ Zeichen für Zeichen erhalten bleiben, dass im Protokoll kein Name und
 keine E-Mail-Adresse steht, und dass ein zweiter Lauf nichts mehr tut.
 
 ---
+
+## Rechnungen und Buchungsbelege
+
+**Heute erzeugt VERA keine Rechnungen.** Nachgesehen, nicht vermutet:
+
+- Im Code kommt kein Rechnungs-, Beleg- oder Quittungsdokument vor.
+  Die Treffer auf „Rechnung" sind Rechenvorgänge, die auf „belegt"
+  sind belegte Plätze.
+- Die Stripe-Sitzung läuft mit `mode: "payment"` **ohne**
+  `invoice_creation` (`lib/zahlung.ts`). Stripe erzeugt damit keine
+  Rechnung.
+- Die Zahlungsbestätigung per Mail ist eine Bestätigung, keine
+  Rechnung: kein Rechnungsdatum, keine fortlaufende Nummer, keine
+  Verkäuferangaben, keine Steuerausweisung (Kleinunternehmer nach
+  § 19 UStG). Sie wird verschickt, nicht als Dokument gespeichert.
+
+**Die Regel, sobald sich das ändert.** Werden je Rechnungen mit
+personenbezogenen Angaben erzeugt, gilt für sie:
+
+1. Sie sind **eigenständige Buchungsbelege**, nicht Teil der
+   Teilnehmerdaten.
+2. Sie werden **unverändert** aufbewahrt — mindestens acht Jahre nach
+   § 147 Abs. 3 AO, gerechnet ab dem Ende des Kalenderjahres.
+3. Der Teilnehmer-Löschlauf fasst sie **nie** an.
+
+Punkt 3 ist bereits gebaut und braucht keine neue Mechanik: Die Klasse
+`STEUERUNTERLAGEN` wird von `entscheide()` an allererster Stelle
+ausgeschlossen, noch vor jeder Sperrprüfung, und ihre Aktion heißt
+ausdrücklich `"niemals"`. Das ist **strenger** als acht Jahre — es wird
+gar nicht automatisch gelöscht, sondern von Hand entschieden, wenn die
+Frist abgelaufen ist. Ein Rechnungsdatensatz bekommt diese Klasse und
+ist damit vom ersten Tag an außerhalb der Reichweite des Löschlaufs.
+
+Was in dem Fall zusätzlich zu tun wäre: ein Ablageort, der ein
+Deployment übersteht (wie `BILDER_VERZEICHNIS`), und eine fortlaufende
+Nummernvergabe. Beides ist eigene Arbeit und steht hier nur, damit es
+beim nächsten Mal nicht neu gefunden werden muss.
 
 ## Was bewusst offen bleibt
 

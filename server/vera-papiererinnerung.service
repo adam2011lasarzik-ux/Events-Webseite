@@ -1,0 +1,14 @@
+[Unit]
+Description=Erinnert an Papierunterlagen, die zu vernichten sind
+After=network-online.target mariadb.service
+Requires=mariadb.service
+
+[Service]
+Type=oneshot
+# Als "vera", nicht als root: braucht nur Datenbank und Projektordner.
+User=vera
+Group=vera
+WorkingDirectory=/var/www/vera
+ExecStart=/usr/local/bin/vera-papiererinnerung.sh
+NoNewPrivileges=true
+PrivateTmp=true

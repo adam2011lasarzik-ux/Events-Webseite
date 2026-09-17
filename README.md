@@ -643,14 +643,22 @@ Rechtsstreit. Im Adminbereich unter **`/admin/loeschen`** stehen die
 Vorschau, die offenen Sperren und das Protokoll; unter
 **`/admin/vorfaelle`** die Akten samt ihrer Einstufung.
 
+Papierunterlagen (K1 und K2) kann die Webseite nicht vernichten — dafür
+kommt monatlich eine Erinnerung per Mail, und nur dann, wenn wirklich
+etwas ansteht.
+
 ```bash
-npm run loeschen:vorschau   # zeigt nur, verändert nichts
-npm run loeschen            # führt es aus
+npm run loeschen:vorschau            # zeigt nur, verändert nichts
+npm run loeschen                     # führt es aus
+npm run papier:erinnern -- --zeigen  # was die Erinnerung melden würde
 ```
 
 Wie das im Betrieb läuft, was nach einer Wiederherstellung zu tun ist
 und was bewusst offen bleibt, steht in
-**[docs/loeschkonzept-betrieb.md](docs/loeschkonzept-betrieb.md)**.
+**[docs/loeschkonzept-betrieb.md](docs/loeschkonzept-betrieb.md)**. Die
+erstmalige Einrichtung auf dem Server — Sicherung prüfen, migrieren,
+Trockenlauf, aktivieren, gegenprüfen — steht in
+**[docs/loeschkonzept-produktivsetzung.md](docs/loeschkonzept-produktivsetzung.md)**.
 
 ## Rechtliche Seiten
 

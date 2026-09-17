@@ -263,6 +263,55 @@ export function systemEntwarnungMail(): { betreff: string; text: string } {
   };
 }
 
+/**
+ * Monatliche Erinnerung an Papierunterlagen, die zu vernichten sind.
+ *
+ * Klasse 1 (Gesundheits- und Notfallangaben) und Klasse 2
+ * (vollständige Einverständniserklärungen) liegen auf Papier. Der
+ * Löschlauf kann sie nicht vernichten — er kann nur sagen, was
+ * ansteht. Diese Mail ist die einzige Stelle, an der das jemanden
+ * erreicht.
+ *
+ * Ohne fällige Unterlagen wird NICHT gemailt. Eine monatliche Mail
+ * „nichts zu tun" wird nach dem dritten Mal ungelesen weggeklickt —
+ * und dann auch die vierte, in der etwas steht.
+ */
+export function papiererinnerungsMail(
+  posten: { klasse: string; eventTitel: string; faelligSeit: string; anzahl: number }[],
+): { betreff: string; text: string } {
+  const KLASSENNAME: Record<string, string> = {
+    GESUNDHEITSANGABEN: "Gesundheits- und Notfallangaben (7 Tage nach der Veranstaltung)",
+    EINVERSTAENDNIS_VOLL: "Vollständige Einverständniserklärungen (3 Jahre ab Jahresende)",
+  };
+
+  return {
+    betreff: `VERA: ${posten.length} Papierunterlage${posten.length === 1 ? "" : "n"} zu vernichten`,
+    text: [
+      "Diese Unterlagen liegen auf Papier. Die Webseite kann sie nicht",
+      "löschen — sie kann nur daran erinnern.",
+      "",
+      ...posten.flatMap((p) => [
+        `  ${KLASSENNAME[p.klasse] ?? p.klasse}`,
+        `      Veranstaltung: ${p.eventTitel}`,
+        `      fällig seit:   ${p.faelligSeit}`,
+        `      Anmeldungen:   ${p.anzahl}`,
+        "",
+      ]),
+      "Zu tun: Die Unterlagen heraussuchen und vernichten — bei",
+      "Gesundheitsangaben schreddern, nicht in den Papierkorb.",
+      "",
+      "Liegt ein Vorfall, eine Beschwerde oder ein Rechtsstreit zu einer",
+      "dieser Veranstaltungen vor, dürfen die Unterlagen NICHT vernichtet",
+      "werden. Dann gehört im Verwaltungsbereich eine Löschsperre gesetzt:",
+      "",
+      "  https://veraevents.de/admin/loeschen",
+      "",
+      "Diese Erinnerung kommt einmal im Monat und nur dann, wenn wirklich",
+      "etwas ansteht.",
+    ].join("\n"),
+  };
+}
+
 /** Alarm-Mail für die nächtliche Datenbank-Sicherung — nur bei Fehlern. */
 export function sicherungsAlarmMail(zeitpunkt: string, meldung: string): { betreff: string; text: string } {
   return {

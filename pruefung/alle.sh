@@ -160,6 +160,7 @@ lauf "P · Storno durch den Veranstalter" "$P/P/p-admin-storno.mjs"
 lauf "P · Anmeldung endgueltig loeschen" "$P/P/p-anmeldung-loeschen.mjs"
 lauf "S · Loeschlauf je Klasse und Sperre" "$P/S/s-loeschlauf.mjs"
 lauf "S · Zugang zu Loeschen und Vorfaellen" "$P/S/s-zugang.mjs"
+lauf "S · Monatliche Papiererinnerung" "$P/S/s-papier.mjs"
 
 # Diese beiden laufen gegen den Server OHNE Sonderwerte (Port 3249).
 lauf_rein "N · Rechtsseiten"           node "$P/N/n-seiten.mjs"
