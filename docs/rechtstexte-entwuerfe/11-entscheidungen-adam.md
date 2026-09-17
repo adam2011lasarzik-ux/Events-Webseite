@@ -98,7 +98,12 @@ stellt (2×), Foto-Zwecke (3×).
 | 3.4 | Hinweis zu vorsätzlicher Beschädigung aufnehmen? | ⬜ ⚖️ | ⬜ |
 | 3.5 | Hausordnung der Veranstaltungslocation im Wortlaut | 🔎 | ⬜ |
 | 3.6 | Schuhwerk-Vorgabe der Location | 🔎 | ⬜ |
-| 3.7 | Alkohol bei Veranstaltungen: Ausschank, Mitbringen, beides nicht? | ⬜ | ⬜ ← jetzt |
+| 3.7 | Alkohol bei Veranstaltungen | ⬜ | ✅ 17.09.2026 |
+| 3.23 | **neu:** Alterskontrolle am Ausschank | ⬜ | ✅ 17.09.2026 |
+| 3.24 | **neu:** Wer schenkt aus — VERA oder die Location? | ⬜ | ⬜ ← jetzt |
+| 3.27 | **neu:** Ankunftsvorgang | ⬜ | ✅ 17.09.2026 |
+| 3.25 | **neu:** Gaststättenrechtliche Erlaubnis oder Gestattung | ⚖️ | ⬜ |
+| 3.26 | **neu:** Darf Alkohol mitgebracht werden? | ⬜ | ⬜ |
 | 3.8 | Geeigneter Bereich für ausgeschlossene Minderjährige bis zur Abholung? | 🔎 | ⬜ |
 | 3.9 | **neu:** Kontaktprozess — jetzt nur noch für Notfälle | ⬜ | ⬜ |
 | 3.10 | **neu:** Mindestalter und selbstständige An-/Abreise | ⬜ | ✅ 17.09.2026 |
@@ -797,3 +802,114 @@ dafür der einfachste Nachweis, den es gibt.
 | **03** Teilnahmebedingungen | die Einweisung als Leistung von VERA benennen — sie ist Teil dessen, was geschuldet wird, und gehört damit auch in die Kernpflichten der Haftungsziffer |
 | **05** Minderjährigenformular | Hinweis für Eltern: VERA weist ein, beaufsichtigt aber nicht |
 | **12** Checkliste | Vermerk mit Uhrzeit und Kürzel |
+
+
+---
+
+## 3.7 / 3.23 — Alkohol · entschieden am 17.09.2026
+
+**Gewählt: Alkohol für Erwachsene, kontrolliert.** Alterskontrolle durch
+**Ausweiskontrolle an der Theke**, kein Band für Volljährige.
+
+### Der Konflikt, der dabei sichtbar wurde
+
+Das Armband war in 3.21 gestrichen worden, weil sein Zweck mit dem
+Anlagenmodell entfallen war. **Der Alkoholausschank schafft einen neuen,
+gegenläufigen Zweck:** Am Ausschank muss in Sekunden erkennbar sein, wer
+volljährig ist. Bei 100 Teilnehmenden, darunter viele Schüler und junge
+Erwachsene, ist das per Augenmaß nicht zu leisten — 17 und 19 sieht man
+nicht an.
+
+Vorgeschlagen war deshalb ein Band **für Volljährige** (eine
+Berechtigung, keine Kennzeichnung Minderjähriger), mit einmaliger
+Ausweiskontrolle beim Check-in. **Adam hat sich dagegen und für die
+Kontrolle an der Theke entschieden.**
+
+### Was das bedeutet
+
+| | |
+|---|---|
+| **Vorteil** | kein Aufwand beim Check-in, keine Bänder, kein Kontrollpunkt am Eingang |
+| **Preis** | die Kontrolle findet bei **jedem einzelnen Getränk** statt, und die Verantwortung trägt die Person hinter der Theke im laufenden Betrieb |
+| **Risiko** | in Stoßzeiten wird erfahrungsgemäß nachlässig geprüft. Ein Verstoß gegen das Jugendschutzgesetz trifft den Ausschenkenden, nicht die Eltern |
+
+> **Daraus folgt unmittelbar Frage 3.24:** Wenn die Kontrolle an der
+> Theke stattfindet, ist entscheidend, **wer** dort steht. Schenkt die
+> Gastronomie der Veranstaltungslocation aus, ist das ihr
+> Tagesgeschäft und ihre eingeübte Praxis. Schenkt VERA selbst aus,
+> muss VERA die Kontrolle organisieren, schulen und verantworten.
+
+### Was unverändert gilt
+
+Dokument 09, Ziffer 5.1 — Teilnahme am Spielbetrieb unter Alkohol­
+einfluss ist nicht gestattet, wer erkennbar unter Einfluss steht, wird
+von der aktiven Teilnahme ausgeschlossen. Diese Regel passt zur
+Entscheidung und bleibt.
+
+### Offen und fachlich zu prüfen
+
+- **3.25 Erlaubnis:** Ausschank von Alkohol ist gaststättenrechtlich
+  erlaubnispflichtig; bei einer einmaligen Veranstaltung kommt statt
+  einer vollen Erlaubnis eine befristete Gestattung in Betracht. Bei
+  der zuständigen Behörde zu klären. `[Der Gesetzestext war aus dieser
+  Arbeitsumgebung nicht abrufbar.]`
+- **Jugendschutz:** Die Altersgrenzen unterscheiden zwischen Bier/Wein
+  und Spirituosen und kennen eine Sonderregel bei Begleitung durch
+  Erziehungsberechtigte. Die genauen Grenzen gehören in die fachliche
+  Prüfung und anschließend als Aushang an die Theke.
+- **3.26 Mitbringen:** Ob mitgebrachter Alkohol gestattet ist, ist noch
+  nicht entschieden. Ohne Regel wäre die Alterskontrolle an der Theke
+  wirkungslos — wer mitbringt, geht an ihr vorbei.
+
+
+---
+
+## 3.27 — Ankunftsvorgang · entschieden am 17.09.2026
+
+**Gewählt: V2 — Einverständniserklärungen annehmen und zusätzlich eine
+ausgedruckte Anwesenheitsliste abhaken.**
+
+Die ursprüngliche Frage nach Check-in und Check-out hatte sich durch
+Entscheidung 3.20 halbiert: Einen Check-out gibt es nicht mehr. Offen
+blieb der Ankunftsvorgang.
+
+### Der Ablauf
+
+| | |
+|---|---|
+| **Alle Teilnehmenden** | auf der ausgedruckten Teilnehmerliste abhaken, wer erschienen ist |
+| **Unbegleitete Minderjährige** | zusätzlich die unterschriebene Einverständniserklärung abgeben |
+| **Begleitete Minderjährige** | Kurznotiz mit dem Namen der Begleitperson (Entscheidung 3.19) |
+| **Beim Gehen** | nichts — kein Check-out, keine Abmeldung |
+
+**Kein Baubedarf.** Die Teilnehmerliste lässt sich bereits heute als CSV
+aus dem Adminbereich ziehen; der Export ist gebaut und geprüft.
+
+### Warum die Liste trotz Anlagenmodell sinnvoll ist
+
+Nicht wegen der Aufsicht, sondern wegen des **Notfalls**. Verletzt sich
+jemand, ist die erste Frage, wen man anruft. Mit Liste steht es in einer
+Zeile; ohne Liste blättert jemand durch einen Stapel Formulare.
+
+Daneben: Platzbelegung, No-Shows, Abrechnung.
+
+### ⚠️ Die Bedingung, die zwingend dazugehört
+
+**Eine Anwesenheitsliste ist keine Aufsichtszusage — aber sie kann wie
+eine aussehen.** Wenn die Texte nicht klar trennen, hat sich VERA über
+die Hintertür genau die Pflicht eingehandelt, die mit Entscheidung 3.20
+bewusst vermieden wurde.
+
+Der Satz, der in die Teilnahmebedingungen und in die
+Einverständniserklärung gehört:
+
+> Wir erfassen beim Ankommen, wer erschienen ist. Wir überwachen **nicht**,
+> wer das Gelände wann verlässt, und übernehmen keine Aufsicht über
+> einzelne Teilnehmende.
+
+### Zu den beiden Randbedingungen von Adam
+
+| Bedingung | Stand |
+|---|---|
+| keine Unterschrift der Jugendlichen | ✅ erfüllt — es unterschreiben nur die Eltern auf der Erklärung |
+| Elternzustimmung zur selbstständigen An- und Abreise online möglich | **weitgehend gegenstandslos** durch 3.20 — VERA hat das Kind nie in Obhut, es kommt und geht frei. Was die Eltern zustimmen, ist die **Teilnahme**; das steht bereits in der Online-Anmeldung und auf der Erklärung |
