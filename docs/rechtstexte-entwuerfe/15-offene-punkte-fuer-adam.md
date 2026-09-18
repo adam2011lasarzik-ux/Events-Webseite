@@ -56,7 +56,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 | ~~2.6~~ | ✅ **Durch 2.5 miterledigt:** Widerrufsrecht ist durchgehend ausgeschlossen (§ 312g Abs. 2 Nr. 9 BGB), weil künftig nur noch Events mit festem Termin verkauft werden — Fassung A gilt einheitlich, kein Einzelfall mehr. **Weiterhin als Prüfauftrag zu lesen** (Abschnitt F, Punkt 2), nicht als bestätigtes Ergebnis. | — |
 | ~~2.7~~ | ✅ **Durch 2.6 miterledigt:** Kein Widerrufsrecht → keine Widerrufsfunktion nach § 356a BGB nötig. | — |
 | ~~2.8~~ | ✅ **Beantwortet 18.09.2026: begrenzte Fassung (11.2/11.3).** Mit drei Skills geprüft und korrigiert — Einzelheiten unten. | — |
-| 2.9 | Mindestteilnehmerzahl einführen? | Deine Entscheidung — abhängig von den Fixkosten pro Veranstaltung. |
+| ~~2.9~~ | ✅ **Beantwortet 18.09.2026:** Ja, individuell je Event, mit sichtbarer Entscheidungsfrist. Klausel formuliert und mit `klauselinhalt-und-verbote-pruefen` geprüft (§ 308 Nr. 3 BGB, Vergleichsmaßstab § 651h Abs. 4 Nr. 1 BGB) — Dokument 03, Ziffer 8.3. **Technisch noch nicht umgesetzt.** | — |
 | 2.10 | Verlegung: eigener Ablauf oder nur Absage plus Neuanmeldung? | Heute kann die Software nur absagen und erstatten. Ein eigener Verlegungs-Ablauf wäre zusätzlicher Bauaufwand. |
 | 2.11 | Sonderfrist für Stornierung nach nachträglicher Terminbekanntgabe (Platzhalter-Termine)? | Sinnvoll, wenn Termine erst nach der Anmeldung feststehen — sonst kann niemand fristgerecht stornieren. |
 | 2.12–2.14 | Checkout-Texte: Leistungsmerkmale wiederholen? AGB als PDF oder Volltext in der Mail? Absagegrund nennen? | Empfehlung: Leistungsmerkmale kurz wiederholen (Transparenzpflicht), AGB als Link **und** Volltext in der Mail, Absagegrund kurz nennen (schafft Vertrauen, ist aber keine Pflicht). |
@@ -219,6 +219,7 @@ Volltext heute.
 | B-3 | Die Foto-Einwilligung ist im Online-Formular ein einziges Häkchen ohne Zweck, Kanal oder Dauer (siehe Dokument 02, Abschnitt 5, Befund). Sobald Gruppe 4 entschieden ist, braucht dieses Häkchen einen ausführlicheren Text oder ein eigenes Formularfeld. | Dokument 06 |
 | B-4 | Prüfliste `N` (maschineller Abgleich AGB/Datenschutz/Formular) muss um die neuen Formulierungen aus dieser Konsolidierungsrunde erweitert werden, bevor sie wieder etwas beweist. | alle |
 | B-5 | Events ohne feststehenden Termin (`startAt`/`endAt` = `null`) dürfen künftig **keinen Kaufknopf** mehr zeigen — nur die Ankündigung. Das ist heute noch nicht durchgesetzt und ein eigener Bauauftrag (vermutlich `lib/events.ts`/`components/PreisRechner.tsx`), nicht Teil dieser Dokumentationsrunde. | Dokument 07, Ziffer 2.5 |
+| B-6 | Mindestteilnehmerzahl und Entscheidungsfrist existieren noch nicht als Datenfelder am Event (`prisma/schema.prisma` kennt nur `maxPersonen`). Nötig: zwei neue Felder, Anzeige auf der Eventseite vor der Anmeldung, automatische Prüfung zur Frist, admin-seitiger Warnhinweis bei einer Frist unter 48 Stunden vor dem Termin. | Dokument 03, Ziffer 8.3 |
 
 ---
 

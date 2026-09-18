@@ -323,32 +323,59 @@ Gründen unmöglich oder unzumutbar wird, die VERA nicht zu vertreten hat
 Anordnungen, Unwetter oder sonstigen Ereignissen höherer Gewalt. Es
 gilt Ziffer 8.1.
 
-8.3 `[VOR VERWENDUNG KLÄREN: Mindestteilnehmerzahl.]`
+8.3 Ist für eine Veranstaltung auf der Eventseite eine
+Mindestteilnehmerzahl und eine Entscheidungsfrist angegeben und wird
+die Mindestteilnehmerzahl bis zum Ablauf der Entscheidungsfrist nicht
+erreicht, kann VERA die Veranstaltung absagen. Der volle Betrag wird
+unmittelbar zur Rückerstattung angewiesen — auf demselben Weg, über
+den gezahlt wurde. Je nach Zahlungsdienstleister und Bank kann die
+Gutschrift einige Werktage dauern. Weitergehende Ansprüche bestehen
+nicht, soweit VERA die Absage nicht zu vertreten hat.
 
-> ⚠️ **Hier fehlt die technische Grundlage.** Das Datenmodell kennt
-> **kein Feld für eine Mindestteilnehmerzahl** (`prisma/schema.prisma`
-> → `Event` hat `maxPersonen`, aber kein Gegenstück). Eine Klausel, die
-> eine Absage wegen Unterschreitung einer Mindestteilnehmerzahl erlaubt,
-> setzt voraus, dass diese Zahl **vor der Anmeldung bekannt gegeben
-> wird** — sonst wäre sie schon deshalb angreifbar.
+> ✅ **Entschieden von Adam am 18.09.2026 und mit
+> `klauselinhalt-und-verbote-pruefen` geprüft.**
 >
-> **Zwei Wege, beide vertretbar:**
+> **Einschlägiger Tatbestand:** § 308 Nr. 3 BGB (Rücktrittsvorbehalt).
+> Die Norm verlangt, dass der Grund für das Lösungsrecht **im Vertrag
+> selbst benannt** und **nicht unerheblich** ist. Beides ist hier
+> erfüllt: Der Grund („Mindestteilnehmerzahl nicht erreicht") steht in
+> der Klausel selbst und wird zusätzlich vor der Buchung auf der
+> Eventseite konkret angezeigt (Zahl und Frist) — nicht erst nachträglich
+> behauptet. Eine zu geringe Teilnehmerzahl ist bei einer Veranstaltung
+> mit Fixkosten (Halle, Trainer) ein anerkennenswerter wirtschaftlicher
+> Grund, kein vorgeschobener.
 >
-> **(a) Keine Mindestteilnehmerzahl.** Ziffer 8.3 entfällt ersatzlos.
-> VERA führt jede Veranstaltung durch oder sagt nach 8.2 ab. Erfordert
-> keine Änderung an der Software.
+> **Vergleichsmaßstab, nicht direkt anwendbar:** Das Pauschalreiserecht
+> kennt in § 651h Abs. 4 Nr. 1 BGB genau diesen Mechanismus — Rücktritt
+> des Veranstalters bei Nichterreichen einer im Vertrag genannten
+> Mindestteilnehmerzahl, mit gestaffelten Mitteilungsfristen (20 Tage
+> bei Reisen über 6 Tage, 7 Tage bei 2–6 Tagen, 48 Stunden bei kürzeren
+> Reisen). VERA schließt keine Reiseverträge; diese Norm gilt hier
+> **nicht unmittelbar**. Sie zeigt aber, dass der Gesetzgeber genau
+> dieses Modell — Mindestzahl **plus** vorab bekannte Frist — selbst als
+> grundsätzlich fair ansieht. Als Richtwert für die pro Event zu
+> setzende Entscheidungsfrist ist deshalb **48 Stunden vor dem
+> angekündigten Beginn als praktische Untergrenze** empfehlenswert,
+> auch bei eintägigen Formaten wie dem Padel-Nachmittag — eine deutlich
+> kürzere Frist ließe den Kunden faktisch keine Zeit mehr, sich auf die
+> Absage einzustellen, was die Angemessenheit im Einzelfall gefährden
+> könnte.
 >
-> **(b) Mindestteilnehmerzahl einführen.** Dann ist erforderlich:
-> ein Feld im Datenmodell, die Anzeige auf der Eventseite **vor** der
-> Anmeldung, eine Absagefrist, und folgender Klauselentwurf:
+> **Erstattungsfrist bewusst nicht neu erfunden**, sondern wörtlich aus
+> Ziffer 7.2 übernommen — dieselbe Formulierung für denselben
+> wirtschaftlichen Vorgang (Rückerstattung) an zwei Stellen im selben
+> Dokument zu verwenden, ist transparenter als zwei leicht
+> unterschiedliche Fristformulierungen für denselben Fall.
 >
-> > Ist für eine Veranstaltung auf der Eventseite eine
-> > Mindestteilnehmerzahl angegeben und wird diese nicht erreicht, kann
-> > VERA die Veranstaltung bis spätestens `[Frist]` vor dem Beginn
-> > absagen. Der volle Betrag wird erstattet; weitergehende Ansprüche
-> > bestehen nicht, soweit VERA die Absage nicht zu vertreten hat.
->
-> **Ohne Entscheidung darf Ziffer 8.3 nicht veröffentlicht werden.**
+> ⚠️ **Technische Grundlage fehlt noch — nicht Teil dieser
+> Dokumentationsrunde.** Das Datenmodell kennt bisher **kein Feld** für
+> Mindestteilnehmerzahl oder Entscheidungsfrist (`prisma/schema.prisma`
+> → `Event` hat `maxPersonen`, aber kein Gegenstück). Nötig für die
+> Umsetzung: zwei neue Felder am Event, deren Anzeige auf der
+> Eventseite **vor** der Anmeldung (analog zur Restplatzanzeige), eine
+> automatische Prüfung zur Entscheidungsfrist und ein admin-seitiger
+> Hinweis, wenn eine gesetzte Frist unter 48 Stunden vor dem Termin
+> liegt. Siehe Dokument 15, Abschnitt G.
 
 8.4 **Verlegung.** `[VOR VERWENDUNG KLÄREN: Soll eine Verlegung möglich
 sein, und mit welcher Folge?]`
