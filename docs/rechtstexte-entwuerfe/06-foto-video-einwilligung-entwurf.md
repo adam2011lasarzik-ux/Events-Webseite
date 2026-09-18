@@ -296,6 +296,55 @@ weil dann nicht mehr belegbar wäre, **welchem Text** die Person zugestimmt
 hat. Genau dafür ist das Feld `fotoEinwilligungFassung` in B-10
 vorgesehen.
 
+### Keine Weitergabe an Dritte
+
+> ✅ **Entschieden am 18.09.2026 (Frage 4.5).** Die Aufnahmen werden
+> **nicht** an Presse, Sponsoren, Kooperationspartner oder sonstige
+> Dritte weitergegeben. Entsteht später ein konkreter Presse- oder
+> Partnerkontakt, wird dafür eine **gesonderte Einwilligung** der
+> abgebildeten Personen eingeholt.
+>
+> **Nicht betroffen ist die Veranstaltungslocation.** Deren eigene
+> Nutzung ist keine Weitergabe im Sinne dieser Frage, sondern ein eigener
+> Verarbeitungszweck eines eigenständig Verantwortlichen — geregelt über
+> das zweite, getrennte und freiwillige Häkchen (Entscheidungen 4.3 und
+> 4.4).
+
+**Formulierung für den Einwilligungstext:**
+
+> Wir geben die Aufnahmen nicht an Dritte weiter — insbesondere nicht an
+> Presse, Sponsoren oder Kooperationspartner. Ausgenommen ist
+> ausschließlich die Veranstaltungslocation, und auch nur dann, wenn Sie
+> dafür gesondert zugestimmt haben.
+
+**Warum das die tragfähigere Entscheidung ist:**
+
+1. **Der Widerruf bliebe sonst eine leere Zusage.** Website und
+   Instagram kann VERA bereinigen; eine an eine Redaktion gegebene
+   Aufnahme nicht. Sie steht danach im Online-Artikel, im Archiv und
+   gegebenenfalls bei einer Bildagentur. Ein Widerruf nach Art. 7 Abs. 3
+   DS-GVO liefe dort praktisch ins Leere — und VERA hätte den Eltern
+   etwas versprochen, das es nicht halten kann.
+2. **Das Medienprivileg entzieht VERA die Steuerung.** Redaktionelle
+   Veröffentlichungen unterliegen nach § 19 BDSG und den
+   Landespressegesetzen eigenen Regeln; die Redaktion ist dann selbst
+   verantwortlich. VERA könnte weder Umfang noch Dauer noch Löschung
+   zusagen.
+   `[Prüfauftrag: Reichweite des Medienprivilegs im konkreten Fall —
+   amtlicher Wortlaut aus dieser Arbeitsumgebung nicht abrufbar.]`
+3. **Ein ungenutzter Zweck schadet doppelt.** Es gibt heute keinen
+   Presse- oder Partnerkontakt, für den die Zeile gebraucht würde. Sie
+   stehen zu lassen hieße, einen Hinweis auf den faktisch wirkungslosen
+   Widerruf in den Text aufzunehmen — und damit ausgerechnet die
+   unproblematischen Kanäle Website und Instagram mit zu gefährden, weil
+   Eltern dann eher ganz ablehnen.
+
+**Für den Einzelfall später:** Berichtet eine Lokalzeitung über eine
+Veranstaltung, betrifft das erfahrungsgemäß eine Handvoll Aufnahmen und
+wenige Personen. Eine anlassbezogene Einzelzustimmung ist dort praktisch
+gut machbar und rechtlich deutlich sauberer als eine Vorratseinwilligung,
+die beim Ticketkauf Monate vorher erteilt wurde.
+
 ## Wie lange
 
 `[VOR VERWENDUNG KLÄREN: eine der beiden Varianten wählen.]`
