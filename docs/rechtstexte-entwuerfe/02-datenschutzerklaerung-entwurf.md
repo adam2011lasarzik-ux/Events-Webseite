@@ -409,10 +409,10 @@ Zahlungsbezüge) **einmal täglich in verschlüsselter Form** den Server.
 >
 > Anbieter des Speicherdienstes ist **Backblaze, Inc.**, 500 Ben
 > Franklin Ct, San Mateo, CA 94401, USA (recherchiert 18.09.2026,
-> Dokument 14/15 — Backblaze nennt nur diese eine Gesellschaft).
-> `[VOR VERWENDUNG KLÄREN: die für den Bucket tatsächlich gewählte
-> Region — EU oder USA. Das steht nur im eigenen Backblaze-Konto, nicht
-> recherchierbar.]`
+> Dokument 14/15 — Backblaze nennt nur diese eine Gesellschaft). Der
+> genutzte Speicherort (Bucket „Vera-Sicherungen") liegt **in der EU**
+> (Endpoint `s3.eu-central-003.backblazeb2.com`, bestätigt von Adam am
+> 18.09.2026).
 >
 > Sicherungen werden nach 180 Tagen gelöscht.
 >
@@ -420,10 +420,15 @@ Zahlungsbezüge) **einmal täglich in verschlüsselter Form** den Server.
 > Interesse liegt in der Ausfallsicherheit.
 
 `[VOR VERWENDUNG KLÄREN: Auftragsverarbeitungsvertrag mit Backblaze
-abgeschlossen? Bei einer Region außerhalb der EU zusätzlich: auf welche
-Garantien stützt sich die Übermittlung? Die Verschlüsselung vor dem
-Hochladen ist ein starkes Argument, ersetzt die rechtliche Einordnung
-aber nicht.]`
+abgeschlossen? UND, fachlich zu prüfen: Auch bei einem **EU-Speicherort**
+bleibt Backblaze, Inc. eine **US-amerikanische Gesellschaft** — ob und
+unter welchen Garantien (Angemessenheitsbeschluss EU-US Data Privacy
+Framework, Standardvertragsklauseln) sie dadurch weiterhin
+zugriffsberechtigt sein könnte (z. B. über den US CLOUD Act), ist eine
+fachliche Frage, die die EU-Speicherregion allein nicht beantwortet.
+Die Verschlüsselung vor dem Hochladen — der Schlüssel bleibt bei VERA —
+ist hier das stärkste Argument: Selbst bei einem Zugriff auf die
+Speicherebene bliebe der Inhalt unlesbar.]`
 
 ---
 
@@ -542,7 +547,7 @@ Erklärung verweist, die es nicht gibt.]`
 | Hostinger (Postfach) | E-Mail-Versand und -Empfang | Inhalt und Adressaten der E-Mails | Auftragsverarbeiter `[bestätigen]` | wie oben |
 | Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | doppelte Rolle — Auftragsverarbeiter für die Abwicklung, eigenständig Verantwortlicher für eigene Pflichten `[aus eigenem Vertrag bestätigen]` | `[Drittlandbezug klären]` |
 | PayPal (nur bei Auswahl dieser Zahlungsart) | Bezahlung | PayPal-Zugangsdaten, Betrag | eigenständig Verantwortlicher | `[klären]` |
-| Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | USA `[Region des Buckets — EU oder USA — im Konto klären]` |
+| Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | Speicherort: **EU** (Bucket-Endpoint `eu-central-003`, bestätigt 18.09.2026) — Gesellschaft selbst US-amerikanisch, Drittlandbezug `[fachlich zu bewerten]` |
 | UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei | Erreichbarkeitsprüfung | nur öffentliche Seitenaufrufe | `[klären, ob AV nötig — Firmensitz EU, spricht dafür]` | EU (Slowakei) |
 | Veranstaltungslocation | Entgegennahme der Papierformulare am Empfang | die unterschriebenen Einverständniserklärungen | siehe Datenschutz Abschnitt 2 | Inland |
 | Rettungsdienst / ärztliches Personal | Notfall | die im Notfall erforderlichen Angaben | eigener Verantwortlicher | Inland |

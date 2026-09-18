@@ -23,7 +23,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 | ~~1.2~~ | ✅ **Beantwortet 18.09.2026:** 0 Personen — § 36 Abs. 3 VSBG-Ausnahme greift | eigene Angabe |
 | 1.5 | ⚙️ **Teilweise recherchiert am 18.09.2026 (Dokument 14):** Backblaze, Inc. (San Mateo, USA) und UptimeRobot s. r. o. (Bratislava) sind eindeutig — je nur eine Gesellschaft. Stripe: **Stripe Payments Europe, Limited** (Dublin) ist für deutsche Kunden die in Stripes eigenen Unterlagen genannte Gesellschaft, aber Stripe selbst weist auf mögliche weitere beteiligte Gesellschaften hin — **im eigenen Stripe-Dashboard unter „Einstellungen → Geschäftsdaten" gegenprüfen.** Hostinger: **nicht sicher zuordenbar** — Hostinger firmiert je nach Kundensitz unter mehreren Gesellschaften (Zypern, Luxemburg, UK, weitere); **auf deiner Hostinger-Rechnung (hPanel → Abrechnung → Rechnungen) steht, welche für dich gilt.** | Rechnungen/Dashboard, s. o. |
 | ~~1.6~~ | ✅ **Beantwortet 18.09.2026:** Frankreich (genaue Stadt unbekannt, nicht erforderlich) | hPanel-Kundenkonto |
-| 1.7 | Region deines Backblaze-Speichers (EU oder USA) | Backblaze-Konto |
+| ~~1.7~~ | ✅ **Beantwortet 18.09.2026:** Bucket „Vera-Sicherungen" liegt in der EU (`eu-central-003`). Backblaze, Inc. selbst bleibt aber eine US-Gesellschaft — der Drittlandbezug ist damit nicht vollständig erledigt, siehe Abschnitt F | Backblaze-Konto |
 | 1.8 | Welche Auftragsverarbeitungsverträge (AVV) hast du bereits abgeschlossen? | jeweiliges Konto, meist unter „Datenschutz" oder „DPA" |
 | 2.15 | Hast du eine Veranstalter-Haftpflichtversicherung? Welche Deckungssumme? | Versicherungsunterlagen |
 | 2.16 | Vertrag mit der Veranstaltungslocation: Wer stellt Trainer und Ausrüstung — VERA, die Halle oder Dritte? | eigener Vertrag mit der Halle |
@@ -117,6 +117,14 @@ dem, was ein Rechtstexte-Anbieter oder Anwalt bestätigen soll:
 3. **Rolle von Stripe und PayPal** — Verantwortlicher oder
    Auftragsverarbeiter, aus dem eigenen Vertragswerk zu bestätigen
    (Dokument 02, Dokument 14).
+3b. **Backblaze trotz EU-Speicherort:** Der Bucket liegt in der EU
+   (`eu-central-003`), Backblaze, Inc. selbst ist aber eine
+   US-amerikanische Gesellschaft. Ob daraus ein Drittlandbezug folgt,
+   der eine zusätzliche Garantie (Data Privacy Framework oder
+   Standardvertragsklauseln) braucht, ist eine fachliche Frage — die
+   Verschlüsselung vor dem Hochladen (Schlüssel bleibt bei VERA) ist
+   das stärkste eigene Argument dagegen, ersetzt die Prüfung aber
+   nicht (Dokument 02, Ziffer 9).
 4. **Gaststättenrechtliche Erlaubnis/Gestattung**, sobald VERA selbst
    Alkohol verkaufen möchte (Stufe 2, Dokument 09).
 5. **Belehrung nach § 43 Infektionsschutzgesetz** für die Abgabe von
