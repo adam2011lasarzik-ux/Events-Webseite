@@ -87,7 +87,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 | # | Frage |
 |---|---|
 | ~~4.1~~ | ✅ **Beantwortet 18.09.2026: mit Einwilligung (Weg A), abgesichert.** Separates, freiwilliges, nicht vorausgewähltes Häkchen vor dem Kauf; Kauf und Teilnahme auch ohne Zustimmung möglich; Status **pro Person** nachweisbar gespeichert und beim Check-in angezeigt. Geprüft gegen Art. 7 Abs. 1, 2 und 4 DSGVO — Dokument 06, Teil VI. **Technisch noch nicht umgesetzt, siehe B-10.** |
-| 4.2 | Aufnahmearten: nur Foto, auch Video, auch Ton? |
+| ~~4.2~~ | ✅ **Beantwortet 18.09.2026: Foto und Video ohne Ton.** Ton bleibt bewusst draußen — er berührt zusätzlich § 201 StGB (nichtöffentlich gesprochenes Wort) und würde auch Personen erfassen, die nicht im Bild und nicht in der Einwilligungsliste sind. Spätere O-Töne sind gezielte Einzelaufnahmen, von dieser Einwilligung **nicht** gedeckt. |
 | 4.3 | Wer nimmt auf: VERA selbst, eine beauftragte Person, auch die Location? |
 | 4.4 | Veröffentlichungswege: Website, Druck, welche sozialen Netzwerke genau? |
 | 4.5 | Weitergabe an Presse, Partner oder die Location? |

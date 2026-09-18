@@ -108,13 +108,29 @@ kontakt@veraevents.de
 
 ## Welche Aufnahmen
 
-`[VOR VERWENDUNG KLÄREN: Zutreffendes festlegen.]`
+✅ **Entschieden am 18.09.2026 (Frage 4.2): Fotografien und
+Videoaufnahmen ohne Ton.**
 
-> Bei unseren Veranstaltungen entstehen Fotografien und
-> Videoaufnahmen `[VOR VERWENDUNG KLÄREN: auch Tonaufnahmen? Wenn ja,
-> ausdrücklich nennen — Ton ist datenschutzrechtlich ein eigener
-> Eingriff.]`. Aufgenommen werden das Geschehen auf der Anlage, einzelne
-> Spielszenen und Gruppensituationen.
+> Bei unseren Veranstaltungen entstehen Fotografien und Videoaufnahmen
+> **ohne Tonaufzeichnung**. Aufgenommen werden das Geschehen auf der
+> Anlage, einzelne Spielszenen und Gruppensituationen.
+
+> **Warum der Ton bewusst ausgenommen ist.** Tonaufnahmen sind nicht
+> nur datenschutzrechtlich ein eigener Eingriff, sondern berühren
+> zusätzlich **§ 201 StGB** (Verletzung der Vertraulichkeit des
+> Wortes): Das Aufnehmen des **nichtöffentlich gesprochenen Wortes**
+> ist strafbewehrt. Auf einer Veranstaltung unterhalten sich Menschen
+> privat — ein offenes Mikrofon nimmt auch Personen auf, die weder im
+> Bild noch in der Einwilligungsliste stehen. Ohne Ton entfällt dieses
+> Risiko vollständig, und für Bewegtbild vom Sport ist der
+> Originalton ohnehin entbehrlich (Musik lässt sich nachträglich
+> unterlegen).
+>
+> **Wenn später einmal O-Töne gebraucht werden** — ein Statement, ein
+> Trainer-Interview —, sind das **gezielte Einzelaufnahmen mit der
+> betreffenden Person**, angekündigt und einzeln dokumentiert. Dafür
+> braucht es keine pauschale Ton-Einwilligung von allen Teilnehmenden.
+> **Diese Fassung deckt solche Aufnahmen nicht ab.**
 >
 > `[VOR VERWENDUNG KLÄREN: Wer nimmt auf — VERA selbst, eine beauftragte
 > Person, oder auch die Veranstaltungslocation? Wird ein externer
