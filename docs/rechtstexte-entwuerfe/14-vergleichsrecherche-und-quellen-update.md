@@ -80,6 +80,24 @@ eigenen Sicherheit.
 
 ---
 
+## 2d. Checkout-Pflichten (Fragen 2.12–2.14), recherchiert 18.09.2026
+
+| Thema | Ergebnis | Quellenart |
+|---|---|---|
+| **§ 312j Abs. 2 BGB** — wesentliche Merkmale | Müssen **unmittelbar vor Abgabe der Bestellung** klar, verständlich und hervorgehoben bereitstehen; maßgeblich ist die Bestellübersicht/Checkout-Seite selbst. **OLG Nürnberg** hat das ausdrücklich für die wesentlichen Eigenschaften entschieden — eine Darstellung nur eine Ebene davor genügt nicht. | Fachbeiträge (it-recht-kanzlei.de, shopbetreiber-blog.de) zu OLG Nürnberg |
+| **§ 312f Abs. 2 BGB** — Vertragsbestätigung | Die Bestätigung auf dauerhaftem Datenträger muss den **gesamten Vertragsinhalt einschließlich der einbezogenen AGB** und die Informationen nach Art. 246a EGBGB enthalten. E-Mail ist ein dauerhafter Datenträger; ein Link auf eine änderbare Website ist keiner. | Fachbeiträge (it-recht-kanzlei.de zur AGB-Übermittlung in Textform, website-check.de zu nachvertraglichen Informationspflichten) |
+| **§ 305 Abs. 2 BGB** — Einbeziehung | Findet **im Bestellvorgang** statt (Häkchen), nicht in der Bestätigungsmail. Beide Pflichten bestehen nebeneinander und ersetzen einander nicht. | Skill-Prüfraster `agb-pruefung-kaltstart` |
+| Absagegrund | **Keine** gesetzliche Pflicht zur Begründung einer Absage gefunden. Der Nutzen liegt in der Dokumentation, dass ein vertraglich vorbehaltenes Lösungsrecht (§ 308 Nr. 3 BGB) tatsächlich ausgeübt wurde. | eigene Subsumtion, keine Fundstelle |
+
+**Einschränkung wie oben:** Das OLG-Nürnberg-Urteil wurde **nicht im
+Volltext** gelesen — der Abruf amtlicher Entscheidungssammlungen ist aus
+dieser Umgebung blockiert. Aktenzeichen und Randnummern sind deshalb
+bewusst **nicht** zitiert; die Aussage stützt sich auf zwei unabhängige
+Fachbeiträge, die den Entscheidungsinhalt übereinstimmend wiedergeben.
+Vor Verwendung im Ernstfall im Digitalisat prüfen.
+
+---
+
 ## 3. Vergleichsrecherche: Struktur bei vergleichbaren Anbietern
 
 > **Zweck und Grenze dieser Recherche.** Es geht um **Aufbau und

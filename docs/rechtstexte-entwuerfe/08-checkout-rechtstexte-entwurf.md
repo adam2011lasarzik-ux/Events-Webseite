@@ -244,10 +244,26 @@ wesentlichen Merkmale der Leistung und den Gesamtpreis.
 Gesamtsumme. Was die Veranstaltung **inhaltlich** umfasst, steht auf der
 Eventseite — also eine Ebene davor.
 
-`[VOR VERWENDUNG KLÄREN: Genügt das, oder müssen die wesentlichen
-Merkmale in der Zusammenfassung wiederholt werden?]`
+✅ **Entschieden und geprüft am 18.09.2026** (Skill
+`agb-pruefung-kaltstart`, dazu Websuche — Quellen unten).
 
-**Vorschlag für den vorsorglichen Fall** — eine kompakte Zeile über der
+**Ergebnis: Ja, die wesentlichen Merkmale gehören in die
+Zusammenfassung.** Die Eventseite eine Ebene davor genügt nach der
+recherchierten Rechtsprechung **nicht**. Das **OLG Nürnberg** hat
+entschieden, dass die wesentlichen Eigenschaften dem Verbraucher
+**unmittelbar vor Abgabe der Bestellung** klar, verständlich und in
+hervorgehobener Weise zur Verfügung stehen müssen — maßgeblich ist die
+Bestellübersicht bzw. Checkout-Seite, also genau die Seite, die der
+Verbraucher direkt vor dem Klick sieht. Eine Information, die er drei
+Klicks vorher einmal gesehen hat, erfüllt das nicht.
+
+**Der Aufwand ist gering:** Titel, `startAt`, `endAt`, `ortName`,
+`stadt` und die Abschnitte vom Typ „dabei" liegen alle bereits am Event
+und lassen sich ohne neues Datenfeld anzeigen. Der wirtschaftliche
+Nutzen kommt obendrauf — wer direkt vor dem Bezahlen noch einmal sieht,
+was er bucht, bricht seltener ab und beschwert sich seltener hinterher.
+
+**Umzusetzender Textbaustein** — eine kompakte Zeile über der
 Zusammenfassung:
 
 > **Ihre Anmeldung**
@@ -322,12 +338,37 @@ aber nicht.
 - [x] Stornolink — *vorhanden*
 - [ ] Kontaktweg für Rückfragen
 
-> **Ein Link auf die Website genügt möglicherweise nicht**, weil sich
-> deren Inhalt ändern kann. Der sichere Weg ist der Volltext in der Mail
-> oder ein angehängtes PDF. `[VOR VERWENDUNG KLÄREN: welche Form?]`
->
-> **Reihenfolge:** Dieser Punkt ist erst umsetzbar, wenn die
-> Teilnahmebedingungen fertig sind — vorher gäbe es nichts anzuhängen.
+✅ **Entschieden und geprüft am 18.09.2026** (Skill
+`agb-pruefung-kaltstart`, dazu Websuche — Quellen unten).
+
+**Ergebnis: Volltext in der Mail oder PDF-Anhang — ein bloßer Link
+genügt nicht.** § 312f Abs. 2 BGB verlangt eine Bestätigung des
+Vertrags auf einem dauerhaften Datenträger, die den **gesamten
+Vertragsinhalt einschließlich der einbezogenen AGB** sowie die
+Informationen nach Art. 246a EGBGB enthält. Eine E-Mail ist ein
+dauerhafter Datenträger — ein Link auf die Website ist es **nicht**:
+Der Inhalt hinter dem Link kann sich jederzeit ändern, und genau das
+soll die Bestätigung verhindern.
+
+**Empfehlung: Volltext in der Mail**, nicht PDF-Anhang. Gründe: Ein PDF
+muss erzeugt, gespeichert und versioniert werden (zusätzlicher
+Bauaufwand); Anhänge erhöhen außerdem die Spam-Wahrscheinlichkeit, und
+die Mails gehen über dasselbe Postfach, dessen Zustellbarkeit für die
+Zahlungsbestätigungen gebraucht wird. Ein Volltext am Ende der Mail
+kostet nichts und ist unkaputtbar.
+
+**Zur Einbeziehung (§ 305 Abs. 2 BGB) — wichtige Abgrenzung:** Die
+Einbeziehung ist mit dem Pflicht-Häkchen im Bestellvorgang (Befund C-2)
+**bereits abgeschlossen**. Die Bestätigungsmail holt das nicht nach und
+muss es nicht — sie erfüllt eine **eigene, nachvertragliche** Pflicht
+(Dokumentation nach § 312f Abs. 2 BGB). Die beiden Anforderungen werden
+oft verwechselt: Wer die AGB erst in der Bestätigungsmail schickt, hat
+sie **nicht** wirksam einbezogen; wer sie nur im Bestellvorgang zeigt
+und nicht in der Bestätigung mitschickt, hat sie zwar einbezogen, aber
+die Bestätigungspflicht verletzt. **VERA braucht beides.**
+
+**Reihenfolge:** Dieser Punkt ist erst umsetzbar, wenn die
+Teilnahmebedingungen fertig sind — vorher gäbe es nichts mitzuschicken.
 
 ---
 
@@ -364,9 +405,8 @@ aber nicht.
 >
 > **{Titel} am {Datum} muss leider ausfallen.** Das tut uns leid.
 >
-> `[VOR VERWENDUNG KLÄREN: Soll der Grund genannt werden? Eine
-> Absagemail ohne Grund wirkt nachlässig; ein Pflichtfeld „Grund" im
-> Adminbereich wäre dafür nötig.]`
+> {Grund der Absage in einem Satz — siehe die Bewertung unterhalb
+> dieses Entwurfs.}
 >
 > **Ihr Geld bekommen Sie automatisch zurück.** Wir haben die
 > Erstattung von {Betrag} bereits angewiesen — Sie müssen nichts tun.
@@ -385,6 +425,44 @@ aber nicht.
 > **Zum Ton:** Die wichtigste Information — das Geld kommt automatisch
 > zurück — steht fett und weit oben. Wer eine Absage liest, will genau
 > das wissen, und zwar sofort.
+
+✅ **Zum Absagegrund: entschieden und geprüft am 18.09.2026** (Skill
+`agb-pruefung-kaltstart`).
+
+**Ergebnis: Ja, den Grund nennen — aber nur den zutreffenden, und
+niemals einen erfundenen.**
+
+**Eine Rechtspflicht dazu besteht nicht.** Weder § 312f noch § 312j BGB
+verlangen eine Begründung der Absage; auch Ziffer 8.1 der
+Teilnahmebedingungen sieht sie nicht vor. Es gibt jedoch einen
+konkreten rechtlichen **Vorteil**, der erst durch die heutigen
+Entscheidungen entstanden ist:
+
+**Ziffer 8.3 (Mindestteilnehmerzahl) ist ein Rücktrittsvorbehalt nach
+§ 308 Nr. 3 BGB.** Ein solcher Vorbehalt greift nur, wenn der im
+Vertrag benannte Grund **tatsächlich vorliegt**. Wer bei der Absage
+schreibt „die Mindestteilnehmerzahl von X wurde bis zum {Datum} nicht
+erreicht", dokumentiert damit, dass genau dieses vereinbarte
+Lösungsrecht ausgeübt wurde — und nicht ein beliebiges. Das ist im
+Streitfall der Unterschied zwischen einer vertraglich gedeckten und
+einer freihändigen Absage.
+
+⚠️ **Der Preis dieser Empfehlung, offen benannt:** Ein genannter Grund
+bindet. Sagt VERA aus einem Grund ab, der **nicht** von Ziffer 8.1, 8.2
+oder 8.3 gedeckt ist, und schreibt ihn in die Mail, ist das ein
+schriftliches Eingeständnis einer nicht gedeckten Absage. Die Antwort
+darauf ist aber nicht, den Grund zu verschweigen — sondern nur eine
+Absage auszusprechen, die auch gedeckt ist. **Ein unzutreffender oder
+beschönigter Grund wäre der schlechteste aller Wege** und könnte
+zusätzlich als Irreführung gewertet werden.
+
+**Praktische Folge:** Im Adminbereich wird bei einer Absage ein
+Grund erfasst. Sinnvoll wäre eine Auswahl der in den
+Teilnahmebedingungen vorgesehenen Fälle (Mindestteilnehmerzahl nicht
+erreicht · höhere Gewalt / Ausfall der Veranstaltungsstätte /
+behördliche Anordnung · Terminänderung) plus ein Freitextfeld für
+Einzelheiten. Das gehört zur Sammelabsage-Funktion aus Dokument 15,
+Punkt B-7 — beides sollte zusammen gebaut werden.
 
 ---
 
