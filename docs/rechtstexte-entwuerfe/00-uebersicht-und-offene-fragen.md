@@ -82,7 +82,7 @@ fremden Seiten kopiert.
 
 > In der Reihenfolge, in der sie dir schaden können.
 
-### 🔴 1. Der Bestellknopf heißt „Zur Bezahlung"
+### ✅ 1. Der Bestellknopf hieß „Zur Bezahlung" — entschieden am 18.09.2026
 
 **Was das Gesetz verlangt:** Der Knopf, mit dem bestellt wird, muss
 „zahlungspflichtig bestellen" heißen — oder etwas ähnlich Eindeutiges
@@ -96,8 +96,10 @@ bei **jeder einzelnen Buchung**.
 „Bestellung aufgeben" und Knöpfe der Form „mit … bezahlen" als nicht
 ausreichend angesehen. „Zur Bezahlung" liegt sprachlich nah daran.
 
-**Ich habe nichts geändert** — die Formulierung war deine Entscheidung.
-Vorschläge stehen in Dokument 08.
+**Adam hat entschieden:** verbindlicher Bestellknopf → „Zahlungspflichtig
+bestellen" (wortwörtlich der Gesetzestext), Einstiegsknopf zur Anmeldung
+→ „Zu den Tickets". **Noch nicht auf der Website umgesetzt** — Details
+in Dokument 08 und Dokument 15, Abschnitt B.
 
 ### 🔴 2. Der Widerrufsbutton ist seit Juni 2026 Pflicht — vielleicht auch für dich
 

@@ -107,32 +107,46 @@ bezahlen – 50,00 €". Die Änderung auf „Zur Bezahlung" war eine bewusste
 Entscheidung des Unternehmers und wird hier **nicht eigenmächtig
 rückgängig gemacht** — sie wird vorgelegt.
 
-### Vorschläge
+### ✅ Entschieden von Adam am 18.09.2026
 
-`[VOR VERWENDUNG KLÄREN: Eine Fassung auswählen und fachlich bestätigen
-lassen.]`
-
-| Variante | Wortlaut | Anmerkung |
-|---|---|---|
-| **V1 — wörtlich** | `Zahlungspflichtig anmelden` | der sicherste Weg; entspricht dem Gesetzeswortlaut in angepasster Form |
-| **V2 — mit Betrag** | `Zahlungspflichtig anmelden – 50,00 €` | Betrag bleibt sichtbar. Vorsicht: § 312j Abs. 3 verlangt „nichts anderem als"; ob ein Betragszusatz zulässig ist, gehört bestätigt |
-| **V3 — nah am bisherigen Ton** | `Jetzt anmelden & zahlungspflichtig bestellen` | verbindet die Marken­sprache mit dem Gesetzeswortlaut |
-| **V4 — der frühere Wortlaut** | `Jetzt anmelden & bezahlen – 50,00 €` | war vorher im Einsatz; näher als „Zur Bezahlung", aber nicht offensichtlich ausreichend |
-
-**Empfehlung:** V1 oder V2, und die Frage nach dem Betragszusatz
-ausdrücklich mitprüfen lassen. Der Betrag steht ohnehin unmittelbar
-darüber in der Zusammenfassung.
+**Der verbindliche Bestellknopf erhält den Wortlaut „Zahlungspflichtig
+bestellen"** — das ist wortwörtlich die im Gesetz selbst genannte
+Formulierung (§ 312j Abs. 3 BGB: „nichts anderem als den Wörtern
+‚zahlungspflichtig bestellen'") und damit die sicherste denkbare Wahl,
+noch vorsichtiger als die zuvor empfohlenen Varianten V1–V4. Ersetzt
+den bisherigen Text „Zur Bezahlung – {betrag}"
+(`content/de.ts → anmeldung.formular.absenden`).
 
 **Für kostenlose Veranstaltungen** bleibt „Jetzt verbindlich anmelden"
 richtig — ohne Entgelt greift § 312j Abs. 3 BGB nicht, und ein
-Zahlungshinweis wäre dort falsch.
+Zahlungshinweis wäre dort falsch. **Unverändert.**
 
-**Für die Schaltfläche auf der Abschluss-Seite** („Bezahlen", zweiter
-Anlauf): `[VOR VERWENDUNG KLÄREN: Ist das eine erneute Bestellung im
-Sinne von § 312j Abs. 3 BGB oder nur die Fortsetzung eines bereits
-abgegebenen Bestellvorgangs? Nach dem Ablauf im Code ist die Anmeldung
-zu diesem Zeitpunkt bereits gespeichert — was für Letzteres spricht.
-Vorsorglich könnte auch dort „Zahlungspflichtig bestellen" stehen.]`
+**Für die Schaltfläche auf der Abschluss-Seite** (`danke.zahlungKnopf`,
+bisher „Bezahlen", zweiter Anlauf): Sollte konsequent ebenfalls
+„Zahlungspflichtig bestellen" erhalten, damit ein zweiter Bestellversuch
+demselben Maßstab genügt wie der erste — unabhängig davon, ob er
+rechtlich eine neue Bestellung oder nur die Fortsetzung der ersten ist,
+schadet die einheitliche, sichere Formulierung nicht. `[Noch offen: ob
+das rechtlich zwingend ist oder nur vorsorglich sinnvoll — fachlich zu
+bestätigen, ändert aber nichts an der Empfehlung.]`
+
+### ✅ Verwandte, aber eigenständige Entscheidung: die Einstiegsschaltfläche
+
+**Nicht Teil der ursprünglichen § 312j-Frage, aber im selben Zuge
+entschieden:** Die Schaltfläche, die von der Startseite/Eventseite zur
+Anmeldung **führt** (nicht die verbindliche Bestellung selbst — dort
+wird noch nichts gekauft), erhält den Wortlaut **„Zu den Tickets"**.
+
+Das ist **derselbe** Textbaustein `content/de.ts → aktion.anmelden`
+(bisher „Jetzt anmelden"), der an **sechs Stellen** im Code verwendet
+wird: `components/Header.tsx` (zweimal, Desktop und Mobilmenü),
+`components/Hero.tsx`, `components/HeroPremium.tsx`,
+`components/CtaBand.tsx`, `app/(seite)/event/[slug]/page.tsx`. Eine
+Änderung wäre also **eine** Textzeile mit **sechsfacher** Wirkung —
+gut kontrollierbar, aber der Umfang gehört vorher klar benannt, bevor
+es umgesetzt wird. Rechtlich unproblematisch, da diese Schaltfläche
+selbst keine Bestellung auslöst (§ 312j Abs. 3 BGB betrifft nur den
+tatsächlichen Bestellabschluss).
 
 ### Umsetzung
 
