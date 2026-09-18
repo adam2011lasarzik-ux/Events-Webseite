@@ -19,7 +19,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 
 | # | Was | Wo du es findest |
 |---|---|---|
-| 1.1 | Hast du eine Umsatzsteuer-Identifikationsnummer? (wahrscheinlich nein) | Finanzamt-Unterlagen |
+| ~~1.1~~ | ✅ **Beantwortet 18.09.2026:** keine USt-IdNr. — Feld entfällt | Finanzamt-Unterlagen |
 | 1.2 | Wie viele Personen waren am 31.12.2025 bei dir beschäftigt? (wahrscheinlich 0, nur du selbst) | eigene Angabe |
 | 1.5 | Vollständige Firmierung und Anschrift von: Hostinger, Stripe, Backblaze, UptimeRobot | jeweiliges Kundenkonto / Vertragsunterlagen |
 | 1.6 | Genauer Serverstandort bei Hostinger (Land/Rechenzentrum) | hPanel-Kundenkonto |

@@ -76,12 +76,8 @@ Die Seite trägt bereits die richtige Überschrift („Angaben gemäß § 5 DDG"
 
 ### 4.1 Umsatzsteuer-Identifikationsnummer
 
-`[VOR VERWENDUNG KLÄREN: Liegt eine USt-IdNr. nach § 27a UStG vor?]`
-
-- **Wenn nein** (bei Kleinunternehmern der Regelfall, sofern kein
-  innergemeinschaftlicher Leistungsbezug stattfindet): Die Angabe
-  entfällt ersatzlos. Es darf **keine** erfunden werden.
-- **Wenn ja**: Sie ist nach § 5 Abs. 1 Nr. 6 DDG anzugeben.
+✅ **Beantwortet von Adam am 18.09.2026:** Keine USt-IdNr. vorhanden.
+Das Feld entfällt im Impressum ersatzlos — es wird keine erfunden.
 
 **Nicht verwechseln:** Die Steuernummer des Finanzamts gehört **nicht**
 ins Impressum. Sie steht auf Rechnungen. Die Unterscheidung ist im Code
