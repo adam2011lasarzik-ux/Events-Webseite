@@ -511,9 +511,14 @@ diesen Bedingungen nicht verbunden.
 > Versicherung.** Eine Versicherungssumme belegt die Wirksamkeit einer
 > Haftungsbegrenzung nicht. Beides ist getrennt zu prüfen.
 >
-> `[VOR VERWENDUNG KLÄREN: Besteht eine Veranstalter- oder
-> Betriebshaftpflichtversicherung, und welche Veranstaltungsarten deckt
-> sie? Das ist für das tatsächliche Risiko wichtiger als jede Klausel.]`
+> ⚠️ **Beantwortet von Adam am 18.09.2026: Es besteht derzeit keine
+> Veranstalter- oder Betriebshaftpflichtversicherung.** Das ändert an
+> der Klausel selbst nichts — sie behauptet ohnehin keine Versicherung
+> und darf auch künftig keine erfinden. Es ist aber ein **eigener
+> offener Punkt vor dem ersten echten (nicht mehr Test-)Event**: Ohne
+> Versicherung trägt VERA jedes Haftungsrisiko aus Ziffer 11.1
+> (unbeschränkte Haftung bei Personenschäden, Vorsatz, grober
+> Fahrlässigkeit) unmittelbar selbst. Siehe Dokument 15, Abschnitt A.
 
 ---
 

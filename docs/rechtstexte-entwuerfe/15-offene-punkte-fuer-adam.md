@@ -10,6 +10,14 @@
 > Nichts davon wurde erfunden. Wo ich eine Empfehlung habe, steht sie
 > dabei — die Entscheidung bleibt bei dir.
 
+> ⚠️ **Wichtigster Einzelbefund aus der laufenden Klärung (18.09.2026):
+> Es besteht derzeit keine Veranstalter-Haftpflichtversicherung.** Das
+> ist kein Textproblem — die Entwürfe behaupten keine und tun das auch
+> künftig nicht —, sondern ein wirtschaftliches Risiko: Ohne
+> Versicherung trägt VERA jeden Haftungsfall unmittelbar selbst. Sollte
+> **vor dem ersten echten (nicht mehr Test-)Event** geklärt sein, siehe
+> Abschnitt A.
+
 ---
 
 ## A. Nur ablesen — keine Entscheidung, reine Fakten (~15 Minuten)
@@ -25,7 +33,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 | ~~1.6~~ | ✅ **Beantwortet 18.09.2026:** Frankreich (genaue Stadt unbekannt, nicht erforderlich) | hPanel-Kundenkonto |
 | ~~1.7~~ | ✅ **Beantwortet 18.09.2026:** Bucket „Vera-Sicherungen" liegt in der EU (`eu-central-003`). Backblaze, Inc. selbst bleibt aber eine US-Gesellschaft — der Drittlandbezug ist damit nicht vollständig erledigt, siehe Abschnitt F | Backblaze-Konto |
 | ~~1.8~~ | ✅ **Recherchiert 18.09.2026:** Hostinger, Stripe und Backblaze binden ihren AVV automatisch per Verweis in die jeweilige Kontoeröffnung ein — nichts zu tun. **Nur UptimeRobot ist unklar** — bitte selbst im Konto unter uptimerobot.com/dpa nachsehen, ob er dort direkt bereitsteht oder angefordert werden muss | jeweiliges Konto |
-| 2.15 | Hast du eine Veranstalter-Haftpflichtversicherung? Welche Deckungssumme? | Versicherungsunterlagen |
+| ~~2.15~~ | ⚠️ **Beantwortet 18.09.2026: Noch keine Versicherung vorhanden.** Wichtiger offener Punkt **vor dem ersten echten Event** (nicht mehr Testmodus) — ohne sie trägt VERA jedes Haftungsrisiko selbst. Keine Versicherung wird in den Texten behauptet (Dokument 03, Ziffer 11.3). | Versicherungsunterlagen |
 | 2.16 | Vertrag mit der Veranstaltungslocation: Wer stellt Trainer und Ausrüstung — VERA, die Halle oder Dritte? | eigener Vertrag mit der Halle |
 | 3.5/3.6 | Hausordnung der Veranstaltungslocation im Wortlaut, Vorgabe zum Schuhwerk | von der Location anfordern |
 | 6.4 | Gibt es in der Halle abschließbare Schließfächer? | Halle fragen |
