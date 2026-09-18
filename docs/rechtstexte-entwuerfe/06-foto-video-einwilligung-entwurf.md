@@ -132,9 +132,82 @@ Videoaufnahmen ohne Ton.**
 > braucht es keine pauschale Ton-Einwilligung von allen Teilnehmenden.
 > **Diese Fassung deckt solche Aufnahmen nicht ab.**
 >
-> `[VOR VERWENDUNG KLÄREN: Wer nimmt auf — VERA selbst, eine beauftragte
-> Person, oder auch die Veranstaltungslocation? Wird ein externer
-> Fotograf eingesetzt, ist dessen Rolle gesondert zu regeln.]`
+✅ **Entschieden am 18.09.2026 (Frage 4.3): VERA **und** der jeweilige
+Veranstaltungsort dürfen aufnehmen und die Aufnahmen jeweils für
+**eigene** Werbezwecke verwenden.**
+
+> ⚠️ **Das ist die folgenreichste Entscheidung dieses Dokuments** — sie
+> macht aus einem Verantwortlichen **zwei**. Drei Dinge folgen daraus
+> zwingend; ohne sie wäre die Einwilligung angreifbar.
+
+### 1. Zwei Zwecke, zwei Verantwortliche — zwei Häkchen
+
+**Erwägungsgrund 43 Satz 2 DSGVO:** Eine Einwilligung gilt **nicht als
+freiwillig**, wenn zu verschiedenen Verarbeitungsvorgängen nicht
+gesondert eingewilligt werden kann, obwohl das im Einzelfall angebracht
+wäre. Genau dieser Fall liegt hier vor: Jemand kann gute Gründe haben,
+VERA ein Bild zu erlauben, der Halle aber nicht — die beiden verfolgen
+**eigene** Zwecke und sind **getrennt** verantwortlich.
+
+**Deshalb: zwei getrennte, nicht vorausgewählte Häkchen**, nicht eines
+für beides:
+
+> ☐ VERA darf Foto- und Videoaufnahmen (ohne Ton) von mir für eigene
+> Werbezwecke verwenden.
+>
+> ☐ Die Veranstaltungslocation **{Firmierung, Anschrift}** darf Foto-
+> und Videoaufnahmen (ohne Ton) von mir für **ihre eigenen**
+> Werbezwecke verwenden.
+
+### 2. Die Location muss namentlich genannt werden — je Event
+
+„Der jeweilige Veranstaltungsort" genügt für eine informierte
+Einwilligung **nicht**. Wer einwilligt, muss wissen, **wem gegenüber**.
+Da VERA in wechselnden Hallen veranstaltet, muss die konkrete
+Gesellschaft samt Anschrift **pro Event** in den Einwilligungstext
+eingesetzt werden.
+
+⚠️ **Dafür fehlt heute das Datenfeld.** `Event` kennt nur `ortName`,
+`strasse`, `plz`, `stadt` (`prisma/schema.prisma:108–111`) — also den
+Anzeigenamen der Halle, **nicht** deren rechtliche Firmierung. Siehe
+Dokument 15, Punkt B-11.
+
+### 3. Der Widerruf erreicht nicht automatisch beide
+
+Nach Art. 7 Abs. 3 DSGVO muss der Widerruf so einfach sein wie die
+Erteilung. Wird die Einwilligung gegenüber VERA widerrufen, endet damit
+**nicht** die Erlaubnis der Halle — sie ist eigenständig
+verantwortlich. Der Text muss das sagen, und VERA sollte sich
+verpflichten, einen Widerruf **unverzüglich an die Location
+weiterzugeben**. Andernfalls läuft die betroffene Person zwei getrennte
+Widerrufe hinterher, was dem Gebot der Einfachheit widerspricht.
+
+### Empfehlung zur praktischen Umsetzung: nur VERA fotografiert
+
+Adams Ziel — die Halle darf die Bilder für ihre Werbung nutzen — lässt
+sich auf zwei Wegen erreichen:
+
+| Weg | Was passiert | Bewertung |
+|---|---|---|
+| **(a) Beide fotografieren selbst vor Ort** | Das Hallenpersonal muss **im Moment der Aufnahme** wissen, wer eingewilligt hat — VERA müsste dafür die Einwilligungsliste an die Halle weitergeben, eine zusätzliche Datenübermittlung | organisatorisch fragil, zusätzliche Übermittlung |
+| **(b) Nur VERA fotografiert, gibt ausgewählte Aufnahmen an die Halle weiter** | Nur VERA braucht die Liste. Die Halle erhält ausschließlich Material, das bereits freigegeben ist | **empfohlen** — gleiches Ergebnis, deutlich weniger Risiko |
+
+**Bei Weg (b)** lautet das zweite Häkchen sinngemäß: „VERA darf
+ausgewählte Aufnahmen an die Veranstaltungslocation **{Firmierung}**
+weitergeben, die diese für eigene Werbezwecke verwenden darf."
+
+### Was VERA der Location nicht abnehmen kann
+
+Die Halle bleibt für ihre eigene Nutzung **selbst verantwortlich** —
+eigene Informationspflichten nach Art. 13 DSGVO, eigene
+Datenschutzerklärung, eigene Rechtsgrundlage. VERAs Einwilligungsformular
+verschafft ihr eine tragfähige Grundlage, **entbindet sie aber nicht**
+von ihren eigenen Pflichten. Das gehört in die Absprache mit der Halle,
+nicht in den Einwilligungstext.
+
+`[VOR VERWENDUNG KLÄREN: Mit der Location vereinbaren — wer fotografiert
+während der VERA-Veranstaltung, wie wird mit Personen umgegangen, die
+nicht eingewilligt haben, und wie erreicht ein Widerruf die Halle?]`
 
 ## Wozu wir die Aufnahmen verwenden
 
