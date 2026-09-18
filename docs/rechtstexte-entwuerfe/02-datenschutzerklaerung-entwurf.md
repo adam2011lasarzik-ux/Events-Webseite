@@ -361,16 +361,19 @@ Versand über das Postfach `kontakt@veraevents.de` bei **Hostinger**
 an `127.0.0.1` gebunden. Bei der Bestellung wurde ein EU-Standort
 gewählt.
 
-`[VOR VERWENDUNG KLÄREN: **genauer Serverstandort.** Im Hostinger-Konto
-ablesen und hier benennen. Die Hostname-Kennung `dus.hostingervps.com`
-deutet auf Düsseldorf hin — das ist ein Indiz, kein Beleg, und darf so
-nicht in die Erklärung.]`
+✅ **Bestätigt von Adam am 18.09.2026: Frankreich.** Die frühere
+Vermutung „Düsseldorf" stützte sich nur auf die Hostname-Kennung
+`dus.hostingervps.com` — ein Indiz, kein Beleg, und damit durch die
+echte Angabe aus hPanel überholt. `[VOR VERWENDUNG KLÄREN, optional:
+genaue Stadt/Rechenzentrum in Frankreich, falls hPanel das einmal
+verlässlich anzeigt — „Frankreich" allein reicht als Ländername für
+die Erklärung.]`
 
 **Entwurfstext:**
 
 > Diese Website wird auf einem von uns angemieteten virtuellen Server
 > betrieben. Anbieter ist `[VOR VERWENDUNG KLÄREN: Firmierung und
-> Anschrift]`, Standort `[VOR VERWENDUNG KLÄREN: Region]`. Der Anbieter
+> Anschrift, siehe Ziffer 7]`, Standort **Frankreich**. Der Anbieter
 > verarbeitet die auf dem Server anfallenden Daten in unserem Auftrag auf
 > Grundlage eines Auftragsverarbeitungsvertrags.
 > Rechtsgrundlage für den Einsatz ist Art. 6 Abs. 1 Buchst. f DSGVO;
@@ -535,7 +538,7 @@ Erklärung verweist, die es nicht gibt.]`
 
 | Empfänger | Wofür | Was er erhält | Rolle | Standort |
 |---|---|---|---|---|
-| Hostinger (Server) | Betrieb der Website | alle auf dem Server anfallenden Daten | Auftragsverarbeiter `[bestätigen]` | Server: EU (VPS-Standort laut Phase 1 bestätigt) — Vertragsgesellschaft `[siehe Ziffer 7 — Hostinger International Limited (Zypern) oder Hostinger Global S.à r.l. (Luxemburg), aus eigener Rechnung zu bestätigen]` |
+| Hostinger (Server) | Betrieb der Website | alle auf dem Server anfallenden Daten | Auftragsverarbeiter `[bestätigen]` | Server: **Frankreich** (bestätigt 18.09.2026) — Vertragsgesellschaft `[siehe Ziffer 7 — Hostinger International Limited (Zypern) oder Hostinger Global S.à r.l. (Luxemburg), aus eigener Rechnung zu bestätigen]` |
 | Hostinger (Postfach) | E-Mail-Versand und -Empfang | Inhalt und Adressaten der E-Mails | Auftragsverarbeiter `[bestätigen]` | wie oben |
 | Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | doppelte Rolle — Auftragsverarbeiter für die Abwicklung, eigenständig Verantwortlicher für eigene Pflichten `[aus eigenem Vertrag bestätigen]` | `[Drittlandbezug klären]` |
 | PayPal (nur bei Auswahl dieser Zahlungsart) | Bezahlung | PayPal-Zugangsdaten, Betrag | eigenständig Verantwortlicher | `[klären]` |
