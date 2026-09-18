@@ -566,6 +566,26 @@ Siehe Dokument **06** für den Einwilligungstext selbst.
 dieser Abschnitt nicht veröffentlicht werden, weil er sonst auf eine
 Erklärung verweist, die es nicht gibt.]`
 
+> ✅ **Ergänzung vom 18.09.2026 (Entscheidung 4.4).** Die Veröffentlichung
+> erfolgt auf vier benannten Kanälen: Website und offizieller
+> Instagram-Kanal von VERA sowie Website und offizieller Instagram-Kanal
+> der jeweiligen Veranstaltungslocation. Daraus folgt für diesen
+> Abschnitt:
+>
+> - **Meta wird zum Empfänger.** Mit der Instagram-Veröffentlichung tritt
+>   Meta Platforms Ireland Ltd. als weiterer Empfänger hinzu, mit
+>   möglicher Übermittlung in die USA. Das gehört in die Übersicht in
+>   Ziffer 14 — siehe die dortige Zeile.
+> - **Die Location wird zum eigenständig Verantwortlichen** für ihre
+>   eigene Veröffentlichung (Entscheidung 4.3). Auch sie gehört in die
+>   Übersicht, mit Firmierung je Event (B-11).
+> - **Ziffer 12 bleibt richtig.** Die Aussage „keine
+>   Social-Media-Bausteine" betrifft **eingebettete Inhalte auf
+>   veraevents.de** — die gibt es weiterhin nicht. Dass VERA selbst
+>   Beiträge auf Instagram veröffentlicht, ist etwas anderes und berührt
+>   den Besuch der Website nicht. Diese Unterscheidung muss im Text
+>   erkennbar bleiben, sonst wirkt sie wie ein Widerspruch.
+
 ---
 
 ## 14. Empfänger und Auftragsverarbeiter — Übersicht
@@ -577,6 +597,8 @@ Erklärung verweist, die es nicht gibt.]`
 | Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | doppelte Rolle — Auftragsverarbeiter für die Abwicklung, eigenständig Verantwortlicher für eigene Pflichten. **AVV bereits durch Kontoeröffnung wirksam** (per Verweis), genaue Rollenverteilung `[aus eigenem Vertrag bestätigen]` | `[Drittlandbezug klären]` |
 | PayPal (nur bei Auswahl dieser Zahlungsart) | Bezahlung | PayPal-Zugangsdaten, Betrag | eigenständig Verantwortlicher | `[klären]` |
 | Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | Speicherort: **EU** (Bucket-Endpoint `eu-central-003`, bestätigt 18.09.2026) — Gesellschaft selbst US-amerikanisch, Drittlandbezug `[fachlich zu bewerten]` |
+| Meta Platforms Ireland Ltd., Merrion Road, Dublin 4, D04 X2K5, Irland (Instagram) — **nur bei erteilter Foto-Einwilligung** | Veröffentlichung von Aufnahmen auf dem offiziellen Instagram-Kanal von VERA | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher | Irland, mit möglicher Übermittlung in die **USA**; Grundlage derzeit der EU-US-Angemessenheitsbeschluss `[Stand 18.09.2026 in Kraft, aber unter Überprüfung — siehe Dokument 06]` |
+| Veranstaltungslocation `[Firmierung je Event, siehe B-11]` — **nur bei erteilter zweiter Foto-Einwilligung** | eigene Werbung der Location auf deren Website und Instagram-Kanal | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher (Entscheidung 4.3) | `[je Event zu ergänzen]` |
 | UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei | Erreichbarkeitsprüfung | nur öffentliche Seitenaufrufe | `[einziger unklarer AVV-Fall — im eigenen Konto unter uptimerobot.com/dpa prüfen, ob automatisch eingebunden oder anzufordern]` | EU (Slowakei) |
 | Veranstaltungslocation | Entgegennahme der Papierformulare am Empfang | die unterschriebenen Einverständniserklärungen | siehe Datenschutz Abschnitt 2 | Inland |
 | Rettungsdienst / ärztliches Personal | Notfall | die im Notfall erforderlichen Angaben | eigener Verantwortlicher | Inland |

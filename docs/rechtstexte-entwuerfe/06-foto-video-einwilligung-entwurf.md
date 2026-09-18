@@ -211,28 +211,90 @@ nicht eingewilligt haben, und wie erreicht ein Widerruf die Halle?]`
 
 ## Wozu wir die Aufnahmen verwenden
 
-`[VOR VERWENDUNG KLÄREN: Nur ankreuzen, was wirklich vorgesehen ist.
-Jeder nicht gebrauchte Zweck macht die Einwilligung angreifbarer, nicht
-sicherer.]`
+> ✅ **Entschieden am 18.09.2026 (Frage 4.4).** Abgedeckt sind genau vier
+> Veröffentlichungswege, in zwei getrennten Einwilligungen:
+>
+> | Einwilligung | Kanäle |
+> |---|---|
+> | **1 — VERA** | Website `veraevents.de` **und** der offizielle Instagram-Kanal von VERA |
+> | **2 — Veranstaltungsort** | Website **und** offizieller Instagram-Kanal der jeweiligen Location |
+>
+> **Ausdrücklich nicht abgedeckt:** Flyer, Plakate, Programmhefte und
+> sonstige Druckerzeugnisse, Facebook, TikTok, YouTube, LinkedIn, Presse,
+> Kooperationspartner. Beide Einwilligungen bleiben **getrennt und
+> freiwillig** (Entscheidung 4.1 und 4.3).
+
+`[VOR FREISCHALTUNG EINSETZEN: die genauen Kontonamen und Links der
+beiden Instagram-Konten — @handle und https://www.instagram.com/… für
+VERA und für die jeweilige Location. Ohne diese Angaben darf der Text
+nicht live gehen: „unser Instagram-Kanal" ohne Kontobezeichnung ist
+keine bestimmte Angabe im Sinne von Art. 4 Nr. 11 DS-GVO.]`
+
+**Einwilligung 1 — VERA:**
 
 > - zur Darstellung unserer Veranstaltungen auf **veraevents.de**
-> - in **Druckerzeugnissen** wie Flyern, Plakaten und Programmheften
-> - in **sozialen Netzwerken**: `[VOR VERWENDUNG KLÄREN: welche genau?
->   Instagram? Facebook? LinkedIn? Jedes Netzwerk einzeln benennen —
->   „Social Media" ist keine bestimmte Angabe.]`
-> - `[VOR VERWENDUNG KLÄREN: Weitergabe an Presse? An
->   Kooperationspartner? An die Veranstaltungslocation für deren eigene
->   Werbung? Jede dieser Weitergaben ist ein eigener Zweck und braucht
->   eine eigene Zeile.]`
+> - auf unserem offiziellen Instagram-Kanal
+>   `[VOR FREISCHALTUNG EINSETZEN: @handle und Link]`
 
-> ⚠️ **Zu sozialen Netzwerken.** Wird dort veröffentlicht, ist der
-> Hinweis aufzunehmen, dass die Aufnahmen dabei den Bereich der EU
-> verlassen können und von dort nur begrenzt zurückzuholen sind. Ohne
-> diesen Hinweis ist die Einwilligung für diesen Zweck nicht informiert.
->
-> **Wird nicht in sozialen Netzwerken veröffentlicht, ist die Zeile
-> ersatzlos zu streichen.** Sie „für später" stehen zu lassen wäre der
-> typische Fehler.
+**Einwilligung 2 — Veranstaltungsort:**
+
+> - auf der Website von `[Firmierung und Anschrift der Location je Event
+>   — siehe B-11]`
+> - auf dem offiziellen Instagram-Kanal dieser Location
+>   `[VOR FREISCHALTUNG EINSETZEN: @handle und Link]`
+
+### Der Instagram-Hinweis ist Pflichtbestandteil, nicht Beiwerk
+
+Instagram gehört zu **Meta**. Wer dort veröffentlicht, muss das in der
+Einwilligung offenlegen, sonst ist sie für diesen Zweck nicht
+„informiert" im Sinne von Art. 4 Nr. 11 und Art. 7 Abs. 2 DS-GVO. Drei
+Punkte gehören in den Text:
+
+1. **Kontrollverlust.** Einmal veröffentlichte Aufnahmen können von
+   Dritten heruntergeladen, gespeichert und weiterverbreitet werden. Ein
+   Widerruf entfernt den Beitrag aus unserem Kanal — er holt keine Kopie
+   zurück, die jemand vorher gesichert hat.
+2. **Nutzungsrechte der Plattform.** Meta lässt sich mit dem Hochladen
+   weitreichende Nutzungsrechte an den Inhalten einräumen.
+3. **Verarbeitung außerhalb der EU.** Die Aufnahmen können in die USA
+   übermittelt werden. Grundlage ist derzeit der
+   EU-US-Angemessenheitsbeschluss („Data Privacy Framework").
+
+> ⚠️ **Prüfauftrag für die fachkundige Kontrolle, mit Stand 18.09.2026.**
+> Der Angemessenheitsbeschluss ist formal weiter in Kraft, steht aber
+> unter Druck: Nach der Entscheidung des US Supreme Court in
+> *Trump v. Slaughter* vom 29.06.2026 zur Unabhängigkeit der FTC hat der
+> Europäische Datenschutzausschuss am 31.07.2026 eine Überprüfung
+> verlangt. Fällt der Beschluss, braucht die Instagram-Zeile eine andere
+> Grundlage — dann trägt sie nur noch die ausdrückliche Einwilligung nach
+> **Art. 49 Abs. 1 lit. a DS-GVO**, und die verlangt einen zusätzlichen
+> Hinweis auf die **fehlenden Garantien** im Drittland. Dieser Satz ist
+> vor der Freischaltung zu prüfen und danach im Blick zu behalten.
+> *Quelle: Websuche, keine amtliche Primärquelle — siehe Dokument 14.*
+
+### Warum Druck bewusst draußen bleibt — und was das erspart
+
+Ein Widerruf wirkt nach Art. 7 Abs. 3 DS-GVO nur für die Zukunft.
+Digitale Kanäle lassen sich daraufhin tatsächlich bereinigen: Beitrag
+löschen, Bild von der Website nehmen. **Verteilte Flyer und aufgehängte
+Plakate nicht.** Hätte VERA Druckerzeugnisse mit aufgenommen, müsste der
+Einwilligungstext genau das vorher offenlegen („bereits verteilte
+Exemplare können wir nicht zurückholen") — ein Satz, der die Einwilligung
+für viele Eltern unattraktiver macht, ohne dass VERA derzeit einen Nutzen
+davon hätte. Der Verzicht ist damit nicht nur die vorsichtigere, sondern
+auch die praktischere Wahl.
+
+### Ein neuer Kanal ist ein neuer Zweck
+
+Kommt später Facebook, TikTok, YouTube, eine Pressemappe oder ein
+gedruckter Flyer dazu, ist das **kein Detail, sondern ein neuer
+Verarbeitungszweck**. Er braucht eine **neue Einwilligung** der
+betroffenen Personen. Die vorhandenen Einwilligungen still zu erweitern
+oder den verlinkten Text nachträglich zu ändern wäre unwirksam — und
+zugleich ein Verstoß gegen die Nachweispflicht aus Art. 7 Abs. 1 DS-GVO,
+weil dann nicht mehr belegbar wäre, **welchem Text** die Person zugestimmt
+hat. Genau dafür ist das Feld `fotoEinwilligungFassung` in B-10
+vorgesehen.
 
 ## Wie lange
 
