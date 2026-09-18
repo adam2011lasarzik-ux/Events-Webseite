@@ -294,3 +294,56 @@
 .teilnehmerListe { margin: 0 0 var(--a-3); padding-left: 1.2rem; font-size: var(--gr-s); }
 
 .anonym { font-style: italic; color: var(--text-leise); }
+
+/* ── Löschsperren: Klartext vorn, Kennung als Zusatz ──────────────
+
+   Die Seite zeigte anfangs fast nur technische Kennungen. Im Betrieb
+   war sie damit unbenutzbar: Man konnte nicht entscheiden, ob eine
+   Sperre noch nötig ist, ohne jede Kennung einzeln nachzuschlagen.
+   Jetzt steht der Name oben, die Kennung klein darunter.            */
+
+.sperrZeile { display: flex; flex-direction: column; gap: var(--a-1); }
+.sperrName { font-weight: 600; }
+.sperrNeben { font-size: var(--gr-xs); color: var(--text-leise); }
+
+/* Die Kennung: klein, gedämpft, umbruchfähig. `break-all`, weil eine
+   cuid keine Trennstellen hat und sonst die Tabelle auf dem Handy
+   aufspreizt. */
+.kennung {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--a-2);
+  flex-wrap: wrap;
+  font-size: var(--gr-xs);
+  color: var(--text-leise);
+}
+.kennung code {
+  word-break: break-all;
+  font-size: var(--gr-xs);
+}
+
+.kennungKnopf {
+  border: 1px solid var(--linie);
+  background: transparent;
+  color: var(--text-leise);
+  border-radius: var(--rund-s);
+  padding: 0.15rem 0.5rem;
+  font: inherit;
+  font-size: var(--gr-xs);
+  cursor: pointer;
+  /* Bewusst kein 44px-Mindestmaß: Das ist ein Zusatz neben einer
+     Kennung, kein Bedienelement des Hauptwegs — und die Kennung
+     lässt sich daneben jederzeit von Hand markieren. */
+}
+.kennungKnopf:hover { border-color: var(--text-leise); color: var(--text); }
+.kennungKnopf:focus-visible {
+  outline: 2px solid var(--fokus);
+  outline-offset: 2px;
+}
+
+/* Von Hand gesetzt gegen automatisch abgeleitet: Der Unterschied ist
+   wichtig, weil eine automatische Sperre von selbst wieder verschwinden
+   kann (Erstattung zurückgenommen, Vorfall geschlossen) — eine von Hand
+   gesetzte niemals. */
+.markerAuto   { background: #EEF2F7; border-color: #C3D0DE; color: #33526F; }
+.markerHand   { background: #FFF4DA; border-color: #E4C77A; color: #6B4C05; }

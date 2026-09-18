@@ -54,6 +54,54 @@ for (const pfad of ["/admin/loeschen", "/admin/vorfaelle"]) {
 const sitzung = await anmelden("test-admin@vera.example", "Sonnenblume-Kaffee-Regen");
 if (!sitzung.cookie) throw new Error("Anmeldung fehlgeschlagen — läuft der Server auf 3213?");
 
+/* Die Testdaten entstehen VOR dem ersten Laden der Seite.
+
+   Das Formular „Löschsperre von Hand setzen" zeigt seit dem Umbau
+   eine Auswahlliste der Anmeldungen statt eines Freitextfelds. Gibt
+   es keine einzige Anmeldung, gibt es auch kein Feld `zielId` — und
+   die Liste scheiterte hier mit „Kein Formular gefunden". Das war
+   nicht der Zugangsschutz, sondern ein leerer Datenstand: `alle.sh`
+   räumt vor jeder Liste auf. */
+/* Eine eigene, längst vergangene Veranstaltung. Die vorhandene wäre
+   die falsche Wahl: `faelligkeitenAuffrischen()` rechnet die
+   Fälligkeit bei JEDEM Lauf aus dem Veranstaltungstermin neu, und ein
+   künftiger Termin setzte das hier eingetragene Datum sofort wieder
+   zurück. Das ist richtig so — die Prüfung muss sich danach richten. */
+const event = await db.event.create({
+  data: {
+    slug: "s-probe-zugang",
+    titel: "S-Probe Zugang",
+    beschreibung: "Nur zum Prüfen.",
+    kurz: "Prüfung",
+    karteTitel: "S-Probe",
+    karteKurz: "Prüfung",
+    karteZielgruppe: "Prüfung",
+    startAt: new Date("2015-06-15T12:00:00Z"),
+    endAt: new Date("2015-06-15T12:00:00Z"),
+    stadt: "Falkensee",
+    maxPersonen: 100,
+    schwelleWenigPlaetze: 10,
+    schuelerAktiv: true,
+    preisSchuelerCents: 700,
+    preisErwachsenerCents: 1400,
+    status: "ENTWURF",
+  },
+});
+
+const opfer = await db.registration.create({
+  data: {
+    eventId: event.id,
+    kontaktVorname: "Zugangs",
+    kontaktNachname: "Probe",
+    kontaktEmail: "zugangsprobe@s-pruefung.invalid",
+    gesamtpreisCents: 700,
+    status: "BESTAETIGT",
+    faelligAm: new Date("2015-12-31T23:59:59.999Z"),
+    teilnehmer: { create: [{ vorname: "Zugangs", nachname: "Probe", typ: "SCHUELER" }] },
+  },
+});
+
+
 const loeschSeite = await hole("/admin/loeschen", sitzung.cookie);
 pruefe("Angemeldet ist /admin/loeschen erreichbar", loeschSeite.status === 200);
 pruefe(
@@ -105,45 +153,6 @@ pruefe(
 /* Der schärfste Fall: der Löschlauf selbst. Dafür wird ein echter,
    längst fälliger Datensatz angelegt — bliebe er nach dem Aufruf
    ohne Sitzung unverändert, hat der Zugangsschutz gehalten. */
-/* Eine eigene, längst vergangene Veranstaltung. Die vorhandene wäre
-   die falsche Wahl: `faelligkeitenAuffrischen()` rechnet die
-   Fälligkeit bei JEDEM Lauf aus dem Veranstaltungstermin neu, und ein
-   künftiger Termin setzte das hier eingetragene Datum sofort wieder
-   zurück. Das ist richtig so — die Prüfung muss sich danach richten. */
-const event = await db.event.create({
-  data: {
-    slug: "s-probe-zugang",
-    titel: "S-Probe Zugang",
-    beschreibung: "Nur zum Prüfen.",
-    kurz: "Prüfung",
-    karteTitel: "S-Probe",
-    karteKurz: "Prüfung",
-    karteZielgruppe: "Prüfung",
-    startAt: new Date("2015-06-15T12:00:00Z"),
-    endAt: new Date("2015-06-15T12:00:00Z"),
-    stadt: "Falkensee",
-    maxPersonen: 100,
-    schwelleWenigPlaetze: 10,
-    schuelerAktiv: true,
-    preisSchuelerCents: 700,
-    preisErwachsenerCents: 1400,
-    status: "ENTWURF",
-  },
-});
-
-const opfer = await db.registration.create({
-  data: {
-    eventId: event.id,
-    kontaktVorname: "Zugangs",
-    kontaktNachname: "Probe",
-    kontaktEmail: "zugangsprobe@s-pruefung.invalid",
-    gesamtpreisCents: 700,
-    status: "BESTAETIGT",
-    faelligAm: new Date("2015-12-31T23:59:59.999Z"),
-    teilnehmer: { create: [{ vorname: "Zugangs", nachname: "Probe", typ: "SCHUELER" }] },
-  },
-});
-
 const laufFelder = actionFelder(loeschSeite.html, 'name="bestaetigt"');
 await sende("/admin/loeschen", laufFelder, { bestaetigt: "ja" }, null);
 let stand = await db.registration.findUniqueOrThrow({ where: { id: opfer.id } });

@@ -47,6 +47,21 @@ export interface OffeneSperre {
   gesetztAm: Date;
   gesetztVon: string;
   notiz: string | null;
+
+  /* ── Wer oder was steckt hinter der Kennung? ──────────────────
+     Wird beim Lesen nachgeschlagen, NICHT gespeichert. Eine Kopie des
+     Namens in der Sperrtabelle wäre eine zweite Stelle, an der
+     Personendaten liegen — und sie bliebe nach dem Anonymisieren
+     stehen. Genau das soll das Löschkonzept verhindern. */
+  bezeichnung: string;
+  /** Veranstaltung, falls zuzuordnen. */
+  eventTitel: string | null;
+  veranstaltungAm: Date | null;
+  email: string | null;
+  /** true = die Personendaten dahinter sind bereits überschrieben. */
+  anonymisiert: boolean;
+  /** false = der Datensatz existiert nicht mehr. */
+  vorhanden: boolean;
 }
 
 export interface ProtokollZeile {
@@ -205,9 +220,19 @@ export async function loeschVorschau(jetzt: Date = new Date()): Promise<Vorschau
   return zeilen;
 }
 
-/** Alle offenen Sperren, neueste zuerst. */
+/**
+ * Alle offenen Sperren, neueste zuerst — mit lesbarer Bezeichnung.
+ *
+ * Die Sperrtabelle kennt nur `zielArt` und `zielId`. Wer davor sitzt,
+ * braucht aber einen Namen, um zu entscheiden, ob die Sperre noch
+ * nötig ist. Eine Liste aus Kennungen ist praktisch unbenutzbar.
+ *
+ * Nachgeschlagen wird gebündelt: je Zielart EINE Abfrage, nicht eine
+ * je Sperre. Bei zwanzig Sperren wären das sonst zwanzig Abfragen für
+ * eine Tabelle.
+ */
 export async function offeneSperrenListe(): Promise<OffeneSperre[]> {
-  return db.loeschsperre.findMany({
+  const sperren = await db.loeschsperre.findMany({
     where: { aufgehobenAm: null },
     orderBy: { gesetztAm: "desc" },
     select: {
@@ -220,6 +245,166 @@ export async function offeneSperrenListe(): Promise<OffeneSperre[]> {
       gesetztVon: true,
       notiz: true,
     },
+  });
+  if (sperren.length === 0) return [];
+
+  const idsVon = (art: string) =>
+    sperren.filter((s) => s.zielArt === art).map((s) => s.zielId);
+
+  const [anmeldungen, vorfaelle, checklisten, nachweise] = await Promise.all([
+    db.registration.findMany({
+      where: { id: { in: idsVon("Registration") } },
+      select: {
+        id: true,
+        kontaktVorname: true,
+        kontaktNachname: true,
+        kontaktEmail: true,
+        anonymisiertAm: true,
+        event: { select: { titel: true, startAt: true, endAt: true } },
+      },
+    }),
+    db.vorfall.findMany({
+      where: { id: { in: idsVon("Vorfall") } },
+      select: { id: true, titel: true, eroeffnetAm: true, status: true },
+    }),
+    db.checkliste.findMany({
+      where: { id: { in: idsVon("Checkliste") } },
+      select: { id: true, durchgefuehrtAm: true, anonymisiertAm: true },
+    }),
+    db.zustimmungsnachweis.findMany({
+      where: { id: { in: idsVon("Zustimmungsnachweis") } },
+      select: { id: true, teilnehmerName: true, veranstaltungAm: true },
+    }),
+  ]);
+
+  const a = new Map(anmeldungen.map((x) => [x.id, x]));
+  const v = new Map(vorfaelle.map((x) => [x.id, x]));
+  const c = new Map(checklisten.map((x) => [x.id, x]));
+  const z = new Map(nachweise.map((x) => [x.id, x]));
+
+  return sperren.map((s) => {
+    const leer = {
+      ...s,
+      bezeichnung: "Datensatz nicht mehr vorhanden",
+      eventTitel: null,
+      veranstaltungAm: null,
+      email: null,
+      anonymisiert: false,
+      vorhanden: false,
+    };
+
+    if (s.zielArt === "Registration") {
+      const t = a.get(s.zielId);
+      if (!t) return leer;
+      return {
+        ...s,
+        bezeichnung: `${t.kontaktVorname} ${t.kontaktNachname}`.trim(),
+        eventTitel: t.event.titel,
+        veranstaltungAm: t.event.startAt ?? t.event.endAt,
+        email: t.kontaktEmail,
+        anonymisiert: t.anonymisiertAm !== null,
+        vorhanden: true,
+      };
+    }
+    if (s.zielArt === "Vorfall") {
+      const t = v.get(s.zielId);
+      if (!t) return leer;
+      return {
+        ...s,
+        bezeichnung: t.titel,
+        eventTitel: null,
+        veranstaltungAm: t.eroeffnetAm,
+        email: null,
+        anonymisiert: false,
+        vorhanden: true,
+      };
+    }
+    if (s.zielArt === "Checkliste") {
+      const t = c.get(s.zielId);
+      if (!t) return leer;
+      return {
+        ...s,
+        bezeichnung: "Veranstaltungscheckliste",
+        eventTitel: null,
+        veranstaltungAm: t.durchgefuehrtAm,
+        email: null,
+        anonymisiert: t.anonymisiertAm !== null,
+        vorhanden: true,
+      };
+    }
+    const t = z.get(s.zielId);
+    if (!t) return leer;
+    return {
+      ...s,
+      bezeichnung: t.teilnehmerName,
+      eventTitel: null,
+      veranstaltungAm: t.veranstaltungAm,
+      email: null,
+      anonymisiert: false,
+      vorhanden: true,
+    };
+  });
+}
+
+/** Eine Anmeldung, wie sie in der Auswahlliste erscheint. */
+export interface AnmeldungZurAuswahl {
+  id: string;
+  /** „Vorname Nachname — Veranstaltung — Datum — E-Mail" */
+  beschriftung: string;
+  anonymisiert: boolean;
+  /** true = auf diesen Datensatz liegt bereits eine offene Sperre. */
+  bereitsGesperrt: boolean;
+}
+
+/**
+ * Die Anmeldungen für die Auswahl beim Setzen einer Sperre.
+ *
+ * Damit niemand mehr eine Kennung abtippen muss. Gespeichert wird
+ * weiterhin die Kennung — die Beschriftung ist reine Anzeige und
+ * entsteht bei jedem Aufruf neu.
+ *
+ * Bereits anonymisierte Anmeldungen bleiben in der Liste, aber
+ * erkennbar gekennzeichnet: Eine Sperre darauf ist nicht falsch, nur
+ * wirkungslos — der Löschlauf überspringt sie ohnehin, weil ihre
+ * Personendaten schon überschrieben sind. Sie stillschweigend
+ * wegzulassen wäre schlechter: Dann suchte man vergeblich nach einem
+ * Namen, den man in der Anmeldungsliste noch sieht.
+ */
+export async function anmeldungenZurAuswahl(): Promise<AnmeldungZurAuswahl[]> {
+  const [anmeldungen, gesperrte] = await Promise.all([
+    db.registration.findMany({
+      orderBy: { angemeldetAm: "desc" },
+      select: {
+        id: true,
+        kontaktVorname: true,
+        kontaktNachname: true,
+        kontaktEmail: true,
+        anonymisiertAm: true,
+        event: { select: { titel: true, startAt: true, endAt: true } },
+      },
+    }),
+    db.loeschsperre.findMany({
+      where: { zielArt: "Registration", aufgehobenAm: null },
+      select: { zielId: true },
+    }),
+  ]);
+
+  const schonGesperrt = new Set(gesperrte.map((g) => g.zielId));
+
+  return anmeldungen.map((r) => {
+    const termin = r.event.startAt ?? r.event.endAt;
+    const teile = [
+      `${r.kontaktVorname} ${r.kontaktNachname}`.trim(),
+      r.event.titel,
+      termin ? termin.toLocaleDateString("de-DE", { timeZone: "Europe/Berlin" }) : "Termin offen",
+      r.kontaktEmail,
+    ];
+    return {
+      id: r.id,
+      beschriftung: teile.join(" — "),
+      anonymisiert: r.anonymisiertAm !== null,
+      bereitsGesperrt: schonGesperrt.has(r.id),
+    };
   });
 }
 

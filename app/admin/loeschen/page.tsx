@@ -1,5 +1,6 @@
 import { verlangeAdmin } from "@/lib/adminAuth";
 import {
+  anmeldungenZurAuswahl,
   letztesProtokoll,
   loeschVorschau,
   offeneSperrenListe,
@@ -8,6 +9,8 @@ import {
 } from "@/lib/loeschVorschau";
 import { AKTION_JE_KLASSE, type Loeschklasse } from "@/lib/loeschfristen";
 import { AdminRahmen } from "@/components/admin/AdminRahmen";
+import { AnmeldungAuswahl } from "@/components/admin/AnmeldungAuswahl";
+import { KennungKopieren } from "@/components/admin/KennungKopieren";
 import stil from "../admin.module.css";
 import {
   loeschlaufAusfuehren,
@@ -32,6 +35,14 @@ const KLASSENNAME: Record<Loeschklasse, string> = {
   CHECKLISTE: "K5 Checkliste",
   VORFALLAKTE: "K6 Vorfallakte",
   STEUERUNTERLAGEN: "K7 Steuerunterlagen",
+};
+
+/** Die Zielarten in Klartext — „Registration" sagt einem Menschen nichts. */
+const ZIELART_NAME: Record<string, string> = {
+  Registration: "Anmeldung",
+  Vorfall: "Vorfall",
+  Checkliste: "Checkliste",
+  Zustimmungsnachweis: "Zustimmungsnachweis",
 };
 
 const SPERRGRUND_NAME: Record<string, string> = {
@@ -85,11 +96,12 @@ export default async function LoeschenSeite({
   const admin = await verlangeAdmin();
   const { hinweis, lauf } = await searchParams;
 
-  const [vorschau, sperren, papier, protokoll] = await Promise.all([
+  const [vorschau, sperren, papier, protokoll, auswahl] = await Promise.all([
     loeschVorschau(),
     offeneSperrenListe(),
     papierFaellig(),
     letztesProtokoll(50),
+    anmeldungenZurAuswahl(),
   ]);
 
   const ueberfaellig = vorschau.filter((z) => z.ueberfaellig && z.gesperrtWegen.length === 0);
@@ -236,50 +248,103 @@ export default async function LoeschenSeite({
         {sperren.length === 0 ? (
           <p>Keine offene Sperre.</p>
         ) : (
-          <div className={stil.tabelleUmschlag}>
-            <table className={stil.tabelle}>
-              <thead>
-                <tr>
-                  <th>Grund</th>
-                  <th>Datensatz</th>
-                  <th>gesetzt am</th>
-                  <th>von</th>
-                  <th>Notiz</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {sperren.map((s) => (
-                  <tr key={s.id}>
-                    <td>
-                      <span className={`${stil.marker} ${stil.markerWartet}`}>
-                        {SPERRGRUND_NAME[s.grund] ?? s.grund}
-                      </span>
-                    </td>
-                    <td>
-                      {s.zielArt}
-                      <br />
-                      <code>{s.zielId}</code>
-                    </td>
-                    <td>{zeitpunkt(s.gesetztAm)}</td>
-                    <td>{s.automatisch ? "automatisch" : s.gesetztVon}</td>
-                    <td>{s.notiz ?? "—"}</td>
-                    <td>
-                      <form action={sperreAufheben}>
-                        <input type="hidden" name="sperreId" value={s.id} />
-                        <button
-                          type="submit"
-                          className={`${stil.knopf} ${stil.knopfLeise} ${stil.knopfKlein}`}
-                        >
-                          Aufheben
-                        </button>
-                      </form>
-                    </td>
+          <>
+            <p className={stil.feldHilfe}>
+              <b>Automatisch</b> gesetzte Sperren leitet das System bei jedem Lauf neu ab
+              (Erstattung, offener Vorfall) — sie verschwinden von selbst, wenn der Grund
+              entfällt. <b>Von Hand</b> gesetzte bleiben, bis du sie aufhebst.
+            </p>
+            <div className={stil.tabelleUmschlag}>
+              <table className={stil.tabelle}>
+                <thead>
+                  <tr>
+                    <th>Betroffener Datensatz</th>
+                    <th>Veranstaltung</th>
+                    <th>Grund</th>
+                    <th>Gesetzt</th>
+                    <th>Notiz</th>
+                    <th />
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {sperren.map((s) => (
+                    <tr key={s.id}>
+                      <td>
+                        <div className={stil.sperrZeile}>
+                          <span className={stil.sperrName}>
+                            {s.bezeichnung}
+                            {s.anonymisiert && (
+                              <>
+                                {" "}
+                                <span className={`${stil.marker} ${stil.markerAus}`}>
+                                  anonymisiert
+                                </span>
+                              </>
+                            )}
+                            {!s.vorhanden && (
+                              <>
+                                {" "}
+                                <span className={`${stil.marker} ${stil.markerOffen}`}>
+                                  nicht mehr vorhanden
+                                </span>
+                              </>
+                            )}
+                          </span>
+                          {s.email && <span className={stil.sperrNeben}>{s.email}</span>}
+                          <span className={stil.sperrNeben}>
+                            {ZIELART_NAME[s.zielArt] ?? s.zielArt}
+                          </span>
+                          <KennungKopieren kennung={s.zielId} />
+                        </div>
+                      </td>
+                      <td>
+                        {s.eventTitel ?? "—"}
+                        {s.veranstaltungAm && (
+                          <>
+                            <br />
+                            <span className={stil.sperrNeben}>
+                              {datum(s.veranstaltungAm)}
+                            </span>
+                          </>
+                        )}
+                      </td>
+                      <td>
+                        <span className={`${stil.marker} ${stil.markerWartet}`}>
+                          {SPERRGRUND_NAME[s.grund] ?? s.grund}
+                        </span>
+                      </td>
+                      <td>
+                        <span
+                          className={`${stil.marker} ${
+                            s.automatisch ? stil.markerAuto : stil.markerHand
+                          }`}
+                        >
+                          {s.automatisch ? "automatisch" : "von Hand"}
+                        </span>
+                        <br />
+                        <span className={stil.sperrNeben}>
+                          {zeitpunkt(s.gesetztAm)}
+                          {!s.automatisch && <> · {s.gesetztVon}</>}
+                        </span>
+                      </td>
+                      <td>{s.notiz ?? "—"}</td>
+                      <td>
+                        <form action={sperreAufheben}>
+                          <input type="hidden" name="sperreId" value={s.id} />
+                          <button
+                            type="submit"
+                            className={`${stil.knopf} ${stil.knopfLeise} ${stil.knopfKlein}`}
+                          >
+                            Aufheben
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
 
@@ -292,23 +357,19 @@ export default async function LoeschenSeite({
           hier ein.
         </p>
         <form action={sperreSetzen}>
+          {/* Die Art ist fest: Über dieses Formular werden Anmeldungen
+              gesperrt. Vorfälle, Checklisten und Zustimmungsnachweise
+              sperrt man dort, wo man sie sieht — ein Formular, das
+              alles kann, kann nichts davon gut. */}
+          <input type="hidden" name="zielArt" value="Registration" />
+
+          {auswahl.length === 0 ? (
+            <p>Es gibt noch keine Anmeldung, die sich sperren ließe.</p>
+          ) : (
+            <AnmeldungAuswahl anmeldungen={auswahl} name="zielId" />
+          )}
+
           <div className={stil.raster}>
-            <label className={stil.feld}>
-              <span className={stil.feldLabel}>Art des Datensatzes</span>
-              <select name="zielArt" className={stil.auswahl} defaultValue="Registration">
-                <option value="Registration">Anmeldung</option>
-                <option value="Vorfall">Vorfall</option>
-                <option value="Checkliste">Checkliste</option>
-                <option value="Zustimmungsnachweis">Zustimmungsnachweis</option>
-              </select>
-            </label>
-            <label className={stil.feld}>
-              <span className={stil.feldLabel}>Kennung</span>
-              <input name="zielId" className={stil.eingabe} required />
-              <span className={stil.feldHilfe}>
-                Die Kennung steht in der Anmeldungsliste und in den Tabellen oben.
-              </span>
-            </label>
             <label className={stil.feld}>
               <span className={stil.feldLabel}>Grund</span>
               <select name="grund" className={stil.auswahl} defaultValue="BESCHWERDE">
@@ -329,7 +390,7 @@ export default async function LoeschenSeite({
             </span>
           </label>
           <div className={stil.knopfReihe}>
-            <button type="submit" className={stil.knopf}>
+            <button type="submit" className={stil.knopf} disabled={auswahl.length === 0}>
               Sperre setzen
             </button>
           </div>
