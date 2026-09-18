@@ -268,16 +268,22 @@ beliebige Ziffern. Name und Adresse: frei erfunden.
 
 **Was geprüft werden soll:**
 
-1. Einzelperson zahlt → Anmeldung ist bestätigt und bezahlt
-2. Familienbuchung (mehrere Personen) → richtige Personenzahl belegt,
-   richtiger Betrag
-3. Zahlung abbrechen → Seite sagt „noch nicht abgeschlossen", **kein**
-   „Danke"
-4. Abgelehnte Karte → Anmeldung bleibt unbezahlt
+1. ✅ Einzelperson zahlt → Anmeldung ist bestätigt und bezahlt
+   (13.09.2026)
+2. ✅ Familienbuchung (mehrere Personen) → richtige Personenzahl
+   belegt, richtiger Betrag (13.09.2026)
+3. ✅ Zahlung abbrechen → Seite sagt „noch nicht abgeschlossen",
+   **kein** „Danke" (18.09.2026)
+4. ✅ Abgelehnte Karte → Anmeldung bleibt unbezahlt (18.09.2026)
 5. Danach „Jetzt bezahlen" → führt zurück zur Bezahlseite, ohne dass
    die Daten neu eingegeben werden müssen
 6. Zweimal schnell tippen → nur **eine** Bezahlseite, keine doppelte
    Abbuchung
+
+Punkt 5 und 6 sind bisher nur durch die automatischen Prüflisten belegt
+(`pruefung/K`), nicht durch einen echten Klick — dafür bräuchte es zwei
+unabhängige Browser-Sitzungen auf dieselbe Anmeldung, was sich mit den
+bisherigen Testdaten nicht ohne Weiteres nachstellen lässt.
 
 ### Ergebnis vom 13.09.2026 — durchgeführt und belegt
 
@@ -306,16 +312,55 @@ Zahlung geht durch und wird bestätigt**, und **eine Erstattung kommt
 an und wird verarbeitet**. Beides über Stripes echte Bezahlseite, nicht
 gegen die örtliche Attrappe.
 
-**Was dieser Beleg NICHT zeigt** — und was deshalb weiterhin nur durch
-die automatischen Prüflisten abgedeckt ist, nicht durch einen Klick auf
-der echten Seite:
+**Was dieser Beleg NICHT zeigt** — und was am 18.09.2026 zusätzlich
+echt durchgeklickt wurde (siehe unten):
 
 - der Abbruch (Punkt 3 oben) und die abgelehnte Karte (Punkt 4) — beide
-  erzeugen kein Webhook-Ereignis, hinterlassen also keine Spur in dieser
-  Tabelle
+  erzeugen kein Webhook-Ereignis, hinterlassen also keine Spur in der
+  Tabelle `ZahlungsEreignis`
 - `checkout.session.async_payment_failed` (verspätet fehlgeschlagene
   PayPal-Zahlung) ist nie eingetroffen — der Fall ist im Code behandelt
   und durch Prüfliste `M` abgedeckt, aber nie echt ausgelöst worden
+
+### Ergebnis vom 18.09.2026 — Abbruch und abgelehnte Karte, durchgeklickt
+
+Die beiden am 13.09. noch offenen Fälle (Punkt 3 und 4 der Prüfliste
+oben) wurden am 18.09.2026 echt auf Stripes Bezahlseite im Testmodus
+durchgeklickt. Da beide Fälle **kein** Webhook-Ereignis erzeugen, ist
+der Beleg hier ein anderer als bei den drei bezahlten Sitzungen oben:
+die betroffene Anmeldung selbst in der Produktivdatenbank, mit
+Zeitstempel passend zum Klick und unverändertem Status.
+
+**Punkt 3 — Zahlung abbrechen** (Klick auf „← Zurück" auf der
+Bezahlseite, ohne Karteneingabe):
+
+- Anmeldung `cmu7484g00001o1l4htqutopd` („Testabbruch",
+  `test-abbruchl@beispiel.de`)
+- Anwendung zeigte „Deine Anmeldung ist noch nicht abgeschlossen"
+  („Zahlung noch offen") — **kein** „Danke"
+- Datenbank: `status = RESERVIERT`, `zahlungsStatus = OFFEN`,
+  unverändert seit der Anmeldung
+
+**Punkt 4 — Abgelehnte Karte** (`4000 0000 0000 0002`):
+
+- Anmeldung `cmu74hqag0004o1l4225z0jkh` („Testen Sie Kate",
+  `test-karte@beispiel.de`)
+- Stripe zeigte auf derselben Seite „Ihre Kreditkarte wurde
+  abgelehnt", **keine** Weiterleitung
+- Datenbank: `status = RESERVIERT`, `zahlungsStatus = OFFEN`,
+  unverändert — die Ablehnung hat nichts bestätigt
+
+Damit ist jeder der vier Fälle aus der Prüfliste oben jetzt mindestens
+einmal echt geklickt worden — Punkt 5 (erneutes „Jetzt bezahlen") und
+Punkt 6 (kein doppelter Vorgang) waren bereits am 13.09. über die
+Sitzungs-Wiederverwendung technisch geprüft (`lib/zahlungStart.ts`) und
+werden hier nicht wiederholt.
+
+**Weiterhin nicht echt ausgelöst:**
+`checkout.session.async_payment_failed` — dafür bräuchte es eine
+verzögert fehlschlagende PayPal-Zahlung, die sich im Testmodus nicht
+gezielt herbeiführen lässt. Der Fall bleibt durch Prüfliste `M`
+(15 automatische Prüfungen) abgedeckt.
 
 ---
 

@@ -151,8 +151,10 @@ anlegt.
 
 - **Der Klick durch Stripes echte Bezahlseite.** Diese Listen prüfen
   gegen eine örtliche Attrappe. Der Durchlauf über die echte Bezahlseite
-  ist am 13.09.2026 separat erfolgt und belegt — siehe „Ergebnis vom
-  13.09.2026" in `docs/stripe-einrichten.md`.
+  ist am 13.09.2026 (erfolgreiche Zahlung, Familienbuchung, Erstattung)
+  und am 18.09.2026 (Abbruch, abgelehnte Karte) separat erfolgt und
+  belegt — siehe „Ergebnis vom 13.09.2026" und „Ergebnis vom
+  18.09.2026" in `docs/stripe-einrichten.md`.
 - **Safari.** Gemessen wird in Chromium. Safari rechnet bei `svh` und
   der Adressleiste etwas anders und kennt deutsche Silbentrennung, die
   Chromium hier nicht hat.

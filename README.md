@@ -352,9 +352,24 @@ nur nach bestandener Signaturprüfung gespeichert werden. Alle Referenzen
 beginnen mit `cs_test_`, es ist kein echtes Geld geflossen. Einzelheiten
 unter „Ergebnis vom 13.09.2026" in `docs/stripe-einrichten.md`.
 
-Nicht durch einen echten Klick abgedeckt, sondern weiterhin nur durch die
-Prüflisten: der **Abbruch** und die **abgelehnte Karte** — beide erzeugen
-kein Webhook-Ereignis und hinterlassen deshalb keine nachprüfbare Spur.
+**Abbruch und abgelehnte Karte sind am 18.09.2026 ebenfalls echt
+durchgeklickt worden.** Beide erzeugen bauartbedingt kein
+Webhook-Ereignis — die Sitzung bei Stripe bleibt offen, es gibt nichts
+zu bestätigen. Der Beleg ist deshalb ein anderer als bei den drei
+bezahlten Sitzungen: die betroffene Anmeldung selbst, mit Zeitstempel
+passend zum Klick und unverändertem Status.
+
+- **Abbruch** („← Zurück" auf der Bezahlseite, ohne Karteneingabe):
+  Anwendung zeigte „Deine Anmeldung ist noch nicht abgeschlossen"
+  („Zahlung noch offen") — kein „Danke". Die Anmeldung blieb
+  `RESERVIERT`/`OFFEN`.
+- **Abgelehnte Karte** (`4000 0000 0000 0002`): Stripe zeigte auf
+  derselben Seite „Ihre Kreditkarte wurde abgelehnt", **keine**
+  Weiterleitung. Die Anmeldung blieb ebenfalls `RESERVIERT`/`OFFEN` —
+  die Ablehnung hat nichts bestätigt.
+
+Damit ist jetzt jeder der vier Fälle aus Abschnitt 7 der
+Stripe-Anleitung mindestens einmal echt geklickt worden.
 
 Der **Testmodus-Riegel bleibt geschlossen**, bis die Rechtstexte vorliegen
 und der Echtbetrieb bewusst freigeschaltet wird. Ein Schlüssel, der nicht
