@@ -231,8 +231,9 @@ Sammlung solcher technischen Folgen.
 > **2.3** Ist die Bestätigungsmail nicht mehr auffindbar, genügt eine
 > Nachricht an kontakt@veraevents.de.
 >
-> **2.4** Solange für eine Veranstaltung noch kein Termin feststeht, ist
-> eine Stornierung jederzeit möglich.
+> **2.4** ❌ **Am 18.09.2026 gestrichen** — seit Entscheidung 2.5 kann
+> eine Veranstaltung ohne feststehenden Termin nicht mehr gebucht
+> werden, der Fall entsteht also nicht mehr.
 >
 > **2.5** Nach Ablauf der Frist und bei Nichterscheinen bleibt der
 > Anspruch von VERA auf die vereinbarte Vergütung bestehen. Anzurechnen

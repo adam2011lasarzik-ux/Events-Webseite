@@ -74,8 +74,10 @@ Werbematerial beschreiben das Angebot, begründen aber für sich genommen
 keinen Anspruch auf eine bestimmte Einzelleistung.
 
 2.4 Steht für eine Veranstaltung noch kein Termin fest, ist das auf der
-Eventseite als solches gekennzeichnet. Der Termin wird nachträglich
-mitgeteilt. **Ziffer 8.4 gilt dann besonders.**
+Eventseite als solches gekennzeichnet. Eine solche Veranstaltung ist
+eine reine Ankündigung: **Sie kann noch nicht gebucht werden.** Erst
+wenn Datum und Uhrzeit feststehen und auf der Eventseite angegeben
+sind, ist eine Anmeldung möglich.
 
 > **Warum das so formuliert ist.** Die Eventdaten liegen je Veranstaltung
 > in der Datenbank (`prisma/schema.prisma` → `Event`), einschließlich der
@@ -97,10 +99,10 @@ bindendes Angebot, sondern eine Aufforderung zur Anmeldung.
    wird dabei laufend angezeigt.
 2. Eingabe der Kontakt- und Teilnehmerdaten.
 3. Anzeige einer Übersicht mit allen Einzelposten und dem Gesamtbetrag.
-4. Absenden der Anmeldung über die Schaltfläche
-   `[VOR VERWENDUNG KLÄREN: endgültige Beschriftung — siehe Dokument 08,
-   Befund C-1. Die derzeitige Beschriftung „Zur Bezahlung – {Betrag}"
-   ist auf ihre Vereinbarkeit mit § 312j Abs. 3 BGB zu prüfen.]`
+4. Absenden der Anmeldung über die Schaltfläche **„Zahlungspflichtig
+   bestellen"**, nachdem das Häkchen „Ich akzeptiere die AGB." gesetzt
+   wurde (entschieden am 18.09.2026, siehe Dokument 08, Befunde C-1 und
+   C-2 — auf der Website noch nicht umgesetzt).
 5. Weiterleitung auf die gesicherte Bezahlseite des
    Zahlungsdienstleisters.
 6. Nach erfolgreicher Zahlung: Bestätigung der Anmeldung per E-Mail.
@@ -255,8 +257,17 @@ Gutschrift einige Werktage dauern. Der Platz wird sofort wieder frei.
 7.3 Ist die Bestätigungsmail nicht mehr auffindbar, genügt eine
 Nachricht an kontakt@veraevents.de.
 
-7.4 Solange für eine Veranstaltung noch kein Termin feststeht, ist eine
-Stornierung jederzeit möglich.
+> ❌ **Ziffer 7.4 ist am 18.09.2026 ersatzlos gestrichen worden.** Sie
+> lautete: „Solange für eine Veranstaltung noch kein Termin feststeht,
+> ist eine Stornierung jederzeit möglich." Diese Klausel regelte einen
+> Fall, den es seit Entscheidung 2.5 nicht mehr geben kann — gebucht
+> werden kann erst, wenn Datum und Uhrzeit feststehen, also hat jede
+> Buchung von Anfang an eine laufende, berechenbare Stornofrist. Eine
+> Klausel für einen unmöglichen Sachverhalt stiftet nur Verwirrung.
+>
+> ⚠️ **Sie steht aber noch live auf der Website** (`content/de.ts:750`)
+> — die Streichung ist damit Teil des späteren Rollouts, nicht schon
+> erledigt. Siehe Dokument 15, Abschnitt G.
 
 7.5 **Nach Ablauf der Frist nach Ziffer 7.1 und bei Nichterscheinen**
 bleibt der Anspruch von VERA auf die vereinbarte Vergütung bestehen.
