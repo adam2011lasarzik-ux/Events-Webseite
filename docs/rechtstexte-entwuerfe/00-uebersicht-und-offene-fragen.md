@@ -1,10 +1,34 @@
 # 00 — Übersicht: was hier liegt und was du entscheiden musst
 
-**Stand: 16.09.2026**
+**Stand: 18.09.2026** (Version 3 — vorherige Stände 16./17.09.2026)
 
 Dieser Ordner enthält **Entwürfe** für alle Rechtstexte, die VERA
 braucht. Sie sind neu für VERA geschrieben — es wurde nichts von
 fremden Seiten kopiert.
+
+> ### Was sich seit dem 16.09.2026 geändert hat
+>
+> Am 17.09.2026 hat Adam **58 der ursprünglich 85 offenen Punkte** in
+> einem ausführlichen Entscheidungsprozess durchgesprochen (Dokument
+> 11). **Vollständig entschieden ist Gruppe 3 (alles rund um
+> Minderjährige, Aufsicht, Alkohol, Ankunft)** — sie ist in die
+> Dokumente 02, 03, 05 und 09 eingearbeitet (Version 2 vom 18.09.2026).
+> Zentrales Ergebnis: das **Anlagenmodell** — VERA übernimmt keine
+> Aufsicht über unbegleitete Minderjährige, kein Check-out, kein
+> Armband, kein Pfand.
+>
+> **Weiterhin vollständig offen sind die Gruppen 1 (teilweise), 2, 4, 5
+> und 6** — vor allem alles rund um AGB-Grundsatzfragen, Foto/Video und
+> B2B. Das sind unternehmerische Entscheidungen, die nur Adam treffen
+> kann; sie sind jetzt gesammelt und mit Empfehlung in **Dokument 15**
+> aufgeführt — das ist die aktuelle Antwort auf die Frage „was fehlt
+> noch?", nicht mehr Abschnitt 2 dieser Datei (siehe unten).
+>
+> Zusätzlich neu: **Dokument 14** (Vergleichsrecherche bei ähnlichen
+> Anbietern, erneute Quellenprüfung) und die Ausrichtung von Dokument
+> 02, Ziffer 15 auf das inzwischen **produktiv gebaute Löschkonzept**
+> (K1–K7) — die frühere Aussage „keine automatische Löschfrist" gilt
+> nicht mehr.
 
 > ## ⚠️ Das Wichtigste zuerst
 >
@@ -31,57 +55,26 @@ fremden Seiten kopiert.
 | **06 Foto-Einwilligung** | Bilder und Videos | du sagst, wofür du die Bilder brauchst |
 | **07 Widerruf & Storno** | die 14-Tage-Frage und dein 24-Stunden-Angebot | ein Anwalt eine Frage beantwortet hat (siehe unten) |
 | **08 Checkout** | Texte im Bestellvorgang | die AGB fertig sind |
-| **09 Hausordnung** | Verhalten vor Ort | du die Hausordnung der Halle gelesen hast |
-| **10 Prüfprotokoll** | woher jede Aussage stammt | — (nur zum Nachschlagen) |
+| **09 Hausordnung** | Verhalten vor Ort — **Version 2, Minderjährigen-/Alkoholteil jetzt entschieden** | du die Hausordnung der Halle gelesen hast |
+| **10 Prüfprotokoll** | woher jede Aussage stammt (Stand 16.09.) | — (nur zum Nachschlagen) |
+| **11 Entscheidungen** | alle 58 Antworten von Adam, mit Begründung und Folgen für die Texte | — (nur zum Nachschlagen) |
+| **12 Datenbestand & Löschfristen** | Vorarbeit zum Löschkonzept | überholt durch 13 und die echte Umsetzung |
+| **13 Löschkonzept** | DIN-66398-Entwurf mit 7 Klassen | überholt durch die echte, produktive Umsetzung (`docs/loeschkonzept-betrieb.md`) |
+| **14 Vergleichsrecherche** | ähnliche Anbieter, erneute Quellenprüfung | — (nur zum Nachschlagen) |
+| **15 Offene Punkte für Adam** | **die aktuelle „Liste offener Angaben"** | — **hier anfangen** |
 
 ---
 
 ## 2. Was noch fehlt
 
-### 2.1 Zahlen und Namen, die du nur ablesen kannst
-
-Das ist die einfachste Arbeit. Du musst dich irgendwo einloggen und
-etwas abschreiben.
-
-- [ ] **Serverstandort** bei Hostinger (im Kundenkonto)
-- [ ] **Vollständiger Firmenname und Anschrift** von: Hostinger, Stripe,
-      Backblaze, UptimeRobot
-- [ ] **Region** deines Backblaze-Speichers (EU oder USA?)
-- [ ] Welche **Auftragsverarbeitungsverträge** hast du abgeschlossen?
-- [ ] Hast du eine **Umsatzsteuer-Identifikationsnummer**? (Wahrscheinlich
-      nein — dann bleibt das Feld einfach leer)
-- [ ] **Hausordnung der Veranstaltungslocation** — als Datei oder Foto
-- [ ] Wer stellt den **Trainer**: du, die Halle oder jemand Drittes?
-- [ ] Hast du eine **Veranstalter-Haftpflichtversicherung**?
-
-> **Warum ich das nicht selbst gemacht habe:** Ich kann mich nicht in
-> deine Konten einloggen, und geraten wird nichts. Ein falscher
-> Firmenname in der Datenschutzerklärung ist schlimmer als eine
-> Lücke.
-
-### 2.2 Entscheidungen, die nur du treffen kannst
-
-Diese sind wichtiger als die Zahlen oben — an ihnen hängen ganze Texte.
-
-- [ ] **Willst du überhaupt eigene AGB?** Ohne sie gilt das Gesetz. Mit
-      ihnen kannst du Storno, Ausschluss und Haftung selbst regeln.
-- [ ] **Wer beaufsichtigt Minderjährige während der Veranstaltung?**
-      Du und dein Team — oder bleibt die Verantwortung bei den Eltern?
-      *(Dokument 05 hat für beide Antworten einen fertigen Text.)*
-- [ ] **Was machst du mit Fotos?** Website? Instagram? Flyer? Oder gar
-      keine erkennbaren Personen?
-- [ ] **Gibt es bei deinen Veranstaltungen Alkohol?**
-- [ ] **Willst du eine Mindestteilnehmerzahl?** (Also: „Ab 8 Personen,
-      sonst sage ich ab.")
-- [ ] **Was passiert bei einer Verlegung?** Heute kann die Software nur
-      absagen und erstatten.
-- [ ] **Sollen Firmen und Schulen künftig online buchen können** — oder
-      bleibt das per E-Mail?
-- [ ] **Wie lange bewahrst du Anmeldedaten auf?** Es gibt heute keine
-      Frist.
-- [ ] **Geschäftsbereich „Büro- und Verwaltungsdienstleistungen":
-      welche Leistungen genau?** Dafür gibt es bisher nur ein leeres
-      Gerüst — absichtlich.
+> ⚠️ **Stand 18.09.2026: Dieser Abschnitt ist veraltet und wird durch
+> Dokument 15 ersetzt.** Die Minderjährigen-/Aufsichtsfrage aus 2.2 ist
+> seit dem 17.09.2026 entschieden (Anlagenmodell, Dokument 11/05). Die
+> Löschfrist-Frage ist durch das inzwischen produktiv gebaute
+> Löschkonzept (K1–K7) beantwortet. **Die aktuelle, vollständige Liste
+> steht in Dokument 15** — dort ist außerdem nach Priorität sortiert
+> und mit Empfehlung versehen, wo ich eine habe. Dieser Abschnitt bleibt
+> nur aus historischen Gründen stehen.
 
 ---
 
@@ -136,21 +129,22 @@ das Gesetz — auch dort, wo deine Regeln dich schützen sollten.
 Platz dafür ist im Code schon vorbereitet. Aber erst, wenn die AGB
 fertig sind — ein Häkchen auf einen Platzhalter wäre Augenwischerei.
 
-### 🔴 4. Die Aufsicht über Minderjährige ist nicht geregelt
+### ✅ 4. Die Aufsicht über Minderjährige — entschieden am 17./18.09.2026
 
-Im Formular steht heute nur, **wann** die Betreuung anfängt und aufhört
-— nicht, **was** sie umfasst. Offen ist: Darf ein Jugendlicher
-zwischendurch gehen? Wie viele Betreuer auf wie viele Kinder? Was gilt
-in den Pausen?
+**War die größte offene Frage, ist jetzt entschieden:** Adam hat sich
+für das **Anlagenmodell** entschieden — VERA übernimmt keine Aufsicht
+über unbegleitete Minderjährige (wie eine Kletter- oder
+Trampolinhalle). Kein Check-out, kein Armband, kein Pfand. Eingearbeitet
+in Dokument 05 (Version 2) und Dokument 03, Ziffer 6.
 
-**Das ist die Frage, bei der im Ernstfall am meisten auf dem Spiel
-steht.** Und sie lässt sich nicht mit einer Formulierung lösen, sondern
-nur mit einer Entscheidung darüber, was ihr tatsächlich tut.
+**Weiterhin offen — jetzt als Frage an einen Fachkundigen, nicht mehr
+an Adam:** Ob dieses Modell bei einem gezielt an Schüler vermarkteten
+Format ohne Mindestalter rechtlich trägt (Dokument 15, Abschnitt F.1).
 
 **Übrigens:** „Eltern haften für ihre Kinder" stimmt nicht und steht
 deshalb in keinem dieser Texte. Eltern haften für ihre *eigene*
-Aufsichtspflichtverletzung — und wenn du die Aufsicht übernommen hast,
-regelmäßig gar nicht.
+Aufsichtspflichtverletzung — und wenn du die Aufsicht ohnehin nicht
+übernimmst, stellt sich die Frage meist gar nicht erst.
 
 ### 🔴 5. Die Foto-Einwilligung ist ein Satz — auch für Kinder
 
@@ -197,7 +191,7 @@ In dieser Reihenfolge — die ersten drei hängen zusammen:
 | **02 Datenschutz** | alle Anbieterdaten eingesetzt, Löschfrist festgelegt |
 | **03 AGB** | Haftung, Mindestteilnehmerzahl, Verlegung entschieden; Widerrufsfrage geklärt |
 | **04 B2B** | Auftragsarten und Vertragstyp geklärt |
-| **05 Minderjährige** | **Aufsichtsfrage entschieden** — vorher gar nicht |
+| **05 Minderjährige** | ✅ Aufsichtsfrage entschieden (Anlagenmodell) — noch die fachliche Prüfung, ob es trägt (Dokument 15, F.1) |
 | **06 Fotos** | Zwecke und Kanäle benannt |
 | **07 Widerruf** | Anwalt hat Frage 2 beantwortet |
 | **08 Checkout** | AGB fertig |
@@ -218,16 +212,18 @@ sollten. Einzelheiten in Dokument 10, Abschnitt 5.
 | **T-1** | Wird ein Termin nachträglich eingetragen und liegt er in weniger als 24 Stunden, können Kunden **nicht mehr stornieren** — obwohl sie nie eine Gelegenheit dazu hatten | klein–mittel |
 | **T-3** | Der Spam-Schutz speichert die **volle IP-Adresse im Klartext** (max. 60 Minuten). Die E-Mail-Adresse wird gehasht — die IP könnte es auch | klein |
 | **T-4** | Die **Bestätigungsmails enthalten keine Anbieterangaben, keine AGB und keine Widerrufsinformation**. Bei der kostenlosen Variante fehlt sogar der Betrag | mittel |
-| **T-6** | Es gibt **keine automatische Löschfrist** für Anmeldedaten — nur eine Funktion, die man von Hand auslösen muss | mittel |
+| ~~**T-6**~~ | ~~Es gibt keine automatische Löschfrist für Anmeldedaten~~ | ✅ **erledigt** — produktives Löschkonzept (K1–K7) mit täglichem automatischem Lauf seit dem 17.09.2026 |
 
 ---
 
 ## 7. Dein nächster Schritt
 
-**Nimm dir Abschnitt 2.2.** Die Entscheidungen dort blockieren fast
-alles andere — besonders die Aufsichtsfrage und die Fotofrage.
-
-Danach sind die Punkte aus 2.1 reine Fleißarbeit: einloggen, abschreiben.
+**Nimm dir Dokument 15.** Es ersetzt Abschnitt 2.2 dieser Datei und ist
+nach Priorität sortiert: zuerst Abschnitt A (reine Fakten, ca. 15
+Minuten), dann Abschnitt B (AGB/Checkout — blockiert den B2C-Verkauf),
+parallel dazu Abschnitt F Punkt 1 an einen Fachkundigen (Anlagenmodell).
+Abschnitt C (Fotos) und D (B2B) erst, wenn diese Funktionen gebraucht
+werden.
 
 **Und wenn du nur eine einzige Frage weitergibst**, dann diese:
 

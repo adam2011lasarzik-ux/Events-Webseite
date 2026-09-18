@@ -184,29 +184,46 @@ sorgeberechtigten Person erforderlich ist, muss auch diese vorliegen.
 6.2 **Vertragspartner ist die anmeldende erziehungsberechtigte Person**,
 nicht die minderjährige teilnehmende Person.
 
-6.3 Die von VERA bereitgestellte Einverständniserklärung muss
-vollständig ausgefüllt, unterschrieben und spätestens beim Check-in
-abgegeben werden. Liegt sie bei Veranstaltungsbeginn nicht vor, kann die
+6.3 Es gibt zwei Wege der Teilnahme: **begleitet**, wenn eine
+erziehungsberechtigte Person während der gesamten Veranstaltung
+persönlich anwesend ist, oder **unbegleitet**. Für den unbegleiteten
+Weg muss die von VERA bereitgestellte Einverständniserklärung
+vollständig ausgefüllt, unterschrieben und beim Ankommen abgegeben
+werden. Liegt sie bei Veranstaltungsbeginn nicht vor, kann die
 Teilnahme abgelehnt werden. Gesetzliche und vertragliche
 Erstattungsansprüche bleiben unberührt.
 
-6.4 Für die Organisation des Hin- und Rückwegs ist die
-erziehungsberechtigte Person verantwortlich. Die Betreuung durch VERA
-beginnt mit dem vereinbarten Check-in und endet mit dem offiziellen
-Veranstaltungsende, soweit nicht ausdrücklich etwas anderes vereinbart
-wurde.
+6.4 **VERA übernimmt keine Aufsicht über unbegleitete minderjährige
+Teilnehmende.** Es gibt kein von VERA festgelegtes Mindestalter für die
+Teilnahme oder für das selbstständige Kommen und Gehen — die
+erziehungsberechtigte Person entscheidet beides mit ihrer Unterschrift
+auf der Einverständniserklärung. VERA erfasst beim Ankommen, wer
+erschienen ist, überwacht aber nicht, wer das Gelände wann verlässt.
+Für die Organisation des Hin- und Rückwegs ist die
+erziehungsberechtigte Person verantwortlich.
 
-6.5 Die erziehungsberechtigte Person muss während der Veranstaltung
-unter der angegebenen Mobilnummer erreichbar sein und die minderjährige
-Person erforderlichenfalls zeitnah abholen.
+6.5 Die erziehungsberechtigte Person muss während der gesamten
+Veranstaltung unter der angegebenen Mobilnummer erreichbar sein. Hat sie
+das selbstständige Verlassen des Geländes nicht erlaubt, weist VERA die
+minderjährige Person nicht des Geländes; eine Beaufsichtigung während
+der Zeit bis zur Abholung übernimmt VERA nicht.
 
-6.6 Einzelheiten zur Aufsicht regelt die Einverständniserklärung
-(Dokument 05).
+6.6 Statt einer Aufsichtsübernahme schuldet VERA jeder teilnehmenden
+Person eine Sicherheitseinweisung vor dem ersten Spielen (siehe Ziffer
+11.2) sowie erkennbare Ansprechpersonen, die bei einer erkannten Gefahr
+eingreifen. Weitere Einzelheiten regelt die Einverständniserklärung
+(Dokument 05) und die Hausordnung (Dokument 09).
 
-> ✅ **Übernommen aus dem geltenden Bestand.** Die Ziffern 6.1 bis 6.5
-> entsprechen inhaltlich Abschnitt 2 der bestehenden AGB-Seite. Sie sind
-> mit der Einverständniserklärung und dem Hinweis im Anmeldebereich
-> wörtlich abgestimmt und dürfen nur gemeinsam geändert werden.
+> ⚠️ **Geändert am 18.09.2026.** Die Ziffern 6.3 bis 6.6 wurden an das
+> **Anlagenmodell** angepasst, für das sich Adam nach einem
+> ausführlichen Entscheidungsprozess entschieden hat (Dokument 11,
+> Entscheidung 3.20, bestätigt am 18.09.2026). Die frühere Fassung
+> („Betreuung durch VERA beginnt mit dem Check-in und endet mit dem
+> offiziellen Ende") hätte eine Aufsichtsübernahme zugesagt, die so
+> nicht mehr gilt. **Diese Einordnung — ob das Anlagenmodell bei einem
+> gezielt an Schüler vermarkteten Format ohne Mindestalter trägt —
+> gehört ausdrücklich in die fachliche Prüfung** (siehe Dokument 05,
+> Teil III).
 
 ---
 
@@ -455,7 +472,10 @@ insbesondere:
 - die Veranstaltungsfläche und die bereitgestellte Ausrüstung in
   verkehrssicherem Zustand zur Verfügung zu stellen,
 - in die Nutzung der Anlage und der Ausrüstung ordnungsgemäß
-  einzuweisen,
+  einzuweisen — bei Veranstaltungen im Anlagenmodell (Ziffer 6.4, 6.6)
+  insbesondere die **Sicherheitseinweisung** vor dem ersten Spielen
+  (Dokument 09, Ziffer 4.8), die dort ausdrücklich an die Stelle einer
+  Aufsichtsübernahme tritt,
 - den gezahlten Betrag nach Ziffer 7 und 8 zurückzuerstatten.
 
 In diesen Fällen ist die Haftung auf den bei Vertragsschluss

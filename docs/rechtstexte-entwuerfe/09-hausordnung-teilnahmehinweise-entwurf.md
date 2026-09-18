@@ -1,6 +1,17 @@
 # 09 — Hausordnung und Teilnahmehinweise (Entwurf)
 
-> **Status:** Entwurf, Version 1 vom 16.09.2026. **Nicht anwaltlich geprüft.**
+> **Status:** Entwurf, **Version 2 vom 18.09.2026**. **Nicht anwaltlich
+> geprüft.**
+>
+> **Was sich gegenüber Version 1 geändert hat:** Ziffer 5 (Alkohol) ist
+> jetzt entschieden statt offen (Dokument 11, Entscheidungen 3.7/3.23/
+> 3.24/3.26). Ziffer 7.3 ist an das **Anlagenmodell** angepasst — VERA
+> übernimmt keine Beaufsichtigung wartender Personen (Entscheidung
+> 3.20). Neu: Ziffer 4.8 zur Sicherheitseinweisung (Entscheidung 3.22).
+> Ziffer 8 (Fundsachen) bleibt **unverändert** — sie war von Anfang an
+> für den Fall geschrieben, dass VERA nichts entgegennimmt, und genau
+> das gilt weiterhin (kein Armband, keine Garderobe, kein Pfand;
+> Entscheidung 3.21).
 >
 > **Was dieses Dokument ist:** verbindliche Verhaltensregeln für
 > VERA-Veranstaltungen. Sie ergänzen die Teilnahmebedingungen
@@ -40,9 +51,14 @@ Ort nicht durchsetzbar.]`
 
 ## 1. Für wen diese Hinweise gelten
 
-Diese Hinweise gelten für alle Teilnehmenden einer VERA-Veranstaltung
-sowie für Begleitpersonen, die sich auf dem Veranstaltungsgelände
-aufhalten.
+1.1 Diese Hinweise gelten für alle Teilnehmenden einer
+VERA-Veranstaltung sowie für Begleitpersonen, die sich auf dem
+Veranstaltungsgelände aufhalten.
+
+1.2 Wir erfassen beim Ankommen, wer erschienen ist. **Wir überwachen
+nicht, wer das Gelände wann verlässt, und übernehmen keine Aufsicht
+über einzelne Teilnehmende** — auch nicht über minderjährige. Näheres
+zu Minderjährigen regelt Dokument 05.
 
 ---
 
@@ -119,6 +135,19 @@ personal unverzüglich zu melden, auch wenn sie geringfügig erscheinen.
 > und beschädigte die saubere Haftungsregel in Dokument 03, Ziffer 11.
 > Zur gesundheitlichen Eigenverantwortung siehe dort Ziffer 10.
 
+4.8 **Sicherheitseinweisung.** Vor dem ersten Spielen erhält jede
+teilnehmende Person eine kurze Sicherheitseinweisung (Schlägerführung
+auf engem Raum, bauliche Gegebenheiten, vorgeschriebenes Schuhwerk,
+Verhalten bei Unwohlsein, Meldung von Verletzungen, Ansprechpersonen).
+**Wer die Einweisung nicht mitgemacht hat, nimmt nicht am Spielbetrieb
+teil.** Die Einweisung wird auf der Veranstaltungscheckliste mit
+Uhrzeit und Kürzel der durchführenden Person vermerkt.
+
+> Im Anlagenmodell (siehe Dokument 05, Teil I) ist diese Einweisung die
+> **zentrale Pflicht**, die an die Stelle einer Aufsichtsübernahme
+> tritt (Dokument 11, Entscheidung 3.22). Sie ist deshalb ausdrücklich
+> auch eine Kernpflicht im Sinne von Dokument 03, Ziffer 11.
+
 ---
 
 ## 5. Alkohol und andere berauschende Mittel
@@ -127,28 +156,32 @@ personal unverzüglich zu melden, auch wenn sie geringfügig erscheinen.
 berauschenden Mitteln ist nicht gestattet. Wer erkennbar unter Einfluss
 steht, wird von der aktiven Teilnahme ausgeschlossen.
 
-5.2 `[VOR VERWENDUNG KLÄREN: Wird bei Veranstaltungen Alkohol
-ausgeschenkt oder mitgebracht?]`
+5.2 Alkohol wird ausschließlich für volljährige Personen und
+ausschließlich durch die Gastronomie der jeweiligen
+Veranstaltungslocation ausgeschenkt. Die Alterskontrolle erfolgt bei
+jedem Getränk durch Ausweiskontrolle an der Theke. VERA selbst schenkt
+derzeit keinen Alkohol aus und verkauft nur Speisen und alkoholfreie
+Getränke.
 
-> **Die Frage ist nicht nebensächlich.** Sie hat drei Folgen:
+5.3 Das Mitbringen und der Verzehr eigener alkoholischer Getränke sind
+nicht gestattet.
+
+> **Herkunft dieser Regel:** Dokument 11, Entscheidungen 3.7, 3.23,
+> 3.24 und 3.26 (17.09.2026, bestätigt am 18.09.2026). Zwei Punkte
+> bleiben ausdrücklich offen und sind **kein** Redaktionsversehen:
 >
-> - **Jugendschutz.** Bei Veranstaltungen mit Minderjährigen gelten die
->   Vorgaben des Jugendschutzgesetzes. Wer ausschenkt, muss das Alter
->   kontrollieren.
-> - **Gaststättenrecht.** Der Ausschank von Alkohol kann eine Erlaubnis
->   erfordern. `[VOR VERWENDUNG KLÄREN]`
-> - **Aufsicht und Haftung.** Alkohol auf einer Sportveranstaltung
->   erhöht das Verletzungsrisiko spürbar und verschärft die
->   Verkehrssicherungspflichten.
->
-> **Vorschlag für den einfachsten Fall** — falls kein Alkohol vorgesehen
-> ist:
->
-> > Bei unseren Veranstaltungen wird kein Alkohol ausgeschenkt. Das
-> > Mitbringen alkoholischer Getränke ist nicht gestattet.
->
-> Das ist die Fassung mit den wenigsten Folgefragen. Bei Veranstaltungen
-> für Schüler und Eltern spricht ohnehin viel dafür.
+> - **Gaststättenrechtliche Erlaubnis.** Solange ausschließlich die
+>   Location selbst ausschenkt, braucht VERA dafür keine eigene
+>   Erlaubnis. Sobald VERA **selbst** Alkohol verkaufen möchte
+>   („Stufe 2"), wird diese Ziffer neu gefasst — dann zusätzlich mit
+>   eigener Alterskontrolle durch VERA. `[VOR VERWENDUNG KLÄREN, falls
+>   Stufe 2 näher rückt: gaststättenrechtliche Erlaubnis oder befristete
+>   Gestattung bei der zuständigen Behörde.]`
+> - **Belehrung nach § 43 Infektionsschutzgesetz** für die Abgabe von
+>   Speisen. `[VOR VERWENDUNG KLÄREN: Welche Speisen genau, verpackt
+>   oder offen abgegeben? Die Antwort entscheidet, ob eine Belehrung
+>   durch das Gesundheitsamt nötig ist — siehe Dokument 11, Frage
+>   3.28.]`
 
 ---
 
@@ -187,23 +220,24 @@ sie
 vorherigen Hinweis**.
 
 7.3 Bei minderjährigen Teilnehmenden wird die erziehungsberechtigte
-Person unverzüglich unter der angegebenen Mobilnummer informiert und
-gebeten, die Person abzuholen. Bis zum Eintreffen bleibt die Person in
-einem sicheren Bereich der Veranstaltungsstätte.
+Person unverzüglich unter der angegebenen Mobilnummer informiert. Hat
+sie das selbstständige Verlassen erlaubt, kann die Person das Gelände
+nach dem Ausschluss verlassen. Hat sie es nicht erlaubt, weisen wir die
+Person nicht des Geländes; eine Beaufsichtigung bis zur Abholung
+übernehmen wir nicht.
 
 7.4 Ein Anspruch auf Erstattung besteht bei einem berechtigten
 Ausschluss nicht. Dokument 03, Ziffer 7.5 Satz 3 gilt entsprechend —
 der Nachweis eines geringeren Schadens bleibt vorbehalten.
 
-> **Zu 7.3 — das ist mehr als Höflichkeit.** Eine minderjährige Person
-> bei einem Ausschluss einfach vor die Tür zu setzen, wäre selbst eine
-> Pflichtverletzung. Die Regel muss die Zeit bis zur Abholung abdecken —
-> und sie ist der Grund, warum die durchgehende Erreichbarkeit der
-> erziehungsberechtigten Person in Dokument 05 Pflichtangabe ist.
->
-> ⚠️ `[VOR VERWENDUNG KLÄREN: Gibt es in der Halle einen geeigneten
-> Bereich dafür, und ist jemand verfügbar, der dort bleibt? Eine Zusage,
-> die vor Ort nicht eingehalten werden kann, ist schlimmer als keine.]`
+> **Zu 7.3 — geändert am 18.09.2026.** Die frühere Fassung versprach
+> einen „sicheren Bereich", in dem die Person „bis zum Eintreffen"
+> bleibt — das wäre eine zugesagte Beaufsichtigung und damit eine
+> Aufsichtsübernahme gewesen, die dem Anlagenmodell (Dokument 05, Teil
+> I; Dokument 11, Entscheidungen 3.8/3.9/3.20) widerspricht. Die neue
+> Fassung folgt derselben „Unterlassen statt Leistung"-Formulierung wie
+> beim vorzeitigen Gehen: **Wir weisen niemanden hinaus, aber wir
+> beaufsichtigen auch niemanden.**
 
 ---
 
@@ -264,11 +298,16 @@ auf veraevents.de abrufbar.
 |---|---|---|
 | H-1 | Hausordnung der Veranstaltungslocation im Wortlaut | Location |
 | H-2 | Vorgaben zum Schuhwerk | Hausordnung, dann auf die Eventseite |
-| H-3 | Alkohol: Ausschank, Mitbringen, Erlaubnispflicht | Entscheidung + ggf. Behörde |
-| H-4 | Geeigneter Bereich für ausgeschlossene Minderjährige | Halle |
-| H-5 | Schließfächer vorhanden? | Halle |
-| H-6 | Wer stellt das Betreuungspersonal — VERA, Halle oder Dritte? | Vertrag mit der Halle |
+| H-3 | Gaststättenrechtliche Erlaubnis, sobald VERA selbst Alkohol verkauft (Stufe 2) | Behörde, erst bei Bedarf |
+| H-3b | Belehrung nach § 43 IfSG für die Speisenabgabe (Stufe 1, jetzt) | Gesundheitsamt, abhängig von Speisenart |
+| H-5 | Schließfächer vorhanden? (nur als Hinweis, keine Haftungsfrage — VERA nimmt nichts entgegen) | Halle |
+| H-6 | Wer stellt das Betreuungs-/Trainerpersonal — VERA, Halle oder Dritte? | Vertrag mit der Halle |
 | H-7 | Aushang vor Ort: wer druckt und hängt ihn auf? | Organisation |
+
+> **H-4 (bisher: „geeigneter Bereich für ausgeschlossene
+> Minderjährige") ist am 18.09.2026 entfallen** — sie hätte eine
+> Beaufsichtigung zugesagt, die dem Anlagenmodell widerspricht
+> (siehe Ziffer 7.3).
 
 > **H-6 taucht hier zum zweiten Mal auf** — sie steht bereits in
 > Dokument 03, Ziffer 12. Das ist kein Versehen: Die Frage, wer den

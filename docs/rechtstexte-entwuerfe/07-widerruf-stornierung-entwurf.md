@@ -2,6 +2,15 @@
 
 > **Status:** Entwurf, Version 1 vom 16.09.2026. **Nicht anwaltlich geprüft.**
 >
+> **Stand 18.09.2026:** § 312g Abs. 2 Nr. 9 BGB und die BGH-Anwendung
+> auf Eintrittskarten wurden erneut recherchiert und bestätigen den
+> unten dargestellten Befund (Dokument 14). Inhaltlich sonst
+> unverändert — die zugrunde liegenden Fragen 2.5–2.7 aus Dokument 11
+> sind weiterhin offen (siehe Dokument 15, Abschnitt B). Die freiwillige
+> **24-Stunden-Storno-Regel** (kostenlose Stornierung bis 24 Stunden vor
+> Veranstaltungsbeginn, volle Erstattung) ist davon unabhängig und
+> bleibt unverändert Grundlage von Teil II dieses Dokuments.
+>
 > **Das ist das rechtlich heikelste der zehn Dokumente.** Es enthält
 > zwei Funde, die vor jeder Veröffentlichung entschieden sein müssen.
 

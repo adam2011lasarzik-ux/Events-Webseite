@@ -1,108 +1,157 @@
 # 05 — Teilnahmeerklärung für Minderjährige (Entwurf)
 
-> **Status:** Entwurf, Version 1 vom 16.09.2026. **Nicht anwaltlich geprüft.**
+> **Status:** Entwurf, **Version 2 vom 18.09.2026**. **Nicht anwaltlich
+> geprüft.**
+>
+> **Was sich gegenüber Version 1 (16.09.2026) geändert hat:** Version 1
+> stellte die Aufsichtsfrage noch als offene Wahl zwischen „Fassung A"
+> (VERA übernimmt Aufsicht) und „Fassung B" (Aufsicht bleibt bei den
+> Eltern) dar. Adam hat sich in einem ausführlichen Entscheidungsprozess
+> (Dokument 11, Entscheidungen 3.1–3.27, insbesondere **3.20**) für ein
+> **drittes, konkreteres Modell** entschieden — das **Anlagenmodell**,
+> wie es Kletter- und Trampolinhallen verwenden: VERA übernimmt **keine
+> Aufsicht** über unbegleitete Minderjährige, kein Check-out, kein
+> Armband, keine Garderobenpflicht. Diese Fassung ersetzt Fassung A und
+> B vollständig. **Am 18.09.2026 wurde ausdrücklich bestätigt, dass es
+> bei diesem Modell bleibt** — ein anderslautender, älterer Auftrag
+> („Einlassband mit 5 € Pfand") wurde geprüft und verworfen (siehe
+> Dokument 11, Entscheidungen 3.14–3.21).
 >
 > **Verhältnis zum Bestand:** Es existiert bereits ein zweiseitiges
 > Formular (`public/dokumente/einverstaendniserklaerung-minderjaehrige.pdf`),
 > das mit den AGB und der Datenschutzerklärung wörtlich abgestimmt ist.
-> Dieser Entwurf **ersetzt es nicht**, sondern schlägt eine kürzere,
-> verständlichere Fassung vor und benennt die Punkte, die im Bestand
-> ungeklärt sind.
+> Dieser Entwurf **ersetzt es nicht automatisch**, sondern schlägt die
+> Fassung vor, die aus den Entscheidungen in Dokument 11 folgt.
 >
-> **Vor jeder Änderung beachten:** Formular, AGB Abschnitt 2 und
-> Datenschutz Abschnitt 2 sind aufeinander abgestimmt und dürfen nur
-> **gemeinsam** geändert werden. Wird nur eines geändert, ist eines der
-> drei danach falsch.
+> **Vor jeder Änderung beachten:** Formular, AGB Abschnitt 2/6, Dokument
+> 09 (Hausordnung) und Datenschutz Abschnitt 2 sind aufeinander
+> abgestimmt und dürfen nur **gemeinsam** geändert werden.
 
 ---
 
-## Teil I — Was an der bestehenden Fassung zu klären ist
+## Teil I — Das Grundmodell, das jetzt gilt
 
-### K-1 ⚠️ Die Aufsicht ist nicht wirklich geregelt
+### Zwei Wege: begleitet und unbegleitet (Entscheidung 3.19)
 
-Der Bestand sagt:
+| | **begleitet** | **unbegleitet** |
+|---|---|---|
+| Voraussetzung | eine erziehungsberechtigte Person ist während der **gesamten** Veranstaltung persönlich anwesend | keine erziehungsberechtigte Person ist durchgehend vor Ort |
+| Formular | **keins** — nur eine Zeile auf der Anwesenheitsliste beim Ankommen, mit einem Bestätigungssatz (siehe unten) | **dieses Dokument**, vorab ausgefüllt und beim Ankommen abgegeben |
+| Wer führt die Aufsicht | die anwesende erziehungsberechtigte Person | **niemand** — siehe unten |
+| Verlassen des Geländes | zusammen mit der Begleitperson, jederzeit, ohne Abmeldung | nach Maßgabe der Erklärung zum selbstständigen Verlassen (Teil II, Feld 4) |
 
-> „Die Betreuung durch VERA Events beginnt mit dem vereinbarten Check-in
-> und endet mit dem offiziellen Veranstaltungsende."
+Für **begleitete** Minderjährige gilt beim Ankommen dieser Satz, den die
+Begleitperson mit ihrer Unterschrift auf der Anwesenheitsliste
+bestätigt:
 
-Das ist ein **Zeitraum**, kein **Inhalt**. Offen bleibt:
+> Ich bin erziehungsberechtigt für die genannte Person, bleibe während
+> der gesamten Veranstaltung anwesend und nehme sie mit, wenn ich gehe.
+> Die Aufsicht liegt bei mir.
 
-- Ist „Betreuung" eine Übernahme der Aufsichtspflicht oder nur fachliche
-  Anleitung? Das sind rechtlich zwei verschiedene Dinge.
-- Wie viele Betreuungspersonen auf wie viele Minderjährige?
-- Was gilt, wenn eine minderjährige Person das Gelände verlässt?
-- Darf sie die Veranstaltung vorzeitig allein verlassen?
-- Was gilt in den Pausen und beim Essen?
+**Dieses Dokument (05) betrifft nur den unbegleiteten Weg.**
 
-**Das ist die wichtigste offene Frage dieses gesamten Dokumentensatzes.**
-Sie lässt sich nicht durch eine Formulierung lösen, sondern nur durch
-eine Entscheidung darüber, was VERA tatsächlich leistet. Der Text kann
-danach beschreiben, was entschieden wurde.
+### Das Anlagenmodell — was VERA übernimmt und was nicht (Entscheidung 3.20)
 
-`[VOR VERWENDUNG KLÄREN: Übernimmt VERA die Aufsicht über minderjährige
-Teilnehmende während der Veranstaltung — ja oder nein? Mit welcher
-Personalstärke? Der Entwurf in Teil II bietet für beide Antworten eine
-Fassung an.]`
+VERA veranstaltet ein **offenes Format**: Teilnehmende entscheiden
+selbst, ob sie spielen, sich unterhalten, essen oder trinken. Das ist
+näher an einer Kletter- oder Trampolinhalle als an einer betreuten
+Ferienfreizeit.
 
-### K-2 ⚠️ „Eltern haften für ihre Kinder" — steht nicht drin, und das ist richtig
+> **VERA übernimmt keine Aufsicht über unbegleitete minderjährige
+> Teilnehmende.** Wer ohne erziehungsberechtigte Begleitung kommt, kann
+> das Gelände jederzeit betreten und verlassen, ohne sich abzumelden.
+> Niemand überwacht, wo sich eine einzelne Person gerade aufhält.
 
-Der Bestand enthält **keine** solche Klausel. Das ist gut so und soll so
-bleiben.
+**Was VERA statt Aufsicht schuldet:**
 
-**Warum die verbreitete Formel falsch ist:** Eltern haften **nicht**
-automatisch für Schäden ihrer Kinder. Sie haften nach § 832 Abs. 1 BGB
-für die Verletzung **ihrer eigenen** Aufsichtspflicht — und auch das nur,
-wenn sie sich nicht entlasten können. Führt während der Veranstaltung ein
-anderer die Aufsicht, ist eine Aufsichtspflichtverletzung der Eltern
-regelmäßig schon tatsächlich ausgeschlossen.
+1. eine **Sicherheitseinweisung** vor dem ersten Spielen (Entscheidung
+   3.22, siehe Teil II und Dokument 09),
+2. die allgemeine **Verkehrssicherungspflicht** für das Gelände,
+3. **erkennbare Ansprechpersonen**, die bei einer erkannten Gefahr
+   eingreifen — als Ansprechpartner, nicht als Aufsichtsperson,
+4. **Erste Hilfe und Benachrichtigung** der Notfallkontakte bei einer
+   Verletzung oder einem gesundheitlichen Problem.
 
-Das Kind selbst haftet nach §§ 828, 829 BGB nur nach Maßgabe seiner
-Einsichtsfähigkeit.
+> ⚠️ **Das ist eine bewusste Entscheidung mit einem offen benannten
+> Risiko** (Dokument 11, Entscheidung 3.20): VERA vermarktet gezielt an
+> Schüler, die Eltern melden das Kind an, VERA stellt Trainer und
+> Ausrüstung — das spricht eigentlich eher für eine Aufsichtsübernahme
+> als bei einer Halle mit Laufkundschaft. Eine Aufsichtspflicht entsteht
+> aus der **tatsächlichen** Übernahme, nicht aus dem Text. Wenn vor Ort
+> faktisch beaufsichtigt wird, hilft die Formulierung nicht.
+> **Diese Einordnung gehört ausdrücklich in die fachliche Prüfung.**
 
-**Eine Klausel, die die Eltern pauschal haften ließe, wäre in AGB
-unwirksam** und würde zugleich ein falsches Bild erzeugen. Der Entwurf
-enthält deshalb bewusst nur eine Aussage über **Vorsatz und grobe
-Fahrlässigkeit des Kindes** — und auch die nur als Hinweis auf die
-gesetzliche Lage, nicht als eigene Anspruchsgrundlage.
+### Was bei vorzeitigem Gehen gilt (Entscheidungen 3.8/3.9)
 
-### K-3 ⚠️ Fotos fehlen im Papierformular — und stehen dafür ungeregelt online
+> „Wir bleiben konsequent beim Jumphaus-/Anlagenmodell. […] Bitte keine
+> Regelungen einbauen, die unnötig wieder eine dauerhafte Aufsicht oder
+> Betreuung durch VERA voraussetzen." — Adam, wörtlich
 
-Das Formular stellt ausdrücklich klar:
+| Fall | Was geschieht |
+|---|---|
+| Die erziehungsberechtigte Person hat das selbstständige Verlassen **erlaubt** | die Person kann jederzeit gehen, keine Abmeldung |
+| Die erziehungsberechtigte Person hat es **nicht erlaubt** | VERA weist die Person nicht des Geländes und lässt sie nicht allein gehen. Eine **Beaufsichtigung** während der Wartezeit bis zur Abholung übernimmt VERA **nicht** |
+| Unwohlsein oder Verletzung | Erste Hilfe je nach Situation, bei Bedarf Rettungsdienst; die erziehungsberechtigte Person bzw. der Notfallkontakt wird informiert |
+| Ausschluss wegen Fehlverhaltens | die erziehungsberechtigte Person wird informiert |
 
-> „Diese Erklärung enthält keine Einwilligung in Foto- oder
-> Videoaufnahmen."
+**Was damit ausdrücklich nicht eingebaut wird:** kein benannter Warte-
+oder Aufenthaltsbereich, keine Zusage, jemanden „im Blick zu behalten",
+keine Eskalationsstufen, keine Suche auf dem Gelände.
 
-Das ist als Aussage korrekt. Die Folge ist es nicht: Im Online-Formular
-kann die erziehungsberechtigte Person ein Häkchen setzen —
+### Der Ankunftsvorgang (Entscheidung 3.27)
 
-> „Bei der Veranstaltung dürfen Fotos gemacht und für VERA verwendet
-> werden."
+Beim Ankommen wird auf einer ausgedruckten Teilnehmerliste vermerkt, wer
+erschienen ist — bei unbegleiteten Minderjährigen zusätzlich die
+Abgabe dieser Erklärung, bei begleiteten die Bestätigungszeile oben.
+**Beim Gehen geschieht nichts** — kein Check-out, keine Abmeldung.
 
-— und dieses Häkchen gilt **für das Kind**. Ein Satz, ohne Zweck,
-Kanal, Dauer oder Widerrufshinweis. Siehe Dokument 06.
+> Der folgende Satz gehört in Teil II und in Dokument 03, weil eine
+> Anwesenheitsliste sonst wie eine Aufsichtszusage wirken kann, obwohl
+> sie das Gegenteil ist:
+>
+> Wir erfassen beim Ankommen, wer erschienen ist. Wir überwachen
+> **nicht**, wer das Gelände wann verlässt, und übernehmen keine
+> Aufsicht über einzelne Teilnehmende.
 
-### K-4 Geburtsdatum: nur auf Papier
+### Kein Mindestalter (Entscheidung 3.10)
 
-Das Online-Formular erhebt **kein** Geburtsdatum (`lib/anmeldung.ts`
-kennt nur Vorname, Nachname, E-Mail, Telefon). Das Papierformular
-erhebt es. Das ist stimmig und datensparsam — es muss nur in der
-Datenschutzerklärung richtig abgegrenzt bleiben, was sie bereits tut.
+> „Eltern bestimmen mit der Unterschrift, und wenn nicht, bringen sie
+> die und bleiben mit denen auf dem Event." — Adam, wörtlich
 
-### K-5 Gesundheitsangaben sind freiwillig — bitte so lassen
+Es gibt **keine von VERA gesetzte Altersuntergrenze** — weder für die
+Teilnahme noch für das selbstständige Kommen und Gehen. Die
+erziehungsberechtigte Person entscheidet beides mit ihrer Unterschrift
+in Teil II, Feld 4.
 
-Der Bestand behandelt Angaben zu Allergien, Erkrankungen und
-Notfallmedikamenten als freiwillig, mit ausdrücklicher Einwilligung nach
-Art. 9 Abs. 2 Buchst. a DSGVO und Löschung spätestens 30 Tage nach
-Veranstaltungsende. Das ist sauber gelöst und wird übernommen.
+### Kein Geldpfand, kein Armband, keine Garderobe (Entscheidung 3.21)
+
+Der Einlass erfolgt **ohne** Armband, ohne Pfand und ohne dass VERA
+Jacken oder Taschen entgegennimmt. Für persönliche Sachen gelten die
+Einrichtungen der Veranstaltungslocation (Dokument 09, Ziffer 8). Das
+gilt unverändert, unabhängig davon, was frühere Fassungen dieses
+Entwurfs oder einzelne Aufträge dazu vorgeschlagen hatten.
+
+### Was unverändert aus dem Bestand übernommen wird
+
+- **„Eltern haften für ihre Kinder" steht bewusst nicht drin** — Eltern
+  haften nicht automatisch für Schäden ihrer Kinder, sondern nach
+  § 832 Abs. 1 BGB nur für eine eigene Aufsichtspflichtverletzung. Eine
+  pauschale Haftungsklausel wäre in AGB unwirksam und sachlich falsch.
+- **Fotos sind hier nicht geregelt** — dafür gibt es die gesonderte,
+  freiwillige Einwilligung in Dokument 06.
+- **Geburtsdatum nur auf Papier** — das Online-Anmeldeformular erhebt
+  kein Geburtsdatum (`lib/anmeldung.ts`); das ist datensparsam und
+  bleibt so.
+- **Gesundheitsangaben sind freiwillig**, mit Einwilligung nach Art. 9
+  Abs. 2 Buchst. a DSGVO und Löschung spätestens 30 Tage nach
+  Veranstaltungsende.
 
 ---
 
-## Teil II — Entwurf des Formulars
+## Teil II — Entwurf des Formulars (nur für den unbegleiteten Weg)
 
-> **Gestaltungsprinzip:** So kurz wie möglich. Wer ein Formular für
-> sein Kind unterschreibt, liest es am Empfang im Stehen. Jeder Satz,
-> der nicht gebraucht wird, senkt die Wahrscheinlichkeit, dass die
-> wichtigen gelesen werden.
+> **Gestaltungsprinzip unverändert:** so kurz wie möglich. Wer dieses
+> Formular für sein Kind ausfüllt, liest es am Empfang im Stehen.
 
 ---
 
@@ -110,8 +159,10 @@ Veranstaltungsende. Das ist sauber gelöst und wird übernommen.
 
 # Teilnahme-Einverständnis für Minderjährige
 
-**Bitte vollständig ausfüllen, unterschreiben und beim Check-in abgeben.**
-Ohne diese Erklärung kann die Teilnahme abgelehnt werden.
+**Nur für Minderjährige, die ohne durchgehend anwesende
+erziehungsberechtigte Person teilnehmen.** Bitte vollständig ausfüllen,
+unterschreiben und beim Ankommen abgeben. Ohne diese Erklärung kann die
+Teilnahme abgelehnt werden.
 
 ---
 
@@ -155,11 +206,19 @@ sorgeberechtigten Person erforderlich, liegt sie vor.
 Veranstaltung teilnimmt.
 
 ☐ Ich bin während der gesamten Veranstaltung unter der angegebenen
-Mobilnummer erreichbar und hole die Person bei Bedarf zeitnah ab.
+Mobilnummer erreichbar.
 
-☐ Ich habe die Hinweise auf Seite 2 gelesen — insbesondere dazu, wer
-während der Veranstaltung die Aufsicht führt und wie der Hin- und
-Rückweg geregelt ist.
+☐ Ich erlaube der oben genannten Person, das Veranstaltungsgelände
+**selbstständig und ohne Abmeldung** zu betreten und zu verlassen —
+auch vor dem offiziellen Ende.
+
+  ☐ *abweichend:* Die Person darf **nicht** selbstständig gehen. Hat sie
+  das nicht erlaubte Verlassen vor, wird sie nicht des Geländes
+  gewiesen; eine Beaufsichtigung bis zur Abholung übernimmt VERA nicht
+  (siehe Seite 2).
+
+☐ Ich habe die Hinweise auf Seite 2 gelesen — insbesondere dazu, dass
+VERA **keine Aufsicht** über die teilnehmende Person übernimmt.
 
 ---
 
@@ -184,21 +243,7 @@ Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen.
 
 ---
 
-**6. Rückweg**
-
-`[VOR VERWENDUNG KLÄREN: Nur aufnehmen, wenn VERA überhaupt eine
-Entscheidung darüber trifft. Andernfalls streichen und in den Hinweisen
-auf Seite 2 klarstellen, dass die erziehungsberechtigte Person den
-Rückweg organisiert.]`
-
-☐ Die Person darf nach dem offiziellen Ende allein nach Hause gehen
-oder fahren.
-
-☐ Die Person wird abgeholt von: ____________________________
-
----
-
-**7. Unterschrift**
+**6. Unterschrift**
 
 Mit meiner Unterschrift bestätige ich die Richtigkeit meiner Angaben,
 mein Einverständnis mit den vorstehenden Punkten und den Erhalt der
@@ -216,73 +261,36 @@ Ort, Datum: _________________  Unterschrift: _________________
 
 ## Hinweise und Datenschutzinformation
 
-### Wer während der Veranstaltung die Aufsicht führt
+### VERA übernimmt keine Aufsicht
 
-`[VOR VERWENDUNG KLÄREN: Eine der beiden folgenden Fassungen auswählen.
-Ohne diese Entscheidung darf das Formular nicht verwendet werden.]`
-
----
-
-**Fassung A — VERA übernimmt die Aufsicht**
-
-> Während der Veranstaltung — vom Check-in bis zum offiziellen Ende —
-> führt VERA die Aufsicht über die teilnehmenden Minderjährigen. Dafür
-> sind `[Anzahl]` Betreuungspersonen für bis zu `[Anzahl]` Minderjährige
-> eingesetzt.
+> VERA veranstaltet als offenes Format: Teilnehmende entscheiden
+> selbst, ob sie spielen, sich unterhalten, essen oder trinken. **VERA
+> übernimmt keine Aufsicht** über die teilnehmende Person — vergleichbar
+> mit einer Kletter- oder Trampolinhalle.
 >
-> Die Aufsicht umfasst die Veranstaltungsfläche und die zugehörigen
-> Räume. Sie umfasst **nicht** den Hin- und Rückweg.
+> Wir erfassen beim Ankommen, wer erschienen ist. Wir überwachen
+> **nicht**, wer das Gelände wann verlässt. Ob die Person das Gelände
+> selbstständig verlassen darf, entscheiden Sie mit Feld 4 auf Seite 1.
 >
-> Minderjährige dürfen das Veranstaltungsgelände während der
-> Veranstaltung nicht ohne Rücksprache verlassen. Verlässt eine Person
-> die Veranstaltung vorzeitig, informieren wir Sie unverzüglich.
+> Was VERA stattdessen leistet: eine Sicherheitseinweisung vor dem
+> ersten Spielen, erkennbare Ansprechpersonen, die bei einer erkannten
+> Gefahr eingreifen, und Erste Hilfe im Notfall.
 
----
+### Wenn das selbstständige Verlassen nicht erlaubt ist
 
-**Fassung B — die Aufsicht bleibt bei Ihnen**
-
-> VERA erbringt während der Veranstaltung die fachliche Anleitung und
-> Betreuung: Einweisung, Erklärung des Spiels, Hilfestellung und
-> Beaufsichtigung des sportlichen Ablaufs.
->
-> **Eine darüber hinausgehende Aufsichtspflicht übernimmt VERA nicht.**
-> Sie bleibt bei Ihnen als erziehungsberechtigter Person. Deshalb bitten
-> wir um Ihre durchgehende Erreichbarkeit.
->
-> Minderjährige dürfen das Veranstaltungsgelände jederzeit verlassen;
-> VERA hält sie nicht zurück und kann ihr Fernbleiben nicht
-> überwachen.
-
----
-
-> ⚠️ **Diese Entscheidung ist keine Formulierungsfrage.** Was VERA
-> tatsächlich tut, entscheidet über die Aufsichtspflicht — nicht, was im
-> Formular steht. Wer eine Gruppe Minderjähriger über Stunden
-> beaufsichtigt, hat die Aufsicht faktisch übernommen, auch wenn Fassung
-> B unterschrieben wurde. **Umgekehrt** ist Fassung A wertlos, wenn
-> tatsächlich niemand hinschaut.
->
-> Die Fassung muss also zur Wirklichkeit passen. Ist die Wirklichkeit
-> „ein Trainer für zwanzig Jugendliche auf einem Padelcourt", spricht
-> viel für eine Mischform, die den sportlichen Ablauf abdeckt und den
-> Rest ausdrücklich nicht. Auch diese Mischform gehört fachlich geprüft.
-
-### Hin- und Rückweg
-
-> Für den Hin- und Rückweg sind Sie als erziehungsberechtigte Person
-> verantwortlich. Die Betreuung durch VERA beginnt mit dem Check-in am
-> Veranstaltungsort und endet mit dem offiziellen Ende.
+> Haben Sie das selbstständige Verlassen nicht gestattet, weisen wir die
+> teilnehmende Person nicht des Geländes. Eine Beaufsichtigung während
+> der Zeit bis zur Abholung übernehmen wir **nicht**.
 
 ### Verhalten während der Veranstaltung
 
 > Die teilnehmende Person beachtet die Sicherheits-, Verhaltens- und
-> Hausregeln sowie die Anweisungen des Veranstaltungs-, Betreuungs- und
-> Hallenpersonals.
+> Hausregeln (Dokument 09) sowie die Anweisungen des Veranstaltungs-,
+> Trainer- und Hallenpersonals.
 >
 > Bei erheblichen oder wiederholten Verstößen — insbesondere bei
 > Gefährdung anderer — kann die Person von der weiteren Teilnahme
-> ausgeschlossen werden. Wir informieren Sie in diesem Fall sofort und
-> bitten Sie, die Person abzuholen.
+> ausgeschlossen werden. Wir informieren Sie in diesem Fall.
 
 ### Wenn etwas passiert
 
@@ -303,19 +311,6 @@ Ohne diese Entscheidung darf das Formular nicht verwendet werden.]`
 > vorsätzlich oder grob fahrlässig verursachte Schäden nicht
 > ausgeschlossen oder beschränkt.
 
-> **Zum ersten Absatz:** Er ist bewusst so knapp. Er sagt, was gilt
-> (das Gesetz) und was **nicht** gilt (eine zusätzliche Haftungsübernahme
-> durch die Unterschrift). Das ist ehrlich und vermeidet die verbreitete
-> „Eltern haften"-Formel, die weder zutrifft noch in AGB wirksam wäre.
->
-> `[VOR VERWENDUNG KLÄREN: Soll für den Fall vorsätzlicher Beschädigung
-> ein ausdrücklicher Hinweis aufgenommen werden? Er änderte an der
-> Rechtslage nichts, könnte aber vorbeugend wirken. Formulierungs­
-> vorschlag: „Beschädigt die teilnehmende Person Einrichtungen
-> vorsätzlich, kann der Betreiber der Anlage Ersatz verlangen." —
-> Vorsicht: Das ist eine Aussage über einen Anspruch **des Betreibers**,
-> nicht von VERA. Sie gehört fachlich geprüft.]`
-
 ### Datenschutz
 
 > **Verantwortlich:** Adam Maurice Lasarzik, Mühlenstr. 8a, 14167
@@ -323,13 +318,15 @@ Ohne diese Entscheidung darf das Formular nicht verwendet werden.]`
 >
 > **Welche Daten:** Name und Geburtsdatum der minderjährigen Person;
 > Name und Mobilnummer der erziehungsberechtigten Person, auf Wunsch
-> deren E-Mail-Adresse; Angaben zur Veranstaltung; freiwillige Angaben
-> zu Allergien, Erkrankungen oder Notfallmedikamenten.
+> deren E-Mail-Adresse; Angaben zur Veranstaltung; ob das selbstständige
+> Verlassen erlaubt ist; freiwillige Angaben zu Allergien, Erkrankungen
+> oder Notfallmedikamenten; Ankunftszeit auf der Anwesenheitsliste.
 >
-> **Wozu:** Entgegennahme des Formulars am Empfang, Organisation und
+> **Wozu:** Entgegennahme des Formulars beim Ankommen, Organisation und
 > Durchführung der Veranstaltung, Prüfung der Teilnahmeberechtigung,
 > Erreichbarkeit während der Veranstaltung, Sicherheit, Notfallhilfe und
-> Dokumentation der erteilten Erklärung.
+> Dokumentation der erteilten Erklärung. **Nicht** zur Aufsichtsführung
+> — VERA übernimmt keine Aufsicht.
 >
 > **Rechtsgrundlagen:** Art. 6 Abs. 1 Buchst. b DSGVO sowie, für
 > Erreichbarkeit, Sicherheit und Dokumentation, Art. 6 Abs. 1 Buchst. f
@@ -351,11 +348,11 @@ Ohne diese Entscheidung darf das Formular nicht verwendet werden.]`
 > sonstige Weitergabe erfolgt nur bei gesetzlicher Verpflichtung.
 >
 > **Wie lange:** Freiwillige Gesundheitsangaben werden spätestens 30
-> Tage nach Veranstaltungsende gelöscht oder vernichtet. Die übrigen
-> Angaben werden gelöscht, sobald sie für die genannten Zwecke nicht
-> mehr erforderlich sind — es sei denn, eine längere Speicherung ist zur
-> Geltendmachung oder Verteidigung von Rechtsansprüchen erforderlich
-> oder gesetzlich vorgeschrieben.
+> Tage nach Veranstaltungsende gelöscht oder vernichtet (Löschklasse K1
+> im Löschkonzept). Das vollständige Formular wird nach 3 Jahren zum
+> Jahresende auf einen reduzierten Nachweis verkürzt und dieser nach
+> insgesamt 10 Jahren gelöscht (Löschklassen K2/K3) — Einzelheiten in
+> der Datenschutzerklärung, Abschnitt „Wie lange wir Daten aufbewahren".
 >
 > **Pflicht oder freiwillig:** Die Angaben in den Abschnitten 1 bis 4
 > werden für die Teilnahme benötigt. Die E-Mail-Adresse und die
@@ -368,24 +365,22 @@ Ohne diese Entscheidung darf das Formular nicht verwendet werden.]`
 > Datenschutz-Aufsichtsbehörde. Einzelheiten stehen in der
 > Datenschutzerklärung auf veraevents.de.
 
-> ✅ **Dieser Datenschutzblock ist inhaltlich aus dem geltenden Bestand
-> übernommen** (Datenschutz Abschnitt 2, acht Absätze) und nur sprachlich
-> gestrafft. Er wurde **nicht neu erfunden** — die Rechtsgrundlagen und
-> die 30-Tage-Frist stammen aus dem bestehenden, abgestimmten Text.
-
 ---
 
-## Teil III — Änderungen gegenüber dem Bestand, zum Abhaken
+## Teil III — Was noch offen ist
 
-| # | Änderung | Grund | Betrifft außerdem |
-|---|---|---|---|
-| Ä-1 | Aufsicht wird ausdrücklich geregelt (Fassung A oder B) | bisher nur ein Zeitraum, kein Inhalt | AGB Ziffer 6.4, Dokument 04 Ziffer 6 |
-| Ä-2 | Rückweg-Feld (optional) | bisher nur allgemeiner Satz | — |
-| Ä-3 | Ausdrücklich: keine zusätzliche Haftungsübernahme durch die Unterschrift | Klarstellung, verhindert Missverständnis | — |
-| Ä-4 | Hinweis auf gesonderte Foto-Einwilligung | bisher nur Negativaussage | Dokument 06, Datenschutz Abschnitt 2 |
-| Ä-5 | Sprachliche Straffung | Lesbarkeit am Empfang | PDF neu setzen |
+| # | Punkt | Status |
+|---|---|---|
+| Betreuungsschlüssel für Ansprechpersonen | ⬜ offen — Dokument 11, „Restliche Punkte aus Gruppe 3" |
+| Vorsätzliche Beschädigung: eigener Hinweis? | ⬜ offen (3.4) |
+| Fachliche Prüfung: trägt das Anlagenmodell bei diesem Format? | ⚖️ **die wichtigste offene Frage in diesem Dokument** (siehe Entscheidung 3.20) |
 
-**Wird eine dieser Änderungen umgesetzt, müssen AGB Abschnitt 2 und
-Datenschutz Abschnitt 2 im selben Zug geprüft werden.** Die drei Texte
-sind aufeinander abgestimmt; Prüfliste `N` im Projekt vergleicht sie
-maschinell.
+**Erledigt und in diese Fassung eingearbeitet:** 3.1, 3.2, 3.7–3.28
+(soweit Gruppe 3 betreffend), insbesondere 3.10, 3.19, 3.20, 3.21, 3.22,
+3.27. Einzelheiten und Begründungen stehen in Dokument 11.
+
+**Wird diese Fassung umgesetzt, müssen AGB Ziffer 6, Dokument 09 und
+Datenschutz Abschnitt 2 im selben Zug angepasst werden.** Die Texte sind
+aufeinander abgestimmt; Prüfliste `N` im Projekt vergleicht sie
+maschinell — sie muss um die neuen Formulierungen erweitert werden,
+bevor sie wieder etwas beweist.

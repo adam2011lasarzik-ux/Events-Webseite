@@ -1,9 +1,16 @@
 # 02 — Datenschutzerklärung (Entwurf)
 
-> **Status:** Entwurf, Version 1 vom 16.09.2026. **Nicht anwaltlich geprüft.**
-> Ersetzt nicht die bestehende Seite `/datenschutz`. Abschnitt 2 der
-> bestehenden Seite (Einverständniserklärungen für Minderjährige) ist
+> **Status:** Entwurf, **Version 2 vom 18.09.2026**. **Nicht anwaltlich
+> geprüft.** Ersetzt nicht die bestehende Seite `/datenschutz`. Abschnitt 2
+> der bestehenden Seite (Einverständniserklärungen für Minderjährige) ist
 > bereits verbindlich und wird hier **übernommen, nicht neu erfunden**.
+>
+> **Was sich gegenüber Version 1 geändert hat:** Ziffer 15
+> (Speicherdauer) ist an das inzwischen gebaute und produktive
+> Löschkonzept (K1–K7) angepasst — die frühere Aussage „keine
+> automatische Löschfrist" gilt nicht mehr. Neu: Ziffer 4b
+> (Anwesenheitsliste), PayPal in Ziffer 6 und Ziffer 14, eine erste
+> recherchierte Einordnung der Stripe-/PayPal-Rollen (Dokument 14).
 >
 > **Grundsatz dieses Entwurfs:** Es wird ausschließlich beschrieben, was
 > im Code oder in der Serverdokumentation nachweisbar geschieht. Wo eine
@@ -156,6 +163,36 @@ Gesundheitsangaben. Das Online-Formular kennt diese Felder nicht.
 
 ---
 
+## 4b. Ankommen vor Ort (Anwesenheitsliste) — neu, Stand 18.09.2026
+
+> ✅ **Neue Verarbeitung**, die sich aus Dokument 11, Entscheidung 3.27
+> ergibt und bisher in keiner Fassung dieser Erklärung stand.
+
+Beim Ankommen wird auf einer ausgedruckten Teilnehmerliste vermerkt,
+wer erschienen ist. Bei unbegleiteten minderjährigen Teilnehmenden wird
+zusätzlich die unterschriebene Einverständniserklärung entgegengenommen
+(siehe Dokument 05); bei begleiteten eine Kurzbestätigung der
+anwesenden erziehungsberechtigten Person.
+
+> **Welche Daten.** Name der teilnehmenden Person, Ankunftszeit, das
+> Kürzel der Person, die den Vermerk vornimmt — bei Minderjährigen
+> zusätzlich die Angaben aus der Einverständniserklärung.
+>
+> **Wozu.** Um im Notfall schnell feststellen zu können, wer vor Ort
+> ist, sowie zur Platz- und Anwesenheitskontrolle. **Nicht**, um zu
+> überwachen, wer das Gelände wann verlässt — das findet nicht statt
+> (siehe Dokument 05 und Dokument 09, Ziffer 1.2).
+>
+> **Rechtsgrundlage.** Art. 6 Abs. 1 Buchst. f DSGVO (berechtigtes
+> Interesse an einem funktionierenden Notfallmanagement und einer
+> geordneten Durchführung).
+>
+> **Wie lange.** Die ausgedruckte Teilnehmerliste wird nach der
+> Veranstaltung digitalisiert oder vernichtet; ein von Namen bereinigter
+> Nachweis (Löschklasse K5) wird bis zu 3 Jahre aufbewahrt.
+
+---
+
 ## 5. Minderjährige Teilnehmer und Sorgeberechtigte
 
 Der bestehende **Abschnitt 2 der Datenschutzseite** (acht Absätze,
@@ -206,6 +243,11 @@ Entwurf schließt:
   gespeichert noch protokolliert.
 - Zurück kommt eine signaturgeprüfte Rückmeldung mit Zahlungsstatus,
   Betrag und Referenz.
+- Als Zahlungsart steht neben der Karte auch **PayPal** zur Verfügung
+  (`lib/zahlung.ts` → `payment_method_types: ["card", "paypal"]`). Wer
+  PayPal wählt, wird innerhalb der Stripe-Bezahlseite zu PayPal
+  weitergeleitet und gibt seine PayPal-Zugangsdaten dort, **nicht** bei
+  VERA oder auf einer VERA-Seite, ein.
 
 > ⚠️ **Stand der Freischaltung:** `lib/zahlung.ts` weist jeden Schlüssel
 > ab, der nicht mit `sk_test_` oder `rk_test_` beginnt. **Es ist bisher
@@ -235,13 +277,26 @@ Entwurf schließt:
 > Ihre Anmeldung zu bestätigen und um eine Erstattung durchführen zu
 > können.
 >
+> Wenn Sie als Zahlungsart PayPal wählen, geben Sie Ihre
+> PayPal-Zugangsdaten unmittelbar bei PayPal ein; PayPal verarbeitet
+> diese Daten dann in eigener Verantwortung.
+>
 > Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. b DSGVO.
 
-`[VOR VERWENDUNG KLÄREN: Rolle von Stripe. Stripe tritt für
-Zahlungsdienste weithin als eigenständig Verantwortlicher auf, nicht als
-Auftragsverarbeiter. Das ist im eigenen Vertragswerk zu prüfen und
-richtig zu benennen — die Rolle bestimmt, ob ein AV-Vertrag nötig ist
-und wie die Übermittlung zu beschreiben ist.]`
+> 🔎 **Recherchiert am 18.09.2026 (Such-Zusammenfassungen, siehe
+> Dokument 14) — als Prüfauftrag zu lesen, nicht als bestätigtes
+> Ergebnis:** Stripe wird verbreitet als **doppelte Rolle** beschrieben
+> — Auftragsverarbeiter für die reine Zahlungsabwicklung (Art. 28
+> DSGVO), zugleich eigenständig Verantwortlicher für eigene regulatorische
+> Pflichten (etwa Geldwäscheprävention). **PayPal tritt nach verbreiteter
+> Einschätzung nicht als Auftragsverarbeiter, sondern durchgehend als
+> eigenständig Verantwortlicher auf.**
+>
+> `[VOR VERWENDUNG KLÄREN: Beide Rollen sind aus dem eigenen
+> Vertragswerk mit Stripe (Stripe Services Agreement / DPA) zu
+> bestätigen, nicht aus fremden Mustern zu übernehmen — das gilt auch
+> für den Drittlandbezug (Angemessenheitsbeschluss EU-US Data Privacy
+> Framework oder Standardvertragsklauseln).]`
 
 `[VOR VERWENDUNG KLÄREN: Drittlandbezug. Ob und in welchem Umfang Daten
 in die USA gelangen und auf welche Garantien sich das stützt
@@ -466,7 +521,8 @@ Erklärung verweist, die es nicht gibt.]`
 |---|---|---|---|---|
 | Hostinger (Server) | Betrieb der Website | alle auf dem Server anfallenden Daten | Auftragsverarbeiter `[bestätigen]` | EU `[Region bestätigen]` |
 | Hostinger (Postfach) | E-Mail-Versand und -Empfang | Inhalt und Adressaten der E-Mails | Auftragsverarbeiter `[bestätigen]` | `[bestätigen]` |
-| Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | `[Rolle klären — vermutlich eigenständig Verantwortlicher]` | `[klären]` |
+| Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | doppelte Rolle — Auftragsverarbeiter für die Abwicklung, eigenständig Verantwortlicher für eigene Pflichten `[aus eigenem Vertrag bestätigen]` | `[Drittlandbezug klären]` |
+| PayPal (nur bei Auswahl dieser Zahlungsart) | Bezahlung | PayPal-Zugangsdaten, Betrag | eigenständig Verantwortlicher | `[klären]` |
 | Backblaze, Inc. | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | `[Region klären]` |
 | UptimeRobot | Erreichbarkeitsprüfung | nur öffentliche Seitenaufrufe | `[klären, ob AV nötig]` | `[klären]` |
 | Veranstaltungslocation | Entgegennahme der Papierformulare am Empfang | die unterschriebenen Einverständniserklärungen | siehe Datenschutz Abschnitt 2 | Inland |
@@ -479,7 +535,50 @@ Analysedienste, keine sozialen Netzwerke.
 
 ## 15. Speicherdauer und Löschung
 
-**Belegter Stand — und die offene Stelle:**
+> ✅ **Stand 18.09.2026 — diese Ziffer ist jetzt technisch überholt und
+> unten neu gefasst.** Seit dem 16./17.09.2026 gibt es ein
+> vollständiges, automatisiertes Löschkonzept nach **DIN 66398** mit
+> sieben Löschklassen (K1–K7), einem täglichen automatischen Lauf und
+> einer Löschsperre für Einzelfälle (Unfall, Beschwerde, Rechtsstreit).
+> Es ist **produktiv im Einsatz** (systemd-Timer `vera-loeschlauf.timer`)
+> und ausführlich dokumentiert in `docs/loeschkonzept-betrieb.md`. Die
+> frühere Aussage „für Anmeldungen gibt es bisher keine automatische
+> Löschfrist" **stimmt seit der Umsetzung nicht mehr** und darf so nicht
+> stehen bleiben.
+
+**Die sieben Klassen im Überblick** (Einzelheiten und Rechtsgrundlagen
+in `docs/loeschkonzept-betrieb.md`):
+
+| Klasse | Datenart | Frist | danach |
+|---|---|---|---|
+| K1 | Gesundheits- und Notfallangaben | 7 Tage nach Veranstaltungsende | Papier vernichten |
+| K2 | vollständige Einverständniserklärungen | 3 Jahre zum Jahresende | Papier vernichten |
+| K3 | reduzierter Zustimmungsnachweis | 10 Jahre zum Jahresende | löschen |
+| K4 | Anmelde- und Ankunftsdaten | 3 Jahre zum Jahresende | anonymisieren |
+| K5 | Veranstaltungs- und Sicherheitschecklisten | 3 Jahre zum Jahresende | Personenbezug entfernen |
+| K6 | Vorfall- und Versicherungsakten | 10 Jahre, bei schwerem Personen-/Gesundheitsschaden bis 30 Jahre, ab Abschluss des Vorgangs | löschen |
+| K7 | Steuerunterlagen (§ 147 AO) | 10 / 8 / 6 Jahre | **niemals** vom Löschlauf angefasst |
+
+**Löschsperre.** Einzelne Datensätze können von der Löschung
+ausgenommen werden — bei einem Unfall, einer Beschwerde, einer
+Rückbuchung, einem Versicherungsfall oder einem drohenden
+Rechtsstreit. Ohne eine solche Sperre läuft die automatische Löschung
+regulär weiter.
+
+**Rechnungen mit Namen** sind, solange ihre gesetzliche Aufbewahrungs­
+frist läuft, selbst ein Buchungsbeleg und werden vom Löschlauf **nicht**
+angefasst, auch wenn die zugehörige Anmeldung längst anonymisiert
+wurde.
+
+> ⚠️ **Weiterhin offen, ausdrücklich nicht erfunden:** Die konkreten
+> Fristen für K3–K6 stützen sich auf DIN 66398 als anerkanntes Verfahren
+> und auf eine erste fachliche Einschätzung (Dokument 12/13 in diesem
+> Ordner), sind aber **nicht** anwaltlich bestätigt. Vor der
+> Veröffentlichung dieser Erklärung sollten sie fachkundig geprüft
+> werden — eine spätere Verkürzung ist unproblematisch, eine zu frühe
+> Löschung wäre es nicht.
+
+**Was unverändert gilt:**
 
 | Daten | Dauer | Beleg |
 |---|---|---|
@@ -487,22 +586,6 @@ Analysedienste, keine sozialen Netzwerke.
 | System-Journal | 7 Tage | Serverkonfiguration |
 | Missbrauchsschutz-Zähler | 60 Minuten | `lib/ratelimit.ts` |
 | Verschlüsselte Sicherungen | 180 Tage | `docs/sicherung.md` |
-| Gesundheitsangaben auf Papier | spätestens 30 Tage nach Veranstaltungsende | Datenschutz Abschnitt 2 |
-| **Anmeldungen und Teilnehmerdaten** | **nicht festgelegt** | ⚠️ siehe unten |
-
-> ⚠️ **Für Anmeldungen gibt es bisher keine automatische Löschfrist.**
-> Es existiert eine Anonymisierungsfunktion, die Namen, E-Mail und
-> Telefon der Anmeldung **und aller Teilnehmer** überschreibt und die
-> Buchung als anonyme Zeile bestehen lässt
-> (`lib/anmeldungLoeschbar.ts`). Sie muss aber **von Hand ausgelöst**
-> werden. Eine Erklärung darf keine Frist behaupten, die es nicht gibt.
-
-`[VOR VERWENDUNG KLÄREN: Regelaufbewahrungsfrist für Anmeldedaten
-festlegen. Zu berücksichtigen: handels- und steuerrechtliche
-Aufbewahrungspflichten für Zahlungsvorgänge sowie die
-Verjährungsfristen möglicher Ansprüche. Danach entweder die Frist hier
-eintragen **und technisch umsetzen**, oder ehrlich beschreiben, dass
-gelöscht wird, sobald der Zweck entfällt.]`
 
 **Wichtiger Zusammenhang, der oft übersehen wird:** Wer gelöscht oder
 anonymisiert wird, steht noch in den Sicherungen — bis zu 180 Tage lang.
@@ -511,15 +594,36 @@ der so nicht stattfindet.
 
 **Entwurfstext:**
 
-> Wir löschen personenbezogene Daten, sobald der Zweck ihrer
-> Verarbeitung entfällt und keine gesetzliche Aufbewahrungspflicht
-> entgegensteht.
+> Wir löschen oder anonymisieren personenbezogene Daten nach festen
+> Fristen, die sich nach der Art der Daten richten (Löschkonzept nach
+> DIN 66398). Ein täglich laufender automatischer Vorgang prüft, welche
+> Daten fällig sind:
 >
-> Eine Stornierung ist dabei keine Löschung: Die Buchung muss
-> gespeichert bleiben, damit Platzzählung und Zahlungsabgleich stimmen.
-> Auf Verlangen überschreiben wir Namen, E-Mail-Adresse und
-> Telefonnummer der Anmeldung und aller Teilnehmenden; die Buchung
-> bleibt dann als anonyme Zeile ohne Personenbezug bestehen.
+> - Gesundheits- und Notfallangaben auf Papier: spätestens 7 Tage nach
+>   der Veranstaltung vernichtet.
+> - Vollständige Einverständniserklärungen: nach 3 Jahren auf einen
+>   reduzierten Nachweis verkürzt, dieser nach insgesamt 10 Jahren
+>   gelöscht.
+> - Anmelde- und Ankunftsdaten: nach 3 Jahren anonymisiert — Name,
+>   E-Mail-Adresse und Telefonnummer werden überschrieben, die Buchung
+>   bleibt als anonyme Zeile bestehen, damit Statistiken und der
+>   Zahlungsabgleich stimmen.
+> - Veranstaltungs- und Sicherheitschecklisten: nach 3 Jahren wird der
+>   Personenbezug entfernt.
+> - Akten zu Unfällen oder Vorfällen: 10 Jahre, bei einem schweren
+>   Personen- oder Gesundheitsschaden bis zu 30 Jahre nach Abschluss des
+>   Vorgangs.
+> - Steuerlich relevante Unterlagen: 10, 8 oder 6 Jahre nach der
+>   gesetzlichen Aufbewahrungspflicht (§ 147 AO) — davon rührt der
+>   automatische Löschvorgang **nicht**.
+>
+> Eine Stornierung ist dabei keine Löschung: Die Buchung muss bis zum
+> Ablauf ihrer Frist gespeichert bleiben, damit Platzzählung und
+> Zahlungsabgleich stimmen.
+>
+> Droht ein Rechtsstreit oder liegt ein Unfall, eine Beschwerde oder ein
+> Versicherungsfall vor, setzen wir die Löschung für die betroffenen
+> Datensätze gezielt aus, bis der Vorgang abgeschlossen ist.
 >
 > Bitte beachten Sie: Verschlüsselte Sicherungskopien der Datenbank
 > werden 180 Tage aufbewahrt. Gelöschte oder anonymisierte Daten können
@@ -574,7 +678,7 @@ DSGVO statt — das ist im Code belegbar, es gibt keine solche Funktion.
 | D-4 | Drittlandbezug Stripe und Backblaze samt Garantien | rechtliche Bewertung |
 | D-5 | Region des Backblaze-Buckets | nur im Konto ablesbar |
 | D-6 | AV-Verträge: welche liegen vor | Tatsachenfrage |
-| D-7 | Regelaufbewahrungsfrist für Anmeldungen | unternehmerische **und** rechtliche Entscheidung |
-| D-8 | Anschrift der Aufsichtsbehörde | von deren Seite zu übernehmen |
+| D-7 | ~~Regelaufbewahrungsfrist für Anmeldungen~~ | ✅ gelöst durch das Löschkonzept (K1–K7, Ziffer 15) — die Fristen selbst sind aber weiterhin fachlich zu bestätigen |
+| D-8 | ~~Anschrift der Aufsichtsbehörde~~ | ✅ recherchiert (Dokument 14): Berliner Beauftragte für Datenschutz und Informationsfreiheit, Alt-Moabit 59–61, 10555 Berlin — **vor Verwendung auf der Behördenseite gegenprüfen** |
 | D-9 | Datenschutzbeauftragter nötig? | Bewertung, auch wegen Gesundheitsangaben |
 | D-10 | Foto-Einwilligung: alle Angaben aus Dokument 06 | Entscheidung des Unternehmers |

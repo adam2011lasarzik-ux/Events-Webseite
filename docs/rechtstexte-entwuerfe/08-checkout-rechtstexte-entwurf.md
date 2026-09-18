@@ -2,6 +2,10 @@
 
 > **Status:** Entwurf, Version 1 vom 16.09.2026. **Nicht anwaltlich geprüft.**
 >
+> **Stand 18.09.2026:** inhaltlich unverändert — die Bestellknopf- und
+> Checkbox-Formulierungen hängen an den offenen Fragen 2.2–2.4 und
+> 2.12–2.14 aus Dokument 11 (gesammelt in Dokument 15, Abschnitt B).
+>
 > Dieses Dokument ist das praktischste der zehn: Es enthält konkrete
 > Textvorschläge für Bildschirmelemente und benennt die Stelle im Code,
 > an der sie stehen müssten. **Nichts davon wurde eingebaut** — der

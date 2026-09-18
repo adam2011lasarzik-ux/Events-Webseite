@@ -9,6 +9,13 @@
 > ist inhaltlich weitgehend fertig (`app/(seite)/impressum/page.tsx`,
 > Daten aus `content/de.ts` → `anbieter`). Dieser Entwurf überschreibt
 > sie **nicht**, sondern beschreibt den Sollzustand samt Begründung.
+>
+> **Stand 18.09.2026:** Inhaltlich unverändert gegenüber Version 1 —
+> § 5 DDG und die EU-OS-Plattform-Abschaltung wurden erneut recherchiert
+> und bestätigt (Dokument 14). Die beiden offenen Punkte (USt-IdNr.,
+> Beschäftigtenzahl für § 36 VSBG) stehen jetzt zusätzlich gesammelt in
+> Dokument 15, Abschnitt A — beide lassen sich in wenigen Minuten
+> beantworten.
 
 ---
 

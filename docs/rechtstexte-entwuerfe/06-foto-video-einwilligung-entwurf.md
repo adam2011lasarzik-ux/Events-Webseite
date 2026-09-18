@@ -2,6 +2,12 @@
 
 > **Status:** Entwurf, Version 1 vom 16.09.2026. **Nicht anwaltlich geprüft.**
 >
+> **Stand 18.09.2026:** inhaltlich unverändert — alle 8 zugrunde
+> liegenden Fragen aus Dokument 11, Gruppe 4, sind weiterhin offen
+> (gesammelt in Dokument 15, Abschnitt C). Das betrifft auch das
+> einzige Foto-Häkchen im heutigen Online-Anmeldeformular, das ohne
+> Zweck, Kanal oder Dauer auskommt (siehe Dokument 02, Ziffer 5).
+>
 > ⚠️ **Dieser Entwurf ist unvollständig — notwendigerweise.** Eine
 > Einwilligung muss *bestimmt* sein: Sie muss sagen, wofür genau,
 > auf welchen Kanälen und wie lange. Diese Angaben kann nur der

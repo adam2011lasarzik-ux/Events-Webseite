@@ -4,6 +4,11 @@
 > nicht rechtssicher, nicht garantiert wirksam.** Neu für VERA formuliert;
 > keine fremden AGB, keine Kanzleimuster übernommen.
 >
+> **Stand 18.09.2026:** inhaltlich unverändert — alle 18 zugrunde
+> liegenden Fragen aus Dokument 11, Gruppe 5, sind weiterhin offen
+> (gesammelt in Dokument 15, Abschnitt D). Niedrige Priorität, solange
+> VERA keine Firmen- oder Schulaufträge annimmt.
+>
 > **Getrennt von Dokument 03.** Diese Bedingungen gelten **nicht** für
 > Verbraucher und dürfen mit den Teilnahmebedingungen nicht vermischt
 > werden.
