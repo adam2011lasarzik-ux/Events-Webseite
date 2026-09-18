@@ -54,5 +54,17 @@ echo "$AUSGABE"
 
 # Die Zusammenfassung in die Statusdatei, damit `tail` genügt, um zu
 # sehen, ob der Lauf etwas getan hat.
-ZUSAMMEN=$(echo "$AUSGABE" | grep -E '^ +(anonymisiert|geloescht|uebersprungen|faellig) ' | tr -s ' ' | tr '\n' ' ')
+#
+# Das abschliessende `|| true` ist nicht Schlamperei, sondern nötig:
+# grep liefert Exitcode 1, wenn es NICHTS findet — und genau das ist
+# der Normalfall, nämlich "nichts fällig". Zusammen mit `set -e` und
+# `pipefail` beendete das den Dienst mit Fehler, obwohl beide Läufe
+# sauber durchgelaufen waren, und löste über den ERR-Trap eine
+# Alarmmail aus.
+#
+# Gefunden beim allerersten echten Lauf auf dem Server am 18.09.2026.
+# Ein Fehler, der nur im GUTEN Fall auftritt, ist die unangenehmste
+# Sorte: Wäre an dem Tag etwas zu löschen gewesen, wäre er nie
+# aufgefallen.
+ZUSAMMEN=$(printf '%s\n' "$AUSGABE" | grep -E '^ +(anonymisiert|geloescht|uebersprungen|faellig) ' | tr -s ' ' | tr '\n' ' ' || true)
 echo "$(date -Iseconds) OK ${ZUSAMMEN:-nichts zu tun}" >> "$STATUS"

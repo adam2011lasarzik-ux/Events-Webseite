@@ -171,6 +171,7 @@ lauf_rein "L · Kopfleiste: Menü und Anmelden" npx tsx "$P/L/l-schulen.mjs"
 lauf_rein "Q · Überwachung (Mail-Texte und Wächter-Logik)" npx tsx "$P/Q/q-wache.mjs"
 lauf_rein "R · Riegel vor der echten Datenbank" node "$P/R/r-schutz.mjs"
 lauf_rein "S · Loeschfristen (reine Regeln)" npx tsx "$P/S/s-fristen.mjs"
+lauf_rein "S · Server-Skripte (grep-Falle)" node "$P/S/s-skripte.mjs"
 
 # ── Bilanz ───────────────────────────────────────────────────────
 echo ""
