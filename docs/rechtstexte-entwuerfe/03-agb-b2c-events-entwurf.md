@@ -377,27 +377,71 @@ nicht, soweit VERA die Absage nicht zu vertreten hat.
 > Hinweis, wenn eine gesetzte Frist unter 48 Stunden vor dem Termin
 > liegt. Siehe Dokument 15, Abschnitt G.
 
-8.4 **Verlegung.** `[VOR VERWENDUNG KLÄREN: Soll eine Verlegung möglich
-sein, und mit welcher Folge?]`
+8.4 **Terminänderung.** Eine Verlegung bereits gebuchter
+Veranstaltungen auf einen anderen Termin findet nicht statt. Kann eine
+Veranstaltung zum angekündigten Termin nicht stattfinden, wird sie nach
+Ziffer 8.1 abgesagt und der volle Betrag erstattet. Ein neuer Termin
+wird als eigene Veranstaltung veröffentlicht, für die Sie sich
+freiwillig neu anmelden können. **Eine Übertragung Ihrer Buchung auf
+einen anderen Termin erfolgt nur mit Ihrer ausdrücklichen Zustimmung.**
 
-> ⚠️ **Auch hier fehlt die technische Grundlage.** Die Software kennt
-> heute nur „absagen und erstatten" (`lib/stornoAusfuehren.ts`). Eine
-> Verlegung mit Fortbestand der Buchung ist nicht gebaut.
+> ✅ **Entschieden von Adam am 18.09.2026 und mit
+> `klauselinhalt-und-verbote-pruefen` geprüft.** Vier Ergebnisse:
 >
-> **Besonders wichtig wegen Ziffer 2.4:** Veranstaltungen ohne
-> feststehenden Termin sind ausdrücklich vorgesehen (`startAt` ist
-> nullable, die Seite zeigt „Termin folgt"). Die spätere Bekanntgabe
-> eines Termins ist **keine Verlegung**, sondern die Konkretisierung
-> einer von Anfang an offenen Leistungszeit — und sie hat erhebliche
-> Folgen für das Widerrufsrecht (Ziffer 13 und Dokument 07).
+> **1. Der Verzicht auf einen Verlegungsvorbehalt ist die sicherere
+> Position, nicht die schwächere.** Ein Änderungsvorbehalt wäre an
+> § 308 Nr. 4 BGB zu messen: Die Änderung müsste für die Kundin unter
+> Berücksichtigung der Interessen von VERA zumutbar sein. Beim Termin
+> einer Freizeitveranstaltung ist das heikel, weil der Termin für die
+> Buchungsentscheidung typischerweise tragend ist. Wer sich nichts
+> vorbehält, muss auch nichts rechtfertigen. **Eine Lücke zu Lasten
+> von VERA entsteht dadurch nicht** — ohne Vorbehalt gilt schlicht das
+> Gesetz: VERA kann nicht einseitig verlegen und sagt deshalb ab. Der
+> Verlust ist wirtschaftlich (der Umsatz geht zurück), nicht rechtlich.
 >
-> **Klauselentwurf, falls Verlegung gewollt ist:**
+> **2. Diese Entscheidung stützt ausgerechnet die Widerrufsfrage.** Der
+> Ausschluss nach § 312g Abs. 2 Nr. 9 BGB hängt daran, dass für die
+> Leistung ein **spezifischer Termin** vorgesehen ist (Ziffer 13,
+> Dokument 07). Hätte sich VERA vorbehalten, genau diesen Termin
+> einseitig zu verschieben, wäre das ein Argument gegen seine
+> Spezifität — der Termin wäre dann nur vorläufig. So bleibt jeder
+> Vertrag auf genau einen konkreten Termin bezogen; fällt der weg,
+> endet der Vertrag, statt sich zu wandeln. Die Entscheidungen 2.5 und
+> 2.10 desselben Tages greifen hier sauber ineinander.
 >
-> > Muss eine Veranstaltung verlegt werden, teilt VERA den neuen Termin
-> > unverzüglich mit. Sie können die Buchung auf den neuen Termin
-> > übernehmen oder innerhalb von `[Frist]` nach der Mitteilung ohne
-> > Angabe von Gründen stornieren; in diesem Fall wird der volle Betrag
-> > erstattet. Weitergehende Ansprüche bleiben unberührt.
+> **3. „Keine automatische Umbuchung" ist rechtlich richtig gedacht.**
+> Eine Gestaltung nach dem Muster „wer nicht widerspricht, gilt als
+> umgebucht" hätte gleich zwei Klauselverbote berührt: § 308 Nr. 4 BGB
+> (einseitige Leistungsänderung) und § 308 Nr. 5 BGB (fingierte
+> Erklärung). Beide Tatbestände werden durch die gewählte Lösung
+> vollständig vermieden.
+>
+> **4. Ziffer 8.4 braucht keine eigene Erstattungsregel.** Ziffer 8.1
+> regelt die Rechtsfolge bereits vollständig und passt wörtlich, weil
+> der Verlegungsfall hier eben ein Absagefall ist. Eine zweite,
+> leicht abweichende Erstattungsformulierung wäre nur eine zusätzliche
+> Fehlerquelle.
+>
+> ⚠️ **Der eigentliche Befund liegt nicht in der Klausel, sondern in
+> der Technik.** Im Adminbereich gibt es **nur** eine Stornofunktion je
+> einzelner Anmeldung (`lib/stornoAusfuehren.ts` → `stornoDurchAdmin`).
+> Eine Sammelabsage für eine ganze Veranstaltung existiert nicht, einen
+> Status „abgesagt" am Event ebenso wenig. Eine Eventabsage ist heute
+> Handarbeit, Buchung für Buchung.
+>
+> Das ist **kein Klausel-, sondern ein Erfüllungsrisiko**: Das Wort
+> „automatisch" in Ziffer 8.1 bleibt aus Kundensicht zutreffend — sie
+> muss nichts beantragen, und genau das sagt der Satz. Aber je mehr
+> Buchungen eine Absage betrifft, desto größer die Gefahr, dass eine
+> Erstattung übersehen wird oder fehlschlägt, ohne dass es jemandem
+> auffällt. Dann liegt kein AGB-Verstoß vor, sondern eine schlicht
+> nicht erfüllte Zahlungspflicht mit Verzugsfolgen (§§ 286, 288 BGB).
+>
+> **Und dieses Risiko ist heute gewachsen:** Die Entscheidungen 2.9
+> (Mindestteilnehmerzahl) und 2.10 (Verlegung) machen die Eventabsage
+> zum Regelweg für zwei **zusätzliche** Fallgruppen. Die fehlende
+> Sammelabsage gehört damit auf die Bauliste — siehe Dokument 15,
+> Abschnitt G, Punkt B-7.
 
 8.5 **Programmänderungen.** VERA kann den Ablauf einer Veranstaltung
 ändern, soweit die Änderung den Gesamtcharakter der Veranstaltung nicht
