@@ -42,7 +42,7 @@
 | Getrennte, freiwillige Fotoeinwilligung | ✅ ja (Text unzureichend, siehe Dokument 06) |
 | Einwilligung Erziehungsberechtigte | ✅ ja |
 | **Eindeutig beschrifteter Bestellbutton** | ⚠️ **fraglich** |
-| **Hinweis auf und Bestätigung der AGB** | ❌ **nein** |
+| **Hinweis auf und Bestätigung der AGB** | ❌ nein (noch nicht deployt) — ✅ Wortlaut entschieden, siehe C-2 |
 | **Link zu Datenschutz und Widerruf beim Bestellvorgang** | ❌ nur in der Fußzeile |
 | **Angabe der wesentlichen Merkmale der Leistung im Bestellvorgang** | ⚠️ zu prüfen |
 
@@ -188,41 +188,31 @@ Attrappe. Die bisherige Entscheidung, es wegzulassen, war richtig —
 
 **Sie ist falsch, sobald der vollständige Text steht.**
 
-### Vorschlag
+### ✅ Entschieden von Adam am 18.09.2026
 
-Unmittelbar **über** der Bestellschaltfläche, nicht in der Fußzeile:
+**Pflicht-Häkchen, nicht vorangekreuzt:**
 
-> ☐ Ich habe die
-> [Teilnahmebedingungen](/agb) und die
-> [Informationen zu Widerruf und Stornierung](/widerruf) gelesen und
-> bin mit ihnen einverstanden. Die
-> [Datenschutzerklärung](/datenschutz) habe ich zur Kenntnis genommen.
+> ☐ Ich akzeptiere die [AGB](/agb).
 
-**Drei Gestaltungsregeln dazu:**
+Das Wort „AGB" verlinkt direkt auf die vollständigen Teilnahme­
+bedingungen. **Ohne gesetztes Häkchen darf die Bestellung nicht
+abgeschlossen werden** — serverseitig zu prüfen, nicht nur im Browser
+(dasselbe Muster wie bei `einwilligungVormund`, das ebenfalls
+serverseitig erzwungen wird, nicht nur per `required`-Attribut).
 
-1. **Nicht vorangekreuzt.** Ein vorangekreuztes Häkchen ist keine
-   Bestätigung.
-2. **Die Datenschutzerklärung wird nur zur Kenntnis genommen, nicht
-   „akzeptiert".** Sie ist eine Information nach Art. 13 DSGVO, keine
-   Vereinbarung. Ein „Ich stimme der Datenschutzerklärung zu" ist ein
-   verbreiteter Fehler und erweckt den falschen Eindruck einer
-   Einwilligung.
-3. **Links öffnen in einem neuen Tab**, damit die ausgefüllten
-   Formulardaten nicht verloren gehen.
+**Zwei Anmerkungen dazu, ohne die Entscheidung infrage zu stellen:**
 
-### Alternative ohne Häkchen
+1. **Nicht vorangekreuzt** — erfüllt, siehe oben.
+2. Die kurze Fassung erwähnt Widerruf/Storno und Datenschutz nicht
+   gesondert. Das ist unproblematisch: Widerrufs- und Stornoregeln
+   gehören inhaltlich in die AGB selbst bzw. in eine dort verlinkte
+   Seite, und die Datenschutzerklärung ist ohnehin nur eine
+   **Information** nach Art. 13 DSGVO (keine Vereinbarung) — sie
+   braucht rechtlich kein eigenes Häkchen, nur einen erreichbaren Link,
+   den die Fußzeile bereits bietet.
 
-Ein Häkchen ist nicht zwingend. Es genügt auch ein gut sichtbarer
-Hinweis unmittelbar über der Schaltfläche:
-
-> Mit dem Absenden erkennen Sie die [Teilnahmebedingungen](/agb) an und
-> bestätigen, die [Datenschutzerklärung](/datenschutz) zur Kenntnis
-> genommen zu haben.
-
-`[VOR VERWENDUNG KLÄREN: Häkchen oder Hinweistext? Das Häkchen ist
-besser nachweisbar — es lässt sich zusammen mit der Anmeldung speichern.
-Der Hinweistext ist bequemer. Diese Abwägung gehört in die fachliche
-Prüfung.]`
+**Link öffnet in einem neuen Tab**, damit die ausgefüllten Formular­
+daten nicht verloren gehen.
 
 ### Umsetzung
 

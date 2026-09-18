@@ -51,7 +51,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 |---|---|---|
 | ~~2.1~~ | ✅ **Beantwortet 18.09.2026: Ja**, eigene, individuell zugeschnittene AGB | — |
 | ~~2.2/2.3~~ | ✅ **Beantwortet 18.09.2026:** Verbindlicher Bestellknopf → „Zahlungspflichtig bestellen" (wortwörtlich der Gesetzestext). Einstiegsknopf zur Anmeldung (nicht bindend) → „Zu den Tickets", betrifft `aktion.anmelden` an 6 Stellen im Code. **Noch nicht deployt.** | — |
-| 2.4 | AGB-Bestätigung: Häkchen oder bloßer Hinweistext? | **Häkchen**, das nicht vorbelegt ist — ein Hinweistext allein gilt verbreitet als schwächerer Nachweis der Einbeziehung. |
+| ~~2.4~~ | ✅ **Beantwortet 18.09.2026:** Pflicht-Häkchen „Ich akzeptiere die AGB." (nicht vorbelegt, „AGB" verlinkt auf die vollständigen AGB, serverseitig erzwungen). **Noch nicht deployt.** | — |
 | 2.5 | Nur noch Veranstaltungen mit festem Termin verkaufen? | Hängt an 2.6 — ein fester Termin ist die Voraussetzung für den Widerrufsausschluss nach § 312g Abs. 2 Nr. 9 BGB. |
 | 2.6 | Besteht ein Widerrufsrecht? Für welche Veranstaltungen? | Bei Events mit festem Termin nach der recherchierten Rechtslage **ausgeschlossen** — aber das ist als Prüfauftrag zu lesen, nicht als gesichertes Ergebnis (siehe Dokument 07). |
 | 2.7 | Widerrufsfunktion nach § 356a BGB bauen? | Folgt aus 2.6 — besteht kein Widerrufsrecht, entfällt die Pflicht. |
