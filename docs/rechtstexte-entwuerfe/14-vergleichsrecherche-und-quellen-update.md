@@ -60,6 +60,24 @@ gegenprüfen.
 Ablesearbeit im eigenen Konto** (Dokument 15, Abschnitt A) — Recherche
 kann eine unternehmerspezifische Vertragsbeziehung nicht ersetzen.
 
+## 2c. Auftragsverarbeitungsverträge — automatisch oder gesondert? (18.09.2026)
+
+Auf Wunsch von Adam recherchiert, statt pauschal als „fehlend"
+markiert:
+
+| Anbieter | Ergebnis | Quelle |
+|---|---|---|
+| Hostinger | DPA per Verweis in die Nutzungsbedingungen eingebunden; Kunde „gilt als unterzeichnet" (inkl. EU-Standardvertragsklauseln) ab elektronischer Annahme der Nutzungsbedingungen | `hostinger.com/legal/dpa` (per Suchtreffer) |
+| Stripe | DPA (inkl. „Data Transfers Addendum") per Verweis in die Stripe Services Agreement eingebunden, ohne separate Unterschrift | `stripe.com/legal/dpa`, `stripe.com/legal/ssa` (per Suchtreffer) |
+| Backblaze | DPA per Verweis in die Nutzungsbedingungen eingebunden; eigene „DPA for EEA/EU Residents"-Fassung mit Vorrang bei Widerspruch | `backblaze.com/company/dpa.html` (per Suchtreffer) |
+| UptimeRobot | **Abweichende Formulierung:** DPA „verfügbar" für Verantwortliche, „zugänglich auf Anfrage" — deutet auf einen aktiven Schritt statt automatischer Einbindung hin | `uptimerobot.com/dpa/` (per Suchtreffer, nicht direkt abgerufen) |
+
+**Auch hier gilt die Einschränkung aus Abschnitt 1:** Direkter Abruf
+der Originaldokumente war blockiert; die Einschätzung stammt aus
+Suchergebnis-Zusammenfassungen und ist vor Verwendung im eigenen Konto
+gegenzuprüfen — für UptimeRobot ausdrücklich, für die anderen drei zur
+eigenen Sicherheit.
+
 ---
 
 ## 3. Vergleichsrecherche: Struktur bei vergleichbaren Anbietern

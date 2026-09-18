@@ -297,11 +297,18 @@ Entwurf schließt:
 > Einschätzung nicht als Auftragsverarbeiter, sondern durchgehend als
 > eigenständig Verantwortlicher auf.**
 >
-> `[VOR VERWENDUNG KLÄREN: Beide Rollen sind aus dem eigenen
-> Vertragswerk mit Stripe (Stripe Services Agreement / DPA) zu
-> bestätigen, nicht aus fremden Mustern zu übernehmen — das gilt auch
-> für den Drittlandbezug (Angemessenheitsbeschluss EU-US Data Privacy
-> Framework oder Standardvertragsklauseln).]`
+> ✅ **Zum Auftragsverarbeitungsvertrag selbst, recherchiert 18.09.2026
+> (Dokument 14/15):** Stripes DPA (einschließlich „Data Transfers
+> Addendum") ist **per Verweis in die Stripe Services Agreement
+> eingebunden** — mit der Kontoeröffnung und Vertragsannahme gilt er als
+> abgeschlossen, ohne separate Unterschrift.
+>
+> `[VOR VERWENDUNG KLÄREN: Die genaue Rollenverteilung (Verantwortlicher/
+> Auftragsverarbeiter je Tätigkeit) und der Drittlandbezug
+> (Angemessenheitsbeschluss EU-US Data Privacy Framework oder
+> Standardvertragsklauseln) sind aus den „Definitionen" der eigenen
+> Stripe Services Agreement zu bestätigen, nicht aus fremden Mustern zu
+> übernehmen.]`
 
 `[VOR VERWENDUNG KLÄREN: Drittlandbezug. Ob und in welchem Umfang Daten
 in die USA gelangen und auf welche Garantien sich das stützt
@@ -348,9 +355,13 @@ Versand über das Postfach `kontakt@veraevents.de` bei **Hostinger**
 > bitte nachsehen, statt zu raten.]`. Der Anbieter verarbeitet die
 > Inhalte und Verbindungsdaten Ihrer E-Mails in unserem Auftrag.
 >
-> `[VOR VERWENDUNG KLÄREN: Liegt ein Auftragsverarbeitungsvertrag mit
-> Hostinger vor, und deckt er sowohl den Server als auch das Postfach
-> ab?]`
+> ✅ **Recherchiert 18.09.2026 (Dokument 14/15):** Hostingers
+> Auftragsverarbeitungsvertrag (einschließlich EU-Standardvertrags­
+> klauseln) ist **per Verweis in die Nutzungsbedingungen eingebunden**
+> — mit der Annahme der Nutzungsbedingungen gilt er nach Hostingers
+> eigenen Angaben als abgeschlossen, ohne separate Unterschrift. Das
+> deckt sowohl den Server als auch das Postfach ab, soweit beide unter
+> demselben Vertragswerk laufen.
 
 ---
 
@@ -419,8 +430,13 @@ Zahlungsbezüge) **einmal täglich in verschlüsselter Form** den Server.
 > Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. f DSGVO; unser berechtigtes
 > Interesse liegt in der Ausfallsicherheit.
 
-`[VOR VERWENDUNG KLÄREN: Auftragsverarbeitungsvertrag mit Backblaze
-abgeschlossen? UND, fachlich zu prüfen: Auch bei einem **EU-Speicherort**
+✅ **Recherchiert 18.09.2026 (Dokument 14/15):** Auch Backblazes
+Auftragsverarbeitungsvertrag ist per Verweis in die Nutzungsbedingungen
+eingebunden — für Kunden aus der EU/EWR gilt zusätzlich eine eigene
+„DPA for EEA/EU Residents"-Fassung, die im Konfliktfall Vorrang hat.
+Kein separater Vertragsschluss nötig.
+
+`[Fachlich zu prüfen bleibt trotzdem: Auch bei einem **EU-Speicherort**
 bleibt Backblaze, Inc. eine **US-amerikanische Gesellschaft** — ob und
 unter welchen Garantien (Angemessenheitsbeschluss EU-US Data Privacy
 Framework, Standardvertragsklauseln) sie dadurch weiterhin
@@ -460,10 +476,23 @@ Server statt.
 > Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. f DSGVO; unser berechtigtes
 > Interesse liegt darin, Störungen schnell zu bemerken.
 
-`[VOR VERWENDUNG KLÄREN: Ist ein Auftragsverarbeitungsvertrag mit
-UptimeRobot erforderlich? Da keine Nutzerdaten übermittelt werden,
-spricht einiges dagegen — der Dienst erzeugt Zugriffe, er verarbeitet
-keine. Das gehört fachlich bestätigt, nicht angenommen.]`
+> ⚙️ **Recherchiert 18.09.2026 (Dokument 14/15) — einziger unklarer
+> Fall der vier Dienstleister:** UptimeRobot beschreibt seinen DPA
+> anders als die anderen drei — er sei für Verantwortliche „verfügbar"
+> und werde „auf Anfrage zugänglich", statt automatisch per Verweis in
+> die Nutzungsbedingungen eingebunden zu sein. `[VOR VERWENDUNG
+> KLÄREN: im eigenen, eingeloggten UptimeRobot-Konto unter
+> uptimerobot.com/dpa nachsehen, ob dort ein Vertrag direkt zum
+> Akzeptieren/Herunterladen bereitsteht, oder ob er aktiv angefordert
+> werden muss.]` Da ohnehin keine personenbezogenen Besucherdaten
+> übermittelt werden (der Dienst ruft nur eine öffentliche Seite auf),
+> ist die praktische Dringlichkeit gering — die Klärung sollte trotzdem
+> nicht offenbleiben.
+
+**Nebenbefund, nicht sicherheitsrelevant:** UptimeRobots kostenloser
+Tarif hatte zeitweise ein Verbot kommerzieller Nutzung; das wurde nach
+Recherche inzwischen (Stand Juni 2026) wieder aufgehoben — kommerzielle
+Nutzung ist ausdrücklich erlaubt.
 
 ---
 
@@ -545,10 +574,10 @@ Erklärung verweist, die es nicht gibt.]`
 |---|---|---|---|---|
 | Hostinger (Server) | Betrieb der Website | alle auf dem Server anfallenden Daten | Auftragsverarbeiter `[bestätigen]` | Server: **Frankreich** (bestätigt 18.09.2026) — Vertragsgesellschaft `[siehe Ziffer 7 — Hostinger International Limited (Zypern) oder Hostinger Global S.à r.l. (Luxemburg), aus eigener Rechnung zu bestätigen]` |
 | Hostinger (Postfach) | E-Mail-Versand und -Empfang | Inhalt und Adressaten der E-Mails | Auftragsverarbeiter `[bestätigen]` | wie oben |
-| Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | doppelte Rolle — Auftragsverarbeiter für die Abwicklung, eigenständig Verantwortlicher für eigene Pflichten `[aus eigenem Vertrag bestätigen]` | `[Drittlandbezug klären]` |
+| Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | doppelte Rolle — Auftragsverarbeiter für die Abwicklung, eigenständig Verantwortlicher für eigene Pflichten. **AVV bereits durch Kontoeröffnung wirksam** (per Verweis), genaue Rollenverteilung `[aus eigenem Vertrag bestätigen]` | `[Drittlandbezug klären]` |
 | PayPal (nur bei Auswahl dieser Zahlungsart) | Bezahlung | PayPal-Zugangsdaten, Betrag | eigenständig Verantwortlicher | `[klären]` |
 | Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | Speicherort: **EU** (Bucket-Endpoint `eu-central-003`, bestätigt 18.09.2026) — Gesellschaft selbst US-amerikanisch, Drittlandbezug `[fachlich zu bewerten]` |
-| UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei | Erreichbarkeitsprüfung | nur öffentliche Seitenaufrufe | `[klären, ob AV nötig — Firmensitz EU, spricht dafür]` | EU (Slowakei) |
+| UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei | Erreichbarkeitsprüfung | nur öffentliche Seitenaufrufe | `[einziger unklarer AVV-Fall — im eigenen Konto unter uptimerobot.com/dpa prüfen, ob automatisch eingebunden oder anzufordern]` | EU (Slowakei) |
 | Veranstaltungslocation | Entgegennahme der Papierformulare am Empfang | die unterschriebenen Einverständniserklärungen | siehe Datenschutz Abschnitt 2 | Inland |
 | Rettungsdienst / ärztliches Personal | Notfall | die im Notfall erforderlichen Angaben | eigener Verantwortlicher | Inland |
 
