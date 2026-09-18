@@ -49,7 +49,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 
 | # | Frage | Meine Empfehlung |
 |---|---|---|
-| 2.1 | Eigene AGB verwenden — ja oder nein? | **Ja.** Ohne AGB gilt zwar das Gesetz, aber die Sonderfragen (Storno-Frist, Widerrufsausschluss, Haftungsklarstellung für Minderjährige) blieben ungeregelt. |
+| ~~2.1~~ | ✅ **Beantwortet 18.09.2026: Ja**, eigene, individuell zugeschnittene AGB | — |
 | 2.2/2.3 | Beschriftung des Bestellknopfs und des Knopfs auf der Abschlussseite | Muss nach § 312j Abs. 3 BGB eindeutig „zahlungspflichtig" sein, z. B. „Jetzt kostenpflichtig anmelden". Formulierungen wie „Anmeldung abschicken" reichen laut recherchierter Fachmeinung **nicht**. |
 | 2.4 | AGB-Bestätigung: Häkchen oder bloßer Hinweistext? | **Häkchen**, das nicht vorbelegt ist — ein Hinweistext allein gilt verbreitet als schwächerer Nachweis der Einbeziehung. |
 | 2.5 | Nur noch Veranstaltungen mit festem Termin verkaufen? | Hängt an 2.6 — ein fester Termin ist die Voraussetzung für den Widerrufsausschluss nach § 312g Abs. 2 Nr. 9 BGB. |

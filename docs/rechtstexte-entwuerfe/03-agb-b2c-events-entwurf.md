@@ -4,6 +4,12 @@
 > nicht rechtssicher, nicht garantiert wirksam.** Neu für VERA formuliert;
 > es wurden keine fremden AGB und keine Kanzleimuster übernommen.
 >
+> **Grundsatzfrage 2.1 beantwortet (18.09.2026):** Adam möchte eigene,
+> individuell auf VERA zugeschnittene AGB — dieses Dokument wird damit
+> nicht zur Kür, sondern gebraucht. Die einzelnen Formulierungsfragen
+> (Bestellknopf, Häkchen, Haftungsbegrenzung usw., Dokument 15
+> Abschnitt B) sind davon unabhängig weiterhin einzeln zu klären.
+>
 > **Gilt nur für Verbraucher.** Aufträge von Unternehmen, Schulen und
 > anderen Organisationen regelt Dokument **04**. Die beiden Texte dürfen
 > nicht vermischt werden — der Prüfmaßstab ist ein anderer
