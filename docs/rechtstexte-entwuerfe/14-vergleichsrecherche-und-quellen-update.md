@@ -39,6 +39,27 @@ mit vergleichbarer Quellenlage dokumentiert: § 356a BGB
 (Widerrufsbutton), § 36 VSBG (Kleinunternehmer-Ausnahme), BFSG-Ausnahme
 für Kleinstunternehmen, Abschaltung der EU-OS-Plattform.
 
+## 2b. Dienstleister-Firmierungen (recherchiert auf Wunsch von Adam, 18.09.2026)
+
+**Direkter Abruf der Anbieter-Rechtsseiten war blockiert** (`stripe.com`,
+`www.hostinger.com`, `uptimerobot.com` — alle `EGRESS_BLOCKED`). Die
+folgenden Angaben stammen aus Websuche-Zusammenfassungen fremder
+Quellen (Handelsregisterauszüge, LEI-Register, Drittanbieter-DPAs), die
+diese Angaben zitieren — **nicht aus den Originaldokumenten selbst.**
+Vor Verwendung im eigenen Konto/den eigenen Vertragsunterlagen
+gegenprüfen.
+
+| Anbieter | Recherchiertes Ergebnis | Sicherheit | Quelle |
+|---|---|---|---|
+| Backblaze | Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA | hoch — nur eine Gesellschaft gefunden | Backblaze-eigene Datenschutzseiten, BBB-Eintrag |
+| UptimeRobot | UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei | hoch — aus dem öffentlichen UptimeRobot-DPA | UptimeRobot DPA-Seite (per Suchtreffer, nicht direkt abgerufen) |
+| Stripe | Stripe Payments Europe, Limited, One Wilton Park, Wilton Place, Dublin 2, D02 FX04, Irland | **mittel** — für deutsche Kunden in Stripes „Services Agreement — Germany" genannt, aber Stripe weist ausdrücklich auf ggf. mehrere beteiligte Gesellschaften hin | Stripe-eigene Rechtsseiten (`stripe.com/en-de/legal`), LEI-Register |
+| Hostinger | **nicht eindeutig** — mindestens vier Gesellschaften je nach Kundensitz: Hostinger International Limited (Zypern), Hostinger UK Limited, Hostinger Global S.à r.l. (Luxemburg), weitere für Asien | niedrig — Kundensitz Deutschland fiel in keinem Treffer eindeutig einer bestimmten Gesellschaft zu | Hostinger-eigene Rechtsseiten, DPA-Zusammenfassungen |
+
+**Für Stripe und Hostinger bleibt die endgültige Zuordnung eine
+Ablesearbeit im eigenen Konto** (Dokument 15, Abschnitt A) — Recherche
+kann eine unternehmerspezifische Vertragsbeziehung nicht ersetzen.
+
 ---
 
 ## 3. Vergleichsrecherche: Struktur bei vergleichbaren Anbietern

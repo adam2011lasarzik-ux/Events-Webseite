@@ -258,11 +258,16 @@ Entwurf schließt:
 
 **Entwurfstext:**
 
-> Für die Bezahlung nutzen wir den Zahlungsdienstleister **Stripe**.
->
-> `[VOR VERWENDUNG KLÄREN: vollständige Firmierung und Anschrift der
-> für VERA vertragschließenden Stripe-Gesellschaft aus dem eigenen
-> Stripe-Konto ablesen — nicht aus fremden Erklärungen abschreiben.]`
+> Für die Bezahlung nutzen wir den Zahlungsdienstleister **Stripe
+> Payments Europe, Limited**, One Wilton Park, Wilton Place, Dublin 2,
+> D02 FX04, Irland — recherchiert 18.09.2026 (Dokument 14/15): Diese
+> Gesellschaft wird in Stripes eigenen Vertragsunterlagen ausdrücklich
+> für Kunden mit Sitz in Deutschland genannt. `[VOR VERWENDUNG KLÄREN:
+> Stripe weist selbst darauf hin, dass je nach genutzten Diensten
+> **mehrere** Stripe-Gesellschaften beteiligt sein können — im eigenen
+> Stripe-Dashboard unter „Einstellungen → Geschäftsdaten" bzw. in den
+> „Definitionen" der akzeptierten Stripe Services Agreement gegen­
+> prüfen, nicht ungeprüft übernehmen.]`
 >
 > Bezahlt wird ausschließlich auf einer von Stripe betriebenen Seite. Wir
 > übermitteln dorthin den zu zahlenden Betrag, die Anmeldenummer, Ihre
@@ -332,10 +337,16 @@ Versand über das Postfach `kontakt@veraevents.de` bei **Hostinger**
 > Buchst. b DSGVO. Werbe-E-Mails versenden wir nicht.
 >
 > Für den Versand und das Postfach nutzen wir die E-Mail-Dienste der
-> `[VOR VERWENDUNG KLÄREN: vollständige Firmierung und Anschrift der
-> Hostinger-Gesellschaft, mit der der Vertrag besteht — aus dem eigenen
-> Kundenkonto ablesen.]`. Der Anbieter verarbeitet die Inhalte und
-> Verbindungsdaten Ihrer E-Mails in unserem Auftrag.
+> `[VOR VERWENDUNG KLÄREN — recherchiert, aber nicht sicher zuordenbar
+> (Dokument 14/15): Hostinger firmiert je nach Kundensitz unter
+> verschiedenen Gesellschaften — u. a. **Hostinger International
+> Limited** (Zypern, 61 Lordou Vironos Street, Lumiel Building, 4.
+> Stock, Larnaca, CY 6023) oder **Hostinger Global S.à r.l.**
+> (Luxemburg, 6 Avenue Pasteur, L-2310 Luxemburg). Welche davon für
+> deinen konkreten Vertrag gilt, steht auf deiner Hostinger-Rechnung
+> bzw. -Auftragsbestätigung (hPanel → Abrechnung → Rechnungen) — dort
+> bitte nachsehen, statt zu raten.]`. Der Anbieter verarbeitet die
+> Inhalte und Verbindungsdaten Ihrer E-Mails in unserem Auftrag.
 >
 > `[VOR VERWENDUNG KLÄREN: Liegt ein Auftragsverarbeitungsvertrag mit
 > Hostinger vor, und deckt er sowohl den Server als auch das Postfach
@@ -393,10 +404,12 @@ Zahlungsbezüge) **einmal täglich in verschlüsselter Form** den Server.
 > Entschlüsseln erforderliche Schlüssel befindet sich ausschließlich bei
 > uns; der Speicherdienst kann die Sicherungen nicht lesen.
 >
-> Anbieter des Speicherdienstes ist **Backblaze, Inc.**
-> `[VOR VERWENDUNG KLÄREN: vollständige Anschrift sowie die für den
-> Bucket tatsächlich gewählte Region — EU oder USA. Dies im
-> Backblaze-Konto ablesen.]`
+> Anbieter des Speicherdienstes ist **Backblaze, Inc.**, 500 Ben
+> Franklin Ct, San Mateo, CA 94401, USA (recherchiert 18.09.2026,
+> Dokument 14/15 — Backblaze nennt nur diese eine Gesellschaft).
+> `[VOR VERWENDUNG KLÄREN: die für den Bucket tatsächlich gewählte
+> Region — EU oder USA. Das steht nur im eigenen Backblaze-Konto, nicht
+> recherchierbar.]`
 >
 > Sicherungen werden nach 180 Tagen gelöscht.
 >
@@ -427,8 +440,11 @@ Server statt.
 
 > Damit wir von einem Ausfall der Website erfahren, ruft ein externer
 > Überwachungsdienst alle fünf Minuten eine öffentliche Seite auf.
-> Anbieter ist `[VOR VERWENDUNG KLÄREN: Firmierung und Anschrift der
-> UptimeRobot-Gesellschaft]`. Dabei werden **keine** Daten von Besuchern
+> Anbieter ist **UptimeRobot s. r. o.**, Obchodná 507/2, Bratislava —
+> mestská časť Staré Mesto, 811 06 Bratislava, Slowakei (recherchiert
+> 18.09.2026, Dokument 14/15, aus dem öffentlichen Auftragsverarbeitungs­
+> vertrag von UptimeRobot; **vor Verwendung mit dem eigenen Konto
+> gegenprüfen**). Dabei werden **keine** Daten von Besuchern
 > oder Teilnehmenden übermittelt — der Dienst ruft die Seite auf wie ein
 > gewöhnlicher Besucher. In unseren Server-Protokollen erscheinen diese
 > Aufrufe wie andere auch.
@@ -519,12 +535,12 @@ Erklärung verweist, die es nicht gibt.]`
 
 | Empfänger | Wofür | Was er erhält | Rolle | Standort |
 |---|---|---|---|---|
-| Hostinger (Server) | Betrieb der Website | alle auf dem Server anfallenden Daten | Auftragsverarbeiter `[bestätigen]` | EU `[Region bestätigen]` |
-| Hostinger (Postfach) | E-Mail-Versand und -Empfang | Inhalt und Adressaten der E-Mails | Auftragsverarbeiter `[bestätigen]` | `[bestätigen]` |
+| Hostinger (Server) | Betrieb der Website | alle auf dem Server anfallenden Daten | Auftragsverarbeiter `[bestätigen]` | Server: EU (VPS-Standort laut Phase 1 bestätigt) — Vertragsgesellschaft `[siehe Ziffer 7 — Hostinger International Limited (Zypern) oder Hostinger Global S.à r.l. (Luxemburg), aus eigener Rechnung zu bestätigen]` |
+| Hostinger (Postfach) | E-Mail-Versand und -Empfang | Inhalt und Adressaten der E-Mails | Auftragsverarbeiter `[bestätigen]` | wie oben |
 | Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | doppelte Rolle — Auftragsverarbeiter für die Abwicklung, eigenständig Verantwortlicher für eigene Pflichten `[aus eigenem Vertrag bestätigen]` | `[Drittlandbezug klären]` |
 | PayPal (nur bei Auswahl dieser Zahlungsart) | Bezahlung | PayPal-Zugangsdaten, Betrag | eigenständig Verantwortlicher | `[klären]` |
-| Backblaze, Inc. | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | `[Region klären]` |
-| UptimeRobot | Erreichbarkeitsprüfung | nur öffentliche Seitenaufrufe | `[klären, ob AV nötig]` | `[klären]` |
+| Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | USA `[Region des Buckets — EU oder USA — im Konto klären]` |
+| UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei | Erreichbarkeitsprüfung | nur öffentliche Seitenaufrufe | `[klären, ob AV nötig — Firmensitz EU, spricht dafür]` | EU (Slowakei) |
 | Veranstaltungslocation | Entgegennahme der Papierformulare am Empfang | die unterschriebenen Einverständniserklärungen | siehe Datenschutz Abschnitt 2 | Inland |
 | Rettungsdienst / ärztliches Personal | Notfall | die im Notfall erforderlichen Angaben | eigener Verantwortlicher | Inland |
 

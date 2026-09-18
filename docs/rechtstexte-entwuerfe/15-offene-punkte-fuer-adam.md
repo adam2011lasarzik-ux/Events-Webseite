@@ -21,7 +21,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 |---|---|---|
 | ~~1.1~~ | ✅ **Beantwortet 18.09.2026:** keine USt-IdNr. — Feld entfällt | Finanzamt-Unterlagen |
 | ~~1.2~~ | ✅ **Beantwortet 18.09.2026:** 0 Personen — § 36 Abs. 3 VSBG-Ausnahme greift | eigene Angabe |
-| 1.5 | Vollständige Firmierung und Anschrift von: Hostinger, Stripe, Backblaze, UptimeRobot | jeweiliges Kundenkonto / Vertragsunterlagen |
+| 1.5 | ⚙️ **Teilweise recherchiert am 18.09.2026 (Dokument 14):** Backblaze, Inc. (San Mateo, USA) und UptimeRobot s. r. o. (Bratislava) sind eindeutig — je nur eine Gesellschaft. Stripe: **Stripe Payments Europe, Limited** (Dublin) ist für deutsche Kunden die in Stripes eigenen Unterlagen genannte Gesellschaft, aber Stripe selbst weist auf mögliche weitere beteiligte Gesellschaften hin — **im eigenen Stripe-Dashboard unter „Einstellungen → Geschäftsdaten" gegenprüfen.** Hostinger: **nicht sicher zuordenbar** — Hostinger firmiert je nach Kundensitz unter mehreren Gesellschaften (Zypern, Luxemburg, UK, weitere); **auf deiner Hostinger-Rechnung (hPanel → Abrechnung → Rechnungen) steht, welche für dich gilt.** | Rechnungen/Dashboard, s. o. |
 | 1.6 | Genauer Serverstandort bei Hostinger (Land/Rechenzentrum) | hPanel-Kundenkonto |
 | 1.7 | Region deines Backblaze-Speichers (EU oder USA) | Backblaze-Konto |
 | 1.8 | Welche Auftragsverarbeitungsverträge (AVV) hast du bereits abgeschlossen? | jeweiliges Konto, meist unter „Datenschutz" oder „DPA" |
