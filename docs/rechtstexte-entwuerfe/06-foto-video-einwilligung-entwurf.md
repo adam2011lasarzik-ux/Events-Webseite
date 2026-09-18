@@ -347,5 +347,85 @@ Organisationsfrage „wer hat eingewilligt?" bei 100 Leuten — und die
 Fragen 4.2 bis 4.8 dieses Abschnitts reduzieren sich auf die viel
 kleinere Frage, was auf dem Einzelzustimmungs-Zettel stehen soll.
 
-⬜ **Zu entscheiden:** ob dieser Weg so gewählt wird, und ob er nur für
-das erste Event oder dauerhaft gelten soll.
+---
+
+## Teil VI — Entscheidung von Adam (18.09.2026): Weg A, abgesichert
+
+**Adam hat sich gegen die obige Empfehlung und für Weg A entschieden —
+mit vier Auflagen, die den Einwand gegen Weg A gerade auflösen:**
+
+1. Die Foto- und Videoeinwilligung wird als **separates, freiwilliges,
+   nicht vorausgewähltes Häkchen vor dem Kauf** eingebaut.
+2. **Ticketkauf und Teilnahme müssen auch ohne Zustimmung möglich
+   sein.**
+3. Der Einwilligungsstatus wird **pro Person nachweisbar gespeichert**.
+4. Er wird **beim Check-in angezeigt**.
+
+### Warum das trägt
+
+Mein Haupteinwand gegen Weg A war nicht rechtlicher, sondern
+organisatorischer Natur: Bei hundert Leuten muss im Moment des
+Fotografierens erkennbar sein, wer eingewilligt hat. **Auflage 4 löst
+genau das** — der Status steht auf derselben Liste, die beim Ankommen
+ohnehin geführt wird (Entscheidung 3.27).
+
+Rechtlich sind die Auflagen 1 und 2 die richtige Umsetzung von
+**Art. 7 Abs. 2 DSGVO** (Einwilligung klar unterscheidbar von anderen
+Sachverhalten) und **Art. 7 Abs. 4 DSGVO** (Kopplungsverbot). Auflage 3
+entspricht **Art. 7 Abs. 1 DSGVO**, der Nachweispflicht des
+Verantwortlichen.
+
+### Was „pro Person nachweisbar" technisch bedeutet — belegt
+
+**Heute ist das nicht möglich.** `Registration.einwilligungFotos`
+(`prisma/schema.prisma:238`) ist **ein einziger Boolean für die gesamte
+Buchung**. Bei einem Familienticket mit vier Personen gibt es genau
+einen Wert für alle vier. `Participant`
+(`prisma/schema.prisma:338–352`) hat **kein** Einwilligungsfeld.
+
+**Nötig ist deshalb eine Erweiterung am Teilnehmer**, nicht an der
+Buchung. Vorschlag:
+
+| Feld | Zweck |
+|---|---|
+| `fotoEinwilligung Boolean @default(false)` | der eigentliche Status, je Person |
+| `fotoEinwilligungAm DateTime?` | **wann** eingewilligt wurde — ohne Zeitpunkt ist ein Nachweis wenig wert |
+| `fotoEinwilligungFassung String?` | **welcher Text** zugestimmt wurde. Ändert sich der Einwilligungstext später, lässt sich sonst nicht mehr sagen, worin eigentlich eingewilligt wurde |
+
+> **Warum die letzten beiden Felder nicht Beiwerk sind:** Art. 7 Abs. 1
+> DSGVO verlangt, dass der Verantwortliche die Einwilligung
+> **nachweisen** kann. Ein bloßes Häkchen-Ja belegt nur, dass irgendwann
+> irgendetwas angekreuzt wurde. Zeitpunkt und Textfassung machen daraus
+> einen belastbaren Nachweis — und beides kostet je eine Spalte.
+
+**Bei Minderjährigen** gibt die Einwilligung die anmeldende
+erziehungsberechtigte Person ab; sie ist über die Buchung eindeutig
+zuordenbar und muss nicht zusätzlich gespeichert werden.
+
+**Der alte Boolean an der Buchung** wird durch die Felder am Teilnehmer
+abgelöst. ⬜ **Zu entscheiden bei der Umsetzung:** ob die Werte
+bestehender Buchungen auf alle zugehörigen Teilnehmer übertragen werden
+oder ob das Feld nur noch als Altbestand stehen bleibt.
+
+### ⚠️ Eine Folge, die zur Anzeige am Check-in zwingend dazugehört
+
+**Wer die Einwilligung vor Ort sichtbar macht, muss sie vor Ort auch
+zurücknehmen können.** Art. 7 Abs. 3 DSGVO verlangt, dass der Widerruf
+so einfach möglich ist wie die Erteilung. Steht am Check-in „Foto: ja"
+und die Person sagt „das möchte ich doch nicht", muss das **sofort**
+festhaltbar sein und ab diesem Moment gelten. Ein Widerruf, der erst
+per E-Mail nach der Veranstaltung möglich wäre, käme zu spät — die
+Aufnahmen gibt es dann schon.
+
+### Was daraus für die übrigen Fragen folgt
+
+Die Fragen **4.2 bis 4.8** sind mit dieser Entscheidung **nicht**
+erledigt, sondern werden jetzt erst wirklich gebraucht: Ein
+Einwilligungstext muss Aufnahmearten, Zwecke, Veröffentlichungswege,
+Dauer und Widerruf konkret benennen, sonst ist die Einwilligung nicht
+„informiert" im Sinne der DSGVO. Teil II dieses Dokuments enthält den
+Textentwurf dafür; er bleibt bis zur Beantwortung der Fragen 4.2–4.8
+unvollständig.
+
+⬜ **Weiterhin offen:** ob dieser Weg nur für das erste Event oder
+dauerhaft gilt.
