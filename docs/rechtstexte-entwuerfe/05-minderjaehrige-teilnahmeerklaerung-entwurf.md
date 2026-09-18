@@ -45,9 +45,13 @@
 > Elternteil anwesend und aufsichtsführend ist. Die Frage bleibt für
 > spätere Events offen, ist aber nicht mehr dringend.
 >
-> ⬜ **Noch zu klären:** Gilt die Familienticket-Regel nur für das erste
-> Event oder dauerhaft? Bei „dauerhaft" könnte Teil II dieses Dokuments
-> entfallen; bei „nur erstes Event" bleibt es unverändert nötig.
+> ✅ **Geklärt am 18.09.2026: Die Familienticket-Regel gilt nur für das
+> erste Event.** Für spätere Events bleibt die selbstständige Teilnahme
+> Minderjähriger ausdrücklich offen. **Teil II dieses Dokuments und die
+> zugehörigen Rechtsfragen bleiben deshalb vollständig bestehen** — sie
+> sind für das erste Event nur nicht einschlägig, nicht erledigt. Das
+> gilt auch für die fachliche Prüfung des Anlagenmodells (Teil III):
+> **aufgeschoben, nicht aufgehoben.**
 
 ---
 

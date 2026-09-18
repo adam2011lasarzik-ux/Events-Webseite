@@ -18,9 +18,11 @@
 > Kinder selbst. Damit greift für das erste Event ausschließlich der
 > **begleitete** Weg aus Dokument 05 (Kurzbestätigung beim Ankommen) —
 > der unbegleitete Weg samt Einverständniserklärung ist dort **nicht
-> einschlägig**. ⬜ **Offen und für Dokument 05 entscheidend:** Gilt das
-> nur für das erste Event, oder dauerhaft? Davon hängt ab, ob der
-> unbegleitete Weg überhaupt gebraucht wird.
+> einschlägig**. ✅ **Geklärt am 18.09.2026: Die Regel gilt nur für das
+> erste Event.** Für spätere Events bleibt die selbstständige Teilnahme
+> Minderjähriger offen — Dokument 05 und die Anlagenmodell-Frage aus
+> Abschnitt F.1 bleiben deshalb vollständig bestehen und sind nur für
+> das erste Event nicht einschlägig.
 >
 > ⚠️ **Wichtigster Einzelbefund aus der laufenden Klärung (18.09.2026):
 > Es besteht derzeit keine Veranstalter-Haftpflichtversicherung.** Das
@@ -129,7 +131,9 @@ Stand-Datum für AGB/B2B. Vollständige Liste in Dokument 11, Gruppe 6.
 Diese Punkte kann weder ich noch du allein beantworten; sie gehören zu
 dem, was ein Rechtstexte-Anbieter oder Anwalt bestätigen soll:
 
-1. **Trägt das Anlagenmodell?** Ob die Aufsichtsfreistellung für
+1. **Trägt das Anlagenmodell?** *(Stand 18.09.2026: für das erste Event
+   nicht einschlägig, weil dort nur begleitete Minderjährige teilnehmen
+   — für spätere Events unverändert offen.)* Ob die Aufsichtsfreistellung für
    unbegleitete Minderjährige bei einem gezielt an Schüler vermarkteten
    Format ohne Mindestalter rechtlich hält (Dokument 05, Dokument 11,
    Entscheidung 3.20). **Das ist die wichtigste offene Frage im
