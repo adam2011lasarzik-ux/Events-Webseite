@@ -545,11 +545,30 @@ die Haftung von VERA nach Ziffer 11 nicht.
 > auf den Anlagenbetreiber abzuwälzen, wäre gegenüber Verbrauchern
 > angreifbar und ist hier bewusst nicht formuliert.
 >
-> `[VOR VERWENDUNG KLÄREN: Was steht im Vertrag zwischen VERA und der
-> jeweiligen Veranstaltungslocation? Wer stellt die Ausrüstung? Wer stellt den Trainer — VERA,
-> die Halle oder ein selbständiger Dritter? Davon hängt ab, ob der
-> Trainer Erfüllungsgehilfe von VERA nach § 278 BGB ist. Diese Frage
-> ist für die Haftung wichtiger als jede Formulierung in Ziffer 11.]`
+> ✅ **Beantwortet von Adam am 18.09.2026:** Die Veranstaltungslocation
+> stellt den Trainer (die Halle setzt ihn ein, er führt das Training vor
+> Ort durch) **und** die Ausrüstung (Schläger, Bälle).
+>
+> **Erste rechtliche Einordnung — als Prüfauftrag zu lesen, nicht als
+> bestätigtes Ergebnis:** Dass die Halle den Trainer anstellt oder
+> beauftragt, entscheidet **nicht automatisch**, ob er Erfüllungsgehilfe
+> der Halle oder von VERA ist. Maßgeblich nach § 278 BGB ist, **wessen
+> Vertragspflicht** der Trainer erfüllt — nicht, wer ihn bezahlt. Wenn
+> VERA den Teilnehmenden gegenüber (Ziffer 2.2, „Betreuung durch einen
+> Trainer") eine Einweisung/Betreuung als eigene Leistung **verspricht**
+> und der von der Halle gestellte Trainer genau das für VERA erbringt,
+> spricht viel dafür, dass er trotz seines Vertrags mit der Halle
+> **Erfüllungsgehilfe von VERA** ist — VERA kann sich seiner nicht
+> „bedienen", ohne für ihn einzustehen. Das eigentliche Vertragsverhältnis
+> zwischen VERA und der Halle (Subunternehmer? bloße Raum- und
+> Personalgestellung?) bestimmt zusätzlich, ob daneben auch die Halle
+> selbst haftet — beide Haftungen können nebeneinander bestehen.
+>
+> `[VOR VERWENDUNG KLÄREN, fachlich: Diese Einordnung anhand des
+> tatsächlichen Vertrags zwischen VERA und der Halle bestätigen lassen
+> — insbesondere, ob dort eine Freistellung oder Risikoverteilung
+> vereinbart ist, die im Innenverhältnis (nicht gegenüber den
+> Teilnehmenden) greift.]`
 
 ---
 

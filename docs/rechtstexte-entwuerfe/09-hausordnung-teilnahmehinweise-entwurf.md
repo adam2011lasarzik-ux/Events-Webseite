@@ -301,7 +301,7 @@ auf veraevents.de abrufbar.
 | H-3 | Gaststättenrechtliche Erlaubnis, sobald VERA selbst Alkohol verkauft (Stufe 2) | Behörde, erst bei Bedarf |
 | H-3b | Belehrung nach § 43 IfSG für die Speisenabgabe (Stufe 1, jetzt) | Gesundheitsamt, abhängig von Speisenart |
 | H-5 | Schließfächer vorhanden? (nur als Hinweis, keine Haftungsfrage — VERA nimmt nichts entgegen) | Halle |
-| H-6 | Wer stellt das Betreuungs-/Trainerpersonal — VERA, Halle oder Dritte? | Vertrag mit der Halle |
+| ~~H-6~~ | ✅ Betreuungs-/Trainerpersonal und Ausrüstung werden von der **Halle** gestellt (beantwortet 18.09.2026) | — |
 | H-7 | Aushang vor Ort: wer druckt und hängt ihn auf? | Organisation |
 
 > **H-4 (bisher: „geeigneter Bereich für ausgeschlossene
@@ -310,7 +310,13 @@ auf veraevents.de abrufbar.
 > (siehe Ziffer 7.3).
 
 > **H-6 taucht hier zum zweiten Mal auf** — sie steht bereits in
-> Dokument 03, Ziffer 12. Das ist kein Versehen: Die Frage, wer den
-> Trainer stellt, entscheidet über die Haftung nach § 278 BGB **und**
-> darüber, wessen Anweisungen nach Ziffer 2.1 zu befolgen sind. Sie
-> gehört zu den wichtigsten offenen Punkten überhaupt.
+> Dokument 03, Ziffer 12, jetzt mit einer ersten rechtlichen Einordnung:
+> Auch wenn die Halle den Trainer stellt, ist er nach vorläufiger
+> Einschätzung voraussichtlich **Erfüllungsgehilfe von VERA** nach
+> § 278 BGB, weil er die von VERA versprochene Betreuung erbringt — das
+> ist fachlich zu bestätigen, siehe Dokument 03. Für Ziffer 2.1 dieses
+> Dokuments bedeutet die Antwort: Es sind die Anweisungen des
+> **von der Halle gestellten** Trainer- und Betreuungspersonals, denen
+> Folge zu leisten ist — die Formulierung „Veranstaltungs-, Betreuungs-
+> und Hallenpersonal" bleibt deshalb bewusst offen für „von wem
+> gestellt", statt nur „VERA-Personal" zu sagen.

@@ -34,7 +34,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 | ~~1.7~~ | ✅ **Beantwortet 18.09.2026:** Bucket „Vera-Sicherungen" liegt in der EU (`eu-central-003`). Backblaze, Inc. selbst bleibt aber eine US-Gesellschaft — der Drittlandbezug ist damit nicht vollständig erledigt, siehe Abschnitt F | Backblaze-Konto |
 | ~~1.8~~ | ✅ **Recherchiert 18.09.2026:** Hostinger, Stripe und Backblaze binden ihren AVV automatisch per Verweis in die jeweilige Kontoeröffnung ein — nichts zu tun. **Nur UptimeRobot ist unklar** — bitte selbst im Konto unter uptimerobot.com/dpa nachsehen, ob er dort direkt bereitsteht oder angefordert werden muss | jeweiliges Konto |
 | ~~2.15~~ | ⚠️ **Beantwortet 18.09.2026: Noch keine Versicherung vorhanden.** Wichtiger offener Punkt **vor dem ersten echten Event** (nicht mehr Testmodus) — ohne sie trägt VERA jedes Haftungsrisiko selbst. Keine Versicherung wird in den Texten behauptet (Dokument 03, Ziffer 11.3). | Versicherungsunterlagen |
-| 2.16 | Vertrag mit der Veranstaltungslocation: Wer stellt Trainer und Ausrüstung — VERA, die Halle oder Dritte? | eigener Vertrag mit der Halle |
+| ~~2.16~~ | ✅ **Beantwortet 18.09.2026:** Die Halle stellt Trainer und Ausrüstung. Erste Einordnung: Der Trainer ist trotzdem voraussichtlich Erfüllungsgehilfe von VERA nach § 278 BGB, weil er die von VERA versprochene Betreuung erbringt — **fachlich zu bestätigen** anhand des Vertrags zwischen VERA und der Halle (Dokument 03, Ziffer 12) | eigener Vertrag mit der Halle |
 | 3.5/3.6 | Hausordnung der Veranstaltungslocation im Wortlaut, Vorgabe zum Schuhwerk | von der Location anfordern |
 | 6.4 | Gibt es in der Halle abschließbare Schließfächer? | Halle fragen |
 
@@ -141,6 +141,11 @@ dem, was ein Rechtstexte-Anbieter oder Anwalt bestätigen soll:
 6. **Datenschutzbeauftragter nötig?** Vorläufige Einschätzung „nein"
    (Einzelunternehmen ohne Beschäftigte), aber wegen der freiwilligen
    Gesundheitsangaben gesondert zu bestätigen (Dokument 02).
+7a. **Erfüllungsgehilfe § 278 BGB:** Der von der Halle gestellte
+   Trainer erbringt nach vorläufiger Einschätzung trotzdem die von VERA
+   versprochene Leistung und wäre damit voraussichtlich Erfüllungs­
+   gehilfe von VERA — anhand des tatsächlichen Vertrags zwischen VERA
+   und der Halle zu bestätigen (Dokument 03, Ziffer 12).
 7. **Fristen für die Löschklassen K3–K6** — beruhen auf DIN 66398 und
    einer ersten Einschätzung, sind aber nicht anwaltlich bestätigt
    (Dokument 02, Ziffer 15; Dokument 13).
