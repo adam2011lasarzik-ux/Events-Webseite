@@ -475,8 +475,12 @@ insbesondere:
   durchzuführen,
 - die auf der Eventseite als enthalten ausgewiesenen Leistungen zu
   erbringen,
-- die Veranstaltungsfläche und die bereitgestellte Ausrüstung in
-  verkehrssicherem Zustand zur Verfügung zu stellen,
+- eine für die Veranstaltung geeignete Veranstaltungslocation
+  sorgfältig auszuwählen und bekannt gewordene Mängel an Fläche oder
+  Ausrüstung nicht zu verschweigen — die Verkehrssicherungspflicht für
+  Gebäude, Bodenbeläge, fest installierte Einrichtungen sowie für die
+  von der Location gestellte Ausrüstung liegt beim Betreiber der
+  Anlage (Ziffer 12.1),
 - in die Nutzung der Anlage und der Ausrüstung ordnungsgemäß
   einzuweisen — bei Veranstaltungen im Anlagenmodell (Ziffer 6.4, 6.6)
   insbesondere die **Sicherheitseinweisung** vor dem ersten Spielen
@@ -496,7 +500,13 @@ Betreuungspersonen und sonstigen Erfüllungsgehilfen von VERA.
 11.5 Eine Änderung der gesetzlichen Beweislast zu Ihrem Nachteil ist mit
 diesen Bedingungen nicht verbunden.
 
-> `[VOR VERWENDUNG KLÄREN: Soll Ziffer 11.2 und 11.3 überhaupt gelten?]`
+> ✅ **Beantwortet von Adam am 18.09.2026: Ja, die begrenzte Fassung
+> (11.2/11.3) gilt.** Der Wortlaut wurde daraufhin mit den drei
+> installierten AGB-Skills geprüft — Ergebnis, Quellen und offene
+> Punkte für eine spätere anwaltliche Prüfung stehen in Dokument 15,
+> Abschnitt F. Eine sachliche Korrektur (Ausrüstungs-/Verkehrs­
+> sicherheitszusage) wurde dabei bereits eingearbeitet, siehe die
+> Aufzählung oben und Ziffer 12.2.
 >
 > Die **bisherige** AGB-Fassung enthält keine Begrenzung: Sie verweist
 > auf das Gesetz und stellt nur klar, dass für Leben, Körper, Gesundheit
@@ -536,9 +546,22 @@ insbesondere die Verkehrssicherungspflicht für Gebäude, Bodenbeläge und
 fest installierte Einrichtungen — treffen den Betreiber der Anlage.
 
 12.2 VERA bleibt verantwortlich für die eigene Leistung: Organisation
-und Durchführung der Veranstaltung, Auswahl geeigneter Anlagen und
-Betreuungspersonen, Einweisung und die von VERA bereitgestellte
-Ausrüstung.
+und Durchführung der Veranstaltung, sorgfältige Auswahl geeigneter
+Anlagen sowie des eingesetzten Trainer- und Betreuungspersonals, und
+die Sicherheitseinweisung.
+
+> ⚠️ **Korrigiert am 18.09.2026 nach Prüfung mit den installierten
+> AGB-Skills** (`haftungsbegrenzung-pruefen-und-formulieren`,
+> `klauseltransparenz-pruefen`, `klauselinhalt-und-verbote-pruefen`):
+> Die frühere Fassung nannte „die von VERA bereitgestellte Ausrüstung"
+> — das ist durch die Antwort auf Frage 2.16 (Halle stellt Trainer und
+> Ausrüstung) sachlich überholt. Dieselbe Korrektur betrifft Ziffer
+> 11.2, wo dieselbe unzutreffende Zusage als **Kernpflicht mit
+> Erfolgshaftung** formuliert war — dort noch gewichtiger, weil sie im
+> Widerspruch zu Ziffer 12.1 stand (Verkehrssicherungspflicht der
+> Anlage liegt beim Betreiber). Ein solcher Widerspruch würde nach der
+> Unklarheitenregel (§ 305c Abs. 2 BGB) zu Lasten von VERA ausgelegt.
+> Details und Quellen in Dokument 15, Abschnitt F.
 
 12.3 Ziffer 12.1 stellt die Verantwortungsbereiche klar; sie beschränkt
 die Haftung von VERA nach Ziffer 11 nicht.

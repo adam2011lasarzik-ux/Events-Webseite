@@ -55,7 +55,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 | ~~2.5~~ | ✅ **Beantwortet 18.09.2026: Ja.** Ticketverkauf nur bei feststehendem Termin; „Termin folgt"-Events bleiben Ankündigung ohne Kaufknopf. Technisch noch nicht umgesetzt, siehe Abschnitt G. | — |
 | ~~2.6~~ | ✅ **Durch 2.5 miterledigt:** Widerrufsrecht ist durchgehend ausgeschlossen (§ 312g Abs. 2 Nr. 9 BGB), weil künftig nur noch Events mit festem Termin verkauft werden — Fassung A gilt einheitlich, kein Einzelfall mehr. **Weiterhin als Prüfauftrag zu lesen** (Abschnitt F, Punkt 2), nicht als bestätigtes Ergebnis. | — |
 | ~~2.7~~ | ✅ **Durch 2.6 miterledigt:** Kein Widerrufsrecht → keine Widerrufsfunktion nach § 356a BGB nötig. | — |
-| 2.8 | Haftungsbegrenzung für einfache Fahrlässigkeit — ja oder nein? | Dokument 03 bietet beide Fassungen an. Meine Empfehlung: **ja**, mit klar benannten Kernpflichten (liegt bereits als Entwurf vor), weil die unbegrenzte Fassung wirtschaftlich riskanter ist, ohne mehr Sicherheit für die Teilnehmenden zu bringen. |
+| ~~2.8~~ | ✅ **Beantwortet 18.09.2026: begrenzte Fassung (11.2/11.3).** Mit drei Skills geprüft und korrigiert — Einzelheiten unten. | — |
 | 2.9 | Mindestteilnehmerzahl einführen? | Deine Entscheidung — abhängig von den Fixkosten pro Veranstaltung. |
 | 2.10 | Verlegung: eigener Ablauf oder nur Absage plus Neuanmeldung? | Heute kann die Software nur absagen und erstatten. Ein eigener Verlegungs-Ablauf wäre zusätzlicher Bauaufwand. |
 | 2.11 | Sonderfrist für Stornierung nach nachträglicher Terminbekanntgabe (Platzhalter-Termine)? | Sinnvoll, wenn Termine erst nach der Anmeldung feststehen — sonst kann niemand fristgerecht stornieren. |
@@ -149,6 +149,58 @@ dem, was ein Rechtstexte-Anbieter oder Anwalt bestätigen soll:
 7. **Fristen für die Löschklassen K3–K6** — beruhen auf DIN 66398 und
    einer ersten Einschätzung, sind aber nicht anwaltlich bestätigt
    (Dokument 02, Ziffer 15; Dokument 13).
+
+---
+
+## F2. Haftungsklausel (Ziffer 11) — Skill-Prüfung vom 18.09.2026
+
+Auf ausdrücklichen Wunsch mit drei Skills geprüft:
+`haftungsbegrenzung-pruefen-und-formulieren`,
+`klauseltransparenz-pruefen`, `klauselinhalt-und-verbote-pruefen`.
+
+**Ergebnis in Kürze:** Die Grundstruktur folgt bereits sehr nah dem in
+den Skill-Referenzen als sicher dokumentierten Muster (§ 309 Nr. 7
+Buchst. a/b BGB korrekt umgesetzt, auch für Erfüllungsgehilfen; § 276
+Abs. 3 BGB gewahrt; Kernpflichten-Definition entspricht der
+anerkannten Formel; die offene „insbesondere"-Liste ist transparenz­
+rechtlich unproblematisch).
+
+**Ein echter, korrigierter Fehler:** Die Aufzählungsposition zur
+„Ausrüstung in verkehrssicherem Zustand" war durch die heutige Antwort
+auf Frage 2.16 sachlich überholt (Ausrüstung kommt von der Halle) und
+widersprach Ziffer 12.1 (Verkehrssicherungspflicht der Anlage liegt
+beim Betreiber). Bei einem solchen Widerspruch hätte die
+Unklarheitenregel (§ 305c Abs. 2 BGB) zu Lasten von VERA gewirkt.
+**Korrigiert** in Ziffer 11.2 und 12.2 — VERA verspricht jetzt eine
+sorgfältige Auswahl und Mängelweitergabe statt einer Erfolgszusage für
+etwas, das VERA nicht kontrolliert.
+
+**Verwendete Quellen** (Auszug, vollständig in den Skill-Referenzen
+`.claude/skills/haftungsbegrenzung-pruefen-und-formulieren/references/`
+und `.claude/skills/klausel*-pruefen/references/`, dort mit Datum
+„geprüft am 05.09.2026" versehen): §§ 276, 278, 306, 307, 309 Nr. 7,
+310 BGB; § 14 ProdHaftG; BGH, Urteil vom 07.04.2022, Az. I ZR 212/20;
+BGH, Urteil vom 13.11.2025, Az. III ZR 165/24. **Wichtige
+Einschränkung:** Direkter Abruf von `gesetze-im-internet.de` und der
+BGH-Entscheidungen im Volltext war aus dieser Arbeitsumgebung
+technisch blockiert (nur Websuche funktioniert) — die Paragrafen- und
+Randnummern-Angaben stammen aus den kuratierten Skill-Referenzen,
+nicht aus einem selbst durchgeführten Live-Abgleich mit dem amtlichen
+Volltext heute.
+
+**Für die spätere anwaltliche Prüfung ausdrücklich offen:**
+
+1. Ob die Erfüllungsgehilfen-Einordnung des Hallen-Trainers (Frage
+   2.16, § 278 BGB) trägt — davon hängt ab, ob 11.1/11.4 ihn
+   tatsächlich erfassen.
+2. Ob ein Produkthaftungsgesetz-Bezug hier überhaupt praktisch relevant
+   werden kann (reine Vorsichtsklausel, ohne dass ein „Produkt" im
+   Sinne des Gesetzes verkauft wird).
+3. Ob die konkrete Kernpflichten-Liste in 11.2 aus Sicht eines
+   Gerichts vollständig genug ist, oder ob weitere, hier nicht bedachte
+   Pflichten als „Kernpflicht" nachgeschoben werden müssten.
+4. Allgemein: Diese Prüfung ist Skill-gestützte Eigenarbeit, **keine
+   anwaltliche Prüfung** — sie ersetzt Dokument 15 nicht als Ganzes.
 
 ---
 
