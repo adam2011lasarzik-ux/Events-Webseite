@@ -279,6 +279,73 @@ Widerrufsfall.
 **Der Preis:** deutlich weniger brauchbares Material für die
 Außendarstellung — bei einer neuen Marke ein echter Nachteil.
 
-`[VOR VERWENDUNG KLÄREN: Welcher Weg? Diese Entscheidung sollte vor
-der ersten Veranstaltung fallen, nicht danach — Aufnahmen ohne
-tragfähige Grundlage lassen sich nachträglich nicht heilen.]`
+---
+
+## Teil V — Neubewertung vom 18.09.2026
+
+Anlass sind zwei Vorgaben von Adam vom selben Tag.
+
+### Vorgabe 1: keine allein teilnehmenden Minderjährigen beim ersten Event
+
+Minderjährige nehmen beim ersten Event **ausschließlich über ein
+Familienticket gemeinsam mit anwesenden Erziehungsberechtigten** teil.
+
+**Das entschärft den heikelsten Teil dieses Dokuments.** Die
+Einwilligung für ein Kind muss nach § 22 KunstUrhG von den
+Erziehungsberechtigten kommen — und die sind hier **persönlich vor Ort
+und ansprechbar**. Eine vor Ort erteilte, dokumentierte Einwilligung
+ist der sauberere Weg als ein Häkchen, das Wochen vorher im
+Buchungsformular gesetzt wurde: Der Elternteil sieht die Situation, um
+die es geht, und kann für sein Kind konkret entscheiden.
+
+### Vorgabe 2: keine automatische Kopplung an den Ticketkauf
+
+**Rechtlich ist das genau richtig gedacht.** Nach Art. 7 Abs. 4 DSGVO
+(Kopplungsverbot, dazu Erwägungsgrund 43) ist bei der Beurteilung der
+Freiwilligkeit zu berücksichtigen, ob die Erfüllung eines Vertrags von
+einer Einwilligung abhängig gemacht wird, die für diesen Vertrag gar
+nicht erforderlich ist. Eine Fotoeinwilligung ist für die Durchführung
+einer Veranstaltung **nicht erforderlich** — sie darf den Ticketkauf
+deshalb weder blockieren noch stillschweigend mit ihm mitlaufen.
+Zusätzlich verlangt Art. 7 Abs. 2 DSGVO, dass eine Einwilligung von
+anderen Sachverhalten **klar unterscheidbar** erteilt wird.
+
+**Befund zum heutigen Stand, belegt:** Das Häkchen in
+`content/de.ts:258` („Bei der Veranstaltung dürfen Fotos gemacht und
+für VERA verwendet werden.") ist zwar **freiwillig** — die Buchung
+funktioniert auch ohne — verstößt also nicht gegen das Kopplungsverbot
+im engeren Sinn. Es steht aber **mitten im Buchungsvorgang**, ohne
+Angabe von Zweck, Kanal, Dauer und Widerrufsrecht. Für eine wirksame
+Einwilligung reicht das nicht, und Adams Vorgabe verlangt ohnehin die
+Trennung vom Kauf.
+
+### Empfehlung: Weg B, ergänzt um Einzelzustimmung vor Ort
+
+**Für das erste Event: keine Aufnahmen, auf denen Teilnehmende
+erkennbar sind — plus gezielte Einzelaufnahmen, für die vor Ort
+einzeln zugestimmt wird.**
+
+Das erfüllt alle Vorgaben auf einmal:
+
+| Anforderung | erfüllt durch |
+|---|---|
+| Keine Kopplung an den Ticketkauf | Im Buchungsvorgang wird **gar nichts** zu Fotos abgefragt — das Häkchen entfällt ersatzlos |
+| Wirksame Einwilligung bei Kindern | Der Elternteil ist anwesend und entscheidet konkret für das jeweilige Bild |
+| Brauchbares Material für die Marke | Anlage, Ausrüstung, Spielszenen aus der Distanz — plus die Aufnahmen, für die ausdrücklich zugestimmt wurde |
+| Kein Widerrufs-Chaos | Wenige, einzeln dokumentierte Einwilligungen statt hundert pauschale |
+
+**Der Preis, offen benannt:** Vor Ort muss jemand daran denken, die
+Zustimmung tatsächlich einzuholen und zu dokumentieren, bevor ein
+erkennbares Bild entsteht. Ein Zettel mit Name, Datum, Verwendungszweck
+und Unterschrift genügt; ohne ihn darf das Bild nicht veröffentlicht
+werden. **Aufnahmen ohne tragfähige Grundlage lassen sich
+nachträglich nicht heilen.**
+
+**Was bei dieser Wahl entfällt:** die Einwilligung im Anmeldeformular,
+der Datenschutzabsatz zur pauschalen Foto-Einwilligung, die
+Organisationsfrage „wer hat eingewilligt?" bei 100 Leuten — und die
+Fragen 4.2 bis 4.8 dieses Abschnitts reduzieren sich auf die viel
+kleinere Frage, was auf dem Einzelzustimmungs-Zettel stehen soll.
+
+⬜ **Zu entscheiden:** ob dieser Weg so gewählt wird, und ob er nur für
+das erste Event oder dauerhaft gelten soll.

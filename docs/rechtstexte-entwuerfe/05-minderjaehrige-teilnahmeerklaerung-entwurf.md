@@ -29,6 +29,28 @@
 
 ---
 
+> 📌 **Sachverhaltskorrektur vom 18.09.2026 — für das erste Event
+> greift nur die linke Spalte.** Adam hat klargestellt: **Beim ersten
+> Event nehmen keine Minderjährigen allein teil.** Minderjährige können
+> ausschließlich über ein **Familienticket gemeinsam mit ihren
+> anwesenden Erziehungsberechtigten** teilnehmen, die ihre Kinder
+> selbst beaufsichtigen. Für das erste Event ist damit **nur der
+> begleitete Weg** einschlägig — die Einverständniserklärung in Teil II
+> wird dort nicht gebraucht.
+>
+> **Das entschärft zugleich die wichtigste offene Rechtsfrage dieses
+> Dokuments:** Die Sorge aus Entscheidung 3.20 — ob das Anlagenmodell
+> bei unbegleiteten Minderjährigen ohne Mindestalter trägt — stellt
+> sich beim ersten Event **gar nicht**, weil dort durchgehend ein
+> Elternteil anwesend und aufsichtsführend ist. Die Frage bleibt für
+> spätere Events offen, ist aber nicht mehr dringend.
+>
+> ⬜ **Noch zu klären:** Gilt die Familienticket-Regel nur für das erste
+> Event oder dauerhaft? Bei „dauerhaft" könnte Teil II dieses Dokuments
+> entfallen; bei „nur erstes Event" bleibt es unverändert nötig.
+
+---
+
 ## Teil I — Das Grundmodell, das jetzt gilt
 
 ### Zwei Wege: begleitet und unbegleitet (Entscheidung 3.19)

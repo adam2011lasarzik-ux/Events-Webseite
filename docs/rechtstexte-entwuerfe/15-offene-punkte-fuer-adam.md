@@ -10,6 +10,18 @@
 > Nichts davon wurde erfunden. Wo ich eine Empfehlung habe, steht sie
 > dabei — die Entscheidung bleibt bei dir.
 
+> 📌 **Sachverhaltskorrektur von Adam am 18.09.2026, mit Folgen über
+> mehrere Dokumente:** **Beim ersten Event gibt es keine allein
+> teilnehmenden Minderjährigen.** Minderjährige können ausschließlich
+> über ein **Familienticket gemeinsam mit ihren anwesenden
+> Erziehungsberechtigten** teilnehmen; die Eltern beaufsichtigen ihre
+> Kinder selbst. Damit greift für das erste Event ausschließlich der
+> **begleitete** Weg aus Dokument 05 (Kurzbestätigung beim Ankommen) —
+> der unbegleitete Weg samt Einverständniserklärung ist dort **nicht
+> einschlägig**. ⬜ **Offen und für Dokument 05 entscheidend:** Gilt das
+> nur für das erste Event, oder dauerhaft? Davon hängt ab, ob der
+> unbegleitete Weg überhaupt gebraucht wird.
+>
 > ⚠️ **Wichtigster Einzelbefund aus der laufenden Klärung (18.09.2026):
 > Es besteht derzeit keine Veranstalter-Haftpflichtversicherung.** Das
 > ist kein Textproblem — die Entwürfe behaupten keine und tun das auch
