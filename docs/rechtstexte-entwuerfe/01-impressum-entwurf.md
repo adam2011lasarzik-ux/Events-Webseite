@@ -102,11 +102,9 @@ Davon getrennt gilt weiterhin das **Verbraucherstreitbeilegungsgesetz
 (VSBG)**:
 
 - **§ 36 Abs. 1 Nr. 1 VSBG** (allgemeine Information über Bereitschaft
-  zur Teilnahme): Nach **§ 36 Abs. 3 VSBG** ausgenommen, wer am
-  31.12. des Vorjahres **zehn oder weniger Personen** beschäftigt hat.
-  VERA ist ein Einzelunternehmen. `[VOR VERWENDUNG KLÄREN: Bestätigen,
-  dass am 31.12.2025 höchstens zehn Personen beschäftigt waren — nach
-  derzeitigem Kenntnisstand null.]`
+  zur Teilnahme): ✅ **Bestätigt von Adam am 18.09.2026** — am
+  31.12.2025 waren 0 Personen beschäftigt (Einzelunternehmen ohne
+  Angestellte). Die Ausnahme nach **§ 36 Abs. 3 VSBG** greift damit.
 - **§ 36 Abs. 1 Nr. 2 VSBG** (Hinweis auf die zuständige Stelle, wenn
   eine Teilnahmeverpflichtung besteht oder eingegangen wurde): bleibt
   unabhängig von der Beschäftigtenzahl bestehen. `[VOR VERWENDUNG
