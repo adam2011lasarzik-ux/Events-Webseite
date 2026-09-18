@@ -296,8 +296,8 @@ auf veraevents.de abrufbar.
 
 | # | Punkt | Woher die Antwort kommt |
 |---|---|---|
-| H-1 | Hausordnung der Veranstaltungslocation im Wortlaut | Location |
-| H-2 | Vorgaben zum Schuhwerk | Hausordnung, dann auf die Eventseite |
+| H-1 | Hausordnung der Veranstaltungslocation im Wortlaut — **geprüft 18.09.2026: auf der öffentlichen Playtomic-Seite von Quality Padel nicht angegeben, direkte Nachfrage bei der Halle nötig** | Location, direkt |
+| H-2 | Vorgaben zum Schuhwerk — **dieselbe Prüfung, gleiches Ergebnis: nicht öffentlich gelistet** | Location, direkt |
 | H-3 | Gaststättenrechtliche Erlaubnis, sobald VERA selbst Alkohol verkauft (Stufe 2) | Behörde, erst bei Bedarf |
 | H-3b | Belehrung nach § 43 IfSG für die Speisenabgabe (Stufe 1, jetzt) | Gesundheitsamt, abhängig von Speisenart |
 | H-5 | Schließfächer vorhanden? (nur als Hinweis, keine Haftungsfrage — VERA nimmt nichts entgegen) | Halle |
