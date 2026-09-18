@@ -125,9 +125,12 @@ tun und werden hier deshalb getrennt behandelt.
 
 ## 1. Das gesetzliche Widerrufsrecht
 
-`[VOR VERWENDUNG KLÄREN: Dieser Abschnitt hat drei mögliche Fassungen.
-Welche gilt, entscheidet sich nach Fund W-1 — und möglicherweise **je
-Veranstaltung**.]`
+✅ **Entschieden von Adam am 18.09.2026: Fassung A gilt durchgehend.**
+Ticketverkauf und Buchung sind künftig **nur möglich, wenn Datum und
+Uhrzeit feststehen**; Events mit „Termin folgt" dürfen weiterhin
+angekündigt werden, bekommen aber **keinen Kaufknopf**. Damit entfällt
+die Notwendigkeit für Fassung B/C — sie bleiben unten nur zur
+Dokumentation stehen, warum die einfachere Lösung gewählt wurde.
 
 ---
 
@@ -199,12 +202,13 @@ Dann genügt **eine** feste Seite nicht. Nötig wäre:
    Bestellvorgang**, nicht nur zentral,
 3. die Aufnahme in die Bestätigungsmail.
 
-`[VOR VERWENDUNG KLÄREN: Ist das gewollt — oder werden künftig
-ausschließlich Veranstaltungen mit festem Termin angeboten, sodass
-Fassung A durchgehend gilt? Die zweite Antwort ist erheblich einfacher
-und schließt den Fall „Termin folgt" aus. Sie müsste dann aber auch
-technisch durchgesetzt werden: Ein Event ohne `startAt` dürfte nicht
-mehr veröffentlicht werden können.]`
+✅ **Beantwortet 18.09.2026:** Die zweite Antwort gilt — ausschließlich
+Veranstaltungen mit festem Termin werden zum Kauf angeboten, Fassung A
+durchgehend. **Technisch noch nicht umgesetzt** (nichts wurde
+deployt): Ein Event ohne `startAt`/`endAt` dürfte künftig keinen
+Kaufknopf mehr zeigen — das ist ein Bauauftrag für später, nicht für
+diese Dokumentationsrunde. Siehe Dokument 15, Abschnitt G für die
+Sammlung solcher technischen Folgen.
 
 ---
 

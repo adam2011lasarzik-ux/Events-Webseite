@@ -52,7 +52,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 | ~~2.1~~ | ✅ **Beantwortet 18.09.2026: Ja**, eigene, individuell zugeschnittene AGB | — |
 | ~~2.2/2.3~~ | ✅ **Beantwortet 18.09.2026:** Verbindlicher Bestellknopf → „Zahlungspflichtig bestellen" (wortwörtlich der Gesetzestext). Einstiegsknopf zur Anmeldung (nicht bindend) → „Zu den Tickets", betrifft `aktion.anmelden` an 6 Stellen im Code. **Noch nicht deployt.** | — |
 | ~~2.4~~ | ✅ **Beantwortet 18.09.2026:** Pflicht-Häkchen „Ich akzeptiere die AGB." (nicht vorbelegt, „AGB" verlinkt auf die vollständigen AGB, serverseitig erzwungen). **Noch nicht deployt.** | — |
-| 2.5 | Nur noch Veranstaltungen mit festem Termin verkaufen? | Hängt an 2.6 — ein fester Termin ist die Voraussetzung für den Widerrufsausschluss nach § 312g Abs. 2 Nr. 9 BGB. |
+| ~~2.5~~ | ✅ **Beantwortet 18.09.2026: Ja.** Ticketverkauf nur bei feststehendem Termin; „Termin folgt"-Events bleiben Ankündigung ohne Kaufknopf. Technisch noch nicht umgesetzt, siehe Abschnitt G. | — |
 | 2.6 | Besteht ein Widerrufsrecht? Für welche Veranstaltungen? | Bei Events mit festem Termin nach der recherchierten Rechtslage **ausgeschlossen** — aber das ist als Prüfauftrag zu lesen, nicht als gesichertes Ergebnis (siehe Dokument 07). |
 | 2.7 | Widerrufsfunktion nach § 356a BGB bauen? | Folgt aus 2.6 — besteht kein Widerrufsrecht, entfällt die Pflicht. |
 | 2.8 | Haftungsbegrenzung für einfache Fahrlässigkeit — ja oder nein? | Dokument 03 bietet beide Fassungen an. Meine Empfehlung: **ja**, mit klar benannten Kernpflichten (liegt bereits als Entwurf vor), weil die unbegrenzte Fassung wirtschaftlich riskanter ist, ohne mehr Sicherheit für die Teilnehmenden zu bringen. |
@@ -166,6 +166,7 @@ dem, was ein Rechtstexte-Anbieter oder Anwalt bestätigen soll:
 | B-2 | Die **Erlaubnis zum selbstständigen Verlassen** wird bisher nur auf dem Papierformular (Dokument 05) erfasst, nicht online — das Online-Anmeldeformular (`lib/anmeldung.ts`) kennt dieses Feld nicht. Solange nur unbegleitete Minderjährige betroffen sind, für die es ohnehin ein Papierformular gibt, ist das konsistent; falls das je online abgefragt werden soll, wäre das ein neues Formularfeld je Teilnehmer, nicht je Anmeldung. | Dokument 05 |
 | B-3 | Die Foto-Einwilligung ist im Online-Formular ein einziges Häkchen ohne Zweck, Kanal oder Dauer (siehe Dokument 02, Abschnitt 5, Befund). Sobald Gruppe 4 entschieden ist, braucht dieses Häkchen einen ausführlicheren Text oder ein eigenes Formularfeld. | Dokument 06 |
 | B-4 | Prüfliste `N` (maschineller Abgleich AGB/Datenschutz/Formular) muss um die neuen Formulierungen aus dieser Konsolidierungsrunde erweitert werden, bevor sie wieder etwas beweist. | alle |
+| B-5 | Events ohne feststehenden Termin (`startAt`/`endAt` = `null`) dürfen künftig **keinen Kaufknopf** mehr zeigen — nur die Ankündigung. Das ist heute noch nicht durchgesetzt und ein eigener Bauauftrag (vermutlich `lib/events.ts`/`components/PreisRechner.tsx`), nicht Teil dieser Dokumentationsrunde. | Dokument 07, Ziffer 2.5 |
 
 ---
 
