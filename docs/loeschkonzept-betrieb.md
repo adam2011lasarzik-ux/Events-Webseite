@@ -134,10 +134,20 @@ Das ist der Weg, der beim ersten Mal zu gehen ist.
 - Zwei Knöpfe: **Probelauf** (verändert nichts) und **Löschlauf jetzt
   ausführen** (braucht ein ausdrückliches Häkchen)
 
-Auf der Seite stehen **Kennungen, keine Namen**. Wer wissen will, um
-wen es geht, schlägt die Kennung in der Anmeldung nach — solange es
-sie noch gibt. Eine Löschvorschau, die selbst eine Namensliste ist,
-wäre eine zweite Datensammlung.
+**Namen, E-Mail-Adresse, Veranstaltung und Datum stehen in Klartext**
+— sowohl in den beiden Vorschau-Tabellen als auch bei den offenen
+Sperren. Ohne das war die Seite im Betrieb kaum benutzbar: Man konnte
+nicht entscheiden, ob eine Sperre noch nötig ist, ohne jede Kennung
+einzeln in der Datenbank nachzuschlagen. Die Kennung bleibt trotzdem
+sichtbar — klein, gedämpft, mit einem Knopf zum Kopieren — weil man
+sie braucht, um den Datensatz anderswo wiederzufinden.
+
+Nichts davon wird zusätzlich gespeichert: Name, E-Mail und
+Veranstaltung werden bei jedem Aufruf der Seite aus der jeweiligen
+Anmeldung, Checkliste, dem Vorfall oder Zustimmungsnachweis
+nachgeschlagen. Eine Kopie in einer eigenen Tabelle wäre eine zweite
+Stelle mit Personendaten — und sie bliebe nach dem Anonymisieren
+stehen, obwohl die Person genau das nicht mehr wollte.
 
 **`/admin/vorfaelle`**
 

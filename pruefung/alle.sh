@@ -162,6 +162,7 @@ lauf "S · Loeschlauf je Klasse und Sperre" "$P/S/s-loeschlauf.mjs"
 lauf "S · Zugang zu Loeschen und Vorfaellen" "$P/S/s-zugang.mjs"
 lauf "S · Monatliche Papiererinnerung" "$P/S/s-papier.mjs"
 lauf "S · Bedienung der Loeschsperren" "$P/S/s-sperr-bedienung.mjs"
+lauf "S · Vorschau-Tabellen in Klartext" "$P/S/s-vorschau-klartext.mjs"
 
 # Diese beiden laufen gegen den Server OHNE Sonderwerte (Port 3249).
 lauf_rein "N · Rechtsseiten"           node "$P/N/n-seiten.mjs"

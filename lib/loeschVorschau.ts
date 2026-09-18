@@ -5,10 +5,13 @@
    Frage, die ein Betreiber vor dem Löschlauf stellt: "Was würde
    verschwinden, und ist darunter etwas, das ich sperren muss?"
 
-   Der Adminbereich zeigt bewusst KEINE Namen. Wer wissen will, um
-   wen es geht, schlägt die Kennung in der Anmeldung nach — solange
-   es sie noch gibt. Eine Löschvorschau, die selbst eine Namensliste
-   ist, wäre eine zweite Datensammlung.
+   Name, E-Mail, Veranstaltung und Datum werden beim LESEN
+   nachgeschlagen, NICHT gespeichert — genau wie bei den offenen
+   Löschsperren weiter unten. Eine zweite Ablage der Personendaten
+   nur für diese Vorschau wäre eine zusätzliche Datensammlung, und
+   sie bliebe nach dem Anonymisieren stehen. Die Kennung bleibt
+   trotzdem sichtbar (klein, mit Kopierfunktion): Sie ist es, was man
+   braucht, um einen Datensatz anderswo wiederzufinden.
    --------------------------------------------------------------- */
 
 import { db } from "./db";
@@ -34,8 +37,15 @@ export interface VorschauZeile {
   ueberfaellig: boolean;
   /** Offene Sperrgründe. Leer = nichts hält den Datensatz. */
   gesperrtWegen: string[];
-  /** Kurze, personenfreie Einordnung, z. B. der Eventtitel. */
-  hinweis?: string;
+
+  /* ── Klartext statt nur Kennung ────────────────────────────────
+     Nachgeschlagen beim Lesen, siehe Kopfkommentar. */
+  /** Name der Person bzw. sachliche Bezeichnung (z. B. „Veranstaltungscheckliste"). */
+  bezeichnung: string;
+  /** Veranstaltung, falls über eine echte Relation zuzuordnen (nur Anmeldungen). */
+  eventTitel: string | null;
+  veranstaltungAm: Date | null;
+  email: string | null;
 }
 
 export interface OffeneSperre {
@@ -102,15 +112,22 @@ async function sperrenKarte(): Promise<Map<string, Sperrangabe[]>> {
  * ihm die Frage, ob die Sperre noch nötig ist.
  */
 function zeileBauen(
-  klasse: Loeschklasse,
-  zielArt: string,
-  zielId: string,
-  faelligAm: Date | null,
-  sperren: Sperrangabe[],
+  eingabe: {
+    klasse: Loeschklasse;
+    zielArt: string;
+    zielId: string;
+    faelligAm: Date | null;
+    sperren: Sperrangabe[];
+    bezeichnung: string;
+    eventTitel: string | null;
+    veranstaltungAm: Date | null;
+    email: string | null;
+  },
   jetzt: Date,
   grenze: Date,
-  hinweis?: string,
 ): VorschauZeile | null {
+  const { klasse, zielArt, zielId, faelligAm, sperren, bezeichnung, eventTitel, veranstaltungAm, email } =
+    eingabe;
   if (!faelligAm) return null;
 
   const e = entscheide(klasse, faelligAm, sperren, jetzt);
@@ -123,7 +140,18 @@ function zeileBauen(
 
   const gesperrtWegen =
     !e.handeln && e.grund === "gesperrt" ? offeneSperrgruende(sperren) : [];
-  return { klasse, zielArt, zielId, faelligAm, ueberfaellig, gesperrtWegen, hinweis };
+  return {
+    klasse,
+    zielArt,
+    zielId,
+    faelligAm,
+    ueberfaellig,
+    gesperrtWegen,
+    bezeichnung,
+    eventTitel,
+    veranstaltungAm,
+    email,
+  };
 }
 
 /**
@@ -145,19 +173,27 @@ export async function loeschVorschau(jetzt: Date = new Date()): Promise<Vorschau
       id: true,
       faelligAm: true,
       loeschklasse: true,
-      event: { select: { titel: true } },
+      kontaktVorname: true,
+      kontaktNachname: true,
+      kontaktEmail: true,
+      event: { select: { titel: true, startAt: true, endAt: true } },
     },
   });
   for (const a of anmeldungen) {
     const z = zeileBauen(
-      a.loeschklasse,
-      "Registration",
-      a.id,
-      a.faelligAm,
-      karte.get(`Registration:${a.id}`) ?? [],
+      {
+        klasse: a.loeschklasse,
+        zielArt: "Registration",
+        zielId: a.id,
+        faelligAm: a.faelligAm,
+        sperren: karte.get(`Registration:${a.id}`) ?? [],
+        bezeichnung: `${a.kontaktVorname} ${a.kontaktNachname}`.trim(),
+        eventTitel: a.event.titel,
+        veranstaltungAm: a.event.startAt ?? a.event.endAt,
+        email: a.kontaktEmail,
+      },
       jetzt,
       grenze,
-      a.event.titel,
     );
     if (z) zeilen.push(z);
   }
@@ -168,28 +204,43 @@ export async function loeschVorschau(jetzt: Date = new Date()): Promise<Vorschau
   });
   for (const c of checklisten) {
     const z = zeileBauen(
-      c.loeschklasse,
-      "Checkliste",
-      c.id,
-      c.faelligAm,
-      karte.get(`Checkliste:${c.id}`) ?? [],
+      {
+        klasse: c.loeschklasse,
+        zielArt: "Checkliste",
+        zielId: c.id,
+        faelligAm: c.faelligAm,
+        sperren: karte.get(`Checkliste:${c.id}`) ?? [],
+        // Kein Personenbezug: eine Checkliste betrifft keine einzelne
+        // Person. "eventId" ist hier ein rohes Feld ohne Prisma-
+        // Relation — der Titel lässt sich ohne eine zweite Abfrage je
+        // Zeile nicht mitliefern, deshalb bleibt eventTitel leer.
+        bezeichnung: "Veranstaltungscheckliste",
+        eventTitel: null,
+        veranstaltungAm: c.durchgefuehrtAm,
+        email: null,
+      },
       jetzt,
       grenze,
-      `durchgeführt ${c.durchgefuehrtAm.toISOString().slice(0, 10)}`,
     );
     if (z) zeilen.push(z);
   }
 
   const nachweise = await db.zustimmungsnachweis.findMany({
-    select: { id: true, faelligAm: true, loeschklasse: true },
+    select: { id: true, faelligAm: true, loeschklasse: true, teilnehmerName: true, veranstaltungAm: true },
   });
   for (const n of nachweise) {
     const z = zeileBauen(
-      n.loeschklasse,
-      "Zustimmungsnachweis",
-      n.id,
-      n.faelligAm,
-      karte.get(`Zustimmungsnachweis:${n.id}`) ?? [],
+      {
+        klasse: n.loeschklasse,
+        zielArt: "Zustimmungsnachweis",
+        zielId: n.id,
+        faelligAm: n.faelligAm,
+        sperren: karte.get(`Zustimmungsnachweis:${n.id}`) ?? [],
+        bezeichnung: n.teilnehmerName,
+        eventTitel: null,
+        veranstaltungAm: n.veranstaltungAm,
+        email: null,
+      },
       jetzt,
       grenze,
     );
@@ -198,18 +249,23 @@ export async function loeschVorschau(jetzt: Date = new Date()): Promise<Vorschau
 
   const vorfaelle = await db.vorfall.findMany({
     where: { status: "ABGESCHLOSSEN" },
-    select: { id: true, faelligAm: true, loeschklasse: true, titel: true },
+    select: { id: true, faelligAm: true, loeschklasse: true, titel: true, eroeffnetAm: true },
   });
   for (const v of vorfaelle) {
     const z = zeileBauen(
-      v.loeschklasse,
-      "Vorfall",
-      v.id,
-      v.faelligAm,
-      karte.get(`Vorfall:${v.id}`) ?? [],
+      {
+        klasse: v.loeschklasse,
+        zielArt: "Vorfall",
+        zielId: v.id,
+        faelligAm: v.faelligAm,
+        sperren: karte.get(`Vorfall:${v.id}`) ?? [],
+        bezeichnung: v.titel,
+        eventTitel: null,
+        veranstaltungAm: v.eroeffnetAm,
+        email: null,
+      },
       jetzt,
       grenze,
-      v.titel,
     );
     if (z) zeilen.push(z);
   }

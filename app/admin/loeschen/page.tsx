@@ -446,7 +446,15 @@ export default async function LoeschenSeite({
   );
 }
 
-/** Die Vorschautabelle — dreimal benutzt, deshalb einmal geschrieben. */
+/**
+ * Die Vorschautabelle — zweimal benutzt (jetzt fällig / demnächst fällig),
+ * deshalb einmal geschrieben.
+ *
+ * Zeigt Name, E-Mail, Veranstaltung und Datum in Klartext, dieselbe
+ * Bauweise wie die Tabelle der offenen Löschsperren weiter unten. Die
+ * Kennung bleibt sichtbar — klein, mit Kopierfunktion — weil man sie
+ * braucht, um den Datensatz anderswo wiederzufinden.
+ */
 function Tabelle({
   zeilen,
 }: {
@@ -458,10 +466,10 @@ function Tabelle({
         <thead>
           <tr>
             <th>fällig am</th>
+            <th>Betroffener Datensatz</th>
+            <th>Veranstaltung</th>
             <th>Klasse</th>
             <th>vorgesehen</th>
-            <th>Datensatz</th>
-            <th>Hinweis</th>
             <th>Sperre</th>
           </tr>
         </thead>
@@ -469,14 +477,25 @@ function Tabelle({
           {zeilen.map((z) => (
             <tr key={`${z.zielArt}-${z.zielId}`}>
               <td>{datum(z.faelligAm)}</td>
+              <td>
+                <div className={stil.sperrZeile}>
+                  <span className={stil.sperrName}>{z.bezeichnung}</span>
+                  {z.email && <span className={stil.sperrNeben}>{z.email}</span>}
+                  <span className={stil.sperrNeben}>{ZIELART_NAME[z.zielArt] ?? z.zielArt}</span>
+                  <KennungKopieren kennung={z.zielId} />
+                </div>
+              </td>
+              <td>
+                {z.eventTitel ?? "—"}
+                {z.veranstaltungAm && (
+                  <>
+                    <br />
+                    <span className={stil.sperrNeben}>{datum(z.veranstaltungAm)}</span>
+                  </>
+                )}
+              </td>
               <td>{KLASSENNAME[z.klasse] ?? z.klasse}</td>
               <td>{AKTION_JE_KLASSE[z.klasse]}</td>
-              <td>
-                {z.zielArt}
-                <br />
-                <code>{z.zielId}</code>
-              </td>
-              <td>{z.hinweis ?? "—"}</td>
               <td>
                 {z.gesperrtWegen.length === 0 ? (
                   "—"
