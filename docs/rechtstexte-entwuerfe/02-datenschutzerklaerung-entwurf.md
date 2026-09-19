@@ -566,6 +566,34 @@ Siehe Dokument **06** für den Einwilligungstext selbst.
 dieser Abschnitt nicht veröffentlicht werden, weil er sonst auf eine
 Erklärung verweist, die es nicht gibt.]`
 
+> ⚠️ **Ergänzung vom 19.09.2026 (Entscheidung 4.9): zwei Spuren, zwei
+> Rechtsgrundlagen.** Der bisherige Entwurfstext oben beschreibt nur die
+> Einwilligung. Seit der Entscheidung zum Umgebungston braucht Ziffer 13
+> eine **zweite Passage**, sonst fehlt die Rechtsgrundlage für den
+> größeren Teil der Aufnahmen:
+>
+> - **Übersichtsaufnahmen, bei denen keine einzelne Person im Mittelpunkt
+>   steht** — einschließlich allgemeiner Umgebungsgeräusche wie Spiel-
+>   und Hallengeräuschen und Applaus. Rechtsgrundlage ist **Art. 6 Abs. 1
+>   Buchst. f DS-GVO**, bildrechtlich gestützt auf **§ 23 Abs. 1 Nr. 3
+>   KunstUrhG**. Berechtigtes Interesse: die Darstellung der eigenen
+>   Veranstaltungstätigkeit auf den in Dokument 06 benannten vier
+>   Kanälen.
+> - **Aufnahmen mit erkennbaren einzelnen Personen** — Rechtsgrundlage
+>   bleibt die **freiwillige Einwilligung** nach Art. 6 Abs. 1 Buchst. a
+>   DS-GVO, zusätzlich § 22 KunstUrhG.
+>
+> **Pflichtbestandteil der ersten Spur ist der Hinweis auf das
+> Widerspruchsrecht** nach Art. 21 Abs. 1 DS-GVO. Art. 21 Abs. 4 DS-GVO
+> verlangt ihn **ausdrücklich und in einer von anderen Informationen
+> getrennten Form** — er darf hier also nicht im Fließtext untergehen.
+>
+> Ebenfalls aufzunehmen: Einzelne Gespräche und private Äußerungen werden
+> nicht gezielt aufgenommen und nicht veröffentlicht; ist ein Gespräch
+> deutlich verständlich, wird der Ton vor der Veröffentlichung entfernt
+> oder bearbeitet. Das ist zugleich die Antwort auf § 201 StGB
+> (Dokument 06, Teil VII).
+
 > ✅ **Ergänzung vom 18.09.2026 (Entscheidung 4.4).** Die Veröffentlichung
 > erfolgt auf vier benannten Kanälen: Website und offizieller
 > Instagram-Kanal von VERA sowie Website und offizieller Instagram-Kanal

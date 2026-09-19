@@ -74,6 +74,21 @@ Löschfrist und Widerrufshinweis haben.
 
 ### II.1 Text am Häkchen (im Anmeldeformular)
 
+> ⚠️ **Ergänzt am 19.09.2026.** Im Formular stehen seit der Entscheidung
+> zum Umgebungston **zwei verschiedene Dinge**, die nicht verwechselt
+> werden dürfen:
+>
+> 1. ein **verpflichtendes Kenntnisnahme-Häkchen** zu Übersichtsaufnahmen
+>    mit Umgebungston — keine Einwilligung, sondern Information; Wortlaut
+>    und Begründung in **Teil VII**,
+> 2. die hier beschriebenen **freiwilligen Einwilligungs-Häkchen** für
+>    erkennbare Einzelaufnahmen (VERA und Location getrennt).
+>
+> Beide brauchen im Formular sichtbaren Abstand und eigene
+> Überschriften. Stehen sie untereinander wie eine Liste, entsteht der
+> Eindruck, man müsse alles ankreuzen — und damit wäre die Freiwilligkeit
+> der zweiten Gruppe praktisch entwertet.
+
 > ☐ **Foto- und Videoaufnahmen (freiwillig)**
 > Ich bin damit einverstanden, dass bei der Veranstaltung Foto- und
 > Videoaufnahmen entstehen, auf denen ich beziehungsweise die von mir
@@ -108,30 +123,71 @@ kontakt@veraevents.de
 
 ## Welche Aufnahmen
 
-✅ **Entschieden am 18.09.2026 (Frage 4.2): Fotografien und
-Videoaufnahmen ohne Ton.**
+> ⚠️ **Geändert am 19.09.2026.** Die ursprüngliche Entscheidung vom
+> 18.09.2026 („Foto und Video **ohne Ton**", Frage 4.2) ist **überholt**.
+> Sie wird hier nicht gelöscht, sondern ersetzt — die alte Begründung
+> steht weiter unten, weil sie für die neue Fassung noch gebraucht wird.
 
-> Bei unseren Veranstaltungen entstehen Fotografien und Videoaufnahmen
-> **ohne Tonaufzeichnung**. Aufgenommen werden das Geschehen auf der
-> Anlage, einzelne Spielszenen und Gruppensituationen.
+✅ **Entschieden am 19.09.2026 (Frage 4.2, Neufassung): Fotografien und
+Videoaufnahmen, Video mit allgemeinem Umgebungston.**
 
-> **Warum der Ton bewusst ausgenommen ist.** Tonaufnahmen sind nicht
-> nur datenschutzrechtlich ein eigener Eingriff, sondern berühren
-> zusätzlich **§ 201 StGB** (Verletzung der Vertraulichkeit des
-> Wortes): Das Aufnehmen des **nichtöffentlich gesprochenen Wortes**
-> ist strafbewehrt. Auf einer Veranstaltung unterhalten sich Menschen
-> privat — ein offenes Mikrofon nimmt auch Personen auf, die weder im
-> Bild noch in der Einwilligungsliste stehen. Ohne Ton entfällt dieses
-> Risiko vollständig, und für Bewegtbild vom Sport ist der
-> Originalton ohnehin entbehrlich (Musik lässt sich nachträglich
-> unterlegen).
+> Bei unseren Veranstaltungen entstehen Fotografien und Videoaufnahmen.
+> Die Videoaufnahmen sind **Übersichtsaufnahmen** vom Geschehen auf der
+> Anlage und können den **allgemeinen Umgebungston** enthalten —
+> Spielgeräusche, Applaus, allgemeine Hallengeräusche.
 >
-> **Wenn später einmal O-Töne gebraucht werden** — ein Statement, ein
-> Trainer-Interview —, sind das **gezielte Einzelaufnahmen mit der
-> betreffenden Person**, angekündigt und einzeln dokumentiert. Dafür
-> braucht es keine pauschale Ton-Einwilligung von allen Teilnehmenden.
-> **Diese Fassung deckt solche Aufnahmen nicht ab.**
->
+> **Nicht aufgenommen und nicht veröffentlicht werden** einzelne
+> Gespräche, Interviews oder private Äußerungen. Sind persönliche
+> Gespräche in einer Aufnahme deutlich verständlich, wird der Ton vor
+> der Veröffentlichung entfernt oder entsprechend bearbeitet.
+
+### Warum die Tongrenze genau dort verläuft
+
+Die Begründung der alten Fassung bleibt gültig — sie führt nur zu einer
+anderen Grenze, nicht mehr zu einem vollständigen Verzicht.
+
+**§ 201 StGB** (Verletzung der Vertraulichkeit des Wortes) stellt unter
+Strafe, wer das **nichtöffentlich gesprochene Wort** eines anderen
+aufnimmt **oder** eine so hergestellte Aufnahme gebraucht oder Dritten
+zugänglich macht. Daraus folgen drei Unterscheidungen, die die neue
+Regel genau trifft:
+
+- **Reine Geräusche sind kein gesprochenes Wort.** Ballkontakte,
+  Applaus, Hallenhall, Stimmengewirr ohne verstehbaren Inhalt fallen
+  nicht unter § 201 StGB. Für diesen Teil ist die Frage strafrechtlich
+  gar nicht eröffnet.
+- **Der Tatbestand hat zwei Stufen — Aufnehmen und Veröffentlichen.**
+  Wer bei einer Übersichtsaufnahme unbeabsichtigt ein Gespräch
+  mitschneidet, handelt insoweit ohne Vorsatz; die Aufnahme selbst ist
+  dann nicht strafbar. **Wer ein verstehbares Gespräch anschließend
+  veröffentlicht, handelt vorsätzlich.** Genau dort setzt die
+  Bearbeitungspflicht an — sie ist deshalb nicht nur eine Höflichkeit,
+  sondern der Punkt, an dem die Strafbarkeit sonst einträte.
+- **Nicht jedes Gespräch auf der Anlage ist „nichtöffentlich".** Wo
+  Umstehende ohne Weiteres mithören können, kann ein Gespräch seinen
+  vertraulichen Charakter verlieren („faktische Öffentlichkeit"). Darauf
+  darf man sich aber **nicht verlassen**: Zwei Personen, die sich abseits
+  unterhalten, führen ein nichtöffentliches Gespräch, auch mitten in
+  einer Halle. Die Regel „im Zweifel Ton entfernen" ist deshalb die
+  richtige.
+
+**Was die Regel zusätzlich leisten muss und heute noch nicht sagt:**
+
+- Die **Stimme ist ein personenbezogenes Datum**. Der Umgebungston ist
+  also nicht nur eine strafrechtliche, sondern auch eine
+  datenschutzrechtliche Frage — sie wird in Teil VII beantwortet.
+- Die Bearbeitungspflicht braucht einen **festen Platz im Ablauf**: Sie
+  greift **vor** jeder Veröffentlichung, und sie gilt für beide
+  Verantwortliche. Gibt VERA eine Aufnahme an die Location weiter
+  (Entscheidung 4.3), muss sie **bereits bearbeitet** sein — VERA kann
+  die Prüfung nicht an die Halle delegieren und sich darauf verlassen.
+
+> **Gezielte O-Töne bleiben ausgenommen.** Ein Statement, ein
+> Trainer-Interview, eine Umfrage vor der Kamera sind **gezielte
+> Einzelaufnahmen mit der betreffenden Person**, angekündigt und einzeln
+> dokumentiert. **Diese Fassung deckt sie nicht ab** — daran ändert die
+> Erweiterung um den Umgebungston nichts.
+
 ✅ **Entschieden am 18.09.2026 (Frage 4.3): VERA **und** der jeweilige
 Veranstaltungsort dürfen aufnehmen und die Aufnahmen jeweils für
 **eigene** Werbezwecke verwenden.**
@@ -906,3 +962,175 @@ unvollständig.
 
 ⬜ **Weiterhin offen:** ob dieser Weg nur für das erste Event oder
 dauerhaft gilt.
+
+---
+
+# Teil VII — Umgebungston und das Zwei-Spuren-Modell (19.09.2026)
+
+## Was Adam entschieden hat
+
+- Übersichtsvideos dürfen **allgemeinen Umgebungston** enthalten:
+  Spielgeräusche, Applaus, allgemeine Hallengeräusche.
+- Einzelne Gespräche, Interviews oder private Äußerungen dürfen **nicht
+  gezielt aufgenommen und nicht veröffentlicht** werden.
+- Sind persönliche Gespräche deutlich verständlich, wird der Ton **vor
+  der Veröffentlichung entfernt oder bearbeitet**.
+- Es soll ein **verpflichtendes Häkchen** geben, das Foto-, Video- und
+  allgemeine Tonaufnahmen ausdrücklich benennt. Vorgeschlagener Text:
+
+  > ☐ Ich habe den Datenschutzhinweis zu Foto-, Video- und allgemeinen
+  > Tonaufnahmen gelesen. Mir ist bekannt, dass während der Veranstaltung
+  > Übersichtsaufnahmen mit allgemeinen Umgebungsgeräuschen angefertigt
+  > und für die genannten Zwecke veröffentlicht werden können. Einzelne
+  > Personen und persönliche Gespräche stehen dabei nicht im Mittelpunkt.
+
+## Die entscheidende Einordnung: das ist keine Einwilligung
+
+**Der vorgeschlagene Text ist eine Kenntnisnahme, keine Zustimmung.** Er
+sagt „ich habe gelesen" und „mir ist bekannt" — er sagt nicht „ich bin
+einverstanden". Das ist kein Schönheitsfehler, sondern der Grund, warum
+das Häkchen überhaupt verpflichtend sein **darf**:
+
+- Eine **Einwilligung** darf nach Art. 7 Abs. 4 DS-GVO nicht an den
+  Vertragsschluss gekoppelt werden. Ein Pflichthäkchen „ich willige in
+  Aufnahmen ein" wäre unwirksam — und stünde im direkten Widerspruch zu
+  Adams eigener Vorgabe vom 18.09.2026: „Eine Fotoeinwilligung darf nicht
+  automatisch mit dem Ticketkauf verbunden sein."
+- Eine **Information** darf und muss dagegen jeden erreichen. Sie zu
+  bestätigen verlangt niemandem etwas ab, was er verweigern könnte.
+
+Daraus folgt ein Modell mit **zwei Spuren**, die sauber auseinandergehalten
+werden müssen:
+
+- **Spur 1 — Übersichtsaufnahmen, niemand im Mittelpunkt.**
+  Rechtsgrundlage ist **nicht** die Einwilligung, sondern das berechtigte
+  Interesse nach **Art. 6 Abs. 1 Buchst. f DS-GVO**, bildrechtlich
+  gestützt auf **§ 23 Abs. 1 Nr. 3 KunstUrhG** (Bilder von Versammlungen
+  und ähnlichen Vorgängen, an denen die Abgebildeten teilgenommen haben).
+  Das Pflichthäkchen ist die zugehörige **Information**.
+- **Spur 2 — Aufnahmen, auf denen einzelne Personen erkennbar im
+  Mittelpunkt stehen.**
+  Rechtsgrundlage ist die **freiwillige Einwilligung** aus Entscheidung
+  4.1, mit den beiden getrennten Häkchen für VERA und die Location.
+
+**Die beiden Spuren dürfen im Formular nicht verschwimmen.** Steht das
+Pflichthäkchen direkt über dem freiwilligen, entsteht der Eindruck, man
+müsse beides ankreuzen. Sie brauchen deshalb sichtbaren Abstand, eigene
+Überschriften und beim freiwilligen Häkchen den ausdrücklichen Satz, dass
+die Teilnahme ohne es uneingeschränkt möglich ist.
+
+## Interessenabwägung für den Umgebungston
+
+Art. 6 Abs. 1 Buchst. f DS-GVO verlangt eine Abwägung. Sie ist hier
+**nicht selbstverständlich positiv**, und das gehört offen gesagt.
+
+**Für VERA spricht:**
+
+- Die Darstellung der eigenen Tätigkeit ist ein anerkanntes berechtigtes
+  Interesse. Ein Video vom Padel-Nachmittag ohne jeden Ton wirkt tot;
+  Ballgeräusche und Applaus sind das, was eine Veranstaltung als lebendig
+  erkennbar macht.
+- Der Eingriff ist **gering**: Umgebungsgeräusche enthalten keine
+  Aussage über eine bestimmte Person. Wer im Hintergrund klatscht, ist
+  daraus nicht identifizierbar.
+- Die Teilnehmenden werden **vorher informiert** — durch das
+  Pflichthäkchen, also zu einem Zeitpunkt, an dem sie noch entscheiden
+  können, ob sie teilnehmen.
+- Die Nutzung ist **auf vier benannte Kanäle begrenzt** (Entscheidung
+  4.4) und nicht an Presse oder Dritte weitergegeben (4.5).
+
+**Gegen VERA spricht:**
+
+- **Der Zweck ist Werbung.** Bei rein werblicher Nutzung ist das
+  berechtigte Interesse schwächer als bei Berichterstattung, und
+  § 23 Abs. 1 Nr. 3 KunstUrhG wird für Werbezwecke deutlich enger
+  ausgelegt. Das ist der wundeste Punkt dieser Spur.
+- **Kinder wiegen schwerer.** Art. 6 Abs. 1 Buchst. f DS-GVO nennt
+  ausdrücklich den Fall, dass die betroffene Person ein Kind ist; nach
+  Erwägungsgrund 38 verdienen Kinder besonderen Schutz, gerade bei
+  Marketing. Bei einem Event, dessen Zielgruppe Familien sind, ist das
+  keine Randfrage.
+- **Ton hebt die Eingriffstiefe.** Die Stimme ist ein personenbezogenes
+  Datum. Sobald ein Wort verstehbar wird, kippt die Abwägung sofort — und
+  zwar unabhängig davon, wie harmlos der Satz ist.
+
+**Ergebnis der Abwägung:** Die Spur trägt, aber nur mit Auflagen. Sie
+sind Bedingungen, nicht Empfehlungen:
+
+- **Übersicht heißt Übersicht.** Keine Nahaufnahmen, keine Aufnahme, in
+  der eine einzelne Person — besonders ein Kind — den Bildinhalt
+  bestimmt. Wo das doch passiert, gilt Spur 2, also Einwilligung.
+- **Kein verstehbares Wort im veröffentlichten Ton.** Im Zweifel Ton
+  entfernen. Die Prüfung erfolgt **vor** der Veröffentlichung und
+  **vor** einer Weitergabe an die Location.
+- **Das Widerspruchsrecht muss ausdrücklich genannt werden** — siehe
+  unten, das ist die wichtigste Lücke im vorgeschlagenen Text.
+- **Ein Widerspruch wird sofort umgesetzt**, ohne dass jemand begründen
+  muss, warum ihn die Aufnahme stört.
+
+## Prüfung des vorgeschlagenen Häkchentextes
+
+Geprüft mit `klauseltransparenz-pruefen`. Der Text ist gut gebaut — er
+benennt Aufnahmearten, den Umgebungston und die Begrenzung „nicht im
+Mittelpunkt". **Drei Beanstandungen:**
+
+- **Das Widerspruchsrecht fehlt.** Stützt sich Spur 1 auf Art. 6 Abs. 1
+  Buchst. f DS-GVO, besteht ein Widerspruchsrecht nach **Art. 21 Abs. 1
+  DS-GVO**. Nach **Art. 21 Abs. 4 DS-GVO** muss darauf **ausdrücklich
+  und in einer von anderen Informationen getrennten Form** hingewiesen
+  werden. Ein Hinweis, der nur in der verlinkten Seite steht, erfüllt das
+  nicht sicher. Das ist keine Feinheit — es ist die Gegenleistung dafür,
+  dass hier ohne Einwilligung gearbeitet wird.
+- **„für die genannten Zwecke" verweist ins Leere.** Im Häkchentext
+  selbst ist kein Zweck genannt. Die Verweiskette muss bis zum
+  maßgeblichen Inhalt führen: Das Wort muss auf die Seite mit den vier
+  Kanälen verlinken, und der Link muss als solcher erkennbar sein.
+- **„gelesen" ist eine Fiktion, die sich vermeiden lässt.** „zur Kenntnis
+  genommen" verlangt dasselbe, behauptet aber nichts Unbeweisbares.
+
+**Vorgeschlagene Fassung:**
+
+> ☐ Ich habe den [Datenschutzhinweis zu Foto-, Video- und allgemeinen
+> Tonaufnahmen](/fotoeinwilligung) zur Kenntnis genommen. Mir ist
+> bekannt, dass während der Veranstaltung Übersichtsaufnahmen entstehen,
+> die allgemeine Umgebungsgeräusche wie Spiel- und Hallengeräusche und
+> Applaus enthalten können, und dass VERA sie für die
+> [dort genannten Zwecke](/fotoeinwilligung#zwecke) veröffentlichen kann.
+> Einzelne Personen und persönliche Gespräche stehen dabei nicht im
+> Mittelpunkt; verstehbare Gespräche werden vor einer Veröffentlichung
+> aus dem Ton entfernt.
+
+Und **getrennt davon, optisch abgesetzt**, unmittelbar darunter:
+
+> **Sie können widersprechen.** Sie haben das Recht, der Anfertigung und
+> Veröffentlichung solcher Übersichtsaufnahmen jederzeit zu
+> widersprechen — vorab per Nachricht an kontakt@veraevents.de oder vor
+> Ort beim Check-in. Ein Widerspruch muss nicht begründet werden und hat
+> keine Auswirkung auf Ihre Teilnahme.
+
+## Folgen für bereits getroffene Entscheidungen
+
+- **Entscheidung 4.2 ist ersetzt** — dokumentiert im Abschnitt „Welche
+  Aufnahmen". Die alte Fassung („ohne Ton") gilt nicht mehr.
+- **Entscheidung 4.1 bleibt unberührt.** Die Einwilligung für erkennbare
+  Einzelaufnahmen bleibt freiwillig, separat und pro Person. Das neue
+  Häkchen tritt **daneben**, nicht an ihre Stelle.
+- **Frage 4.8 ändert sich im Zuschnitt.** Eine Kennzeichnung am Eingang
+  kann sich nur auf **Spur 2** beziehen — bei Übersichtsaufnahmen lässt
+  sich niemand herausrechnen. Für Spur 1 ist das Gegenstück nicht die
+  Kennzeichnung, sondern der **Widerspruch**: Wer widersprochen hat, wird
+  auch in Übersichtsaufnahmen nicht gezeigt, und das muss am Eingang
+  ebenso erkennbar sein.
+- **Die Datenschutzerklärung braucht eine eigene Passage** zu Spur 1:
+  Rechtsgrundlage Art. 6 Abs. 1 Buchst. f, Zweck, Abwägungsergebnis und
+  Widerspruchsrecht. Dokument 02, Ziffer 13.
+
+`[FACHLICHE PRÜFUNG — ausdrücklich offen: (1) Trägt § 23 Abs. 1 Nr. 3
+KunstUrhG für eine rein werbliche Nutzung? Die Auslegung ist bei Werbung
+eng. (2) Hält die Interessenabwägung bei Kindern in Übersichtsaufnahmen
+zu Werbezwecken stand? Dies ist der Punkt, an dem eine Aufsichtsbehörde
+am ehesten widersprechen würde. (3) Genügt die Bearbeitungspflicht als
+Sicherung, oder ist eine Tonaufzeichnung ohne vorherige Einwilligung
+schon bei der Anfertigung zu vermeiden? Die hier genannten Normen sind
+Prüfauftrag, kein nachgewiesenes Ergebnis — gesetze-im-internet.de und
+dejure.org sind aus dieser Arbeitsumgebung gesperrt.]`
