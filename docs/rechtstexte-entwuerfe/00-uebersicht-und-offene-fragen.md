@@ -1,5 +1,13 @@
 # 00 — Übersicht: was hier liegt und was du entscheiden musst
 
+> **Darstellungsregel (Vorgabe Adam, 19.09.2026):**
+> Übersichten und Baulistenpunkte werden **nicht als breite Tabellen**
+> dargestellt, sondern vollständig untereinander als normale Aufzählung.
+> Grund: Adam arbeitet auf dem iPad, dort sind breite Tabellen unlesbar.
+> Gilt für die Dokumente **und** für die Antworten im Chat. Kurze Tabellen
+> mit zwei schmalen Spalten bleiben zulässig, sobald sie ohne seitliches
+> Scrollen lesbar sind.
+
 **Stand: 18.09.2026** (Version 3 — vorherige Stände 16./17.09.2026)
 
 Dieser Ordner enthält **Entwürfe** für alle Rechtstexte, die VERA
