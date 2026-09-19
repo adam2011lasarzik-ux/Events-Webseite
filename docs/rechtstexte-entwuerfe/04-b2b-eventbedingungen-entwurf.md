@@ -72,8 +72,32 @@ deshalb, dass **im Angebot selbst** benannt wird, was geschuldet ist und
 ob eine Abnahme stattfindet. Das ist die wirksamste Vorsorge — wichtiger
 als jede Klausel.
 
-`[VOR VERWENDUNG KLÄREN: Welche Auftragsarten sollen tatsächlich
-angeboten werden? Ohne diese Angabe bleibt die Einordnung abstrakt.]`
+> ✅ **Entschieden am 19.09.2026 (Frage 5.2): nur eine Auftragsart.**
+> Angeboten werden ausschließlich **eigene, von VERA organisierte und
+> durchgeführte Veranstaltungen für geschlossene Gruppen** — Schulklassen,
+> Firmen, Vereine und andere Organisationen. Angefragt und vereinbart
+> wird individuell per E-Mail; **VERA bleibt dabei Veranstalter.**
+>
+> **Nicht angeboten** werden die reine Planung, Vermittlung oder
+> Organisation **fremder** Veranstaltungen sowie Büro- und
+> Verwaltungsleistungen. Beide Bereiche können später getrennt ergänzt
+> werden, nachdem Versicherung, Haftung und mögliche Erlaubnispflichten
+> geklärt sind.
+>
+> **Damit ist die Zeile 2 der Tabelle oben (Werkvertrag über ein
+> abnahmefähiges Ergebnis) vorerst gegenstandslos**, ebenso Zeile 3.
+> Geschuldet ist die **Durchführung der Veranstaltung als solche** —
+> das spricht für einen Dienstvertrag nach §§ 611 ff. BGB. Sicher ist
+> das nicht: Wird im Angebot ein bestimmter Ablauf mit festem Ergebnis
+> zugesagt, kann derselbe Auftrag werkvertragliche Züge bekommen.
+> **Ziffer 3 bleibt deshalb unverändert wichtig:** Im Angebot muss
+> stehen, was geschuldet ist und ob eine Abnahme stattfindet.
+>
+> `[FACHLICHE PRÜFUNG: Dienst- oder Werkvertrag bei der Durchführung
+> einer Veranstaltung — die Einordnung entscheidet über Abnahme,
+> Mängelrechte und das freie Kündigungsrecht des Auftraggebers nach
+> § 648 BGB. Letzteres ist die gesetzliche Grundlage, an der sich die
+> Ausfallstaffel aus Frage 5.10 messen lassen muss.]`
 
 ---
 
@@ -84,8 +108,20 @@ angeboten werden? Ohne diese Angabe bleibt die Einordnung abstrakt.]`
 1.1 Diese Bedingungen gelten für Verträge zwischen Adam Maurice
 Lasarzik, Mühlenstr. 8a, 14167 Berlin („VERA") und Unternehmern
 (§ 14 BGB), juristischen Personen des öffentlichen Rechts und
-öffentlich-rechtlichen Sondervermögen („Auftraggeber") über die Planung,
-Organisation oder Durchführung von Veranstaltungen.
+öffentlich-rechtlichen Sondervermögen („Auftraggeber") über
+**Veranstaltungen, die VERA für eine geschlossene Gruppe des
+Auftraggebers organisiert und durchführt**. VERA ist dabei
+Veranstalter.
+
+1.1a Nicht Gegenstand dieser Bedingungen sind die Planung, Vermittlung
+oder Organisation von Veranstaltungen, die ein anderer durchführt,
+sowie Büro- und Verwaltungsleistungen. Solche Leistungen bietet VERA
+derzeit nicht an.
+
+1.1b Tickets für **öffentlich angebotene** Veranstaltungen können
+Unternehmen, Schulen und andere Organisationen über den Ticketshop
+erwerben; dafür gelten nicht diese Bedingungen, sondern die
+Teilnahmebedingungen für öffentliche Veranstaltungen.
 
 1.2 Sie gelten auch für alle künftigen Aufträge desselben
 Auftraggebers, ohne dass es eines erneuten Hinweises bedarf.
@@ -713,3 +749,109 @@ Sobald B.1 beantwortet ist, trägt folgende Struktur:
 
 **Diese Struktur ist bewusst leer.** Sie wird ausgefüllt, wenn der
 Geschäftsbereich beschrieben ist — nicht vorher.
+
+---
+
+# Anhang B: Prüfung der Auftragsarten (19.09.2026, Frage 5.2)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen` und
+`klauseltransparenz-pruefen`.
+
+## Was die Einschränkung rechtlich bewirkt
+
+Die Beschränkung auf eigene, selbst durchgeführte Veranstaltungen ist
+keine bloße Marktentscheidung — sie hält vier Risiken von VERA fern, die
+sonst alle in diesem Klauselwerk hätten geregelt werden müssen:
+
+- **Keine Haftung für fremde Veranstaltungsdurchführung.** Wer eine
+  fremde Veranstaltung organisiert, schuldet ein Zusammenspiel aus
+  Location, Catering, Technik und Programm und haftet für deren
+  Zusammenwirken. Genau dort entstehen die typischen Vermögensschäden,
+  für die es einen Haftungshöchstbetrag und eine Versicherung braucht —
+  und VERA hat derzeit **keine Veranstalterhaftpflicht**.
+- **Keine Vermittlerrolle.** Ein Vermittler steht zwischen Auftraggeber
+  und Leistungserbringer, mit eigenen Aufklärungs- und Auswahlpflichten
+  und der schwierigen Frage, wessen Vertrag eigentlich zustande kommt.
+  Die Rolle entfällt vollständig.
+- **Kein Pauschalreiserecht.** Die §§ 651a ff. BGB greifen erst, wenn
+  **mindestens zwei verschiedene** Reiseleistungen verbunden werden —
+  etwa Beförderung und Unterbringung oder eine davon zusammen mit einer
+  weiteren touristischen Leistung. Eine reine Veranstaltung vor Ort ist
+  **eine** Leistung; die Vorschriften greifen nicht.
+  ⚠️ **Das kippt, sobald VERA An- und Abreise oder Übernachtung
+  mitanbietet** — dann entstünde unter Umständen eine Pauschalreise mit
+  Insolvenzsicherungspflicht und einem ganz anderen Haftungsregime. Für
+  Schulklassen ist genau das eine naheliegende Nachfrage. **Vor jeder
+  Erweiterung in diese Richtung ist der Punkt zu prüfen.**
+- **Keine Erlaubnisfrage.** Büro- und Verwaltungsleistungen könnten je
+  nach Zuschnitt das Rechtsdienstleistungsgesetz oder das
+  Steuerberatungsgesetz berühren. Solange sie nicht angeboten werden,
+  stellt sich die Frage nicht — sie bleibt als Vorfrage vermerkt
+  (Dokument 11, Frage 5.18).
+
+**Belegt:** Die Website bewirbt heute weder Fremdorganisation noch
+Büro- oder Verwaltungsleistungen. Eine Volltextsuche über `content/`,
+`app/` und `components/` nach „Verwaltung", „Büroservice",
+„Buchhaltung", „Sekretariat" und „Dienstleistung" findet außerhalb des
+Adminbereichs und der Datenschutztexte **keinen** entsprechenden
+Werbetext. Bedingungen und Außenauftritt stimmen also überein — das ist
+kein Selbstläufer und sollte bei künftigen Textänderungen im Blick
+bleiben.
+
+## Was „eigene Veranstaltung" **nicht** bedeutet
+
+Ein Missverständnis, das im Klauselwerk nicht entstehen darf: „VERA ist
+Veranstalter" heißt **nicht**, dass VERA alles selbst erbringt. Nach dem
+für die öffentlichen Events festgehaltenen Anlagenmodell stellt die
+Veranstaltungslocation den Trainer und die Ausrüstung. Für die
+B2B-Bedingungen folgt daraus dasselbe wie im B2C-Fall:
+
+- Soweit der von der Halle gestellte Trainer die von VERA versprochene
+  Einweisung und Betreuung erbringt, ist er **Erfüllungsgehilfe von
+  VERA** (§ 278 BGB) — VERA haftet für ihn wie für eigenes Personal.
+- Die **Verkehrssicherungspflicht** für Gebäude, Bodenbeläge, fest
+  installierte Einrichtungen und die gestellte Ausrüstung liegt
+  weiterhin beim Betreiber der Anlage.
+- Ziffer 7 (Veranstaltungsstätte und Dritte) und Ziffer 15 (Haftung)
+  müssen diese Aufteilung genauso abbilden wie die B2C-Fassung. Eine
+  großzügigere Zusage im B2B-Werk würde die B2C-Fassung im Streitfall
+  unglaubwürdig machen.
+
+## Der Punkt, der bei Schulklassen zuerst schiefgeht
+
+Bei einer Schulveranstaltung während der Unterrichtszeit bleibt die
+**Aufsichtspflicht bei der Schule** und den begleitenden Lehrkräften —
+sie folgt aus dem Schulrecht des Landes und geht nicht dadurch auf VERA
+über, dass VERA die Veranstaltung durchführt. Das entspricht exakt dem
+Anlagenmodell aus dem B2C-Bereich: VERA schuldet die
+**Sicherheitseinweisung**, nicht die Beaufsichtigung.
+
+Ziffer 6 des Entwurfs greift das bereits auf. Wichtig ist, dass das
+**Angebot** es ebenfalls sagt — eine Lehrkraft, die annimmt, VERA
+übernehme die Aufsicht, ist der wahrscheinlichste Konfliktfall dieses
+Geschäftsbereichs.
+
+## Folge für die noch offenen B2B-Fragen
+
+Die Einschränkung vereinfacht mehrere spätere Fragen erheblich:
+
+- **5.6 Genehmigungen:** Bei einer Veranstaltung in einer fremden Halle
+  liegen die einschlägigen Genehmigungen regelmäßig beim Betreiber.
+  VERAs eigener Bedarf ist gering — zu prüfen bleibt der Einzelfall.
+- **5.12 Nutzungsrechte:** Ohne Konzept- oder Dokumentationsleistungen
+  entsteht kaum abnahmefähiges Material, an dem Rechte einzuräumen
+  wären. Die Frage schrumpft auf Foto- und Videoaufnahmen.
+- **5.14 Vermögensschäden:** Das realistische Schadensbild wird
+  kleiner — im Wesentlichen vergebliche Aufwendungen des Auftraggebers
+  bei einem Ausfall, nicht der Ausfall eines ganzen Firmenevents mit
+  Kette von Dienstleistern.
+- **5.13 Haftungshöchstbetrag:** Er lässt sich dadurch leichter
+  begründen, weil der vorhersehbare Schaden begrenzter ist.
+
+`[FACHLICHE PRÜFUNG: (1) Dienst- oder Werkvertrag bei der Durchführung
+einer Veranstaltung. (2) Ob die Beschränkung auf eigene Veranstaltungen
+im Klauselwerk und im Außenauftritt durchgehend eingehalten ist.
+(3) Die Pauschalreise-Schwelle, falls An- und Abreise oder Übernachtung
+je hinzukommen. Alle Normzitate sind Prüfauftrag, kein nachgewiesenes
+Ergebnis — gesetze-im-internet.de und dejure.org sind aus dieser
+Arbeitsumgebung gesperrt.]`

@@ -120,6 +120,22 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.2 — Welche Auftragsarten?**~~ ✅ **Nur eine.** Die
+  B2B-Bedingungen decken ausschließlich **eigene, von VERA organisierte
+  und durchgeführte Veranstaltungen für geschlossene Gruppen** ab —
+  Schulklassen, Firmen, Vereine, andere Organisationen; individuell per
+  E-Mail vereinbart, **VERA bleibt Veranstalter**. Reine Planung,
+  Vermittlung oder Organisation **fremder** Veranstaltungen sowie Büro-
+  und Verwaltungsleistungen werden **vorerst nicht** angeboten und
+  können später getrennt ergänzt werden, nach Klärung von Versicherung,
+  Haftung und Erlaubnispflichten. Geprüft: Die Einschränkung hält vier
+  Risiken fern (Haftung für fremde Durchführung, Vermittlerrolle,
+  Pauschalreiserecht, Erlaubnispflichten) und verkleinert die noch
+  offenen Fragen 5.6, 5.12, 5.13 und 5.14. ⚠️ **Merkposten:** Die
+  Pauschalreise-Schwelle (§§ 651a ff. BGB) kippt, sobald An- und Abreise
+  oder Übernachtung mitangeboten werden — bei Schulklassen eine
+  naheliegende Nachfrage. Dokument 04, Ziffer 1.1–1.1b und Anhang B.
+
 - ~~**5.1 — Sollen Firmen und Schulen online buchen?**~~ ✅ **Nein.**
   Individuell beauftragte Veranstaltungen werden ausschließlich **per
   E-Mail angefragt**; es gibt dafür keine Online-Buchung und keinen
