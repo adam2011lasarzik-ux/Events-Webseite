@@ -134,17 +134,13 @@ zugestimmt hat.
 
 1.4 Für Verträge mit Verbrauchern gelten diese Bedingungen **nicht**.
 
-> ⚠️ **Zu 1.1 — Schulen sind ein Sonderfall.**
-> `[VOR VERWENDUNG KLÄREN: Wer ist bei einer Klassenbuchung
-> Vertragspartner — die Schule, der Schulträger oder die einzelne
-> Lehrkraft?]` Eine öffentliche Schule ist in der Regel nicht selbst
-> rechtsfähig; Träger ist die Kommune oder das Land. Handelt eine
-> Lehrkraft ohne Vertretungsmacht, kann sie selbst verpflichtet sein
-> (§ 179 BGB) — das will niemand.
->
-> **Praktische Vorsorge:** Im Angebot ausdrücklich den Auftraggeber
-> benennen und um Bestätigung durch eine vertretungsberechtigte Person
-> bitten. Ziffer 2.4 sieht das vor.
+> ✅ **Zu 1.1 — Schulen: entschieden am 19.09.2026 (Frage 5.3).**
+> Der Vertragspartner wird **nicht abstrakt festgelegt**, sondern im
+> Angebot benannt. Eine öffentliche Schule ist in der Regel nicht selbst
+> rechtsfähig; Träger ist die Kommune oder das Land. Welcher Weg im
+> Einzelfall passt — Träger, Förderverein, Schule in freier
+> Trägerschaft —, kann VERA nicht steuern. Deshalb regeln die Ziffern
+> 2.4 bis 2.7 das Verfahren statt des Ergebnisses.
 
 ---
 
@@ -161,17 +157,36 @@ bestimmt ist.
 Auftraggeber in Textform zustande, spätestens mit dem Beginn der
 Leistungsausführung durch VERA.
 
-2.4 Der Auftraggeber benennt bei Auftragserteilung die
-vertretungsberechtigte Person und eine für die Durchführung
-verantwortliche Ansprechperson mit Erreichbarkeit während der
-Veranstaltung.
+2.4 **Auftraggeber ist die im Angebot eindeutig bezeichnete
+rechtsfähige Person oder Organisation** — etwa der Schulträger, ein
+Förderverein, eine Schule in freier Trägerschaft oder ein Unternehmen.
+Eine Klassenkasse, eine Klassengemeinschaft oder eine sonstige nicht
+rechtsfähige Einrichtung kann nicht Auftraggeber sein.
 
-2.5 Nebenabreden, Zusagen und Änderungen bedürfen der Textform. Das gilt
+2.5 VERA nimmt die Beauftragung erst an, wenn die handelnde Person von
+einer **dienstlichen E-Mail-Adresse** in Textform bestätigt, dass sie zur
+Beauftragung für den im Angebot benannten Auftraggeber berechtigt ist.
+
+2.6 Handelt die Kontaktperson erkennbar im Namen des im Angebot
+benannten Auftraggebers und mit Vertretungsberechtigung, **haftet sie
+nicht persönlich** aus dem Vertrag. Lehrkräfte und sonstige
+Kontaktpersonen werden dadurch nicht selbst Vertragspartner.
+
+2.7 Soll ausnahmsweise eine natürliche Person selbst Auftraggeber
+werden, bedarf das der **ausdrücklichen Vereinbarung im Angebot**. In
+diesem Fall gelten vorrangig die zwingenden Vorschriften des
+Verbraucherrechts, soweit die Person als Verbraucher handelt.
+
+2.8 Der Auftraggeber benennt bei Auftragserteilung zusätzlich eine für
+die Durchführung verantwortliche Ansprechperson mit Erreichbarkeit
+während der Veranstaltung.
+
+2.9 Nebenabreden, Zusagen und Änderungen bedürfen der Textform. Das gilt
 auch für die Aufhebung dieses Textformerfordernisses. **Individuelle
 Vereinbarungen zwischen den Parteien haben in jedem Fall Vorrang**
 (§ 305b BGB).
 
-> **Zu 2.5 — der letzte Satz ist kein Beiwerk.** Eine Schriftform- oder
+> **Zu 2.9 — der letzte Satz ist kein Beiwerk.** Eine Schriftform- oder
 > Textformklausel, die den Vorrang der Individualabrede nicht offenlässt,
 > ist angreifbar. Der Vorrang der Individualabrede gilt ohnehin
 > gesetzlich; ihn im Text zu verschweigen erweckt den gegenteiligen
@@ -853,5 +868,131 @@ einer Veranstaltung. (2) Ob die Beschränkung auf eigene Veranstaltungen
 im Klauselwerk und im Außenauftritt durchgehend eingehalten ist.
 (3) Die Pauschalreise-Schwelle, falls An- und Abreise oder Übernachtung
 je hinzukommen. Alle Normzitate sind Prüfauftrag, kein nachgewiesenes
+Ergebnis — gesetze-im-internet.de und dejure.org sind aus dieser
+Arbeitsumgebung gesperrt.]`
+
+---
+
+# Anhang C: Prüfung des Vertragspartners bei Klassenbuchungen (19.09.2026, Frage 5.3)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen` und
+`klauseltransparenz-pruefen`. **Ergebnis: die Regelung trägt.** Vier
+Feststellungen und ein Befund, der ernst zu nehmen ist.
+
+## 1. Die Klassenkasse auszuschließen ist richtig — und nötig
+
+Eine Klassenkasse ist **kein Rechtssubjekt**. Sie ist weder eine
+juristische Person noch eine rechtsfähige Personengesellschaft, sondern
+ein Bestand treuhänderisch verwalteten Geldes. Sie kann deshalb nicht
+Vertragspartner sein, nicht klagen und nicht verklagt werden.
+
+Wer sie trotzdem im Angebot als Auftraggeber bezeichnet, erzeugt genau
+die Lage, die Ziffer 2.6 verhindern soll: Es gibt **keinen** wirksam
+benannten Vertragspartner, und der Vertrag kommt entweder gar nicht
+zustande oder mit der handelnden Lehrkraft persönlich — dann greift
+§ 179 BGB, und sie haftet selbst.
+
+**Die Unterscheidung, die dabei sauber bleiben muss:** Eine Zahlung
+**aus** der Klassenkasse ist unproblematisch — woher das Geld kommt, ist
+eine andere Frage als, wer schuldet. Untersagt ist nur, die Klassenkasse
+als **Vertragspartner** zu bezeichnen.
+
+## 2. Das Verfahren statt des Ergebnisses zu regeln ist der tragfähigere Weg
+
+Eine Klausel „Vertragspartner ist der Schulträger" wäre in allen Fällen
+falsch, in denen ein Förderverein beauftragt — und umgekehrt. VERA kann
+die interne Organisation einer Schule nicht steuern und soll sie auch
+nicht prüfen müssen. Die Ziffern 2.4 bis 2.7 regeln deshalb, **wie** der
+Auftraggeber bestimmt wird, nicht **wer** es ist.
+
+Das ist zugleich transparent im Sinne von § 307 Abs. 1 Satz 2 BGB: Die
+Leserin erkennt genau, was passieren muss, damit ein Vertrag zustande
+kommt.
+
+## 3. Die dienstliche E-Mail-Adresse ist eine Beweisregel, keine Formvorschrift
+
+Sie ersetzt keine Vertretungsmacht — eine Lehrkraft wird nicht dadurch
+vertretungsberechtigt, dass sie von der Schuladresse schreibt. Ihr Wert
+liegt woanders:
+
+- Sie ist ein **Indiz** dafür, dass im dienstlichen Zusammenhang
+  gehandelt wird, und stützt später die Annahme einer Duldungs- oder
+  Anscheinsvollmacht.
+- Sie **dokumentiert** die Erklärung dauerhaft und nachvollziehbar —
+  Textform nach § 126b BGB.
+- Sie verhindert die typische Unklarheit, dass jemand von einer privaten
+  Adresse schreibt und hinterher offen ist, in welcher Rolle.
+
+Weil sie keine Vertretungsmacht ersetzt, bleibt die **ausdrückliche
+Berechtigungszusage** aus Ziffer 2.5 der eigentlich tragende Teil.
+
+## 4. Der Haftungsausschluss für die Kontaktperson kostet VERA nichts
+
+Ziffer 2.6 gibt nichts auf, was VERA hätte: Handelt die Kontaktperson
+erkennbar in fremdem Namen **und mit Vertretungsmacht**, haftet sie
+ohnehin nicht — § 179 BGB greift nur beim Vertreter **ohne**
+Vertretungsmacht. Die Klausel schreibt also die Gesetzeslage auf.
+
+Ihr Nutzen ist ein praktischer: Sie nimmt der Lehrkraft die Sorge, mit
+ihrem Privatvermögen einzustehen, und macht die Beauftragung dadurch
+überhaupt erst wahrscheinlich. Zugleich bleibt der Fall der
+**fehlenden** Vertretungsmacht ungeregelt — dort gilt § 179 BGB
+unverändert weiter, was richtig ist: Andernfalls stünde VERA bei einem
+unwirksam erteilten Auftrag ganz ohne Schuldner da.
+
+## ⚠️ 5. Der Befund: Eine Lehrkraft als Vertragspartner ist mit hoher Wahrscheinlichkeit Verbraucherin
+
+Adam hat richtig verlangt, in diesem Fall das Verbraucherrecht zu
+prüfen. Das Ergebnis ist deutlicher, als es auf den ersten Blick wirkt.
+
+**§ 13 BGB nimmt nur die gewerbliche und die selbständige berufliche
+Tätigkeit aus.** Eine angestellte oder verbeamtete Lehrkraft ist
+beruflich tätig, aber **nicht selbständig** — sie ist weisungsgebunden
+und fremdbestimmt. Schließt sie einen Vertrag im **eigenen Namen** ab,
+ist sie deshalb nach dem Wortlaut der Norm **Verbraucherin**, auch wenn
+der Anlass dienstlich ist.
+
+**Was daraus folgt, wenn dieser Ausnahmefall je eintritt:**
+
+- **Diese Auftragsbedingungen sind dann weitgehend unbrauchbar.** Sie
+  sind auf Unternehmer zugeschnitten; gegenüber einer Verbraucherin
+  gelten die Klauselverbote der §§ 308, 309 BGB unmittelbar. Eine
+  Ausfallstaffel, ein Haftungshöchstbetrag oder eine Abschlagsregelung,
+  die im B2B-Verkehr trägt, kann hier unwirksam sein.
+- **Es kämen Informationspflichten hinzu**, die im B2B-Fall nicht
+  bestehen — und bei einem außerhalb von Geschäftsräumen oder im
+  Fernabsatz geschlossenen Vertrag gegebenenfalls ein Widerrufsrecht,
+  für dessen Ausschluss nach § 312g Abs. 2 Nr. 9 BGB dann wieder die
+  Voraussetzungen zu prüfen wären.
+- **Ziffer 2.7 ist deshalb keine Formalie, sondern eine Warnleuchte.**
+  Der Satz „In diesem Fall gelten vorrangig die zwingenden Vorschriften
+  des Verbraucherrechts" ist rechtlich ohnehin richtig; er steht dort,
+  damit der Fall beim Schreiben des Angebots auffällt.
+
+**Praktische Empfehlung: diesen Weg meiden.** Findet sich kein
+rechtsfähiger Auftraggeber, ist der bessere Ausweg, dass die
+teilnehmenden Familien **einzeln über den Ticketshop** buchen — dann
+gelten die Teilnahmebedingungen für öffentliche Veranstaltungen, und die
+Lage ist geklärt, statt zwischen zwei Regelwerken zu hängen.
+
+## 6. Die Aufsichtspflicht gehört ins Angebot, nicht nur in die Bedingungen
+
+Bei Schulveranstaltungen bleibt die Aufsicht bei der Schule und den
+begleitenden Lehrkräften. Ziffer 6 regelt das bereits. Adams Vorgabe,
+dass es **auch im konkreten Angebot** stehen muss, ist der wichtigere
+Teil: Eine Klausel in den Bedingungen wird selten gelesen, ein Satz im
+Angebot schon — und eine Lehrkraft, die annimmt, VERA übernehme die
+Aufsicht, ist der wahrscheinlichste Konfliktfall dieses
+Geschäftsbereichs.
+
+**Das gehört damit in die Angebotsvorlage**, zusammen mit der Benennung
+des Auftraggebers und der Berechtigungszusage — als fester Bestandteil,
+nicht als Textbaustein nach Ermessen.
+
+`[FACHLICHE PRÜFUNG: (1) Ob die Berechtigungszusage aus Ziffer 2.5 im
+Streitfall genügt oder ob bei öffentlichen Trägern zusätzlich eine
+Bestätigung der Schulleitung oder des Trägers einzuholen ist.
+(2) Die Verbrauchereigenschaft einer im eigenen Namen handelnden
+Lehrkraft. Die Normzitate sind Prüfauftrag, kein nachgewiesenes
 Ergebnis — gesetze-im-internet.de und dejure.org sind aus dieser
 Arbeitsumgebung gesperrt.]`

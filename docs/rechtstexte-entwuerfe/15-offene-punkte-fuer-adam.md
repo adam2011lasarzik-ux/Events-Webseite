@@ -120,6 +120,28 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.3 — Vertragspartner bei Klassenbuchungen?**~~ ✅ **Flexibel,
+  über das Angebot.** Auftraggeber ist die im individuellen Angebot
+  **eindeutig bezeichnete rechtsfähige** Person oder Organisation
+  (Schulträger, Förderverein, Schule in freier Trägerschaft,
+  Unternehmen). Angenommen wird erst, wenn eine handelnde Person über
+  eine **dienstliche E-Mail-Adresse** in Textform ihre
+  Beauftragungsberechtigung bestätigt. Die Kontaktperson **haftet nicht
+  persönlich**, wenn sie erkennbar im Namen des benannten Auftraggebers
+  und mit Vertretungsberechtigung handelt. Eine **Klassenkasse allein
+  darf nicht** Vertragspartner sein. Soll ausnahmsweise eine Privatperson
+  Vertragspartner werden, muss das ausdrücklich vereinbart werden.
+  Die **Aufsichtspflicht** bleibt bei Schule und Lehrkräften und muss
+  auch im konkreten Angebot stehen.
+  ⚠️ **Wichtigster Prüfbefund:** Eine angestellte oder verbeamtete
+  Lehrkraft, die im **eigenen Namen** abschließt, ist nach § 13 BGB mit
+  hoher Wahrscheinlichkeit **Verbraucherin** — die Norm nimmt nur die
+  *selbständige* berufliche Tätigkeit aus. Dann wären diese
+  Auftragsbedingungen weitgehend unbrauchbar (§§ 308, 309 BGB gelten
+  unmittelbar). Empfehlung: diesen Weg meiden; findet sich kein
+  rechtsfähiger Auftraggeber, buchen die Familien einzeln über den
+  Ticketshop. Dokument 04, Ziffern 2.4–2.8 und Anhang C.
+
 - ~~**5.2 — Welche Auftragsarten?**~~ ✅ **Nur eine.** Die
   B2B-Bedingungen decken ausschließlich **eigene, von VERA organisierte
   und durchgeführte Veranstaltungen für geschlossene Gruppen** ab —
