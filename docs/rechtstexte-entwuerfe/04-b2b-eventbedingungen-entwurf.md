@@ -243,9 +243,11 @@ Mitwirkungshandlungen zur Verfügung.
   Zugänge.
 
 4.5 **Informationsblatt statt eigener Einverständniserklärung.** VERA
-stellt dem Auftraggeber rechtzeitig vor der Veranstaltung ein
-einheitliches Informationsblatt zur Weitergabe an die
-Erziehungsberechtigten zur Verfügung. Es enthält mindestens:
+sendet dem Auftraggeber das einheitliche Informationsblatt **unmittelbar
+nach der Terminvereinbarung beziehungsweise zusammen mit der
+Buchungsbestätigung** zur Weitergabe an die Erziehungsberechtigten. Das
+Informationsblatt trägt eine **eindeutige Versionsnummer und ein
+Datum**. Es enthält mindestens:
 
 - Art, Ort, Termin und Dauer der Veranstaltung,
 - notwendige Kleidung und Ausrüstung,
@@ -257,11 +259,27 @@ Erziehungsberechtigten zur Verfügung. Es enthält mindestens:
 - Hinweise zur Datenverarbeitung sowie zur Hausordnung des
   Veranstaltungsortes.
 
-4.6 Der Auftraggeber führt sein eigenes Elternverfahren durch und holt
-alle schulrechtlich erforderlichen Einverständnisse ein. **Vor der
-Veranstaltung bestätigt er VERA in Textform**, dass das Informationsblatt
-rechtzeitig weitergegeben wurde und alle für Teilnahme und Durchführung
-erforderlichen Einverständnisse vorliegen.
+4.6 Der Auftraggeber verteilt das Informationsblatt an die
+Erziehungsberechtigten, führt sein eigenes Elternverfahren durch und
+holt alle schulrechtlich erforderlichen Einverständnisse ein.
+Anschließend sendet er VERA eine **Bestätigung in Textform** zurück. Die
+Bestätigung muss sich **auf genau die übersandte Fassung des
+Informationsblatts beziehen** (Versionsnummer und Datum) und — unabhängig
+von der verbleibenden Anzahl an Tagen — **spätestens vor Beginn der
+Veranstaltung** bei VERA vorliegen.
+
+4.6a Widersprüche gegen Übersichtsaufnahmen, die dem Auftraggeber von
+Erziehungsberechtigten oder Teilnehmenden mitgeteilt wurden, gibt er
+**vor Beginn der Veranstaltung zuverlässig an VERA weiter**.
+
+4.6b **Liegt die Bestätigung bei Beginn der Veranstaltung nicht vor,
+fertigt VERA bei dieser Veranstaltung keine Übersichtsaufnahmen an.**
+Die Veranstaltung selbst findet grundsätzlich gleichwohl statt.
+
+4.6c Der Auftraggeber bestätigt mit der Erklärung nach Ziffer 4.6 allein
+die Verteilung des Informationsblatts und die Durchführung seines
+Elternverfahrens. **Die eigene datenschutzrechtliche Verantwortung von
+VERA wird dadurch nicht ausgeschlossen.**
 
 4.7 **VERA sammelt keine Elternunterschriften, keine vollständigen
 Teilnehmerlisten und keine Gesundheitsdaten.** Solche Angaben werden nur
@@ -1092,21 +1110,57 @@ Personen bleibt VERA für das verantwortlich, was VERA selbst verarbeitet
 weitergegeben, sind die Eltern nicht informiert worden, und das ist
 VERAs Problem, nicht nur das der Schule.
 
-**Daraus folgen zwei praktische Punkte, die in die Angebotsvorlage
-gehören:**
+**Daraus folgt der Ablauf, den Adam am 19.09.2026 festgelegt hat** — und
+er löst das Problem besser als eine Tagesfrist:
 
-- **Ein konkreter Zeitpunkt statt „rechtzeitig".** Der Begriff ist
-  unbestimmt und im Streitfall wertlos. Vorschlag: Weitergabe an die
-  Schule mindestens **21 Tage** vor der Veranstaltung, Bestätigung durch
-  den Auftraggeber spätestens **7 Tage** vorher. Dann bleibt Zeit,
-  nachzufassen, bevor der Termin steht.
-- **Eine Fassungsbezeichnung auf dem Merkblatt** (Datum und Version).
-  Die Bestätigung bezieht sich sonst auf ein Dokument, dessen Inhalt
-  später nicht mehr feststeht — und der Nachweis nach Art. 5 Abs. 2
-  DS-GVO läuft leer.
+- Das Informationsblatt geht **sofort mit der Buchungsbestätigung**
+  hinaus. Damit hat die Schule die maximal mögliche Zeit, ohne dass eine
+  Frist berechnet werden müsste.
+- Die Bestätigung muss **spätestens vor Veranstaltungsbeginn** vorliegen
+  — unabhängig davon, wie viele Tage verbleiben.
+- **Fehlt sie, werden keine Übersichtsaufnahmen angefertigt.** Die
+  Veranstaltung findet trotzdem statt.
 
-`[ENTSCHEIDUNG OFFEN: Fristen 21 und 7 Tage — von Adam zu bestätigen
-oder anders festzulegen.]`
+### Warum diese Lösung stärker ist als eine feste Frist
+
+Eine Frist von 21 oder 7 Tagen wäre eine **Obliegenheit ohne
+Durchsetzung** gewesen: Wird sie versäumt, steht VERA am
+Veranstaltungstag trotzdem in der Halle und muss entscheiden, ob
+fotografiert wird — mit derselben Unsicherheit wie vorher.
+
+Die gewählte Regel verknüpft die Bestätigung stattdessen **genau mit
+der Verarbeitung, die sie absichert**. Fehlt die Information an die
+Eltern, unterbleibt die Verarbeitung, für die informiert werden müsste.
+Das ist eine selbstvollziehende Regel: Sie braucht keine Fristenkontrolle
+und keine Sanktion, weil die Folge automatisch eintritt.
+
+Zugleich bleibt die Veranstaltung selbst unberührt — richtig so, denn
+die Durchführung hängt nicht an der Information über Aufnahmen. Eine
+Absage wäre hier die unverhältnismäßige Reaktion.
+
+### Die verbleibende Lücke — und warum sie geschlossen ist
+
+Ohne feste Frist kann die Bestätigung theoretisch **kurz vor Beginn**
+eintreffen. Dann hätten die Eltern das Blatt womöglich so spät erhalten,
+dass sie nicht mehr in Ruhe widersprechen konnten. Die Bestätigung
+beweist die Verteilung, nicht ihre Rechtzeitigkeit.
+
+**Geschlossen wird das durch den Ablauf vor Ort aus Entscheidung 4.8:**
+Ein Widerspruch kann **beim Check-in und jederzeit während der
+Veranstaltung** erklärt werden, ohne Begründung und ohne Nachteil. Wer
+zu spät informiert wurde, verliert dadurch nichts — er kann vor Ort
+widersprechen, und vor jeder Veröffentlichung wird ohnehin geprüft.
+**Dieser Zusammenhang muss im Informationsblatt ausdrücklich stehen**,
+sonst wissen die Eltern nichts davon.
+
+### Die Fassungsbezeichnung bleibt notwendig
+
+Versionsnummer und Datum auf dem Informationsblatt sind kein
+Verwaltungsaufwand, sondern die Voraussetzung dafür, dass die
+Bestätigung überhaupt etwas beweist. Ohne sie bezieht sie sich auf ein
+Dokument, dessen Inhalt später nicht mehr feststeht — und der Nachweis
+nach Art. 5 Abs. 2 DS-GVO läuft leer. Ziffer 4.5 und 4.6 verlangen sie
+deshalb ausdrücklich.
 
 ## 4. Gesundheitsangaben sind der heikelste Teil dieser Ziffer
 
