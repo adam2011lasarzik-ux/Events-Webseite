@@ -446,9 +446,21 @@ benanntem Fall — in das interne Löschkonzept, nicht in die Einwilligung.
 Eine Zusage, die man einhalten kann, ist wertvoller als ein Vorbehalt,
 den niemand versteht.
 
-`[ENTSCHEIDUNG OFFEN: Adam bestätigt die Streichung des Vorbehalts aus
-dem Verbrauchertext — oder benennt den konkreten Fall, für den er
-gebraucht wird.]`
+> ✅ **Entschieden am 19.09.2026 (Frage 4.6a): Der Vorbehalt wird
+> gestrichen.** Der an die betroffene Person gerichtete Einwilligungstext
+> sagt die Rechtsfolge des Widerrufs **vorbehaltlos** zu: Die betroffenen
+> Aufnahmen werden von den Kanälen genommen und gelöscht. Der oben
+> vorgeschlagene Wortlaut ist bereits so gefasst.
+>
+> **Was das für die Nachweisunterlagen bedeutet — und was nicht.** Die
+> Streichung betrifft ausschließlich die **Aufnahme**. Der
+> Einwilligungsnachweis selbst (wer wann welcher Textfassung zugestimmt
+> und wann widerrufen hat) wird davon nicht erfasst: Er wird nach Art. 7
+> Abs. 1 DS-GVO benötigt, um belegen zu können, dass die Veröffentlichung
+> bis zum Widerruf rechtmäßig war, und nach dem Widerruf noch für die
+> Dauer möglicher Ansprüche. Diese Unterscheidung gehört in das interne
+> Löschkonzept (B-14), **nicht** in den Einwilligungstext — dort würde sie
+> nur den Eindruck erwecken, es bleibe doch etwas vom Bild zurück.
 
 #### 4. Der Widerruf muss ausführbar sein — heute ist er es nicht
 
@@ -630,14 +642,28 @@ DS-GVO (Datenminimierung). Dazu drei belegte Feststellungen:
   Veranstaltungstag 13 oder 14 sein. Ein Merkmal, das die eine Frage
   nicht beantwortet, für die es erhoben würde, ist das falsche Merkmal.
 
-**Empfehlung: ein grobes Altersmerkmal je Teilnehmer, mehr nicht.** Drei
-Werte genügen — `UNTER_14`, `VIERZEHN_BIS_17`, `AB_18` —, angegeben von
-der buchenden erwachsenen Person. Eine Altersprüfung findet nicht statt
-und ist für diesen Zweck auch nicht verlangt; die Angabe ist eine
-Selbstauskunft, und das genügt. `geburtsjahr` bleibt dabei ungenutzt und
-sollte entweder entfernt oder ausdrücklich als „nicht erhoben"
-dokumentiert werden — ein totes Feld im Schema lädt dazu ein, später
-doch befüllt zu werden.
+> ✅ **Entschieden am 19.09.2026: ein grobes Altersmerkmal je
+> Teilnehmer, mehr nicht.** Die buchende erwachsene Person gibt beim
+> Ticketkauf für jede teilnehmende Person **genau eine** von drei
+> Altersgruppen an: **„unter 14"**, **„14 bis 17"** oder **„ab 18"**.
+> **Kein Geburtsdatum, kein Geburtsjahr.** Eine Altersprüfung findet
+> nicht statt und ist für diesen Zweck auch nicht verlangt — die Angabe
+> ist eine Selbstauskunft, und das genügt.
+>
+> Das bisher ungenutzte Feld `Participant.geburtsjahr` wird **entfernt**.
+> Es steht als technischer Punkt auf der Bauliste (B-16); am Code wurde
+> dafür noch nichts geändert. Ein totes Feld im Schema lädt dazu ein,
+> später doch befüllt zu werden — und wäre dann eine Datenerhebung, die
+> niemand beschlossen hat.
+
+Die drei Werte sind bewusst so geschnitten, dass sie **genau die eine
+Frage beantworten**, für die sie erhoben werden: Braucht diese Person
+beim Check-in eine eigene Zustimmung? „ab 18" trägt dabei keine
+zusätzliche Information über die Person — es ist die Abwesenheit einer
+Minderjährigkeit und ergibt sich beim Familienticket ohnehin aus der
+Rolle. Wer es genau nimmt, könnte auf den dritten Wert verzichten; er
+bleibt, weil eine dreiwertige Angabe im Formular verständlicher ist als
+ein Häkchen, das nur bei Minderjährigen erscheint.
 
 `[ALTERNATIVE, die noch weniger speichert — für die fachliche Prüfung
 festgehalten: Das Altersmerkmal ließe sich vollständig vermeiden, indem
