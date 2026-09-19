@@ -118,6 +118,27 @@ wofür VERA Fotos überhaupt braucht.
 
 ## D. Geschäftsentscheidungen vor dem ersten B2B-Auftrag
 
+**Beantwortet am 19.09.2026:**
+
+- ~~**5.1 — Sollen Firmen und Schulen online buchen?**~~ ✅ **Nein.**
+  Individuell beauftragte Veranstaltungen werden ausschließlich **per
+  E-Mail angefragt**; es gibt dafür keine Online-Buchung und keinen
+  Kaufknopf. **Tickets für öffentlich angebotene Veranstaltungen** dürfen
+  dagegen auch Firmen, Schulen und Organisationen über den bestehenden
+  Ticketshop kaufen — dann gelten die allgemeinen Teilnahmebedingungen.
+  **Ausdrücklich nicht** gilt „öffentliches Ticket = Verbraucherrecht":
+  Verbraucherrechte greifen nur, wenn die buchende Person rechtlich
+  Verbraucher ist (§ 13 BGB); eine Firma oder Schule bleibt Unternehmer
+  beziehungsweise institutioneller Käufer. Die B2B-Bedingungen gelten
+  ausschließlich für individuell beauftragte Veranstaltungen.
+  ⚠️ **Dabei gefunden und korrigiert:** Ziffer 1.1 des AGB-Entwurfs
+  beschränkte die Teilnahmebedingungen bisher auf Verbraucher und
+  verwies Organisationen pauschal auf „gesonderte Bedingungen" — eine
+  Firma, die ein öffentliches Ticket kauft, fiel damit durch **beide**
+  Regelwerke. Ziffer 1 ist neu gefasst (Dokument 03, Ziffer 1.1–1.2a und
+  Anhang).
+
+
 > Dokument 04 (B2B-Eventbedingungen) ist ebenfalls größtenteils
 > Platzhalter — **alle 18 Fragen aus Gruppe 5 sind offen.** Diese Gruppe
 > ist nur relevant, sobald VERA tatsächlich Firmen- oder

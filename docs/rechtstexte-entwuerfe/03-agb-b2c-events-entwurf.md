@@ -36,16 +36,38 @@ Richtungen trägt; die Einordnung gehört in die fachliche Prüfung.
 
 ## 1. Geltungsbereich und Begriffe
 
+> ✅ **Neu gefasst am 19.09.2026 (Frage 5.1).** Die alte Fassung von 1.1
+> und 1.2 beschränkte diese Bedingungen auf Verbraucher und verwies
+> Unternehmen, Schulen und Organisationen pauschal auf „gesonderte
+> Bedingungen". Damit fiel eine Firma, die Tickets für ein **öffentlich
+> angebotenes** Event kauft, durch beide Regelwerke hindurch. Die
+> Neufassung trennt sauber nach dem **Vertragsgegenstand** statt nach
+> dem Status der buchenden Person.
+
 1.1 Diese Teilnahmebedingungen gelten für alle Verträge über die
-Teilnahme an Veranstaltungen, die Adam Maurice Lasarzik, Mühlenstr. 8a,
-14167 Berlin (im Folgenden „VERA") mit Verbraucherinnen und Verbrauchern
-schließt.
+Teilnahme an **öffentlich angebotenen Veranstaltungen**, die Adam
+Maurice Lasarzik, Mühlenstr. 8a, 14167 Berlin (im Folgenden „VERA")
+über den Ticketshop auf veraevents.de schließt. Sie gelten unabhängig
+davon, ob die buchende Person als Verbraucher oder als Unternehmer
+handelt; Unternehmen, Schulen und andere Organisationen können Tickets
+für öffentlich angebotene Veranstaltungen zu diesen Bedingungen
+erwerben.
 
 1.2 Verbraucher ist, wer den Vertrag zu Zwecken abschließt, die
 überwiegend weder der gewerblichen noch der selbständigen beruflichen
-Tätigkeit zugerechnet werden können (§ 13 BGB). Für Aufträge von
-Unternehmen, Schulen und anderen Organisationen gelten gesonderte
-Bedingungen.
+Tätigkeit zugerechnet werden können (§ 13 BGB). Unternehmer ist, wer
+bei Abschluss des Vertrags in Ausübung seiner gewerblichen oder
+selbständigen beruflichen Tätigkeit handelt (§ 14 BGB). **Einzelne
+Regelungen dieser Bedingungen gelten nur gegenüber Verbrauchern; sie
+sind jeweils ausdrücklich als solche gekennzeichnet.** Im Übrigen gelten
+diese Bedingungen für alle Buchenden gleichermaßen.
+
+1.2a Für **individuell beauftragte Veranstaltungen** — insbesondere
+Firmen- und Schulveranstaltungen, die auf Anfrage geplant und
+abgestimmt werden — gelten nicht diese Bedingungen, sondern die
+gesonderten Bedingungen für Veranstaltungsaufträge. Solche
+Veranstaltungen werden **nicht über den Ticketshop gebucht**, sondern
+auf Anfrage per E-Mail vereinbart.
 
 1.3 „Veranstaltung" ist das jeweils auf der Website beschriebene
 Angebot. „Anmeldung" ist die Buchung eines oder mehrerer Plätze durch
@@ -784,3 +806,98 @@ VERA schützen sollen (7.5, 8, 9.5, 11.2, 11.3).
 
 **Umsetzung: siehe Dokument 08, Abschnitt C-2.** Dort steht der konkrete
 Vorschlag für Platzierung und Wortlaut der Bestätigung.
+
+---
+
+# Anhang: Prüfung der Abgrenzung B2C / B2B (19.09.2026, Frage 5.1)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen` und
+`klauseltransparenz-pruefen`.
+
+## Die Entscheidung
+
+- **Individuell beauftragte Veranstaltungen** (Firmen, Schulen,
+  Organisationen) werden ausschließlich **per E-Mail angefragt**. Es gibt
+  dafür **keine Online-Buchung und keinen Kaufknopf**.
+- **Tickets für öffentlich angebotene Veranstaltungen** dürfen auch
+  Firmen, Schulen und andere Organisationen über den bestehenden
+  Ticketshop kaufen. Dafür gelten diese Teilnahmebedingungen.
+- **Ausdrücklich nicht** gilt die Gleichung „öffentliches Ticket =
+  Verbraucherrecht". Verbraucherrechte greifen nur, wenn die buchende
+  Person rechtlich Verbraucher ist.
+
+## Warum die Korrektur an Ziffer 1 nötig war
+
+Die Trennlinie verläuft **nicht** zwischen Personengruppen, sondern
+zwischen **Vertragsgegenständen**: öffentlich angebotene Veranstaltung
+gegen individuell beauftragte Veranstaltung. Der Status der buchenden
+Person entscheidet etwas anderes — nämlich, welche gesetzlichen
+Schutzrechte **daneben** gelten.
+
+Beides zu vermischen erzeugt genau die Lücke, die die alte Fassung
+hatte. Die Neufassung hält es auseinander:
+
+- **Ziffer 1.1** bestimmt den Anwendungsbereich über den
+  Vertragsgegenstand.
+- **Ziffer 1.2** erklärt die Begriffe nach § 13 und § 14 BGB und sagt,
+  dass einzelne Regelungen **nur gegenüber Verbrauchern** gelten und als
+  solche gekennzeichnet sind.
+- **Ziffer 1.2a** verweist beauftragte Veranstaltungen auf das eigene
+  Klauselwerk und stellt klar, dass sie nicht über den Ticketshop
+  laufen.
+
+## Was daraus für den Rest der Bedingungen folgt
+
+- **Die Klauseln müssen durchgehend der Verbraucherkontrolle
+  standhalten.** Weil dieselben Bedingungen auch gegenüber Verbrauchern
+  gelten, ist der strengere Maßstab der §§ 307 bis 309 BGB der
+  maßgebliche. Die Erleichterungen des § 310 Abs. 1 BGB für den
+  Unternehmerverkehr helfen hier **nicht** — eine Klausel, die nur
+  gegenüber Unternehmern wirksam wäre, wäre gegenüber Verbrauchern
+  unwirksam und damit für dieses Klauselwerk unbrauchbar.
+- **Nur gegenüber Verbrauchern gelten** und sind entsprechend zu
+  kennzeichnen: die Regelungen zum Widerrufsrecht beziehungsweise dessen
+  Ausschluss (§ 312g Abs. 2 Nr. 9 BGB), die Pflichtangaben im
+  Bestellvorgang (§ 312j BGB) und der Inhalt der Vertragsbestätigung
+  (§ 312f Abs. 2 BGB) sowie der Hinweis nach § 36 VSBG.
+- **Nicht** verbraucherspezifisch und damit für alle gleich: die
+  freiwillige Stornoregel mit voller Erstattung bis 24 Stunden vor
+  Beginn, die Mindestteilnehmerzahl, die Absageregel, die Hausordnung
+  und die Haftungsregelung.
+
+## Der praktische Kern: VERA kann den Status gar nicht erkennen
+
+Das Formular erhebt Vorname, Nachname, E-Mail und Telefonnummer — **kein
+Feld sagt, ob jemand geschäftlich handelt.** Die Unterscheidung ist
+rechtlich richtig, im Ablauf aber unsichtbar. Daraus folgen drei Dinge:
+
+- **Das Risiko ist einseitig.** Wer einem Verbraucher den
+  Verbraucherschutz vorenthält, verstößt gegen das Gesetz. Wer einem
+  Unternehmer mehr gibt, als nötig wäre, tut nichts Verbotenes. Also:
+  **im Zweifel alle wie Verbraucher behandeln**, im Ablauf wie im Text.
+- **Es wird keine B2B/B2C-Weiche in den Checkout gebaut.** Ein Feld
+  „Ich kaufe als Unternehmen" würde dazu verleiten, sich darauf zu
+  verlassen — und wäre unzuverlässig: Auch wer mit einer Firmen-Adresse
+  bucht, kann privat handeln. Bei gemischter Verwendung („dual use")
+  bleibt Verbraucher, wer überwiegend privat handelt.
+- **Die Kennzeichnung im Text ist die Lösung.** Statt im Ablauf zu
+  unterscheiden, tragen die betroffenen Klauseln den Zusatz „soweit Sie
+  Verbraucher sind". Das ist zugleich transparent im Sinne von § 307
+  Abs. 1 Satz 2 BGB, weil jede Leserin erkennt, was für sie gilt.
+
+## Ein Punkt, der bewusst nicht aufgenommen wurde
+
+Eine **Gerichtsstandsvereinbarung** wäre die naheliegende Ergänzung für
+den Unternehmerfall. Sie ist nach § 38 ZPO aber nur zwischen Kaufleuten
+und ähnlichen Personen zulässig und gegenüber Verbrauchern unwirksam.
+In einem Klauselwerk, das überwiegend Verbraucher erreicht, wäre sie ein
+Fremdkörper mit geringem Nutzen. **Empfehlung: weglassen** und, falls
+gewünscht, erst in den Bedingungen für Veranstaltungsaufträge
+regeln.
+
+`[FACHLICHE PRÜFUNG: Ob die Kennzeichnung einzelner Klauseln als „nur
+für Verbraucher" in dieser Form genügt oder ob zwei getrennte
+Klauselwerke vorzuziehen sind, gehört in die anwaltliche Kontrolle. Die
+Normzitate sind Prüfauftrag, kein nachgewiesenes Ergebnis —
+gesetze-im-internet.de und dejure.org sind aus dieser Arbeitsumgebung
+gesperrt.]`
