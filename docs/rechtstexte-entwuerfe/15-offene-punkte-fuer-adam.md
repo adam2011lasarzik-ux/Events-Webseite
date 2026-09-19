@@ -120,6 +120,23 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.7 — Welche Veranstaltungsgrößen und -arten?**~~ ✅ **Allgemeine
+  Veranstaltungen mit bis zu 100–200 Personen.** In Ziffer 8.6
+  aufgenommen als **bis zu 200 gleichzeitig anwesende Personen**;
+  größere Veranstaltungen bedürfen einer gesonderten Vereinbarung.
+  ⚠️ **Wichtigster Befund: Diese Zahl liegt genau auf der
+  entscheidenden Schwelle.** Die Brandenburgische
+  Versammlungsstättenverordnung gilt ab **mehr als 200 Besuchern** je
+  Versammlungsraum — bei 200 ist VERA knapp darunter, bei 201 darüber,
+  und oberhalb greift ein eigenes Regelwerk (Rettungswege,
+  Bestuhlungs- und Rettungswegepläne, Brandschutzordnung,
+  Veranstaltungsleitung, ggf. Ordnungsdienst). **Räume mit gemeinsamen
+  Rettungswegen werden zusammengezählt** — eine Halle mit mehreren
+  Courts kann dadurch hineinfallen, auch wenn kein Bereich allein 200
+  fasst. Die Betreiberpflichten treffen den **Hallenbetreiber**; der
+  praktische Engpass ist deshalb, ob die gewählte Halle die Größe
+  überhaupt zulässt. Dokument 04, Ziffer 8.6 und Anhang G.
+
 - ~~**5.6 — Genehmigungen: wer beschafft welche?**~~ ✅ **Grundregel in
   die Klausel, Abweichung ins Angebot.** **Betreiber der Halle:**
   Baurecht, Brandschutz, Flucht- und Rettungswege, Kapazitätsgrenzen,

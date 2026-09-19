@@ -452,7 +452,10 @@ oder grillen darf, wird vor jeder Veranstaltung mit dem Betreiber der
 Veranstaltungsstätte **schriftlich** geklärt.
 
 8.6 Die Sicherheitsorganisation richtet sich nach Art und Größe der
-Veranstaltung und wird im Angebot beschrieben.
+Veranstaltung und wird im Angebot beschrieben. VERA führt Veranstaltungen
+mit **bis zu 200 gleichzeitig anwesenden Personen** durch. Größere
+Veranstaltungen bedürfen einer gesonderten Vereinbarung und eines
+entsprechenden zeitlichen Vorlaufs.
 
 8.7 Abweichende Zuständigkeiten können im Angebot vereinbart werden; sie
 gehen den Ziffern 8.1 bis 8.5 vor.
@@ -1489,3 +1492,87 @@ gesperrt. Zu klären sind insbesondere: Zuständigkeit und Formular der
 Ordnungsbehörde, mögliche Ausnahmen von der Zweiwochenfrist, der Umfang
 der Belehrungspflicht nach § 43 IfSG für die gewählte Angebotsstufe und
 die Reichweite der bestehenden Gewerbeanmeldung.]`
+
+---
+
+# Anhang G: Veranstaltungsgrößen (19.09.2026, Frage 5.7)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen`.
+
+## Die Angabe
+
+Geplant sind allgemeine Veranstaltungen mit **bis zu 100 bis 200
+Personen**.
+
+## ⚠️ Diese Zahl liegt genau auf der entscheidenden Schwelle
+
+Die Brandenburgische Versammlungsstättenverordnung gilt für
+Versammlungsstätten mit Versammlungsräumen, die **jeweils mehr als 200
+Besucher** fassen. Für Sportstadien und Freisportanlagen mit Tribünen
+liegt die Schwelle erst bei mehr als 5 000 Besuchern.
+
+**Bei 200 Personen ist VERA also knapp darunter, bei 201 darüber.** Das
+ist keine theoretische Grenze: Oberhalb greift ein eigenes Regelwerk mit
+Anforderungen an Rettungswege, Bestuhlungs- und Rettungswegepläne,
+Brandschutzordnung, Veranstaltungsleitung und gegebenenfalls einen
+Ordnungsdienst. Unterhalb gelten die allgemeinen bauordnungs- und
+verkehrssicherungsrechtlichen Anforderungen — deutlich weniger.
+
+**Zwei Punkte, die man dabei leicht übersieht:**
+
+- **Räume mit gemeinsamen Rettungswegen werden zusammengezählt.** Die
+  Verordnung erfasst auch Versammlungsstätten mit **mehreren**
+  Versammlungsräumen, die zusammen mehr als 200 Besucher fassen, wenn
+  sie gemeinsame Rettungswege haben. Eine Halle mit mehreren Courts
+  unter einem Dach kann dadurch in den Anwendungsbereich fallen, auch
+  wenn kein einzelner Bereich für sich 200 Personen fasst.
+- **Maßgeblich ist die Zahl der Besucher**, nicht die verkauften
+  Tickets. Wer mitzählt — Begleitpersonen, Betreuung, Personal der
+  Halle — ist im Zweifel eine Frage an die Behörde, nicht an das
+  Bauchgefühl.
+
+## Wer die Pflichten trägt
+
+Die Betreiberpflichten der Verordnung treffen den **Betreiber der
+Versammlungsstätte**. Für VERA als Veranstalter in fremder Anlage
+bedeutet das zunächst Entlastung — es ändert aber nichts daran, dass
+eine Veranstaltung oberhalb der Schwelle **nur stattfinden kann, wenn
+die Anlage dafür zugelassen ist und der Betreiber die Pflichten
+erfüllt.** Der praktische Engpass ist also nicht VERAs eigene Pflicht,
+sondern die Frage, ob die gewählte Halle die Größe überhaupt zulässt.
+
+## Empfehlung: die 200 als bewusste Obergrenze führen
+
+Ziffer 8.6 nennt deshalb ausdrücklich **bis zu 200 gleichzeitig
+anwesende Personen**. Das hat drei Vorteile:
+
+- Es hält VERA unterhalb eines Regelwerks, für das heute weder
+  Erfahrung noch Personal noch eine Versicherung vorhanden sind.
+- Es macht die Grenze zu einer **bewussten Entscheidung** statt zu einer
+  Zahl, die beim Verkaufen zufällig überschritten wird.
+- Es gibt der bisher inhaltsleeren Klausel zur Sicherheitsorganisation
+  einen konkreten Anker.
+
+**Ehrlich dazugesagt:** Die Obergrenze in den Auftragsbedingungen bindet
+den Auftraggeber, nicht die Behörde. Sie ersetzt keine Prüfung im
+Einzelfall — sie verhindert nur, dass der Fall überhaupt entsteht.
+
+## Was zusätzlich zu bedenken ist
+
+- **Der erste öffentliche Event ist mit 100 Plätzen geplant** und liegt
+  damit deutlich unterhalb. Der Spielraum betrifft also künftige
+  Veranstaltungen.
+- **Die Versicherungsfrage wächst mit der Größe.** Eine
+  Veranstalterhaftpflicht fehlt weiterhin; bei 200 Personen ist das ein
+  anderes Risiko als bei 20.
+- **Die Aufsichtsfrage bei Schulklassen bleibt davon unberührt** — sie
+  hängt nicht an der Größe, sondern am Schulrecht.
+
+`[FACHLICHE PRÜFUNG: (1) Ob die konkrete Halle als Versammlungsstätte
+eingestuft ist und welche Besucherzahl ihre Baugenehmigung zulässt —
+das ist beim Betreiber zu erfragen und nicht zu schätzen. (2) Ob
+mehrere Bereiche mit gemeinsamen Rettungswegen zusammenzuzählen sind.
+(3) Wer bei der Zählung als Besucher gilt. Die Angaben zur
+Brandenburgischen Versammlungsstättenverordnung stammen aus der
+Websuche, nicht aus dem amtlichen Volltext — gesetze-im-internet.de und
+dejure.org sind aus dieser Arbeitsumgebung gesperrt.]`
