@@ -566,6 +566,32 @@ Siehe Dokument **06** für den Einwilligungstext selbst.
 dieser Abschnitt nicht veröffentlicht werden, weil er sonst auf eine
 Erklärung verweist, die es nicht gibt.]`
 
+> 🛑 **Neufassung vom 19.09.2026 — überholt die beiden folgenden
+> Ergänzungen, soweit sie Einwilligungen betreffen.** Es gibt künftig
+> **ausschließlich Übersichtsaufnahmen** mit allgemeinem Umgebungston und
+> **keine Einwilligung mehr**. Für Ziffer 13 heißt das:
+>
+> - **Eine** Rechtsgrundlage statt zweier: **Art. 6 Abs. 1 Buchst. f
+>   DS-GVO**, bildrechtlich gestützt auf **§ 23 Abs. 1 Nr. 3
+>   KunstUrhG**. Der Verweis auf Art. 6 Abs. 1 Buchst. a und § 22
+>   KunstUrhG entfällt.
+> - **Das Widerspruchsrecht nach Art. 21 DS-GVO** ist der einzige
+>   Rechtsbehelf der betroffenen Person und muss nach Art. 21 Abs. 4
+>   DS-GVO **ausdrücklich und von anderen Informationen getrennt**
+>   dargestellt werden. Der Begriff „Widerruf" darf hier nicht mehr
+>   vorkommen — er setzt eine Einwilligung voraus, die es nicht gibt.
+> - **Veröffentlicht werden dürfen nur allgemeine Veranstaltungs- und
+>   Hallengeräusche.** Verständliche einzelne Gespräche werden entfernt
+>   oder stummgeschaltet — vor der Veröffentlichung und vor jeder
+>   Weitergabe an die Location.
+> - **Die Weitergabe an die Location** steht damit allein auf der
+>   Abwägung und ist eine Übermittlung an einen weiteren
+>   Verantwortlichen zu **dessen** Werbezwecken. Sie ist der Punkt,
+>   der in der anwaltlichen Prüfung am ehesten fällt — siehe Dokument
+>   06, Teil VIII.4.
+>
+> Die beiden folgenden Absätze bleiben als Begründungsmaterial stehen.
+
 > ⚠️ **Ergänzung vom 19.09.2026 (Entscheidung 4.9): zwei Spuren, zwei
 > Rechtsgrundlagen.** Der bisherige Entwurfstext oben beschreibt nur die
 > Einwilligung. Seit der Entscheidung zum Umgebungston braucht Ziffer 13

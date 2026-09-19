@@ -1,4 +1,27 @@
-# 06 — Einwilligung in Foto- und Videoaufnahmen (Entwurf)
+# 06 — Foto-, Video- und Tonaufnahmen (Entwurf)
+
+> 🛑 **GRUNDLEGENDE NEUFASSUNG AM 19.09.2026 — bitte zuerst Teil VIII
+> lesen.**
+>
+> Adam hat entschieden, dass es künftig **ausschließlich
+> Übersichtsaufnahmen der Veranstaltung mit allgemeinem Umgebungston**
+> gibt. Aufnahmen, auf denen einzelne Personen erkennbar im Mittelpunkt
+> stehen, entfallen vollständig — und damit auch **jede Einwilligung**.
+>
+> **Überholt und nicht mehr als Konzept zu verwenden sind damit:** die
+> beiden freiwilligen Einwilligungshäkchen für VERA und die Location,
+> die Speicherung eines Einwilligungsstatus pro Person, die
+> Doppelzustimmung Minderjähriger für Aufnahmen und die sichtbare
+> Kennzeichnung einwilligender Personen. Betroffen sind die
+> **Teile II bis VII** dieses Dokuments sowie die Entscheidungen
+> **4.1, 4.3 und 4.7**, soweit sie Einwilligungen betreffen.
+>
+> Diese Teile bleiben stehen, weil ihre **Begründungen** weiter
+> gebraucht werden — insbesondere zu § 201 StGB, zu den
+> Veröffentlichungswegen, zur Dauer und zur Interessenabwägung. Sie
+> sind **Material**, nicht mehr der geltende Entwurf. Der geltende
+> Entwurf steht in **Teil VIII**.
+
 
 > **Status:** Entwurf, Version 1 vom 16.09.2026. **Nicht anwaltlich geprüft.**
 >
@@ -1134,3 +1157,212 @@ Sicherung, oder ist eine Tonaufzeichnung ohne vorherige Einwilligung
 schon bei der Anfertigung zu vermeiden? Die hier genannten Normen sind
 Prüfauftrag, kein nachgewiesenes Ergebnis — gesetze-im-internet.de und
 dejure.org sind aus dieser Arbeitsumgebung gesperrt.]`
+
+---
+
+# Teil VIII — Geltender Entwurf ab 19.09.2026: nur Übersichtsaufnahmen
+
+Dieser Teil ersetzt die Teile II bis VII als Konzept. Was dort steht,
+bleibt als Begründungsmaterial nutzbar, aber nicht als Regelwerk.
+
+## VIII.1 Was gilt
+
+- Es entstehen **ausschließlich Übersichtsaufnahmen** der Veranstaltung —
+  Fotos und Videos vom Geschehen auf der Anlage, bei denen **keine
+  einzelne Person im Mittelpunkt steht**.
+- Videoaufnahmen dürfen den **allgemeinen Umgebungston** enthalten:
+  Spiel- und Hallengeräusche, Applaus.
+- **Veröffentlicht werden dürfen ausschließlich allgemeine
+  Veranstaltungs- und Hallengeräusche.** Verständliche einzelne Gespräche
+  werden entfernt oder stummgeschaltet.
+- Einzelne Gespräche, Interviews und private Äußerungen werden **nicht
+  gezielt aufgenommen und nicht veröffentlicht**.
+- **Es gibt keine Einwilligung mehr** — weder für VERA noch für die
+  Location, weder pro Buchung noch pro Person.
+- Rechtsgrundlage ist durchgehend **Art. 6 Abs. 1 Buchst. f DS-GVO**,
+  bildrechtlich gestützt auf **§ 23 Abs. 1 Nr. 3 KunstUrhG**.
+- Das Gegenstück dazu ist das **Widerspruchsrecht nach Art. 21 DS-GVO**.
+  Es tritt an die Stelle des Widerrufs.
+- Veröffentlichungswege bleiben die vier aus Entscheidung 4.4: Website
+  und Instagram-Kanal von VERA, Website und Instagram-Kanal der
+  jeweiligen Veranstaltungslocation. Keine Weitergabe an Presse,
+  Sponsoren oder sonstige Dritte (Entscheidung 4.5).
+- Die Dauer bleibt zweckgebunden und ohne feste Frist mit jährlicher
+  dokumentierter Prüfung (Entscheidung 4.6) — mit **einer sprachlichen
+  Korrektur**: Es endet nicht mehr „mit dem Widerruf", sondern **mit
+  einem erfolgreichen Widerspruch**.
+
+## VIII.2 Der Pflichttext im Anmeldeformular
+
+**Verpflichtendes Kenntnisnahme-Häkchen** — keine Einwilligung, sondern
+Information; nur deshalb darf es verpflichtend sein:
+
+> ☐ Ich habe den [Hinweis zu Foto-, Video- und allgemeinen
+> Tonaufnahmen](/aufnahmen) zur Kenntnis genommen. Mir ist bekannt, dass
+> während der Veranstaltung Übersichtsaufnahmen entstehen, die allgemeine
+> Umgebungsgeräusche wie Spiel- und Hallengeräusche und Applaus enthalten
+> können, und dass VERA und die Veranstaltungslocation sie für die
+> [dort genannten Zwecke](/aufnahmen#zwecke) veröffentlichen können.
+> Einzelne Personen stehen dabei nicht im Mittelpunkt. Verständliche
+> Gespräche werden vor einer Veröffentlichung entfernt oder
+> stummgeschaltet.
+
+**Deutlich abgesetzt darunter** — eigener Kasten, eigene Überschrift,
+nicht als weiterer Listenpunkt im selben Block. Art. 21 Abs. 4 DS-GVO
+verlangt den Hinweis **ausdrücklich und in einer von anderen
+Informationen getrennten Form**; steht er in derselben Aufzählung wie
+alles andere, ist diese Anforderung nicht erfüllt:
+
+> ### Sie können widersprechen
+>
+> Sie haben jederzeit das Recht, der Anfertigung und Veröffentlichung
+> solcher Aufnahmen zu widersprechen — **vorab** per Nachricht an
+> kontakt@veraevents.de, **beim Check-in** oder **jederzeit während der
+> Veranstaltung** bei einer Ansprechperson von VERA.
+>
+> Ein Widerspruch muss **nicht begründet** werden, ist **kostenlos** und
+> hat **keine Auswirkung auf Ihre Teilnahme**. Wir kennzeichnen Sie
+> dadurch nicht sichtbar. Wir setzen den Widerspruch für Sie und für die
+> von Ihnen angemeldeten Personen um.
+
+`[VOR FREISCHALTUNG: Der Link „/aufnahmen" ist ein Arbeitsname. Die
+Hinweisseite ersetzt die bisher geplante Einwilligungsseite und muss
+Zwecke, Kanäle, Rechtsgrundlage, Dauer, Empfänger und das
+Widerspruchsrecht enthalten.]`
+
+## VIII.3 Der Ablauf vor Ort (Entscheidung 4.8)
+
+✅ **Entschieden am 19.09.2026.**
+
+- Ein Widerspruch kann **beim Check-in** oder **jederzeit während der
+  Veranstaltung** erklärt werden.
+- Die betroffene Person wird **nicht sichtbar gekennzeichnet**.
+- Stattdessen wird **der Fotograf informiert**.
+- Während **angekündigter Aufnahmezeiten** steht gegebenenfalls ein
+  **fotografiefreier Court oder Bereich** zur Verfügung.
+- **Vor jeder Veröffentlichung und vor jeder Weitergabe an die
+  Veranstaltungslocation** wird geprüft, ob widersprechende Personen
+  erkennbar sind. Erforderlichenfalls werden sie **herausgeschnitten oder
+  unkenntlich gemacht**.
+
+### Warum dieser Ablauf besser ist als die verworfene Kennzeichnung
+
+Der Verzicht auf eine sichtbare Kennzeichnung ist **datenschutzrechtlich
+der stärkere Weg**, nicht der bequemere. Eine Markierung — welcher Art
+auch immer — hätte die Entscheidung einer Person für alle anderen
+Teilnehmenden sichtbar gemacht. Bei Kindern wäre daraus ein
+Unterscheidungsmerkmal auf dem Platz geworden. Der Ablauf erreicht
+dasselbe Ziel, ohne diese Nebenwirkung.
+
+Er verlagert die Last dafür auf VERA, und das ist die ehrliche
+Kehrseite: Die Prüfung vor jeder Veröffentlichung ist jetzt **die
+einzige** technische Sicherung. Fällt sie aus, gibt es keine zweite.
+
+### Vier Punkte, die der Ablauf noch braucht
+
+- **Der Fotograf muss die Information verlässlich bekommen**, auch wenn
+  der Widerspruch mitten in der Veranstaltung erklärt wird. Auf einer
+  Anlage mit mehreren Courts ist das keine Selbstverständlichkeit. Nötig
+  ist eine feste Absprache, wer informiert und wie — nicht „man sagt
+  Bescheid".
+- **„Angekündigte Aufnahmezeiten" müssen wirklich angekündigt werden**,
+  und zwar so, dass die Ankündigung auch ankommt: beim Check-in genannt
+  und vor Ort sichtbar. Ein fotografiefreier Bereich, von dem niemand
+  weiß, ist keiner.
+- **Der fotografiefreie Bereich steht unter Vorbehalt der Halle.** Ob ein
+  Court dafür freigehalten werden kann, entscheidet VERA nicht allein.
+  Das Wort „gegebenenfalls" ist deshalb richtig gewählt — es darf im
+  Hinweistext aber nicht so klingen, als sei ein solcher Bereich
+  zugesagt.
+- **Der Widerspruch muss festgehalten werden**, sonst lässt sich die
+  Prüfung vor der Veröffentlichung nicht durchführen. Er ist zugleich
+  der Nachweis, dass VERA ihn umgesetzt hat.
+
+## VIII.4 Rechtliche Prüfung der Neufassung
+
+Geprüft mit `klauseltransparenz-pruefen` und
+`klauselinhalt-und-verbote-pruefen`.
+
+### Was sich verbessert
+
+- **Kein Kopplungsproblem mehr.** Es gibt keine Einwilligung, die an den
+  Ticketkauf gekoppelt sein könnte. Art. 7 Abs. 4 DS-GVO ist nicht mehr
+  berührt.
+- **Kein Problem mit der Freiwilligkeit bei Minderjährigen.** Die
+  schwierige Situation, einen 15-Jährigen vor seinen Eltern am Eingang um
+  Zustimmung zu bitten, entfällt vollständig.
+- **Erheblich weniger Datenverarbeitung.** Kein Einwilligungsstatus pro
+  Person, keine Textfassung, kein Zeitpunkt, keine zwei getrennten
+  Zustände. Gespeichert wird nur noch, wer **widersprochen** hat — also
+  die Ausnahme statt der Regel. Das ist ein echter Gewinn nach Art. 5
+  Abs. 1 Buchst. c DS-GVO.
+- **Der Ablauf ist konsistent.** Vorher hätte es zwei Spuren
+  nebeneinander gegeben, mit der Gefahr, dass im Formular alles wie eine
+  Pflichtliste aussieht. Diese Gefahr ist weg.
+
+### ⚠️ Was sich verschlechtert — und das wiegt schwer
+
+**Es gibt keinen Rückfallweg mehr.** Bisher stand neben der Abwägung noch
+die Einwilligung. Wenn eine Aufsichtsbehörde oder ein Gericht die
+Abwägung nicht mittrüge, wären wenigstens die Aufnahmen mit Einwilligung
+gedeckt gewesen. Jetzt steht **das gesamte Konzept auf einer einzigen
+Rechtsgrundlage**. Fällt sie, fällt alles.
+
+Das ist keine theoretische Sorge. Drei Punkte machen die Abwägung
+angreifbar, und sie sind genau die, die Adam anwaltlich prüfen lassen
+will:
+
+- **Werbezweck.** § 23 Abs. 1 Nr. 3 KunstUrhG (Bilder von Versammlungen
+  und ähnlichen Vorgängen) wird für **werbliche** Nutzung deutlich enger
+  ausgelegt als für Berichterstattung. Die Aufnahmen dienen hier
+  ausschließlich der Werbung.
+- **Kinder.** Art. 6 Abs. 1 Buchst. f DS-GVO nennt den Fall, dass die
+  betroffene Person ein Kind ist, ausdrücklich als Gegengewicht;
+  Erwägungsgrund 38 verlangt besonderen Schutz gerade bei Marketing. Die
+  Zielgruppe sind Familien.
+- **Originalton.** Die Stimme ist ein personenbezogenes Datum, und
+  § 201 StGB steht daneben. Die Sicherung besteht allein darin, dass
+  verständliche Gespräche vor der Veröffentlichung entfernt werden — eine
+  **organisatorische**, keine technische Maßnahme.
+
+### Ein neuer Punkt, der vorher nicht bestand
+
+**Die Weitergabe an die Location steht jetzt auf schwächerem Grund.**
+Solange es die zweite Einwilligung gab, war die Nutzung durch die Halle
+durch die Zustimmung der betroffenen Person gedeckt. Ohne sie ist sie
+eine Übermittlung an einen **weiteren Verantwortlichen zu dessen
+eigenen Werbezwecken** — und ein berechtigtes Interesse **eines Dritten**
+an **fremder** Werbung wiegt in der Abwägung leichter als das eigene.
+
+Das ist der Punkt, an dem ich am ehesten mit Widerspruch rechne, und er
+gehört ausdrücklich in die anwaltliche Prüfung. **Zwei Auswege, falls
+die Prüfung hier nicht mitgeht:** entweder die Weitergabe an die Location
+entfällt, oder sie wird auf Aufnahmen beschränkt, auf denen **niemand**
+erkennbar ist.
+
+### Sprachliche Korrektur, die aus der Neufassung folgt
+
+Überall dort, wo bisher **„Widerruf"** steht, muss künftig
+**„Widerspruch"** stehen. Das ist kein Wortspiel: Der Widerruf nach
+Art. 7 Abs. 3 DS-GVO setzt eine Einwilligung voraus, die es nicht mehr
+gibt. Der Widerspruch nach Art. 21 DS-GVO ist etwas anderes — er muss
+nicht begründet werden, aber der Verantwortliche kann ihm theoretisch
+zwingende schutzwürdige Gründe entgegensetzen.
+
+> **Wichtig für die Praxis:** VERA sollte einem Widerspruch **immer**
+> stattgeben und sich nie auf diese Ausnahme berufen. Bei
+> Werbeaufnahmen wäre sie kaum zu begründen, und ein abgelehnter
+> Widerspruch ist der sicherste Weg zu einer Beschwerde bei der
+> Aufsichtsbehörde. Der Hinweistext sagt das deshalb ohne Vorbehalt zu.
+
+`[ANWALTLICHE PRÜFUNG — von Adam ausdrücklich veranlasst, vor der
+Freischaltung: (1) Trägt Art. 6 Abs. 1 Buchst. f DS-GVO in Verbindung
+mit § 23 Abs. 1 Nr. 3 KunstUrhG die rein werbliche Nutzung von
+Übersichtsaufnahmen? (2) Hält die Abwägung stand, wenn Kinder auf den
+Aufnahmen sind? (3) Genügt die organisatorische Tonbearbeitung vor der
+Veröffentlichung, oder ist der Originalton schon bei der Aufnahme zu
+vermeiden? (4) Neu hinzugekommen: Trägt die Abwägung auch die Weitergabe
+an die Veranstaltungslocation für deren eigene Werbung? Alle
+Normzitate in diesem Dokument sind Prüfauftrag, kein nachgewiesenes
+Ergebnis — gesetze-im-internet.de und dejure.org sind aus dieser
+Arbeitsumgebung gesperrt.]`
