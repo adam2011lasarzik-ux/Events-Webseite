@@ -347,18 +347,164 @@ die beim Ticketkauf Monate vorher erteilt wurde.
 
 ## Wie lange
 
-`[VOR VERWENDUNG KLÄREN: eine der beiden Varianten wählen.]`
+> ✅ **Entschieden am 19.09.2026 (Frage 4.6): Variante 2 — zweckgebunden,
+> ohne feste Frist.** VERA und die jeweilige Veranstaltungslocation dürfen
+> die Aufnahmen zeitlich unbefristet auf ihrer Website und ihrem
+> Instagram-Kanal verwenden, solange der jeweils genannte Werbezweck
+> fortbesteht oder bis die betroffene Person ihre jeweilige Einwilligung
+> widerruft. Die Erforderlichkeit wird **jährlich dokumentiert geprüft**.
+> Nach Widerruf oder Wegfall des Zwecks werden die betroffenen Aufnahmen
+> entfernt und gelöscht. Einwilligungen und Widerrufe für VERA und für die
+> Location bleiben **getrennt**.
 
-> **Variante 1 — feste Frist:**
-> Wir verwenden die Aufnahmen für `[Zeitraum, z. B. drei Jahre]` ab der
-> Veranstaltung. Danach nehmen wir sie von unseren eigenen Kanälen und
-> löschen sie.
+**Vorgeschlagener Wortlaut für den Einwilligungstext:**
+
+> Wir verwenden die Aufnahmen **ohne feste zeitliche Begrenzung**, solange
+> der oben genannte Werbezweck fortbesteht — längstens jedoch bis Sie Ihre
+> Einwilligung widerrufen. Einmal im Jahr prüfen wir, ob ältere Aufnahmen
+> noch gebraucht werden, und halten das Ergebnis fest. Entfällt der Zweck,
+> oder widerrufen Sie, nehmen wir die betroffenen Aufnahmen von unseren
+> Kanälen und löschen sie.
 >
-> **Variante 2 — zweckgebunden:**
-> Wir verwenden die Aufnahmen, solange sie für die Darstellung unserer
-> Tätigkeit erforderlich sind, längstens jedoch bis zum Widerruf. Wir
-> prüfen `[Rhythmus, z. B. jährlich]`, ob ältere Aufnahmen noch benötigt
-> werden.
+> Ihre beiden Einwilligungen sind getrennt. Widerrufen Sie nur gegenüber
+> VERA, nehmen wir die Aufnahmen von **veraevents.de** und unserem
+> Instagram-Kanal; die Veranstaltungslocation ist dadurch nicht
+> automatisch erreicht. Wir leiten Ihren Widerruf an sie weiter, und Sie
+> können sich zusätzlich unmittelbar an sie wenden.
+
+### Rechtliche Prüfung der Entscheidung (19.09.2026)
+
+**Geprüft mit:** `klauseltransparenz-pruefen` (Prüffragen und Grenzen aus
+`references/transparenz.md`) und, soweit einschlägig,
+`klauselinhalt-und-verbote-pruefen`. **Ergebnis: Die Entscheidung ist
+tragfähig.** Drei Feststellungen, eine Beanstandung am Wortlaut und drei
+Folgen, die ohne Umsetzung zu einem echten Problem werden.
+
+#### 1. Eine unbefristete Einwilligung ist nicht per se unzulässig
+
+Die DS-GVO verlangt **keine** Verfallsfrist für eine Einwilligung. Sie
+bleibt wirksam, solange der Zweck besteht. **Art. 13 Abs. 2 Buchst. a
+DS-GVO** lässt ausdrücklich zu, statt einer Dauer die **Kriterien** für
+ihre Festlegung anzugeben — genau das tut Variante 2. Die Grenze zieht
+**Art. 5 Abs. 1 Buchst. e DS-GVO** (Speicherbegrenzung): nicht länger als
+erforderlich. Die jährliche dokumentierte Prüfung ist die passende
+Antwort darauf und zugleich die Erfüllung der Rechenschaftspflicht aus
+**Art. 5 Abs. 2 DS-GVO**.
+
+**Damit ist Variante 2 nicht der laxere, sondern der ehrlichere Weg** —
+vorausgesetzt, die Prüfung findet wirklich statt. Eine nie durchgeführte
+Jahresprüfung wäre ein Verstoß gegen die eigene Zusage und gegen Art. 5
+Abs. 2 DS-GVO. Sie ist deshalb als wiederkehrender Termin zu führen, mit
+schriftlichem Ergebnis, auch wenn dieses lautet: „weiterhin erforderlich,
+keine Änderung".
+
+#### 2. Vorformulierte Einwilligungen unterliegen der Transparenzkontrolle
+
+Eine für eine Vielzahl von Verträgen vorformulierte Einwilligung ist
+zugleich eine Allgemeine Geschäftsbedingung. Der BGH hat in der
+*Payback*-Entscheidung (Urteil vom 16.07.2008, Az. VIII ZR 348/06) eine
+solche Einwilligung an §§ 305 ff. BGB gemessen. Für die **Inhalts**­
+kontrolle gilt dabei eine Einschränkung: Soweit die Einwilligung nicht
+von Rechtsvorschriften abweicht, ist sie nach § 307 Abs. 3 Satz 1 BGB der
+Inhaltskontrolle entzogen — maßgeblich ist dann allein das
+Datenschutzrecht. **Das Transparenzgebot des § 307 Abs. 1 Satz 2 BGB
+greift jedoch über § 307 Abs. 3 Satz 2 BGB auch dort.** Die
+Verständlichkeit des Wortlauts ist also unabhängig von der DS-GVO
+zusätzlich justiziabel.
+
+*Prüfauftrag: Aktenzeichen und Randnummern der Payback-Entscheidung sind
+über eine Websuche ermittelt; der amtliche Volltext ist aus dieser
+Arbeitsumgebung nicht abrufbar — siehe Dokument 14.*
+
+#### 3. Beanstandung am Wortlaut: „soweit keine andere Rechtsgrundlage besteht"
+
+Adams Formulierung enthält den Vorbehalt „…müssen die betroffenen
+Aufnahmen entfernt und gelöscht werden, **soweit keine andere
+Rechtsgrundlage besteht**". Das ist der Typ Formulierung, den die
+Transparenzprüfung ausdrücklich in den Blick nimmt (vgl.
+`references/transparenz.md`, Abschnitt 2.1: „soweit gesetzlich zulässig").
+
+Die Prüffrage lautet: **Welche Folge hat der Widerruf konkret?** Für die
+betroffene Person ist nach diesem Satz nicht erkennbar, ob ihre Aufnahme
+nun verschwindet oder nicht — der Satz gibt VERA einen Beurteilungs­
+spielraum, dessen Grenzen der Leser nicht überprüfen kann. Ein
+Beurteilungsspielraum ist nicht automatisch unzulässig; unzulässig ist
+der **ungerechtfertigte** Spielraum. Hier fehlt die Rechtfertigung:
+
+> **Für Aufnahmen, die ausschließlich zu Werbezwecken veröffentlicht
+> wurden, gibt es realistisch keine andere Rechtsgrundlage.** Ein
+> berechtigtes Interesse nach Art. 6 Abs. 1 Buchst. f DS-GVO an der
+> Weiterverwendung gerade der Aufnahme einer Person, die widersprochen
+> hat, wäre nach Art. 21 DS-GVO kaum durchsetzbar. Denkbar bleibt allein
+> die **Aufbewahrung des Einwilligungsnachweises selbst** (Art. 7 Abs. 1
+> DS-GVO) — das betrifft aber die Erklärung, nicht das Bild.
+
+**Empfehlung:** Den Vorbehalt aus dem an den Verbraucher gerichteten Text
+**streichen** und die Rechtsfolge klar zusagen („wir nehmen die Aufnahmen
+von unseren Kanälen und löschen sie"). Der Vorbehalt gehört — mit
+benanntem Fall — in das interne Löschkonzept, nicht in die Einwilligung.
+Eine Zusage, die man einhalten kann, ist wertvoller als ein Vorbehalt,
+den niemand versteht.
+
+`[ENTSCHEIDUNG OFFEN: Adam bestätigt die Streichung des Vorbehalts aus
+dem Verbrauchertext — oder benennt den konkreten Fall, für den er
+gebraucht wird.]`
+
+#### 4. Der Widerruf muss ausführbar sein — heute ist er es nicht
+
+Eine unbefristete Nutzung verschiebt das gesamte Gewicht auf den
+Widerruf. Der ist nach **Art. 7 Abs. 3 DS-GVO** jederzeit und ohne
+Begründung möglich; die Löschpflicht folgt aus **Art. 17 Abs. 1
+Buchst. b DS-GVO**. Praktisch setzt beides voraus, dass VERA **weiß,
+welche Aufnahme welche Person zeigt**. Eine solche Zuordnung existiert
+heute nicht — weder in der Datenbank noch im Dateiablage-Verzeichnis.
+
+**Ohne sie ist der Widerruf eine leere Zusage**, und zwar dauerhaft,
+weil die Nutzung kein Ablaufdatum mehr hat. Das ist die eigentliche
+Folge dieser Entscheidung und steht als **B-13** auf der Bauliste.
+
+**Zweite Pflicht aus Art. 17 Abs. 2 DS-GVO:** Wer Aufnahmen öffentlich
+gemacht hat, muss angemessene Maßnahmen ergreifen, um andere
+Verantwortliche über den Löschwunsch zu informieren. Das trifft hier die
+Weitergabe des Widerrufs an die Location — die bereits aus Entscheidung
+4.3 folgt, hier aber eine **zweite, unabhängige** Rechtsgrundlage
+bekommt.
+
+#### 5. Getrennte Einwilligungen heißt: getrennte Widerrufe
+
+Aus der Trennung folgt zwingend, dass eine Person **nur gegenüber VERA**
+oder **nur gegenüber der Location** widerrufen kann. Die Speicherung
+braucht deshalb **zwei getrennte Zustände je Teilnehmer**, jeweils mit
+Zeitpunkt und Textfassung, und die Möglichkeit, einen Widerruf **später**
+festzuhalten — nicht nur beim Check-in. Das erweitert B-10 und wird dort
+vermerkt.
+
+#### 6. Konflikt mit dem bestehenden Löschkonzept — belegt
+
+Zwei Punkte, die ohne Anpassung auseinanderlaufen:
+
+| Fund | Warum das ein Problem ist |
+|---|---|
+| **Die veröffentlichten Aufnahmen haben keine Löschklasse.** K1–K7 decken Gesundheitsangaben, Einverständniserklärungen, Zustimmungsnachweise, Anmeldedaten, Checklisten, Vorfallakten und Steuerunterlagen ab — **die Bilddateien und die Beiträge auf den Kanälen sind in keiner Klasse enthalten.** | Die Jahresprüfung ist damit ein rein manueller Vorgang ohne technischen Anker. Der automatische Löschlauf (`vera-loeschlauf.timer`) wird hier nie etwas tun. Das ist vertretbar, muss aber **bewusst** so dokumentiert sein, statt stillschweigend zu unterstellen, der Löschlauf kümmere sich darum. |
+| **K3 löscht den reduzierten Zustimmungsnachweis nach 10 Jahren** — die Nutzung der Aufnahme ist jetzt aber **unbefristet**. | Steht die Aufnahme im elften Jahr noch online, kann VERA die Einwilligung **nicht mehr nachweisen** und verstößt gegen Art. 7 Abs. 1 DS-GVO. Der Nachweis muss mindestens **so lange** aufbewahrt werden, wie die Aufnahme genutzt wird. Auflösung: entweder eine eigene Löschklasse für Foto-Einwilligungen mit Frist „Ende der Nutzung + Verjährungspuffer", oder eine Löschsperre, solange die Aufnahme veröffentlicht ist. |
+
+`[FACHLICHE PRÜFUNG: Der Zuschnitt der neuen Löschklasse und die Länge
+des Verjährungspuffers gehören in die anwaltliche Kontrolle. Die hier
+genannten Normen sind Prüfauftrag, kein nachgewiesenes Ergebnis —
+gesetze-im-internet.de und dejure.org sind aus dieser Arbeitsumgebung
+gesperrt.]`
+
+#### 7. Was die Prüfung ausdrücklich NICHT beanstandet
+
+- **Die fehlende Höchstdauer als solche.** Art. 13 Abs. 2 Buchst. a
+  DS-GVO lässt Kriterien statt einer Frist zu; das Wort „unbefristet"
+  allein macht die Einwilligung nicht unwirksam.
+- **Den Begriff „Werbezweck".** Er ist durch die in 4.4 benannten vier
+  Kanäle konkretisiert und damit überprüfbar. Ein
+  Auslegungsspielraum bleibt, aber ein gerechtfertigter.
+- **Die jährliche Prüfung als Mechanismus.** Sie ist die richtige Antwort
+  auf Art. 5 Abs. 1 Buchst. e DS-GVO — solange sie stattfindet und
+  festgehalten wird.
 
 ## Freiwilligkeit
 

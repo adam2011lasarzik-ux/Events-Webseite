@@ -634,6 +634,27 @@ in `docs/loeschkonzept-betrieb.md`):
 | K6 | Vorfall- und Versicherungsakten | 10 Jahre, bei schwerem Personen-/Gesundheitsschaden bis 30 Jahre, ab Abschluss des Vorgangs | löschen |
 | K7 | Steuerunterlagen (§ 147 AO) | 10 / 8 / 6 Jahre | **niemals** vom Löschlauf angefasst |
 
+> ⚠️ **Offen seit Entscheidung 4.6 (19.09.2026) — zwei Lücken in dieser
+> Tabelle.** Die Foto- und Videoaufnahmen werden künftig **unbefristet**
+> genutzt, solange der Werbezweck besteht (Dokument 06). Daraus folgt:
+>
+> 1. **Die veröffentlichten Aufnahmen selbst haben keine Löschklasse.**
+>    K1–K7 erfassen Erklärungen, Nachweise, Anmeldedaten, Checklisten,
+>    Vorfallakten und Steuerunterlagen — nicht die Bilddateien und nicht
+>    die Beiträge auf Website und Instagram. Der automatische Löschlauf
+>    wird dort nie etwas tun. Das ist vertretbar, muss aber ausdrücklich
+>    so dastehen, statt den Eindruck zu erwecken, der Lauf decke alles ab.
+> 2. **K3 und die unbefristete Nutzung passen nicht zusammen.** Wird der
+>    reduzierte Zustimmungsnachweis nach 10 Jahren gelöscht, die Aufnahme
+>    steht aber noch online, ist die Einwilligung nicht mehr nachweisbar
+>    (Art. 7 Abs. 1 DS-GVO). Der Nachweis muss mindestens so lange
+>    bestehen bleiben wie die Nutzung.
+>
+> Auflösung — fachlich zu bestätigen: eine eigene Löschklasse für
+> Foto-Einwilligungen mit der Frist „Ende der Nutzung zuzüglich
+> Verjährungspuffer", oder eine Löschsperre, solange die Aufnahme
+> veröffentlicht ist. Bauauftrag **B-14** in Dokument 15.
+
 **Löschsperre.** Einzelne Datensätze können von der Löschung
 ausgenommen werden — bei einem Unfall, einer Beschwerde, einer
 Rückbuchung, einem Versicherungsfall oder einem drohenden
