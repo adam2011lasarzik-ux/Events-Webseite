@@ -541,10 +541,22 @@ ihm nur zu, soweit es auf demselben Vertragsverhältnis beruht.
 Auswirkungen sie auf Vergütung und Termine hat. Die Änderung wird erst
 nach Bestätigung durch den Auftraggeber wirksam.
 
-10.3 Zusätzliche Leistungen werden nach Aufwand vergütet, soweit nichts
-anderes vereinbart ist. `[VOR VERWENDUNG KLÄREN: Stundensatz oder
-Tagessatz festlegen — ohne einen benannten Satz ist „nach Aufwand" für
-den Auftraggeber nicht kalkulierbar.]`
+10.3 **Zusätzliche Leistungen dürfen nur nach vorheriger Bestätigung in
+Textform ausgeführt werden.** Am Veranstaltungstag genügt eine kurze
+Bestätigung per Nachricht.
+
+10.3a Zusätzliche Leistungen werden mit **60 Euro je Stunde** vergütet.
+Abgerechnet wird **je angefangene halbe Stunde**. Umsatzsteuer wird nicht
+berechnet (Ziffer 9.2).
+
+10.3b **Fremdkosten**, die durch eine zusätzliche Leistung entstehen,
+werden zusätzlich und **gegen Nachweis** berechnet.
+
+10.3c Muss VERA während der Veranstaltung **unaufschiebbare Maßnahmen zur
+Abwehr einer Gefahr für Personen oder Sachen** ergreifen, darf sie diese
+auch ohne vorherige Bestätigung ausführen. Sie unterrichtet den
+Auftraggeber unverzüglich und rechnet nach den Ziffern 10.3a und 10.3b
+ab.
 
 10.4 VERA kann geringfügige Abweichungen vom vereinbarten Programm
 vornehmen, soweit sie den Gesamtcharakter der Veranstaltung nicht
@@ -1699,3 +1711,91 @@ bei denen eine Vorleistung verwaltungstechnisch schwierig sein kann.
 Die Normzitate sind Prüfauftrag, kein nachgewiesenes Ergebnis —
 gesetze-im-internet.de und dejure.org sind aus dieser Arbeitsumgebung
 gesperrt.]`
+
+---
+
+# Anhang I: Prüfung der Zusatzleistungen (19.09.2026, Frage 5.9)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen` und
+`klauseltransparenz-pruefen`. **Ergebnis: die Regelung trägt.** Eine
+Lücke wurde geschlossen.
+
+## Die Entscheidung
+
+- **60 Euro je Stunde**, Abrechnung **je angefangene halbe Stunde**.
+- Zusatzleistungen nur nach **vorheriger Bestätigung in Textform**.
+- **Fremdkosten zusätzlich gegen Nachweis.**
+
+## Warum der Satz nicht der Inhaltskontrolle unterliegt
+
+Der Preis für eine zusätzliche Leistung ist eine **Hauptleistungsabrede**
+im Sinne von § 307 Abs. 3 Satz 1 BGB. Seine **Höhe** wird deshalb nicht
+auf Angemessenheit geprüft — 60 Euro sind weder zu prüfen noch zu
+rechtfertigen. Kontrolliert wird allein die **Transparenz** über § 307
+Abs. 3 Satz 2 in Verbindung mit Abs. 1 Satz 2 BGB, und die ist hier
+erfüllt: Der Satz ist beziffert, die Abrechnungseinheit benannt, der
+Auslöser klar.
+
+**Was dadurch vermieden wird:** Die bisherige Fassung „nach Aufwand"
+ohne benannten Satz hätte auf ein **einseitiges Preisbestimmungsrecht**
+hinausgelaufen. Formulierungen wie „VERA berechnet einen angemessenen
+Zuschlag" sind die klassische Angriffsfläche — nicht wegen der Höhe,
+sondern weil der Kunde die Belastung nicht vorher erkennen kann.
+
+Ohne jede Vereinbarung wäre im Übrigen nach § 632 Abs. 2 beziehungsweise
+§ 612 Abs. 2 BGB die **übliche Vergütung** geschuldet. Ein Anspruch
+bestünde also ohnehin; der benannte Satz verhindert nur, dass im Streit
+ein Gutachter bestimmt, was üblich ist.
+
+## Die Rundung auf angefangene halbe Stunden
+
+Eine Aufrundung ist eine Abweichung vom Grundsatz, dass nur die
+tatsächlich erbrachte Leistung zu vergüten ist, und damit an § 307 BGB
+zu messen. **Die halbe Stunde ist dabei die deutlich sicherere Wahl als
+die volle:** Der Aufschlag beträgt im Höchstfall knapp 30 Minuten
+gegenüber knapp 60. Bei einer Leistung von zehn Minuten eine volle
+Stunde zu berechnen, wäre im Unternehmerverkehr zwar nicht automatisch
+unwirksam, aber eine unnötige Angriffsfläche — und gegenüber einer
+Schule schlicht schlechter Stil.
+
+## Die geschlossene Lücke: der unaufschiebbare Fall
+
+Adams Regel — Zusatzleistungen **nur** nach vorheriger Bestätigung in
+Textform — ist als Beweisregel richtig und schützt beide Seiten. Sie
+hatte aber eine Lücke, die genau im ungünstigsten Moment aufgeht:
+
+**Muss während der Veranstaltung sofort gehandelt werden**, um eine
+Gefahr für Personen oder Sachen abzuwenden, ist eine vorherige
+Bestätigung in Textform tatsächlich unmöglich. Nach dem strengen
+Wortlaut dürfte VERA dann nicht handeln — oder müsste auf eigene Kosten
+handeln, obwohl die Maßnahme im Interesse des Auftraggebers liegt.
+Schlimmstenfalls entstünde ein Zögern in einer Situation, in der
+Zögern das Falsche ist.
+
+**Ziffer 10.3c schließt das** mit einer bewusst engen Ausnahme:
+ausschließlich unaufschiebbare Gefahrenabwehr, mit unverzüglicher
+Unterrichtung und Abrechnung nach denselben Sätzen. Sie ist kein
+Einfallstor für sonstige Mehrarbeit — jede andere Zusatzleistung bleibt
+bestätigungspflichtig.
+
+## Warum Stundensatz und nicht Tagessatz
+
+Zusatzleistungen fallen bei diesem Zuschnitt realistisch in Stunden an —
+eine Verlängerung, eine weitere Gruppe, Aufbauhilfe. Ein Tagessatz
+zwänge dazu, für eine Zusatzstunde einen Tag zu berechnen (unangemessen)
+oder frei zu verhandeln (unbestimmt). Der Stundensatz vermeidet beides.
+
+## Ein Hinweis zur Kalkulation, nicht zur Rechtslage
+
+60 Euro je Stunde sind rechtlich unbedenklich. Ob sie **kaufmännisch**
+passen, ist eine andere Frage: Zusatzleistungen sind ungeplant und
+stören den Ablauf, weshalb ihr Satz üblicherweise über dem rechnerischen
+Stundenertrag des regulären Auftrags liegt. Das ist Adams Entscheidung
+und hier nur als Merkposten festgehalten.
+
+`[FACHLICHE PRÜFUNG: Ob die Ausnahme in Ziffer 10.3c eng genug gefasst
+ist und ob die Abrechnung der Gefahrenabwehr nach Stundensatz im
+Einzelfall trägt — je nach Ursache der Gefahr kann die Kostentragung
+anders zu beurteilen sein. Die Normzitate sind Prüfauftrag, kein
+nachgewiesenes Ergebnis — gesetze-im-internet.de und dejure.org sind aus
+dieser Arbeitsumgebung gesperrt.]`

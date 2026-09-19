@@ -120,6 +120,25 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.9 — Stunden- oder Tagessatz für Zusatzleistungen?**~~ ✅
+  **60 Euro je Stunde, Abrechnung je angefangene halbe Stunde.**
+  Zusatzleistungen nur nach **vorheriger Bestätigung in Textform**;
+  Fremdkosten zusätzlich **gegen Nachweis**.
+  ✅ **Geprüft:** Der Satz ist eine Hauptleistungsabrede und damit der
+  Inhaltskontrolle entzogen (§ 307 Abs. 3 Satz 1 BGB) — geprüft wird nur
+  die Transparenz, und die ist mit beziffertem Satz und benannter
+  Abrechnungseinheit erfüllt. Die bisherige Fassung „nach Aufwand" ohne
+  Satz wäre auf ein **einseitiges Preisbestimmungsrecht** hinausgelaufen.
+  Die **halbe** Stunde ist die sicherere Rundung als die volle.
+  ⚠️ **Eine Lücke geschlossen (Ziffer 10.3c):** Muss während der
+  Veranstaltung sofort gehandelt werden, um eine Gefahr für Personen oder
+  Sachen abzuwenden, ist eine vorherige Bestätigung in Textform unmöglich
+  — nach dem strengen Wortlaut hätte VERA dann nicht handeln dürfen oder
+  auf eigene Kosten handeln müssen. Jetzt gilt eine **eng gefasste
+  Ausnahme** für unaufschiebbare Gefahrenabwehr, mit unverzüglicher
+  Unterrichtung und Abrechnung nach denselben Sätzen.
+  Dokument 04, Ziffern 10.3–10.3c und Anhang I.
+
 - ~~**5.8 — Abschlagsstaffel bei B2B-Aufträgen?**~~ ✅ **Abschlag bei
   jedem Auftrag.** Verlangt werden vorab die bei Auftragsbestätigung
   bereits **feststehenden Fremdkosten** (Halle, Trainer, Material);
