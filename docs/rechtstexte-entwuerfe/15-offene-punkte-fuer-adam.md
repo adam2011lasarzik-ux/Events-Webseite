@@ -120,6 +120,22 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.5 — Datenschutzrollen im B2B?**~~ ✅ **Getrennt Verantwortliche.**
+  Jede Seite bestimmt ihre eigenen Zwecke und Mittel. **Kein** AVV nach
+  Art. 28 DSGVO, **keine** Vereinbarung nach Art. 26 DSGVO. Die
+  Begründung steht direkt in der Klausel, die gegenseitige Unterstützung
+  bei Betroffenenanfragen und Widersprüchen bleibt. **Rückausnahme:**
+  Verarbeitet VERA im Einzelfall ausschließlich weisungsgebunden für
+  Zwecke des Auftraggebers, wird die Rollenverteilung **vor Beginn**
+  gesondert geprüft und erforderlichenfalls ein AVV geschlossen.
+  ✅ **Geprüft und tragfähig.** VERA erhält nach Entscheidung 5.4 nur
+  Ansprechperson, Widersprüche und einzelne Gesundheitshinweise — alle
+  drei verarbeitet VERA zu eigenen Zwecken und nicht auf Weisung.
+  Die Einordnung ist hier **sicherer als bei der Veranstaltungslocation**,
+  weil das gemeinsame Ergebnis fehlt: Die Schule bekommt keine Aufnahmen
+  und verfolgt keinen Werbezweck; die Zwecke laufen parallel statt
+  zusammen. Dokument 04, Ziffern 5.2–5.4 und Anhang E.
+
 - ~~**5.4 — Eigene Einverständniserklärung für Schulen?**~~ ✅ **Nein —
   Merkblatt statt Formular.** VERA sammelt **keine**
   Elternunterschriften, keine vollständigen Teilnehmerlisten und keine

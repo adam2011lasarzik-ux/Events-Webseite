@@ -310,30 +310,32 @@ wird nach Ziffer 9 vergütet.
 Teilnehmenden an VERA, stellt er sicher, dass er zu dieser Übermittlung
 berechtigt ist und die betroffenen Personen entsprechend informiert hat.
 
-5.2 **Die Parteien gehen davon aus, dass jede Partei für die von ihr
-verarbeiteten Daten datenschutzrechtlich eigenständig verantwortlich
-ist** — VERA für die zur Durchführung der Veranstaltung erforderliche
-Verarbeitung, der Auftraggeber für die Auswahl und Übermittlung der
-Teilnehmerdaten.
+5.2 **Der Auftraggeber und VERA sind datenschutzrechtlich getrennt
+Verantwortliche.** Jede Partei bestimmt die Zwecke und Mittel der von ihr
+vorgenommenen Verarbeitungen selbst: Der Auftraggeber entscheidet über
+sein Elternverfahren, die Auswahl der Teilnehmenden und die Angaben, die
+er an VERA übermittelt; VERA entscheidet über die zur Vorbereitung und
+sicheren Durchführung der Veranstaltung erforderlichen Verarbeitungen
+sowie über Anfertigung, Prüfung und Veröffentlichung der
+Übersichtsaufnahmen. VERA verarbeitet die vom Auftraggeber übermittelten
+Angaben nicht auf dessen Weisung und nicht für dessen Zwecke.
 
-5.3 `[VOR VERWENDUNG KLÄREN: Ist diese Einordnung im Einzelfall
-richtig?]`
+5.3 Ein Auftragsverarbeitungsvertrag nach Art. 28 DSGVO und eine
+Vereinbarung über gemeinsame Verantwortlichkeit nach Art. 26 DSGVO sind
+für die Zusammenarbeit nach diesen Bedingungen daher nicht erforderlich.
 
-> ⚠️ **Die Rolleneinordnung ist kein Formalismus.** Sie entscheidet, ob
-> ein Auftragsverarbeitungsvertrag nach Art. 28 DSGVO, eine Vereinbarung
-> über gemeinsame Verantwortlichkeit nach Art. 26 DSGVO oder nichts von
-> beidem nötig ist. Die Parteien können sie nicht frei wählen — sie
-> folgt daraus, wer über Zwecke und Mittel entscheidet. Ziffer 5.2 ist
-> deshalb als **Annahme** formuliert, nicht als Festlegung.
->
-> Für die typische Konstellation (VERA führt eine Veranstaltung durch
-> und entscheidet selbst über das Wie) spricht viel für getrennte
-> Verantwortlichkeit. Übernähme VERA dagegen reine Büro- und
-> Verwaltungstätigkeit nach Weisung (Geschäftsbereich 3), läge
-> Auftragsverarbeitung deutlich näher. **Das gehört fachlich geprüft.**
+5.3a **Rückausnahme.** Sollte VERA in einem konkreten Einzelfall
+personenbezogene Daten ausschließlich weisungsgebunden für Zwecke des
+Auftraggebers verarbeiten, prüfen die Parteien die Rollenverteilung vor
+Beginn dieser Verarbeitung gesondert und schließen erforderlichenfalls
+einen Auftragsverarbeitungsvertrag.
 
 5.4 Die Parteien unterstützen sich gegenseitig bei der Erfüllung von
-Betroffenenrechten und Informationspflichten.
+Betroffenenrechten und Informationspflichten. Das gilt insbesondere für
+Widersprüche gegen Übersichtsaufnahmen: Erreicht ein Widerspruch den
+Auftraggeber, gibt er ihn unverzüglich an VERA weiter; erreicht er VERA,
+unterrichtet VERA den Auftraggeber, soweit dieser für die Umsetzung
+etwas beitragen muss.
 
 ---
 
@@ -1211,3 +1213,110 @@ sollte, dass das Merkblatt verteilt wurde. (2) Die Rechtsgrundlage für
 Gesundheitsangaben im Schulkontext. Die Normzitate sind Prüfauftrag,
 kein nachgewiesenes Ergebnis — gesetze-im-internet.de und dejure.org
 sind aus dieser Arbeitsumgebung gesperrt.]`
+
+---
+
+# Anhang E: Prüfung der Datenschutzrollen im B2B (19.09.2026, Frage 5.5)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen` und
+`klauseltransparenz-pruefen`. **Ergebnis: die Einordnung trägt, und sie
+ist hier sicherer als bei der Veranstaltungslocation.**
+
+## Der Maßstab
+
+- **Auftragsverarbeitung (Art. 28 DSGVO)** liegt vor, wenn eine Stelle
+  personenbezogene Daten **weisungsgebunden für fremde Zwecke**
+  verarbeitet.
+- **Gemeinsame Verantwortlichkeit (Art. 26 DSGVO)** liegt vor, wenn zwei
+  Stellen **gemeinsam** über Zwecke und Mittel entscheiden — nach der
+  Rechtsprechung des EuGH phasenweise begrenzt auf die Verarbeitungen,
+  bei denen diese gemeinsame Entscheidung tatsächlich stattfindet
+  (*Fashion ID*, C-40/17).
+- Die Rollen sind **nicht frei wählbar**. Sie folgen aus den
+  tatsächlichen Entscheidungsbefugnissen; eine Vereinbarung kann sie
+  abbilden, nicht schaffen.
+
+## Die Subsumtion
+
+Nach der Entscheidung zu Frage 5.4 erhält VERA vom Auftraggeber nur noch
+drei Arten von Angaben. Für jede einzeln:
+
+- **Die Ansprechperson.** Kontaktdaten, die VERA für die eigene
+  Organisation der Veranstaltung braucht. Kein fremder Zweck.
+- **Widersprüche gegen Übersichtsaufnahmen.** VERA setzt sie in der
+  **eigenen** Aufnahme- und Veröffentlichungspraxis um — für eine
+  Verarbeitung, für die VERA selbst verantwortlich ist (Art. 6 Abs. 1
+  Buchst. f DSGVO, Dokument 06 Teil VIII). Die Schule weist VERA nicht
+  an; sie leitet eine Erklärung weiter, die sich gegen **VERAs**
+  Verarbeitung richtet.
+- **Einzelne Gesundheitshinweise.** VERA verarbeitet sie zur Erfüllung
+  der **eigenen** Verkehrssicherungs- und Sorgfaltspflichten als
+  Veranstalter. Auch das ist ein eigener Zweck.
+
+**In keinem der drei Fälle entscheidet der Auftraggeber über Zweck oder
+Mittel der Verarbeitung durch VERA.** Damit scheidet Art. 28 DSGVO aus.
+
+**Art. 26 DSGVO scheidet ebenfalls aus**, weil es keine gemeinsam
+festgelegte Verarbeitung gibt: Das Elternverfahren führt die Schule
+allein durch, die Aufnahmen verantwortet VERA allein, und beide nutzen
+die Ergebnisse nicht gemeinsam.
+
+## Warum die Einordnung hier sicherer ist als bei der Location
+
+Bei der Veranstaltungslocation (Dokument 06, Teil VIII.5) blieb ein
+Restrisiko, weil dort **drei Elemente** in Richtung gemeinsamer
+Verantwortlichkeit zogen: eine schriftliche Zuständigkeitsvereinbarung,
+ein gemeinsames Widerspruchsverfahren und ein gemeinsamer
+Informationstext. Vor allem aber **nutzen beide dieselben Aufnahmen für
+eigene Werbung**.
+
+Mit der Schule fehlt dieses gemeinsame Ergebnis vollständig. Die Schule
+bekommt keine Aufnahmen und verfolgt keinen Werbezweck; sie erfüllt ihre
+schulrechtlichen Pflichten. Die Zwecke laufen **parallel**, nicht
+zusammen. Deshalb ist Ziffer 5.2 hier als **Feststellung** formuliert,
+während Dokument 06 an der entsprechenden Stelle eine Vereinbarung
+vorsieht, die in beiden Fällen trägt.
+
+## Warum die Begründung in der Klausel steht
+
+Eine reine Behauptung („die Parteien sind getrennt verantwortlich")
+hätte zwei Schwächen: Sie wäre gegenüber einer Aufsichtsbehörde wertlos,
+weil die Rollen nicht vereinbart werden können, und sie wäre für den
+Auftraggeber nicht überprüfbar. Ziffer 5.2 nennt deshalb die
+**Entscheidungsbefugnisse**, aus denen die Einordnung folgt — das ist
+zugleich der Nachweis nach Art. 5 Abs. 2 DSGVO und transparent im Sinne
+von § 307 Abs. 1 Satz 2 BGB.
+
+## Die Rückausnahme ist kein Schönheitsfehler
+
+Ziffer 5.3a ist der ehrliche Teil: Die Einordnung gilt **für die
+Zusammenarbeit nach diesen Bedingungen**. Verschiebt sich der Zuschnitt
+— etwa weil VERA für einen Auftraggeber Anmeldungen entgegennimmt und
+eine Teilnehmerliste **für ihn** führt —, kippt die Rolle. Die Klausel
+verpflichtet dann zur Prüfung **vor** Beginn der Verarbeitung, nicht
+danach. Genau dieser Fall wäre der einzige realistische Weg in die
+Auftragsverarbeitung, und er ist mit der Entscheidung zu Frage 5.2
+(keine Büro- und Verwaltungsleistungen) ohnehin weit entfernt.
+
+## Was Ziffer 5.4 leistet — und was nicht
+
+Bei getrennter Verantwortlichkeit besteht **keine gesetzliche**
+Unterstützungspflicht, wie sie Art. 26 Abs. 1 DSGVO für gemeinsam
+Verantwortliche kennt. Ziffer 5.4 schafft sie vertraglich, und das ist
+praktisch wichtig: Ein Elternteil wendet sich naturgemäß **zuerst an die
+Schule**, nicht an VERA. Ohne diese Pflicht liefe ein dort erklärter
+Widerspruch ins Leere.
+
+**Was die Klausel nicht leistet:** Sie verschiebt keine Verantwortung.
+Jede Partei bleibt gegenüber den betroffenen Personen für ihre eigenen
+Verarbeitungen einstandspflichtig — auch wenn die andere Seite ihre
+Unterstützungspflicht verletzt.
+
+`[FACHLICHE PRÜFUNG: (1) Bestätigung der Rolleneinordnung im Hinblick
+auf die Gesundheitsangaben — dort ist die Zweckbestimmung am ehesten
+streitig, weil sie auch dem Schutz der Teilnehmenden und damit einem
+Anliegen der Schule dient. (2) Ob der Verzicht auf jede
+Rollenvereinbarung tragfähig ist oder ob eine kurze schriftliche
+Feststellung außerhalb der AGB vorzugswürdig wäre. Die Normzitate sind
+Prüfauftrag, kein nachgewiesenes Ergebnis — gesetze-im-internet.de und
+dejure.org sind aus dieser Arbeitsumgebung gesperrt.]`
