@@ -406,33 +406,72 @@ Der Auftraggeber weist die Teilnehmenden darauf hin.
 
 ## 8. Genehmigungen und Sicherheitsorganisation
 
-8.1 `[VOR VERWENDUNG KLÄREN: Wer beschafft welche Genehmigungen?]`
+> ✅ **Neu gefasst am 19.09.2026 (Frage 5.6).** Der bisherige Entwurf
+> ließ die Frage offen und verwies sie ins Angebot. Das reicht nicht:
+> Die Grundaufteilung ist bei jeder Veranstaltung dieselbe und gehört
+> deshalb in die Klausel; nur die Abweichung gehört ins Angebot.
 
-**Entwurfsvorschlag:**
+8.1 **Grundsatz.** Genehmigungen, Erlaubnisse und Anzeigen, die an die
+Veranstaltungsstätte selbst anknüpfen, obliegen deren Betreiber. Dazu
+zählen insbesondere die baurechtliche Zulässigkeit, der Brandschutz,
+Flucht- und Rettungswege, die Kapazitätsgrenzen der Anlage,
+Anforderungen des Versammlungsstättenrechts, Sperrzeiten sowie der
+laufende Gaststättenbetrieb der Anlage.
 
-> Welche behördlichen Genehmigungen, Anzeigen oder Erlaubnisse für eine
-> Veranstaltung erforderlich sind und wer sie beschafft, wird im Angebot
-> festgelegt. Ist dort nichts bestimmt, obliegt die Beschaffung
-> derjenigen Partei, die die Veranstaltungsstätte stellt.
->
-> Erforderliche Abgaben und Meldungen — insbesondere an Verwertungs­
-> gesellschaften bei Musiknutzung sowie an die gesetzliche
-> Unfallversicherung — obliegen der jeweils dafür verantwortlichen
-> Partei nach den gesetzlichen Vorschriften.
+8.2 **VERA** verantwortet die Genehmigungen, Anzeigen und Abgaben, die
+an die von ihr selbst erbrachten oder eingebrachten Leistungen
+anknüpfen, insbesondere:
 
-8.2 Die Sicherheitsorganisation richtet sich nach Art und Größe der
+- Meldungen an Verwertungsgesellschaften bei Musiknutzung,
+- die Künstlersozialabgabe bei Beauftragung selbständiger Künstlerinnen
+  und Künstler,
+- die Einhaltung des Jugendschutzes bei der eigenen Veranstaltung,
+- die Anzeige eines anlassbezogenen vorübergehenden
+  Gaststättenbetriebs, soweit VERA selbst Speisen oder Getränke abgibt
+  (Ziffer 8.5).
+
+8.3 **Der Auftraggeber** teilt Wünsche, die über den üblichen Betrieb
+der Veranstaltungsstätte hinausgehen — etwa eigene Aufbauten,
+Dekoration, Sondergeräte, offene Flammen oder besondere Nutzungen — so
+rechtzeitig mit, dass eine erforderliche Zustimmung oder Anzeige noch
+möglich ist. Entstehen dadurch Genehmigungs- oder Mehrkosten, trägt er
+sie.
+
+8.4 Ist eine erforderliche Genehmigung oder Zustimmung nicht rechtzeitig
+zu erlangen, entfällt der betroffene Leistungsteil. VERA haftet dafür
+nicht, wenn sie auf die Erforderlichkeit rechtzeitig hingewiesen hat;
+die Vergütung mindert sich entsprechend.
+
+8.5 **Speisen und Getränke.** VERA kann bei ihren Veranstaltungen selbst
+Speisen, Snacks und alkoholfreie Getränke verkaufen. **Alkoholische
+Getränke werden ausschließlich durch die Gastronomie der
+Veranstaltungsstätte angeboten und ausgegeben.** Speisen und Getränke
+sind nicht in der Vergütung enthalten und werden gesondert verkauft.
+Ob, wo und in welchem Umfang VERA verkaufen, lagern, kühlen, zubereiten
+oder grillen darf, wird vor jeder Veranstaltung mit dem Betreiber der
+Veranstaltungsstätte **schriftlich** geklärt.
+
+8.6 Die Sicherheitsorganisation richtet sich nach Art und Größe der
 Veranstaltung und wird im Angebot beschrieben.
 
-> ⚠️ **Hier ist nichts erfunden worden — und das ist Absicht.**
-> Versammlungsstättenrecht, Gaststättenrecht, Musikabgaben und
-> Unfallversicherung hängen vollständig von Art, Größe und Ort der
-> Veranstaltung ab. Ein pauschaler Klauselbaustein wäre für den einen
-> Fall zu viel und für den anderen zu wenig. Die Klausel verlangt
-> deshalb nur, dass die Frage **im Angebot** beantwortet wird.
+8.7 Abweichende Zuständigkeiten können im Angebot vereinbart werden; sie
+gehen den Ziffern 8.1 bis 8.5 vor.
+
+> ⚠️ **Zu 8.1 — die Grundregel folgt aus Entscheidung 5.2.** Weil VERA
+> in einer **fremden** Anlage veranstaltet und nicht deren Betreiber
+> ist, hängen die anlagenbezogenen Pflichten am Betreiber. Diese Linie
+> trägt die ganze Aufteilung — sie würde sich ändern, sobald VERA eine
+> eigene Fläche betreibt oder eine Veranstaltung im Freien durchführt.
 >
-> `[VOR VERWENDUNG KLÄREN: Welche Veranstaltungsgrößen und -arten sind
-> geplant? Ab einer bestimmten Größe greifen eigene Vorschriften. Das
-> gehört vor dem ersten größeren Auftrag geklärt.]`
+> **Zu 8.2, erster Punkt — das ist der praktisch riskanteste.** Der
+> Rahmenvertrag eines Betreibers mit einer Verwertungsgesellschaft deckt
+> regelmäßig nur dessen **eigene** Veranstaltungen im eigenen Namen und
+> auf eigene Rechnung. Eine Veranstaltung eines externen Veranstalters
+> fällt **nicht** darunter. Eine interne Absprache mit der Halle hilft
+> gegenüber der Verwertungsgesellschaft nicht, weil Verträge nur
+> zwischen den Vertragsparteien wirken. **Soll die Halle die Meldung
+> übernehmen, gehört das schriftlich in die Vereinbarung mit ihr** —
+> und auch dann bleibt das Risiko bei VERA, wenn die Halle es versäumt.
 
 ---
 
@@ -1320,3 +1359,133 @@ Rollenvereinbarung tragfähig ist oder ob eine kurze schriftliche
 Feststellung außerhalb der AGB vorzugswürdig wäre. Die Normzitate sind
 Prüfauftrag, kein nachgewiesenes Ergebnis — gesetze-im-internet.de und
 dejure.org sind aus dieser Arbeitsumgebung gesperrt.]`
+
+---
+
+# Anhang F: Genehmigungen und eigener Verkauf von Speisen und Getränken (19.09.2026, Frage 5.6)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen` und
+`klauseltransparenz-pruefen`. **Achtung: Dieser Anhang betrifft nicht nur
+das B2B-Werk.** Der eigene Verkauf von Speisen und Getränken wirkt auch
+auf die öffentlichen Veranstaltungen, auf die Hausordnung (Dokument 09)
+und auf die Website.
+
+## Die Entscheidung vom 19.09.2026
+
+- VERA darf bei eigenen Veranstaltungen **selbst Speisen, Snacks und
+  alkoholfreie Getränke verkaufen**. Die zuvor erwogene Festlegung
+  „ausschließlich Hallengastronomie" wird **nicht** übernommen.
+- **Alkoholische Getränke** bleiben ausschließlich der Gastronomie der
+  Veranstaltungsstätte vorbehalten.
+- Speisen und Getränke sind **nicht im Ticketpreis enthalten** und
+  werden gesondert verkauft.
+- Vor jeder Veranstaltung wird mit dem Betreiber **schriftlich** geklärt,
+  ob und wo VERA verkaufen, lagern, kühlen, zubereiten oder grillen darf.
+
+## Was das gaststättenrechtlich auslöst
+
+**Der Verkauf von Speisen und alkoholfreien Getränken zum Verzehr an Ort
+und Stelle ist in Brandenburg anzeigepflichtig** — auch ohne Alkohol.
+Das Land hat als erstes Bundesland ein eigenes Gaststättengesetz
+erlassen und die frühere Erlaubnis durch eine **Anzeige** ersetzt. Für
+einen anlassbezogenen oder vorübergehenden Betrieb ist sie der
+zuständigen Ordnungsbehörde **zwei Wochen vor Beginn** zu erstatten.
+
+**Folgen für die Praxis:**
+
+- Die Zweiwochenfrist ist in die Terminplanung einzurechnen. Ob im
+  Einzelfall eine kürzere Frist akzeptiert wird, ist mit der Behörde zu
+  klären — darauf lässt sich nicht planen.
+- Zuständig ist die Ordnungsbehörde am Veranstaltungsort, nicht am Sitz
+  von VERA. Bei Veranstaltungen in verschiedenen Orten sind es
+  verschiedene Ämter.
+- Findet die Veranstaltung außerhalb Brandenburgs statt, gilt das dortige
+  Landesrecht. **Die Anzeigepflicht ist Landesrecht und nicht bundesweit
+  gleich** — das ist bei einer Ausweitung auf andere Bundesländer neu zu
+  prüfen.
+
+## Drei Angebotsstufen mit sehr unterschiedlichem Aufwand
+
+Die lebensmittelrechtlichen Pflichten hängen nicht am Verkauf als
+solchem, sondern daran, **was** verkauft wird:
+
+- **Originalverpackte Produkte** (abgepackte Riegel, Flaschen, Dosen):
+  der schlankste Fall. Der Hersteller trägt die Kennzeichnung; VERA gibt
+  weiter. Kühlung nur, soweit das Produkt sie verlangt.
+- **Offene Lebensmittel** (Obst, belegte Brötchen, Kuchen, Getränke aus
+  Großgebinden): Hier greifen die Hygieneanforderungen der Verordnung
+  (EG) Nr. 852/2004, die **Belehrung nach § 43 IfSG** durch das
+  Gesundheitsamt für alle beteiligten Personen, die Einhaltung der
+  Kühlkette und die **Allergeninformation** bei loser Ware.
+- **Frisch zubereitete Speisen** (Grillen, Erwärmen, Zubereitung vor
+  Ort): zusätzlich Anforderungen an die Zubereitungsfläche, Trennung
+  roher und fertiger Lebensmittel, Handwaschmöglichkeit,
+  Temperaturführung und Dokumentation. Beim Grillen kommen
+  Brandschutzauflagen und die Zustimmung des Betreibers hinzu — in einer
+  Sporthalle ist offenes Feuer regelmäßig ausgeschlossen.
+
+**Empfehlung für den Start: Stufe 1.** Originalverpackte Produkte
+erfüllen das Versprechen an die Teilnehmenden, kosten fast keinen
+Verwaltungsaufwand und lassen die Anzeige zu einer Formalie werden. Der
+Sprung auf Stufe 2 oder 3 ist eine bewusste Entscheidung mit
+Vorlaufzeit, keine Erweiterung nebenbei.
+
+## Gewerbeanmeldung
+
+Zu prüfen ist, ob die bestehende Gewerbeanmeldung von VERA den Verkauf
+von Speisen und Getränken bereits umfasst. Die Anmeldung beschreibt die
+ausgeübte Tätigkeit; kommt ein neuer Tätigkeitsbereich hinzu, ist sie zu
+ergänzen. Das ist ein kurzer Vorgang beim Gewerbeamt, aber er gehört vor
+den ersten Verkauf und nicht danach.
+
+`[VOR DEM ERSTEN VERKAUF KLÄREN: Wortlaut der bestehenden
+Gewerbeanmeldung prüfen und gegebenenfalls ergänzen.]`
+
+## ⚠️ Der Widerspruch im eigenen Bestand
+
+Beim Prüfen dieser Frage ist ein Widerspruch in der Leistungsbeschreibung
+aufgefallen:
+
+- `content/de.ts:83`: „Essen und Getränke können vor Ort **separat
+  erworben** werden." — also **nicht** im Preis enthalten.
+- `prisma/seed.ts:179`: **„Essen und Getränke"** steht im Block
+  **„Das ist dabei"** — also **im Preis enthalten**.
+- `prisma/seed.ts:59`: „Essen und Getränke gibt es für alle."
+
+Das ist eine mehrdeutige Leistungsbeschreibung, und sie geht nach
+**§ 305c Abs. 2 BGB zu Lasten des Verwenders**: Bei Zweifeln gilt die
+kundenfreundlichste Auslegung — ein Käufer könnte darauf bestehen, dass
+Verpflegung im Ticketpreis enthalten ist. Bei einem Ticket zu 7 € ist
+das kein theoretisches Risiko.
+
+**Einschränkung des Befunds:** Belegt ist er im **Startdatensatz**
+(`prisma/seed.ts`). Was am Live-Event steht, kommt aus der Datenbank und
+kann im Adminbereich geändert worden sein. Das ist am echten Event
+nachzusehen. **Es wurde nichts geändert** — der Punkt steht als B-19 auf
+der Bauliste.
+
+**Der einheitliche Wortlaut, auf den alle Stellen gebracht werden:**
+
+> Speisen und alkoholfreie Getränke können vor Ort separat bei VERA
+> oder — abhängig vom Veranstaltungsort — bei der Hallengastronomie
+> erworben werden. Sie sind nicht im Ticketpreis enthalten.
+
+## Folge für die Hausordnung (Dokument 09)
+
+Ziffer 5.2 sagt bereits zutreffend, dass VERA selbst keinen Alkohol
+ausschenkt und nur Speisen und alkoholfreie Getränke verkauft. Der
+zugehörige Hinweiskasten ist jedoch **unvollständig**: Er behandelt nur
+die gaststättenrechtliche **Erlaubnis für Alkohol** und schließt daraus,
+VERA brauche nichts. **Die Anzeigepflicht für den Verkauf von Speisen
+und alkoholfreien Getränken bleibt davon unberührt** und besteht
+unabhängig vom Alkohol. Der Kasten ist entsprechend ergänzt.
+
+`[FACHLICHE PRÜFUNG — von Adam ausdrücklich veranlasst: Die endgültige
+Regelung ist anhand der konkret angebotenen Produkte und der Vorgaben
+der zuständigen Behörde zu prüfen. Die Angaben zum Brandenburger
+Landesrecht stammen aus der Websuche, nicht aus amtlichen Volltexten —
+gesetze-im-internet.de und dejure.org sind aus dieser Arbeitsumgebung
+gesperrt. Zu klären sind insbesondere: Zuständigkeit und Formular der
+Ordnungsbehörde, mögliche Ausnahmen von der Zweiwochenfrist, der Umfang
+der Belehrungspflicht nach § 43 IfSG für die gewählte Angebotsstufe und
+die Reichweite der bestehenden Gewerbeanmeldung.]`

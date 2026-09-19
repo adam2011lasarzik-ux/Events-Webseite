@@ -120,6 +120,41 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.6 — Genehmigungen: wer beschafft welche?**~~ ✅ **Grundregel in
+  die Klausel, Abweichung ins Angebot.** **Betreiber der Halle:**
+  Baurecht, Brandschutz, Flucht- und Rettungswege, Kapazitätsgrenzen,
+  Versammlungsstättenrecht, Sperrzeiten, laufender Gaststättenbetrieb
+  der Anlage. **VERA:** Meldungen an Verwertungsgesellschaften bei
+  Musik, Künstlersozialabgabe, Jugendschutz, Anzeige des eigenen
+  anlassbezogenen Gaststättenbetriebs. **Auftraggeber:**
+  Sonderwünsche rechtzeitig mitteilen und etwaige Mehrkosten tragen.
+  Dokument 04, Ziffer 8 neu gefasst.
+  ⚠️ **Der praktisch riskanteste Punkt ist die GEMA:** Der Rahmenvertrag
+  eines Hallenbetreibers deckt regelmäßig **nur dessen eigene**
+  Veranstaltungen. Eine Veranstaltung eines externen Veranstalters fällt
+  **nicht** darunter, und eine interne Absprache hilft gegenüber der
+  Verwertungsgesellschaft nicht — Verträge wirken nur zwischen den
+  Vertragsparteien.
+
+- ~~**5.6a — Verpflegung: wer verkauft?**~~ ✅ **Korrigiert am
+  19.09.2026: VERA verkauft selbst.** Speisen, Snacks und **alkoholfreie**
+  Getränke darf VERA bei eigenen Veranstaltungen selbst verkaufen; die
+  zuvor erwogene Festlegung „ausschließlich Hallengastronomie" gilt
+  **nicht**. **Alkohol** bleibt ausschließlich bei der Hallengastronomie.
+  Speisen und Getränke sind **nicht im Ticketpreis enthalten**. Vor jedem
+  Event wird mit dem Betreiber **schriftlich** geklärt, ob und wo VERA
+  verkaufen, lagern, kühlen, zubereiten oder grillen darf.
+  ⚠️ **Wichtigster Prüfbefund:** In Brandenburg ist der Verkauf von
+  Speisen und Getränken zum Verzehr an Ort und Stelle **anzeigepflichtig
+  — auch ohne Alkohol**; ein anlassbezogener vorübergehender Betrieb ist
+  der zuständigen Ordnungsbehörde **zwei Wochen vor Beginn** anzuzeigen.
+  Die Pflichten hängen zudem an der Angebotsstufe: originalverpackt,
+  offen oder frisch zubereitet. **Empfehlung für den Start:
+  originalverpackte Produkte** — erfüllt das Versprechen, minimaler
+  Aufwand. Zu klären ist außerdem, ob die bestehende **Gewerbeanmeldung**
+  den Verkauf bereits umfasst. Dokument 04, Ziffer 8.5 und Anhang F;
+  Dokument 09, Ziffer 5 ergänzt.
+
 - ~~**5.5 — Datenschutzrollen im B2B?**~~ ✅ **Getrennt Verantwortliche.**
   Jede Seite bestimmt ihre eigenen Zwecke und Mittel. **Kein** AVV nach
   Art. 28 DSGVO, **keine** Vereinbarung nach Art. 26 DSGVO. Die
@@ -412,6 +447,9 @@ Volltext heute.
 
 - **B-5** — Events ohne feststehenden Termin (`startAt`/`endAt` = `null`) dürfen künftig **keinen Kaufknopf** mehr zeigen — nur die Ankündigung. Das ist heute noch nicht durchgesetzt und ein eigener Bauauftrag (vermutlich `lib/events.ts`/`components/PreisRechner.tsx`), nicht Teil dieser Dokumentationsrunde.
   *Betrifft:* Dokument 07, Ziffer 2.5
+
+- **B-19** — ⚠️ **Widerspruch in der Leistungsbeschreibung zu Speisen und Getränken.** `content/de.ts:83` sagt, Essen und Getränke könnten „vor Ort **separat erworben** werden" (also **nicht** im Preis), während `prisma/seed.ts:179` „Essen und Getränke" im Block **„Das ist dabei"** führt (also **im Preis**) und `prisma/seed.ts:59` ergänzt: „Essen und Getränke gibt es für alle." Das geht nach **§ 305c Abs. 2 BGB zu Lasten von VERA** — bei Zweifeln gilt die kundenfreundlichste Auslegung, ein Käufer könnte auf Verpflegung im Ticketpreis bestehen. **Belegt im Startdatensatz; am Live-Event aus der Datenbank zu prüfen.** Alle Stellen sind auf den einheitlichen Wortlaut zu bringen: „Speisen und alkoholfreie Getränke können vor Ort separat bei VERA oder — abhängig vom Veranstaltungsort — bei der Hallengastronomie erworben werden. Sie sind nicht im Ticketpreis enthalten." **Noch nichts geändert** — ausdrückliche Vorgabe von Adam.
+  *Betrifft:* `content/de.ts`, `prisma/seed.ts`, Live-Eventdaten; Dokument 04, Anhang F
 
 - **B-18** — ✅ **Neu 19.09.2026: schriftliche Vereinbarung mit der Veranstaltungslocation.** Kein Code, sondern ein Dokument, das **vor der Freischaltung** vorliegen muss. Inhalt: Rollenverständnis (getrennte Verantwortliche, mit Regelung für den Fall, dass eine Behörde Art. 26 DS-GVO annimmt), was übergeben wird (nur geprüfte Übersichtsaufnahmen ohne verständliche Gespräche, ohne Nahaufnahmen und Porträts), Zweckbindung der Halle ohne Weitergabe an Dritte, Verteilung der Informationspflichten nach Art. 13 DS-GVO, Umgang mit Widersprüchen samt Frist und Rückbestätigung, Anlaufstelle, Ende der Zusammenarbeit. **Der wesentliche Inhalt wird im Datenschutzhinweis veröffentlicht** (Art. 26 Abs. 2 Satz 2 DS-GVO — erfüllt die Pflicht vorsorglich, falls die Rollen doch anders eingeordnet werden). ⚠️ **Vorab zu klären:** ob die Halle während der VERA-Veranstaltung **selbst** fotografiert — dann greift VERAs Hinweistext nicht und die Prüfung vor der Veröffentlichung läuft für dieses Material ins Leere.
   *Betrifft:* Dokument 06, Teil VIII.5; Dokument 02, Ziffer 13 und 14

@@ -170,9 +170,18 @@ nicht gestattet.
 > 3.24 und 3.26 (17.09.2026, bestätigt am 18.09.2026). Zwei Punkte
 > bleiben ausdrücklich offen und sind **kein** Redaktionsversehen:
 >
-> - **Gaststättenrechtliche Erlaubnis.** Solange ausschließlich die
->   Location selbst ausschenkt, braucht VERA dafür keine eigene
->   Erlaubnis. Sobald VERA **selbst** Alkohol verkaufen möchte
+> - ⚠️ **Ergänzt am 19.09.2026 — dieser Punkt war unvollständig.**
+>   Solange ausschließlich die Location Alkohol ausschenkt, braucht VERA
+>   dafür keine eigene Erlaubnis. **Das sagt aber nichts über den
+>   Verkauf von Speisen und alkoholfreien Getränken durch VERA selbst:**
+>   Der ist in Brandenburg **anzeigepflichtig** — ein anlassbezogener
+>   vorübergehender Gaststättenbetrieb ist der zuständigen
+>   Ordnungsbehörde **zwei Wochen vor Beginn** anzuzeigen, auch ohne
+>   Alkohol. Einzelheiten und die Angebotsstufen in Dokument 04,
+>   Anhang F.
+> - **Gaststättenrechtliche Erlaubnis für Alkohol.** Solange
+>   ausschließlich die Location selbst ausschenkt, braucht VERA dafür
+>   keine eigene Erlaubnis. Sobald VERA **selbst** Alkohol verkaufen möchte
 >   („Stufe 2"), wird diese Ziffer neu gefasst — dann zusätzlich mit
 >   eigener Alterskontrolle durch VERA. `[VOR VERWENDUNG KLÄREN, falls
 >   Stufe 2 näher rückt: gaststättenrechtliche Erlaubnis oder befristete
