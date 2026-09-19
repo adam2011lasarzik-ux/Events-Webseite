@@ -547,20 +547,125 @@ gesperrt.]`
 
 ## Minderjährige
 
-> Für minderjährige Teilnehmende gibt die erziehungsberechtigte Person
-> die Einwilligung ab. Ist die minderjährige Person alt genug, die
-> Tragweite zu verstehen, beziehen wir sie ein — wir bitten dann auch
-> um ihr Einverständnis.
+> ✅ **Entschieden am 19.09.2026 (Frage 4.7): Altersgrenze 14 Jahre.**
+
+**Vorgeschlagener Wortlaut für den Einwilligungstext:**
+
+> **Unter 14 Jahren** entscheiden die Erziehungsberechtigten. Zeigt Ihr
+> Kind vor Ort erkennbar, dass es nicht aufgenommen werden möchte,
+> respektieren wir das immer — unabhängig davon, was Sie hier angekreuzt
+> haben.
+>
+> **Von 14 bis einschließlich 17 Jahren** brauchen wir zwei Zustimmungen:
+> Ihre beim Ticketkauf und die der minderjährigen Person selbst beim
+> Check-in. Diese Bestätigung ist freiwillig. Fehlt eine der beiden
+> Zustimmungen, behandeln wir die Person als **nicht eingewilligt**.
 >
 > Die auf Papier abgegebene Einverständniserklärung für Minderjährige
 > enthält **keine** Einwilligung in Foto- oder Videoaufnahmen. Die
 > Einwilligung wird ausschließlich hier erteilt.
 
-`[VOR VERWENDUNG KLÄREN: Ab welchem Alter wird die minderjährige Person
-selbst einbezogen? Eine feste Altersgrenze gibt es nicht; maßgeblich ist
-die Einsichtsfähigkeit im Einzelfall. Verbreitet ist eine Doppel­
-einwilligung ab etwa 14 Jahren. **Das gehört fachlich geprüft** — und es
-gehört technisch umgesetzt, wenn es gelten soll.]`
+> ℹ️ **Für das erste Event gilt zusätzlich:** Minderjährige nehmen
+> ausschließlich gemeinsam mit ihren anwesenden Erziehungsberechtigten
+> teil (Familienticket). Die zweite Zustimmung wird also in Anwesenheit
+> der Eltern eingeholt — das ist der einfachste denkbare Fall und
+> zugleich der beweissicherste.
+
+### Rechtliche Prüfung der Entscheidung (19.09.2026)
+
+**Geprüft mit** `klauseltransparenz-pruefen` (Prüffragen aus
+`references/transparenz.md`) und `klauselinhalt-und-verbote-pruefen`
+(Kontrollmaßstab). **Ergebnis: Die Regel ist tragfähig und liegt auf der
+sicheren Seite.** Im Einzelnen:
+
+- **Maßstab ist die Einsichtsfähigkeit, nicht die Geschäftsfähigkeit.**
+  Entscheidend ist, ob die Person begreift, was die Veröffentlichung
+  ihres Bildes bedeutet. Die Aufsichtspraxis nimmt das ab etwa 14 Jahren
+  an; liegt Einsichtsfähigkeit vor, wird eine **Doppelzustimmung**
+  verlangt. Die gewählte Grenze entspricht damit der verbreiteten
+  Behördenauffassung.
+- **Art. 8 DS-GVO greift hier nicht.** Er betrifft Dienste, die einem
+  Kind **unmittelbar** angeboten werden; bei VERA kauft der
+  Erziehungsberechtigte. Die dort genannten 16 Jahre sind deshalb nicht
+  der Maßstab — was die Frage nicht entschärft, sondern sie auf die
+  Einsichtsfähigkeit zurückführt.
+- **Die Sicherheitsregel ist richtig herum gebaut.** „Fehlt eine
+  Zustimmung, gilt die Person als nicht eingewilligt" ist der sichere
+  Grundzustand. Der umgekehrte Weg — annehmen, es sei erlaubt, solange
+  niemand widerspricht — wäre mit Art. 4 Nr. 11 DS-GVO unvereinbar, weil
+  Schweigen keine Einwilligung ist.
+- **Die Freiwilligkeit der zweiten Zustimmung ist nicht nur eine
+  Höflichkeit.** Ein 15-Jähriger, der vor seinen Eltern am Eingang
+  gefragt wird, steht unter Erwartungsdruck. Deshalb muss die Frage
+  neutral gestellt werden („möchtest du, dass Fotos von dir
+  veröffentlicht werden dürfen?"), ein Nein muss folgenlos bleiben, und
+  ein Nein darf nicht durch die Eltern überschrieben werden können.
+- **Der Widerspruch des Kindes unter 14 gehört in den Text, nicht nur in
+  die Praxis.** Er ist die Zusage, die aus einer formal wirksamen
+  Elterneinwilligung eine auch praktisch akzeptable macht. Ohne sie wäre
+  der häufigste Konfliktfall — das Kind will nicht, die Eltern haben
+  zugestimmt — ungeregelt.
+
+### Welches Altersmerkmal dafür wirklich nötig ist
+
+Adams Vorgabe lautet, **nur das erforderliche Altersmerkmal** zu
+erfassen. Das ist zugleich die Anforderung aus Art. 5 Abs. 1 Buchst. c
+DS-GVO (Datenminimierung). Dazu drei belegte Feststellungen:
+
+- **Der vorhandene Teilnehmertyp reicht nicht.** `Participant.typ`
+  unterscheidet `SCHUELER` und `ERWACHSENER`
+  (`prisma/schema.prisma`) — das ist eine **Preiskategorie**, keine
+  Altersangabe. Ein Schüler kann 19 sein, und seit Schritt S kann ein
+  Event die Schülerkategorie ganz abschalten.
+- **Das Feld `geburtsjahr` existiert, wird aber nirgends erhoben.**
+  `Participant.geburtsjahr Int?` steht im Schema, kommentiert mit „nur
+  das Jahr, nicht das volle Geburtsdatum". Eine Volltextsuche über
+  `lib/`, `components/`, `app/` und `content/` findet dazu **keine
+  einzige Erfassungsstelle** — der einzige Treffer ist
+  `lib/anonymisieren.ts:60`, das es beim Löschen auf `null` setzt. Das
+  Feld ist also seit jeher tot.
+- **Das Geburtsjahr ist hier zugleich zu viel und zu wenig.** Zu viel,
+  weil es mehr aussagt als gebraucht wird. Zu wenig, weil es an genau der
+  entscheidenden Grenze mehrdeutig ist: Wer 2012 geboren ist, kann am
+  Veranstaltungstag 13 oder 14 sein. Ein Merkmal, das die eine Frage
+  nicht beantwortet, für die es erhoben würde, ist das falsche Merkmal.
+
+**Empfehlung: ein grobes Altersmerkmal je Teilnehmer, mehr nicht.** Drei
+Werte genügen — `UNTER_14`, `VIERZEHN_BIS_17`, `AB_18` —, angegeben von
+der buchenden erwachsenen Person. Eine Altersprüfung findet nicht statt
+und ist für diesen Zweck auch nicht verlangt; die Angabe ist eine
+Selbstauskunft, und das genügt. `geburtsjahr` bleibt dabei ungenutzt und
+sollte entweder entfernt oder ausdrücklich als „nicht erhoben"
+dokumentiert werden — ein totes Feld im Schema lädt dazu ein, später
+doch befüllt zu werden.
+
+`[ALTERNATIVE, die noch weniger speichert — für die fachliche Prüfung
+festgehalten: Das Altersmerkmal ließe sich vollständig vermeiden, indem
+die Altersgruppe erst beim Check-in mündlich geklärt und nur auf der
+Papierliste vermerkt wird. Für das erste Event mit anwesenden Eltern
+wäre das tragfähig. Dagegen spricht, dass die Check-in-Liste dann nicht
+vorab ausweisen kann, bei wem eine zweite Zustimmung einzuholen ist, und
+dass am Eingang nach dem Alter gefragt werden müsste. Die Entscheidung
+zwischen beiden Wegen gehört in die anwaltliche Kontrolle.]`
+
+### Was daraus für den Ablauf folgt
+
+- Die Check-in-Liste weist bei Minderjährigen von 14 bis 17 aus, dass
+  eine zweite Zustimmung fehlt, und bietet die Möglichkeit, sie dort
+  festzuhalten.
+- Der gespeicherte Status je Person lautet erst dann „eingewilligt", wenn
+  **beide** Zustimmungen vorliegen. Das ist eine Verknüpfung, keine
+  zweite Spalte — und es ist die Stelle, an der ein Denkfehler teuer
+  würde.
+- Unter 14 bleibt der Status allein von der Elternzustimmung abhängig;
+  ein Widerspruch vor Ort wird als **Widerruf** festgehalten und wirkt
+  wie jeder andere Widerruf (Art. 7 Abs. 3 DS-GVO).
+
+`[FACHLICHE PRÜFUNG: Die Altersgrenze von 14 Jahren stammt aus
+Behördenpraxis und Fachliteratur, nicht aus dem Gesetzeswortlaut. Sie
+ist Prüfauftrag, kein nachgewiesenes Ergebnis — gesetze-im-internet.de
+und dejure.org sind aus dieser Arbeitsumgebung gesperrt. Quellen siehe
+Dokument 14.]`
 
 ## Wenn keine Einwilligung vorliegt
 
