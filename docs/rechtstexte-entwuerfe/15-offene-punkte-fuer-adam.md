@@ -120,6 +120,37 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.4 — Eigene Einverständniserklärung für Schulen?**~~ ✅ **Nein —
+  Merkblatt statt Formular.** VERA sammelt **keine**
+  Elternunterschriften, keine vollständigen Teilnehmerlisten und keine
+  Gesundheitsdaten; Notfallkontakte bleiben bei den Lehrkräften. Die
+  Schule erhält rechtzeitig ein **einheitliches Informationsblatt** zur
+  Weitergabe an die Eltern (Inhalt: Art, Ort, Termin und Dauer;
+  Kleidung und Ausrüstung; Sicherheits- und Verhaltenshinweise;
+  Aufsichtspflicht bleibt bei Schule und Lehrkräften; Übersichtsaufnahmen
+  mit Umgebungston und Widerspruchsrecht; Datenverarbeitung; Hausordnung
+  des Veranstaltungsortes). Die Schule führt ihr eigenes Elternverfahren
+  und **bestätigt VERA in Textform**, dass das Merkblatt weitergegeben
+  wurde und alle Einverständnisse vorliegen. Widersprüche und unbedingt
+  erforderliche gesundheitliche oder organisatorische Hinweise gehen an
+  die Kontaktperson von VERA. Buchen Eltern einzeln, gilt das normale
+  Verfahren für öffentliche Veranstaltungen.
+  ⚠️ **Zwei Punkte mit Handlungsbedarf:** Das Merkblatt ist **kein
+  Serviceblatt, sondern ein Pflichtdokument** — es ist bei einer
+  Schulklasse der einzige Weg, auf dem die Information nach Art. 13
+  DS-GVO und der getrennte Widerspruchshinweis nach Art. 21 Abs. 4
+  DS-GVO die betroffenen Personen erreichen. Und die Textform-Bestätigung
+  wirkt nur im **Innenverhältnis**: Gegenüber den Eltern bleibt VERA
+  verantwortlich, auch wenn die Schule das Blatt nicht verteilt hat.
+  Dokument 04, Ziffern 4.2 und 4.5–4.8 sowie Anhang D.
+
+- **5.4a** ⬜ **Kurze Rückfrage:** Statt „rechtzeitig" konkrete Fristen —
+  Vorschlag: Merkblatt an die Schule mindestens **21 Tage** vor der
+  Veranstaltung, Textform-Bestätigung des Auftraggebers spätestens
+  **7 Tage** vorher. Dazu eine **Fassungsbezeichnung** (Datum und
+  Version) auf dem Merkblatt, damit die Bestätigung sich auf einen
+  feststehenden Inhalt bezieht.
+
 - ~~**5.3 — Vertragspartner bei Klassenbuchungen?**~~ ✅ **Flexibel,
   über das Angebot.** Auftraggeber ist die im individuellen Angebot
   **eindeutig bezeichnete rechtsfähige** Person oder Organisation

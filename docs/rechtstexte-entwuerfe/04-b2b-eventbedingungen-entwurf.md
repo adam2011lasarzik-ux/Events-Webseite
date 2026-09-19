@@ -233,21 +233,54 @@ Mitwirkungshandlungen zur Verfügung.
 
 - die endgültige Teilnehmerzahl bis zu dem im Angebot genannten
   Zeitpunkt,
-- die Benennung der verantwortlichen Ansprechperson (Ziffer 2.4),
-- Angaben zu besonderen Anforderungen der Teilnehmenden, soweit sie für
-  die Sicherheit oder die Durchführung erheblich sind,
+- die Benennung der verantwortlichen Ansprechperson (Ziffer 2.8),
+- die Weitergabe des Informationsblatts nach Ziffer 4.5,
+- Widersprüche gegen Übersichtsaufnahmen sowie unbedingt erforderliche
+  gesundheitliche oder organisatorische Hinweise, jeweils rechtzeitig
+  vor der Veranstaltung,
 - soweit der Auftraggeber die Räumlichkeiten stellt: deren rechtzeitige
   und geeignete Bereitstellung einschließlich der erforderlichen
   Zugänge.
 
-4.3 Kommt der Auftraggeber seinen Mitwirkungspflichten nicht,
+4.5 **Informationsblatt statt eigener Einverständniserklärung.** VERA
+stellt dem Auftraggeber rechtzeitig vor der Veranstaltung ein
+einheitliches Informationsblatt zur Weitergabe an die
+Erziehungsberechtigten zur Verfügung. Es enthält mindestens:
+
+- Art, Ort, Termin und Dauer der Veranstaltung,
+- notwendige Kleidung und Ausrüstung,
+- Sicherheits- und Verhaltenshinweise,
+- den Hinweis, dass die Aufsichtspflicht bei den begleitenden
+  Lehrkräften beziehungsweise beim Auftraggeber bleibt,
+- Informationen zu den geplanten Übersichtsaufnahmen mit allgemeinem
+  Umgebungston und zum Widerspruchsrecht,
+- Hinweise zur Datenverarbeitung sowie zur Hausordnung des
+  Veranstaltungsortes.
+
+4.6 Der Auftraggeber führt sein eigenes Elternverfahren durch und holt
+alle schulrechtlich erforderlichen Einverständnisse ein. **Vor der
+Veranstaltung bestätigt er VERA in Textform**, dass das Informationsblatt
+rechtzeitig weitergegeben wurde und alle für Teilnahme und Durchführung
+erforderlichen Einverständnisse vorliegen.
+
+4.7 **VERA sammelt keine Elternunterschriften, keine vollständigen
+Teilnehmerlisten und keine Gesundheitsdaten.** Solche Angaben werden nur
+verarbeitet, soweit sie für die konkrete sichere Durchführung
+erforderlich sind. Notfallkontakte verbleiben beim Auftraggeber
+beziehungsweise bei den begleitenden Lehrkräften.
+
+4.8 Buchen Erziehungsberechtigte einzeln Tickets für eine öffentlich
+angebotene Veranstaltung, gilt nicht diese Ziffer, sondern das Verfahren
+nach den Teilnahmebedingungen für öffentliche Veranstaltungen.
+
+4.9 Kommt der Auftraggeber seinen Mitwirkungspflichten nicht,
 nicht rechtzeitig oder nicht vollständig nach, verlängern sich
 Ausführungsfristen angemessen. Ein hierdurch entstehender Mehraufwand
 wird nach Ziffer 9 vergütet.
 
-4.4 VERA weist rechtzeitig auf erkennbar fehlende Mitwirkung hin.
+4.10 VERA weist rechtzeitig auf erkennbar fehlende Mitwirkung hin.
 
-> **Zu 4.4 — nicht weglassen.** Eine Mitwirkungsklausel ohne
+> **Zu 4.10 — nicht weglassen.** Eine Mitwirkungsklausel ohne
 > Hinweispflicht des Auftragnehmers ist einseitig. Der Hinweis kostet
 > nichts und macht die Klausel deutlich tragfähiger.
 
@@ -996,3 +1029,131 @@ Bestätigung der Schulleitung oder des Trägers einzuholen ist.
 Lehrkraft. Die Normzitate sind Prüfauftrag, kein nachgewiesenes
 Ergebnis — gesetze-im-internet.de und dejure.org sind aus dieser
 Arbeitsumgebung gesperrt.]`
+
+---
+
+# Anhang D: Prüfung des Merkblatt-Modells (19.09.2026, Frage 5.4)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen` und
+`klauseltransparenz-pruefen`. **Ergebnis: das Modell trägt und ist die
+datensparsamere Lösung.** Fünf Feststellungen, zwei davon mit
+Handlungsbedarf.
+
+## 1. Der Verzicht auf eigene Einverständniserklärungen ist rechtlich geboten, nicht nur bequem
+
+Bei einer Schulveranstaltung ist der Auftraggeber die Schule
+beziehungsweise ihr Träger — die Erziehungsberechtigten sind am Vertrag
+**nicht beteiligt**. Würde VERA von ihnen dennoch Unterschriften und
+Angaben einsammeln, entstünde eine Datenverarbeitung ohne Notwendigkeit:
+
+- **Art. 5 Abs. 1 Buchst. c DS-GVO** (Datenminimierung) verlangt, auf
+  das Erforderliche zu beschränken. Für die Durchführung braucht VERA
+  die Teilnehmerzahl und eine Ansprechperson — nicht die Namen aller
+  Kinder.
+- Die Aufsichts- und Einverständnisfragen sind **schulrechtlich** bereits
+  geregelt. Ein zweites Formular stünde daneben und würde im
+  Zweifelsfall die Frage aufwerfen, welches gilt.
+
+Der ganze Teil der Einverständniserklärung aus Dokument 05, der die
+**unbegleitete** Teilnahme, das selbstständige Verlassen des Geländes
+und die Erreichbarkeit der Eltern während der Veranstaltung betrifft,
+ist bei einer Schulklasse ohnehin **gegenstandslos** — dort sind
+Lehrkräfte durchgehend anwesend.
+
+## 2. Das Merkblatt erfüllt zugleich eine gesetzliche Informationspflicht
+
+Das ist der Punkt, der leicht übersehen wird: Die Übersichtsaufnahmen
+stützen sich auf **Art. 6 Abs. 1 Buchst. f DS-GVO**. Daraus folgt eine
+Informationspflicht nach **Art. 13 DS-GVO** und — weil ohne Einwilligung
+gearbeitet wird — die Pflicht, nach **Art. 21 Abs. 4 DS-GVO**
+**ausdrücklich und getrennt** auf das Widerspruchsrecht hinzuweisen.
+
+Bei einem öffentlichen Event erfüllt das Pflichthäkchen im
+Buchungsformular diese Pflicht. Bei einer Schulklasse gibt es kein
+Buchungsformular — **das Merkblatt ist der einzige Weg, auf dem die
+Information die betroffenen Personen erreicht.** Es ist damit kein
+Serviceblatt, sondern ein Pflichtdokument.
+
+**Folge:** Der Abschnitt zu den Aufnahmen im Merkblatt muss denselben
+Zuschnitt haben wie der Pflichttext aus Dokument 06, Teil VIII.2 —
+einschließlich des **optisch abgesetzten** Widerspruchshinweises. Ein
+beiläufiger Halbsatz genügt nicht.
+
+## 3. Die Textform-Bestätigung ist wirksam — aber sie befreit VERA nicht
+
+Die Bestätigung nach Ziffer 4.6 hat im **Innenverhältnis** echten Wert:
+Sie begründet eine vertragliche Zusicherung, und bei einer Falschangabe
+haftet der Auftraggeber.
+
+**Im Außenverhältnis ändert sie nichts.** Datenschutzrechtliche
+Verantwortung lässt sich nicht wegvereinbaren: Gegenüber den betroffenen
+Personen bleibt VERA für das verantwortlich, was VERA selbst verarbeitet
+— insbesondere für die Aufnahmen. Hat die Schule das Merkblatt nicht
+weitergegeben, sind die Eltern nicht informiert worden, und das ist
+VERAs Problem, nicht nur das der Schule.
+
+**Daraus folgen zwei praktische Punkte, die in die Angebotsvorlage
+gehören:**
+
+- **Ein konkreter Zeitpunkt statt „rechtzeitig".** Der Begriff ist
+  unbestimmt und im Streitfall wertlos. Vorschlag: Weitergabe an die
+  Schule mindestens **21 Tage** vor der Veranstaltung, Bestätigung durch
+  den Auftraggeber spätestens **7 Tage** vorher. Dann bleibt Zeit,
+  nachzufassen, bevor der Termin steht.
+- **Eine Fassungsbezeichnung auf dem Merkblatt** (Datum und Version).
+  Die Bestätigung bezieht sich sonst auf ein Dokument, dessen Inhalt
+  später nicht mehr feststeht — und der Nachweis nach Art. 5 Abs. 2
+  DS-GVO läuft leer.
+
+`[ENTSCHEIDUNG OFFEN: Fristen 21 und 7 Tage — von Adam zu bestätigen
+oder anders festzulegen.]`
+
+## 4. Gesundheitsangaben sind der heikelste Teil dieser Ziffer
+
+Ziffer 4.2 verlangt „unbedingt erforderliche gesundheitliche Hinweise".
+Das sind **Gesundheitsdaten im Sinne von Art. 9 DS-GVO** — besondere
+Kategorien, für deren Verarbeitung ein eigener Erlaubnistatbestand
+nötig ist. Die Formulierung ist deshalb richtig eng gewählt; drei Dinge
+gehören dazu:
+
+- **Nur was für die sichere Durchführung wirklich zählt.** Eine
+  Sportveranstaltung kann einen Hinweis auf eine Herzerkrankung, eine
+  Allergie oder Epilepsie brauchen; sie braucht keine Diagnoseliste.
+  Ziffer 4.7 begrenzt das ausdrücklich.
+- **Rechtsgrundlage.** In Betracht kommt vor allem die ausdrückliche
+  Einwilligung der Erziehungsberechtigten nach **Art. 9 Abs. 2
+  Buchst. a DS-GVO**, eingeholt im Elternverfahren der Schule. Sie muss
+  also Teil dieses Verfahrens sein — ein Punkt, den das Merkblatt
+  benennen sollte.
+- **Kurze Aufbewahrung.** Diese Angaben fallen in die bereits
+  festgelegte Löschklasse **K1** (Gesundheits- und Notfallangaben,
+  7 Tage nach Veranstaltungsende, Papier vernichten). Damit ist der
+  Umgang schon geregelt und muss nicht neu erfunden werden.
+
+**Dass Notfallkontakte bei den Lehrkräften bleiben, ist der wichtigste
+Einzelbeitrag zur Datensparsamkeit in dieser Ziffer** — sie sind die
+Personen, die im Ernstfall ohnehin handeln.
+
+## 5. Was das für die noch offene Frage 5.5 bedeutet
+
+Die Rollenfrage aus Ziffer 5.3 wird durch dieses Modell **erheblich
+kleiner**: Wenn VERA keine Teilnehmerlisten und keine
+Elternunterschriften erhält, gibt es kaum übermittelte Daten, über deren
+Verantwortlichkeit zu streiten wäre. Übrig bleiben:
+
+- die **Ansprechperson** des Auftraggebers — gewöhnliche Kontaktdaten,
+  die VERA für eigene Zwecke verarbeitet,
+- **Widersprüche** gegen Aufnahmen — die Angabe, dass eine bestimmte
+  Person nicht gezeigt werden möchte,
+- **einzelne Gesundheitshinweise**, soweit erforderlich.
+
+Alle drei verarbeitet VERA zu **eigenen** Zwecken und nach eigener
+Entscheidung. Das spricht klar für **getrennte Verantwortlichkeit** und
+gegen eine Auftragsverarbeitung. Frage 5.5 kann darauf aufbauen.
+
+`[FACHLICHE PRÜFUNG: (1) Ob die Textform-Bestätigung des Auftraggebers
+im Streitfall genügt oder ob VERA stichprobenartig nachweisen lassen
+sollte, dass das Merkblatt verteilt wurde. (2) Die Rechtsgrundlage für
+Gesundheitsangaben im Schulkontext. Die Normzitate sind Prüfauftrag,
+kein nachgewiesenes Ergebnis — gesetze-im-internet.de und dejure.org
+sind aus dieser Arbeitsumgebung gesperrt.]`
