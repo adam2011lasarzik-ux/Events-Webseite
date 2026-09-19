@@ -1366,3 +1366,155 @@ an die Veranstaltungslocation für deren eigene Werbung? Alle
 Normzitate in diesem Dokument sind Prüfauftrag, kein nachgewiesenes
 Ergebnis — gesetze-im-internet.de und dejure.org sind aus dieser
 Arbeitsumgebung gesperrt.]`
+
+---
+
+## VIII.5 Weitergabe an den Veranstaltungsort — bleibt im Konzept
+
+✅ **Entschieden am 19.09.2026.** Die Weitergabe der Übersichtsaufnahmen
+an den jeweiligen Veranstaltungsort bleibt Bestandteil des Konzepts. Der
+in VIII.4 genannte Ausweg „Weitergabe entfällt" wird **nicht** gewählt;
+stattdessen wird sie an Bedingungen geknüpft.
+
+### Die neun Festlegungen
+
+- Ausschließlich **Übersichtsaufnahmen** mit allgemeinem Umgebungston.
+- **Keine Nahaufnahmen, keine Porträts.**
+- Einzelne Personen stehen **nicht im Mittelpunkt**.
+- **VERA und der konkrete Veranstaltungsort** dürfen die Aufnahmen für
+  ihre **eigene Veranstaltungswerbung** verwenden.
+- **Beide Verantwortlichen, die Zwecke und die Veröffentlichungskanäle
+  müssen vor dem Ticketkauf und im Datenschutzhinweis eindeutig genannt
+  werden.** „Der Veranstaltungsort" genügt nicht — es braucht Firmierung
+  und Anschrift je Event (B-11) und die benannten Kanäle (B-12).
+- **Verständliche Gespräche werden vor der Weitergabe entfernt.**
+- **Jede Aufnahme wird vor Veröffentlichung und vor Weitergabe
+  kontrolliert.**
+- **Widersprüche werden dokumentiert, an den Veranstaltungsort
+  weitergegeben und von beiden umgesetzt.**
+- **Die Zuständigkeiten werden schriftlich geregelt.**
+
+### Die Kernfrage: getrennt verantwortlich oder Art. 26 DS-GVO?
+
+**Kurzantwort: nach dem geplanten Zuschnitt getrennte, nacheinander
+tätige Verantwortliche — aber die Abgrenzung ist nicht sicher, und
+deshalb sollte die schriftliche Vereinbarung so gebaut sein, dass sie in
+beiden Fällen trägt.**
+
+**Was ausscheidet: Auftragsverarbeitung nach Art. 28 DS-GVO.** Der
+Veranstaltungsort nutzt die Aufnahmen für **eigene** Werbezwecke, nicht
+weisungsgebunden für VERA. Ein AVV wäre hier das falsche Instrument — ein
+häufiger Reflex, der die Verantwortung verschleiern statt klären würde.
+
+**Der Maßstab.** Gemeinsame Verantwortlichkeit nach Art. 26 DS-GVO setzt
+voraus, dass zwei Stellen **gemeinsam über Zwecke und Mittel**
+entscheiden. Der EuGH hat den Begriff weit ausgelegt (Wirtschaftsakademie
+Schleswig-Holstein, C-210/16, Urteil vom 05.06.2018) und zugleich
+**phasenweise begrenzt** (Fashion ID, C-40/17, Urteil vom 29.07.2019):
+Die gemeinsame Verantwortlichkeit reicht nur so weit, wie eine Stelle
+tatsächlich über Zwecke und Mittel mitentscheidet — für die
+anschließende, allein von der anderen Stelle bestimmte Verarbeitung
+besteht sie **nicht**.
+
+**Angewendet auf VERA und die Halle ergeben sich drei Phasen:**
+
+- **Anfertigung der Aufnahmen.** VERA entscheidet, was, wann und wie
+  aufgenommen wird. **VERA allein verantwortlich** — vorausgesetzt, die
+  Halle fotografiert nicht selbst (siehe unten).
+- **Prüfung und Übermittlung.** VERA entscheidet, welche Aufnahmen
+  weitergegeben werden und in welchem Zustand. **VERA allein
+  verantwortlich.**
+- **Nutzung durch die Halle für ihre eigene Werbung.** Die Halle
+  entscheidet allein, was sie wo und wie lange zeigt. **Die Halle allein
+  verantwortlich.**
+
+Keine der drei Phasen wird **gemeinsam** bestimmt. Das ist das Bild
+getrennter, aufeinanderfolgender Verantwortlicher — vergleichbar einer
+Übermittlung von einem Verantwortlichen an einen anderen.
+
+### ⚠️ Warum die Einordnung trotzdem kippen kann
+
+Drei der neun Festlegungen ziehen in die andere Richtung, und das gehört
+offen gesagt:
+
+- **Die schriftliche Zuständigkeitsregelung** ist genau das, was Art. 26
+  Abs. 1 DS-GVO verlangt. Wer sie abschließt, hat schon fast dessen
+  Inhalt.
+- **Das gemeinsame Widerspruchsverfahren** — dokumentieren, weitergeben,
+  von **beiden** umsetzen — ist eine gemeinsam festgelegte Behandlung
+  von Betroffenenrechten.
+- **Der gemeinsame Informationstext** vor dem Ticketkauf nennt beide
+  Verantwortliche und beide Zweckrichtungen in einem Dokument.
+
+Nach der weiten Auslegung des EuGH kann schon ein solcher abgestimmter
+Rahmen für eine gemeinsame Verantwortlichkeit genügen. **Die Grenze ist
+hier ehrlich gesagt unscharf.**
+
+### Empfehlung: die Vereinbarung so schreiben, dass sie in beiden Fällen trägt
+
+Eine falsche Einordnung ist selbst ein Verstoß: Sind die beiden
+gemeinsam verantwortlich, verlangt Art. 26 eine Vereinbarung **und** die
+Bereitstellung ihres **wesentlichen Inhalts** für die betroffenen
+Personen. Fehlt beides, hilft es nicht, dass man sich für getrennt
+verantwortlich hielt.
+
+Der sichere Weg kostet fast nichts: **eine schriftliche Vereinbarung, die
+den Inhalt des Art. 26 ohnehin abdeckt**, mit einer ausdrücklichen
+Feststellung, wie die Parteien die Rollen verstehen. Inhalte:
+
+- **Rollenverständnis:** getrennte Verantwortliche für ihre jeweiligen
+  Phasen, mit der ausdrücklichen Regelung, was gilt, falls eine
+  Aufsichtsbehörde oder ein Gericht eine gemeinsame Verantwortlichkeit
+  annimmt.
+- **Was übergeben wird:** nur geprüfte Übersichtsaufnahmen, ohne
+  verständliche Gespräche im Ton, ohne Nahaufnahmen und Porträts.
+- **Zweckbindung der Halle:** eigene Veranstaltungswerbung auf den
+  benannten Kanälen; **keine Weitergabe an Dritte**, keine
+  Zweckänderung.
+- **Informationspflichten:** wer informiert worüber. VERA informiert vor
+  dem Ticketkauf; die Halle bleibt für ihre **eigene** Information nach
+  Art. 13 DS-GVO verantwortlich — VERAs Hinweis entbindet sie nicht.
+- **Betroffenenrechte:** Widersprüche werden binnen einer benannten Frist
+  weitergegeben; die Halle setzt sie um und bestätigt das. Dazu die
+  gesetzliche Klarstellung, dass die betroffene Person ihre Rechte nach
+  **Art. 26 Abs. 3 DS-GVO** ohnehin **gegenüber jedem** der
+  Verantwortlichen geltend machen kann — eine Aufgabenverteilung im
+  Innenverhältnis ändert daran nichts.
+- **Anlaufstelle** für betroffene Personen, benannt mit Kontaktweg.
+- **Ende der Zusammenarbeit:** was mit den übergebenen Aufnahmen
+  geschieht, wenn die Zusammenarbeit endet.
+- **Der wesentliche Inhalt wird veröffentlicht** — im Datenschutzhinweis,
+  in wenigen verständlichen Sätzen. Das ist die Pflicht aus Art. 26
+  Abs. 2 Satz 2 DS-GVO und zugleich der Nachweis, dass sie erfüllt wäre,
+  falls die Rollen doch anders eingeordnet werden.
+
+### Ein Punkt, der vorher geklärt sein muss: fotografiert die Halle selbst?
+
+Die ganze Einordnung oben setzt voraus, dass **nur VERA aufnimmt** und
+geprüftes Material weitergibt (die schon in Entscheidung 4.3 empfohlene
+Variante b). **Fotografiert die Halle während der VERA-Veranstaltung
+selbst**, ändert sich das Bild grundlegend:
+
+- Sie ist dann für **ihre eigenen Aufnahmen** von Anfang an
+  eigenständig verantwortlich, mit eigener Rechtsgrundlage und eigener
+  Informationspflicht.
+- VERAs Hinweistext deckt diese Aufnahmen **nicht** ab.
+- Und die Prüfung vor der Veröffentlichung — die einzige technische
+  Sicherung des Konzepts — griffe für sie **nicht**, weil VERA dieses
+  Material nie in der Hand hat. Ein Widerspruch ließe sich dort nur über
+  die Halle durchsetzen.
+
+`[VOR FREISCHALTUNG KLÄREN: Mit der Halle verbindlich vereinbaren, dass
+während der VERA-Veranstaltung ausschließlich VERA aufnimmt. Lässt sich
+das nicht durchsetzen, braucht die Halle einen eigenen Hinweis vor Ort
+und ein eigenes Widerspruchsverfahren — und das gehört dann ebenfalls in
+die schriftliche Vereinbarung.]`
+
+`[ANWALTLICHE PRÜFUNG — jetzt vier Punkte: (1) werbliche Nutzung von
+Übersichtsaufnahmen auf Art. 6 Abs. 1 Buchst. f DS-GVO und § 23 Abs. 1
+Nr. 3 KunstUrhG, (2) erkennbare Kinder in der Interessenabwägung,
+(3) Originalton und die organisatorische Bearbeitung als einzige
+Sicherung, (4) die Weitergabe an den Veranstaltungsort einschließlich
+der Einordnung getrennte Verantwortliche oder Art. 26 DS-GVO. Die
+EuGH-Aktenzeichen sind über eine Websuche ermittelt; die amtlichen
+Volltexte sind aus dieser Arbeitsumgebung nicht abrufbar.]`

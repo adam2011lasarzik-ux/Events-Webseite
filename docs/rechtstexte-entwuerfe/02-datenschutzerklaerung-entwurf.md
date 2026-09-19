@@ -590,6 +590,30 @@ Erklärung verweist, die es nicht gibt.]`
 >   der in der anwaltlichen Prüfung am ehesten fällt — siehe Dokument
 >   06, Teil VIII.4.
 >
+> ✅ **Ergänzt 19.09.2026: Die Weitergabe bleibt, mit Bedingungen.** Der
+> Veranstaltungsort darf die Übersichtsaufnahmen für seine eigene
+> Veranstaltungswerbung verwenden. Für diesen Abschnitt heißt das:
+>
+> - **Beide Verantwortlichen müssen namentlich genannt werden** — VERA
+>   und die Location mit Firmierung und Anschrift je Event (B-11) —,
+>   dazu beide Zweckrichtungen und alle vier Veröffentlichungskanäle
+>   (B-12). „Der Veranstaltungsort" genügt nicht.
+> - **Einordnung:** nach dem geplanten Zuschnitt **getrennte,
+>   nacheinander tätige Verantwortliche**, keine Auftragsverarbeitung
+>   nach Art. 28 DS-GVO. Weil die Abgrenzung zu Art. 26 DS-GVO unscharf
+>   ist, wird eine schriftliche Vereinbarung geschlossen, die beide
+>   Fälle abdeckt (B-18), und **ihr wesentlicher Inhalt wird hier
+>   veröffentlicht** — das erfüllt Art. 26 Abs. 2 Satz 2 DS-GVO
+>   vorsorglich.
+> - **Klarstellung für die betroffene Person:** Rechte können nach
+>   Art. 26 Abs. 3 DS-GVO **gegenüber jedem** der beiden
+>   Verantwortlichen geltend gemacht werden. Ein Widerspruch bei VERA
+>   genügt; VERA gibt ihn weiter, die Location setzt ihn um.
+> - **Vor jeder Weitergabe** wird geprüft, ob widersprechende Personen
+>   erkennbar sind, und ob verständliche Gespräche im Ton enthalten
+>   sind.
+
+>
 > Die beiden folgenden Absätze bleiben als Begründungsmaterial stehen.
 
 > ⚠️ **Ergänzung vom 19.09.2026 (Entscheidung 4.9): zwei Spuren, zwei
