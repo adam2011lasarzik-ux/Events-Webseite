@@ -120,6 +120,27 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.8 — Abschlagsstaffel bei B2B-Aufträgen?**~~ ✅ **Abschlag bei
+  jedem Auftrag.** Verlangt werden vorab die bei Auftragsbestätigung
+  bereits **feststehenden Fremdkosten** (Halle, Trainer, Material);
+  **ab 1 000 Euro Auftragswert insgesamt 50 Prozent**. Der Abschlag wird
+  **vollständig auf die Schlussrechnung angerechnet**. Fällig 14 Tage
+  nach Zugang der Auftragsbestätigung.
+  ✅ **Geprüft und tragfähig:** Das Gesetz sieht Zahlung nach der
+  Leistung vor (§ 614, § 641 BGB); die Vorleistung ist hier durch die
+  real gebundenen Fremdkosten sachlich gerechtfertigt, und die
+  **Anrechnung** macht daraus eine Zahlungsmodalität statt einer
+  Zusatzforderung. **Zwei Ergänzungen waren nötig:** Der Betrag muss im
+  Angebot **in Euro beziffert** werden, sonst ist die Belastung für den
+  Auftraggeber nicht erkennbar (§ 307 Abs. 1 Satz 2 BGB); und für den
+  Fall, dass die Fremdkosten über 50 Prozent liegen, wird der höhere
+  Betrag im Angebot gesondert ausgewiesen und begründet.
+  ⚠️ **Begriffliche Korrektur:** „1 000 € **netto**" passt nicht — VERA
+  weist als Kleinunternehmen nach § 19 UStG keine Umsatzsteuer aus, es
+  gibt also kein Netto und kein Brutto. Die Klausel spricht von
+  **„Auftragswert"**; die Schwelle bleibt bei 1 000 Euro.
+  Dokument 04, Ziffern 9.3–9.3c und Anhang H.
+
 - ~~**5.7 — Welche Veranstaltungsgrößen und -arten?**~~ ✅ **Allgemeine
   Veranstaltungen mit bis zu 100–200 Personen.** In Ziffer 8.6
   aufgenommen als **bis zu 200 gleichzeitig anwesende Personen**;

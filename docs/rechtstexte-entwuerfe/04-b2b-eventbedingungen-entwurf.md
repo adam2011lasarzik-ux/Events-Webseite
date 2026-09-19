@@ -493,9 +493,22 @@ Umsatzsteuer berechnet und daher auch keine ausgewiesen.
 > werden. `[VOR VERWENDUNG KLÄREN: steuerliche Beratung einholen, bevor
 > größere B2B-Aufträge angenommen werden.]`
 
-9.3 VERA kann Abschlagszahlungen verlangen, wenn dies im Angebot
-vereinbart ist. `[VOR VERWENDUNG KLÄREN: Übliche Staffel festlegen, etwa
-Anzahlung bei Auftragserteilung, Restzahlung nach Durchführung.]`
+9.3 **Abschlagszahlung.** VERA geht vor der Veranstaltung
+Verbindlichkeiten gegenüber Dritten ein, insbesondere für die
+Veranstaltungsstätte, die Betreuung und das Material. Zur Deckung dieser
+Kosten verlangt VERA bei jedem Auftrag einen Abschlag in Höhe der bei
+Auftragsbestätigung bereits feststehenden Fremdkosten.
+
+9.3a **Ab einem Auftragswert von 1 000 Euro** beträgt der Abschlag
+insgesamt **50 Prozent des Auftragswerts**. Übersteigen die bereits
+feststehenden Fremdkosten diesen Betrag, wird der höhere Betrag im
+Angebot gesondert ausgewiesen und begründet.
+
+9.3b **Der Abschlagsbetrag wird im Angebot in Euro beziffert.** Er ist
+14 Tage nach Zugang der Auftragsbestätigung fällig.
+
+9.3c **Der Abschlag wird vollständig auf die Schlussrechnung
+angerechnet.** Er ist keine zusätzliche Zahlung und keine Gebühr.
 
 9.4 Erforderliche Auslagen, die im Angebot nicht enthalten sind, werden
 nach Absprache und gegen Nachweis erstattet.
@@ -1576,3 +1589,113 @@ mehrere Bereiche mit gemeinsamen Rettungswegen zusammenzuzählen sind.
 Brandenburgischen Versammlungsstättenverordnung stammen aus der
 Websuche, nicht aus dem amtlichen Volltext — gesetze-im-internet.de und
 dejure.org sind aus dieser Arbeitsumgebung gesperrt.]`
+
+---
+
+# Anhang H: Prüfung der Abschlagsregelung (19.09.2026, Frage 5.8)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen` und
+`klauseltransparenz-pruefen`. **Ergebnis: die Regelung trägt.** Eine
+Beanstachtung am Begriff, eine Lücke geschlossen.
+
+## Die Entscheidung
+
+- Bei **jedem** B2B-Auftrag wird ein Abschlag in Höhe der bereits
+  feststehenden Fremdkosten (Halle, Trainer, Material) vorab verlangt.
+- **Ab 1 000 Euro Auftragswert** beträgt der Abschlag **insgesamt
+  50 Prozent**.
+- Der Abschlag wird **vollständig auf die Schlussrechnung angerechnet**.
+
+## Warum die Klausel hält
+
+Das Gesetz sieht Zahlung **nach** der Leistung vor — § 614 BGB beim
+Dienstvertrag, § 641 BGB beim Werkvertrag. Jede Vorleistungspflicht
+weicht davon ab und braucht eine sachliche Rechtfertigung. Im
+Unternehmerverkehr gelten die Klauselverbote der §§ 308, 309 BGB zwar
+nicht unmittelbar (§ 310 Abs. 1 BGB), ihre Wertungen wirken aber über
+§ 307 BGB fort.
+
+**Die Rechtfertigung ist hier konkret und steht im Klauseltext:** VERA
+bindet vor der Veranstaltung echtes Geld bei Dritten. Ein Abschlag, der
+sich an genau diesen gebundenen Kosten orientiert, ist die
+naheliegendste denkbare Begründung für eine Vorleistung — er verlangt
+nicht mehr, als bereits ausgegeben ist.
+
+**Entscheidend ist dabei die Anrechnung.** Weil der Abschlag vollständig
+auf die Schlussrechnung angerechnet wird, zahlt der Auftraggeber im
+Ergebnis **nicht mehr**, sondern **früher**. Das ist der Unterschied
+zwischen einer zulässigen Zahlungsmodalität und einer verdeckten
+Zusatzforderung — und der Grund, warum Ziffer 9.3c nicht weggelassen
+werden darf.
+
+## Die Transparenzhürde: „feststehende Fremdkosten" genügt allein nicht
+
+Ein Auftraggeber kann aus der Formulierung **nicht ablesen, was er
+zahlen soll**. Welche Fremdkosten bei Auftragsbestätigung „feststehen",
+weiß nur VERA. Nach § 307 Abs. 1 Satz 2 BGB muss eine Belastung aber
+erkennbar sein.
+
+**Deshalb Ziffer 9.3b: Der Betrag wird im Angebot in Euro beziffert.**
+Die Klausel beschreibt dann nur noch, **wie** der Betrag zustande kommt;
+die Höhe steht schwarz auf weiß im Angebot, bevor der Auftraggeber
+zusagt. Damit ist die Anforderung erfüllt, ohne dass die flexible Regel
+aufgegeben werden müsste.
+
+## Die geschlossene Lücke: was gilt, wenn die Fremdkosten über 50 % liegen?
+
+Adams Regel enthält zwei Maßstäbe, die bei großen Aufträgen
+auseinanderlaufen können: die feststehenden Fremdkosten einerseits,
+50 Prozent andererseits. Liegen die Fremdkosten eines Auftrags über
+1 000 Euro bei 70 Prozent, wäre ohne Regelung unklar, welcher Wert gilt.
+
+Ziffer 9.3a löst das ausdrücklich: Der höhere Betrag wird **im Angebot
+gesondert ausgewiesen und begründet**. Das ist die für VERA günstige und
+zugleich transparente Lösung — sie verlangt eine Begründung genau dort,
+wo mehr als die Hälfte vorab verlangt wird.
+
+## ⚠️ Begriffliche Beanstandung: „netto" passt hier nicht
+
+Adams Vorgabe nennt „1 000 € netto". Das ist im Zusammenspiel mit
+Ziffer 9.2 **widersprüchlich**: VERA ist Kleinunternehmen nach § 19
+UStG, weist **keine Umsatzsteuer** aus und darf es auch nicht. Wo keine
+Umsatzsteuer hinzukommt, gibt es kein Netto und kein Brutto — es gibt
+nur **einen** Betrag.
+
+Die Klausel spricht deshalb von **„Auftragswert"** ohne den Zusatz. Das
+ist keine inhaltliche Änderung: Die Schwelle bleibt bei 1 000 Euro.
+Bliebe „netto" stehen, entstünde der Eindruck, es käme noch Steuer
+hinzu — genau die Erwartung, die Ziffer 9.2 ausräumen soll.
+
+`[ZU BEACHTEN, falls sich der Steuerstatus ändert: Sobald VERA
+umsatzsteuerpflichtig wird, ist die Schwelle neu zu bestimmen und der
+Zusatz „netto" oder „brutto" wieder aufzunehmen — an dieser Stelle und
+an allen anderen Preisangaben gemeinsam.]`
+
+## Was diese Ziffer bewusst NICHT regelt
+
+**Was mit dem Abschlag geschieht, wenn der Auftraggeber absagt.** Ein
+einbehaltener Abschlag wäre ein pauschalierter Schadensersatz und
+unterläge einem eigenen Maßstab — im Unternehmerverkehr über § 307 BGB,
+mit der Wertung des § 309 Nr. 5 BGB im Hintergrund, insbesondere dem
+Erfordernis, dem Auftraggeber den Nachweis eines geringeren Schadens
+offenzuhalten.
+
+Das ist **Frage 5.10**. Die Trennung ist Absicht: Eine Klausel, die
+Zahlungsmodalität und Ausfallpauschale vermischt, reißt im Zweifel
+beides mit.
+
+## Ein Punkt, der bewusst nicht in die Klausel kam
+
+Ein Satz wie „ohne Zahlung des Abschlags ist VERA nicht zur Leistung
+verpflichtet" wurde **nicht** aufgenommen. Das Zurückbehaltungsrecht
+folgt bereits aus § 320 BGB; als AGB-Klausel wäre es unnötig scharf
+formuliert und böte nur eine zusätzliche Angriffsfläche, ohne etwas
+hinzuzugewinnen.
+
+`[FACHLICHE PRÜFUNG: (1) Ob ein Abschlag von 50 Prozent im konkreten
+Zuschnitt angemessen ist — das hängt vom Anteil der tatsächlich
+gebundenen Fremdkosten ab. (2) Die Behandlung bei öffentlichen Trägern,
+bei denen eine Vorleistung verwaltungstechnisch schwierig sein kann.
+Die Normzitate sind Prüfauftrag, kein nachgewiesenes Ergebnis —
+gesetze-im-internet.de und dejure.org sind aus dieser Arbeitsumgebung
+gesperrt.]`
