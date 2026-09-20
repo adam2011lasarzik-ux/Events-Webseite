@@ -160,7 +160,7 @@ stellt (2×), Foto-Zwecke (3×).
 | 6.1 | Wirtschafts-Identifikationsnummer vergeben und anzugeben? | ⚖️ | ✅ 20.09.2026 |
 | 6.2 | Angabe nach § 18 Abs. 2 MStV nötig? (vermutlich nein) | ⚖️ | ✅ 20.09.2026 |
 | 6.3 | Erlaubnispflichten der Veranstaltungsorganisation selbst | ⚖️ | ✅ 20.09.2026 |
-| 6.4 | Schließfächer in der Location vorhanden? | 🔎 | ⬜ |
+| 6.4 | Schließfächer in der Location vorhanden? | 🔎 | ✅ 20.09.2026 — Frage erledigt sich |
 | 6.5 | Behält Stripe bei Erstattungen die Gebühr ein? | 🔎 | ⬜ |
 | 6.6 | Greift die BFSG-Ausnahme für Kleinstunternehmen? | ⚖️ | ⬜ |
 | 6.7 | Stand-Datum für AGB und B2B-Bedingungen | ⬜ | am Ende |
@@ -190,6 +190,18 @@ stellt (2×), Foto-Zwecke (3×).
 > Sicherheitsdienste (§ 34a GewO) — Merkposten **B-23** in Dokument 15.
 > ⚠️ Schwächer belegt als 6.1 und 6.2; Auskunft der IHK Potsdam
 > empfohlen.
+
+> **6.4 ist am 20.09.2026 beantwortet — die Frage erledigt sich.** Die
+> Regelung gilt unabhängig davon, ob und wie viele Schließfächer es
+> gibt: Persönliche Gegenstände bleiben in der Verantwortung der
+> Teilnehmenden, VERA nimmt nichts zur Verwahrung an, und falls die
+> Veranstaltungsstätte Schließfächer stellt, erfolgt deren Nutzung
+> eigenverantwortlich — VERA ist nicht deren Betreiberin. Ziffer 8 der
+> Hausordnung (Dokument 09) ist entsprechend neu gefasst, der
+> Platzhalter ist entfallen, offener Punkt H-5 erledigt. Die Haftung
+> verweist bewusst auf Ziffer 11 der Teilnahmebedingungen statt auf „die
+> gesetzlichen Vorschriften" — sonst stünden zwei Haftungsaussagen
+> nebeneinander, was nach § 305c Abs. 2 BGB zu Lasten von VERA ginge.
 
 ---
 

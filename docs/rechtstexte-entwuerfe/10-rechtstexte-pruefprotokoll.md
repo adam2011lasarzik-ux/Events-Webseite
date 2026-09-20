@@ -498,9 +498,16 @@ Stufenwahl bleibt als Punkt vor der Freischaltung offen.
 
 Die verbleibenden Platzhalter sind **echte Angaben**, die nur Adam oder
 ein Dritter liefern kann — Unternehmensdaten, das Datum der jeweiligen
-Fassung, die Hausordnung der Halle, Schuhwerkvorgaben, Schließfächer,
+Fassung, die Hausordnung der Halle, Schuhwerkvorgaben, ~~Schließfächer~~,
 die vollständige Widerrufsbelehrung nach fachlicher Klärung. Sie sind
 keine Widersprüche und werden hier nicht als solche gezählt.
+
+> **Nachtrag 20.09.2026:** Der Platzhalter zu den **Schließfächern** ist
+> entfallen. Entscheidung 6.4 hat ihn nicht ausgefüllt, sondern
+> überflüssig gemacht: Ziffer 8.3 der Hausordnung ist jetzt als
+> Bedingungssatz formuliert und gilt mit wie ohne Schließfächer. Das ist
+> die bessere Art, einen Platzhalter zu schließen — sie hält auch bei
+> einer Veranstaltung in einer anderen Halle.
 
 ## Bewertung
 

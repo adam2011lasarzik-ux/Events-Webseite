@@ -13,6 +13,12 @@
 > das gilt weiterhin (kein Armband, keine Garderobe, kein Pfand;
 > Entscheidung 3.21).
 >
+> **Nachtrag vom 20.09.2026 (Entscheidung 6.4):** Ziffer 8 ist jetzt
+> doch geändert worden — allerdings nur ausformuliert, nicht inhaltlich
+> verschoben. Der Platzhalter zu den Schließfächern ist entfallen; an
+> seine Stelle tritt eine Fassung, die unabhängig davon gilt, ob es
+> welche gibt. Aus drei Ziffern sind vier geworden (8.1 bis 8.4).
+>
 > **Was dieses Dokument ist:** verbindliche Verhaltensregeln für
 > VERA-Veranstaltungen. Sie ergänzen die Teilnahmebedingungen
 > (Dokument 03, Ziffer 9) und treten **neben** die Hausordnung der
@@ -256,20 +262,61 @@ der Nachweis eines geringeren Schadens bleibt vorbehalten.
 
 ## 8. Fundsachen und Wertgegenstände
 
-8.1 Wertgegenstände sollten nicht unbeaufsichtigt zurückgelassen
-werden.
+8.1 Persönliche Gegenstände und Wertsachen bleiben in der Verantwortung
+der Teilnehmenden. Wertgegenstände sollten nicht unbeaufsichtigt
+zurückgelassen werden.
 
-8.2 Für Fundsachen gelten die Regeln der Veranstaltungsstätte.
+8.2 VERA nimmt keine Gegenstände zur Verwahrung an. Es gibt weder eine
+Garderobe noch eine Annahmestelle. Für Verlust, Diebstahl oder
+Beschädigung persönlicher Gegenstände haftet VERA nach Maßgabe von
+Ziffer 11 der Teilnahmebedingungen.
 
-8.3 `[VOR VERWENDUNG KLÄREN: Stellt die Halle abschließbare Schließfächer
-zur Verfügung? Falls ja, sollte darauf hingewiesen werden — das ist eine
-nützliche Information, keine Haftungsregel.]`
+8.3 Stellt die Veranstaltungsstätte abschließbare Schließfächer zur
+Verfügung, erfolgt deren Nutzung eigenverantwortlich. VERA ist nicht
+Betreiberin dieser Schließfächer; für ihre Verfügbarkeit und
+Funktionsfähigkeit gelten die Regeln der Veranstaltungsstätte.
 
-> **Was hier bewusst fehlt:** Der übliche Satz „für abhandengekommene
-> Gegenstände wird keine Haftung übernommen". Er ist in AGB gegenüber
-> Verbrauchern so pauschal nicht haltbar und suggeriert einen Ausschluss,
-> den es nicht gibt. Die Haftung richtet sich nach Dokument 03,
-> Ziffer 11 — dort ist sie sauber geregelt.
+8.4 Für Fundsachen gelten die Regeln der Veranstaltungsstätte.
+
+> **Diese Fassung gilt seit dem 20.09.2026 (Entscheidung 6.4) und ist
+> bewusst unabhängig davon, ob es Schließfächer gibt.** Vorher stand in
+> 8.3 ein Platzhalter, der erst beantwortet werden musste. Er ist
+> entfallen: Ziffer 8.3 ist als Bedingungssatz formuliert („stellt die
+> Veranstaltungsstätte … zur Verfügung") und bleibt damit richtig, egal
+> wie die Halle ausgestattet ist und ob sich das zwischen zwei
+> Veranstaltungsorten unterscheidet. Das ist der eigentliche Gewinn:
+> Bei einer Veranstaltung in einer anderen Halle muss nichts
+> nachgezogen werden.
+
+> **Warum Ziffer 8.2 auf Ziffer 11 verweist und nicht „nur im Rahmen der
+> gesetzlichen Vorschriften" sagt.** Beides klingt gleich, ist es aber
+> nicht. Ziffer 11 der Teilnahmebedingungen schränkt die Haftung für
+> **einfache Fahrlässigkeit** außerhalb der dort benannten Kernpflichten
+> ein — sie liegt also unterhalb der gesetzlichen Grundregel. Stünde
+> hier „nur im Rahmen der gesetzlichen Vorschriften", enthielte das
+> Vertragswerk **zwei verschiedene Haftungsaussagen** zum selben
+> Vorgang. Nach **§ 305c Abs. 2 BGB** geht ein solcher Zweifel zu Lasten
+> des Verwenders: Ein Teilnehmer könnte sich auf die für ihn günstigere
+> Fassung berufen und volle gesetzliche Haftung für abhandengekommene
+> Sachen verlangen — also **mehr**, als Ziffer 11 vorsieht. Der Verweis
+> vermeidet das, ohne inhaltlich etwas zu verschieben: Die Haftung steht
+> weiterhin an genau einer Stelle.
+
+> **Was hier bewusst weiterhin fehlt:** Der übliche Satz „für
+> abhandengekommene Gegenstände wird keine Haftung übernommen". Er ist
+> gegenüber Verbrauchern so pauschal nicht haltbar — er erfasste auch
+> Vorsatz und grobe Fahrlässigkeit und wäre nach **§ 309 Nr. 7 Buchst. b
+> BGB** unwirksam. Er suggeriert einen Ausschluss, den es nicht gibt.
+
+> **Dass VERA nichts entgegennimmt, ist eine Leistungsbeschreibung, keine
+> Haftungsklausel.** Das ist der Grund, warum Ziffer 8.2 überhaupt
+> tragfähig ist: Wer nichts in Obhut nimmt, übernimmt keine
+> Verwahrungspflichten nach **§§ 688 ff. BGB** — es gibt dann schlicht
+> keinen Verwahrungsvertrag, dessen Haftung man ausschließen müsste. Die
+> Aussage beschreibt den Leistungsumfang und unterliegt insoweit nach
+> **§ 307 Abs. 3 Satz 1 BGB** keiner Inhaltskontrolle. Genau deshalb darf
+> sie nicht in eine verdeckte Freizeichnung umschlagen — und tut es
+> dank des Verweises in Satz 2 auch nicht.
 
 ---
 
@@ -313,7 +360,7 @@ auf veraevents.de abrufbar.
 | H-2 | Vorgaben zum Schuhwerk — **dieselbe Prüfung, gleiches Ergebnis: nicht öffentlich gelistet** | Location, direkt |
 | H-3 | Gaststättenrechtliche Erlaubnis, sobald VERA selbst Alkohol verkauft (Stufe 2) | Behörde, erst bei Bedarf |
 | H-3b | Belehrung nach § 43 IfSG für die Speisenabgabe (Stufe 1, jetzt) | Gesundheitsamt, abhängig von Speisenart |
-| H-5 | Schließfächer vorhanden? (nur als Hinweis, keine Haftungsfrage — VERA nimmt nichts entgegen) | Halle |
+| ~~H-5~~ | ✅ **Erledigt 20.09.2026 (Entscheidung 6.4):** Die Frage muss nicht mehr beantwortet werden. Ziffer 8.3 ist als Bedingungssatz formuliert und gilt mit wie ohne Schließfächer. | — |
 | ~~H-6~~ | ✅ Betreuungs-/Trainerpersonal und Ausrüstung werden von der **Halle** gestellt (beantwortet 18.09.2026) | — |
 | H-7 | Aushang vor Ort: wer druckt und hängt ihn auf? | Organisation |
 
