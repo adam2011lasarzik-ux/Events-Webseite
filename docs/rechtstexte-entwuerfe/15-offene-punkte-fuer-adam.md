@@ -521,7 +521,10 @@ Die vollständige Ausgangsliste steht in Dokument 11, Gruppe 6.
 
 - ~~**6.1 — Wirtschafts-Identifikationsnummer vergeben und anzugeben?**~~ ✅ **Beantwortet am 20.09.2026.** Adam hat bisher keine W-IdNr. vom Bundeszentralamt für Steuern erhalten. Am Impressum wird deshalb **nichts** geändert; es ist ohne die Nummer vollständig, weil § 5 Abs. 1 Nr. 6 DDG sie nur „soweit vorhanden" verlangt. Die Vergabe erfolgt von Amts wegen ohne Antrag — es gibt nichts zu tun als abzuwarten. Nachzutragen ist sie, sobald das Schreiben kommt: Bauauftrag **B-21**. ⚠️ **Blockiert die Veröffentlichung ausdrücklich nicht.**
 
-- **6.2 — Angabe nach § 18 Abs. 2 MStV nötig?** (Einschätzung im Dokument: vermutlich nein) — offen
+- ~~**6.2 — Angabe nach § 18 Abs. 2 MStV nötig?**~~ ✅ **Beantwortet am 20.09.2026: nein.** Es ist kein Blog, keine Newsrubrik und kein journalistisch-redaktionelles Angebot geplant. § 18 Abs. 2 MStV verlangt die zusätzliche Benennung eines **inhaltlich Verantwortlichen** (natürliche Person, Name und ladungsfähige Anschrift, kein Postfach) nur bei journalistisch-redaktionellen Online-Angeboten — also solchen, die wie klassische Presse auf die öffentliche Meinungsbildung einwirken. Die Seite besteht ausschließlich aus Angebots-, Anmelde- und Pflichtseiten zu eigenen Veranstaltungen (nachgesehen in `app/(seite)/`: Start, Veranstaltungen, Anmeldung, Für Schulen, Über VERA, FAQ, Kontakt, Impressum, Datenschutz, AGB, Widerruf — kein Blog, keine Artikel, keine Redaktion). **Es wird nichts ins Impressum aufgenommen.**
+  **Warum nicht vorsorglich:** Die Angabe wäre nicht „sicherheitshalber", sondern hätte einen Preis — Adams **Privatanschrift** stünde zusätzlich öffentlich auf der Seite, ohne dass eine Pflicht dazu bestünde. Mehr Angaben sind hier nicht sicherer, sondern nur mehr Datenpreisgabe.
+  **Merkposten für später:** Bauauftrag **B-22** — die Bewertung hängt am Inhalt, nicht am Unternehmen, und kippt, sobald ein Blog oder eine Newsrubrik dazukommt.
+  **Prüfauftrag:** Der Wortlaut des § 18 MStV war aus dieser Arbeitsumgebung nur über Sekundärquellen prüfbar (Landesmedienanstalten, IHK, Fachkanzleien), nicht am amtlichen Text; die Abgrenzung „journalistisch-redaktionell" ist zudem eine Auslegungsfrage. Gehört in die anwaltliche Durchsicht.
 
 - **6.3 — Erlaubnispflichten der Veranstaltungsorganisation selbst** — offen
 
@@ -702,6 +705,10 @@ Volltext heute.
   ⚠️ **Dieser Punkt blockiert die Veröffentlichung ausdrücklich nicht.** § 5 Abs. 1 Nr. 6 DDG verlangt die Angabe nur „soweit vorhanden". Solange keine Nummer vergeben ist, ist das Impressum ohne sie vollständig. Ein Zuwarten auf die Vergabe wäre ein selbstgemachter Blocker ohne rechtlichen Grund.
   **Prüfauftrag:** Der Wortlaut von § 5 Abs. 1 Nr. 6 DDG und § 139c AO konnte aus dieser Arbeitsumgebung nur über die Websuche gegengeprüft werden (gesetze-im-internet.de und dejure.org sind gesperrt), nicht am amtlichen Text. Gehört in die anwaltliche Durchsicht.
   *Betrifft:* `content/de.ts` (Impressum); Dokument 11, Frage 6.1
+
+- **B-22** — 🕓 **Neu 20.09.2026, Entscheidung 6.2: Merkposten, kein heutiger Bauauftrag.** Solange die Seite nur eigene Veranstaltungen beschreibt und verkauft, ist sie **kein** journalistisch-redaktionelles Angebot; eine Angabe nach § 18 Abs. 2 MStV entfällt. **Sobald ein Blog, eine Newsrubrik, Ratgeberartikel oder sonstige regelmäßige redaktionelle Beiträge hinzukommen**, kippt die Bewertung: Dann ist im Impressum zusätzlich ein **inhaltlich Verantwortlicher** mit Name und ladungsfähiger Anschrift (kein Postfach) zu benennen, und zwar eine **natürliche Person**.
+  Vor dem Bau einer solchen Rubrik also zuerst diese Frage neu beantworten — nicht danach. Sie betrifft auch die Abwägung, ob Adams Privatanschrift öffentlich stehen soll oder ob dafür eine Geschäftsanschrift nötig wird.
+  *Betrifft:* `content/de.ts` (Impressum); Dokument 11, Frage 6.2
 
 ---
 

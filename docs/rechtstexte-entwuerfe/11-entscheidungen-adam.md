@@ -158,7 +158,7 @@ stellt (2×), Foto-Zwecke (3×).
 | # | Frage | Art | Status |
 |---|---|---|---|
 | 6.1 | Wirtschafts-Identifikationsnummer vergeben und anzugeben? | ⚖️ | ✅ 20.09.2026 |
-| 6.2 | Angabe nach § 18 Abs. 2 MStV nötig? (vermutlich nein) | ⚖️ | ⬜ |
+| 6.2 | Angabe nach § 18 Abs. 2 MStV nötig? (vermutlich nein) | ⚖️ | ✅ 20.09.2026 |
 | 6.3 | Erlaubnispflichten der Veranstaltungsorganisation selbst | ⚖️ | ⬜ |
 | 6.4 | Schließfächer in der Location vorhanden? | 🔎 | ⬜ |
 | 6.5 | Behält Stripe bei Erstattungen die Gebühr ein? | 🔎 | ⬜ |
@@ -171,6 +171,14 @@ stellt (2×), Foto-Zwecke (3×).
 > verlangt die Angabe nur „soweit vorhanden"). Nachtragen, sobald das
 > BZSt sie von Amts wegen vergibt — Bauauftrag **B-21** in Dokument 15.
 > Die Veröffentlichung der Website wird davon nicht aufgehalten.
+
+> **6.2 ist am 20.09.2026 beantwortet: nein.** Kein Blog, keine
+> Newsrubrik, kein journalistisch-redaktionelles Angebot geplant — die
+> Seite beschreibt und verkauft ausschließlich eigene Veranstaltungen.
+> Es wird **kein** inhaltlich Verantwortlicher ins Impressum
+> aufgenommen; eine vorsorgliche Angabe würde nur Adams Privatanschrift
+> zusätzlich veröffentlichen. Merkposten **B-22** in Dokument 15 für den
+> Fall, dass später redaktionelle Inhalte dazukommen.
 
 ---
 
