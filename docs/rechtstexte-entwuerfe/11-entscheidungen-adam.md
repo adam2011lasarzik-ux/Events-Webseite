@@ -157,13 +157,20 @@ stellt (2×), Foto-Zwecke (3×).
 
 | # | Frage | Art | Status |
 |---|---|---|---|
-| 6.1 | Wirtschafts-Identifikationsnummer vergeben und anzugeben? | ⚖️ | ⬜ |
+| 6.1 | Wirtschafts-Identifikationsnummer vergeben und anzugeben? | ⚖️ | ✅ 20.09.2026 |
 | 6.2 | Angabe nach § 18 Abs. 2 MStV nötig? (vermutlich nein) | ⚖️ | ⬜ |
 | 6.3 | Erlaubnispflichten der Veranstaltungsorganisation selbst | ⚖️ | ⬜ |
 | 6.4 | Schließfächer in der Location vorhanden? | 🔎 | ⬜ |
 | 6.5 | Behält Stripe bei Erstattungen die Gebühr ein? | 🔎 | ⬜ |
 | 6.6 | Greift die BFSG-Ausnahme für Kleinstunternehmen? | ⚖️ | ⬜ |
 | 6.7 | Stand-Datum für AGB und B2B-Bedingungen | ⬜ | am Ende |
+
+> **6.1 ist am 20.09.2026 beantwortet.** Es liegt keine
+> Wirtschafts-Identifikationsnummer vor; das Impressum bleibt
+> unverändert und ist ohne sie vollständig (§ 5 Abs. 1 Nr. 6 DDG
+> verlangt die Angabe nur „soweit vorhanden"). Nachtragen, sobald das
+> BZSt sie von Amts wegen vergibt — Bauauftrag **B-21** in Dokument 15.
+> Die Veröffentlichung der Website wird davon nicht aufgehalten.
 
 ---
 

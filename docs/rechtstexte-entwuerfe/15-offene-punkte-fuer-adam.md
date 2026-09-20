@@ -516,10 +516,22 @@ Die vollständige Liste (18 Fragen) steht in Dokument 11, Gruppe 5.
 
 ## E. Später klärbar (Gruppe 6 — niedrige Priorität)
 
-Wirtschafts-Identifikationsnummer, § 18 Abs. 2 MStV, Erlaubnispflichten
-der Veranstaltungsorganisation selbst, Schließfächer (auch unter A),
-Stripe-Gebühren bei Erstattungen, BFSG-Kleinstunternehmen-Ausnahme,
-Stand-Datum für AGB/B2B. Vollständige Liste in Dokument 11, Gruppe 6.
+Seit dem 20.09.2026 wird dieser Abschnitt Frage für Frage abgearbeitet.
+Die vollständige Ausgangsliste steht in Dokument 11, Gruppe 6.
+
+- ~~**6.1 — Wirtschafts-Identifikationsnummer vergeben und anzugeben?**~~ ✅ **Beantwortet am 20.09.2026.** Adam hat bisher keine W-IdNr. vom Bundeszentralamt für Steuern erhalten. Am Impressum wird deshalb **nichts** geändert; es ist ohne die Nummer vollständig, weil § 5 Abs. 1 Nr. 6 DDG sie nur „soweit vorhanden" verlangt. Die Vergabe erfolgt von Amts wegen ohne Antrag — es gibt nichts zu tun als abzuwarten. Nachzutragen ist sie, sobald das Schreiben kommt: Bauauftrag **B-21**. ⚠️ **Blockiert die Veröffentlichung ausdrücklich nicht.**
+
+- **6.2 — Angabe nach § 18 Abs. 2 MStV nötig?** (Einschätzung im Dokument: vermutlich nein) — offen
+
+- **6.3 — Erlaubnispflichten der Veranstaltungsorganisation selbst** — offen
+
+- **6.4 — Schließfächer in der Location vorhanden?** — offen (steht auch unter Abschnitt A, weil es eine reine Tatsachenfrage ist)
+
+- **6.5 — Behält Stripe bei Erstattungen die Gebühr ein?** — offen
+
+- **6.6 — Greift die BFSG-Ausnahme für Kleinstunternehmen?** — offen
+
+- **6.7 — Stand-Datum für AGB und B2B-Bedingungen** — bewusst zuletzt, wenn die Texte stehen
 
 ---
 
@@ -684,6 +696,12 @@ Volltext heute.
 
 - **B-6** — Mindestteilnehmerzahl und Entscheidungsfrist existieren noch nicht als Datenfelder am Event (`prisma/schema.prisma` kennt nur `maxPersonen`). Nötig: zwei neue Felder, Anzeige auf der Eventseite vor der Anmeldung, automatische Prüfung zur Frist, admin-seitiger Warnhinweis bei einer Frist unter 48 Stunden vor dem Termin.
   *Betrifft:* Dokument 03, Ziffer 8.3
+
+- **B-21** — 🕓 **Neu 20.09.2026, Entscheidung 6.1: Wirtschafts-Identifikationsnummer nachtragen, sobald sie kommt.** Adam hat bisher **keine** W-IdNr. vom Bundeszentralamt für Steuern erhalten; am Impressum wird deshalb jetzt **nichts** geändert. Die Nummer wird **von Amts wegen und ohne Antrag** vergeben — es gibt nichts zu beantragen und nichts zu beschleunigen. Sobald das Schreiben des BZSt eintrifft (Form `DE` + neun Ziffern + `-00001`), ist sie „vorhanden" im Sinne von § 5 Abs. 1 Nr. 6 DDG und gehört ins Impressum.
+  Konkret zu tun, wenn es soweit ist: die Nummer in `content/de.ts` beim Impressum ergänzen und den dortigen Satz zur fehlenden Umsatzsteuer-Identifikationsnummer (`content/de.ts:851`) so erweitern, dass er beides sauber trennt — keine USt-IdNr. wegen § 19 UStG, aber eine W-IdNr. nach § 139c AO.
+  ⚠️ **Dieser Punkt blockiert die Veröffentlichung ausdrücklich nicht.** § 5 Abs. 1 Nr. 6 DDG verlangt die Angabe nur „soweit vorhanden". Solange keine Nummer vergeben ist, ist das Impressum ohne sie vollständig. Ein Zuwarten auf die Vergabe wäre ein selbstgemachter Blocker ohne rechtlichen Grund.
+  **Prüfauftrag:** Der Wortlaut von § 5 Abs. 1 Nr. 6 DDG und § 139c AO konnte aus dieser Arbeitsumgebung nur über die Websuche gegengeprüft werden (gesetze-im-internet.de und dejure.org sind gesperrt), nicht am amtlichen Text. Gehört in die anwaltliche Durchsicht.
+  *Betrifft:* `content/de.ts` (Impressum); Dokument 11, Frage 6.1
 
 ---
 
