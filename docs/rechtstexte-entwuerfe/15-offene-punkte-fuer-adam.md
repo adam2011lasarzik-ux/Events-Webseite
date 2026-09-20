@@ -554,7 +554,14 @@ Die vollständige Ausgangsliste steht in Dokument 11, Gruppe 6.
   **Umzusetzen:** Bauaufträge **B-24** (Texte) und **B-25** (Code). **Voraussetzung dafür war die Widerrufsfrage** — sie ist am selben Tag durchgearbeitet worden, siehe Abschnitt F, Punkt 2, und Dokument 07, Abschnitt 5a.
   **Prüfauftrag:** Die Einordnung als kontrollfreie Preisabrede für eine Sonderleistung ist eine Bewertung, keine zitierbare Entscheidung zu genau diesem Fall. Gehört vor der Freischaltung in die anwaltliche Durchsicht.
 
-- **6.6 — Greift die BFSG-Ausnahme für Kleinstunternehmen?** — offen
+- ~~**6.6 — Greift die BFSG-Ausnahme für Kleinstunternehmen?**~~ ✅ **Beantwortet am 20.09.2026: ja, die Ausnahme greift.** Das Barrierefreiheitsstärkungsgesetz gilt seit dem 28.06.2025 unter anderem für den elektronischen Geschäftsverkehr mit Verbrauchern; VERA verkauft Tickets online und fällt dem Grunde nach in den Anwendungsbereich. **§ 3 Abs. 3 BFSG** nimmt jedoch **Kleinstunternehmen, die Dienstleistungen anbieten oder erbringen**, von den Barrierefreiheitsanforderungen aus.
+  **Die beiden Schwellen, und wie sie zusammenwirken:** weniger als **10 Beschäftigte** **und** ein Jahresumsatz **oder** eine Jahresbilanzsumme von höchstens **2 Mio. €**. Adam hat am 20.09.2026 bestätigt: derzeit **null Beschäftigte**, Einstellungen nicht geplant. Beide Schwellen sind damit deutlich unterschritten.
+  ⚠️ **Richtigstellung zu einer früheren Aussage in diesem Gespräch:** Die Ausnahme entfällt **nicht** bereits mit dem ersten Beschäftigten. Sie gilt, solange **beide** Schwellen eingehalten sind. Erst ab **zehn** Beschäftigten — oder wenn Umsatz **und** Bilanzsumme beide über 2 Mio. € liegen — greift sie nicht mehr.
+  **Wie gezählt wird, und warum das nicht trivial ist:** Maßgeblich sind **Jahresarbeitseinheiten** (Vollzeitäquivalente) im Jahresdurchschnitt, nicht Köpfe. **Minijobs, Aushilfen für einzelne Veranstaltungstage und Werkstudenten zählen anteilig mit**: Eine halbe Stelle über das ganze Jahr ist 0,5; drei Monate Vollzeit sind 0,25. Bei einem Eventbetrieb, der viele kurze Einsätze an wenigen Tagen hat, ist die Summe deshalb nicht offensichtlich und gehört im Zweifel ausgerechnet, nicht geschätzt.
+  **Die Ausnahme gilt nur für Dienstleistungen, nicht für Produkte.** Wer als Kleinstunternehmen unter das Produktsicherheitsrecht fällt — etwa Hersteller von Selbstbedienungsterminals —, ist nicht befreit. Für VERA ist das nicht einschlägig: Verkauft wird die Teilnahme an einer Veranstaltung, also eine Dienstleistung.
+  **Warum das trotzdem keine Erlaubnis zum Nachlassen ist.** Die Seite ist bereits weitgehend barrierearm gebaut — sichtbarer Tastaturfokus, echte Überschriftenhierarchie, gemessene Kontraste, nutzbar ab 320 px, `prefers-reduced-motion` respektiert. Das steht so in den Projektvorgaben und ist in Prüfliste `L` über 320–1920 px gemessen. Die Ausnahme ist eine Rückversicherung, kein Freibrief — und sie ist der Grund, warum aus einem übersehenen Kontrastfehler kein Rechtsverstoß wird.
+  **Merkposten:** Bauauftrag **B-26** — die Schwellen sind jährlich zu prüfen, und sie sind zwei, nicht eine.
+  **Prüfauftrag:** Die Norm war nur über die Websuche prüfbar, nicht am amtlichen Text. Gehört in die anwaltliche Durchsicht, insbesondere die Berechnung der Jahresarbeitseinheiten, sobald erstmals jemand beschäftigt wird.
 
 - **6.7 — Stand-Datum für AGB und B2B-Bedingungen** — bewusst zuletzt, wenn die Texte stehen
 
@@ -767,6 +774,11 @@ Volltext heute.
   - **Randfälle, die sonst auffallen:** eine kostenlose Buchung (`gesamtpreisCents` = 0) — dort gibt es nichts zu erstatten und nichts abzuziehen; und ein Buchungsbetrag unter 0,35 €, den es heute nicht gibt, der aber nie zu einem negativen Erstattungsbetrag führen darf.
   - **Prüfliste erweitern:** Der bestehende Storno-Satz (`pruefung/P/`) prüft heute auf den **vollen** Betrag und wird nach dieser Änderung durchfallen. Das ist richtig so — er wird angepasst, **nicht** abgeschwächt, und um Fälle für das Entgelt, die beiden Ausnahmen und die Randfälle ergänzt.
   *Betrifft:* `lib/storno.ts`, `lib/zahlung.ts`, `lib/stornoAusfuehren.ts`, `pruefung/P/`; Bauauftrag B-7
+
+- **B-26** — 🕓 **Neu 20.09.2026, Entscheidung 6.6: die BFSG-Schwellen jährlich prüfen.** Die Befreiung von den Barrierefreiheitsanforderungen nach **§ 3 Abs. 3 BFSG** hängt an zwei Werten, die sich beide ändern können: **weniger als 10 Beschäftigte** (in Jahresarbeitseinheiten, nicht in Köpfen — Minijobs, Aushilfen und Werkstudenten zählen anteilig) **und** höchstens **2 Mio. €** Jahresumsatz oder Jahresbilanzsumme.
+  Zu tun: einmal jährlich zum Jahresabschluss beide Werte feststellen und das Ergebnis festhalten. Sinnvollerweise **gemeinsam mit der Umsatzprüfung zur Kleinunternehmerregelung** (offener Punkt 5.16) — dieselbe Zahl, derselbe Anlass, ein Termin statt zwei.
+  ⚠️ **Wird eine Schwelle gerissen, ist das kein Schalter, sondern ein Projekt:** Die Seite müsste dann den Anforderungen der harmonisierten Normen genügen, und das ist Arbeit an der Substanz, nicht an einer Einstellung. Der heutige Stand — barrierearm gebaut und in Prüfliste `L` gemessen — ist der Grund, warum dieses Projekt dann überschaubar bliebe. Er sollte deshalb nicht abgebaut werden, nur weil die Ausnahme gerade greift.
+  *Betrifft:* Dokument 11, Frage 6.6; offener Punkt 5.16
 
 ---
 
