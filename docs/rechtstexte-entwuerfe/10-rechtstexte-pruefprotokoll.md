@@ -454,6 +454,8 @@ entstehen, für die es dann **keine passende Klausel mehr gibt** — die
 alte ist gestrichen, die neue Sperre fehlt. Das ist der einzige Fund
 dieses Durchlaufs, der ein **offenes Risiko** und nicht nur einen
 redaktionellen Rest betrifft.
+**✅ Geschlossen am 20.09.2026** — siehe den Abschnitt „Nachtrag" am
+Ende dieses Dokuments.
 
 **K-8 · Dokument 08, Bauliste.** Die Zeilen 3 und 4 planten einen
 „neuen Text" für die Fotoeinwilligung und einen Zusatz für
@@ -513,3 +515,51 @@ und keiner in den heute neu geschriebenen B2B-Teilen.
 Entscheidungen wiederholen, nicht erst am Ende. Die Funde waren hier
 noch leicht zu beheben; je mehr Dokumente aufeinander verweisen, desto
 teurer wird ein übersehener Rest.
+
+---
+
+## Nachtrag vom 20.09.2026 — die Lücke aus K-7 ist geschlossen
+
+Der Fund **K-7** war der einzige dieses Durchlaufs mit einem offenen
+Risiko: Die beiden Klauseln, die den Fall „gebucht, aber noch kein
+Termin" regelten, waren gestrichen — und die Software ließ diesen Fall
+weiterhin zu. Beides zusammen hätte eine Buchung entstehen lassen, für
+die es keine passende Regel mehr gab.
+
+Diese Lücke ist jetzt technisch geschlossen. Die Regel steht an genau
+**einer** Stelle (`lib/termin.ts`) und wird an sechs Stellen benutzt:
+in der Serveraktion der Anmeldung, beim Start der Zahlung, auf der
+Abschluss-Seite, auf der Anmeldeseite der Veranstaltung und an den drei
+Kaufknöpfen (Standard-Kopfbereich, Premium-Kopfbereich, Abschlussband).
+
+**Warum die Serveraktion der entscheidende Ort ist.** Der ausgeblendete
+Knopf allein wäre kein Riegel: Die Anmeldung schickt die Kennung der
+Veranstaltung als Formularfeld mit, und ein Formularfeld lässt sich
+ändern. Geprüft wurde deshalb nicht nur, dass der Knopf verschwindet,
+sondern der realistische Umgehungsversuch — gültige Formularmarken von
+einer buchbaren Veranstaltung, die Kennung auf die Veranstaltung ohne
+Termin getauscht. Die Anfrage wird abgewiesen, und es entsteht **keine**
+Anmeldung.
+
+**Belegt, nicht behauptet.** Neue Prüfliste `T`: Teil 1 mit 29
+Prüfungen ohne Datenbank (die Regel selbst, dass sie nur an einer Stelle
+steht, und dass sie an allen sechs Stellen tatsächlich benutzt wird),
+Teil 2 mit 11 Prüfungen gegen die echte Datenbank und den echten Server.
+Dazu eine **Gegenprobe**: Mit entferntem Riegel fallen die Prüfungen
+durch, die Anmeldung entsteht und die Zahlung wird mit dem Grund
+`kein-termin` abgewiesen — die Prüfungen greifen also wirklich. Der
+vollständige Sammellauf über 39 Listen ist danach grün.
+
+**Eine Anpassung an den Prüfungen war nötig und wird hier offengelegt.**
+Der Startdatensatz legt `padel-falkensee` bewusst **ohne** Datum an
+(„Termin folgt"). Seit der Sperre gibt es dort kein Anmeldeformular
+mehr — die Prüflisten, die eine Anmeldung absenden, hätten also nichts
+mehr gefunden, an das sie sich wenden könnten. `pruefung/leeren.mjs`
+setzt deshalb bei jeder Veranstaltung ohne Datum einen Termin in der
+Zukunft. Das ist eine **Anpassung der Prüfung an die neue Regel, keine
+Abschwächung**: Die Sperre selbst prüft Liste `T` mit einer eigens dafür
+angelegten Veranstaltung, die bewusst keinen Termin hat.
+
+**Noch offen und ausdrücklich so gewollt:** Der Widerspruch bei Speisen
+und Getränken (**B-19**) bleibt auf der Bauliste und wurde nicht
+angefasst — das ist eine Vorgabe von Adam, keine Nachlässigkeit.

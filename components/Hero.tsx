@@ -1,3 +1,4 @@
+import { terminStehtAnzeige } from "@/lib/termin";
 import { EventBild } from "./EventBild";
 import { HeroVideo } from "./HeroVideo";
 import { Knopf } from "./Knopf";
@@ -44,9 +45,13 @@ export function Hero({
           <p className={stil.text}>{event.texte.heroText}</p>
 
           <div className={stil.knoepfe}>
-            <Knopf href={`/events/${event.slug}/anmeldung`} pfeil>
-              {t.aktion.anmelden}
-            </Knopf>
+            {/* Ohne feststehenden Termin kein Kaufknopf (Entscheidung
+                2.5). Das Event wird angekündigt, nicht verkauft. */}
+            {terminStehtAnzeige(event) && (
+              <Knopf href={`/events/${event.slug}/anmeldung`} pfeil>
+                {t.aktion.anmelden}
+              </Knopf>
+            )}
             <Knopf href={`/event/${event.slug}`} art="zweit">
               {t.aktion.detailsAnsehen}
             </Knopf>

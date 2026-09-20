@@ -112,6 +112,12 @@ npx tsx --env-file=.env pruefung/S/s-loeschlauf.mjs
 
 # Zugang zu Löschlauf und Vorfällen (braucht den Server auf 3213)
 npx tsx --env-file=.env pruefung/S/s-zugang.mjs
+
+# Terminpflicht: die Regel selbst und ihre Verdrahtung (ohne Datenbank)
+npx tsx pruefung/T/t-regel.mjs
+
+# Terminpflicht gegen Datenbank und Server: der Umgehungsversuch
+npx tsx --env-file=.env pruefung/T/t-http.mjs
 ```
 
 Bildschirmfotos und Messdaten landen in `pruefung/.ausgabe/` — dieser
@@ -144,6 +150,16 @@ Ende, was übrig ist — das gehört angesehen.
 Bremsen und wird ZWISCHEN zwei Prüflisten benutzt. Events lässt es
 absichtlich stehen, weil `G/g2` die Events braucht, die `G/g1`
 anlegt.
+
+Seit der Terminpflicht (Entscheidung 2.5) setzt `leeren.mjs`
+ausserdem bei jeder Veranstaltung **ohne** Datum einen Termin in der
+Zukunft. Grund: Der Startdatensatz legt `padel-falkensee` bewusst ohne
+Datum an („Termin folgt"), und ohne Datum gibt es kein Anmeldeformular
+mehr — die Listen, die eine Anmeldung absenden, hätten dann nichts
+mehr, woran sie sich wenden könnten. Das ist eine **Anpassung der
+Prüfung an die neue Regel, keine Abschwächung**: Die Sperre selbst
+prüft Liste `T` eigens, und zwar mit einer Veranstaltung, die bewusst
+keinen Termin hat.
 
 ---
 

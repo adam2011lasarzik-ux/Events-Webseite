@@ -187,6 +187,19 @@ export const de = {
 
   anmeldung: {
     titel: "Anmeldung",
+
+    /**
+     * Veranstaltung ohne feststehenden Termin (Entscheidung 2.5).
+     *
+     * Solche Events werden nur angekündigt und haben keinen Kaufknopf.
+     * Wer die Adresse trotzdem direkt aufruft, bekommt diese Erklärung
+     * statt eines Formulars, das ohnehin abgelehnt würde.
+     */
+    keinTerminTitel: "Termin folgt",
+    keinTerminText:
+      "Für diese Veranstaltung stehen Datum und Uhrzeit noch nicht fest. " +
+      "Eine Anmeldung ist erst möglich, sobald der Termin veröffentlicht ist — " +
+      "schau einfach später noch einmal vorbei.",
     einleitung:
       "Stell zusammen, wer mitkommt. Der Preis rechnet sich unten sofort mit — " +
       "so weißt du vorher genau, woran du bist.",
@@ -378,6 +391,12 @@ export const de = {
     zahlungKeinePlaetze:
       "Es sind nur noch {frei} Plätze frei — für {personen} Personen reicht das nicht. " +
       "Deine Anmeldung ist deshalb nicht zustande gekommen. Schreib uns, wir suchen eine Lösung.",
+    /** Kein Termin: Buchung und Zahlung sind gesperrt (Entscheidung 2.5). */
+    zahlungKeinTermin:
+      "Für diese Veranstaltung steht noch kein Termin fest. Sobald Datum und " +
+      "Uhrzeit feststehen, ist die Buchung wieder möglich. Es wurde nichts " +
+      "abgebucht.",
+
     zahlungAusgebucht:
       "Die Veranstaltung ist inzwischen ausgebucht. Deine Anmeldung ist deshalb nicht " +
       "zustande gekommen. Schreib uns, wir suchen eine Lösung.",

@@ -9,6 +9,7 @@
    --------------------------------------------------------------- */
 
 import { redirect } from "next/navigation";
+import { terminSteht } from "@/lib/termin";
 import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { berechnePreis } from "@/lib/preise";
@@ -64,6 +65,20 @@ export async function anmeldungAbsenden(
   });
   if (!event) {
     return { fehler: [], meldung: "Diese Veranstaltung gibt es nicht (mehr)." };
+  }
+
+  /* ── Steht der Termin fest? ──────────────────────────────────
+     Ohne Datum und Uhrzeit darf nicht gebucht werden (Entscheidung
+     2.5). Die Prüfung steht hier und nicht nur im Formular: Eine
+     Serveraktion ist über HTTP direkt aufrufbar, und ein
+     ausgeblendeter Knopf hält niemanden auf. */
+  if (!terminSteht(event)) {
+    return {
+      fehler: [],
+      meldung:
+        "Für diese Veranstaltung steht noch kein Termin fest. " +
+        "Eine Anmeldung ist erst möglich, wenn Datum und Uhrzeit feststehen.",
+    };
   }
 
   const regeln = {

@@ -18,6 +18,7 @@
    mitgeschickter Betrag wird an keiner Stelle gelesen.
    --------------------------------------------------------------- */
 
+import { terminSteht } from "@/lib/termin";
 import { db } from "@/lib/db";
 import { belegtFilter, reserviertBis } from "@/lib/plaetze";
 import { darfZahlen, plaetzeReichen, betragPasst, type ZahlungAbgelehnt } from "@/lib/zahlungRegeln";
@@ -44,7 +45,7 @@ export async function bezahlseiteFuer(
   const anmeldung = await db.registration.findUnique({
     where: { id: anmeldungId },
     include: {
-      event: { select: { id: true, titel: true, maxPersonen: true } },
+      event: { select: { id: true, titel: true, maxPersonen: true, startAt: true } },
       teilnehmer: { select: { id: true } },
     },
   });
@@ -52,6 +53,13 @@ export async function bezahlseiteFuer(
   const abgelehnt = darfZahlen(anmeldung);
   if (abgelehnt) return { fehler: abgelehnt };
   if (!anmeldung) return { fehler: "unbekannt" }; // für den Typ; darfZahlen hat das schon
+
+  /* ── Steht der Termin (noch) fest? ───────────────────────────
+     Dieselbe Regel wie beim Anlegen der Anmeldung (Entscheidung 2.5).
+     Sie wird hier erneut geprüft, weil zwischen Anmeldung und Zahlung
+     Zeit vergeht: Wird der Termin im Adminbereich entfernt, darf für
+     diese Veranstaltung kein Geld mehr fließen. */
+  if (!terminSteht(anmeldung.event)) return { fehler: "kein-termin" };
 
   const personen = anmeldung.teilnehmer.length;
 

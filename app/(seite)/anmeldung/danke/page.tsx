@@ -155,7 +155,12 @@ export default async function AbschlussSeite({
   const keinePlaetze = zahlung === "keine-plaetze";
   const freiZahl = Number(frei ?? "0");
 
-  const zeigtBezahlknopf = !bezahlt && !storniert && !keinePlaetze;
+  /* Ohne feststehenden Termin darf nicht bezahlt werden (Entscheidung
+     2.5). Ein Knopf „Jetzt bezahlen" führte dann in eine Aktion, die
+     ohnehin ablehnt. */
+  const keinTermin = zahlung === "kein-termin";
+
+  const zeigtBezahlknopf = !bezahlt && !storniert && !keinePlaetze && !keinTermin;
 
   const titel = bezahlt ? t.danke.bezahltTitel : t.danke.offenTitel;
 
@@ -170,7 +175,9 @@ export default async function AbschlussSeite({
      dargestellt. */
   const lage = bezahlt
     ? { titel: t.danke.zahlungBezahlt, text: t.danke.zahlungBezahltText }
-    : keinePlaetze
+    : keinTermin
+      ? { titel: t.danke.zahlungTitel, text: t.danke.zahlungKeinTermin }
+      : keinePlaetze
       ? {
           titel: t.danke.zahlungTitel,
           text:

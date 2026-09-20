@@ -39,5 +39,28 @@ await db.vorfall.deleteMany({});
 await db.checkliste.deleteMany({});
 await db.zustimmungsnachweis.deleteMany({});
 
-console.log("Anmeldungen, Bremsen, Zahlungsereignisse und Löschtabellen geleert.");
+/* ── Termin der Prüfveranstaltung sicherstellen ──────────────────
+   Seit Entscheidung 2.5 (umgesetzt am 20.09.2026) ist eine Buchung
+   ohne feststehenden Termin gesperrt — im Formular wie in der
+   Serveraktion. Der Startdatensatz legt `padel-falkensee` bewusst
+   OHNE Datum an („Termin folgt"), weil der echte Termin noch nicht
+   feststeht.
+
+   Beides zusammen heißt: Die Prüflisten, die eine Anmeldung absenden,
+   hätten kein Formular mehr, an das sie sich wenden könnten. Deshalb
+   bekommt die Veranstaltung hier einen Termin in der Zukunft.
+
+   Das ist eine **Anpassung der Prüfung an die neue Regel, keine
+   Abschwächung**: Die Sperre selbst wird in Prüfliste T eigens geprüft,
+   und zwar mit einer Veranstaltung, die bewusst keinen Termin hat. */
+const inDreissigTagen = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+const { count: termine } = await db.event.updateMany({
+  where: { startAt: null },
+  data: { startAt: inDreissigTagen },
+});
+
+console.log(
+  `Anmeldungen, Bremsen, Zahlungsereignisse und Löschtabellen geleert. ` +
+    `Termin gesetzt bei ${termine} Veranstaltung(en).`,
+);
 process.exit(0);

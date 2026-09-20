@@ -23,7 +23,9 @@ export type ZahlungAbgelehnt =
   | "bereits-bezahlt"
   | "kein-betrag"
   /** Für die ganze Gruppe sind nicht mehr genug Plätze frei. */
-  | "keine-plaetze";
+  | "keine-plaetze"
+  /** Die Veranstaltung hat (noch) keinen feststehenden Termin. */
+  | "kein-termin";
 
 /**
  * Darf für diese Anmeldung eine Bezahlung gestartet werden?

@@ -4,6 +4,7 @@ import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { ThemeRahmen } from "@/components/ThemeRahmen";
 import { PreisRechner } from "@/components/PreisRechner";
 import { findeEvent } from "@/lib/events";
+import { terminStehtAnzeige } from "@/lib/termin";
 import { texte } from "@/content";
 
 export const dynamic = "force-dynamic";
@@ -39,6 +40,26 @@ export default async function EventAnmeldung({
   const { slug } = await params;
   const event = await findeEvent(slug);
   if (!event) notFound();
+
+  /* Ohne feststehenden Termin gibt es kein Formular (Entscheidung 2.5).
+     Die Seite bleibt erreichbar — ein 404 wäre für jemanden, der einem
+     alten Link folgt, verwirrender als eine Erklärung. Gebucht werden
+     kann hier nichts; die Serveraktion lehnt eine direkte Anfrage
+     ohnehin ab (lib/termin.ts). */
+  if (!terminStehtAnzeige(event)) {
+    return (
+      <ThemeRahmen theme={event.theme}>
+        <Abschnitt>
+          <AbschnittKopf
+            augenbraue={event.texte.titel}
+            titel={texte.anmeldung.keinTerminTitel}
+            haupt
+            einleitung={texte.anmeldung.keinTerminText}
+          />
+        </Abschnitt>
+      </ThemeRahmen>
+    );
+  }
 
   return (
     <ThemeRahmen theme={event.theme}>

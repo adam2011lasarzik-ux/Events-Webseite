@@ -1,8 +1,13 @@
 # Die automatischen Prüfungen
 
-Rund 350 Prüfungen, die gegen die **echte** Datenbank und den **echten**
+Rund 880 Prüfungen, die gegen die **echte** Datenbank und den **echten**
 Server laufen — nicht gegen nachgebaute Logik. Was hier grün ist, ist
 wirklich geprüft.
+
+Die Zahlen unten sind die des Sammellaufs vom 20.09.2026
+(`bash pruefung/alle.sh`, 39 Listen). `L` ist ohne Zahl, weil die
+fliessende Messung der Responsivität Tausende von Einzelmessungen
+erzeugt und getrennt gestartet wird.
 
 Wie man sie startet, steht in **[../docs/pruefen.md](../docs/pruefen.md)**.
 
@@ -11,18 +16,21 @@ Wie man sie startet, steht in **[../docs/pruefen.md](../docs/pruefen.md)**.
 | Ordner | Inhalt | Anzahl |
 |---|---|---|
 | `E`, `H` | Anmeldung: Preise, Plätze, Überbuchung, Duplikate, manipulierte Werte, Honigtopf, Bremse | 32 |
-| `F`, `H` | Adminbereich: Zugang, Sitzungen, Aktionen ohne Sitzung, CSV, Anonymisieren, Event-Formular, zweiter Faktor (TOTP) | 86 |
+| `F`, `H` | Adminbereich: Zugang, Sitzungen, Aktionen ohne Sitzung, CSV, Anonymisieren, Event-Formular, Protokoll, zweiter Faktor (TOTP) | 116 |
 | `G`, `H` | Designs, Inhaltsblöcke, Anmeldung je Event | 38 |
 | `H` | Bild-Upload: Formate, Grössen, EXIF/GPS, getarnte Dateien, Pfad-Tricks | 20 |
 | `I` | Gründerbereich, Kontraste, Wortmarke | 29 |
 | `J` | Zahlung: Unterschrift, doppelte Meldungen, Betragsabgleich, Reservierung, Riegel | 59 |
-| `K` | Anmeldung und Bezahlung als ein Ablauf — die 15 geforderten Fälle | 45 |
-| `L` | Responsivität: fliessende Messung 320–1920 px, Querformat, Pixelvergleich | — |
-| `M` | Fehlgeschlagene Zahlung | 15 |
-| `N` | Rechtsseiten: erreichbar, als Platzhalter gekennzeichnet, verlinkt | 18 |
-| `O` | Jeder Link und jeder Knopf auf jeder öffentlichen Seite | 9 |
+| `K` | Anmeldung und Bezahlung als ein Ablauf — die 15 geforderten Fälle | 48 |
+| `L` | Responsivität: fliessende Messung 320–1920 px, Querformat, Pixelvergleich; dazu die Kopfleiste (Menü, Anmelde-Knopf) | 27 + Messung |
+| `M` | Fehlgeschlagene und späte Zahlung | 43 |
+| `N` | Rechtsseiten: erreichbar, als Platzhalter gekennzeichnet, verlinkt | 94 |
+| `O` | Jeder Link und jeder Knopf auf jeder öffentlichen Seite | 10 |
+| `P` | Stornierung: Regeln, Mails, Erstattung und Kulanz, Ablauf, Storno durch den Veranstalter, endgültiges Löschen | 127 |
+| `Q` | Überwachung: Mail-Texte und Wächter-Logik | 26 |
 | `R` | Der Riegel vor der echten Datenbank | 12 |
 | `S` | Löschkonzept: Fristen je Klasse, jede Sperrsituation, Probelauf, Steuerriegel, Protokoll, Zugang, Papiererinnerung, Server-Skripte, Bedienung der Sperren, Vorschau in Klartext | 161 |
+| `T` | Terminpflicht: ohne feststehenden Termin keine Buchung und keine Zahlung — die Regel, ihre Verdrahtung an allen sechs Stellen und der Umgehungsversuch über eine direkte Serveranfrage | 40 |
 
 ## Zu den Schlüsseln in diesen Dateien
 

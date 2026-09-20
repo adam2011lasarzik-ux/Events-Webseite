@@ -163,6 +163,7 @@ lauf "S · Zugang zu Loeschen und Vorfaellen" "$P/S/s-zugang.mjs"
 lauf "S · Monatliche Papiererinnerung" "$P/S/s-papier.mjs"
 lauf "S · Bedienung der Loeschsperren" "$P/S/s-sperr-bedienung.mjs"
 lauf "S · Vorschau-Tabellen in Klartext" "$P/S/s-vorschau-klartext.mjs"
+lauf "T · Termin-Pflicht: Ablauf und Umgehung" "$P/T/t-http.mjs"
 
 # Diese beiden laufen gegen den Server OHNE Sonderwerte (Port 3249).
 lauf_rein "N · Rechtsseiten"           node "$P/N/n-seiten.mjs"
@@ -174,6 +175,7 @@ lauf_rein "Q · Überwachung (Mail-Texte und Wächter-Logik)" npx tsx "$P/Q/q-wa
 lauf_rein "R · Riegel vor der echten Datenbank" node "$P/R/r-schutz.mjs"
 lauf_rein "S · Loeschfristen (reine Regeln)" npx tsx "$P/S/s-fristen.mjs"
 lauf_rein "S · Server-Skripte (grep-Falle)" node "$P/S/s-skripte.mjs"
+lauf_rein "T · Termin-Pflicht: Regel und Verdrahtung" npx tsx "$P/T/t-regel.mjs"
 
 # ── Bilanz ───────────────────────────────────────────────────────
 echo ""
