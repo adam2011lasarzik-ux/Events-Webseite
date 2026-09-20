@@ -183,7 +183,28 @@ Beide sitzen in **Irland**. Die frühere Formulierung „je nach genutzten
 Diensten können mehrere Stripe-Gesellschaften beteiligt sein" ist damit
 konkretisiert: Es sind diese beiden.
 
-## Was offen bleibt — und warum
+## Nachtrag am selben Tag: die Anschriften sind bestätigt
+
+Adam hat die Anschriften noch am 20.09.2026 aus den
+Stripe-Rechtsdokumenten abgelesen und bestätigt. Für **beide**
+Gesellschaften gilt derzeit dieselbe:
+
+> One Wilton Park, Wilton Place, Dublin 2, D02 FX04, Irland
+
+Sie sind in Dokument 02 an allen drei Stellen eingesetzt — im
+Entwurfstext zur Zahlung und in der Empfängertabelle. **Punkt 1.5 aus
+Dokument 15 ist damit vollständig erledigt.**
+
+**Bemerkenswert und trotzdem kein Grund, anders zu verfahren:** Es ist
+dieselbe Anschrift, die zuvor aus Sekundärrecherche im Entwurf stand
+und die deshalb entfernt wurde. Dass die Sekundärquelle richtig lag,
+war vorher nicht feststellbar — genau das ist der Unterschied zwischen
+„stimmt" und „belegt". Der nächste Abschnitt beschreibt den Zustand
+**vor** dieser Bestätigung und bleibt stehen, weil die dort
+beschriebene Netzsperre fortbesteht und jede spätere Aktualisierung
+denselben Weg nehmen muss.
+
+## Was vor der Bestätigung offen war — und warum
 
 **Die Anschriften der beiden Stripe-Gesellschaften.** Sie sollten
 ausdrücklich aus einer **Stripe-Primärquelle** übernommen werden. Das
@@ -226,3 +247,13 @@ vollständiger Anschrift genannt.
 - **Nicht verwendet:** die im Stripe-Konto angezeigten SOC-Berichte —
   sie betreffen die Prüfung interner Kontrollen und sagen zur
   Vertragsgesellschaft nichts aus.
+
+## Für spätere Aktualisierungen
+
+Die Anschrift einer Gesellschaft kann sich ändern. Nachprüfen lässt sie
+sich **nicht** aus der Arbeitsumgebung des Entwicklers, weil die
+Stripe-Domains dort gesperrt sind. Wer die Datenschutzerklärung
+irgendwann überarbeitet, liest sie deshalb erneut im
+Stripe-Datenverarbeitungsvertrag beziehungsweise im Abschnitt
+„Definitionen" der Stripe Services Agreement nach — und übernimmt sie
+von dort, nicht aus einer Suchmaschine.

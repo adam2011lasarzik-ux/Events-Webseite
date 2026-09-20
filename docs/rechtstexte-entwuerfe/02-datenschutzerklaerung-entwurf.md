@@ -18,10 +18,10 @@
 > E-Mail, **Stripe Payments Europe, Limited** für die
 > Datenverarbeitung und gegebenenfalls **Stripe Technology Europe,
 > Limited** für bestimmte Zahlungsdienste (beide Irland). Offen
-> bleiben allein die **Anschriften der beiden Stripe-Gesellschaften**;
-> sie sind aus dem Stripe-Rechtsdokument zu übernehmen, weil
-> `stripe.com` aus der Arbeitsumgebung gesperrt ist. Quellen und
-> Prüfweg stehen in Dokument 14, Abschnitt „Nachtrag 20.09.2026".
+> Die Anschriften beider Stripe-Gesellschaften sind ebenfalls
+> bestätigt und eingesetzt. **Damit ist Punkt 1.5 vollständig
+> erledigt.** Quellen und Prüfweg stehen in Dokument 14, Abschnitt
+> „Nachtrag 20.09.2026".
 >
 > **Grundsatz dieses Entwurfs:** Es wird ausschließlich beschrieben, was
 > im Code oder in der Serverdokumentation nachweisbar geschieht. Wo eine
@@ -284,12 +284,10 @@ Entwurf schließt:
 **Entwurfstext:**
 
 > Für die Bezahlung nutzen wir den Zahlungsdienstleister **Stripe
-> Payments Europe, Limited**, `[ANSCHRIFT AUS DEM STRIPE-RECHTSDOKUMENT
-> ÜBERNEHMEN]`, Irland.
+> Payments Europe, Limited**, One Wilton Park, Wilton Place, Dublin 2, D02 FX04, Irland.
 >
 > Je nach genutztem Zahlungsdienst kann zusätzlich **Stripe Technology
-> Europe, Limited** beteiligt sein, `[ANSCHRIFT AUS DEM
-> STRIPE-RECHTSDOKUMENT ÜBERNEHMEN]`, Irland.
+> Europe, Limited** beteiligt sein, One Wilton Park, Wilton Place, Dublin 2, D02 FX04, Irland.
 >
 > Bezahlt wird ausschließlich auf einer von Stripe betriebenen Seite. Wir
 > übermitteln dorthin den zu zahlenden Betrag, die Anmeldenummer, Ihre
@@ -314,25 +312,26 @@ Entwurf schließt:
 > innerhalb der EU. Ein Drittlandbezug entsteht aus der Gesellschaft
 > selbst nicht.
 
-> ⚠️ **Die Anschriften fehlen noch — und das ist Absicht.**
-> `stripe.com` und `support.stripe.com` sind aus der Arbeitsumgebung
-> des Entwicklers **netzwerkseitig gesperrt** (geprüft am 20.09.2026:
-> beide Abrufe werden vom Egress-Proxy abgewiesen). Die Anschrift lässt
-> sich von hier aus also **nicht aus einer Stripe-Primärquelle**
-> übernehmen.
+> ✅ **Anschriften am 20.09.2026 von Adam aus den Stripe-Rechtsdokumenten
+> bestätigt und eingesetzt.** Für **beide** Gesellschaften gilt derzeit
+> dieselbe Anschrift: One Wilton Park, Wilton Place, Dublin 2, D02 FX04,
+> Irland.
 >
-> **Eine frühere Fassung dieses Entwurfs nannte hier „One Wilton Park,
-> Wilton Place, Dublin 2, D02 FX04".** Diese Angabe stammte aus
-> Sekundärrecherche vom 18.09.2026, **nicht** aus einem
-> Stripe-Dokument. Sie wurde deshalb **entfernt** statt stehen gelassen
-> — eine Anschrift, die plausibel aussieht und nicht belegt ist, ist in
-> einer Datenschutzerklärung gefährlicher als eine sichtbare Lücke.
+> **Zum Weg dorthin, weil er für spätere Aktualisierungen zählt:**
+> `stripe.com` und `support.stripe.com` sind aus der Arbeitsumgebung des
+> Entwicklers netzwerkseitig gesperrt (geprüft am 20.09.2026, beide
+> Abrufe vom Egress-Proxy abgewiesen). Die Anschrift stand zwischenzeitlich
+> schon einmal hier, stammte aber aus Sekundärrecherche und wurde deshalb
+> **entfernt**; eingesetzt ist sie erst jetzt, nachdem Adam sie im
+> Stripe-Dokument selbst gelesen hat. Dass beide Angaben übereinstimmen,
+> ändert daran nichts: Belegt ist sie erst seit der Bestätigung.
 >
-> **Einzusetzen aus:** dem Stripe-Datenverarbeitungsvertrag
-> (stripe.com/legal/dpa) beziehungsweise der Stripe Services Agreement,
-> Abschnitt „Definitionen" — dort stehen beide Gesellschaften mit
-> vollständiger Anschrift. Adam hat Zugriff darauf; abzulesen und hier
-> einzutragen.
+> ⚠️ **Bei einer späteren Aktualisierung derselbe Weg.** Die Anschrift
+> kann sich ändern, und nachprüfen lässt sie sich nur im
+> Stripe-Konto — nicht von hier aus. Wer den Text irgendwann
+> überarbeitet, liest sie erneut im Stripe-Datenverarbeitungsvertrag
+> beziehungsweise im Abschnitt „Definitionen" der Stripe Services
+> Agreement nach.
 >
 > Zurück erhalten wir die Information, ob und in welcher Höhe gezahlt
 > wurde, sowie eine Zahlungsreferenz. Diese Angaben brauchen wir, um
@@ -733,7 +732,7 @@ Erklärung verweist, die es nicht gibt.]`
 |---|---|---|---|---|
 | Hostinger (Server) | Betrieb der Website | alle auf dem Server anfallenden Daten | Auftragsverarbeiter `[bestätigen]` | Server: **Frankreich** (bestätigt 18.09.2026) — Vertragsgesellschaft: **Hostinger International Ltd.**, 61 Lordou Vironos Street, 6023 Larnaca, Zypern (bestätigt 20.09.2026) |
 | Hostinger (Postfach) | E-Mail-Versand und -Empfang | Inhalt und Adressaten der E-Mails | Auftragsverarbeiter `[bestätigen]` | wie oben |
-| Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | doppelte Rolle — Auftragsverarbeiter für die Abwicklung, eigenständig Verantwortlicher für eigene Pflichten. **AVV bereits durch Kontoeröffnung wirksam** (per Verweis), genaue Rollenverteilung `[aus eigenem Vertrag bestätigen]` | Gesellschaften: **Stripe Payments Europe, Limited (SPEL)** für die Datenverarbeitung, ggf. zusätzlich **Stripe Technology Europe, Limited (STEL)** für bestimmte Zahlungsdienste — beide **Irland**, bestätigt 20.09.2026; Anschriften `[aus dem Stripe-Rechtsdokument übernehmen]`. Weiterer Drittlandbezug `[klären]` |
+| Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | doppelte Rolle — Auftragsverarbeiter für die Abwicklung, eigenständig Verantwortlicher für eigene Pflichten. **AVV bereits durch Kontoeröffnung wirksam** (per Verweis), genaue Rollenverteilung `[aus eigenem Vertrag bestätigen]` | Gesellschaften: **Stripe Payments Europe, Limited (SPEL)** für die Datenverarbeitung, ggf. zusätzlich **Stripe Technology Europe, Limited (STEL)** für bestimmte Zahlungsdienste — beide **Irland**, One Wilton Park, Wilton Place, Dublin 2, D02 FX04 (bestätigt 20.09.2026). Weiterer Drittlandbezug `[klären]` |
 | PayPal (nur bei Auswahl dieser Zahlungsart) | Bezahlung | PayPal-Zugangsdaten, Betrag | eigenständig Verantwortlicher | `[klären]` |
 | Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | Speicherort: **EU** (Bucket-Endpoint `eu-central-003`, bestätigt 18.09.2026) — Gesellschaft selbst US-amerikanisch, Drittlandbezug `[fachlich zu bewerten]` |
 | Meta Platforms Ireland Ltd., Merrion Road, Dublin 4, D04 X2K5, Irland (Instagram) — **sofern Übersichtsaufnahmen veröffentlicht werden** | Veröffentlichung von Aufnahmen auf dem offiziellen Instagram-Kanal von VERA | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher | Irland, mit möglicher Übermittlung in die **USA**; Grundlage derzeit der EU-US-Angemessenheitsbeschluss `[Stand 18.09.2026 in Kraft, aber unter Überprüfung — siehe Dokument 06]` |
