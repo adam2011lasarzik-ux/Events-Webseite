@@ -10,6 +10,7 @@
 
 import { redirect } from "next/navigation";
 import { terminSteht } from "@/lib/termin";
+import { geltendeFassungJetzt, fassungenZurBuchung } from "@/lib/rechtstexte";
 import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { berechnePreis } from "@/lib/preise";
@@ -145,6 +146,15 @@ export async function anmeldungAbsenden(
      beim bisherigen Ablauf: sofort bestätigt, kein Anbieter im Spiel. */
   const kostenlos = preis.gesamtCents <= 0;
 
+  /* Welche Fassung der Rechtstexte bei diesem Vertragsschluss
+     einbezogen wird — VOR der Transaktion ermittelt, weil es zwei
+     reine Lesezugriffe sind und in einer Transaktion nichts zu suchen
+     hat, was den Sperrzeitraum verlängert, ohne ihn zu brauchen. */
+  const [agbFassung, datenschutzFassung] = await Promise.all([
+    geltendeFassungJetzt("AGB_B2C"),
+    geltendeFassungJetzt("DATENSCHUTZ"),
+  ]);
+
   let neueId: string;
 
   try {
@@ -190,6 +200,18 @@ export async function anmeldungAbsenden(
       }
 
       const felder = {
+        /* ── Welche Fassung der Rechtstexte gilt für DIESE Buchung ──
+           Festgehalten wird die Kennung, nicht der Text (Entscheidung
+           6.7). Massgeblich ist die Fassung, die JETZT gilt — nicht
+           die neueste, falls eine spätere schon vorbereitet ist; das
+           entscheidet geltendeFassungJetzt().
+
+           Ist noch keine Fassung hinterlegt, bleibt das Feld leer.
+           Die Anmeldung daran scheitern zu lassen wäre die schlechtere
+           Antwort: Der Kunde kann nichts dafür, und die Buchung ginge
+           verloren. Der Adminbereich weist solche Buchungen aus. */
+        agbFassungId: agbFassung?.id ?? null,
+        datenschutzFassungId: datenschutzFassung?.id ?? null,
         kontaktVorname: anmeldung.kontakt.vorname,
         kontaktNachname: anmeldung.kontakt.nachname,
         kontaktTelefon: anmeldung.kontakt.telefon,
@@ -349,6 +371,10 @@ export async function anmeldungAbsenden(
         mailAnmeldung,
         mailEvent,
         stornoLink(process.env.OEFFENTLICHE_ADRESSE, neueId, gespeichert?.stornoSchluessel),
+        // Volltext der einbezogenen Bedingungen — § 312f Abs. 2 BGB
+        // verlangt die Vertragsbestätigung auf dauerhaftem Datenträger
+        // einschliesslich der Bedingungen. Ein Link genügt dafür nicht.
+        await fassungenZurBuchung(neueId),
       ),
     });
     redirect(`/anmeldung/danke?nr=${neueId}`);

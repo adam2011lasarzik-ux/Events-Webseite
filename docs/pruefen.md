@@ -118,6 +118,9 @@ npx tsx pruefung/T/t-regel.mjs
 
 # Terminpflicht gegen Datenbank und Server: der Umgehungsversuch
 npx tsx --env-file=.env pruefung/T/t-http.mjs
+
+# Versionierte Rechtstexte: Unveränderbarkeit, geltende Fassung, Mail
+npx tsx --env-file=.env pruefung/U/u-rechtstexte.mjs
 ```
 
 Bildschirmfotos und Messdaten landen in `pruefung/.ausgabe/` — dieser

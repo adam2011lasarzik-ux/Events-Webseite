@@ -18,6 +18,7 @@ import type Stripe from "stripe";
 import { db } from "@/lib/db";
 import { rueckmeldungPruefen, ZahlungNichtEingerichtet } from "@/lib/zahlung";
 import { betragPasst } from "@/lib/zahlungRegeln";
+import { fassungenZurBuchung } from "@/lib/rechtstexte";
 import { mailSendenOhneAbbruch } from "@/lib/mail";
 import { zahlungsBestaetigungsMail } from "@/lib/mailVorlagen";
 import { stornoLink } from "@/lib/storno";
@@ -224,6 +225,9 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
       // Der Storno-Link — der einzige Weg, auf dem der Schlüssel
       // den Anmelder erreicht.
       stornoLink(process.env.OEFFENTLICHE_ADRESSE, anmeldung.id, anmeldung.stornoSchluessel),
+      // Dieselben Fassungen wie in der Anmeldebestätigung —
+      // die der BUCHUNG, nicht die heute geltenden.
+      await fassungenZurBuchung(anmeldung.id),
     ),
   });
 }

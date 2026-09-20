@@ -292,6 +292,24 @@ model Registration {
   /// beim Anlegen.
   stornoSchluessel String? @unique
 
+  /**
+   * ── Welche Fassung der Rechtstexte galt bei dieser Buchung ──────
+   * Maßgeblich ist immer die Fassung, die bei VERTRAGSSCHLUSS
+   * einbezogen wurde. Ändert VERA die Bedingungen später, gilt für
+   * Altbuchungen weiterhin die alte — ohne diese Kennungen liesse
+   * sich zwei Jahre später nicht mehr belegen, welche das war.
+   * Hier steht bewusst nur die KENNUNG, nicht der Text. Der Wortlaut
+   * liegt einmal je Fassung in `Rechtstext`; läge er je Buchung dort,
+   * wüchse die Datenbank mit jedem Ticket um mehrere Kilobyte, und das
+   * Löschkonzept müsste denselben Text tausendfach mitbehandeln.
+   * Optional, weil Buchungen von vor dieser Änderung keine haben
+   * (additive Migration nach §9 des Skills).
+   */
+  agbFassungId         String?
+  agbFassung           Rechtstext? @relation("AgbFassung", fields: [agbFassungId], references: [id])
+  datenschutzFassungId String?
+  datenschutzFassung   Rechtstext? @relation("DatenschutzFassung", fields: [datenschutzFassungId], references: [id])
+
   angemeldetAm  DateTime  @default(now())
   reaktiviertAm DateTime?
   storniertAm   DateTime?
@@ -738,4 +756,57 @@ model Loeschprotokoll {
 
   @@index([laufId])
   @@index([zeitpunkt])
+}
+
+/// Welche Rechtstexte es gibt. Die Kennung ist stabil, die Fassungen
+/// wechseln.
+enum Rechtstextart {
+  /// Teilnahmebedingungen für Verbraucher.
+  AGB_B2C
+  /// Bedingungen für Geschäftskunden.
+  AGB_B2B
+  /// Datenschutzerklärung.
+  DATENSCHUTZ
+}
+
+/**
+ * Eine unveränderbare Fassung eines Rechtstexts.
+ * ── Unveränderbar heisst: nur einfügen, nie ändern ────────────────
+ * Eine neue Fassung ist ein NEUER Datensatz, kein überschriebener.
+ * Eine Datenbank kann das nicht von sich aus erzwingen — die Regel
+ * steht deshalb in lib/rechtstexte.ts und wird von Prüfliste U
+ * bewacht. Ohne diese Prüfung wäre „unveränderbar" eine
+ * Absichtserklärung und keine Eigenschaft.
+ * `pruefsumme` ist der SHA-256 über den Wortlaut. Sie belegt nicht
+ * gegenüber Dritten, dass nichts geändert wurde — wer die Zeile
+ * ändern kann, kann auch die Prüfsumme neu setzen. Sie macht eine
+ * unbeabsichtigte Änderung aber sofort sichtbar, und genau dafür ist
+ * sie da.
+ */
+model Rechtstext {
+  id      String        @id @default(cuid())
+  art     Rechtstextart
+  /// Fortlaufend je Art, beginnend bei 1.
+  version Int
+  /// Das Stand-Datum, das im Text selbst genannt wird.
+  datum   DateTime
+
+  /// Ab wann diese Fassung für neue Vertragsschlüsse gilt. Massgeblich
+  /// ist beim Speichern einer Buchung die neueste Fassung, deren
+  /// `gueltigAb` nicht in der Zukunft liegt — nicht schlicht die
+  /// neueste.
+  gueltigAb DateTime
+
+  /// Der vollständige Wortlaut.
+  inhalt     String @db.Text
+  /// SHA-256 über `inhalt`, hexadezimal.
+  pruefsumme String
+
+  erstelltAm DateTime @default(now())
+
+  anmeldungenAgb         Registration[] @relation("AgbFassung")
+  anmeldungenDatenschutz Registration[] @relation("DatenschutzFassung")
+
+  @@unique([art, version])
+  @@index([art, gueltigAb])
 }

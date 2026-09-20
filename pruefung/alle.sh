@@ -164,6 +164,7 @@ lauf "S · Monatliche Papiererinnerung" "$P/S/s-papier.mjs"
 lauf "S · Bedienung der Loeschsperren" "$P/S/s-sperr-bedienung.mjs"
 lauf "S · Vorschau-Tabellen in Klartext" "$P/S/s-vorschau-klartext.mjs"
 lauf "T · Termin-Pflicht: Ablauf und Umgehung" "$P/T/t-http.mjs"
+lauf "U · Versionierte Rechtstexte" "$P/U/u-rechtstexte.mjs"
 
 # Diese beiden laufen gegen den Server OHNE Sonderwerte (Port 3249).
 lauf_rein "N · Rechtsseiten"           node "$P/N/n-seiten.mjs"

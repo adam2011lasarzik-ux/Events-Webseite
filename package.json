@@ -23,7 +23,8 @@
     "anmeldung:loeschen": "tsx --env-file=.env prisma/anmeldungLoeschen.ts",
     "loeschen:vorschau": "tsx --env-file=.env prisma/loeschlauf.ts",
     "loeschen": "tsx --env-file=.env prisma/loeschlauf.ts --echt",
-    "papier:erinnern": "tsx --env-file=.env prisma/papiererinnerung.ts"
+    "papier:erinnern": "tsx --env-file=.env prisma/papiererinnerung.ts",
+    "rechtstext": "tsx --env-file=.env prisma/rechtstextAnlegen.ts"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.9.1",

@@ -42,6 +42,54 @@ function teilnehmerListe(teilnehmer: MailTeilnehmer[]): string {
 }
 
 /**
+ * Die Fassung eines Rechtstexts, wie sie in die Mail gehört.
+ *
+ * Warum der VOLLTEXT und kein Link: § 312f Abs. 2 BGB verlangt die
+ * Vertragsbestätigung auf einem **dauerhaften Datenträger**,
+ * einschliesslich der einbezogenen Bedingungen. Ein Link erfüllt das
+ * nicht — er zeigt morgen auf eine andere Fassung, und der Empfänger
+ * hat nichts in der Hand.
+ *
+ * Warum als Mailtext und nicht als PDF: Ein PDF bräuchte eine neue
+ * Abhängigkeit zur Erzeugung. Der Volltext in der Mail erfüllt den
+ * dauerhaften Datenträger ebenso, ist durchsuchbar und wird von
+ * keinem Anhangsfilter aussortiert. Ein PDF kann später dazukommen.
+ */
+export interface MailFassung {
+  art: string;
+  version: number;
+  datum: Date;
+  inhalt: string;
+}
+
+/** Trennlinie, damit der Volltext erkennbar vom Anschreiben abgesetzt ist. */
+const STRICH = "─".repeat(60);
+
+function fassungsAnhang(fassungen: MailFassung[]): string[] {
+  if (fassungen.length === 0) return [];
+  const bloecke: string[] = [
+    "",
+    STRICH,
+    "Die folgenden Bedingungen sind Bestandteil deines Vertrags.",
+    "Sie sind hier im Wortlaut mitgeschickt, damit du sie dauerhaft",
+    "vorliegen hast — unabhängig davon, was später auf der Website steht.",
+    STRICH,
+  ];
+  for (const f of fassungen) {
+    bloecke.push(
+      "",
+      `${f.art} — Fassung ${f.version}, Stand ${f.datum.toISOString().slice(0, 10)}`,
+      STRICH,
+      "",
+      f.inhalt.trimEnd(),
+      "",
+      STRICH,
+    );
+  }
+  return bloecke;
+}
+
+/**
  * Der Storno-Abschnitt am Ende einer Bestätigung.
  *
  * Ohne Link (Adresse oder Schlüssel fehlen) bleibt er ganz weg —
@@ -67,6 +115,7 @@ export function bestaetigungsMail(
   anmeldung: MailAnmeldung,
   event: MailEvent,
   stornoLink?: string | null,
+  fassungen: MailFassung[] = [],
 ): { betreff: string; text: string } {
   return {
     betreff: `Anmeldung bestätigt: ${event.titel}`,
@@ -86,6 +135,7 @@ export function bestaetigungsMail(
       "",
       "Bis bald,",
       "das VERA-Team",
+      ...fassungsAnhang(fassungen),
     ].join("\n"),
   };
 }
@@ -95,6 +145,7 @@ export function zahlungsBestaetigungsMail(
   anmeldung: MailAnmeldung,
   event: MailEvent,
   stornoLink?: string | null,
+  fassungen: MailFassung[] = [],
 ): { betreff: string; text: string } {
   return {
     betreff: `Zahlung erhalten: ${event.titel}`,
@@ -115,6 +166,7 @@ export function zahlungsBestaetigungsMail(
       "",
       "Bis bald,",
       "das VERA-Team",
+      ...fassungsAnhang(fassungen),
     ].join("\n"),
   };
 }

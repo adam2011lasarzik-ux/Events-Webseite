@@ -37,6 +37,7 @@ export function AdminRahmen({
             <Link href="/admin/einstellungen">Gründerbereich</Link>
             <Link href="/admin/vorfaelle">Vorfälle</Link>
             <Link href="/admin/loeschen">Löschlauf</Link>
+            <Link href="/admin/rechtstexte">Rechtstexte</Link>
             <Link href="/admin/zweiter-faktor">Zweiter Faktor</Link>
             <Link href="/">Zur Webseite</Link>
           </nav>
