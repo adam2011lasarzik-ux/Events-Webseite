@@ -771,32 +771,49 @@ vorhersehbaren, vertragstypischen Schaden begrenzt.
 15.3 Im Übrigen ist die Haftung für einfache Fahrlässigkeit
 ausgeschlossen.
 
-15.4 `[VOR VERWENDUNG KLÄREN: Soll zusätzlich ein Höchstbetrag
-vereinbart werden?]`
+15.4 **Kein pauschaler Höchstbetrag.** Diese Bedingungen enthalten
+keinen summenmäßigen Haftungshöchstbetrag. Es bleibt bei der Begrenzung
+auf den bei Vertragsschluss vorhersehbaren, vertragstypischen Schaden
+nach Ziffer 15.2.
 
-> ⚠️ **Zum Höchstbetrag — hier ist Vorsicht geboten.** Ein
-> summenmäßiger Deckel ist im B2B-Verkehr zulässig, aber **nicht
-> beliebig**. Die verbreitete Formel „Haftung höchstens in Höhe der
-> vereinbarten Vergütung" ist **kein automatisch zulässiger Wert**: Sie
-> ist unwirksam, wenn sie typischerweise vorhersehbare Schäden nicht
-> abdeckt.
->
-> Bei einer Veranstaltung mit körperlicher Betätigung ist der
-> realistische Großschaden ein **Personenschaden** — und der fällt
-> ohnehin unter Ziffer 15.1 und ist nicht deckelbar. Der Deckel wirkt
-> also vor allem für Vermögensschäden.
->
-> **Vorgehen:** Erst die realistischen Schadensszenarien benennen, dann
-> den Betrag daran messen. `[VOR VERWENDUNG KLÄREN: Welche
-> Vermögensschäden sind bei einem abgesagten oder misslungenen
-> Firmenevent realistisch — Raumkosten, Reisekosten der Teilnehmenden,
-> Ausfallzeit?]` **Ein Betrag, der aus einem fremden Muster stammt, ist
-> kein geprüfter Betrag.**
->
-> **Und noch einmal ausdrücklich:** Eine bestehende
-> Haftpflichtversicherung belegt die Wirksamkeit eines Deckels nicht.
+15.4a **Mitteilung außergewöhnlicher Schadensrisiken.** Der Auftraggeber
+teilt VERA **vor Vertragsschluss in Textform** mit, wenn im Fall einer
+Störung der Leistung außergewöhnlich hohe Schäden drohen — insbesondere
+die Freistellung einer größeren Zahl von Beschäftigten während der
+Arbeitszeit oder erhebliche Aufwendungen, die im Vertrauen auf die
+Durchführung getätigt werden. Ohne eine solche Mitteilung sind derartige
+Schäden bei Vertragsschluss **nicht vorhersehbar** im Sinne von
+Ziffer 15.2.
 
-15.5 Die Ziffern 15.1 bis 15.4 gelten auch zugunsten der Mitarbeitenden
+15.4b **Individuell vereinbarte Haftungsobergrenze.** Bei größeren
+Aufträgen können die Parteien eine betragsmäßige Haftungsobergrenze
+vereinbaren. Sie gilt nur, wenn sie zwischen den Parteien **tatsächlich
+ausgehandelt** worden ist.
+
+> ⚠️ **Zu 15.4b — eine vorformulierte Zahl im Angebot genügt NICHT.**
+> Eine Haftungsobergrenze entgeht der AGB-Inhaltskontrolle nur als
+> **Individualabrede**. Dafür reicht es nicht, den Betrag in das Angebot
+> zu schreiben und vom Auftraggeber bestätigen zu lassen — auch ein
+> Angebotstext ist vorformuliert, wenn VERA ihn für eine Vielzahl von
+> Verträgen verwendet oder der Auftraggeber auf den Inhalt keinen
+> Einfluss nehmen konnte.
+>
+> **Ausgehandelt** heißt: VERA stellt den Betrag ernsthaft zur
+> Disposition, der Auftraggeber hat eine **echte Gestaltungsfreiheit**,
+> und das lässt sich belegen — etwa durch den Schriftwechsel, in dem
+> über die Höhe gesprochen wurde. Wird der Betrag unverändert
+> übernommen, ohne dass darüber verhandelt wurde, ist er **AGB** und
+> wird wie eine Klausel geprüft.
+>
+> **Praktische Folge:** Wer die Obergrenze nutzen will, muss sie
+> ansprechen, nicht nur abdrucken.
+>
+> **Ausrichtung an der Versicherung:** Die Obergrenze soll später an der
+> **Deckungssumme der Veranstalterhaftpflicht** ausgerichtet werden.
+> Solange keine Versicherung besteht, gibt es keinen sinnvollen
+> Anknüpfungspunkt — und eine Zahl ohne Anknüpfungspunkt ist geraten.
+
+15.5 Die Ziffern 15.1 bis 15.4b gelten auch zugunsten der Mitarbeitenden
 und Erfüllungsgehilfen von VERA.
 
 15.6 Eine Änderung der gesetzlichen Beweislast zum Nachteil des
@@ -2282,3 +2299,125 @@ Ausgangspunkt taugt. (3) Ob weitere Schadensgruppen zu ergänzen sind.
 Die Normzitate sind Prüfauftrag, kein nachgewiesenes Ergebnis —
 gesetze-im-internet.de und dejure.org sind aus dieser Arbeitsumgebung
 gesperrt.]`
+
+---
+
+# Anhang N: Prüfung der Haftungsbegrenzung im B2B (20.09.2026, Frage 5.13)
+
+Geprüft mit `haftungsbegrenzung-pruefen-und-formulieren` und
+`klauselinhalt-und-verbote-pruefen`.
+
+## Die Entscheidung
+
+- **Qualitative Haftungsstruktur ohne feste Zahl** in den allgemeinen
+  Bedingungen.
+- **Mitteilungspflicht** für außergewöhnliche Schadensrisiken vor
+  Vertragsschluss.
+- **Möglichkeit einer tatsächlich individuell ausgehandelten**
+  Haftungsobergrenze bei größeren Aufträgen.
+- Die Obergrenze soll später an der **Deckungssumme der
+  Veranstalterhaftpflicht** ausgerichtet werden.
+
+## Warum keine Zahl in den Bedingungen steht
+
+Nach den Beispielrechnungen in Anhang M reicht der vertragstypisch
+vorhersehbare Vermögensschaden von einigen hundert bis rund 35 000 Euro.
+Daraus folgt eine Zwickmühle, die sich nicht auflösen lässt:
+
+- **Eine niedrige Zahl schützt wirtschaftlich, hält aber nicht.** Ein
+  Deckel unterhalb des vertragstypisch vorhersehbaren Schadens ist
+  regelmäßig unwirksam. § 309 Nr. 7 BGB gilt gegenüber Unternehmern
+  nicht unmittelbar (§ 310 Abs. 1 BGB), seine Wertung wirkt aber über
+  § 307 BGB fort — und die Haftung für die Verletzung einer Kernpflicht
+  darf nicht so weit beschränkt werden, dass der Vertragszweck gefährdet
+  wird.
+- **Eine hohe Zahl hält, schützt aber nicht.** Läge der Deckel bei
+  50 000 Euro, wäre er wirksam — und im Schadensfall wertlos, weil er
+  über dem realistischen Schaden liegt.
+
+**Ein unwirksamer Deckel ist dabei schlechter als gar keiner:** Fällt er
+weg, gilt die gesetzliche Haftung. Die Klausel hätte also nichts
+bewirkt, aber das Risiko getragen, im Streit als Beleg für eine
+unangemessene Benachteiligung zu dienen.
+
+Die verbleibende Begrenzung auf den **vorhersehbaren, vertragstypischen
+Schaden** in Ziffer 15.2 ist die stärkste Beschränkung, die zulässig
+ist. Sie steht bereits im Text.
+
+## Die Mitteilungspflicht ist der eigentliche Hebel
+
+Der vorhersehbare Schaden bemisst sich nach dem, was VERA **bei
+Vertragsschluss** wusste oder wissen musste. Das ist keine feste Größe,
+sondern eine, die sich gestalten lässt.
+
+Ziffer 15.4a verlangt vom Auftraggeber, außergewöhnliche Schadensrisiken
+vorher zu benennen. Wird das versäumt, fehlt es für diese Schäden an der
+Vorhersehbarkeit — die Begrenzung aus Ziffer 15.2 greift dann in vollem
+Umfang.
+
+**Das ist tragfähig, weil es niemanden überrumpelt.** Der Auftraggeber
+kennt seine eigenen Risiken; VERA kennt sie nicht. Eine Obliegenheit,
+das mitzuteilen, was nur eine Seite wissen kann, ist die sachgerechte
+Verteilung — und sie nimmt dem Auftraggeber nichts, was er nicht durch
+eine kurze Mitteilung behalten könnte.
+
+**Grenze, die dazugehört:** Die Klausel verschiebt nur die
+**Vorhersehbarkeit**. Sie schließt keine Haftung für Vorsatz, grobe
+Fahrlässigkeit oder Personenschäden aus — dort bleibt es bei Ziffer 15.1,
+und daran ändert auch eine unterbliebene Mitteilung nichts.
+
+## Warum eine vorformulierte Zahl im Angebot nicht genügt
+
+Das ist der Punkt, den Adam ausdrücklich festgehalten wissen wollte, und
+er ist in der Praxis der häufigste Irrtum.
+
+Eine Haftungsobergrenze entgeht der Inhaltskontrolle **nur als
+Individualabrede**. Dafür genügt es **nicht**, den Betrag in das Angebot
+zu schreiben und bestätigen zu lassen: Auch ein Angebotstext ist
+vorformuliert, wenn VERA ihn für eine Vielzahl von Verträgen verwendet
+oder der Auftraggeber auf den Inhalt keinen Einfluss nehmen konnte.
+Entscheidend ist nicht, **wo** die Zahl steht, sondern **wie** sie
+zustande kam.
+
+**Ausgehandelt** setzt voraus, dass VERA den Betrag ernsthaft zur
+Disposition stellt und der Auftraggeber eine echte Gestaltungsfreiheit
+hat. Wird er unverändert übernommen, ohne dass darüber gesprochen wurde,
+ist er AGB und wird wie eine Klausel geprüft — also an demselben Maßstab
+gemessen, dem er entgehen sollte.
+
+**Praktische Folge, die in der Angebotsvorlage stehen sollte:** Die
+Obergrenze wird angesprochen, nicht abgedruckt. Der Schriftwechsel, in
+dem über die Höhe gesprochen wurde, ist der Beleg dafür — und ohne
+diesen Beleg ist die Klausel im Streit nichts wert.
+
+## Die Ausrichtung an der Versicherung
+
+Sie ist der einzige sinnvolle Anknüpfungspunkt für eine Zahl. Eine
+Obergrenze über der Deckungssumme verspricht etwas, was VERA nicht
+tragen kann; eine deutlich darunter verschenkt Schutz, den die
+Versicherung bezahlt hat.
+
+**Solange keine Veranstalterhaftpflicht besteht, gibt es diesen
+Anknüpfungspunkt nicht** — und eine Zahl ohne Anknüpfungspunkt ist
+geraten. Das ist der sachliche Grund, warum Ziffer 15.4 heute keine
+nennt.
+
+## ⚠️ Die Feststellung, die über diese Klausel hinausgeht
+
+**Die Haftungsklausel ist nicht das, was VERA schützt.** Bei einem
+Vermögensschaden von 35 000 Euro entscheidet nicht der Wortlaut, sondern
+ob eine Versicherung einspringt. Bei einem Personenschaden ist die
+Haftung ohnehin unbeschränkt und durch keine Klausel begrenzbar.
+
+**Die Veranstalterhaftpflicht ist damit keine Empfehlung, sondern die
+Voraussetzung dafür, dass B2B-Aufträge tragbar sind.** Sie gehört vor
+den ersten Firmenauftrag — nicht in die AGB, sondern in den
+Versicherungsordner.
+
+`[FACHLICHE PRÜFUNG: (1) Ob die Mitteilungsobliegenheit in Ziffer 15.4a
+in dieser Form wirksam ist — sie ist verbreitet, aber der Zuschnitt
+entscheidet. (2) Welche Deckungssumme für den geplanten Zuschnitt
+angemessen ist. (3) Ob die Kernpflichtenliste in Ziffer 15.2 nach den
+Entscheidungen zu 5.2 und 5.6 noch vollständig ist. Die Normzitate sind
+Prüfauftrag, kein nachgewiesenes Ergebnis — gesetze-im-internet.de und
+dejure.org sind aus dieser Arbeitsumgebung gesperrt.]`

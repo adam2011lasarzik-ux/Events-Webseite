@@ -120,6 +120,30 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.13 — Haftungshöchstbetrag und Schadensbasis?**~~ ✅
+  **Beantwortet 20.09.2026: keine feste Zahl in den Bedingungen.**
+  Es bleibt bei der **qualitativen Struktur** — unbeschränkt bei
+  Personenschäden, Vorsatz, grober Fahrlässigkeit, Garantie und
+  Produkthaftung; bei einfacher Fahrlässigkeit nur Kernpflichten,
+  begrenzt auf den **vorhersehbaren, vertragstypischen Schaden**; im
+  Übrigen ausgeschlossen. Dazu eine **Mitteilungspflicht** für
+  außergewöhnliche Schadensrisiken vor Vertragsschluss (Ziffer 15.4a)
+  und die Möglichkeit einer **tatsächlich ausgehandelten** Obergrenze
+  bei größeren Aufträgen (Ziffer 15.4b), später ausgerichtet an der
+  **Deckungssumme der Veranstalterhaftpflicht**.
+  ⚠️ **Ausdrücklich festgehalten:** Eine bloß **vorformulierte Zahl im
+  Angebot ist keine Individualvereinbarung**. Entscheidend ist nicht, wo
+  die Zahl steht, sondern wie sie zustande kam — ausgehandelt heißt,
+  VERA stellt sie ernsthaft zur Disposition und der Auftraggeber hat
+  echte Gestaltungsfreiheit. Wird sie unverändert übernommen, ist sie
+  AGB und wird wie eine Klausel geprüft.
+  ⚠️ **Und die Feststellung, die darüber hinausgeht:** Die
+  Haftungsklausel ist nicht das, was VERA schützt. Bei 35 000 Euro
+  entscheidet, ob eine Versicherung einspringt. **Die
+  Veranstalterhaftpflicht ist die Voraussetzung dafür, dass
+  B2B-Aufträge tragbar sind** — sie gehört vor den ersten Firmenauftrag.
+  Dokument 04, Ziffern 15.4–15.4b und Anhang N.
+
 - ~~**5.14 — Realistische Vermögensschäden bei einem Firmenevent?**~~ ✅
   **Aufbereitet 20.09.2026 mit vorläufigen Beispielrechnungen**
   (ausdrücklich als vorläufig gekennzeichnet; konkrete Auftragswerte
