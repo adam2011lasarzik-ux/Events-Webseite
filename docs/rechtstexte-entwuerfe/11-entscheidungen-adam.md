@@ -161,7 +161,7 @@ stellt (2×), Foto-Zwecke (3×).
 | 6.2 | Angabe nach § 18 Abs. 2 MStV nötig? (vermutlich nein) | ⚖️ | ✅ 20.09.2026 |
 | 6.3 | Erlaubnispflichten der Veranstaltungsorganisation selbst | ⚖️ | ✅ 20.09.2026 |
 | 6.4 | Schließfächer in der Location vorhanden? | 🔎 | ✅ 20.09.2026 — Frage erledigt sich |
-| 6.5 | Behält Stripe bei Erstattungen die Gebühr ein? | 🔎 | ⬜ |
+| 6.5 | Behält Stripe bei Erstattungen die Gebühr ein? | 🔎 | ✅ 20.09.2026 — ja, daraus Stornoentgelt |
 | 6.6 | Greift die BFSG-Ausnahme für Kleinstunternehmen? | ⚖️ | ⬜ |
 | 6.7 | Stand-Datum für AGB und B2B-Bedingungen | ⬜ | am Ende |
 
@@ -202,6 +202,27 @@ stellt (2×), Foto-Zwecke (3×).
 > verweist bewusst auf Ziffer 11 der Teilnahmebedingungen statt auf „die
 > gesetzlichen Vorschriften" — sonst stünden zwei Haftungsaussagen
 > nebeneinander, was nach § 305c Abs. 2 BGB zu Lasten von VERA ginge.
+
+> **6.5 ist am 20.09.2026 beantwortet — und daraus ist eine
+> Entscheidung geworden.** Stripe gibt die Gebühr der ursprünglichen
+> Zahlung bei einer Erstattung nicht zurück. Adam hat daraufhin
+> verbindlich festgelegt: **Stornoentgelt 0,35 € je Buchung** bei einer
+> freiwilligen vollständigen Stornierung durch den Teilnehmer,
+> unabhängig von Zahlungsart und Personenzahl; volle Erstattung bei
+> Absage durch VERA und bei zwingendem gesetzlichem
+> Erstattungsanspruch; Nachweisvorbehalt aufgenommen. Ausschließlich als
+> „Stornoentgelt" zu bezeichnen — die Bezeichnung ist tragend, nicht
+> dekorativ. Zwei Vorfassungen wurden wegen § 270a, § 309 Nr. 5 und
+> § 307 Abs. 1 Satz 2 BGB verworfen. Einzelheiten in Dokument 15,
+> Abschnitt E, und Dokument 07, Ziffern 2.1/2.1a/4.3. Umsetzung als
+> Bauaufträge **B-25** (Code, zuerst) und **B-24** (Texte).
+>
+> **Vorgelagert geklärt: die Widerrufsfrage** (Dokument 15, Abschnitt F,
+> Punkt 2; Dokument 07, Abschnitt 5a). Nach EuGH 31.03.2022, C-96/21
+> (CTS Eventim) besteht bei Veranstaltungen mit feststehendem Termin
+> kein Widerrufsrecht — für den Veranstalter selbst erst recht nicht.
+> Damit ist die freiwillige Stornierung eine echte Sonderleistung, und
+> genau darauf beruht die Zulässigkeit des Entgelts.
 
 ---
 

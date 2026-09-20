@@ -540,7 +540,19 @@ Die vollständige Ausgangsliste steht in Dokument 11, Gruppe 6.
   **Erledigt damit auch:** offener Punkt **H-5** in Dokument 09.
   **Prüfauftrag:** Die Paragrafen waren nur über die Websuche prüfbar, nicht am amtlichen Text. Gehört in die anwaltliche Durchsicht — insbesondere die Frage, ob der Verweis von der Hausordnung auf Ziffer 11 der Teilnahmebedingungen für einen Verbraucher hinreichend klar ist (**§ 307 Abs. 1 Satz 2 BGB**), oder ob die Kernaussage in der Hausordnung wiederholt werden sollte.
 
-- **6.5 — Behält Stripe bei Erstattungen die Gebühr ein?** — offen
+- ~~**6.5 — Behält Stripe bei Erstattungen die Gebühr ein?**~~ ✅ **Beantwortet am 20.09.2026: ja — und daraus ist eine Entscheidung geworden.** Stripe gibt die Gebühr der ursprünglichen Zahlung bei einer Erstattung **nicht** zurück; das gilt seit 2020 für alle neuen Konten und ist keine umschaltbare Einstellung. Für das Auslösen der Erstattung selbst fällt bei Karten in der Regel nichts zusätzlich an — verloren ist die Gebühr der Hinzahlung.
+  **Adams Entscheidung vom 20.09.2026 (verbindlich):** Bei einer freiwilligen vollständigen Stornierung durch den Teilnehmer wird ein **festes Stornoentgelt von 0,35 € je Buchung** vom Erstattungsbetrag abgezogen — **unabhängig von der Zahlungsart und unabhängig von der Anzahl der gebuchten Personen**.
+  **Fünf Vorgaben, die Adam ausdrücklich mitgegeben hat und die tragend sind, nicht dekorativ:**
+  - ausschließlich als **„Stornoentgelt"** bezeichnen, niemals als Stripe-, Zahlungs- oder Bearbeitungsgebühr;
+  - transparent anzeigen **vor dem Kauf**, in den Teilnahmebedingungen und **vor dem endgültigen Stornierungsklick**;
+  - auf der Stornierungsseite den **konkreten Erstattungsbetrag** nennen (also „Sie erhalten 6,65 € zurück", nicht nur „abzüglich 0,35 €");
+  - **volle Erstattung ohne Abzug** bei einer Absage durch VERA und bei einem zwingenden gesetzlichen Erstattungsanspruch;
+  - **Nachweisvorbehalt** aufnehmen, dass kein oder ein wesentlich geringerer Schaden beziehungsweise Aufwand entstanden ist.
+  **Zwei verworfene Vorfassungen und warum:** Zuerst war ein Abzug der „tatsächlich nicht erstatteten Gebühr des Zahlungsdienstleisters" zuzüglich 1 € Bearbeitungsaufwand vorgesehen. Das trug drei unabhängige Unwirksamkeitsrisiken — **§ 270a BGB** (der Abzug wäre wirtschaftlich ein Entgelt für die Nutzung der Zahlungskarte gewesen, also eine Umgehung des Surcharging-Verbots), **§ 309 Nr. 5 BGB** (der Bearbeitungsaufwand hatte mangels Pflichtverletzung gar keine Schadensgrundlage, und 1 € für einen **vollautomatischen** Vorgang übersteigt den zu erwartenden Aufwand) und **§ 307 Abs. 1 Satz 2 BGB** (die Höhe war für den Kunden vor dem Kauf nicht ablesbar). Die jetzige Fassung räumt alle drei aus.
+  **Warum die jetzige Fassung trägt:** Ein Betrag, der bei **jeder** Stornierung gleich hoch anfällt, ist kein Entgelt „für die Nutzung" eines bestimmten Zahlungsmittels — **§ 270a BGB** und **§ 312a Abs. 4 BGB** sind damit tatbestandlich nicht erfüllt. Als **Entgelt für eine Sonderleistung** (das freiwillig eingeräumte Lösungsrecht) unterliegt die Höhe nach **§ 307 Abs. 3 Satz 1 BGB** keiner Angemessenheitskontrolle, und die BGH-Linie zu unwirksamen Bearbeitungsentgelten greift nicht, weil sie Entgelte für **eigene Pflichten** des Verwenders betrifft. Der Nachweisvorbehalt ist billige Versicherung für den Fall, dass ein Gericht das Entgelt entgegen der Einkleidung doch als Schadenspauschale einordnet — dann scheitert es nicht an **§ 309 Nr. 5 Buchst. b BGB**.
+  **„Je Buchung" ist keine Willkür, sondern die einzige Fassung, die zur Software passt.** `lib/stornoAusfuehren.ts` erstattet immer `anmeldung.gesamtpreisCents`; eine Teilstornierung einzelner Personen gibt es nicht. Wäre das Entgelt „je Person" geschuldet, stünde im Text etwas, das die Software gar nicht abbilden kann.
+  **Umzusetzen:** Bauaufträge **B-24** (Texte) und **B-25** (Code). **Voraussetzung dafür war die Widerrufsfrage** — sie ist am selben Tag durchgearbeitet worden, siehe Abschnitt F, Punkt 2, und Dokument 07, Abschnitt 5a.
+  **Prüfauftrag:** Die Einordnung als kontrollfreie Preisabrede für eine Sonderleistung ist eine Bewertung, keine zitierbare Entscheidung zu genau diesem Fall. Gehört vor der Freischaltung in die anwaltliche Durchsicht.
 
 - **6.6 — Greift die BFSG-Ausnahme für Kleinstunternehmen?** — offen
 
@@ -560,8 +572,21 @@ dem, was ein Rechtstexte-Anbieter oder Anwalt bestätigen soll:
    Format ohne Mindestalter rechtlich hält (Dokument 05, Dokument 11,
    Entscheidung 3.20). **Das ist die wichtigste offene Frage im
    gesamten Entwurfssatz.**
-2. **Widerrufsrecht/-ausschluss** nach § 312g Abs. 2 Nr. 9 BGB —
-   anwendbar auf VERAs konkrete Vertragsgestaltung? (Dokument 07)
+2. ~~**Widerrufsrecht/-ausschluss** nach § 312g Abs. 2 Nr. 9 BGB~~
+   ✅ **Am 20.09.2026 durchgearbeitet — Ergebnis: Der Ausschluss greift
+   für VERAs Veranstaltungen sehr wahrscheinlich.** Die Einzelheiten
+   stehen in Dokument 07, Abschnitt 5a. Kurz: Der EuGH hat am
+   31.03.2022 (C-96/21, CTS Eventim) entschieden, dass beim
+   Online-Kauf von Eintrittskarten für Kultur- und Sportveranstaltungen
+   **kein** Widerrufsrecht besteht — und zwar selbst gegenüber einem
+   bloßen **Vermittler**, solange das wirtschaftliche Risiko beim
+   Veranstalter läge. VERA ist Veranstalterin **selbst**, steht also
+   erst recht im Kern der Ausnahme. Der BGH ist dem gefolgt.
+   ⚠️ **Der Punkt bleibt trotzdem in Abschnitt F.** Die Bewertung ist
+   gut belegt, aber sie ist meine und keine anwaltliche. Und sie hängt
+   an einer Tatsache, die sich ändern kann: Der Ausschluss greift nur
+   bei einem **spezifischen Termin**. Für Gutscheine, Kursreihen ohne
+   feste Termine oder rein digitale Angebote gilt er **nicht**.
 3. **Rolle von Stripe und PayPal** — Verantwortlicher oder
    Auftragsverarbeiter, aus dem eigenen Vertragswerk zu bestätigen
    (Dokument 02, Dokument 14).
@@ -725,6 +750,23 @@ Volltext heute.
   - **Tickets fremder Veranstalter verkaufen.** Dann würde fremdes Geld weitergeleitet — das berührt das Zahlungsdiensterecht und ist erlaubnispflichtig.
   - **Sicherheits- oder Ordnungspersonal als Dienstleistung anbieten.** Dann greift § 34a GewO (Bewachungsgewerbe) mit Erlaubnis und Sachkundeprüfung.
   *Betrifft:* Dokument 04, Ziffer 8 und Anhang F; Dokument 11, Frage 6.3
+
+- **B-24** — 🔨 **Neu 20.09.2026, Entscheidung 6.5: das Stornoentgelt in die LIVE-Texte bringen.** Die Entwurfsfassung steht bereits in Dokument 07 (Ziffern 2.1, 2.1a, 4.3). Im ausgelieferten Text der Website fehlt sie vollständig. Nötig sind vier Stellen, und **alle vier müssen denselben Betrag und dieselbe Bezeichnung tragen** — abweichende Formulierungen an zwei Stellen wären nach § 305c Abs. 2 BGB ein Zweifel zu Lasten von VERA:
+  - **Teilnahmebedingungen/AGB** (`content/de.ts`, Abschnitt `recht`): die Stornoregel mit dem Entgelt, den beiden Ausnahmen und dem Nachweisvorbehalt.
+  - **Vor dem Kauf**: in der Zusammenfassung des Preisrechners beziehungsweise unmittelbar beim Kaufknopf ein Satz, der das Entgelt für den Stornofall nennt. Ohne diese Stelle ist die Vorgabe „vor dem Kauf transparent anzeigen" nicht erfüllt — und der Betrag wäre nach § 305c Abs. 1 BGB überraschend.
+  - **Stornierungsseite, vor dem Klick**: der **konkrete** Erstattungsbetrag in Euro, aus dem Buchungsbetrag gerechnet, nicht nur der Abzug.
+  - **Stornobestätigungsmail** (`lib/mailVorlagen.ts`): erstatteter Betrag und Entgelt getrennt ausweisen, damit die Kontogutschrift nachvollziehbar ist.
+  ⚠️ **Nicht anfassen ohne die Gegenprobe:** Die heutigen Zusagen „Erstattet wird der volle Betrag, ohne Abzug" (Ziffer 2.1) und „Für Sie fallen keine Kosten an … auch keine Gebühren des Zahlungsdienstleisters" (Ziffer 4.3) müssen **gleichzeitig** fallen. Bleibt eine davon stehen, gilt sie.
+  *Betrifft:* `content/de.ts`, `lib/mailVorlagen.ts`, Anmelde- und Stornoseite; Dokument 07, Ziffern 2.1/2.1a/4.3; Dokument 03, Ziffer 7
+
+- **B-25** — 🔨 **Neu 20.09.2026, Entscheidung 6.5: Teilerstattung im Code.** Heute gibt es sie bewusst **nicht**. `lib/zahlung.ts` → `erstattungAusloesen()` erstattet immer die ganze Zahlung; im Kommentar steht ausdrücklich: „Ein Teilbetrag wird hier bewusst nicht angeboten". Diese Entscheidung wird durch 6.5 aufgehoben und muss sauber zurückgenommen werden, nicht überschrieben.
+  Nötig ist im Einzelnen:
+  - **Der Betrag gehört an EINE Stelle**, nach dem Muster von `STORNO_VORLAUF_STUNDEN`: eine Konstante `STORNOENTGELT_CENTS = 35` in `lib/storno.ts`, dazu eine reine Funktion, die aus Buchungsbetrag und Stornogrund den Erstattungsbetrag errechnet. Eine zweite Rechnung an anderer Stelle wäre der Weg zu zwei verschiedenen Antworten auf dieselbe Frage.
+  - **`erstattungAusloesen()` bekommt einen optionalen Betrag.** ⚠️ **Dabei der Wiederholungsschlüssel:** Er lautet heute `storno-${anmeldungId}-${zahlungId}`. Schickt derselbe Schlüssel einmal einen vollen und einmal einen Teilbetrag, weist Stripe den zweiten Aufruf ab — gleicher Schlüssel, andere Angaben — und zwar rund einen Tag lang. Für den Kunden sähe es aus, als täte der Knopf nichts. Der Betrag muss deshalb in den Schlüssel.
+  - **Die beiden Ausnahmen technisch durchsetzen:** Absage durch VERA und zwingender gesetzlicher Erstattungsanspruch → **voller** Betrag. Die Absage durch VERA ist heute Handarbeit je Buchung (siehe **B-7**); beide Wege müssen denselben Rechenweg benutzen.
+  - **Randfälle, die sonst auffallen:** eine kostenlose Buchung (`gesamtpreisCents` = 0) — dort gibt es nichts zu erstatten und nichts abzuziehen; und ein Buchungsbetrag unter 0,35 €, den es heute nicht gibt, der aber nie zu einem negativen Erstattungsbetrag führen darf.
+  - **Prüfliste erweitern:** Der bestehende Storno-Satz (`pruefung/P/`) prüft heute auf den **vollen** Betrag und wird nach dieser Änderung durchfallen. Das ist richtig so — er wird angepasst, **nicht** abgeschwächt, und um Fälle für das Entgelt, die beiden Ausnahmen und die Randfälle ergänzt.
+  *Betrifft:* `lib/storno.ts`, `lib/zahlung.ts`, `lib/stornoAusfuehren.ts`, `pruefung/P/`; Bauauftrag B-7
 
 ---
 

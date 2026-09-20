@@ -219,8 +219,19 @@ Sammlung solcher technischen Folgen.
 > schränkt ein solches Recht nicht ein.
 
 > **2.1** Sie können eine Buchung **bis 24 Stunden vor dem angekündigten
-> Beginn der Veranstaltung kostenlos stornieren.** Erstattet wird der
-> volle Betrag, ohne Abzug.
+> Beginn der Veranstaltung stornieren.** Erstattet wird der gezahlte
+> Betrag abzüglich eines **Stornoentgelts von 0,35 € je Buchung**.
+>
+> **2.1a** Das Stornoentgelt fällt **einmal je Buchung** an, unabhängig
+> davon, wie viele Personen gebucht waren und mit welcher Zahlungsart
+> bezahlt wurde. Es wird Ihnen vor dem Kauf angezeigt, und vor dem
+> endgültigen Stornieren sehen Sie den genauen Betrag, den Sie
+> zurückerhalten. **Kein Stornoentgelt** fällt an, wenn VERA die
+> Veranstaltung absagt (Ziffer 3.1) oder Ihnen ein zwingender
+> gesetzlicher Erstattungsanspruch zusteht; dann erhalten Sie den
+> vollen Betrag. **Ihnen bleibt der Nachweis vorbehalten, dass kein
+> oder ein wesentlich geringerer Schaden beziehungsweise Aufwand
+> entstanden ist.**
 >
 > **2.2** Die Stornierung läuft über den Link in Ihrer
 > Bestätigungsmail. Er führt zu einer Seite, die Ihre Buchung anzeigt;
@@ -315,19 +326,101 @@ Sammlung solcher technischen Folgen.
 > angewiesen. Wie lange es bis zur Gutschrift dauert, hängt vom
 > Zahlungsdienstleister und Ihrer Bank ab; einige Werktage sind üblich.
 >
-> **4.3** Für Sie fallen keine Kosten an. VERA behält bei einer
-> fristgerechten Stornierung nichts ein — auch keine Gebühren des
-> Zahlungsdienstleisters.
+> **4.3** Außer dem Stornoentgelt nach Ziffer 2.1 fallen für Sie keine
+> weiteren Kosten an. Insbesondere werden Ihnen keine Gebühren des
+> Zahlungsdienstleisters gesondert berechnet.
 
-> ✅ **4.1 bis 4.3 sind im Code belegt.** Die Erstattung läuft über die
-> ursprüngliche Zahlung (`lib/stornoAusfuehren.ts`), und es gibt keinen
-> Abzug.
+> ✅ **4.1 und 4.2 sind im Code belegt.** Die Erstattung läuft über die
+> ursprüngliche Zahlung (`lib/stornoAusfuehren.ts`).
 >
-> `[VOR VERWENDUNG KLÄREN zu 4.3: Behält der Zahlungsdienstleister bei
-> einer Erstattung seine Gebühr ein? Falls ja, trägt VERA diese Kosten
-> — das ist eine unternehmerische Entscheidung, die man kennen sollte,
-> bevor viele Stornierungen zusammenkommen. Sie ändert nichts am Text,
-> aber etwas an der Kalkulation.]`
+> ⚠️ **4.3 ist seit dem 20.09.2026 neu gefasst und im Code NOCH NICHT
+> umgesetzt.** Die frühere Zusage lautete „Für Sie fallen keine Kosten
+> an … auch keine Gebühren des Zahlungsdienstleisters" und passt nicht
+> mehr zu Ziffer 2.1. Solange die Software den vollen Betrag erstattet,
+> ist das kein Fehler zu Lasten des Kunden — er bekommt mehr, als der
+> Entwurf vorsieht. Umgekehrt wäre es einer. **Reihenfolge deshalb
+> zwingend: erst der Code (Bauauftrag B-25), dann die Live-Texte
+> (B-24)** — niemals umgekehrt, sonst steht auf der Website ein Abzug,
+> den die Software nicht vornimmt, oder schlimmer: ein Abzug, den sie
+> vornimmt, ohne dass er angekündigt war.
+
+> **Zur Begründung des Betrags.** 0,35 € decken die Kosten ab, die eine
+> Stornierung bei VERA auslöst: den beim Zahlungsdienstleister
+> verbleibenden Anteil der ursprünglichen Zahlung, den Versand der
+> Stornobestätigung und die buchhalterische Erfassung des Vorgangs.
+> **Der Betrag ist bewusst nicht die Weitergabe einer einzelnen
+> Fremdgebühr.** Er fällt bei jeder Zahlungsart gleich hoch an und
+> wäre auch bei einer Barzahlung oder Überweisung geschuldet. Das ist
+> der Grund, warum **§ 270a BGB** nicht greift: Diese Vorschrift
+> verbietet Entgelte **für die Nutzung** eines bestimmten bargeldlosen
+> Zahlungsmittels — ein zahlungsartunabhängiges Entgelt ist keines.
+
+---
+
+## 5a. Das Widerrufsrecht — durchgearbeitet am 20.09.2026
+
+> **Diese Einschätzung ist gut belegt, aber sie ist meine und keine
+> anwaltliche.** Sie bleibt deshalb in Dokument 15, Abschnitt F,
+> Punkt 2 stehen. Was sie leistet: Sie macht die Entscheidung über das
+> Stornoentgelt (Frage 6.5) tragfähig und zeigt, welche der offenen
+> Umsetzungspunkte entfallen.
+
+**Die Norm.** § 312g Abs. 2 Nr. 9 BGB nimmt Verträge über
+Dienstleistungen im Zusammenhang mit **Freizeitbetätigungen** vom
+Widerrufsrecht aus, **wenn der Vertrag für die Erbringung einen
+spezifischen Termin oder Zeitraum vorsieht**. Die Vorschrift setzt
+Art. 16 Buchst. l der Verbraucherrechte-Richtlinie (2011/83/EU) um und
+ist richtlinienkonform auszulegen.
+
+**Die maßgebliche Entscheidung.** Der EuGH hat am **31.03.2022**
+(Rs. **C-96/21**, *CTS Eventim*) entschieden, dass beim Online-Kauf von
+Eintrittskarten für Kultur- und Sportveranstaltungen **kein**
+Widerrufsrecht besteht — und zwar **auch gegenüber einem bloßen
+Vermittler**, der im eigenen Namen handelt, solange das wirtschaftliche
+Risiko eines Widerrufs den Veranstalter träfe. Der BGH ist dem gefolgt.
+
+**Warum das für VERA erst recht gilt.** Wenn die Ausnahme schon den
+Vermittler schützt, der nur dazwischensteht, dann greift sie beim
+**Veranstalter selbst** ohne Weiteres — VERA organisiert und führt die
+Veranstaltung durch, trägt also genau das wirtschaftliche Risiko, um
+dessen Schutz es in der Entscheidung ging. Ein Padel-Schnuppertag ist
+eine Freizeitbetätigung; seit **Entscheidung 2.5** kann er ohne
+feststehenden Termin gar nicht mehr gebucht werden.
+
+**Und das ist der eigentliche Punkt: Die Sperre aus Entscheidung 2.5
+stützt diese Argumentation.** Der Ausschluss hängt am „spezifischen
+Termin". Solange Veranstaltungen ohne Datum verkäuflich waren, gab es
+Buchungen, bei denen dieses Merkmal fehlte — und für die die Ausnahme
+gerade **nicht** gegolten hätte. Seit dem 20.09.2026 setzt die Software
+durch, dass ohne feststehenden Termin weder gebucht noch bezahlt werden
+kann (Bauauftrag **B-5**, Prüfliste `T`). Damit trägt **jede** Buchung
+das Merkmal, auf das es ankommt. Was als Ordnungsmaßnahme begann, ist
+nachträglich die Grundlage des Widerrufsausschlusses geworden.
+
+**Was daraus folgt:**
+
+- Für die heutigen Veranstaltungen besteht sehr wahrscheinlich **kein**
+  gesetzliches Widerrufsrecht. Der Umsetzungspunkt **W-d**
+  (elektronische Widerrufsfunktion nach § 356a BGB) — der größte
+  Einzelposten des gesamten Dokumentensatzes — entfällt damit
+  voraussichtlich.
+- Die freiwillige Stornierung nach Ziffer 2.1 ist damit eine echte
+  **Sonderleistung** und kein Ersatz für ein gesetzliches Recht. Genau
+  darauf beruht die Zulässigkeit des Stornoentgelts.
+- **Die Ausnahme in Ziffer 2.1a bleibt trotzdem stehen.** Sie kostet
+  nichts und deckt zwei Fälle ab: dass diese Einschätzung sich als
+  falsch erweist, und dass VERA später etwas anbietet, für das der
+  Ausschluss **nicht** gilt.
+
+⚠️ **Wofür der Ausschluss ausdrücklich NICHT gilt** — das ist die
+Kehrseite und gehört vor jeder Erweiterung geprüft:
+
+- **Gutscheine** ohne festen Termin,
+- **Kursreihen oder Abonnements** ohne spezifische Einzeltermine,
+- **rein digitale Angebote** (Aufzeichnungen, Online-Kurse),
+- der gesamte **B2B-Bereich** — dort gibt es ohnehin kein
+  Widerrufsrecht, weil der Auftraggeber kein Verbraucher ist. Die
+  Ausnahme wird dort also gar nicht gebraucht.
 
 ---
 
@@ -346,12 +439,13 @@ veralteter Link könnte als irreführende Angabe gewertet werden.
 
 | # | Was | Abhängig von | Aufwand |
 |---|---|---|---|
-| W-a | Entscheidung zu Fund W-1: greift die Ausnahme, und für welche Veranstaltungen? | fachliche Prüfung | — |
+| ~~W-a~~ | ✅ **20.09.2026 durchgearbeitet, Abschnitt 5a:** Die Ausnahme greift für Veranstaltungen mit feststehendem Termin — und seit B-5 gibt es keine anderen mehr. Anwaltlich zu bestätigen. | — | — |
 | W-b | Fassung A oder B in Abschnitt 1 einsetzen | W-a | klein |
 | W-c | Falls B: vollständige Musterbelehrung + Muster-Widerrufsformular | W-a, fachliche Prüfung | mittel |
 | W-d | Falls B: elektronische Widerrufsfunktion nach § 356a BGB | W-a | **groß** |
 | W-e | Falls Widerrufsrecht je Event unterschiedlich: Feld am Event + Anzeige im Bestellvorgang | W-a | **groß** |
 | W-f | Storno-Abschnitt 2.5 austauschen | Entscheidung des Unternehmers | klein |
+| W-i | **Neu 20.09.2026:** Stornoentgelt 0,35 € in Code und Live-Texte bringen | Bauaufträge B-25 (Code, zuerst), dann B-24 (Texte) | mittel |
 | W-g | Frist-Fehler bei nachträglichem Termin beheben (Befund T-1) | — | klein bis mittel |
 | ~~W-h~~ | ✅ **Verlegung: entschieden 18.09.2026** — es gibt keine; der Verlegungsfall ist ein Absagefall (Ziffer 3.2) | — | — |
 
@@ -360,3 +454,10 @@ Er entfällt vollständig, wenn W-a ergibt, dass die Freizeitausnahme für
 alle angebotenen Veranstaltungen greift — und dafür müsste unter anderem
 sichergestellt sein, dass keine Veranstaltung ohne feststehenden Termin
 mehr verkauft wird.
+
+> ✅ **Nachtrag 20.09.2026: Beide Bedingungen sind jetzt erfüllt.** W-a
+> ist durchgearbeitet (Abschnitt 5a), und die Sperre gegen Buchungen
+> ohne feststehenden Termin ist gebaut und geprüft (B-5, Prüfliste `T`).
+> **W-d entfällt damit voraussichtlich** — vorbehaltlich der
+> anwaltlichen Bestätigung. Das ist die größte Ersparnis, die sich aus
+> diesem Prüfdurchgang ergibt.
