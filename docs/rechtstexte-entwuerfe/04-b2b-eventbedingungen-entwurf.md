@@ -832,8 +832,16 @@ sind, ohne Verstoß gegen diese Pflicht bekannt werden, rechtmäßig von
 Dritten erlangt wurden oder aufgrund gesetzlicher Verpflichtung
 offenzulegen sind.
 
-16.3 Die Pflicht besteht für `[VOR VERWENDUNG KLÄREN: Zeitraum,
-üblicherweise zwei bis fünf Jahre]` nach Vertragsende fort.
+16.3 Die Pflicht besteht **drei Jahre nach Vertragsende** fort.
+
+16.3a **Geschäftsgeheimnisse** im Sinne des Gesetzes zum Schutz von
+Geschäftsgeheimnissen bleiben darüber hinaus geschützt, solange die
+gesetzlichen Voraussetzungen vorliegen. Ziffer 16.3 schränkt diesen
+Schutz nicht ein.
+
+16.3b Personenbezogene Daten unterliegen unabhängig von Ziffer 16.3 den
+datenschutzrechtlichen Vorschriften; die dort vorgesehenen Pflichten
+enden nicht mit Ablauf der Frist.
 
 16.4 **Referenznennung:** VERA darf den Auftraggeber nur mit dessen
 vorheriger Zustimmung in Textform als Referenz benennen.
@@ -2421,3 +2429,82 @@ angemessen ist. (3) Ob die Kernpflichtenliste in Ziffer 15.2 nach den
 Entscheidungen zu 5.2 und 5.6 noch vollständig ist. Die Normzitate sind
 Prüfauftrag, kein nachgewiesenes Ergebnis — gesetze-im-internet.de und
 dejure.org sind aus dieser Arbeitsumgebung gesperrt.]`
+
+---
+
+# Anhang O: Prüfung der Vertraulichkeitsregelung (20.09.2026, Frage 5.15)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen` und
+`klauseltransparenz-pruefen`.
+
+## Die Entscheidung
+
+**Drei Jahre nach Vertragsende** für vertrauliche Informationen, mit
+zwei Klarstellungen: Geschäftsgeheimnisse bleiben länger geschützt,
+personenbezogene Daten unterliegen ohnehin eigenen Regeln.
+
+## Warum drei Jahre und nicht „unbefristet"
+
+Eine zeitlich **unbegrenzte** Verschwiegenheitspflicht in vorformulierten
+Bedingungen ist über § 307 BGB angreifbar: Sie bindet eine Partei auf
+unabsehbare Zeit, ohne dass dem ein fortbestehendes Schutzinteresse
+gegenüberstehen muss. Drei Jahre liegen im üblichen Rahmen und sind für
+den Zuschnitt — eine eintägige Veranstaltung — eher großzügig als knapp.
+
+**Die Frist ist beidseitig**, und das ist hier wichtiger als es aussieht:
+Bei einem Firmenevent erfährt VERA regelmäßig **mehr** über den
+Auftraggeber als umgekehrt — Teilnehmerkreis, interne Anlässe,
+Organisationsstrukturen. Eine einseitig zugunsten von VERA formulierte
+Klausel wäre nicht nur unangemessen, sondern auch praktisch verkehrt
+herum.
+
+## Die Klarstellung zu Geschäftsgeheimnissen war notwendig
+
+Ohne Ziffer 16.3a hätte die Drei-Jahres-Frist so gelesen werden können,
+dass **jeder** Schutz danach endet. Das wäre falsch und für beide Seiten
+nachteilig: Der gesetzliche Schutz von Geschäftsgeheimnissen besteht,
+solange die Voraussetzungen vorliegen — insbesondere solange die
+Information geheim ist und **angemessene Geheimhaltungsmaßnahmen**
+getroffen wurden.
+
+**Ein interessanter Nebeneffekt:** Die Vertraulichkeitsklausel ist selbst
+eine solche angemessene Geheimhaltungsmaßnahme. Sie trägt also dazu bei,
+dass Informationen überhaupt als Geschäftsgeheimnis gelten — ihr Nutzen
+reicht damit über die vertragliche Bindung hinaus.
+
+## Die Klarstellung zu personenbezogenen Daten
+
+Vertraulichkeit und Datenschutz sind zwei verschiedene Dinge, die in der
+Praxis gern vermischt werden. Eine abgelaufene Vertraulichkeitsfrist
+erlaubt **nicht**, personenbezogene Daten zu verwenden — dafür braucht
+es eine Rechtsgrundlage, und die Löschpflichten laufen unabhängig weiter.
+Ziffer 16.3b sagt das ausdrücklich, damit die Frist nicht als Freibrief
+missverstanden wird.
+
+## Zur Referenznennung in Ziffer 16.4
+
+Sie bleibt unverändert und ist richtig so: **nur mit vorheriger
+Zustimmung in Textform**. Für ein junges Unternehmen sind Referenzen
+wertvoll, und die Versuchung ist groß, den ersten Firmenkunden einfach zu
+nennen. Ohne Zustimmung wäre das zugleich ein Bruch der
+Vertraulichkeitspflicht aus Ziffer 16.1 und — je nach Darstellung — eine
+werbliche Nutzung fremder Kennzeichen.
+
+**Praktischer Hinweis für die Angebotsvorlage:** Die Zustimmung lässt
+sich bereits im Angebot als eigenes, freiwilliges Feld vorsehen. Dann
+wird sie gestellt, wenn die Stimmung gut ist, statt später nachgefragt
+werden zu müssen.
+
+## Was bewusst nicht geregelt ist
+
+**Eine Vertragsstrafe für Verstöße.** Sie ist in
+Vertraulichkeitsklauseln verbreitet, in vorformulierten Bedingungen aber
+heikel — und für VERA doppelt: Die Klausel ist beidseitig, eine
+Vertragsstrafe träfe also auch VERA selbst. Bei diesem Zuschnitt
+überwiegt der Nachteil.
+
+`[FACHLICHE PRÜFUNG: Ob drei Jahre für den konkreten Zuschnitt
+angemessen sind und ob die Klarstellungen in 16.3a und 16.3b in dieser
+Form genügen. Die Normzitate sind Prüfauftrag, kein nachgewiesenes
+Ergebnis — gesetze-im-internet.de und dejure.org sind aus dieser
+Arbeitsumgebung gesperrt.]`

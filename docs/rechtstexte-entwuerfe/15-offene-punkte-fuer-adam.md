@@ -120,6 +120,40 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.15 — Vertraulichkeit: für wie lange nach Vertragsende?**~~ ✅
+  **Beantwortet 20.09.2026: drei Jahre.** Beidseitig. Dazu zwei
+  Klarstellungen: **Geschäftsgeheimnisse** bleiben darüber hinaus
+  geschützt, solange die gesetzlichen Voraussetzungen vorliegen
+  (Ziffer 16.3a), und **personenbezogene Daten** unterliegen unabhängig
+  davon dem Datenschutzrecht — die abgelaufene Frist ist kein Freibrief
+  (Ziffer 16.3b). Eine unbefristete Klausel wäre über § 307 BGB
+  angreifbar. **Referenznennung** bleibt bei Zustimmung in Textform;
+  praktischer Hinweis: als freiwilliges Feld ins Angebot aufnehmen.
+  Bewusst **keine Vertragsstrafe** — die Klausel ist beidseitig, sie
+  träfe auch VERA. Dokument 04, Ziffern 16.3–16.3b und Anhang O.
+
+- **5.16 — Steuerliche Prüfung** ⬜ **Eigene offene Aufgabe, kein
+  AGB-Punkt.** **(a)** Umsätze **laufend überwachen** — die Grenze der
+  Kleinunternehmerregelung nach § 19 UStG ist mit B2B-Aufträgen
+  erheblich schneller erreicht als mit Tickets zu 7 Euro. **(b)** Vor
+  größeren B2B-Aufträgen **steuerlich prüfen lassen**. Wird die Grenze
+  überschritten, ist das **keine reine Formsache**: Dann ist
+  Umsatzsteuer auszuweisen, und alle Preisangaben — Website,
+  Teilnahmebedingungen Ziffer 9.2, Abschlagsschwelle in Ziffer 9.3a,
+  Stundensatz in Ziffer 10.3a — müssen **gemeinsam** angepasst werden.
+  Ein Kleinunternehmer, der Umsatzsteuer ausweist, **schuldet sie dem
+  Finanzamt** (§ 14c Abs. 2 UStG), auch wenn er sie nie eingenommen hat.
+
+- ~~**5.17 — Geschäftsbereich 3: Büro- und Verwaltungsleistungen**~~ und
+  ~~**5.18 — Erlaubnispflichten nach RDG und StBerG**~~ 💤 **Ruhend seit
+  20.09.2026.** Durch Entscheidung 5.2 werden Büro- und
+  Verwaltungsleistungen **nicht angeboten** und sind weder Bestandteil
+  der Website noch der B2B-Bedingungen. Die Fragen werden **nicht
+  bearbeitet, aber auch nicht gestrichen**: Sie sind vor einer etwaigen
+  späteren Aufnahme des Bereichs zwingend zu beantworten — die
+  Erlaubnisfrage nach RDG und StBerG ist dann eine **Vorfrage**, ob die
+  Leistung überhaupt angeboten werden darf, und keine AGB-Frage.
+
 - ~~**5.13 — Haftungshöchstbetrag und Schadensbasis?**~~ ✅
   **Beantwortet 20.09.2026: keine feste Zahl in den Bedingungen.**
   Es bleibt bei der **qualitativen Struktur** — unbeschränkt bei
