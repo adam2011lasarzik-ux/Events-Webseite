@@ -257,3 +257,43 @@ irgendwann überarbeitet, liest sie deshalb erneut im
 Stripe-Datenverarbeitungsvertrag beziehungsweise im Abschnitt
 „Definitionen" der Stripe Services Agreement nach — und übernimmt sie
 von dort, nicht aus einer Suchmaschine.
+
+## Ergänzung: Auftragsverarbeitungsverträge aller vier Dienstleister
+
+Adam hat am 20.09.2026 im eigenen UptimeRobot-Konto nachgesehen: **Der
+DPA ist automatisch in die Nutzungsbedingungen einbezogen, eine
+gesonderte Unterschrift ist nicht erforderlich.**
+
+Damit ist der letzte unklare Fall geschlossen. Für **alle vier**
+Dienstleister gilt dasselbe Bild:
+
+- **Hostinger International Ltd.** — AVV per Verweis in der
+  Kontoeröffnung (recherchiert 18.09.2026)
+- **Stripe Payments Europe, Limited** — AVV per Verweis in der Stripe
+  Services Agreement (recherchiert 18.09.2026)
+- **Backblaze, Inc.** — AVV per Verweis in der Kontoeröffnung
+  (recherchiert 18.09.2026)
+- **UptimeRobot s. r. o.** — AVV per Verweis in den
+  Nutzungsbedingungen (**im Konto bestätigt 20.09.2026**)
+
+**Die Anforderung aus Art. 28 Abs. 3 DS-GVO ist damit für alle vier
+erfüllt.** Es ist nirgends etwas zu unterschreiben, anzufordern oder
+nachzureichen.
+
+**Warum dieser Punkt überhaupt offen war, und was daraus zu lernen ist:**
+UptimeRobot beschrieb seinen DPA in der öffentlichen Darstellung als für
+Verantwortliche „verfügbar" und „auf Anfrage zugänglich". Das klang nach
+einem gesonderten Schritt und unterschied sich sprachlich von den
+anderen drei Anbietern. Tatsächlich meinte es dasselbe. **Die
+Formulierung eines Anbieters ist kein verlässlicher Indikator für die
+Rechtslage seines Vertrags** — der Blick ins eingeloggte Konto ist es.
+Bei einem künftigen fünften Dienstleister gilt derselbe Weg: nachsehen,
+nicht aus der Außendarstellung schließen.
+
+⚠️ **Was damit NICHT erledigt ist:** Ob die Rollenverteilung bei Stripe
+(Auftragsverarbeiter oder eigenständig Verantwortlicher, je nach
+Verarbeitungsschritt) so zutrifft, wie sie in Dokument 02 beschrieben
+ist, bleibt aus dem eigenen Stripe-Vertrag zu bestätigen — siehe
+Dokument 15, Abschnitt F, Punkt 3. Ein wirksamer AVV sagt darüber
+nichts aus.
+

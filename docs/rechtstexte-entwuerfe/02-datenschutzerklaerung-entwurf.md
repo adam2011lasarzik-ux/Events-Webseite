@@ -20,8 +20,11 @@
 > Limited** für bestimmte Zahlungsdienste (beide Irland). Offen
 > Die Anschriften beider Stripe-Gesellschaften sind ebenfalls
 > bestätigt und eingesetzt. **Damit ist Punkt 1.5 vollständig
-> erledigt.** Quellen und Prüfweg stehen in Dokument 14, Abschnitt
-> „Nachtrag 20.09.2026".
+> erledigt.** Ebenso **Punkt 1.8**: Bei allen vier Dienstleistern ist
+> der Auftragsverarbeitungsvertrag automatisch per Verweis in die
+> Kontoeröffnung einbezogen — auch bei UptimeRobot, dem bisher
+> einzigen unklaren Fall. Quellen und Prüfweg stehen in Dokument 14,
+> Abschnitt „Nachtrag 20.09.2026".
 >
 > **Grundsatz dieses Entwurfs:** Es wird ausschließlich beschrieben, was
 > im Code oder in der Serverdokumentation nachweisbar geschieht. Wo eine
@@ -525,10 +528,8 @@ Server statt.
 > Damit wir von einem Ausfall der Website erfahren, ruft ein externer
 > Überwachungsdienst alle fünf Minuten eine öffentliche Seite auf.
 > Anbieter ist **UptimeRobot s. r. o.**, Obchodná 507/2, Bratislava —
-> mestská časť Staré Mesto, 811 06 Bratislava, Slowakei (recherchiert
-> 18.09.2026, Dokument 14/15, aus dem öffentlichen Auftragsverarbeitungs­
-> vertrag von UptimeRobot; **vor Verwendung mit dem eigenen Konto
-> gegenprüfen**). Dabei werden **keine** Daten von Besuchern
+> mestská časť Staré Mesto, 811 06 Bratislava, Slowakei. Dabei werden
+> **keine** Daten von Besuchern
 > oder Teilnehmenden übermittelt — der Dienst ruft die Seite auf wie ein
 > gewöhnlicher Besucher. In unseren Server-Protokollen erscheinen diese
 > Aufrufe wie andere auch.
@@ -536,18 +537,21 @@ Server statt.
 > Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. f DSGVO; unser berechtigtes
 > Interesse liegt darin, Störungen schnell zu bemerken.
 
-> ⚙️ **Recherchiert 18.09.2026 (Dokument 14/15) — einziger unklarer
-> Fall der vier Dienstleister:** UptimeRobot beschreibt seinen DPA
-> anders als die anderen drei — er sei für Verantwortliche „verfügbar"
-> und werde „auf Anfrage zugänglich", statt automatisch per Verweis in
-> die Nutzungsbedingungen eingebunden zu sein. `[VOR VERWENDUNG
-> KLÄREN: im eigenen, eingeloggten UptimeRobot-Konto unter
-> uptimerobot.com/dpa nachsehen, ob dort ein Vertrag direkt zum
-> Akzeptieren/Herunterladen bereitsteht, oder ob er aktiv angefordert
-> werden muss.]` Da ohnehin keine personenbezogenen Besucherdaten
-> übermittelt werden (der Dienst ruft nur eine öffentliche Seite auf),
-> ist die praktische Dringlichkeit gering — die Klärung sollte trotzdem
-> nicht offenbleiben.
+> ✅ **Am 20.09.2026 von Adam im eigenen Konto geprüft und erledigt:
+> Der DPA von UptimeRobot ist automatisch in die Nutzungsbedingungen
+> einbezogen; eine gesonderte Unterschrift ist nicht erforderlich.**
+>
+> **Damit gilt für alle vier Dienstleister dasselbe Bild:** Hostinger,
+> Stripe, Backblaze und UptimeRobot binden den Auftragsverarbeitungs­
+> vertrag jeweils per Verweis in die Kontoeröffnung ein. Es ist
+> nirgends etwas zu unterschreiben, anzufordern oder nachzureichen.
+> **Die Anforderung aus Art. 28 Abs. 3 DS-GVO ist damit für alle vier
+> erfüllt.**
+>
+> Die frühere Unsicherheit hatte einen sprachlichen Grund: UptimeRobot
+> beschrieb seinen DPA als für Verantwortliche „verfügbar" und „auf
+> Anfrage zugänglich", was nach einem gesonderten Schritt klang. Der
+> Blick ins Konto hat das geklärt — es ist keiner.
 
 **Nebenbefund, nicht sicherheitsrelevant:** UptimeRobots kostenloser
 Tarif hatte zeitweise ein Verbot kommerzieller Nutzung; das wurde nach
@@ -737,7 +741,7 @@ Erklärung verweist, die es nicht gibt.]`
 | Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | Speicherort: **EU** (Bucket-Endpoint `eu-central-003`, bestätigt 18.09.2026) — Gesellschaft selbst US-amerikanisch, Drittlandbezug `[fachlich zu bewerten]` |
 | Meta Platforms Ireland Ltd., Merrion Road, Dublin 4, D04 X2K5, Irland (Instagram) — **sofern Übersichtsaufnahmen veröffentlicht werden** | Veröffentlichung von Aufnahmen auf dem offiziellen Instagram-Kanal von VERA | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher | Irland, mit möglicher Übermittlung in die **USA**; Grundlage derzeit der EU-US-Angemessenheitsbeschluss `[Stand 18.09.2026 in Kraft, aber unter Überprüfung — siehe Dokument 06]` |
 | Veranstaltungslocation `[Firmierung je Event, siehe B-11]` — **sofern Übersichtsaufnahmen weitergegeben werden** | eigene Werbung der Location auf deren Website und Instagram-Kanal | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher (Entscheidung 4.3) | `[je Event zu ergänzen]` |
-| UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei | Erreichbarkeitsprüfung | nur öffentliche Seitenaufrufe | `[einziger unklarer AVV-Fall — im eigenen Konto unter uptimerobot.com/dpa prüfen, ob automatisch eingebunden oder anzufordern]` | EU (Slowakei) |
+| UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei | Erreichbarkeitsprüfung | nur öffentliche Seitenaufrufe | Auftragsverarbeiter; **AVV automatisch über die Nutzungsbedingungen einbezogen** (bestätigt 20.09.2026) | EU (Slowakei) |
 | Veranstaltungslocation | Entgegennahme der Papierformulare am Empfang | die unterschriebenen Einverständniserklärungen | siehe Datenschutz Abschnitt 2 | Inland |
 | Rettungsdienst / ärztliches Personal | Notfall | die im Notfall erforderlichen Angaben | eigener Verantwortlicher | Inland |
 
