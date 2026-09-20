@@ -74,6 +74,9 @@ const AF = actionFelder(anmeldeSeite.html, 'name="eventSlug"');
 await sende("/events/probe-business/anmeldung", AF, {
   eventSlug: "probe-business", weg: "selbst", selbstAls: "adult",
   schueler: 0, erwachsene: 1, webseite: "",
+  /* Die beiden Pflichthaken (B-29, B-17) — ohne sie lehnt der Server
+     ab. Liste V prüft sie eigens, auch ihr Fehlen. */
+  agbAkzeptiert: "an", kenntnisAufnahmen: "an",
   "person.0.vorname": "Theme", "person.0.nachname": "Prüfer",
   "person.0.email": "theme@example.org", "person.0.telefon": "",
 }, null, "198.51.100.77");

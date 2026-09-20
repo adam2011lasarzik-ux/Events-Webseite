@@ -22,7 +22,12 @@ export const de = {
   },
 
   aktion: {
-    anmelden: "Jetzt anmelden",
+    /* Der EINSTIEG zur Anmeldung, nicht die Bestellung selbst — er
+       löst keine Zahlungspflicht aus. „Jetzt anmelden" war hier
+       trotzdem unglücklich: Es klang nach dem verbindlichen Schritt
+       und ist als Bestellknopf-Beschriftung ausdrücklich verworfen
+       worden. „Zu den Tickets" beschreibt, was der Klick tut. */
+    anmelden: "Zu den Tickets",
     schuelerAnmelden: "Schüler anmelden",
     familieAnmelden: "Familie anmelden",
     detailsAnsehen: "Alle Infos zum Event",
@@ -268,12 +273,45 @@ export const de = {
       einwilligungVormund:
         "Ich bin erziehungsberechtigt und melde die genannten minderjährigen Personen " +
         "verbindlich an.",
-      einwilligungFotos:
-        "Bei der Veranstaltung dürfen Fotos gemacht und für VERA verwendet werden.",
-      /* Anmeldung und Bezahlung sind EIN Vorgang. Der Knopf nennt
-         deshalb den Betrag — niemand soll klicken und erst danach
-         merken, dass jetzt bezahlt wird. */
-      absenden: "Zur Bezahlung – {betrag}",
+      /* Zwei Pflichthaken. Der erste ist eine Vertragsannahme, der
+         zweite eine Kenntnisnahme — sie dürfen sprachlich nicht
+         ineinanderlaufen, sonst sieht die Kenntnisnahme aus wie eine
+         Einwilligung, und eine Pflicht-Einwilligung wäre nach
+         Art. 7 Abs. 4 DS-GVO unwirksam. */
+      agbTeil1: "Ich akzeptiere die",
+      agbLinktext: "Teilnahmebedingungen",
+      agbTeil2: "von VERA.",
+      aufnahmenTeil1:
+        "Ich habe zur Kenntnis genommen, dass bei der Veranstaltung Foto-, Video- " +
+        "und allgemeine Tonaufnahmen entstehen können",
+      aufnahmenLinktext: "(Hinweise zu Aufnahmen)",
+      aufnahmenTeil2: ".",
+      widerspruchTitel: "Sie möchten nicht abgebildet werden?",
+      widerspruchText:
+        "Dann sagen Sie es uns — beim Ankommen oder jederzeit während der Veranstaltung. " +
+        "Ein Widerspruch ist formlos möglich, muss nicht begründet werden und hat keinerlei " +
+        "Nachteile für Ihre Teilnahme. Wir informieren die fotografierende Person und prüfen " +
+        "vor jeder Veröffentlichung, ob widersprechende Personen erkennbar sind.",
+      /* ── Der Bestellknopf. Der Wortlaut ist NICHT frei wählbar ──
+         § 312j Abs. 3 BGB verlangt, dass die Schaltfläche mit nichts
+         anderem als „zahlungspflichtig bestellen" oder einer
+         entsprechend eindeutigen Formulierung beschriftet ist. Die
+         Rechtsfolge eines Verstoßes steht in § 312j Abs. 4 BGB: Der
+         Vertrag kommt NICHT ZUSTANDE.
+
+         Die Gerichte prüfen dabei ausschließlich die Beschriftung der
+         Schaltfläche selbst — was darüber oder daneben steht, zählt
+         nicht. Als unzureichend verworfen wurden unter anderem
+         „Bestellung aufgeben", „Senden" und „Jetzt anmelden"; die
+         frühere Fassung „Zur Bezahlung" beschrieb einen
+         Navigationsschritt und war damit ebenfalls zu schwach.
+
+         Der Betrag steht deshalb NEBEN dem Knopf statt darin: Er ist
+         eine nützliche Information, aber jedes zusätzliche Wort auf
+         der Schaltfläche schwächt die gesetzlich geforderte
+         Eindeutigkeit. */
+      absenden: "Zahlungspflichtig bestellen",
+      absendenBetrag: "Gesamtbetrag: {betrag}",
       absendenKostenlos: "Jetzt verbindlich anmelden",
       laeuft: "Einen Moment …",
       zahlungHinweis:
@@ -451,6 +489,85 @@ export const de = {
     mitbringen: "Das bringst du mit",
     naechstesEvent: "Nächstes Event",
     fotoAlt: "Eine Spielerin mit Schläger auf dem Padel-Court",
+  },
+
+  /* ── Hinweise zu Aufnahmen (Seite /aufnahmen) ──────────────────
+     Ersetzt die früher geplante Einwilligungsseite. Seit Entscheidung
+     4.8 gibt es keine Foto-Einwilligung mehr: Es entstehen nur
+     Übersichtsaufnahmen auf Grundlage von Art. 6 Abs. 1 Buchst. f
+     DS-GVO, und wer nicht abgebildet werden möchte, widerspricht nach
+     Art. 21 DS-GVO.
+
+     ⚠️ Zwei Platzhalter sind bewusst als solche formuliert und vor der
+     Freischaltung einzusetzen: die Instagram-Kanäle (B-12) und die
+     Firmierung der Veranstaltungsstätte (B-11). */
+  aufnahmen: {
+    titel: "Hinweise zu Foto-, Video- und Tonaufnahmen",
+    fusszeile: "Aufnahmen",
+    einleitung:
+      "Bei VERA-Veranstaltungen entstehen Aufnahmen für die Öffentlichkeitsarbeit. " +
+      "Hier steht, welche das sind, was damit geschieht und wie Sie widersprechen können.",
+    abschnitte: [
+      {
+        titel: "Was aufgenommen wird",
+        absaetze: [
+          "Wir machen ausschliesslich Übersichtsaufnahmen der Veranstaltung: " +
+            "Weitwinkelbilder und kurze Videos vom Spielbetrieb und von der Atmosphäre. " +
+            "Gezielte Porträts und Nahaufnahmen einzelner Personen machen wir nicht.",
+          "Die Videos können allgemeinen Umgebungston enthalten — Spielgeräusche, Applaus, " +
+            "Hallengeräusche. Einzelne Gespräche, Interviews oder private Äusserungen werden " +
+            "nicht gezielt aufgenommen und nicht veröffentlicht. Ist ein persönliches Gespräch " +
+            "deutlich verständlich, wird der Ton vor einer Veröffentlichung entfernt oder " +
+            "bearbeitet.",
+        ],
+      },
+      {
+        titel: "Wofür wir sie verwenden",
+        absaetze: [
+          "Die Aufnahmen erscheinen auf der Website von VERA und auf dem offiziellen " +
+            "Instagram-Kanal von VERA. Zusätzlich können sie an die jeweilige " +
+            "Veranstaltungsstätte weitergegeben werden, die sie auf ihrer eigenen Website und " +
+            "ihrem eigenen Instagram-Kanal verwenden darf.",
+          "[PLATZHALTER: Hier stehen vor der Freischaltung die Kontonamen und Links der " +
+            "beiden Instagram-Kanäle sowie die vollständige Firmierung der " +
+            "Veranstaltungsstätte.]",
+          "Eine Weitergabe an Presse, Sponsoren, Kooperationspartner oder sonstige Dritte " +
+            "findet nicht statt. Auch für Flyer, Plakate, Facebook oder TikTok verwenden wir " +
+            "die Aufnahmen nicht.",
+        ],
+      },
+      {
+        titel: "Auf welcher Grundlage",
+        absaetze: [
+          "Rechtsgrundlage ist unser berechtigtes Interesse nach Art. 6 Abs. 1 Buchst. f " +
+            "DS-GVO: Wir möchten zeigen, wie unsere Veranstaltungen aussehen. Wir holen dafür " +
+            "bewusst keine Einwilligung ein — eine Einwilligung, ohne die man nicht teilnehmen " +
+            "könnte, wäre nicht freiwillig und damit unwirksam.",
+          "Ihre Teilnahme hängt deshalb nicht davon ab, ob Sie mit Aufnahmen einverstanden " +
+            "sind. Sie hängt nur davon ab, dass Sie diesen Hinweis gelesen haben.",
+        ],
+      },
+      {
+        titel: "Wie lange",
+        absaetze: [
+          "Die Aufnahmen bleiben veröffentlicht, solange der genannte Zweck fortbesteht. " +
+            "Einmal im Jahr prüfen wir dokumentiert, ob das noch der Fall ist.",
+        ],
+      },
+    ],
+    widerspruchTitel: "Ihr Widerspruchsrecht",
+    widerspruchAbsaetze: [
+      "Sie können der Anfertigung und Veröffentlichung von Aufnahmen, auf denen Sie " +
+        "erkennbar sind, jederzeit widersprechen — nach Art. 21 DS-GVO.",
+      "Ein Widerspruch ist formlos möglich: beim Ankommen, jederzeit während der " +
+        "Veranstaltung oder später per E-Mail. Er muss nicht begründet werden und hat " +
+        "keinerlei Nachteile für Ihre Teilnahme.",
+      "Wir kennzeichnen widersprechende Personen nicht sichtbar. Stattdessen informieren wir " +
+        "die fotografierende Person, und während angekündigter Aufnahmezeiten steht " +
+        "gegebenenfalls ein aufnahmefreier Bereich zur Verfügung. Vor jeder Veröffentlichung " +
+        "und vor jeder Weitergabe an die Veranstaltungsstätte prüfen wir, ob widersprechende " +
+        "Personen erkennbar sind.",
+    ],
   },
 
   recht: {

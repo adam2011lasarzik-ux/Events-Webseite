@@ -119,7 +119,8 @@ export async function anmeldungAbsenden(
     erwachsene: zahl(formular.get("erwachsene")),
     personen: [],
     einwilligungVormund: formular.get("einwilligungVormund") === "an",
-    einwilligungFotos: formular.get("einwilligungFotos") === "an",
+    agbAkzeptiert: formular.get("agbAkzeptiert") === "an",
+    kenntnisAufnahmen: formular.get("kenntnisAufnahmen") === "an",
   };
 
   // Wie viele Personen abgefragt werden, bestimmt der Server über
@@ -223,7 +224,8 @@ export async function anmeldungAbsenden(
         reserviertBis: kostenlos ? null : reserviertBis(jetzt),
         istVormundBuchung: anmeldung.istVormundBuchung,
         einwilligungVormund: anmeldung.einwilligungVormund,
-        einwilligungFotos: anmeldung.einwilligungFotos,
+        agbAkzeptiert: anmeldung.agbAkzeptiert,
+        kenntnisAufnahmen: anmeldung.kenntnisAufnahmen,
         gesamtpreisCents: preis.gesamtCents,
       };
 

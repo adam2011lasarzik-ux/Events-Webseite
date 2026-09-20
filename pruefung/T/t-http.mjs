@@ -73,7 +73,19 @@ const seite = await (await fetch(`${BASIS}/events/${SLUG_OHNE}/anmeldung`)).text
 pruefe("Seite ist erreichbar (kein 404)", seite.length > 0);
 pruefe("Seite nennt „Termin folgt“", /Termin folgt/.test(seite));
 pruefe("Seite enthält KEIN Anmeldeformular", !/name="eventSlug"/.test(seite));
-pruefe("Seite enthält KEINEN Bestellknopf", !/Zahlungspflichtig bestellen|anmelden &amp; bezahlen/i.test(seite));
+/* Auf das KNOPF-ELEMENT prüfen, nicht auf die Zeichenkette.
+
+   Seit B-28 heißt der Bestellknopf wörtlich „Zahlungspflichtig
+   bestellen" (§ 312j Abs. 3 BGB). Dieser Wortlaut steht damit im
+   Wörterbuch — und das Wörterbuch wird auf JEDER Seite als
+   serialisierte Eigenschaft mitgeliefert, auch auf einer ohne
+   Formular. Eine Suche nach der bloßen Zeichenkette meldete deshalb
+   einen Fehler, den es nicht gibt. Gesucht wird jetzt die
+   Schaltfläche selbst. */
+pruefe(
+  "Seite enthält KEINEN Bestellknopf",
+  !/<button[^>]*type="submit"[^>]*>\s*Zahlungspflichtig bestellen/i.test(seite),
+);
 
 /* ── T7: Die direkte Anfrage wird abgelehnt ─────────────────── */
 console.log("\nT7 · Direkte Anfrage an die Serveraktion (Umgehungsversuch)");
@@ -139,7 +151,8 @@ const testAnmeldung = await db.registration.create({
     buchungsart: "EINZEL",
     istVormundBuchung: false,
     einwilligungVormund: false,
-    einwilligungFotos: false,
+    agbAkzeptiert: true,
+    kenntnisAufnahmen: true,
     status: "RESERVIERT",
     reserviertBis: new Date(Date.now() + 30 * 60 * 1000),
     gesamtpreisCents: 1400,

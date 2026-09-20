@@ -137,3 +137,31 @@
   justify-self: start;
 }
 .absendeKnopf:disabled { opacity: 0.6; cursor: progress; }
+
+/* Der Hinweis auf das Widerspruchsrecht.
+
+   Er steht bewusst in einem eigenen Kasten mit eigener Überschrift,
+   getrennt von den Häkchen darüber. Art. 21 Abs. 4 DS-GVO verlangt,
+   dass auf das Widerspruchsrecht „getrennt von anderen
+   Informationen" hingewiesen wird — ein weiterer Listenpunkt im
+   selben Block erfüllt das nicht. Die optische Trennung ist hier also
+   keine Gestaltungsfrage, sondern die Anforderung selbst. */
+.widerspruch {
+  margin-top: var(--a-5);
+  padding: var(--a-4) var(--a-5);
+  border: 1px solid var(--linie);
+  border-left: 3px solid var(--akzent);
+  border-radius: var(--rund-m);
+  background: var(--flaeche);
+}
+
+.widerspruch h3 {
+  margin: 0 0 var(--a-2);
+  font-size: var(--gr-m);
+}
+
+.widerspruch p {
+  margin: 0;
+  font-size: var(--gr-s);
+  color: var(--text-leise);
+}

@@ -35,7 +35,10 @@ export interface AnmeldeEingabe {
   /** In derselben Reihenfolge wie vorschauRollen() sie liefert. */
   personen: PersonEingabe[];
   einwilligungVormund: boolean;
-  einwilligungFotos: boolean;
+  /** Annahme der Teilnahmebedingungen — Pflicht (§ 305 Abs. 2 BGB). */
+  agbAkzeptiert: boolean;
+  /** Kenntnisnahme der Aufnahmen — Pflicht, aber KEINE Einwilligung. */
+  kenntnisAufnahmen: boolean;
   /** Unsichtbares Feld — nur Bots füllen es aus. */
   honigtopf?: string;
 }
@@ -71,7 +74,10 @@ export interface FertigeAnmeldung {
   teilnehmer: { vorname: string; nachname: string; typ: TeilnehmerTyp }[];
   istVormundBuchung: boolean;
   einwilligungVormund: boolean;
-  einwilligungFotos: boolean;
+  /** Annahme der Teilnahmebedingungen — Pflicht (§ 305 Abs. 2 BGB). */
+  agbAkzeptiert: boolean;
+  /** Kenntnisnahme der Aufnahmen — Pflicht, aber KEINE Einwilligung. */
+  kenntnisAufnahmen: boolean;
 }
 
 const MAX_NAME = 80;
@@ -219,6 +225,38 @@ export function pruefeUndBaue(
     });
   }
 
+  /* ── Zwei Pflichthaken, und warum sie Pflicht sein DÜRFEN ───────
+
+     Die Teilnahmebedingungen werden nach § 305 Abs. 2 BGB nur
+     Vertragsbestandteil, wenn bei Vertragsschluss ausdrücklich auf
+     sie hingewiesen wird. Ohne diesen Haken gälte für Storno,
+     Haftung und alles Übrige das Gesetz — die ausformulierten
+     Bedingungen wären wirkungslos.
+
+     Die Kenntnisnahme zu den Aufnahmen ist ausdrücklich KEINE
+     Einwilligung. Genau deshalb darf sie Pflicht sein: Art. 7 Abs. 4
+     DS-GVO erklärt eine Einwilligung, ohne die der Vertrag nicht
+     zustande kommt, für nicht freiwillig und damit unwirksam. Wer
+     nicht abgebildet werden möchte, widerspricht nach Art. 21 DS-GVO
+     — das steht im abgesetzten Kasten daneben und kostet ihn die
+     Teilnahme nicht.
+
+     Beides wird HIER geprüft, nicht nur im Browser. Ein Häkchen, das
+     sich mit einer direkten Anfrage übergehen lässt, ist kein
+     Nachweis. */
+  if (!eingabe.agbAkzeptiert) {
+    fehler.push({
+      feld: "agbAkzeptiert",
+      text: "Ohne die Teilnahmebedingungen ist die Anmeldung nicht möglich.",
+    });
+  }
+  if (!eingabe.kenntnisAufnahmen) {
+    fehler.push({
+      feld: "kenntnisAufnahmen",
+      text: "Bitte bestätige, dass du den Hinweis zu den Aufnahmen gelesen hast.",
+    });
+  }
+
   if (teilnehmer.length === 0) {
     fehler.push({ feld: "auswahl", text: "Es ist niemand zur Teilnahme ausgewählt." });
   }
@@ -234,9 +272,8 @@ export function pruefeUndBaue(
       teilnehmer,
       istVormundBuchung: vormundNoetig,
       einwilligungVormund: eingabe.einwilligungVormund,
-      // Freiwillig: eine Anmeldung darf nicht daran scheitern, dass
-      // jemand keine Fotos möchte.
-      einwilligungFotos: eingabe.einwilligungFotos,
+      agbAkzeptiert: eingabe.agbAkzeptiert,
+      kenntnisAufnahmen: eingabe.kenntnisAufnahmen,
     },
   };
 }

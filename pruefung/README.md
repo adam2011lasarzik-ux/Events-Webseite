@@ -1,11 +1,11 @@
 # Die automatischen Prüfungen
 
-Rund 920 Prüfungen, die gegen die **echte** Datenbank und den **echten**
+Rund 960 Prüfungen, die gegen die **echte** Datenbank und den **echten**
 Server laufen — nicht gegen nachgebaute Logik. Was hier grün ist, ist
 wirklich geprüft.
 
 Die Zahlen unten sind die des Sammellaufs vom 20.09.2026
-(`bash pruefung/alle.sh`, 40 Listen). `L` ist ohne Zahl, weil die
+(`bash pruefung/alle.sh`, 41 Listen). `L` ist ohne Zahl, weil die
 fliessende Messung der Responsivität Tausende von Einzelmessungen
 erzeugt und getrennt gestartet wird.
 
@@ -32,6 +32,7 @@ Wie man sie startet, steht in **[../docs/pruefen.md](../docs/pruefen.md)**.
 | `S` | Löschkonzept: Fristen je Klasse, jede Sperrsituation, Probelauf, Steuerriegel, Protokoll, Zugang, Papiererinnerung, Server-Skripte, Bedienung der Sperren, Vorschau in Klartext | 161 |
 | `T` | Terminpflicht: ohne feststehenden Termin keine Buchung und keine Zahlung — die Regel, ihre Verdrahtung an allen sechs Stellen und der Umgehungsversuch über eine direkte Serveranfrage | 40 |
 | `U` | Versionierte Rechtstexte: Prüfsumme, Versionsnummern, welche Fassung wann gilt, Unveränderbarkeit (auch projektweit geprüft), Fassung je Buchung, Volltext in der Bestätigungsmail | 42 |
+| `V` | Bestellknopf nach § 312j Abs. 3 BGB, AGB-Häkchen (§ 305 Abs. 2 BGB), Kenntnisnahme zu Aufnahmen und der abgesetzte Widerspruchshinweis (Art. 21 Abs. 4 DS-GVO) — jeweils auch serverseitig erzwungen | 39 |
 
 ## Zu den Schlüsseln in diesen Dateien
 

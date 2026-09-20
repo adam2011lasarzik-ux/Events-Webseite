@@ -35,7 +35,18 @@ export async function absenden(werte, ip = "203.0.113.1") {
   const felder = await actionFelder();
   const daten = new FormData();
   for (const [k, v] of Object.entries(felder)) daten.append(k, v);
-  for (const [k, v] of Object.entries(werte)) daten.append(k, String(v));
+  /* Die beiden Pflichthaken als Voreinstellung — siehe die
+     ausführliche Begründung in pruefung/E/senden.mjs. Kurz: Seit
+     B-29 und B-17 lehnt der Server ohne sie ab; das ist eine
+     Anpassung der Prüfung an die neue Regel, keine Abschwächung.
+     Liste V prüft die Haken eigens, auch ihr Fehlen. */
+  for (const [k, v] of Object.entries({
+    agbAkzeptiert: "an",
+    kenntnisAufnahmen: "an",
+    ...werte,
+  })) {
+    daten.append(k, String(v));
+  }
 
   const antwort = await fetch(`${BASIS}${ANMELDEPFAD}`, {
     method: "POST",

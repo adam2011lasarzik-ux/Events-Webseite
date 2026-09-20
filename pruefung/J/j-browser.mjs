@@ -34,7 +34,11 @@ async function anmeldenImBrowser(page, email) {
   await page.locator('input[name="person.0.vorname"]').fill("Test");
   await page.locator('input[name="person.0.nachname"]').fill("Person");
   await page.locator('input[name="person.0.email"]').fill(email);
-  await page.getByRole("button", { name: /Zur Bezahlung/i }).click();
+  /* Die beiden Pflichthaken (B-29, B-17). Ohne sie lehnt der Server
+     ab — zu Recht. Liste V prüft sie eigens, auch ihr Fehlen. */
+  await page.getByRole("checkbox", { name: /Teilnahmebedingungen/i }).check({ force: true });
+  await page.getByRole("checkbox", { name: /zur Kenntnis genommen/i }).check({ force: true });
+  await page.getByRole("button", { name: /Zahlungspflichtig bestellen/i }).click();
   /* Die Weiterleitung führt auf eine FREMDE Adresse. Der Browser lädt
      dafür die ganze Seite neu; „networkidle" ist auf der alten Seite
      schon vorher erreicht und käme zu früh. */

@@ -31,11 +31,27 @@ export async function actionFelder() {
  * @param {object} werte  Formularfelder
  * @param {string} ip     vorgetäuschte Absender-Adresse (für die Bremse)
  */
+/* ── Die beiden Pflichthaken als Voreinstellung ─────────────────
+   Seit Bauauftrag B-29 (AGB, § 305 Abs. 2 BGB) und B-17
+   (Kenntnisnahme zu Aufnahmen, Art. 7 Abs. 4 DS-GVO) lehnt der Server
+   jede Anmeldung ohne diese beiden Häkchen ab — und zwar zu Recht.
+
+   Sie stehen hier als VOREINSTELLUNG, damit die Listen, die etwas
+   ganz anderes prüfen (Preise, Plätze, Zahlung, Storno), nicht alle
+   an derselben Stelle scheitern. Das ist eine Anpassung der Prüfung
+   an die neue Regel, KEINE Abschwächung: Die Haken selbst prüft
+   Liste V eigens, samt der Fälle, in denen sie fehlen — und ein
+   Aufruf kann sie hier jederzeit mit `agbAkzeptiert: ""`
+   überschreiben. */
+const PFLICHTHAKEN = { agbAkzeptiert: "an", kenntnisAufnahmen: "an" };
+
 export async function absenden(werte, ip = "203.0.113.1") {
   const felder = await actionFelder();
   const daten = new FormData();
   for (const [k, v] of Object.entries(felder)) daten.append(k, v);
-  for (const [k, v] of Object.entries(werte)) daten.append(k, String(v));
+  for (const [k, v] of Object.entries({ ...PFLICHTHAKEN, ...werte })) {
+    daten.append(k, String(v));
+  }
 
   const antwort = await fetch(`${BASIS}${ANMELDEPFAD}`, {
     method: "POST",

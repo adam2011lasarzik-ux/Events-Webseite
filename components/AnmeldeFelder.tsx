@@ -3,6 +3,7 @@
 import type { Feldfehler } from "@/lib/anmeldung";
 import type { Woerterbuch } from "@/content";
 import stil from "./AnmeldeFelder.module.css";
+import type { ReactNode } from "react";
 
 export interface FeldGruppe {
   titel: string;
@@ -118,15 +119,55 @@ export function AnmeldeFelder({
             setzeHaken={setzeHaken}
           />
         )}
-        {/* Freiwillig und bewusst getrennt: Eine Anmeldung darf nicht
-            daran scheitern, dass jemand keine Fotos möchte. */}
+        {/* Pflicht, und zwar zu Recht: Ohne diesen Haken werden die
+            Teilnahmebedingungen nach § 305 Abs. 2 BGB nicht
+            Vertragsbestandteil. Nicht vorbelegt — eine vorbelegte
+            Annahme ist keine. */}
         <Haken
-          name="einwilligungFotos"
-          text={`${f.einwilligungFotos} ${f.freiwillig}`}
-          gesetzt={haken.einwilligungFotos ?? false}
+          name="agbAkzeptiert"
+          text={
+            <>
+              {f.agbTeil1}{" "}
+              <a href="/agb" target="_blank" rel="noreferrer">
+                {f.agbLinktext}
+              </a>{" "}
+              {f.agbTeil2}
+            </>
+          }
+          fehler={fehlerZu("agbAkzeptiert")}
+          gesetzt={haken.agbAkzeptiert ?? false}
+          setzeHaken={setzeHaken}
+        />
+
+        {/* Eine KENNTNISNAHME, keine Einwilligung — nur deshalb darf
+            sie Pflicht sein (Art. 7 Abs. 4 DS-GVO). */}
+        <Haken
+          name="kenntnisAufnahmen"
+          text={
+            <>
+              {f.aufnahmenTeil1}{" "}
+              <a href="/aufnahmen" target="_blank" rel="noreferrer">
+                {f.aufnahmenLinktext}
+              </a>
+              {f.aufnahmenTeil2}
+            </>
+          }
+          fehler={fehlerZu("kenntnisAufnahmen")}
+          gesetzt={haken.kenntnisAufnahmen ?? false}
           setzeHaken={setzeHaken}
         />
       </div>
+
+      {/* ── Der Widerspruchshinweis steht BEWUSST ausserhalb ────────
+          Art. 21 Abs. 4 DS-GVO verlangt, dass auf das
+          Widerspruchsrecht „getrennt von anderen Informationen"
+          hingewiesen wird. Ein weiterer Punkt im selben Block würde
+          das nicht erfüllen — deshalb eigener Kasten mit eigener
+          Überschrift, ausserhalb der Häkchen. */}
+      <aside className={stil.widerspruch} aria-labelledby="widerspruch-titel">
+        <h3 id="widerspruch-titel">{f.widerspruchTitel}</h3>
+        <p>{f.widerspruchText}</p>
+      </aside>
     </div>
   );
 }
@@ -182,7 +223,11 @@ function Haken({
   setzeHaken,
 }: {
   name: string;
-  text: string;
+  /* ReactNode statt string: Der AGB-Haken enthält einen Link auf die
+     vollständigen Bedingungen — ohne ihn wäre die „zumutbare
+     Möglichkeit der Kenntnisnahme" nach § 305 Abs. 2 Nr. 2 BGB nicht
+     gegeben. */
+  text: ReactNode;
   fehler?: string;
   gesetzt: boolean;
   setzeHaken: (name: string, gesetzt: boolean) => void;

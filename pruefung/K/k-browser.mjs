@@ -54,10 +54,15 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
   await formularAusfuellen(page, `knopf-${Date.now()}@example.org`);
-  const knopf = page.getByRole("button", { name: /Zur Bezahlung/i });
+  const knopf = page.getByRole("button", { name: /Zahlungspflichtig bestellen/i });
   const beschriftung = (await knopf.textContent()) ?? "";
-  pruefe("Der Knopf sagt „Zur Bezahlung“ und nennt den Betrag",
-    /Zur Bezahlung/i.test(beschriftung) && /7,00/.test(beschriftung), beschriftung.trim());
+  /* § 312j Abs. 3 BGB: Die Schaltfläche trägt NICHTS als den
+     gesetzlichen Wortlaut. Der Betrag steht deshalb daneben, nicht
+     darin — und genau das wird hier geprüft. */
+  pruefe("Der Knopf trägt genau „Zahlungspflichtig bestellen“, ohne Zusatz",
+    beschriftung.trim() === "Zahlungspflichtig bestellen", beschriftung.trim());
+  pruefe("Der Betrag steht daneben auf der Seite",
+    /7,00/.test(await page.locator("form").innerText()));
 
   await page.screenshot({ path: `${AUS}/knopf-einzel-handy.png`, fullPage: true });
   await ctx.close();
@@ -71,14 +76,25 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   await formularAusfuellen(page, email, { familie: true });
 
   const summe = (await page.locator('[class*="summeBetrag"]').first().textContent()) ?? "";
-  const knopf = page.getByRole("button", { name: /Zur Bezahlung/i });
+  const knopf = page.getByRole("button", { name: /Zahlungspflichtig bestellen/i });
   const beschriftung = (await knopf.textContent()) ?? "";
   const betrag = summe.replace(/\s/g, "");
-  pruefe("Familienpaket: der Betrag im Knopf ist derselbe wie in der Summe",
-    beschriftung.replace(/\s/g, "").includes(betrag), `Knopf „${beschriftung.trim()}“, Summe ${summe.trim()}`);
+  /* Der Betrag steht seit B-28 NEBEN dem Knopf, nicht darin
+     (§ 312j Abs. 3 BGB — die Schaltfläche trägt nichts als den
+     gesetzlichen Wortlaut). Geprüft wird deshalb, dass er im
+     Formular steht und mit der Summe übereinstimmt. */
+  const formularText = (await page.locator("form").innerText()).replace(/\s/g, "");
+  pruefe("Familienpaket: der Betrag neben dem Knopf ist derselbe wie in der Summe",
+    formularText.includes(betrag), `Summe ${summe.trim()}`);
+  pruefe("Der Knopf selbst trägt genau den gesetzlichen Wortlaut",
+    beschriftung.trim() === "Zahlungspflichtig bestellen", beschriftung.trim());
   await page.screenshot({ path: `${AUS}/knopf-familie-handy.png`, fullPage: true });
 
   // Abschicken → direkt zum Anbieter
+  /* Die beiden Pflichthaken (B-29, B-17). Ohne sie lehnt der Server
+     ab — zu Recht. Liste V prüft sie eigens, auch ihr Fehlen. */
+  await page.getByRole("checkbox", { name: /Teilnahmebedingungen/i }).check({ force: true });
+  await page.getByRole("checkbox", { name: /zur Kenntnis genommen/i }).check({ force: true });
   await knopf.click({ force: true });
   await page.waitForURL(/\/bezahlseite\//, { timeout: 20000 });
   pruefe("Familienpaket geht direkt zur Bezahlseite", page.url().includes("/bezahlseite/"));
@@ -102,7 +118,11 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
   await formularAusfuellen(page, `einzel-${Date.now()}@example.org`);
-  await page.getByRole("button", { name: /Zur Bezahlung/i }).click({ force: true });
+  /* Die beiden Pflichthaken (B-29, B-17). Ohne sie lehnt der Server
+     ab — zu Recht. Liste V prüft sie eigens, auch ihr Fehlen. */
+  await page.getByRole("checkbox", { name: /Teilnahmebedingungen/i }).check({ force: true });
+  await page.getByRole("checkbox", { name: /zur Kenntnis genommen/i }).check({ force: true });
+  await page.getByRole("button", { name: /Zahlungspflichtig bestellen/i }).click({ force: true });
   await page.waitForURL(/\/bezahlseite\//, { timeout: 20000 });
   await page.click("#bezahlen");
   await page.waitForURL(/\/anmeldung\/danke/, { timeout: 20000 });
@@ -119,7 +139,11 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
   await formularAusfuellen(page, `abbruch-${Date.now()}@example.org`);
-  await page.getByRole("button", { name: /Zur Bezahlung/i }).click({ force: true });
+  /* Die beiden Pflichthaken (B-29, B-17). Ohne sie lehnt der Server
+     ab — zu Recht. Liste V prüft sie eigens, auch ihr Fehlen. */
+  await page.getByRole("checkbox", { name: /Teilnahmebedingungen/i }).check({ force: true });
+  await page.getByRole("checkbox", { name: /zur Kenntnis genommen/i }).check({ force: true });
+  await page.getByRole("button", { name: /Zahlungspflichtig bestellen/i }).click({ force: true });
   await page.waitForURL(/\/bezahlseite\//, { timeout: 20000 });
   await page.click("#abbrechen");
   await page.waitForURL(/\/anmeldung\/danke/, { timeout: 20000 });

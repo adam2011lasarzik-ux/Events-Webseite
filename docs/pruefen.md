@@ -121,6 +121,9 @@ npx tsx --env-file=.env pruefung/T/t-http.mjs
 
 # Versionierte Rechtstexte: Unveränderbarkeit, geltende Fassung, Mail
 npx tsx --env-file=.env pruefung/U/u-rechtstexte.mjs
+
+# Bestellknopf, AGB-Haken, Aufnahmehinweis
+npx tsx --env-file=.env pruefung/V/v-checkout.mjs
 ```
 
 Bildschirmfotos und Messdaten landen in `pruefung/.ausgabe/` — dieser
@@ -153,6 +156,16 @@ Ende, was übrig ist — das gehört angesehen.
 Bremsen und wird ZWISCHEN zwei Prüflisten benutzt. Events lässt es
 absichtlich stehen, weil `G/g2` die Events braucht, die `G/g1`
 anlegt.
+
+Seit den Bauaufträgen **B-29** (AGB-Häkchen, § 305 Abs. 2 BGB) und
+**B-17** (Kenntnisnahme zu Aufnahmen, Art. 7 Abs. 4 DS-GVO) lehnt der
+Server jede Anmeldung ohne diese beiden Häkchen ab. Die
+Sende-Hilfsdateien der Prüflisten (`pruefung/*/senden.mjs`) setzen sie
+deshalb als **Voreinstellung**, damit Listen, die etwas ganz anderes
+prüfen, nicht alle an derselben Stelle scheitern. Auch das ist eine
+**Anpassung der Prüfung an die neue Regel, keine Abschwächung**: Liste
+`V` prüft die Häkchen eigens, samt der Fälle, in denen sie fehlen — und
+jeder Aufruf kann die Voreinstellung überschreiben.
 
 Seit der Terminpflicht (Entscheidung 2.5) setzt `leeren.mjs`
 ausserdem bei jeder Veranstaltung **ohne** Datum einen Termin in der

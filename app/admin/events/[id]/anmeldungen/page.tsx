@@ -187,7 +187,8 @@ export default async function AnmeldungenSeite({
                         Einwilligung Erziehungsberechtigte:{" "}
                         {a.einwilligungVormund ? "ja" : a.istVormundBuchung ? "FEHLT" : "nicht nötig"}
                         <br />
-                        Fotos erlaubt: {a.einwilligungFotos ? "ja" : "nein"}
+                        AGB angenommen: {a.agbAkzeptiert ? "ja" : "nein"} · Aufnahmehinweis gelesen:{" "}
+                        {a.kenntnisAufnahmen ? "ja" : "nein"}
                         <br />
                         Nummer: {a.id}
                         {a.status === "RESERVIERT" && a.reserviertBis && (

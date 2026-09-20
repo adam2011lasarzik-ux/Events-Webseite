@@ -42,6 +42,7 @@ export function Footer({ t }: { t: Woerterbuch }) {
               <li><Link href={"/datenschutz"}>{t.recht.datenschutz}</Link></li>
               <li><Link href={"/agb"}>{t.recht.agb}</Link></li>
               <li><Link href={"/widerruf"}>{t.recht.widerruf}</Link></li>
+              <li><Link href={"/aufnahmen"}>{t.aufnahmen.fusszeile}</Link></li>
             </ul>
           </div>
         </div>

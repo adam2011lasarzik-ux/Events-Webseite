@@ -235,7 +235,27 @@ model Registration {
   // daran scheitern, dass jemand keine Fotos möchte.
   istVormundBuchung   Boolean @default(false)
   einwilligungVormund Boolean @default(false)
-  einwilligungFotos   Boolean @default(false)
+
+  /**
+   * ── Zwei Pflichtangaben, die keine Einwilligungen sind ──────────
+   * `agbAkzeptiert` ist die Annahme der Teilnahmebedingungen. Ohne
+   * sie werden sie nach § 305 Abs. 2 BGB nicht Vertragsbestandteil —
+   * dann gälte für Storno, Haftung und alles Übrige das Gesetz, und
+   * die ausformulierten Bedingungen wären wirkungslos.
+   * `kenntnisAufnahmen` ist die Kenntnisnahme, dass bei der
+   * Veranstaltung Übersichtsaufnahmen entstehen. Sie ist ausdrücklich
+   * KEINE Einwilligung nach Art. 6 Abs. 1 Buchst. a DS-GVO — genau
+   * deshalb darf sie Pflicht sein (Art. 7 Abs. 4 DS-GVO: Eine
+   * Einwilligung, ohne die der Vertrag nicht zustande kommt, wäre
+   * nicht freiwillig und damit unwirksam). Die Aufnahmen selbst
+   * stützen sich auf Art. 6 Abs. 1 Buchst. f DS-GVO; wer nicht
+   * abgebildet werden möchte, widerspricht nach Art. 21 DS-GVO.
+   * Das frühere Feld `einwilligungFotos` ist mit Entscheidung 4.8
+   * entfallen: Es gibt keine Foto-Einwilligung mehr, die es festhalten
+   * könnte (Bauaufträge B-10 und B-17).
+   */
+  agbAkzeptiert     Boolean @default(false)
+  kenntnisAufnahmen Boolean @default(false)
 
   /// Zum Zeitpunkt der Anmeldung eingefroren. Ändert der Veranstalter
   /// später den Eventpreis, darf sich der Betrag einer bereits

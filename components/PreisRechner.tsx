@@ -330,16 +330,31 @@ export function PreisRechner({
               {ergebnisAktion.meldung}
             </p>
           )}
-          {/* Der Betrag steht IM Knopf. Anmeldung und Bezahlung sind
-              ein Vorgang — niemand soll klicken und erst danach
-              merken, dass jetzt bezahlt wird. Der Betrag hier ist
-              eine Vorschau; verbindlich rechnet der Server erneut. */}
+          {/* ── Der Betrag steht NEBEN dem Knopf, nicht darin ───────
+              Früher trug der Knopf den Betrag. Das war gut gemeint —
+              niemand soll klicken und erst danach merken, dass jetzt
+              bezahlt wird —, aber § 312j Abs. 3 BGB verlangt eine
+              Schaltfläche, die mit NICHTS ANDEREM als
+              „zahlungspflichtig bestellen" oder einer entsprechend
+              eindeutigen Formulierung beschriftet ist. Jedes weitere
+              Wort darauf schwächt diese Eindeutigkeit, und die Folge
+              eines Verstoßes ist hart: Der Vertrag kommt nach
+              § 312j Abs. 4 BGB nicht zustande.
+
+              Die Information geht dabei nicht verloren — sie steht
+              unmittelbar darüber. Der Betrag ist eine Vorschau;
+              verbindlich rechnet der Server erneut. */}
+          {ergebnis.gesamtCents > 0 && (
+            <p className={stil.merkerText} style={{ color: "rgba(234,241,248,0.9)" }}>
+              {fuelle(t.anmeldung.formular.absendenBetrag, {
+                betrag: alsEuro(ergebnis.gesamtCents),
+              })}
+            </p>
+          )}
           <AbsendeKnopf
             text={
               ergebnis.gesamtCents > 0
-                ? fuelle(t.anmeldung.formular.absenden, {
-                    betrag: alsEuro(ergebnis.gesamtCents),
-                  })
+                ? t.anmeldung.formular.absenden
                 : t.anmeldung.formular.absendenKostenlos
             }
             laeuft={t.anmeldung.formular.laeuft}

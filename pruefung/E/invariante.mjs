@@ -28,7 +28,7 @@ let schief = 0;
 for (const f of faelle) {
   const eingabe = { weg: f.weg, selbstAls: f.selbstAls, schueler: f.schueler,
     erwachsene: f.erwachsene, personen: p(12),
-    einwilligungVormund: true, einwilligungFotos: false };
+    einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true };
   const auswahl = { art: f.weg === "familie" ? "family" : "single",
     schueler: f.weg === "selbst" ? (f.selbstAls === "student" ? 1 : 0) : f.schueler,
     erwachsene: f.weg === "selbst" ? (f.selbstAls === "adult" ? 1 : 0) : f.erwachsene };

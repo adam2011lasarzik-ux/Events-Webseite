@@ -55,7 +55,7 @@ export async function GET(
   const kopf = [
     "Anmeldenummer", "Angemeldet am", "Status", "Zahlung", "Betrag in Euro",
     "Buchungsart", "Kontakt Vorname", "Kontakt Nachname", "E-Mail", "Telefon",
-    "Einwilligung Erziehungsberechtigte", "Fotos erlaubt",
+    "Einwilligung Erziehungsberechtigte", "AGB angenommen", "Aufnahmehinweis gelesen",
     "Teilnehmer Vorname", "Teilnehmer Nachname", "Teilnehmer Art",
   ];
 
@@ -77,7 +77,8 @@ export async function GET(
       a.kontaktEmail,
       a.kontaktTelefon,
       a.einwilligungVormund ? "ja" : "nein",
-      a.einwilligungFotos ? "ja" : "nein",
+      a.agbAkzeptiert ? "ja" : "nein",
+      a.kenntnisAufnahmen ? "ja" : "nein",
     ];
 
     if (a.teilnehmer.length === 0) {
