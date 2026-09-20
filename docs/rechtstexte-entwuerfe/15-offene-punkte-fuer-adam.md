@@ -120,6 +120,26 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.11 — Höhere Gewalt: nach welchem Zeitraum Rücktritt?**~~ ✅
+  **Beantwortet 20.09.2026: 30 Tage.** Dauert das Ereignis länger an,
+  kann **jede Partei** zurücktreten. **Steht schon vorher fest, dass die
+  Veranstaltung nicht stattfinden kann, ist der Rücktritt sofort
+  möglich.** Die **Ausfallstaffel gilt bei höherer Gewalt ausdrücklich
+  nicht**; bereits erbrachte Leistungen werden vergütet.
+  ✅ **Geprüft:** Die Frist belastet den Auftraggeber nicht, sie befreit
+  beide Seiten aus einem Schwebezustand — entscheidend ist die
+  **Beidseitigkeit**. 30 Tage passen zum Zuschnitt (ein Termin an einem
+  Tag, keine über Monate laufende Leistung). Der **sofortige Rücktritt
+  ist der praktische Regelfall**, die Frist der seltenere. Der
+  Ausschluss der Staffel ist notwendige Folge daraus, dass höhere Gewalt
+  **keine Absage des Auftraggebers** ist — eine Staffel, die auch diesen
+  Fall erfasste, wäre über § 307 BGB angreifbar.
+  **Zwei Ergänzungen:** eine beidseitige **Mitteilungspflicht** in
+  Textform (Ziffer 11.4a) und die Regelung, was mit einem bereits
+  geleisteten **Abschlag** geschieht — Rückerstattung, soweit ihm keine
+  erbrachten Leistungen und keine nicht mehr abwendbaren Fremdkosten
+  gegenüberstehen. Dokument 04, Ziffern 11.4a–11.5a und Anhang K.
+
 - ~~**5.10 — Ausfallstaffel bei Absage durch den Auftraggeber?**~~ ✅
   **Beantwortet 20.09.2026: 0 / 25 / 50 / 80 Prozent.** Bis 28 Tage
   vorher 0 % (nicht stornierbare Fremdkosten gegen Nachweis), 27–14 Tage

@@ -603,10 +603,21 @@ nicht abwendbare Ereignisse, insbesondere Naturkatastrophen, Unwetter,
 behördliche Anordnungen, Epidemien und Pandemien sowie deren
 Bekämpfungsmaßnahmen.
 
-11.5 Dauert das Ereignis länger als `[VOR VERWENDUNG KLÄREN: Zeitraum]`
-an oder steht fest, dass es die Durchführung endgültig unmöglich macht,
-kann jede Partei vom Vertrag zurücktreten. Bereits erbrachte Leistungen
-werden vergütet; darüber hinausgehende Ansprüche bestehen nicht.
+11.4a **Mitteilungspflicht.** Wer sich auf höhere Gewalt beruft, teilt
+dies der anderen Partei unverzüglich in Textform mit und beschreibt das
+Ereignis sowie seine voraussichtliche Dauer.
+
+11.5 Dauert das Ereignis länger als **30 Tage** an, kann jede Partei vom
+Vertrag zurücktreten. **Steht bereits vorher fest, dass die
+Veranstaltung wegen des Ereignisses nicht stattfinden kann, ist der
+Rücktritt sofort möglich** — die 30 Tage müssen dann nicht abgewartet
+werden. Bereits erbrachte Leistungen werden vergütet; darüber
+hinausgehende Ansprüche bestehen nicht.
+
+11.5a **Die Ausfallstaffel nach Ziffer 11.2 gilt in Fällen höherer
+Gewalt nicht.** Ein nach Ziffer 9.3 geleisteter Abschlag wird
+zurückerstattet, soweit ihm keine bereits erbrachten Leistungen und
+keine nicht mehr abwendbaren Fremdkosten gegenüberstehen.
 
 11.6 **Absage durch VERA.** Kann VERA aus Gründen, die VERA zu vertreten
 hat, nicht durchführen, entfällt der Vergütungsanspruch. Ansprüche des
@@ -1927,3 +1938,92 @@ Auftraggebern mit eigenen Vergabe- und Vertragsbedingungen. Die
 Normzitate sind Prüfauftrag, kein nachgewiesenes Ergebnis —
 gesetze-im-internet.de und dejure.org sind aus dieser Arbeitsumgebung
 gesperrt.]`
+
+---
+
+# Anhang K: Prüfung der Höhere-Gewalt-Regelung (20.09.2026, Frage 5.11)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen` und
+`klauseltransparenz-pruefen`. **Ergebnis: die Regelung trägt.**
+
+## Die Entscheidung
+
+- Rücktritt nach **30 Tagen** Dauer des Ereignisses.
+- **Sofortiger Rücktritt**, wenn bereits vorher feststeht, dass die
+  Veranstaltung nicht stattfinden kann.
+- Die **Ausfallstaffel gilt bei höherer Gewalt ausdrücklich nicht**.
+- Bereits erbrachte Leistungen werden vergütet.
+
+## Warum die Frist AGB-rechtlich unproblematisch ist
+
+Eine Rücktrittsfrist bei höherer Gewalt belastet den Auftraggeber
+nicht — sie **befreit** beide Seiten aus einem Schwebezustand. Ohne sie
+blieben beide gebunden, ohne planen zu können. Entscheidend ist, dass
+sie **beidseitig gleich** gilt: „jede Partei" kann zurücktreten, nicht
+nur VERA. Eine einseitige Lösungsmöglichkeit wäre über § 307 BGB
+angreifbar; diese Fassung ist es nicht.
+
+**30 Tage passen zum Zuschnitt.** Eine VERA-Veranstaltung ist ein Termin
+an einem Tag, keine über Monate laufende Leistung. Fristen von drei oder
+sechs Monaten, wie man sie aus Bau- und Lieferverträgen kennt, wären
+hier unangemessen lang — der Termin wäre längst verstrichen.
+
+## Der eigentlich wichtige Teil ist der sofortige Rücktritt
+
+Die 30-Tage-Frist ist der **seltenere** Fall. Der häufigere ist, dass
+sofort feststeht, dass der Termin nicht stattfinden kann: eine
+behördliche Anordnung für genau diesen Tag, ein Unwetter, eine
+gesperrte Halle. Dann auf den Ablauf von 30 Tagen zu warten wäre
+sinnlos und würde beide Seiten unnötig binden.
+
+Ziffer 11.5 nennt deshalb beide Wege ausdrücklich. Ohne den zweiten
+Halbsatz hätte die Klausel den praktischen Regelfall nicht erfasst.
+
+## Der Ausschluss der Ausfallstaffel ist keine Großzügigkeit
+
+Er ist die notwendige Folge daraus, dass höhere Gewalt **keine Absage
+des Auftraggebers** ist. Die Staffel aus Ziffer 11.2 knüpft an eine
+Entscheidung des Auftraggebers an und pauschaliert den daraus
+entstehenden Schaden. Bei höherer Gewalt gibt es diese Entscheidung
+nicht — niemand hat abgesagt, das Ereignis hat die Leistung unmöglich
+gemacht.
+
+**Eine Staffel, die auch diesen Fall erfasste, wäre über § 307 BGB
+angreifbar**, weil sie Schadensersatz ohne zurechenbare
+Pflichtverletzung verlangte. Ziffer 11.5a stellt das ausdrücklich klar,
+statt es der Auslegung zu überlassen.
+
+**Die Ergänzung zum Abschlag** war dabei notwendig: Ohne sie bliebe
+offen, was mit einer bereits geleisteten Anzahlung geschieht. Sie wird
+zurückerstattet, soweit ihr keine erbrachten Leistungen und keine nicht
+mehr abwendbaren Fremdkosten gegenüberstehen. Damit trägt jede Seite,
+was bei ihr tatsächlich hängen geblieben ist — das ist die übliche und
+sachgerechte Verteilung bei höherer Gewalt.
+
+## Die Mitteilungspflicht in Ziffer 11.4a
+
+Sie war bisher nicht geregelt und ist mehr als eine Höflichkeit: Wer
+sich auf höhere Gewalt beruft, muss das tun, solange die andere Seite
+noch reagieren kann. Ohne Mitteilungspflicht könnte sich eine Partei
+nachträglich darauf berufen, nachdem die andere bereits Aufwendungen
+getätigt hat. Die Pflicht gilt **beidseitig** und verlangt die
+Beschreibung des Ereignisses und seiner voraussichtlichen Dauer — beides
+braucht die andere Seite, um zu entscheiden, ob sie zurücktritt.
+
+## Zur Definition in Ziffer 11.4
+
+Sie bleibt unverändert und ist tragfähig: von außen kommende, nicht
+vorhersehbare und mit zumutbarer Sorgfalt nicht abwendbare Ereignisse,
+mit einer beispielhaften Aufzählung. **Die Aufzählung ist offen
+(„insbesondere")** — das ist hier richtig, weil höhere Gewalt sich nicht
+abschließend katalogisieren lässt. Anders als bei der Kernpflichtenliste
+in der Haftungsklausel entsteht dadurch kein Transparenzproblem, weil
+die Aufzählung den Anwendungsbereich **erweitert** und nicht
+einschränkt.
+
+`[FACHLICHE PRÜFUNG: (1) Ob 30 Tage im konkreten Zuschnitt angemessen
+sind. (2) Ob die Rückerstattungsregel in Ziffer 11.5a die Fremdkosten
+richtig verteilt — bei höherer Gewalt ist streitig, wer das Risiko
+bereits gebundener Kosten trägt. Die Normzitate sind Prüfauftrag, kein
+nachgewiesenes Ergebnis — gesetze-im-internet.de und dejure.org sind aus
+dieser Arbeitsumgebung gesperrt.]`
