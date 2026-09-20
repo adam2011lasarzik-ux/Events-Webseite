@@ -526,7 +526,12 @@ Die vollständige Ausgangsliste steht in Dokument 11, Gruppe 6.
   **Merkposten für später:** Bauauftrag **B-22** — die Bewertung hängt am Inhalt, nicht am Unternehmen, und kippt, sobald ein Blog oder eine Newsrubrik dazukommt.
   **Prüfauftrag:** Der Wortlaut des § 18 MStV war aus dieser Arbeitsumgebung nur über Sekundärquellen prüfbar (Landesmedienanstalten, IHK, Fachkanzleien), nicht am amtlichen Text; die Abgrenzung „journalistisch-redaktionell" ist zudem eine Auslegungsfrage. Gehört in die anwaltliche Durchsicht.
 
-- **6.3 — Erlaubnispflichten der Veranstaltungsorganisation selbst** — offen
+- ~~**6.3 — Erlaubnispflichten der Veranstaltungsorganisation selbst**~~ ✅ **Beantwortet am 20.09.2026: keine Erlaubnis nötig.** Die Organisation und Durchführung **eigener** Veranstaltungen ist ein **erlaubnisfreies Gewerbe**; es genügt die bereits erfolgte Gewerbeanmeldung nach § 14 GewO. Ein Sachkundenachweis oder eine Zuverlässigkeitsprüfung ist dafür nicht vorgesehen. Firmen können VERA mit der Organisation und Durchführung **eigener Firmenveranstaltungen** beauftragen — das bleibt dieselbe Tätigkeit in fremdem Auftrag und ändert daran nichts.
+  **Nicht einschlägig, einzeln durchgesehen:** § 33a GewO (Schaustellung von Personen — Schaustellergewerbe, nicht Sport), § 55 GewO (Reisegewerbekarte — VERA verkauft über die eigene Website mit vorheriger Bestellung, nicht außerhalb fester Geschäftsräume ohne Bestellung), § 34a GewO (Bewachungsgewerbe — griffe nur, wenn VERA Sicherheitsdienste **anbietet**; eigene Ordner für die eigene Veranstaltung sind es nicht), § 34c GewO (Makler).
+  **Keine Zahlungsdiensteerlaubnis nötig, und das stand bisher nirgends:** VERA verkauft **eigene** Tickets im eigenen Namen, die Zahlung führt Stripe durch. Erlaubnispflichtig würde es erst beim Verkauf **fremder** Tickets mit Weiterleitung fremden Geldes.
+  **Abgegrenzt von Ziffer 8 und Anhang F des B2B-Werks:** Dort geht es um die Genehmigungen der **einzelnen Veranstaltung** (Gaststättenanzeige nach BbgGastG, GEMA, Versammlungsstättenrecht, Zustimmung des Betreibers). Diese Frage betraf das **Gewerbe als solches**. Beides bleibt nebeneinander bestehen.
+  **Drei Kippschalter, von Adam am 20.09.2026 ausdrücklich verneint** (nicht geplant): An-/Abreise oder Übernachtung mitverkaufen, Tickets fremder Veranstalter verkaufen, Sicherheits- oder Ordnungspersonal als Dienstleistung anbieten. Als Merkposten festgehalten in Bauauftrag **B-23**.
+  ⚠️ **Schwächer belegt als 6.1 und 6.2.** Die Websuche lieferte zu dieser Frage überwiegend **österreichische** Quellen (WKO); die deutsche Lage ist aus den Erlaubnistatbeständen der GewO abgeleitet, nicht aus einer belastbaren deutschen Fundstelle. **Empfehlung: kostenlose Auskunft bei der IHK Potsdam einholen** — das ist hier der schnellste verlässliche Weg. Bleibt zusätzlich Prüfauftrag für die anwaltliche Durchsicht.
 
 - **6.4 — Schließfächer in der Location vorhanden?** — offen (steht auch unter Abschnitt A, weil es eine reine Tatsachenfrage ist)
 
@@ -709,6 +714,12 @@ Volltext heute.
 - **B-22** — 🕓 **Neu 20.09.2026, Entscheidung 6.2: Merkposten, kein heutiger Bauauftrag.** Solange die Seite nur eigene Veranstaltungen beschreibt und verkauft, ist sie **kein** journalistisch-redaktionelles Angebot; eine Angabe nach § 18 Abs. 2 MStV entfällt. **Sobald ein Blog, eine Newsrubrik, Ratgeberartikel oder sonstige regelmäßige redaktionelle Beiträge hinzukommen**, kippt die Bewertung: Dann ist im Impressum zusätzlich ein **inhaltlich Verantwortlicher** mit Name und ladungsfähiger Anschrift (kein Postfach) zu benennen, und zwar eine **natürliche Person**.
   Vor dem Bau einer solchen Rubrik also zuerst diese Frage neu beantworten — nicht danach. Sie betrifft auch die Abwägung, ob Adams Privatanschrift öffentlich stehen soll oder ob dafür eine Geschäftsanschrift nötig wird.
   *Betrifft:* `content/de.ts` (Impressum); Dokument 11, Frage 6.2
+
+- **B-23** — 🕓 **Neu 20.09.2026, Entscheidung 6.3: drei Kippschalter beim Erlaubnisrecht.** Solange VERA ausschließlich eigene Veranstaltungen organisiert und durchführt — auch im Auftrag von Firmen für deren eigene Veranstaltungen —, ist das Gewerbe erlaubnisfrei. **Drei Erweiterungen würden das ändern und sind deshalb VORHER neu zu prüfen, nicht hinterher:**
+  - **An-/Abreise oder Übernachtung mitverkaufen.** Dann entstünde unter Umständen eine **Pauschalreise** nach § 651a BGB mit **Insolvenzsicherungspflicht** und einem anderen Haftungsregime. Bei Schulklassen von weiter weg ist genau das eine naheliegende Nachfrage. Steht bereits als Warnung in Dokument 04.
+  - **Tickets fremder Veranstalter verkaufen.** Dann würde fremdes Geld weitergeleitet — das berührt das Zahlungsdiensterecht und ist erlaubnispflichtig.
+  - **Sicherheits- oder Ordnungspersonal als Dienstleistung anbieten.** Dann greift § 34a GewO (Bewachungsgewerbe) mit Erlaubnis und Sachkundeprüfung.
+  *Betrifft:* Dokument 04, Ziffer 8 und Anhang F; Dokument 11, Frage 6.3
 
 ---
 

@@ -159,7 +159,7 @@ stellt (2×), Foto-Zwecke (3×).
 |---|---|---|---|
 | 6.1 | Wirtschafts-Identifikationsnummer vergeben und anzugeben? | ⚖️ | ✅ 20.09.2026 |
 | 6.2 | Angabe nach § 18 Abs. 2 MStV nötig? (vermutlich nein) | ⚖️ | ✅ 20.09.2026 |
-| 6.3 | Erlaubnispflichten der Veranstaltungsorganisation selbst | ⚖️ | ⬜ |
+| 6.3 | Erlaubnispflichten der Veranstaltungsorganisation selbst | ⚖️ | ✅ 20.09.2026 |
 | 6.4 | Schließfächer in der Location vorhanden? | 🔎 | ⬜ |
 | 6.5 | Behält Stripe bei Erstattungen die Gebühr ein? | 🔎 | ⬜ |
 | 6.6 | Greift die BFSG-Ausnahme für Kleinstunternehmen? | ⚖️ | ⬜ |
@@ -179,6 +179,17 @@ stellt (2×), Foto-Zwecke (3×).
 > aufgenommen; eine vorsorgliche Angabe würde nur Adams Privatanschrift
 > zusätzlich veröffentlichen. Merkposten **B-22** in Dokument 15 für den
 > Fall, dass später redaktionelle Inhalte dazukommen.
+
+> **6.3 ist am 20.09.2026 beantwortet: keine Erlaubnis nötig.** Die
+> Organisation und Durchführung eigener Veranstaltungen ist ein
+> erlaubnisfreies Gewerbe; die Gewerbeanmeldung nach § 14 GewO genügt.
+> Firmenveranstaltungen im Auftrag ändern daran nichts. Drei
+> Erweiterungen würden die Bewertung kippen und sind von Adam
+> ausdrücklich als nicht geplant bezeichnet worden: Reiseleistungen
+> (§ 651a BGB), Verkauf fremder Tickets (Zahlungsdiensterecht),
+> Sicherheitsdienste (§ 34a GewO) — Merkposten **B-23** in Dokument 15.
+> ⚠️ Schwächer belegt als 6.1 und 6.2; Auskunft der IHK Potsdam
+> empfohlen.
 
 ---
 
