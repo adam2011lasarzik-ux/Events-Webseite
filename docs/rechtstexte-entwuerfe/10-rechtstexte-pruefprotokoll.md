@@ -702,3 +702,72 @@ Durchgang.
 **Empfehlung unverändert:** nach jeder Gruppe von Entscheidungen
 wiederholen, nicht erst am Ende.
 
+---
+
+# Abgleich Abschnitt B am 20.09.2026 — zwei Entscheidungen ohne Bauauftrag
+
+**Anlass:** Abschnitt B sollte als nächste Gruppe bearbeitet werden.
+Der erste Blick zeigte, dass dort **keine offene Frage** mehr steht —
+alle vierzehn Entscheidungen (2.1 bis 2.14) sind seit dem 18.09.2026
+beantwortet. Statt Fragen zu erfinden, wurde geprüft, ob jede
+Entscheidung auch einen **Bauauftrag** hat und ob dieser den Code
+richtig beschreibt.
+
+**Ergebnis: zwei Entscheidungen hatten überhaupt keinen Bauauftrag —
+und es sind die beiden mit der schärfsten Rechtsfolge.**
+
+## M-1 · Knopfbeschriftungen (Entscheidung 2.2/2.3) → neu **B-28**
+
+Entschieden war: Bestellknopf **„Zahlungspflichtig bestellen"**,
+Einstiegsknopf **„Zu den Tickets"**. Im Code steht:
+
+- `content/de.ts:276` → **„Zur Bezahlung – {betrag}"**
+- `content/de.ts:25` → **„Jetzt anmelden"**, an sechs Stellen verwendet
+
+**§ 312j Abs. 3 BGB** verlangt „zahlungspflichtig bestellen" oder eine
+entsprechend eindeutige Formulierung. **§ 312j Abs. 4 BGB** ordnet als
+Folge an, dass der Vertrag **nicht zustande kommt**. Die Gerichte
+prüfen ausschließlich die Beschriftung der Schaltfläche selbst; der
+umgebende Text zählt nicht. Als unzureichend verworfen wurden unter
+anderem „Bestellung aufgeben", „Senden" — und ausdrücklich **„Jetzt
+anmelden"**.
+
+**„Zur Bezahlung" beschreibt einen Navigationsschritt, nicht die Abgabe
+einer zahlungspflichtigen Bestellung.** Es ist damit mit hoher
+Wahrscheinlichkeit zu schwach.
+
+**Nicht betroffen** ist die kostenlose Fassung („Jetzt verbindlich
+anmelden"): Ohne Zahlungspflicht greift die Vorschrift nicht.
+
+## M-2 · AGB-Häkchen (Entscheidung 2.4) → neu **B-29**
+
+Entschieden war ein nicht vorbelegtes Pflicht-Häkchen „Ich akzeptiere
+die AGB.", serverseitig erzwungen. **Es existiert nicht** — die Suche
+über `lib/anmeldung.ts` nach `agb`, `agbAkzeptiert` und
+`einwilligungAgb` findet keinen Treffer.
+
+Nach **§ 305 Abs. 2 BGB** werden AGB nur Vertragsbestandteil, wenn bei
+Vertragsschluss ausdrücklich auf sie hingewiesen wird und die zumutbare
+Möglichkeit der Kenntnisnahme besteht. **Ohne diesen Schritt gelten die
+ausformulierten Bedingungen nicht** — für Storno, Haftung,
+Mindestteilnehmerzahl und alles Übrige griffe das Gesetz. Ein Link im
+Fußbereich genügt dafür nicht.
+
+## Was dieser Abgleich über die Methode zeigt
+
+Die bisherigen Durchläufe prüften **Texte gegen Entscheidungen**. Dieser
+prüfte **Entscheidungen gegen Bauaufträge** — und genau dort lag die
+Lücke. Eine Entscheidung, die dokumentiert ist, sieht erledigt aus; ob
+sie je einen Weg in den Code gefunden hat, steht an anderer Stelle.
+
+**Beide Funde sind auch deshalb bemerkenswert, weil sie die teuerste
+Sorte Fehler sind:** Sie machen nicht einen Absatz angreifbar, sondern
+entziehen dem gesamten Vertragswerk die Grundlage — beim einen kommt
+kein Vertrag zustande, beim anderen gelten die AGB nicht.
+
+**Empfehlung, neu:** Diesen Abgleich künftig **zusätzlich** zum
+Konsistenzdurchlauf fahren. Der Konsistenzdurchlauf fragt „Sagen die
+Dokumente dasselbe?". Dieser fragt „Tut die Software, was die Dokumente
+sagen?". Das ist nicht dieselbe Frage, und die zweite ist die, die am
+Tag der Freischaltung zählt.
+

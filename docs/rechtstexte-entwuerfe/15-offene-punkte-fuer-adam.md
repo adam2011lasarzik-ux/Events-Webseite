@@ -61,6 +61,23 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 > lassen sich nicht durch Recherche ersetzen, weil es deine
 > unternehmerischen Entscheidungen sind.
 
+> ✅ **Stand 20.09.2026: Abschnitt B enthält keine offenen Fragen mehr.**
+> Alle vierzehn Entscheidungen (2.1 bis 2.14) sind seit dem 18.09.2026
+> beantwortet. Was aussteht, ist **Umsetzung**, nicht Entscheidung.
+>
+> ⚠️ **Der Abgleich am 20.09.2026 hat dabei zwei Entscheidungen
+> gefunden, zu denen es überhaupt keinen Bauauftrag gab** — und es sind
+> die beiden mit der schärfsten Rechtsfolge: die **Knopfbeschriftungen**
+> aus 2.2/2.3 (neu als **B-28**; ohne korrekte Beschriftung kommt der
+> Vertrag nach § 312j Abs. 4 BGB **nicht zustande**) und das
+> **AGB-Häkchen** aus 2.4 (neu als **B-29**; ohne es werden die AGB
+> nach § 305 Abs. 2 BGB **nicht Vertragsbestandteil**, und die gesamte
+> Textarbeit liefe leer).
+>
+> **Zuordnung der übrigen Entscheidungen zu Bauaufträgen:** 2.5 → B-5
+> (erledigt) · 2.9 → B-6 · 2.10 → B-7 · 2.11 → B-8 · 2.12–2.14 → B-9 ·
+> 2.1, 2.6, 2.7, 2.8 brauchen keinen Code.
+
 | # | Frage | Meine Empfehlung |
 |---|---|---|
 | ~~2.1~~ | ✅ **Beantwortet 18.09.2026: Ja**, eigene, individuell zugeschnittene AGB | — |
@@ -783,6 +800,21 @@ Volltext heute.
   Zu tun: einmal jährlich zum Jahresabschluss beide Werte feststellen und das Ergebnis festhalten. Sinnvollerweise **gemeinsam mit der Umsatzprüfung zur Kleinunternehmerregelung** (offener Punkt 5.16) — dieselbe Zahl, derselbe Anlass, ein Termin statt zwei.
   ⚠️ **Wird eine Schwelle gerissen, ist das kein Schalter, sondern ein Projekt:** Die Seite müsste dann den Anforderungen der harmonisierten Normen genügen, und das ist Arbeit an der Substanz, nicht an einer Einstellung. Der heutige Stand — barrierearm gebaut und in Prüfliste `L` gemessen — ist der Grund, warum dieses Projekt dann überschaubar bliebe. Er sollte deshalb nicht abgebaut werden, nur weil die Ausnahme gerade greift.
   *Betrifft:* Dokument 11, Frage 6.6; offener Punkt 5.16
+
+- **B-28** — 🛑 **Neu 20.09.2026 aus dem Abgleich von Abschnitt B. Das ist der rechtlich folgenreichste noch nicht gebaute Punkt im gesamten Satz.** Entscheidung 2.2/2.3 vom 18.09.2026 legte die Knopfbeschriftungen fest; **im Code steht beides anders, und für keine der beiden gab es bisher einen Bauauftrag.**
+  - **Bestellknopf:** `content/de.ts:276` sagt heute **„Zur Bezahlung – {betrag}"**. Entschieden war der wörtliche Gesetzestext **„Zahlungspflichtig bestellen"**.
+  - **Einstiegsknopf:** `content/de.ts:25` sagt **„Jetzt anmelden"** (an sechs Stellen verwendet). Entschieden war **„Zu den Tickets"**.
+  ⚠️ **Warum das kein Schönheitsfehler ist:** **§ 312j Abs. 3 BGB** verlangt, dass der Bestellknopf mit nichts anderem als „zahlungspflichtig bestellen" oder einer **entsprechend eindeutigen** Formulierung beschriftet ist. Die Rechtsfolge eines Verstoßes steht in **§ 312j Abs. 4 BGB**: **Der Vertrag kommt nicht zustande.** Nicht „ist anfechtbar", sondern kommt nicht zustande — mit Rückzahlungsansprüchen der Käufer. Die Gerichte prüfen dabei **ausschließlich die Beschriftung der Schaltfläche selbst**; was daneben oder darüber steht, zählt nicht.
+  **„Zur Bezahlung" ist danach mit hoher Wahrscheinlichkeit zu schwach**: Es beschreibt einen Navigationsschritt, nicht die Abgabe einer zahlungspflichtigen Bestellung. Als unzureichend verworfen wurden unter anderem „Bestellung aufgeben", „Senden" und ausdrücklich auch **„Jetzt anmelden"** — also genau der heutige Einstiegsknopf.
+  **Nicht betroffen:** `absendenKostenlos` („Jetzt verbindlich anmelden") bei kostenlosen Veranstaltungen. Ohne Zahlungspflicht greift § 312j Abs. 3 BGB nicht.
+  **Zusammen mit B-24 bauen** — beide ändern Texte im Bestellvorgang, und beide gehören nach **B-27**, damit die Änderung versioniert festgehalten wird.
+  *Betrifft:* `content/de.ts` (`aktion.anmelden`, `anmeldung.formular.absenden`), sechs Verwendungsstellen des Einstiegsknopfes; Dokument 08; Dokument 11, Entscheidung 2.2/2.3
+
+- **B-29** — 🛑 **Neu 20.09.2026 aus demselben Abgleich: Das AGB-Häkchen fehlt vollständig.** Entscheidung 2.4 vom 18.09.2026 verlangt ein **nicht vorbelegtes Pflicht-Häkchen** „Ich akzeptiere die AGB.", mit „AGB" als Link auf die vollständigen Bedingungen und **serverseitig erzwungen**. **Belegt:** Eine Suche über `lib/anmeldung.ts` nach `agb`, `agbAkzeptiert` und `einwilligungAgb` findet **keinen einzigen Treffer** — das Feld existiert nicht, weder im Formular noch in der Prüfung.
+  ⚠️ **Die Folge trifft die gesamte Arbeit an den Rechtstexten:** Nach **§ 305 Abs. 2 BGB** werden AGB nur Vertragsbestandteil, wenn der Verwender bei Vertragsschluss ausdrücklich auf sie hinweist und dem Kunden die zumutbare Möglichkeit der Kenntnisnahme verschafft. **Ohne diesen Schritt gelten die AGB schlicht nicht** — dann greift für Storno, Haftung, Mindestteilnehmerzahl und alles Übrige das Gesetz, und die ausformulierten Bedingungen wären wirkungslos. Ein Link im Fußbereich genügt dafür nicht.
+  **Technisch fügt sich das ohne Umbau ein:** `lib/anmeldung.ts` führt `einwilligungVormund` und `einwilligungFotos` bereits nach demselben Muster; ein drittes Feld reiht sich dort ein. Serverseitig erzwingen heißt: Die Anmeldung wird **abgelehnt**, wenn das Häkchen fehlt — nicht nur im Browser geprüft.
+  **Reihenfolge:** gehört zusammen mit **B-17** (Kenntnisnahme-Häkchen zu Aufnahmen) in einen Arbeitsgang, weil beide dasselbe Formular und dieselbe Prüffunktion berühren. Die beiden Häkchen müssen dabei **optisch und inhaltlich getrennt** bleiben — das eine ist eine Vertragsannahme, das andere eine Kenntnisnahme.
+  *Betrifft:* `lib/anmeldung.ts`, `components/FormularVorschau.tsx`, `content/de.ts`; Dokument 03; Dokument 11, Entscheidung 2.4
 
 - **B-27** — 🔨 **Neu 20.09.2026, Entscheidung 6.7: versionierte Rechtstexte und Nachweis je Buchung.** Heute trägt `content/de.ts` **immer nur die aktuelle Fassung**. Wird ein Text geändert, ist die vorherige aus Sicht des Systems verschwunden — es gibt keine Möglichkeit, einer Buchung vom Vormonat den damals geltenden Wortlaut zuzuordnen.
   Nötig ist im Einzelnen:
