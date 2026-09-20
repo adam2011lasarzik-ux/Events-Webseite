@@ -48,6 +48,9 @@ export const PROTOKOLL_AKTIONEN = {
   loeschlaufEcht: "loeschlauf.echt",
   vorfallAngelegt: "vorfall.angelegt",
   vorfallGeaendert: "vorfall.geaendert",
+  aufnahmeWiderspruchErfasst: "aufnahme.widerspruch-erfasst",
+  aufnahmeWiderspruchGeaendert: "aufnahme.widerspruch-geaendert",
+  veroeffentlichungGeprueft: "veroeffentlichung.geprueft",
 } as const;
 
 export type ProtokollAktion = (typeof PROTOKOLL_AKTIONEN)[keyof typeof PROTOKOLL_AKTIONEN];

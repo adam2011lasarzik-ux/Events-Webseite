@@ -21,7 +21,8 @@ export type Loeschklasse =
   | "ANMELDEDATEN"
   | "CHECKLISTE"
   | "VORFALLAKTE"
-  | "STEUERUNTERLAGEN";
+  | "STEUERUNTERLAGEN"
+  | "AUFNAHMEWIDERSPRUCH";
 
 /** Was mit einem fälligen Datensatz geschieht. */
 export type Loeschaktion =
@@ -67,6 +68,16 @@ export const AKTION_JE_KLASSE: Record<Loeschklasse, Loeschaktion> = {
   CHECKLISTE: "anonymisieren",
   VORFALLAKTE: "loeschen",
   STEUERUNTERLAGEN: "niemals",
+  /* K8 — wie K7 ausdrücklich „niemals", und aus einem verwandten
+     Grund: Der Widerspruch ist der einzige Nachweis, dass eine Person
+     nicht abgebildet werden möchte. Löschte ihn der nächtliche Lauf
+     weg, während Aufnahmen der Veranstaltung noch online stehen,
+     liefe die Prüfung vor jeder Veröffentlichung ins Leere — und
+     niemand wüsste mehr, warum.
+
+     Abgeräumt wird er zusammen mit den veröffentlichten Aufnahmen,
+     von Hand und dokumentiert (Bauauftrag B-14). */
+  AUFNAHMEWIDERSPRUCH: "niemals",
 };
 
 /**

@@ -158,8 +158,10 @@ model Event {
   erstelltAm  DateTime @default(now())
   geaendertAm DateTime @updatedAt
 
-  anmeldungen Registration[]
-  abschnitte  EventAbschnitt[]
+  anmeldungen                  Registration[]
+  abschnitte                   EventAbschnitt[]
+  aufnahmewidersprueche        Aufnahmewiderspruch[]
+  veroeffentlichungspruefungen Veroeffentlichungspruefung[]
 
   @@index([status, startAt])
 }
@@ -351,7 +353,8 @@ model Registration {
   loeschklasse Loeschklasse @default(ANMELDEDATEN)
   faelligAm    DateTime?
 
-  teilnehmer Participant[]
+  teilnehmer            Participant[]
+  aufnahmewidersprueche Aufnahmewiderspruch[]
 
   /// Duplikatsschutz auf Anmeldungs-Ebene: pro Event und E-Mail-Adresse
   /// gibt es genau EINE Anmeldung — auch über Stornierungen hinweg.
@@ -619,6 +622,22 @@ enum Loeschklasse {
   VORFALLAKTE
   /// K7 — steuerrelevant. Wird vom Löschlauf NIEMALS angefasst.
   STEUERUNTERLAGEN
+
+  /// K8 — erklärter Widerspruch gegen Aufnahmen. Wird vom Löschlauf
+  /// NIEMALS angefasst, solange Aufnahmen der Veranstaltung
+  /// veröffentlicht sind.
+  ///
+  /// Begründung: Der Widerspruch ist der einzige Nachweis, dass eine
+  /// Person nicht abgebildet werden möchte. Löschte ihn der
+  /// nächtliche Lauf nach drei Jahren weg, während die Aufnahmen
+  /// weiterhin online stehen, liefe die Prüfung vor jeder
+  /// Veröffentlichung ins Leere — und niemand wüsste mehr, warum.
+  /// Das Gegenstück dazu ist Bauauftrag B-14: Auch die
+  /// veröffentlichten Aufnahmen selbst haben bis heute keine
+  /// Löschklasse. Beides gehört zusammen abgeräumt, wenn eine
+  /// Veranstaltung endgültig aus der Öffentlichkeitsarbeit
+  /// verschwindet — von Hand und dokumentiert, nicht nebenbei.
+  AUFNAHMEWIDERSPRUCH
 }
 
 enum Sperrgrund {
@@ -829,4 +848,114 @@ model Rechtstext {
 
   @@unique([art, version])
   @@index([art, gueltigAb])
+}
+
+/// Auf welchem Weg der Widerspruch erklärt wurde.
+enum Widerspruchsweg {
+  /// Beim Ankommen, im Rahmen des Check-ins.
+  CHECKIN
+  /// Während der Veranstaltung, mündlich vor Ort.
+  VOR_ORT
+  /// Schriftlich, per E-Mail.
+  EMAIL
+  /// Auf einem anderen Weg — dann steht der Weg in der Notiz.
+  SONSTIGES
+}
+
+/**
+ * Ein erklärter Widerspruch gegen Foto-, Video- und Tonaufnahmen
+ * (Art. 21 DS-GVO).
+ * ── Warum es diese Tabelle gibt ───────────────────────────────────
+ * Seit Entscheidung 4.8 gibt es KEINE Foto-Einwilligung mehr. Die
+ * Aufnahmen stützen sich auf Art. 6 Abs. 1 Buchst. f DS-GVO, und wer
+ * nicht abgebildet werden möchte, widerspricht. Damit ist der
+ * Widerspruch die **einzige** technische Sicherung des gesamten
+ * Konzepts: Fällt die Prüfung vor der Veröffentlichung aus, gibt es
+ * keine zweite, weil keine Einwilligung danebensteht.
+ * ── Warum nur die Ausnahme gespeichert wird ───────────────────────
+ * Früher war geplant, je Person einen Einwilligungsstatus zu führen.
+ * Jetzt steht hier nur, wer widersprochen hat — also die Ausnahme
+ * statt der Regel. Das ist ein echter Gewinn nach Art. 5 Abs. 1
+ * Buchst. c DS-GVO: Bei hundert Teilnehmenden und zwei Widersprüchen
+ * werden zwei Namen gespeichert, nicht hundert.
+ * ── Warum der Name genügt ─────────────────────────────────────────
+ * Gespeichert wird der Name und, wenn bekannt, die Buchung. Mehr
+ * braucht die Prüfung nicht: Sie fragt „ist diese Person auf der
+ * Aufnahme erkennbar?", und dafür muss man wissen, wer gemeint ist.
+ * Eine Adresse oder ein Geburtsdatum trüge dazu nichts bei.
+ */
+model Aufnahmewiderspruch {
+  id      String @id @default(cuid())
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  /// Der Name der Person, wie sie ihn genannt hat.
+  name String
+
+  /// Die zugehörige Buchung, falls bekannt. Optional, weil ein
+  /// Widerspruch auch von einer Begleitperson kommen kann, die selbst
+  /// nicht gebucht hat.
+  registrationId String?
+  registration   Registration? @relation(fields: [registrationId], references: [id], onDelete: SetNull)
+
+  weg        Widerspruchsweg @default(VOR_ORT)
+  /// Freitext — etwa „nur Tochter, nicht der Vater" oder der genaue Weg.
+  notiz      String?         @db.Text
+  erklaertAm DateTime        @default(now())
+
+  /// Wer ihn aufgenommen hat — für die Nachvollziehbarkeit.
+  erfasstVon String
+
+  /// Ein Widerspruch kann zurückgenommen werden. Dann bleibt die
+  /// Zeile stehen: Sie belegt, dass zwischen Erklärung und Rücknahme
+  /// ein Widerspruch bestand, und genau das kann später zählen.
+  zurueckgenommenAm DateTime?
+
+  loeschklasse Loeschklasse @default(AUFNAHMEWIDERSPRUCH)
+  faelligAm    DateTime?
+
+  @@index([eventId, zurueckgenommenAm])
+}
+
+/**
+ * Der festgehaltene Abgleich vor einer Veröffentlichung oder vor der
+ * Weitergabe an die Veranstaltungsstätte (Bauauftrag B-13).
+ * Entscheidung 4.8 verlangt, dass **vor jeder Veröffentlichung und
+ * vor jeder Weitergabe** geprüft wird, ob widersprechende Personen
+ * erkennbar sind. Eine Prüfung, die nirgends festgehalten wird, ist
+ * gegenüber einer Aufsichtsbehörde keine — deshalb diese Tabelle.
+ * `widersprueche` hält fest, wie viele Widersprüche zum Zeitpunkt der
+ * Prüfung vorlagen, und `namen` ihre Namen. Beides wird bewusst
+ * KOPIERT statt nur verknüpft: Die Prüfung soll belegen, was damals
+ * bekannt war. Kommt später ein Widerspruch hinzu, war er zum
+ * Zeitpunkt dieser Prüfung eben noch nicht da — und das soll man
+ * hinterher sehen können.
+ */
+model Veroeffentlichungspruefung {
+  id      String @id @default(cuid())
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  /// Wohin veröffentlicht wurde, in Worten: „Website", „Instagram
+  /// VERA", „Weitergabe an die Halle".
+  ziel String
+
+  /// Wie viele Widersprüche lagen zum Zeitpunkt der Prüfung vor.
+  widersprueche Int
+  /// Ihre Namen, als Klartext festgehalten.
+  namen         String? @db.Text
+
+  /// Das Ergebnis: Ist jemand erkennbar, der widersprochen hat?
+  /// false = geprüft und niemand erkennbar, veröffentlicht.
+  /// true  = erkennbar, deshalb nicht veröffentlicht oder bearbeitet.
+  erkennbar Boolean @default(false)
+  notiz     String? @db.Text
+
+  geprueftAm  DateTime @default(now())
+  geprueftVon String
+
+  loeschklasse Loeschklasse @default(AUFNAHMEWIDERSPRUCH)
+  faelligAm    DateTime?
+
+  @@index([eventId, geprueftAm])
 }

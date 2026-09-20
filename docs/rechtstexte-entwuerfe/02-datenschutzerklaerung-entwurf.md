@@ -7,7 +7,7 @@
 >
 > **Was sich gegenüber Version 1 geändert hat:** Ziffer 15
 > (Speicherdauer) ist an das inzwischen gebaute und produktive
-> Löschkonzept (K1–K7) angepasst — die frühere Aussage „keine
+> Löschkonzept (K1–K8) angepasst — die frühere Aussage „keine
 > automatische Löschfrist" gilt nicht mehr. Neu: Ziffer 4b
 > (Anwesenheitsliste), PayPal in Ziffer 6 und Ziffer 14, eine erste
 > recherchierte Einordnung der Stripe-/PayPal-Rollen (Dokument 14).
@@ -755,7 +755,7 @@ Analysedienste, keine sozialen Netzwerke.
 > ✅ **Stand 18.09.2026 — diese Ziffer ist jetzt technisch überholt und
 > unten neu gefasst.** Seit dem 16./17.09.2026 gibt es ein
 > vollständiges, automatisiertes Löschkonzept nach **DIN 66398** mit
-> sieben Löschklassen (K1–K7), einem täglichen automatischen Lauf und
+> acht Löschklassen (K1–K8), einem täglichen automatischen Lauf und
 > einer Löschsperre für Einzelfälle (Unfall, Beschwerde, Rechtsstreit).
 > Es ist **produktiv im Einsatz** (systemd-Timer `vera-loeschlauf.timer`)
 > und ausführlich dokumentiert in `docs/loeschkonzept-betrieb.md`. Die
@@ -775,6 +775,7 @@ in `docs/loeschkonzept-betrieb.md`):
 | K5 | Veranstaltungs- und Sicherheitschecklisten | 3 Jahre zum Jahresende | Personenbezug entfernen |
 | K6 | Vorfall- und Versicherungsakten | 10 Jahre, bei schwerem Personen-/Gesundheitsschaden bis 30 Jahre, ab Abschluss des Vorgangs | löschen |
 | K7 | Steuerunterlagen (§ 147 AO) | 10 / 8 / 6 Jahre | **niemals** vom Löschlauf angefasst |
+| K8 | Widerspruch gegen Foto- und Videoaufnahmen samt Prüfvermerk (Art. 21 DS-GVO) | keine Frist, solange Aufnahmen veröffentlicht sind | **niemals** vom Löschlauf angefasst |
 
 > ⚠️ **Offen seit Entscheidung 4.6 (19.09.2026) — zwei Lücken in dieser
 > Tabelle.** Die Foto- und Videoaufnahmen werden künftig **unbefristet**

@@ -35,6 +35,7 @@ const KLASSENNAME: Record<Loeschklasse, string> = {
   CHECKLISTE: "K5 Checkliste",
   VORFALLAKTE: "K6 Vorfallakte",
   STEUERUNTERLAGEN: "K7 Steuerunterlagen",
+  AUFNAHMEWIDERSPRUCH: "K8 Widerspruch gegen Aufnahmen",
 };
 
 /** Die Zielarten in Klartext — „Registration" sagt einem Menschen nichts. */

@@ -166,6 +166,7 @@ lauf "S · Vorschau-Tabellen in Klartext" "$P/S/s-vorschau-klartext.mjs"
 lauf "T · Termin-Pflicht: Ablauf und Umgehung" "$P/T/t-http.mjs"
 lauf "U · Versionierte Rechtstexte" "$P/U/u-rechtstexte.mjs"
 lauf "V · Bestellknopf, AGB-Haken, Aufnahmehinweis" "$P/V/v-checkout.mjs"
+lauf "W · Widerspruch gegen Aufnahmen" "$P/W/w-aufnahmen.mjs"
 
 # Diese beiden laufen gegen den Server OHNE Sonderwerte (Port 3249).
 lauf_rein "N · Rechtsseiten"           node "$P/N/n-seiten.mjs"

@@ -22,6 +22,7 @@ Dieses Dokument beschreibt nur den laufenden Betrieb.
 | **K5** | Veranstaltungs- und Sicherheitschecklisten | 3 Jahre | Ende des Kalenderjahres | Personenbezug unwiderruflich entfernen |
 | **K6** | Vorfall- und Versicherungsakten | 10 Jahre, bei schwerem Personen-/Gesundheitsschaden bis 30 | **Abschluss** des Vorgangs | löschen |
 | **K7** | Steuerunterlagen (§ 147 AO) | 10 / 8 / 6 Jahre | Ende des Kalenderjahres | **vom Löschlauf niemals angefasst** |
+| **K8** | Widerspruch gegen Aufnahmen und Veröffentlichungsprüfung (Art. 21 DS-GVO) | keine Frist | — | **vom Löschlauf niemals angefasst** |
 
 **K1 und K2 liegen auf Papier.** Die Anwendung kann sie nicht
 vernichten — sie erinnert nur daran. Das ist keine Lücke der Umsetzung,
@@ -31,6 +32,18 @@ UTC) und nur dann, wenn wirklich etwas ansteht — eine monatliche Mail
 „nichts zu tun" wird nach dem dritten Mal ungelesen weggeklickt, und
 dann auch die vierte, in der etwas steht. Sie nennt Klasse,
 Veranstaltung, Fälligkeit und Anzahl, aber **keine Namen**.
+
+**K8 ist der zweite Riegel — aus einem anderen Grund.** Seit dem
+Wegfall der Foto-Einwilligung (B-17) stützen sich die Aufnahmen auf das
+berechtigte Interesse; der Widerspruch nach Art. 21 DS-GVO ist damit die
+**einzige** Sicherung des Konzepts. Er darf nicht verfallen, solange
+Aufnahmen veröffentlicht sind — sonst stünde im elften Jahr eine
+Veröffentlichung online, zu der niemand mehr sagen könnte, ob ihr
+widersprochen wurde. Deshalb tragen `Aufnahmewiderspruch` und
+`Veroeffentlichungspruefung` **kein** Fälligkeitsdatum und werden vom
+Lauf nie angefasst. Wird ein Widerspruch zurückgenommen, bleibt die
+Zeile stehen: Sie belegt, dass zwischen Erklärung und Rücknahme einer
+bestand. Verwaltet wird beides unter **Verwaltung → Aufnahmen**.
 
 **K7 ist der Riegel.** `entscheide()` in `lib/loeschfristen.ts` prüft
 die Steuerrelevanz an **erster** Stelle, noch vor der Sperre. Wer die

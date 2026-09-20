@@ -32,6 +32,7 @@ const KLASSENNAME: Record<Loeschklasse, string> = {
   CHECKLISTE: "K5 Veranstaltungs- und Sicherheitschecklisten",
   VORFALLAKTE: "K6 Vorfall- und Versicherungsakten",
   STEUERUNTERLAGEN: "K7 Steuerunterlagen",
+  AUFNAHMEWIDERSPRUCH: "K8 Widerspruch gegen Aufnahmen",
 };
 
 function datum(d: Date): string {

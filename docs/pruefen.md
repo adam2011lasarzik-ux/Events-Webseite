@@ -1,6 +1,6 @@
 # Die Prüfungen starten
 
-Rund 350 automatische Prüfungen laufen gegen die echte Datenbank und den
+Rund 1.030 automatische Prüfungen laufen gegen die echte Datenbank und den
 echten Server. Diese Anleitung sagt, wie man sie in Gang bringt.
 
 > Alles hier passiert **örtlich**. Es wird nichts an einen fremden
@@ -124,6 +124,9 @@ npx tsx --env-file=.env pruefung/U/u-rechtstexte.mjs
 
 # Bestellknopf, AGB-Haken, Aufnahmehinweis
 npx tsx --env-file=.env pruefung/V/v-checkout.mjs
+
+# Widerspruch gegen Aufnahmen und die Veröffentlichungsprüfung
+npx tsx --env-file=.env pruefung/W/w-aufnahmen.mjs
 ```
 
 Bildschirmfotos und Messdaten landen in `pruefung/.ausgabe/` — dieser
