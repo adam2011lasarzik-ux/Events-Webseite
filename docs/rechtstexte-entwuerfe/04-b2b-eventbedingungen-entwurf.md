@@ -2164,3 +2164,121 @@ Beschäftigten, falls ein Auftraggeber sie ausdrücklich wünscht. Die
 Normzitate sind Prüfauftrag, kein nachgewiesenes Ergebnis —
 gesetze-im-internet.de und dejure.org sind aus dieser Arbeitsumgebung
 gesperrt.]`
+
+---
+
+# Anhang M: Realistische Vermögensschäden bei einem B2B-Event (20.09.2026, Frage 5.14)
+
+Geprüft mit `haftungsbegrenzung-pruefen-und-formulieren`.
+
+> ⚠️ **Alle Zahlen in diesem Anhang sind vorläufige Beispielrechnungen.**
+> Sie beruhen auf den von Adam genannten Gruppengrößen und auf
+> vorsichtig angesetzten Durchschnittswerten, **nicht** auf erhobenen
+> Daten. Konkrete Auftragswerte stehen noch nicht fest. Die Zahlen
+> dienen dazu, die **Größenordnung** sichtbar zu machen, die eine
+> Haftungsklausel abdecken muss — sie sind keine Kalkulationsgrundlage
+> und gehören vor einer Verwendung fachlich geprüft.
+
+## Was hier nicht behandelt wird
+
+**Personen- und Gesundheitsschäden.** Für sie haftet VERA nach der
+festgelegten Haftungsstruktur unbeschränkt; ein Höchstbetrag berührt sie
+nicht. Dieser Anhang betrifft ausschließlich **Vermögensschäden**.
+
+## Die Fallgruppen, nach Größe geordnet
+
+- **Freigestellte Arbeitszeit bei Ausfall durch VERA.** Der mit Abstand
+  größte Posten — und der einzige, der mit der Gruppengröße wächst
+  statt mit dem Auftragswert.
+- **Vergebliche Aufwendungen:** Transfer oder Bus, Raummiete, anderweitig
+  bestelltes Catering, Einladungen, Druck.
+- **Verkürzte oder mangelhafte Durchführung:** Minderwert, begrenzt durch
+  den Auftragswert selbst. Der harmloseste Fall.
+- **Beschädigung von Sachen des Auftraggebers.** Nach Adams Angabe vom
+  20.09.2026 bringen Auftraggeber **normalerweise keine eigene Technik
+  oder Ausstattung** mit; Ausnahmen werden im Angebot festgehalten.
+  Damit ist diese Gruppe im Regelfall **nahe null** — ein Umstand, der
+  in die Interessenabwägung gehört.
+- **Datenschutzverstoß bei Aufnahmen.** Nach den Entscheidungen zu 5.12
+  und Dokument 06 unwahrscheinlich, aber nicht ausgeschlossen.
+- **Rufschaden.** Wird geltend gemacht, ist aber selten bezifferbar und
+  praktisch kaum durchsetzbar.
+
+## Vorläufige Beispielrechnungen
+
+**Angenommene Größen** (vorsichtig, vorläufig): Arbeitgeberkosten je
+beschäftigter Person und Stunde **40 Euro** — das ist der Bruttolohn
+zuzüglich Arbeitgeberanteilen, angesetzt am unteren Rand üblicher
+Mischkalkulationen. Veranstaltungsdauer **4 Stunden** entsprechend dem
+bisherigen Zuschnitt.
+
+**Beispiel 1 — Schulklasse, 25 Schülerinnen und Schüler, 2 Lehrkräfte**
+
+- Bus oder Transfer, vergeblich aufgewendet: rund **400 Euro**
+- Organisatorischer Mehraufwand der Schule: nicht sinnvoll bezifferbar
+- **Größenordnung des Vermögensschadens: einige hundert Euro bis etwa
+  1 000 Euro.**
+
+Lohnkosten spielen hier praktisch keine Rolle: Die Lehrkräfte werden
+ohnehin beschäftigt, und die Schule erbringt keine entgangene
+Wertschöpfung.
+
+**Beispiel 2 — Firmenevent während der Arbeitszeit, 100 Personen**
+
+- Freigestellte Arbeitszeit: 100 × 4 Stunden × 40 Euro = **16 000 Euro**
+- Transfer und Catering, vergeblich aufgewendet: rund **2 000 Euro**
+- **Größenordnung: rund 18 000 Euro.**
+
+**Beispiel 3 — Firmenevent während der Arbeitszeit, 200 Personen**
+
+- Freigestellte Arbeitszeit: 200 × 4 × 40 = **32 000 Euro**
+- Nebenkosten: rund **3 000 Euro**
+- **Größenordnung: rund 35 000 Euro.**
+
+**Beispiel 4 — Firmenevent abends oder am Wochenende, 200 Personen**
+
+- Freigestellte Arbeitszeit: **entfällt**
+- Transfer, Catering, Raum: rund **2 000 bis 5 000 Euro**
+- **Größenordnung: rund 5 000 Euro.**
+
+## Der entscheidende Befund
+
+**Die Spanne reicht von einigen hundert bis rund 35 000 Euro — ein
+Faktor von etwa siebzig.** Und der größte Posten, die freigestellte
+Arbeitszeit, hat **keinen Bezug zur Höhe der Vergütung von VERA**. Er
+hängt an der Gruppengröße und am Lohnniveau beim Auftraggeber.
+
+Daraus folgt unmittelbar: **Eine Klausel „Haftung begrenzt auf den
+Auftragswert" wäre die, die im Ernstfall fällt.** Sie läge weit unter
+dem vertragstypisch vorhersehbaren Schaden, und eine Begrenzung
+unterhalb dieser Schwelle hält der Inhaltskontrolle regelmäßig nicht
+stand — auch im Unternehmerverkehr, wo § 309 Nr. 7 BGB zwar nicht
+unmittelbar gilt, seine Wertung aber über § 307 BGB fortwirkt.
+
+**Dass der Zeitpunkt der Veranstaltung den Schaden halbiert bis
+zehntelt** (Beispiel 4 gegenüber Beispiel 3), ist der zweite wichtige
+Befund. Er lässt sich steuern — siehe Anhang N.
+
+## Eine rechtliche Feinheit zur freigestellten Arbeitszeit
+
+Ob Lohnkosten überhaupt ersatzfähig sind, ist nicht selbstverständlich:
+Der Arbeitgeber schuldet den Lohn **ohnehin**, unabhängig davon, ob die
+Veranstaltung stattfindet. Ein Schaden im Sinne einer Vermögensminderung
+entsteht also nicht durch die Zahlung als solche.
+
+**Der Weg dorthin führt über § 284 BGB** (Ersatz vergeblicher
+Aufwendungen): Wer im Vertrauen auf den Erhalt der Leistung Aufwendungen
+gemacht hat, kann deren Ersatz verlangen, wenn die Leistung ausbleibt.
+Freigestellte Arbeitszeit lässt sich als solche Aufwendung einordnen.
+
+**Das ist kein sicheres Ergebnis, sondern ein Prüfauftrag.** Für die
+Gestaltung der Haftungsklausel ist es aber gleichgültig: Eine Klausel
+muss den Fall abdecken, dass der Anspruch besteht — sich darauf zu
+verlassen, dass er scheitert, wäre keine Risikovorsorge.
+
+`[FACHLICHE PRÜFUNG: (1) Ob freigestellte Arbeitszeit über § 284 BGB
+ersatzfähig ist. (2) Ob der angesetzte Stundenwert von 40 Euro als
+Ausgangspunkt taugt. (3) Ob weitere Schadensgruppen zu ergänzen sind.
+Die Normzitate sind Prüfauftrag, kein nachgewiesenes Ergebnis —
+gesetze-im-internet.de und dejure.org sind aus dieser Arbeitsumgebung
+gesperrt.]`

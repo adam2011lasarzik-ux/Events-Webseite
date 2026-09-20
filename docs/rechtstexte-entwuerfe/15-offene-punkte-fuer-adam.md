@@ -120,6 +120,24 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.14 — Realistische Vermögensschäden bei einem Firmenevent?**~~ ✅
+  **Aufbereitet 20.09.2026 mit vorläufigen Beispielrechnungen**
+  (ausdrücklich als vorläufig gekennzeichnet; konkrete Auftragswerte
+  stehen noch nicht fest). Angaben von Adam: Firmenevents bis 100–200
+  Personen, sowohl während der Arbeitszeit als auch abends oder am
+  Wochenende; **eigene Technik bringen Auftraggeber normalerweise nicht
+  mit** (Ausnahmen ins Angebot).
+  **Größenordnungen:** Schulklasse einige hundert bis ~1 000 Euro ·
+  Firmenevent 100 Personen während der Arbeitszeit ~18 000 Euro ·
+  200 Personen ~35 000 Euro · 200 Personen abends oder am Wochenende
+  ~5 000 Euro.
+  ⚠️ **Entscheidender Befund:** Die Spanne umfasst einen **Faktor von
+  rund siebzig**, und der größte Posten — freigestellte Arbeitszeit —
+  hat **keinen Bezug zur Höhe der Vergütung**. Eine Klausel „Haftung
+  begrenzt auf den Auftragswert" läge damit weit unter dem
+  vertragstypisch vorhersehbaren Schaden und wäre angreifbar.
+  Dokument 04, Anhang M.
+
 - ~~**5.12 — Nutzungsrechte: einfach oder ausschließlich?**~~ ✅
   **Beantwortet 20.09.2026: einfaches, nicht ausschließliches Recht.**
   Nur bei **ausdrücklicher Vereinbarung im Angebot**; ausschließlich für
