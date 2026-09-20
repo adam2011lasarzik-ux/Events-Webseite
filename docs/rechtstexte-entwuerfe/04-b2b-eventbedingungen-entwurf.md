@@ -572,19 +572,29 @@ vereinbarte Vergütung abzüglich ersparter Aufwendungen und abzüglich
 dessen, was VERA durch anderweitige Verwendung der Arbeitskraft erwirbt
 oder zu erwerben böswillig unterlässt.
 
-11.2 Zur Vereinfachung der Abrechnung können die Parteien im Angebot
-eine Ausfallstaffel vereinbaren.
-`[VOR VERWENDUNG KLÄREN: Staffel festlegen, z. B. gestaffelt nach
-Vorlauf. Sie muss sich am typischerweise entstehenden Aufwand
-orientieren.]`
+11.2 **Ausfallstaffel.** Zur Vereinfachung der Abrechnung gilt anstelle
+der Einzelberechnung nach Ziffer 11.1 folgende Pauschale, bezogen auf den
+Auftragswert und den Zeitpunkt des Zugangs der Absage bei VERA:
 
-**Dem Auftraggeber bleibt der Nachweis vorbehalten, dass ein geringerer
-oder kein Schaden entstanden ist.**
+- **bis 28 Tage vor der Veranstaltung: 0 Prozent.** Bereits gebundene und
+  nicht mehr stornierbare Fremdkosten werden gegen Nachweis erstattet.
+- **27 bis 14 Tage vorher: 25 Prozent**, mindestens jedoch die nicht mehr
+  stornierbaren Fremdkosten gegen Nachweis.
+- **13 bis 4 Tage vorher: 50 Prozent.**
+- **ab 3 Tagen vorher sowie bei Nichterscheinen: 80 Prozent.**
 
-11.3 **Terminverschiebung.** Auf Wunsch des Auftraggebers kann ein
-Ersatztermin vereinbart werden, soweit VERA und die
-Veranstaltungsstätte verfügbar sind. Bereits entstandener Mehraufwand
-wird nach Ziffer 9 vergütet.
+11.2a **Dem Auftraggeber bleibt der Nachweis vorbehalten, dass VERA kein
+Schaden oder ein wesentlich geringerer Schaden entstanden ist.** VERA
+bleibt der Nachweis eines höheren Schadens vorbehalten.
+
+11.2b **Ein nach Ziffer 9.3 geleisteter Abschlag wird auf die Pauschale
+angerechnet.** Er wird nicht zusätzlich einbehalten. Übersteigt der
+Abschlag die Pauschale, wird der Unterschiedsbetrag erstattet.
+
+11.3 **Keine Verlegung.** Ein Ersatztermin wird nicht vereinbart. Soll
+die Veranstaltung zu einem anderen Zeitpunkt stattfinden, ist dies ein
+**neuer Auftrag** mit eigenem Angebot; die Absage des bisherigen
+Auftrags richtet sich unverändert nach den Ziffern 11.1 bis 11.2b.
 
 11.4 **Höhere Gewalt.** Ereignisse höherer Gewalt befreien beide
 Parteien für ihre Dauer von der Leistungspflicht. Höhere Gewalt sind von
@@ -1799,3 +1809,121 @@ Einzelfall trägt — je nach Ursache der Gefahr kann die Kostentragung
 anders zu beurteilen sein. Die Normzitate sind Prüfauftrag, kein
 nachgewiesenes Ergebnis — gesetze-im-internet.de und dejure.org sind aus
 dieser Arbeitsumgebung gesperrt.]`
+
+---
+
+# Anhang J: Prüfung der Ausfallstaffel (20.09.2026, Frage 5.10)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen` und
+`klauseltransparenz-pruefen`. **Dies ist die AGB-rechtlich heikelste
+Klausel des B2B-Werks.**
+
+## Die Entscheidung
+
+- Staffel **0 / 25 / 50 / 80 Prozent** nach Vorlauf.
+- **Keine Verlegungsoption, kein Ersatztermin.**
+- Der Abschlag nach Ziffer 9.3 wird **angerechnet** und darf **nicht
+  zusätzlich** einbehalten werden.
+
+## Der Maßstab
+
+Der gesetzliche Ausgangspunkt hängt am Vertragstyp, der bewusst
+offengelassen ist:
+
+- **Werkvertrag:** § 648 BGB gibt dem Besteller ein jederzeitiges freies
+  Kündigungsrecht. Der Unternehmer behält die Vergütung **abzüglich
+  ersparter Aufwendungen** und dessen, was er anderweitig erwirbt oder
+  böswillig zu erwerben unterlässt.
+- **Dienstvertrag:** Ein freies Kündigungsrecht besteht nicht; der
+  Auftraggeber bleibt zur Zahlung verpflichtet, muss sich aber nach
+  § 615 BGB anrechnen lassen, was erspart oder anderweitig verdient
+  wird.
+
+**In beiden Fällen derselbe Gedanke: Ersetzt wird, was tatsächlich
+entgeht — nicht mehr.** Ziffer 11.1 gibt diesen gesetzlichen Maßstab
+zutreffend wieder; die Staffel tritt als **Vereinfachung** daneben.
+
+Eine solche Pauschale ist **pauschalierter Schadensersatz**. § 309 Nr. 5
+BGB gilt gegenüber Unternehmern nicht unmittelbar (§ 310 Abs. 1 BGB),
+seine beiden Anforderungen wirken aber über § 307 BGB fort:
+
+- Die Pauschale darf den **nach dem gewöhnlichen Lauf der Dinge zu
+  erwartenden Schaden nicht übersteigen**.
+- Dem Vertragspartner muss der **Nachweis eines geringeren oder
+  ausbleibenden Schadens** ausdrücklich offenstehen.
+
+**Fehlt der zweite Punkt, ist die Klausel regelmäßig insgesamt
+unwirksam** — und dann bleibt nur die Einzelberechnung nach Ziffer 11.1.
+Ziffer 11.2a enthält ihn deshalb, und er darf bei keiner späteren
+Überarbeitung wegfallen.
+
+## Warum die einzelnen Stufen tragen
+
+- **0 Prozent bis 28 Tage vorher** ist der ehrlichste Teil der Staffel:
+  So früh entgeht VERA nichts außer bereits gebundenen Fremdkosten, und
+  genau die werden gegen Nachweis erstattet — nicht pauschal.
+- **25 und 50 Prozent** in den mittleren Stufen liegen deutlich unter der
+  vollen Vergütung und lassen Raum für ersparte Aufwendungen. Sie sind
+  im Unternehmerverkehr gut vertretbar.
+- **80 Prozent statt 100** ist der wichtigste Punkt der ganzen Staffel.
+  Auch bei einer Absage am Vortag erspart VERA regelmäßig etwas —
+  Material, Verpflegungseinkauf, teils Personal. Eine 100-Prozent-Stufe
+  behauptete das Gegenteil und lieferte den Ansatzpunkt, die **gesamte**
+  Staffel anzugreifen. Die 20 Prozent Abstand sind deshalb keine
+  Großzügigkeit, sondern der Preis für die Haltbarkeit der Klausel.
+
+**Der Anknüpfungspunkt ist sauber gewählt:** der **Zugang der Absage bei
+VERA**, nicht ihre Absendung. Das ist überprüfbar und vermeidet den
+Streit, wann eine E-Mail abgeschickt wurde.
+
+## Die Anrechnung des Abschlags ist nicht nur fair, sondern tragend
+
+Würde der Abschlag aus Ziffer 9.3 **zusätzlich** einbehalten, entstünde
+eine doppelte Belastung: einmal die Pauschale, einmal die vorab
+geleistete Zahlung. Das wäre eine verdeckte Erhöhung der Pauschale über
+das hinaus, was als typischer Schaden begründbar ist — und würde
+zugleich die Abschlagsklausel selbst infizieren, weil deren
+Rechtfertigung (bloße Zahlungsmodalität, vollständige Anrechnung) damit
+entfiele.
+
+Ziffer 11.2b regelt deshalb beides: Anrechnung **und** Erstattung des
+Unterschiedsbetrags, wenn der Abschlag die Pauschale übersteigt. Der
+zweite Halbsatz ist wichtig — bei einer Absage 30 Tage vorher steht die
+Staffel auf 0 Prozent, während der Abschlag längst gezahlt wurde.
+
+## Zur Entscheidung gegen eine Verlegungsoption
+
+Sie ist **konsistent mit der B2C-Entscheidung 2.10**, wo eine
+Verlegungsfunktion ebenfalls abgelehnt wurde: Absage, vollständige
+Rückabwicklung, neuer Termin als neue Veranstaltung. Zwei Regelwerke mit
+gegenläufiger Logik wären schwerer zu handhaben als ein einheitlicher
+Grundsatz.
+
+**Ehrlich dazugesagt:** Kaufmännisch ist das die härtere Wahl. Bei
+Schulen und öffentlichen Trägern ist eine Absage meist Krankheit oder
+eine Anordnung von oben, nicht Nachlässigkeit. Ohne Verlegungsoption
+steht dann eine Rechnung im Raum, wo ein Ersatztermin die Beziehung
+gerettet hätte. Das ist eine bewusste Entscheidung und kein
+Versäumnis — sie lässt sich im Einzelfall jederzeit durch Kulanz
+abmildern, ohne dass die Klausel geändert werden müsste.
+
+Ziffer 11.3 sagt deshalb nicht nur „keine Verlegung", sondern auch, was
+stattdessen gilt: **ein neuer Auftrag mit eigenem Angebot.** Ohne diesen
+Satz entstünde der Eindruck, ein späterer Termin sei ausgeschlossen —
+das ist er nicht.
+
+## Was in dieser Ziffer noch offen ist
+
+Ziffer 11.5 enthält weiterhin einen Platzhalter: **nach welchem Zeitraum
+höherer Gewalt** zurückgetreten werden darf. Das ist Frage **5.11** und
+wird dort entschieden.
+
+`[FACHLICHE PRÜFUNG: (1) Ob die Prozentsätze dem typischen Schaden bei
+diesem Zuschnitt entsprechen — das lässt sich erst nach einigen
+durchgeführten Aufträgen belastbar beurteilen. (2) Ob die Stufe von
+80 Prozent auch bei sehr kleinen Aufträgen angemessen ist, bei denen
+kaum Fremdkosten anfallen. (3) Die Behandlung gegenüber öffentlichen
+Auftraggebern mit eigenen Vergabe- und Vertragsbedingungen. Die
+Normzitate sind Prüfauftrag, kein nachgewiesenes Ergebnis —
+gesetze-im-internet.de und dejure.org sind aus dieser Arbeitsumgebung
+gesperrt.]`

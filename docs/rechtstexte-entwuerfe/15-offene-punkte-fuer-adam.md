@@ -120,6 +120,27 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.10 — Ausfallstaffel bei Absage durch den Auftraggeber?**~~ ✅
+  **Beantwortet 20.09.2026: 0 / 25 / 50 / 80 Prozent.** Bis 28 Tage
+  vorher 0 % (nicht stornierbare Fremdkosten gegen Nachweis), 27–14 Tage
+  25 %, 13–4 Tage 50 %, ab 3 Tagen und bei Nichterscheinen 80 %.
+  Maßgeblich ist der **Zugang der Absage bei VERA**. **Keine
+  Verlegungsoption und kein Ersatztermin** — ein späterer Termin ist ein
+  **neuer Auftrag** mit eigenem Angebot. Der Abschlag nach Ziffer 9.3
+  wird **angerechnet**, nicht zusätzlich einbehalten; übersteigt er die
+  Pauschale, wird der Unterschiedsbetrag erstattet.
+  ✅ **Geprüft:** Die Staffel ist pauschalierter Schadensersatz. § 309
+  Nr. 5 BGB gilt gegenüber Unternehmern nicht unmittelbar, seine
+  Anforderungen wirken aber über § 307 BGB fort — die Pauschale darf den
+  typischen Schaden nicht übersteigen, **und der Nachweis eines
+  geringeren Schadens muss offenstehen**. Ziffer 11.2a enthält ihn;
+  **er darf bei keiner Überarbeitung wegfallen**, sonst ist die gesamte
+  Staffel unwirksam. **80 statt 100 Prozent ist der tragende Punkt** —
+  auch bei einer Absage am Vortag werden Aufwendungen erspart; eine
+  100-%-Stufe lieferte den Ansatzpunkt, die ganze Staffel zu Fall zu
+  bringen. Die Entscheidung gegen die Verlegung ist **konsistent mit der
+  B2C-Entscheidung 2.10**. Dokument 04, Ziffern 11.2–11.3 und Anhang J.
+
 - ~~**5.9 — Stunden- oder Tagessatz für Zusatzleistungen?**~~ ✅
   **60 Euro je Stunde, Abrechnung je angefangene halbe Stunde.**
   Zusatzleistungen nur nach **vorheriger Bestätigung in Textform**;
