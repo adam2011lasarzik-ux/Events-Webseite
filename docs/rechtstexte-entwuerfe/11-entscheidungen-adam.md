@@ -163,7 +163,7 @@ stellt (2×), Foto-Zwecke (3×).
 | 6.4 | Schließfächer in der Location vorhanden? | 🔎 | ✅ 20.09.2026 — Frage erledigt sich |
 | 6.5 | Behält Stripe bei Erstattungen die Gebühr ein? | 🔎 | ✅ 20.09.2026 — ja, daraus Stornoentgelt |
 | 6.6 | Greift die BFSG-Ausnahme für Kleinstunternehmen? | ⚖️ | ✅ 20.09.2026 — greift |
-| 6.7 | Stand-Datum für AGB und B2B-Bedingungen | ⬜ | am Ende |
+| 6.7 | Stand-Datum für AGB und B2B-Bedingungen | ⬜ | ✅ 20.09.2026 — Datum erst bei Freigabe |
 
 > **6.1 ist am 20.09.2026 beantwortet.** Es liegt keine
 > Wirtschafts-Identifikationsnummer vor; das Impressum bleibt
@@ -235,6 +235,18 @@ stellt (2×), Foto-Zwecke (3×).
 > Aushilfen und Werkstudenten zählen anteilig. Jährliche Prüfung als
 > Bauauftrag **B-26**, sinnvollerweise gemeinsam mit der Umsatzprüfung
 > zur Kleinunternehmerregelung (Punkt 5.16).
+
+> **6.7 ist am 20.09.2026 entschieden.** Das Stand-Datum wird erst bei
+> der endgültigen Freigabe gesetzt, getrennt für die
+> B2C-Teilnahmebedingungen und die B2B-Bedingungen. Archiviert werden
+> unveränderbare, versionierte Fassungen mit Versionsnummer und Datum;
+> bei jeder Buchung werden die verwendeten Versions-IDs gespeichert,
+> und die geltenden Texte gehen mit der Bestätigungsmail hinaus.
+> Umsetzung als Bauauftrag **B-27**, der mit **B-9** in einem
+> Arbeitsgang gebaut werden sollte und **vor** die erste Textänderung
+> nach der Freigabe gehört.
+>
+> **Damit ist Gruppe 6 vollständig abgearbeitet.**
 
 ---
 

@@ -563,7 +563,11 @@ Die vollständige Ausgangsliste steht in Dokument 11, Gruppe 6.
   **Merkposten:** Bauauftrag **B-26** — die Schwellen sind jährlich zu prüfen, und sie sind zwei, nicht eine.
   **Prüfauftrag:** Die Norm war nur über die Websuche prüfbar, nicht am amtlichen Text. Gehört in die anwaltliche Durchsicht, insbesondere die Berechnung der Jahresarbeitseinheiten, sobald erstmals jemand beschäftigt wird.
 
-- **6.7 — Stand-Datum für AGB und B2B-Bedingungen** — bewusst zuletzt, wenn die Texte stehen
+- ~~**6.7 — Stand-Datum für AGB und B2B-Bedingungen**~~ ✅ **Entschieden am 20.09.2026.** Das Stand-Datum wird **erst bei der endgültigen Freigabe** gesetzt — also nach der anwaltlichen Durchsicht, unmittelbar vor der Freischaltung. Bis dahin bleiben die Entwürfe als Entwürfe gekennzeichnet („Entwurf, Version 2 vom …"), weil ein Datum auf einem Text, der noch wöchentlich umgebaut wird, nur falsche Sicherheit erzeugt.
+  **Getrennt je Werk:** Die **B2C-Teilnahmebedingungen** und die **B2B-Bedingungen** bekommen jeweils eine **eigene** Versionsnummer und ein eigenes Datum. Sie ändern sich unabhängig voneinander; ein gemeinsames Datum zwänge dazu, bei jeder Änderung an einem Werk auch das andere neu zu datieren — und das wäre schlicht unwahr.
+  **Archivierung, verbindlich festgelegt:** Es werden **unveränderbare, versionierte Fassungen** mit Versionsnummer und Datum vorgehalten. Bei **jeder Buchung** werden die verwendeten **Versions-IDs gespeichert**. Die jeweils geltenden Texte werden zusätzlich **mit der Bestätigungsmail** übermittelt — als PDF oder als vollständiger E-Mail-Inhalt.
+  **Warum das mehr ist als Ordnungsliebe:** Maßgeblich ist immer die Fassung, die bei **Vertragsschluss** einbezogen wurde. Ändert VERA die Bedingungen später, gilt für Altbuchungen weiterhin die alte. Ohne Archiv lässt sich zwei Jahre später nicht belegen, welcher Text einbezogen war — und die Git-Historie ist gegenüber einem Kunden kein Nachweis, sondern ein internes Werkzeug, das VERA selbst ändern kann.
+  **Umzusetzen:** Bauauftrag **B-27**.
 
 ---
 
@@ -780,6 +784,18 @@ Volltext heute.
   ⚠️ **Wird eine Schwelle gerissen, ist das kein Schalter, sondern ein Projekt:** Die Seite müsste dann den Anforderungen der harmonisierten Normen genügen, und das ist Arbeit an der Substanz, nicht an einer Einstellung. Der heutige Stand — barrierearm gebaut und in Prüfliste `L` gemessen — ist der Grund, warum dieses Projekt dann überschaubar bliebe. Er sollte deshalb nicht abgebaut werden, nur weil die Ausnahme gerade greift.
   *Betrifft:* Dokument 11, Frage 6.6; offener Punkt 5.16
 
+- **B-27** — 🔨 **Neu 20.09.2026, Entscheidung 6.7: versionierte Rechtstexte und Nachweis je Buchung.** Heute trägt `content/de.ts` **immer nur die aktuelle Fassung**. Wird ein Text geändert, ist die vorherige aus Sicht des Systems verschwunden — es gibt keine Möglichkeit, einer Buchung vom Vormonat den damals geltenden Wortlaut zuzuordnen.
+  Nötig ist im Einzelnen:
+  - **Eine Tabelle `Rechtstext`** mit Kennung (`agb-b2c`, `agb-b2b`, `datenschutz`, …), **Versionsnummer**, **Datum**, dem **vollständigen Wortlaut** und einer Prüfsumme über den Wortlaut.
+  - **Unveränderbar heißt: nur einfügen, nie ändern.** Eine neue Fassung ist ein **neuer Datensatz**, kein überschriebener. Eine Datenbank kann das nicht von sich aus erzwingen; die Regel muss deshalb im Code stehen **und** von einer Prüfung bewacht werden, die fehlschlägt, sobald eine bestehende Fassung verändert wird. Ohne diese Prüfung ist „unveränderbar" eine Absichtserklärung, keine Eigenschaft.
+  - **Die Versions-IDs an der Buchung**, nicht der Text selbst. Der Wortlaut liegt **einmal je Fassung**, nicht einmal je Buchung — sonst wächst die Datenbank mit jedem Ticket um mehrere Kilobyte, und das Löschkonzept müsste denselben Text tausendfach mitbehandeln. Eine Kennung je Buchung genügt als Nachweis vollständig.
+  - **Beim Speichern die jeweils geltende Fassung ermitteln**, nicht die neueste: Maßgeblich ist, was **zum Zeitpunkt des Vertragsschlusses** galt.
+  - **Übermittlung mit der Bestätigungsmail.** ⚠️ **Empfehlung: den Volltext als E-Mail-Inhalt, nicht als PDF.** Ein PDF bräuchte eine neue Abhängigkeit für die Erzeugung — das Projekt kommt bewusst mit sehr wenigen aus, und auf dem VPS soll nichts übersetzt werden müssen. Der Volltext in der Mail erfüllt die Anforderung an einen **dauerhaften Datenträger** ebenso, ist durchsuchbar, wird von keinem Anhangsfilter aussortiert und funktioniert auf jedem Gerät. Ein PDF kann später ergänzt werden, wenn es gewünscht ist; es sollte nicht der erste Schritt sein.
+  - **Adminbereich:** eine Ansicht, die alle Fassungen mit Nummer und Datum zeigt, und je Buchung die damals geltende Fassung aufrufbar macht. Ohne das ist das Archiv im Streitfall nicht benutzbar.
+  **Zusammenhang mit B-9 beachten, damit nichts doppelt gebaut wird:** B-9 verlangt aus Entscheidung 2.13 bereits, die Teilnahmebedingungen im Volltext an beide Bestätigungsmails anzuhängen, und nennt weitere Lücken in `lib/mailVorlagen.ts` (fehlende Anbieterangaben, Storno- und Widerrufsinformationen, Stornofrist im Klartext, Gesamtbetrag in der kostenlosen Fassung). **B-27 liefert die Quelle, aus der dieser Volltext kommt.** Beide gehören in einen Arbeitsgang.
+  **Und die Reihenfolge gegenüber B-24:** Das Stornoentgelt ändert den Text der Teilnahmebedingungen. Wird B-24 vor B-27 gebaut, entsteht eine Änderung, die nicht versioniert festgehalten wird — genau der Fall, den B-27 verhindern soll. **B-27 gehört deshalb vor die erste Textänderung, die nach der Freigabe kommt.**
+  *Betrifft:* `prisma/schema.prisma`, `content/de.ts`, `lib/mailVorlagen.ts`, Adminbereich; Bauaufträge B-9 und B-24; Dokument 11, Frage 6.7
+
 ---
 
 ## Reihenfolge, in der ich vorgehen würde
@@ -788,4 +804,4 @@ Volltext heute.
 2. **Abschnitt B** (AGB/Checkout) — nötig, sobald online verkauft werden soll.
 3. **Abschnitt F, Punkt 1** (Anlagenmodell) — an einen Fachkundigen geben, parallel zu allem anderen.
 4. **Abschnitt C/D** (Foto/Video, B2B) — erst, wenn diese Funktionen tatsächlich gebraucht werden.
-5. **Abschnitt E** — kann warten.
+5. ~~**Abschnitt E** — kann warten.~~ ✅ **Am 20.09.2026 vollständig abgearbeitet**, Fragen 6.1 bis 6.7. Ergebnis: vier Merkposten (**B-21**, **B-22**, **B-23**, **B-26**), drei echte Bauaufträge (**B-24**, **B-25**, **B-27**), eine neu gefasste Ziffer 8 der Hausordnung — und, als größter Einzelposten, die durchgearbeitete Widerrufsfrage, durch die **W-d** voraussichtlich entfällt.
