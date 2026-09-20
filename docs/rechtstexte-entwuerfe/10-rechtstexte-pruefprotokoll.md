@@ -165,6 +165,21 @@ bearbeitet und sind durchgehend als offen markiert.
 
 ### T-1 ⚠️ Stornofrist bricht, wenn der Termin nachträglich gesetzt wird
 
+> ✅ **Teilweise erledigt am 20.09.2026, und der Rest ist ein anderer
+> Befund.** Die hier beschriebene Fallgruppe — Buchungen, die zustande
+> kamen, als es gar keinen Termin gab — kann es seit der Terminpflicht
+> nicht mehr geben (Bauauftrag **B-5**, Prüfliste `T`).
+>
+> **Übrig bleibt der Fall, dass ein bereits feststehender Termin
+> nachträglich VORVERLEGT wird.** Dann rutscht die 24-Stunden-Frist mit,
+> und Buchungen, die vorher innerhalb der Frist lagen, sind schlagartig
+> außerhalb — ohne Zutun der Teilnehmenden. Der Adminbereich hindert
+> heute nicht daran (**B-8**). Nach Entscheidung 2.10 gehört eine
+> Terminänderung mit bestehenden Buchungen ohnehin als **Absage**
+> behandelt, nicht als stille Verschiebung — der verbleibende Befund
+> ist damit einer der Bedienung, nicht des Texts.
+
+
 **Belegt:** `innerhalbFrist(null)` liefert `true` — ohne Termin ist eine
 Stornierung immer möglich. `stornoFristEnde` rechnet `startAt − 24 h`.
 
@@ -570,3 +585,120 @@ angelegten Veranstaltung, die bewusst keinen Termin hat.
 **Noch offen und ausdrücklich so gewollt:** Der Widerspruch bei Speisen
 und Getränken (**B-19**) bleibt auf der Bauliste und wurde nicht
 angefasst — das ist eine Vorgabe von Adam, keine Nachlässigkeit.
+
+---
+
+# Konsistenzdurchlauf vom 20.09.2026, zweiter Teil — nach Abschnitt E
+
+Der erste Durchlauf dieses Tages (Funde K-1 bis K-10) lief **vor** den
+Entscheidungen 6.1 bis 6.7. Dieser zweite prüft, was diese sieben
+Entscheidungen in den Dokumenten 01 bis 09 hinterlassen haben.
+
+**Anlass und Methode:** Geprüft wurde gezielt auf die Spuren der
+heutigen Entscheidungen — nicht das gesamte Werk erneut. Gesucht wurde
+nach den Formulierungen, die jede Entscheidung überholt: Zusagen zur
+vollen Erstattung, Hinweise auf die noch fehlende Terminsperre,
+Klärungsvorbehalte zu Impressumsangaben, Querverweise auf die neu
+gefasste Ziffer 8 der Hausordnung.
+
+**Ergebnis: acht Fundstellen, alle korrigiert.** Keine davon war ein
+Rechtsrisiko wie K-7 im ersten Durchlauf — es sind ausnahmslos Reste
+einer überholten Fassung. Das ist das erwartbare Bild, wenn an einem
+Tag sieben Fragen entschieden werden, und es ist genau der Grund für
+diesen Durchlauf.
+
+## Die acht Fundstellen
+
+**L-1 · Dokument 03, Ziffer 7.1 und 7.2 — der wichtigste Fund.**
+Beide sagten die **volle Erstattung ohne Abzug** zu und standen damit
+im Widerspruch zum Stornoentgelt aus Entscheidung 6.5. Ziffer 7.1 ist
+neu gefasst, die neue Ziffer 7.1a ergänzt (Entgelt je Buchung, beide
+Ausnahmen, Nachweisvorbehalt), Ziffer 7.2 nennt jetzt den konkreten
+Erstattungsbetrag vor dem Klick. **Hätte man nur Dokument 07 geändert
+und dieses hier vergessen, stünden zwei verschiedene Stornoregeln im
+Werk — und nach § 305c Abs. 2 BGB hätte die kundenfreundlichere
+gegolten, also die ohne Entgelt.**
+
+**L-2 · Dokument 08, Entwurf der Storno-Bestätigungsmail.** Sagte
+ebenfalls „der volle Betrag, ohne Abzug". Angepasst, mit dem Hinweis,
+dass die Mail **beide** Zahlen nennen muss — gezahlter Betrag und
+Erstattungsbetrag —, weil der Empfänger die Gutschrift auf seinem Konto
+sonst nicht nachvollziehen kann. Dazu die Feststellung, dass die
+**Absage-Mail einen eigenen Wortlaut** braucht und diesen nicht
+wiederverwenden darf: Bei einer Absage durch VERA wird voll erstattet.
+
+**L-3 · Dokument 07, Fund W-1 samt Tabellenzeile.** Beschrieb
+Veranstaltungen ohne feststehenden Termin als den Fall, „in dem die
+Ausnahme am wenigsten trägt", und zitierte dafür eine bereits
+gestrichene Klausel. Als überholt gekennzeichnet, die Tabellenzeile
+durchgestrichen und um die Auflösung ergänzt: Ohne Buchung gibt es
+keinen Vertrag und damit keine Widerrufsfrage. Der Befund bleibt zur
+Nachvollziehbarkeit stehen.
+
+**L-4 · Dokument 07, Warnhinweis zu Abschnitt 3.3.** Lautete: „Der
+Hinweis bleibt hier stehen, weil die Software es noch nicht durchsetzt
+— bis dahin ist die Gefahr real." Das trifft seit dem Vormittag des
+20.09.2026 nicht mehr zu. Ersetzt durch die Feststellung, dass die
+Sperre gebaut und mit 40 Prüfungen belegt ist.
+
+**L-5 · Dokument 07, Klärungsvorbehalt zur Sonderfrist.** Fragte, ob
+nach einer nachträglichen Terminbekanntgabe eine eigene Stornofrist
+gelten soll. Gegenstandslos: Ohne Buchungen ohne Termin gibt es keine
+Buchung, die von einer solchen Bekanntgabe überrascht werden könnte.
+Gestrichen.
+
+**L-6 · Dokument 01, Abschnitt 4.4 (Wirtschafts-Identifikationsnummer).**
+Trug einen Klärungsvorbehalt, den Entscheidung 6.1 beantwortet hat.
+Ausgefüllt, mit dem ausdrücklichen Zusatz, dass der Punkt die
+Veröffentlichung **nicht** blockiert.
+
+**L-7 · Dokument 01, Abschnitt 5 (§ 18 Abs. 2 MStV).** Ebenfalls ein
+Klärungsvorbehalt, beantwortet durch Entscheidung 6.2. Ausgefüllt, mit
+der Begründung, warum eine vorsorgliche Angabe gerade **nicht** die
+sichere Wahl wäre: Sie veröffentlichte Adams Privatanschrift ohne
+Pflicht.
+
+**L-8 · Dokument 01, Abschnitt 4.3 (berufsrechtliche Angaben).**
+Fragte nach Erlaubnispflicht und Kammerzugehörigkeit — beantwortet
+durch Entscheidung 6.3. Ausgefüllt. **Dabei ist ein zweiter, eigener
+Fehler aufgefallen:** Die Frage beschrieb die Tätigkeit noch als
+„Organisation und Durchführung von Veranstaltungen **sowie Erbringung
+von Büro- und administrativen Dienstleistungen**". Letztere werden nach
+**Entscheidung 5.2** gar nicht angeboten. Richtiggestellt, mit dem
+Hinweis, dass die Erlaubnisfrage neu zu stellen wäre, falls sie später
+doch kommen.
+
+## Drei Stellen, die geprüft wurden und in Ordnung sind
+
+Sie werden genannt, weil „geprüft und unauffällig" eine andere Aussage
+ist als „nicht angesehen":
+
+- **Dokument 09, Querverweis aus Ziffer 8.2 auf „Ziffer 11 der
+  Teilnahmebedingungen".** Nachgezählt: Ziffer 11 in Dokument 03 ist
+  tatsächlich die Haftung. Der Verweis stimmt.
+- **Dokument 05, Verweis auf „Dokument 09, Ziffer 8".** Bleibt richtig,
+  obwohl Ziffer 8 neu gegliedert wurde — der Verweis geht auf die
+  Ziffer als Ganzes, nicht auf eine Unterziffer.
+- **Dokumente 02 und 06.** Von den heutigen Entscheidungen inhaltlich
+  nicht berührt. Ein Nachzug in Dokument 02 wird erst fällig, wenn
+  **B-27** gebaut ist — die Versions-IDs je Buchung gehören dann in die
+  Aufstellung der gespeicherten Daten. Als Teilpunkt in B-27 vermerkt.
+
+## Was dieser Durchlauf über die Methode zeigt
+
+Im ersten Durchlauf waren neun von zehn Funden redaktionelle Reste und
+einer ein echtes Risiko. Hier sind es acht von acht redaktionelle
+Reste. Der Unterschied hat einen Grund: Der erste Durchlauf prüfte
+**Entscheidungen gegen Texte, die vor ihnen geschrieben waren**; dieser
+prüft **Texte gegen Entscheidungen, die am selben Tag getroffen
+wurden**. Je kürzer der Abstand, desto harmloser die Funde.
+
+**Daraus folgt nicht, dass der Durchlauf verzichtbar wäre — im
+Gegenteil.** L-1 hätte unbemerkt zwei widersprüchliche Stornoregeln im
+Werk stehen lassen, und nach § 305c Abs. 2 BGB hätte die für VERA
+ungünstigere gegolten. Ein Fund dieser Art rechtfertigt den ganzen
+Durchgang.
+
+**Empfehlung unverändert:** nach jeder Gruppe von Entscheidungen
+wiederholen, nicht erst am Ende.
+

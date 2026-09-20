@@ -389,10 +389,18 @@ Teilnahmebedingungen fertig sind — vorher gäbe es nichts mitzuschicken.
 >
 > Ihre Anmeldung zu **{Titel}** am {Datum} ist storniert.
 >
-> **Erstattet werden {Betrag}** — der volle Betrag, ohne Abzug. Die
-> Rückzahlung ist angewiesen und läuft auf demselben Weg zurück, über
-> den Sie bezahlt haben. Je nach Bank dauert die Gutschrift einige
-> Werktage.
+> **Erstattet werden {Betrag}** — der gezahlte Betrag abzüglich des
+> Stornoentgelts von 0,35 €. Die Rückzahlung ist angewiesen und läuft
+> auf demselben Weg zurück, über den Sie bezahlt haben. Je nach Bank
+> dauert die Gutschrift einige Werktage.
+
+> ⚠️ **Am 20.09.2026 an Entscheidung 6.5 angepasst.** Vorher stand hier
+> „der volle Betrag, ohne Abzug". Der Text der Mail muss **beide**
+> Zahlen nennen — gezahlter Betrag und Erstattungsbetrag —, sonst kann
+> der Empfänger die Gutschrift auf seinem Konto nicht nachvollziehen.
+> Bei einer **Absage durch VERA** gilt weiterhin die volle Erstattung;
+> die Absage-Mail braucht deshalb einen **eigenen** Wortlaut und darf
+> diesen hier nicht wiederverwenden.
 >
 > Der Platz ist wieder frei. Wenn Sie es sich anders überlegen, können
 > Sie sich jederzeit neu anmelden, solange Plätze verfügbar sind.

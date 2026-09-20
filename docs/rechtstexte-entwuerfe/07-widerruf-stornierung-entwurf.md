@@ -49,12 +49,24 @@ Stornobedingungen sagen sogar ausdrücklich:
 dem die Ausnahme am wenigsten trägt** — und für den es heute keine
 Widerrufsbelehrung gibt.
 
+> ✅ **Überholt seit dem 20.09.2026 — der Befund beschreibt den Zustand
+> VOR der Terminpflicht.** Die zitierte Klausel ist am 18.09.2026
+> gestrichen, und die Software setzt seit dem 20.09.2026 durch, dass
+> ohne feststehenden Termin **weder gebucht noch bezahlt** werden kann
+> (Bauauftrag **B-5**, Prüfliste `T`). Der Fall, den dieser Befund
+> beschreibt, kann bei einer **Buchung** nicht mehr entstehen.
+> Veranstaltungen ohne Termin gibt es weiterhin — sie dürfen aber nur
+> **angekündigt** werden und haben keinen Kaufknopf; ohne
+> Vertragsschluss stellt sich die Widerrufsfrage dort nicht. Der Befund
+> bleibt zur Nachvollziehbarkeit stehen. Die Auflösung steht in
+> **Abschnitt 5a**.
+
 **Weitere Fälle, die einzeln zu prüfen sind:**
 
 | Angebot | Freizeitbetätigung? | Spezifischer Termin? |
 |---|---|---|
 | Padel-Nachmittag mit Datum und Uhrzeit | ja | ja → Ausnahme greift wahrscheinlich |
-| Veranstaltung mit „Termin folgt" | ja | **nein** → Ausnahme greift wahrscheinlich nicht |
+| ~~Veranstaltung ohne feststehenden Termin~~ *(seit 20.09.2026 nicht mehr buchbar, nur ankündbar — B-5)* | ja | **nein**, aber gegenstandslos: ohne Buchung kein Vertrag und keine Widerrufsfrage |
 | Unternehmer-Netzwerkabend (Kategorie `BUSINESS` existiert im Datenmodell) | **fraglich** — beruflicher Bezug | ja |
 | Büro- und administrative Dienstleistungen an Verbraucher | **nein** | in der Regel nein |
 
@@ -295,25 +307,37 @@ Sammlung solcher technischen Folgen.
 > Ticketverkauf und Buchung erst möglich, wenn **Datum und Uhrzeit
 > feststehen**; Events mit „Termin folgt" dürfen nur angekündigt werden
 > und haben keinen Kaufknopf. Damit kann der Fall nicht mehr eintreten.
+> ✅ **Erledigt am 20.09.2026.** Der frühere Warnhinweis an dieser
+> Stelle lautete: „Der Hinweis bleibt hier stehen, weil die Software es
+> noch nicht durchsetzt — bis dahin ist die Gefahr real, dass eine
+> Buchung ohne Termin entsteht, für die es dann keine passende Klausel
+> gibt." **Das trifft nicht mehr zu.** Die Sperre ist gebaut und
+> geprüft (Bauauftrag **B-5**, Prüfliste `T`: 40 Prüfungen, darunter
+> der Umgehungsversuch über eine direkte Serveranfrage mit
+> getauschter Veranstaltungskennung).
 >
-> ⚠️ **Der Hinweis bleibt hier stehen, weil die Software es noch nicht
-> durchsetzt** — siehe Bauauftrag **B-5**. Bis dahin ist die Gefahr
-> real, dass eine Buchung ohne Termin entsteht, für die es dann keine
-> passende Klausel gibt.
->
-> `[VOR VERWENDUNG KLÄREN: Soll nach der Bekanntgabe eine gesonderte
-> Frist gelten, innerhalb derer noch kostenlos storniert werden kann,
-> auch wenn der Termin weniger als 24 Stunden entfernt liegt? Das wäre
-> die faire Lösung — sonst könnte ein Termin bekannt gegeben werden,
-> der bereits innerhalb der Frist liegt, und die Stornierung wäre nie
-> möglich gewesen.]`
+> ❌ **Der Klärungsbedarf zur Sonderfrist ist damit ebenfalls
+> entfallen.** Er lautete: ob nach einer nachträglichen
+> Terminbekanntgabe noch eine eigene Stornofrist gelten soll, falls der
+> Termin bereits innerhalb der 24 Stunden liegt. Ohne Buchungen ohne
+> Termin gibt es keine Buchung, die von einer solchen Bekanntgabe
+> überrascht werden könnte.
 
-> ⚠️ **3.3 ist ein echter Ablauffehler, nicht nur eine Textlücke.**
-> `lib/storno.ts` rechnet die Frist ab `startAt`. Wird `startAt`
-> nachträglich auf einen Zeitpunkt in weniger als 24 Stunden gesetzt,
-> ist die Selbstbedienungs-Stornierung ab diesem Moment gesperrt — für
-> Buchungen, die zu einer Zeit abgeschlossen wurden, als es gar keinen
-> Termin gab. Siehe Prüfprotokoll, Befund T-1.
+> ⚠️ **Ein Rest von Befund T-1 bleibt — und zwar ein anderer als
+> ursprünglich beschrieben.** Der alte Befund lautete: `lib/storno.ts`
+> rechnet die Frist ab `startAt`, also sei die Selbstbedienung für
+> Buchungen gesperrt, die ohne Termin zustande gekommen waren. Diese
+> Fallgruppe gibt es nicht mehr.
+>
+> **Übrig bleibt der Fall, dass ein bereits feststehender Termin
+> nachträglich VORVERLEGT wird.** Dann rutscht die 24-Stunden-Frist
+> mit, und Buchungen, die vorher komfortabel innerhalb der Frist lagen,
+> sind schlagartig außerhalb — ohne dass die Teilnehmenden etwas getan
+> haben. Der Adminbereich hindert heute nicht daran (Bauauftrag
+> **B-8**). Das ist kein Textproblem, sondern eines der Bedienung: Eine
+> Terminänderung mit bestehenden Buchungen gehört nach Entscheidung
+> 2.10 ohnehin als **Absage** behandelt, nicht als stille
+> Verschiebung.
 
 ---
 

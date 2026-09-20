@@ -16,6 +16,19 @@
 > Beschäftigtenzahl für § 36 VSBG) stehen jetzt zusätzlich gesammelt in
 > Dokument 15, Abschnitt A — beide lassen sich in wenigen Minuten
 > beantworten.
+>
+> **Stand 20.09.2026:** Zwei weitere Punkte sind beantwortet und im
+> Text nachgezogen — die **Wirtschafts-Identifikationsnummer**
+> (Abschnitt 4.4, Frage 6.1: keine vorhanden, nichts zu ergänzen) und
+> die **Angabe nach § 18 Abs. 2 MStV** (Abschnitt 5, Frage 6.2:
+> entfällt). Dazu die **berufsrechtlichen Angaben** (Abschnitt 4.3,
+> Frage 6.3: erlaubnisfreies Gewerbe, nichts zu ergänzen).
+>
+> **Offen bleibt genau ein Klärungsvorbehalt**, und er ist eine
+> Stilfrage, kein Rechtsrisiko: ob der freiwillige Satz zur
+> Verbraucherstreitbeilegung aufgenommen wird, obwohl die Ausnahme nach
+> § 36 Abs. 3 VSBG greift (Abschnitt 4.2). Dazu kommen die echten
+> Unternehmensdaten aus Dokument 15, Abschnitt A.
 
 ---
 
@@ -128,23 +141,58 @@ ebenso zulässig.
 
 ### 4.3 Berufsrechtliche Angaben
 
-`[VOR VERWENDUNG KLÄREN: Unterliegt die Tätigkeit „Organisation und
-Durchführung von Veranstaltungen sowie Erbringung von Büro- und
-administrativen Dienstleistungen" einer Erlaubnispflicht oder
-Kammerzugehörigkeit?]`
+✅ **Beantwortet am 20.09.2026 (Frage 6.3): keine Erlaubnispflicht,
+keine Kammerzugehörigkeit — im Impressum ist nichts zu ergänzen.** Die
+Organisation und Durchführung **eigener** Veranstaltungen ist ein
+**erlaubnisfreies Gewerbe**; die bereits erfolgte Gewerbeanmeldung nach
+§ 14 GewO genügt. Firmen können VERA mit der Organisation und
+Durchführung **eigener Firmenveranstaltungen** beauftragen — das bleibt
+dieselbe Tätigkeit in fremdem Auftrag.
 
-Nach derzeitigem Kenntnisstand nein — Veranstaltungsorganisation ist
-grundsätzlich ein freies Gewerbe. Zu prüfen bleibt, ob einzelne
-Tätigkeiten (z. B. Bewirtung, Ausschank, größere Veranstaltungen)
-eigene Erlaubnisse auslösen. Das betrifft dann aber die Tätigkeit
-selbst, nicht zwingend das Impressum.
+Einzeln durchgesehen und als nicht einschlägig festgehalten:
+**§ 33a GewO** (Schaustellung von Personen), **§ 55 GewO**
+(Reisegewerbekarte), **§ 34a GewO** (Bewachungsgewerbe), **§ 34c GewO**
+(Makler). Auch eine **Zahlungsdiensteerlaubnis** ist nicht nötig, weil
+VERA **eigene** Tickets im eigenen Namen verkauft.
+
+⚠️ **Die Tätigkeitsbeschreibung in der Klammerfrage ist überholt.** Sie
+nannte „sowie Erbringung von Büro- und administrativen
+Dienstleistungen". Nach **Entscheidung 5.2** werden solche Leistungen
+**nicht angeboten**; die Website bewirbt sie auch nicht. Sollte das
+später doch kommen, wäre die Erlaubnisfrage neu zu stellen — dann
+kämen das Rechtsdienstleistungsgesetz und das Steuerberatungsgesetz in
+Betracht (Dokument 11, Frage 5.18).
+
+**Was davon unberührt bleibt:** Erlaubnisse und Anzeigen für die
+**einzelne Veranstaltung** — Gaststättenanzeige nach BbgGastG, GEMA,
+Versammlungsstättenrecht, Zustimmung des Hallenbetreibers. Die sind in
+Dokument 04, Ziffer 8 und Anhang F geregelt und betreffen die
+Tätigkeit, nicht das Impressum.
+
+⚠️ **Schwächer belegt als die übrigen Punkte dieses Abschnitts.** Die
+Websuche lieferte überwiegend österreichische Quellen; die deutsche
+Lage ist aus den Erlaubnistatbeständen der GewO abgeleitet.
+**Empfehlung: kostenlose Auskunft bei der IHK Potsdam** — hier der
+schnellste verlässliche Weg. Merkposten **B-23** nennt die drei
+Erweiterungen, die die Bewertung kippen würden.
 
 ### 4.4 Wirtschafts-Identifikationsnummer
 
-`[VOR VERWENDUNG KLÄREN: Wurde eine Wirtschafts-Identifikationsnummer
-(W-IdNr.) vergeben, und ist sie anzugeben?]` Die Vergabe läuft seit
-November 2024 schrittweise. Ob eine Angabepflicht im Impressum besteht,
-ist gesondert zu klären — **nicht ungeprüft aufnehmen.**
+✅ **Beantwortet am 20.09.2026 (Frage 6.1):** Adam hat **keine**
+W-IdNr. vom Bundeszentralamt für Steuern erhalten. Im Impressum wird
+deshalb **nichts** ergänzt — es ist ohne die Nummer vollständig, weil
+**§ 5 Abs. 1 Nr. 6 DDG** die Angabe nur „soweit vorhanden" verlangt.
+
+Die Vergabe läuft seit November 2024 schrittweise und erfolgt **von
+Amts wegen ohne Antrag**; Kleinunternehmer nach § 19 UStG gehören zur
+ersten Stufe. Es gibt also nichts zu beantragen und nichts zu
+beschleunigen. Sobald das Schreiben eintrifft (Form `DE` + neun Ziffern
++ `-00001`), ist die Nummer „vorhanden" und gehört ins Impressum —
+Bauauftrag **B-21**.
+
+⚠️ **Dieser Punkt blockiert die Veröffentlichung ausdrücklich nicht.**
+Ein Zuwarten auf die Vergabe wäre ein selbstgemachter Blocker ohne
+rechtlichen Grund.
 
 ---
 
@@ -156,7 +204,7 @@ ist gesondert zu klären — **nicht ungeprüft aufnehmen.**
 | Steuernummer | gehört auf Rechnungen, nicht ins Impressum |
 | erfundene USt-IdNr. | keine Angabe ist besser als eine falsche |
 | Haftungsausschluss für Links | kein Pflichtbestandteil; die verbreiteten Textbausteine dazu haben keine eigenständige Wirkung |
-| „Verantwortlich nach § 18 Abs. 2 MStV" | `[VOR VERWENDUNG KLÄREN: Nur nötig, wenn journalistisch-redaktionelle Inhalte angeboten werden. Eine Eventseite ist das im Regelfall nicht.]` |
+| „Verantwortlich nach § 18 Abs. 2 MStV" | ✅ **Entschieden 20.09.2026 (Frage 6.2): entfällt.** Kein Blog, keine Newsrubrik, kein journalistisch-redaktionelles Angebot geplant — nachgesehen in `app/(seite)/`. Eine vorsorgliche Angabe würde nur Adams **Privatanschrift** zusätzlich veröffentlichen, ohne dass eine Pflicht bestünde. Merkposten **B-22**, falls später redaktionelle Inhalte dazukommen. |
 
 ---
 

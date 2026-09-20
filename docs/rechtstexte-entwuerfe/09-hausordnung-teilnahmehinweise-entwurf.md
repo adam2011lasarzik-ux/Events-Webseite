@@ -8,10 +8,10 @@
 > 3.24/3.26). Ziffer 7.3 ist an das **Anlagenmodell** angepasst — VERA
 > übernimmt keine Beaufsichtigung wartender Personen (Entscheidung
 > 3.20). Neu: Ziffer 4.8 zur Sicherheitseinweisung (Entscheidung 3.22).
-> Ziffer 8 (Fundsachen) bleibt **unverändert** — sie war von Anfang an
-> für den Fall geschrieben, dass VERA nichts entgegennimmt, und genau
-> das gilt weiterhin (kein Armband, keine Garderobe, kein Pfand;
-> Entscheidung 3.21).
+> Ziffer 8 (Fundsachen) blieb in Version 2 **unverändert** — sie war
+> von Anfang an für den Fall geschrieben, dass VERA nichts
+> entgegennimmt, und genau das gilt weiterhin (kein Armband, keine
+> Garderobe, kein Pfand; Entscheidung 3.21).
 >
 > **Nachtrag vom 20.09.2026 (Entscheidung 6.4):** Ziffer 8 ist jetzt
 > doch geändert worden — allerdings nur ausformuliert, nicht inhaltlich

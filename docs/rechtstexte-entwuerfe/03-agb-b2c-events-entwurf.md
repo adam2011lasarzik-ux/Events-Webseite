@@ -264,17 +264,45 @@ eingreifen. Weitere Einzelheiten regelt die Einverständniserklärung
 > Regelung so nicht bestünde. Eine Besserstellung ist unbedenklich.
 > Heikel ist 7.5 — der Einbehalt. Er ist hier bewusst **mit dem
 > Nachweisvorbehalt** formuliert, der in der bisherigen Fassung fehlte.
+>
+> **Ergänzung vom 20.09.2026:** Dass das Lösungsrecht freiwillig ist,
+> trägt jetzt zusätzlich das **Stornoentgelt** aus 7.1. Ein Entgelt für
+> eine Leistung, zu der VERA nicht verpflichtet ist, ist eine
+> Preisabrede für eine Sonderleistung — und unterliegt nach
+> **§ 307 Abs. 3 Satz 1 BGB** keiner Angemessenheitskontrolle. Träte an
+> die Stelle des freiwilligen Rechts ein gesetzliches, wäre das Entgelt
+> unzulässig; genau deshalb steht die Ausnahme in 7.1a. Die Herleitung
+> vollständig in Dokument 15, Abschnitt E, Frage 6.5.
 
 7.1 Sie können eine Buchung **bis 24 Stunden vor dem angekündigten
-Beginn der Veranstaltung kostenlos stornieren.** Erstattet wird der
-volle Betrag, ohne Abzug.
+Beginn der Veranstaltung stornieren.** Erstattet wird der gezahlte
+Betrag abzüglich eines **Stornoentgelts von 0,35 € je Buchung**.
+
+7.1a Das Stornoentgelt fällt **einmal je Buchung** an, unabhängig
+davon, wie viele Personen gebucht waren und mit welcher Zahlungsart
+bezahlt wurde. Es wird Ihnen vor dem Kauf angezeigt, und vor dem
+endgültigen Stornieren sehen Sie den genauen Betrag, den Sie
+zurückerhalten. **Kein Stornoentgelt** fällt an, wenn VERA die
+Veranstaltung absagt (Ziffer 8.1) oder Ihnen ein zwingender
+gesetzlicher Erstattungsanspruch zusteht; dann erhalten Sie den vollen
+Betrag. **Ihnen bleibt der Nachweis vorbehalten, dass kein oder ein
+wesentlich geringerer Schaden beziehungsweise Aufwand entstanden ist.**
 
 7.2 Die Stornierung erfolgt über den Link in der Bestätigungsmail. Er
 führt zu einer Seite, die die Buchung anzeigt; storniert wird erst mit
-einem Klick auf die dortige Schaltfläche. Der volle Betrag wird
-unmittelbar zur Rückerstattung angewiesen — auf demselben Weg, über den
-gezahlt wurde. Je nach Zahlungsdienstleister und Bank kann die
-Gutschrift einige Werktage dauern. Der Platz wird sofort wieder frei.
+einem Klick auf die dortige Schaltfläche. Vor diesem Klick wird Ihnen
+der konkrete Erstattungsbetrag genannt. Der Betrag wird unmittelbar zur
+Rückerstattung angewiesen — auf demselben Weg, über den gezahlt wurde.
+Je nach Zahlungsdienstleister und Bank kann die Gutschrift einige
+Werktage dauern. Der Platz wird sofort wieder frei.
+
+> ⚠️ **7.1/7.1a sind am 20.09.2026 geändert worden (Entscheidung 6.5)
+> und im Code NOCH NICHT umgesetzt.** Solange die Software den vollen
+> Betrag erstattet, ist das kein Fehler zu Lasten des Kunden — er
+> bekommt mehr, als der Entwurf vorsieht. Umgekehrt wäre es einer.
+> **Reihenfolge deshalb zwingend: erst der Code (B-25), dann die
+> Live-Texte (B-24)** — und beides erst nach **B-27**, damit die
+> Änderung versioniert festgehalten wird.
 
 7.3 Ist die Bestätigungsmail nicht mehr auffindbar, genügt eine
 Nachricht an kontakt@veraevents.de.
