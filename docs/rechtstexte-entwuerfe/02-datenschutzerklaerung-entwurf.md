@@ -130,7 +130,9 @@ System-Journal ist auf 7 Tage und höchstens 1 GB begrenzt.
 | Vorname, Nachname je Teilnehmer | ja | |
 | Teilnehmerart (Schüler / Erwachsener) | ja | bestimmt den Preis |
 | Einwilligung der erziehungsberechtigten Person | ja, bei „Mein Kind" und „Familienpaket" | |
-| Einwilligung in Foto- und Videoaufnahmen | **nein, freiwillig** | siehe Dokument 06 |
+| ~~Einwilligung in Foto- und Videoaufnahmen~~ | 🛑 **überholt seit 19.09.2026** | Es gibt **keine** Foto-Einwilligung mehr. An ihre Stelle tritt ein **verpflichtendes Kenntnisnahme-Häkchen** und das **Widerspruchsrecht** nach Art. 21 DS-GVO — Dokument 06, Teil VIII. |
+| Kenntnisnahme des Hinweises zu Foto-, Video- und allgemeinen Tonaufnahmen | **ja, verpflichtend** | keine Einwilligung, sondern Information |
+| Widerspruch gegen Übersichtsaufnahmen | **freiwillig**, jederzeit | zu speichern, damit er vor Veröffentlichung umgesetzt werden kann (B-10 neu) |
 | Gesamtbetrag, Zahlungsstatus, Zahlungsreferenz | automatisch | |
 | Stornoschlüssel | automatisch | Zufallswert für den Link in der Bestätigungsmail |
 
@@ -157,9 +159,13 @@ Gesundheitsangaben. Das Online-Formular kennt diese Felder nicht.
 > einer kurzfristigen Änderung erreichen können.
 >
 > **Folgen einer Nichtangabe.** Ohne die Pflichtangaben kann keine
-> Anmeldung entgegengenommen werden. Die Telefonnummer und die
-> Einwilligung in Foto- und Videoaufnahmen sind freiwillig; ohne sie ist
-> die Teilnahme uneingeschränkt möglich.
+> Anmeldung entgegengenommen werden. Die Telefonnummer ist freiwillig;
+> ohne sie ist die Teilnahme uneingeschränkt möglich.
+>
+> `[AKTUALISIERT 20.09.2026: Der frühere Verweis auf eine freiwillige
+> Foto-Einwilligung ist entfallen — es gibt keine. Die Kenntnisnahme des
+> Aufnahmehinweises ist verpflichtend, der Widerspruch gegen
+> Übersichtsaufnahmen jederzeit möglich und folgenlos.]`
 
 ---
 
@@ -216,15 +222,23 @@ Entwurf schließt:
 
 **Zu ergänzender Absatz (neu):**
 
-> Wird über das Anmeldeformular eine Einwilligung in Foto- und
-> Videoaufnahmen erteilt und betrifft die Anmeldung minderjährige
-> Personen, so gibt die erziehungsberechtigte Person diese Einwilligung
-> zugleich für die minderjährige Person ab. Einzelheiten zu Zwecken,
-> Veröffentlichungswegen, Dauer und Widerruf stehen in der gesonderten
-> Einwilligungserklärung. Die Einwilligung ist freiwillig; die Teilnahme
-> hängt nicht von ihr ab. Die auf Papier abgegebene
-> Einverständniserklärung für Minderjährige enthält **keine**
-> Einwilligung in Foto- oder Videoaufnahmen.
+> 🛑 **Überholt seit 19.09.2026 — ersetzt durch den folgenden Absatz.**
+> Der frühere Text setzte eine Foto-Einwilligung voraus, die es nicht
+> mehr gibt.
+
+**Ersetzender Absatz:**
+
+> Bei unseren Veranstaltungen entstehen **Übersichtsaufnahmen**, auf
+> denen keine einzelne Person im Mittelpunkt steht; Videoaufnahmen
+> können allgemeine Umgebungsgeräusche enthalten. Grundlage ist unser
+> berechtigtes Interesse an der Darstellung unserer Tätigkeit; eine
+> Einwilligung wird dafür **nicht** erhoben. Sie können der Anfertigung
+> und Veröffentlichung jederzeit **widersprechen** — vorab, beim
+> Check-in oder während der Veranstaltung. Ein Widerspruch muss nicht
+> begründet werden und hat keine Auswirkung auf die Teilnahme; er gilt
+> auch für die von Ihnen angemeldeten Personen. Die auf Papier
+> abgegebene Einverständniserklärung für Minderjährige enthält **keine**
+> Erklärung zu Foto- oder Videoaufnahmen.
 
 ---
 
@@ -675,8 +689,8 @@ Erklärung verweist, die es nicht gibt.]`
 | Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | doppelte Rolle — Auftragsverarbeiter für die Abwicklung, eigenständig Verantwortlicher für eigene Pflichten. **AVV bereits durch Kontoeröffnung wirksam** (per Verweis), genaue Rollenverteilung `[aus eigenem Vertrag bestätigen]` | `[Drittlandbezug klären]` |
 | PayPal (nur bei Auswahl dieser Zahlungsart) | Bezahlung | PayPal-Zugangsdaten, Betrag | eigenständig Verantwortlicher | `[klären]` |
 | Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | Speicherort: **EU** (Bucket-Endpoint `eu-central-003`, bestätigt 18.09.2026) — Gesellschaft selbst US-amerikanisch, Drittlandbezug `[fachlich zu bewerten]` |
-| Meta Platforms Ireland Ltd., Merrion Road, Dublin 4, D04 X2K5, Irland (Instagram) — **nur bei erteilter Foto-Einwilligung** | Veröffentlichung von Aufnahmen auf dem offiziellen Instagram-Kanal von VERA | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher | Irland, mit möglicher Übermittlung in die **USA**; Grundlage derzeit der EU-US-Angemessenheitsbeschluss `[Stand 18.09.2026 in Kraft, aber unter Überprüfung — siehe Dokument 06]` |
-| Veranstaltungslocation `[Firmierung je Event, siehe B-11]` — **nur bei erteilter zweiter Foto-Einwilligung** | eigene Werbung der Location auf deren Website und Instagram-Kanal | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher (Entscheidung 4.3) | `[je Event zu ergänzen]` |
+| Meta Platforms Ireland Ltd., Merrion Road, Dublin 4, D04 X2K5, Irland (Instagram) — **sofern Übersichtsaufnahmen veröffentlicht werden** | Veröffentlichung von Aufnahmen auf dem offiziellen Instagram-Kanal von VERA | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher | Irland, mit möglicher Übermittlung in die **USA**; Grundlage derzeit der EU-US-Angemessenheitsbeschluss `[Stand 18.09.2026 in Kraft, aber unter Überprüfung — siehe Dokument 06]` |
+| Veranstaltungslocation `[Firmierung je Event, siehe B-11]` — **sofern Übersichtsaufnahmen weitergegeben werden** | eigene Werbung der Location auf deren Website und Instagram-Kanal | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher (Entscheidung 4.3) | `[je Event zu ergänzen]` |
 | UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei | Erreichbarkeitsprüfung | nur öffentliche Seitenaufrufe | `[einziger unklarer AVV-Fall — im eigenen Konto unter uptimerobot.com/dpa prüfen, ob automatisch eingebunden oder anzufordern]` | EU (Slowakei) |
 | Veranstaltungslocation | Entgegennahme der Papierformulare am Empfang | die unterschriebenen Einverständniserklärungen | siehe Datenschutz Abschnitt 2 | Inland |
 | Rettungsdienst / ärztliches Personal | Notfall | die im Notfall erforderlichen Angaben | eigener Verantwortlicher | Inland |
@@ -728,8 +742,9 @@ in `docs/loeschkonzept-betrieb.md`):
 >    (Art. 7 Abs. 1 DS-GVO). Der Nachweis muss mindestens so lange
 >    bestehen bleiben wie die Nutzung.
 >
-> Auflösung — fachlich zu bestätigen: eine eigene Löschklasse für
-> Foto-Einwilligungen mit der Frist „Ende der Nutzung zuzüglich
+> Auflösung — fachlich zu bestätigen: eine eigene Löschklasse für die
+> **Nachweise zu Aufnahmen** (Kenntnisnahme und Widersprüche) mit der
+> Frist „Ende der Nutzung zuzüglich
 > Verjährungspuffer", oder eine Löschsperre, solange die Aufnahme
 > veröffentlicht ist. Bauauftrag **B-14** in Dokument 15.
 

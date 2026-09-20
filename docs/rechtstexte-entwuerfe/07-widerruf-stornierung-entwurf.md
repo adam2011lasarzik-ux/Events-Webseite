@@ -264,17 +264,31 @@ Sammlung solcher technischen Folgen.
 > etwas beantragt werden muss. Die Absage wird so früh wie möglich per
 > E-Mail mitgeteilt.
 >
-> **3.2 Verlegung.** `[VOR VERWENDUNG KLÄREN: siehe Dokument 03,
-> Ziffer 8.4. Es gibt heute keinen technischen Ablauf dafür — die
-> Software kennt nur „absagen und erstatten". Entweder wird eine
-> Verlegung eingeführt (dann braucht es Software **und** Klausel), oder
-> der Abschnitt entfällt und eine Verlegung wird als Absage mit
-> anschließender Neuanmeldung behandelt.]`
+> ✅ **3.2 Verlegung — entschieden am 18.09.2026 (Entscheidung 2.10).**
+> Es gibt **keine Verlegung**. Muss ein Termin verschoben werden, wird
+> die Veranstaltung **abgesagt**, die Buchung vollständig aufgehoben und
+> der gesamte Ticketpreis automatisch über die ursprüngliche Zahlungsart
+> erstattet. Der neue Termin wird als **neue Veranstaltung**
+> veröffentlicht; die Teilnehmenden können sich freiwillig neu anmelden.
+> Eine automatische Umbuchung ohne ausdrückliche Zustimmung findet nicht
+> statt. Der Verlegungsfall ist damit ein **Absagefall** und richtet
+> sich nach Ziffer 3.1. Einzelheiten in Dokument 03, Ziffer 8.4.
 >
-> **3.3 Nachträgliche Bekanntgabe eines Termins.** Steht bei der
-> Anmeldung noch kein Termin fest, teilen wir ihn mit, sobald er
-> feststeht. Bis dahin können Sie jederzeit kostenlos stornieren
-> (Abschnitt 2.4).
+> **Dieselbe Linie gilt im B2B** (Dokument 04, Ziffer 11.3): kein
+> Ersatztermin, ein späterer Termin ist ein neuer Auftrag.
+>
+> ❌ **3.3 Nachträgliche Bekanntgabe eines Termins — am 20.09.2026
+> gestrichen.** Der Abschnitt setzte voraus, dass eine Anmeldung ohne
+> feststehenden Termin möglich ist, und verwies auf den bereits am
+> 18.09.2026 gestrichenen Abschnitt 2.4. Seit **Entscheidung 2.5** sind
+> Ticketverkauf und Buchung erst möglich, wenn **Datum und Uhrzeit
+> feststehen**; Events mit „Termin folgt" dürfen nur angekündigt werden
+> und haben keinen Kaufknopf. Damit kann der Fall nicht mehr eintreten.
+>
+> ⚠️ **Der Hinweis bleibt hier stehen, weil die Software es noch nicht
+> durchsetzt** — siehe Bauauftrag **B-5**. Bis dahin ist die Gefahr
+> real, dass eine Buchung ohne Termin entsteht, für die es dann keine
+> passende Klausel gibt.
 >
 > `[VOR VERWENDUNG KLÄREN: Soll nach der Bekanntgabe eine gesonderte
 > Frist gelten, innerhalb derer noch kostenlos storniert werden kann,
@@ -339,7 +353,7 @@ veralteter Link könnte als irreführende Angabe gewertet werden.
 | W-e | Falls Widerrufsrecht je Event unterschiedlich: Feld am Event + Anzeige im Bestellvorgang | W-a | **groß** |
 | W-f | Storno-Abschnitt 2.5 austauschen | Entscheidung des Unternehmers | klein |
 | W-g | Frist-Fehler bei nachträglichem Termin beheben (Befund T-1) | — | klein bis mittel |
-| W-h | Verlegung: Ablauf entscheiden | Entscheidung des Unternehmers | klein bis groß |
+| ~~W-h~~ | ✅ **Verlegung: entschieden 18.09.2026** — es gibt keine; der Verlegungsfall ist ein Absagefall (Ziffer 3.2) | — | — |
 
 **W-d ist der größte Einzelposten dieses gesamten Dokumentensatzes.**
 Er entfällt vollständig, wenn W-a ergibt, dass die Freizeitausnahme für

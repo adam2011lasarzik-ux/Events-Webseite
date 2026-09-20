@@ -15,6 +15,13 @@
 
 ## Der heutige Ablauf — nachgezeichnet aus dem Code
 
+> ℹ️ **Dieses Ablaufbild zeigt den Stand VOR den Entscheidungen vom
+> 18. bis 20.09.2026** — also das, was heute live ist. Es ist ein
+> Befund, keine Zielbeschreibung. Geändert werden unter anderem: die
+> Beschriftung der Bestellschaltfläche (C-1), das AGB-Pflichthäkchen
+> (C-2) und das Foto-Häkchen, das durch Kenntnisnahme und
+> Widerspruchshinweis **ersetzt** wird (B-17).
+
 ```
 /events/<slug>/anmeldung
   │
@@ -472,8 +479,8 @@ Punkt B-7 — beides sollte zusammen gebaut werden.
 |---|---|---|---|---|
 | 1 | Beschriftung der Bestellschaltfläche | `content/de.ts` + 2 Prüfskripte | fachliche Prüfung C-1 | klein |
 | 2 | Häkchen/Hinweis zu den Teilnahmebedingungen | `FormularVorschau.tsx`, `lib/anmeldung.ts`, Schema, `content/de.ts` | **fertige AGB** | mittel |
-| 3 | Fotoeinwilligung: neuer Text | `content/de.ts` | Dokument 06 | klein |
-| 4 | Fotoeinwilligung: Zusatz bei Minderjährigen | `FormularVorschau.tsx` | Dokument 06 | klein |
+| 3 | 🛑 **Neu gefasst 20.09.2026:** Das freiwillige Foto-Häkchen wird **ersetzt** — nicht überarbeitet. An seine Stelle treten ein **verpflichtendes Kenntnisnahme-Häkchen** und ein **abgesetzter Widerspruchshinweis** (B-17) | `content/de.ts`, `FormularVorschau.tsx`, `lib/anmeldung.ts`, Schema | Dokument 06, Teil VIII | mittel |
+| ~~4~~ | 🛑 **Entfällt.** Der Zusatz bei Minderjährigen setzte eine Einwilligung voraus, die es nicht mehr gibt | — | — | — |
 | 5 | Wesentliche Merkmale in der Zusammenfassung | `PreisRechner.tsx` | fachliche Prüfung C-3 | mittel |
 | 6 | Teilnahmebedingungen in die Bestätigungsmail | `lib/mailVorlagen.ts` | **fertige AGB** | mittel |
 | 7 | Stornofrist im Klartext in die Mail | `lib/mailVorlagen.ts` | — | klein |

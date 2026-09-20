@@ -384,3 +384,132 @@ sind unangetastet. Es wurde nichts veröffentlicht und nichts deployed.
   Kanzleimuster übernommen. Wo eine Formulierung dem Gesetzeswortlaut
   folgt (etwa „zahlungspflichtig bestellen"), ist das die Norm selbst,
   kein fremder Text.
+
+---
+
+# Konsistenzdurchlauf über die Dokumente 01 bis 09 (20.09.2026)
+
+**Anlass.** Zwischen dem 18. und 20.09.2026 sind rund vierzig
+Entscheidungen getroffen worden, mehrere davon aufeinander aufbauend.
+Das Aufnahmekonzept wurde **zweimal** grundlegend umgestellt, die
+Regeln zu Abschlag, Ausfall und Haftung greifen ineinander. Zwei echte
+Widersprüche waren beim Bearbeiten **zufällig** aufgefallen — dieser
+Durchlauf sucht die übrigen systematisch.
+
+**Methode.** Gezielte Volltextsuchen über alle neun Dokumente nach den
+Begriffen, an denen sich eine überholte Fassung zeigt: Foto-Einwilligung,
+Widerruf gegenüber Widerspruch, Verlegung und Ersatztermin, Verpflegung
+und Hallengastronomie, „netto", Verbraucherabgrenzung, offene
+Platzhalter. Anschließend Sichtprüfung jeder Fundstelle im Zusammenhang —
+eine Trefferliste allein unterscheidet nicht zwischen einer überholten
+Regel und einem korrekt beschriebenen Ist-Zustand.
+
+## Gefundene und behobene Widersprüche
+
+**K-1 · Dokument 02, Tabelle der erhobenen Daten.** Führte die
+„Einwilligung in Foto- und Videoaufnahmen" als **freiwillig**. Es gibt
+sie seit dem 19.09.2026 nicht mehr. Ersetzt durch zwei Zeilen: die
+**verpflichtende Kenntnisnahme** des Aufnahmehinweises und den
+**freiwilligen Widerspruch**, der gespeichert werden muss, damit er vor
+einer Veröffentlichung umgesetzt werden kann.
+
+**K-2 · Dokument 02, „Folgen einer Nichtangabe".** Nannte die
+Foto-Einwilligung neben der Telefonnummer als freiwillig. Korrigiert —
+freiwillig ist nur noch die Telefonnummer.
+
+**K-3 · Dokument 02, Absatz zu Minderjährigen.** Beschrieb, dass die
+erziehungsberechtigte Person die Foto-Einwilligung zugleich für das Kind
+abgibt, mit Verweis auf Zwecke, Dauer und **Widerruf**. Vollständig
+ersetzt: Übersichtsaufnahmen auf Grundlage des berechtigten Interesses,
+**Widerspruch** statt Widerruf, gültig auch für die angemeldeten
+Personen.
+
+**K-4 · Dokument 02, Empfängerübersicht.** Meta und die
+Veranstaltungslocation standen dort „nur bei erteilter
+Foto-Einwilligung" beziehungsweise „bei erteilter **zweiter**
+Einwilligung". Beide Bedingungen gibt es nicht mehr; sie knüpfen jetzt
+daran an, ob Übersichtsaufnahmen veröffentlicht beziehungsweise
+weitergegeben werden.
+
+**K-5 · Dokument 02, Löschkonzept.** Die vorgesehene neue Löschklasse
+hieß „für Foto-Einwilligungen". Umbenannt in **Nachweise zu Aufnahmen**
+— Kenntnisnahme und Widersprüche —, weil es Einwilligungen nicht mehr
+gibt, die Nachweispflicht aber bleibt.
+
+**K-6 · Dokument 07, Abschnitt 3.2 „Verlegung".** Stand seit dem
+16.09.2026 als offener Platzhalter, obwohl die Frage am 18.09.2026
+entschieden wurde (Entscheidung 2.10). Ausgefüllt: keine Verlegung, der
+Verlegungsfall ist ein Absagefall; dazu der Hinweis, dass im B2B
+dieselbe Linie gilt (Dokument 04, Ziffer 11.3). Der zugehörige offene
+Punkt **W-h** ist als erledigt markiert.
+
+**K-7 · Dokument 07, Abschnitt 3.3.** Regelte die nachträgliche
+Bekanntgabe eines Termins und verwies dabei auf den **bereits am
+18.09.2026 gestrichenen** Abschnitt 2.4 — ein Verweis ins Leere.
+Gestrichen, weil seit Entscheidung 2.5 ohne feststehenden Termin nicht
+gebucht werden kann.
+**Dabei sichtbar geworden:** Die Software setzt das **noch nicht**
+durch (Bauauftrag **B-5**). Bis dahin kann eine Buchung ohne Termin
+entstehen, für die es dann **keine passende Klausel mehr gibt** — die
+alte ist gestrichen, die neue Sperre fehlt. Das ist der einzige Fund
+dieses Durchlaufs, der ein **offenes Risiko** und nicht nur einen
+redaktionellen Rest betrifft.
+
+**K-8 · Dokument 08, Bauliste.** Die Zeilen 3 und 4 planten einen
+„neuen Text" für die Fotoeinwilligung und einen Zusatz für
+Minderjährige. Beides setzt eine Einwilligung voraus. Zeile 3 ist neu
+gefasst — das Häkchen wird **ersetzt**, nicht überarbeitet —, Zeile 4
+entfällt.
+
+**K-9 · Dokument 08, Ablaufbild des Bestellvorgangs.** Es zeigt den
+Stand **vor** den Entscheidungen vom 18. bis 20.09.2026. Das ist als
+Befund richtig, war aber nicht als solcher gekennzeichnet. Hinweis
+ergänzt.
+
+**K-10 · Dokument 09, Hinweis zur Speisenabgabe.** Fragte offen, welche
+Speisen abgegeben werden. Seit Entscheidung 5.6 ist die Systematik
+geklärt — drei Angebotsstufen mit unterschiedlichen Pflichten, Empfehlung
+Stufe 1. Verweis auf Dokument 04, Anhang F ergänzt; die konkrete
+Stufenwahl bleibt als Punkt vor der Freischaltung offen.
+
+## Geprüft und für stimmig befunden
+
+- **„netto"** kommt nur noch in der Begründung vor, warum der Begriff
+  nicht verwendet wird — nicht mehr in einer Klausel.
+- **Verlegung** ist jetzt in Dokument 03 (Ziffer 8.4), Dokument 04
+  (Ziffer 11.3) und Dokument 07 (Abschnitt 3.2) **gleichlautend**
+  geregelt: keine Verlegung, neuer Termin als neue Veranstaltung.
+- **Verbraucherabgrenzung** in Dokument 03, Ziffer 1 passt zur
+  Entscheidung 5.1 und widerspricht nicht den B2B-Bedingungen
+  (Dokument 04, Ziffer 1.1b verweist zurück).
+- **Dokument 03, Ziffer 2.2** löst den Verpflegungswiderspruch aus
+  **B-19** vertraglich bereits auf: Leistungen sind nur dann im Preis
+  enthalten, wenn die Eventseite sie ausdrücklich ausweist. **Das
+  entbindet nicht davon, die Website eindeutig zu machen** — eine
+  Klausel repariert keinen widersprüchlichen Werbetext, sie verlagert
+  den Streit nur.
+- **Dokument 05** enthält keine offenen Platzhalter mehr und keine
+  Aussage zu Aufnahmen, die der Neufassung widerspräche.
+- **Dokument 01** ist bis auf die bekannten Unternehmensdaten vollständig.
+
+## Was bewusst offen bleibt
+
+Die verbleibenden Platzhalter sind **echte Angaben**, die nur Adam oder
+ein Dritter liefern kann — Unternehmensdaten, das Datum der jeweiligen
+Fassung, die Hausordnung der Halle, Schuhwerkvorgaben, Schließfächer,
+die vollständige Widerrufsbelehrung nach fachlicher Klärung. Sie sind
+keine Widersprüche und werden hier nicht als solche gezählt.
+
+## Bewertung
+
+**Zehn Fundstellen, neun davon redaktionelle Reste einer überholten
+Fassung, eine mit echtem Risiko (K-7).** Das Verhältnis ist erwartbar:
+Wer ein Konzept zweimal an einem Tag umstellt, hinterlässt Spuren in den
+Dokumenten, die darauf verweisen. Auffällig ist, dass **alle** Funde im
+Umfeld der beiden großen Umstellungen liegen — Aufnahmen und Verlegung —
+und keiner in den heute neu geschriebenen B2B-Teilen.
+
+**Empfehlung:** Diesen Durchlauf nach jeder weiteren Gruppe von
+Entscheidungen wiederholen, nicht erst am Ende. Die Funde waren hier
+noch leicht zu beheben; je mehr Dokumente aufeinander verweisen, desto
+teurer wird ein übersehener Rest.

@@ -187,10 +187,14 @@ nicht gestattet.
 >   Stufe 2 näher rückt: gaststättenrechtliche Erlaubnis oder befristete
 >   Gestattung bei der zuständigen Behörde.]`
 > - **Belehrung nach § 43 Infektionsschutzgesetz** für die Abgabe von
->   Speisen. `[VOR VERWENDUNG KLÄREN: Welche Speisen genau, verpackt
->   oder offen abgegeben? Die Antwort entscheidet, ob eine Belehrung
->   durch das Gesundheitsamt nötig ist — siehe Dokument 11, Frage
->   3.28.]`
+>   Speisen. ✅ **Teilweise beantwortet am 20.09.2026 (Frage 5.6):** Die
+>   Pflichten hängen an der Angebotsstufe — originalverpackt, offen oder
+>   frisch zubereitet. **Empfohlen für den Start ist Stufe 1
+>   (originalverpackte Produkte)**; dann entfällt die Belehrungspflicht
+>   nach § 43 IfSG weitgehend. Die drei Stufen und ihre Folgen stehen in
+>   Dokument 04, Anhang F. `[VOR FREISCHALTUNG FESTLEGEN: Welche Stufe
+>   wird tatsächlich angeboten? Erst danach steht fest, welche
+>   Belehrungen, Kühlung und Allergeninformationen nötig sind.]`
 
 ---
 
