@@ -142,3 +142,87 @@ Verzicht auf die verbreitete, aber unwirksame „Eltern haften"-Formel.
 - **Keine Übernahme von Wortlaut.** Es wurde nichts aus den gefundenen
   Seiten kopiert oder umformuliert — nur die Themenliste diente als
   Prüfraster für die eigenen Entwürfe.
+
+---
+
+# Nachtrag 20.09.2026 — Vertragsgesellschaften der Dienstleister
+
+Anlass: Punkt 1.5 aus Dokument 15. Für die Datenschutzerklärung müssen
+die **Gesellschaften** der eingesetzten Dienstleister benannt werden,
+nicht nur die Marken. Die Recherche vom 18.09.2026 hatte Hostinger und
+Stripe als „nicht sicher zuordenbar" hinterlassen.
+
+## Was jetzt feststeht
+
+**Hostinger** — von Adam am 20.09.2026 anhand der eigenen
+Vertragsunterlagen bestätigt:
+
+> Hostinger International Ltd.
+> 61 Lordou Vironos Street
+> 6023 Larnaca
+> Zypern
+
+Damit ist die Alternative **Hostinger Global S.à r.l.** (Luxemburg), die
+in der Recherche vom 18.09.2026 als zweite Möglichkeit aufgetaucht war,
+ausgeschlossen. Zypern liegt in der EU; aus der Gesellschaft entsteht
+kein Drittlandbezug. Dieselbe Gesellschaft gilt für **Server und
+E-Mail** — beide laufen über denselben Vertrag, und beide Stellen der
+Datenschutzerklärung müssen dieselbe Firmierung tragen.
+
+**Stripe** — von Adam am 20.09.2026 anhand der Stripe-Rechtsdokumente
+bestätigt:
+
+- **Stripe Payments Europe, Limited (SPEL)** ist nach dem aktuellen
+  Stripe-Datenverarbeitungsvertrag bei einem **deutschen Konto** für die
+  Datenverarbeitung zuständig.
+- Der **Stripe-Rahmenvertrag** nennt zusätzlich **Stripe Technology
+  Europe, Limited (STEL)** als mögliche weitere Vertragspartei für
+  bestimmte Zahlungsdienste.
+
+Beide sitzen in **Irland**. Die frühere Formulierung „je nach genutzten
+Diensten können mehrere Stripe-Gesellschaften beteiligt sein" ist damit
+konkretisiert: Es sind diese beiden.
+
+## Was offen bleibt — und warum
+
+**Die Anschriften der beiden Stripe-Gesellschaften.** Sie sollten
+ausdrücklich aus einer **Stripe-Primärquelle** übernommen werden. Das
+ist aus dieser Arbeitsumgebung **nicht möglich**:
+
+- `https://stripe.com/legal/dpa` → vom Egress-Proxy abgewiesen
+  (`EGRESS_BLOCKED`), geprüft am 20.09.2026
+- `https://support.stripe.com/…` → ebenso abgewiesen, geprüft am
+  20.09.2026
+
+Das deckt sich mit den bereits bekannten Sperren für `api.stripe.com`,
+`dashboard.stripe.com` und `checkout.stripe.com`.
+
+**Konsequenz, und sie ist bewusst so gewählt:** Die frühere Angabe
+„One Wilton Park, Wilton Place, Dublin 2, D02 FX04" wurde aus dem
+Entwurf der Datenschutzerklärung **entfernt**, nicht stehen gelassen.
+Sie stammte aus Sekundärrecherche vom 18.09.2026 und war nie an einem
+Stripe-Dokument geprüft. **Eine Anschrift, die plausibel aussieht und
+nicht belegt ist, ist in einer Datenschutzerklärung gefährlicher als
+eine sichtbare Lücke** — die Lücke wird beim Korrekturlesen bemerkt, die
+falsche Angabe nicht.
+
+An ihrer Stelle steht jetzt ein sichtbarer Platzhalter. Einzusetzen aus
+dem Stripe-Datenverarbeitungsvertrag beziehungsweise der Stripe Services
+Agreement, Abschnitt „Definitionen" — dort sind beide Gesellschaften mit
+vollständiger Anschrift genannt.
+
+## Verwendete Quellen
+
+- **Primär, vom Auftraggeber gelesen:** Stripe-Datenverarbeitungsvertrag
+  und Stripe-Rahmenvertrag (Zugriff über Adams Stripe-Konto, Stand
+  20.09.2026) — Grundlage für SPEL und STEL.
+- **Primär, vom Auftraggeber gelesen:** Hostinger-Vertragsunterlagen
+  (Stand 20.09.2026) — Grundlage für Firmierung und Anschrift.
+- **Sekundär, nur zur Vorabeinschätzung vor der Bestätigung und nicht in
+  die Entwürfe übernommen:** `av-vertrag.org/dienst-anbieter/
+  hostinger-international-ltd/` und `datenanfragen.de/company/hostinger/`
+  (beide abgerufen am 20.09.2026). Sie deckten sich mit der späteren
+  Bestätigung, waren aber nicht deren Grundlage.
+- **Nicht verwendet:** die im Stripe-Konto angezeigten SOC-Berichte —
+  sie betreffen die Prüfung interner Kontrollen und sagen zur
+  Vertragsgesellschaft nichts aus.

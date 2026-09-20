@@ -12,6 +12,17 @@
 > (Anwesenheitsliste), PayPal in Ziffer 6 und Ziffer 14, eine erste
 > recherchierte Einordnung der Stripe-/PayPal-Rollen (Dokument 14).
 >
+> **Stand 20.09.2026:** Die Vertragsgesellschaften sind von Adam
+> anhand der Anbieterunterlagen bestätigt und im Text eingesetzt —
+> **Hostinger International Ltd.** (Larnaca, Zypern) für Server und
+> E-Mail, **Stripe Payments Europe, Limited** für die
+> Datenverarbeitung und gegebenenfalls **Stripe Technology Europe,
+> Limited** für bestimmte Zahlungsdienste (beide Irland). Offen
+> bleiben allein die **Anschriften der beiden Stripe-Gesellschaften**;
+> sie sind aus dem Stripe-Rechtsdokument zu übernehmen, weil
+> `stripe.com` aus der Arbeitsumgebung gesperrt ist. Quellen und
+> Prüfweg stehen in Dokument 14, Abschnitt „Nachtrag 20.09.2026".
+>
 > **Grundsatz dieses Entwurfs:** Es wird ausschließlich beschrieben, was
 > im Code oder in der Serverdokumentation nachweisbar geschieht. Wo eine
 > Rechtsgrundlage, eine Frist oder eine Anbieterrolle nicht belegbar ist,
@@ -273,15 +284,12 @@ Entwurf schließt:
 **Entwurfstext:**
 
 > Für die Bezahlung nutzen wir den Zahlungsdienstleister **Stripe
-> Payments Europe, Limited**, One Wilton Park, Wilton Place, Dublin 2,
-> D02 FX04, Irland — recherchiert 18.09.2026 (Dokument 14/15): Diese
-> Gesellschaft wird in Stripes eigenen Vertragsunterlagen ausdrücklich
-> für Kunden mit Sitz in Deutschland genannt. `[VOR VERWENDUNG KLÄREN:
-> Stripe weist selbst darauf hin, dass je nach genutzten Diensten
-> **mehrere** Stripe-Gesellschaften beteiligt sein können — im eigenen
-> Stripe-Dashboard unter „Einstellungen → Geschäftsdaten" bzw. in den
-> „Definitionen" der akzeptierten Stripe Services Agreement gegen­
-> prüfen, nicht ungeprüft übernehmen.]`
+> Payments Europe, Limited**, `[ANSCHRIFT AUS DEM STRIPE-RECHTSDOKUMENT
+> ÜBERNEHMEN]`, Irland.
+>
+> Je nach genutztem Zahlungsdienst kann zusätzlich **Stripe Technology
+> Europe, Limited** beteiligt sein, `[ANSCHRIFT AUS DEM
+> STRIPE-RECHTSDOKUMENT ÜBERNEHMEN]`, Irland.
 >
 > Bezahlt wird ausschließlich auf einer von Stripe betriebenen Seite. Wir
 > übermitteln dorthin den zu zahlenden Betrag, die Anmeldenummer, Ihre
@@ -290,6 +298,41 @@ Entwurf schließt:
 > Bankverbindung — geben Sie unmittelbar bei Stripe ein. Sie erreichen
 > unsere Website zu keinem Zeitpunkt und werden von uns weder
 > gespeichert noch protokolliert.
+
+> ✅ **Am 20.09.2026 von Adam anhand der Stripe-Rechtsdokumente
+> bestätigt — die beiden Gesellschaften stehen damit fest:**
+>
+> - **Stripe Payments Europe, Limited (SPEL)** ist nach dem aktuellen
+>   Stripe-Datenverarbeitungsvertrag bei einem **deutschen Konto** für
+>   die Datenverarbeitung zuständig.
+> - Der **Stripe-Rahmenvertrag** nennt zusätzlich **Stripe Technology
+>   Europe, Limited (STEL)** als mögliche weitere Vertragspartei für
+>   bestimmte Zahlungsdienste.
+>
+> Damit ist die frühere Unsicherheit („mehrere Gesellschaften möglich")
+> aufgelöst: Es sind diese beiden, und beide sitzen in **Irland**, also
+> innerhalb der EU. Ein Drittlandbezug entsteht aus der Gesellschaft
+> selbst nicht.
+
+> ⚠️ **Die Anschriften fehlen noch — und das ist Absicht.**
+> `stripe.com` und `support.stripe.com` sind aus der Arbeitsumgebung
+> des Entwicklers **netzwerkseitig gesperrt** (geprüft am 20.09.2026:
+> beide Abrufe werden vom Egress-Proxy abgewiesen). Die Anschrift lässt
+> sich von hier aus also **nicht aus einer Stripe-Primärquelle**
+> übernehmen.
+>
+> **Eine frühere Fassung dieses Entwurfs nannte hier „One Wilton Park,
+> Wilton Place, Dublin 2, D02 FX04".** Diese Angabe stammte aus
+> Sekundärrecherche vom 18.09.2026, **nicht** aus einem
+> Stripe-Dokument. Sie wurde deshalb **entfernt** statt stehen gelassen
+> — eine Anschrift, die plausibel aussieht und nicht belegt ist, ist in
+> einer Datenschutzerklärung gefährlicher als eine sichtbare Lücke.
+>
+> **Einzusetzen aus:** dem Stripe-Datenverarbeitungsvertrag
+> (stripe.com/legal/dpa) beziehungsweise der Stripe Services Agreement,
+> Abschnitt „Definitionen" — dort stehen beide Gesellschaften mit
+> vollständiger Anschrift. Adam hat Zugriff darauf; abzulesen und hier
+> einzutragen.
 >
 > Zurück erhalten wir die Information, ob und in welcher Höhe gezahlt
 > wurde, sowie eine Zahlungsreferenz. Diese Angaben brauchen wir, um
@@ -358,16 +401,19 @@ Versand über das Postfach `kontakt@veraevents.de` bei **Hostinger**
 > Buchst. b DSGVO. Werbe-E-Mails versenden wir nicht.
 >
 > Für den Versand und das Postfach nutzen wir die E-Mail-Dienste der
-> `[VOR VERWENDUNG KLÄREN — recherchiert, aber nicht sicher zuordenbar
-> (Dokument 14/15): Hostinger firmiert je nach Kundensitz unter
-> verschiedenen Gesellschaften — u. a. **Hostinger International
-> Limited** (Zypern, 61 Lordou Vironos Street, Lumiel Building, 4.
-> Stock, Larnaca, CY 6023) oder **Hostinger Global S.à r.l.**
-> (Luxemburg, 6 Avenue Pasteur, L-2310 Luxemburg). Welche davon für
-> deinen konkreten Vertrag gilt, steht auf deiner Hostinger-Rechnung
-> bzw. -Auftragsbestätigung (hPanel → Abrechnung → Rechnungen) — dort
-> bitte nachsehen, statt zu raten.]`. Der Anbieter verarbeitet die
-> Inhalte und Verbindungsdaten Ihrer E-Mails in unserem Auftrag.
+> **Hostinger International Ltd.**, 61 Lordou Vironos Street, 6023
+> Larnaca, Zypern. Der Anbieter verarbeitet die Inhalte und
+> Verbindungsdaten Ihrer E-Mails in unserem Auftrag.
+
+> ✅ **Am 20.09.2026 von Adam bestätigt.** Die frühere Unsicherheit ist
+> damit aufgelöst: Es ist **Hostinger International Ltd.** in Larnaca,
+> Zypern — **nicht** Hostinger Global S.à r.l. (Luxemburg), die als
+> zweite Möglichkeit im Raum stand. Zypern liegt in der EU; ein
+> Drittlandbezug entsteht aus der Gesellschaft nicht.
+>
+> **Dieselbe Gesellschaft gilt auch für den Server** (Abschnitt 8) —
+> Hosting und E-Mail laufen über denselben Vertrag. Beide Stellen
+> müssen dieselbe Firmierung tragen.
 >
 > ✅ **Recherchiert 18.09.2026 (Dokument 14/15):** Hostingers
 > Auftragsverarbeitungsvertrag (einschließlich EU-Standardvertrags­
@@ -397,8 +443,9 @@ die Erklärung.]`
 **Entwurfstext:**
 
 > Diese Website wird auf einem von uns angemieteten virtuellen Server
-> betrieben. Anbieter ist `[VOR VERWENDUNG KLÄREN: Firmierung und
-> Anschrift, siehe Ziffer 7]`, Standort **Frankreich**. Der Anbieter
+> betrieben. Anbieter ist die **Hostinger International Ltd.**, 61
+> Lordou Vironos Street, 6023 Larnaca, Zypern; Standort des Servers ist
+> **Frankreich**. Der Anbieter
 > verarbeitet die auf dem Server anfallenden Daten in unserem Auftrag auf
 > Grundlage eines Auftragsverarbeitungsvertrags.
 > Rechtsgrundlage für den Einsatz ist Art. 6 Abs. 1 Buchst. f DSGVO;
@@ -684,9 +731,9 @@ Erklärung verweist, die es nicht gibt.]`
 
 | Empfänger | Wofür | Was er erhält | Rolle | Standort |
 |---|---|---|---|---|
-| Hostinger (Server) | Betrieb der Website | alle auf dem Server anfallenden Daten | Auftragsverarbeiter `[bestätigen]` | Server: **Frankreich** (bestätigt 18.09.2026) — Vertragsgesellschaft `[siehe Ziffer 7 — Hostinger International Limited (Zypern) oder Hostinger Global S.à r.l. (Luxemburg), aus eigener Rechnung zu bestätigen]` |
+| Hostinger (Server) | Betrieb der Website | alle auf dem Server anfallenden Daten | Auftragsverarbeiter `[bestätigen]` | Server: **Frankreich** (bestätigt 18.09.2026) — Vertragsgesellschaft: **Hostinger International Ltd.**, 61 Lordou Vironos Street, 6023 Larnaca, Zypern (bestätigt 20.09.2026) |
 | Hostinger (Postfach) | E-Mail-Versand und -Empfang | Inhalt und Adressaten der E-Mails | Auftragsverarbeiter `[bestätigen]` | wie oben |
-| Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | doppelte Rolle — Auftragsverarbeiter für die Abwicklung, eigenständig Verantwortlicher für eigene Pflichten. **AVV bereits durch Kontoeröffnung wirksam** (per Verweis), genaue Rollenverteilung `[aus eigenem Vertrag bestätigen]` | `[Drittlandbezug klären]` |
+| Stripe | Bezahlung | Betrag, Anmeldenummer, E-Mail, Eventtitel, Personenzahl | doppelte Rolle — Auftragsverarbeiter für die Abwicklung, eigenständig Verantwortlicher für eigene Pflichten. **AVV bereits durch Kontoeröffnung wirksam** (per Verweis), genaue Rollenverteilung `[aus eigenem Vertrag bestätigen]` | Gesellschaften: **Stripe Payments Europe, Limited (SPEL)** für die Datenverarbeitung, ggf. zusätzlich **Stripe Technology Europe, Limited (STEL)** für bestimmte Zahlungsdienste — beide **Irland**, bestätigt 20.09.2026; Anschriften `[aus dem Stripe-Rechtsdokument übernehmen]`. Weiterer Drittlandbezug `[klären]` |
 | PayPal (nur bei Auswahl dieser Zahlungsart) | Bezahlung | PayPal-Zugangsdaten, Betrag | eigenständig Verantwortlicher | `[klären]` |
 | Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | Speicherort: **EU** (Bucket-Endpoint `eu-central-003`, bestätigt 18.09.2026) — Gesellschaft selbst US-amerikanisch, Drittlandbezug `[fachlich zu bewerten]` |
 | Meta Platforms Ireland Ltd., Merrion Road, Dublin 4, D04 X2K5, Irland (Instagram) — **sofern Übersichtsaufnahmen veröffentlicht werden** | Veröffentlichung von Aufnahmen auf dem offiziellen Instagram-Kanal von VERA | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher | Irland, mit möglicher Übermittlung in die **USA**; Grundlage derzeit der EU-US-Angemessenheitsbeschluss `[Stand 18.09.2026 in Kraft, aber unter Überprüfung — siehe Dokument 06]` |
