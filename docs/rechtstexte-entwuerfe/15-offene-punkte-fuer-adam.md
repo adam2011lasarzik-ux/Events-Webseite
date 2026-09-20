@@ -50,7 +50,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 | ~~2.15~~ | ⚠️ **Beantwortet 18.09.2026: Noch keine Versicherung vorhanden.** Wichtiger offener Punkt **vor dem ersten echten Event** (nicht mehr Testmodus) — ohne sie trägt VERA jedes Haftungsrisiko selbst. Keine Versicherung wird in den Texten behauptet (Dokument 03, Ziffer 11.3). | Versicherungsunterlagen |
 | ~~2.16~~ | ✅ **Beantwortet 18.09.2026:** Die Halle stellt Trainer und Ausrüstung. Erste Einordnung: Der Trainer ist trotzdem voraussichtlich Erfüllungsgehilfe von VERA nach § 278 BGB, weil er die von VERA versprochene Betreuung erbringt — **fachlich zu bestätigen** anhand des Vertrags zwischen VERA und der Halle (Dokument 03, Ziffer 12) | eigener Vertrag mit der Halle |
 | 3.5/3.6 | ⬜ **Geprüft 18.09.2026, weiterhin offen:** Öffentliche Playtomic-Seite von Quality Padel nennt keine Hausordnung und keine Schuhwerk-Vorgabe. Adam fragt direkt bei der Halle nach | direkt bei der Halle |
-| 6.4 | ⬜ **Geprüft 18.09.2026, weiterhin offen:** noch nicht bekannt, niedrige Priorität (reine Zusatzinfo, keine Haftungsfrage) | Halle fragen |
+| ~~6.4~~ | ✅ **Erledigt am 20.09.2026 — die Frage hat sich aufgelöst.** Entscheidung 6.4 hat Ziffer 8 der Hausordnung so gefasst, dass sie **unabhängig** davon gilt, ob es Schließfächer gibt (8.3 ist ein Bedingungssatz). Es ist nichts mehr abzulesen und bei einer Veranstaltung in einer anderen Halle nichts nachzuziehen. | — |
 
 ---
 
