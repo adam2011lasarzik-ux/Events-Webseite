@@ -120,6 +120,27 @@ wofür VERA Fotos überhaupt braucht.
 
 **Beantwortet am 19.09.2026:**
 
+- ~~**5.12 — Nutzungsrechte: einfach oder ausschließlich?**~~ ✅
+  **Beantwortet 20.09.2026: einfaches, nicht ausschließliches Recht.**
+  Nur bei **ausdrücklicher Vereinbarung im Angebot**; ausschließlich für
+  eigene Unternehmenskommunikation und Werbung; **nicht übertragbar**,
+  **keine Unterlizenzierung**; VERA darf die Aufnahmen weiter selbst
+  nutzen. Überlassen werden **nur von VERA ausgewählte
+  Übersichtsaufnahmen** ohne erkennbar hervorgehobene Einzelpersonen;
+  **Aufnahmen mit hervorgehobenen Beschäftigten werden nicht überlassen**,
+  solange keine gesonderte tragfähige Grundlage vorliegt. Widersprüche
+  werden vor der Überlassung berücksichtigt. Der Auftraggeber ist für
+  seine anschließende Nutzung selbst verantwortlich. **Ohne Vereinbarung
+  kein Anspruch auf Herausgabe.**
+  ⚠️ **Dabei beseitigt: ein Widerspruch zum geltenden Aufnahmekonzept.**
+  Die alte Ziffer 14 sagte, der Auftraggeber hole „die erforderlichen
+  Einwilligungen" ein und VERA brauche für eigene Zwecke die
+  „Einwilligung der abgebildeten Personen" — **seit der Neufassung vom
+  19.09.2026 gibt es keine Einwilligung mehr** (Art. 6 Abs. 1 Buchst. f
+  DS-GVO, Widerspruchsrecht statt Widerruf). Zwei Regelwerke von VERA
+  hätten sonst gegensätzliche Rechtsgrundlagen behauptet.
+  Dokument 04, Ziffern 13.5 und 14.1–14.7 sowie Anhang L.
+
 - ~~**5.11 — Höhere Gewalt: nach welchem Zeitraum Rücktritt?**~~ ✅
   **Beantwortet 20.09.2026: 30 Tage.** Dauert das Ereignis länger an,
   kann **jede Partei** zurücktreten. **Steht schon vorher fest, dass die

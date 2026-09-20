@@ -663,10 +663,10 @@ erbracht.
 ## 13. Nutzungsrechte an erstellten Materialien
 
 13.1 Erstellt VERA im Rahmen des Auftrags Konzepte, Ablaufpläne,
-Präsentationen, Fotografien oder sonstige Materialien, erhält der
-Auftraggeber **mit vollständiger Zahlung der Vergütung** das einfache,
-räumlich und zeitlich unbeschränkte Recht, diese Materialien für den
-vereinbarten Zweck zu nutzen.
+Präsentationen oder sonstige Materialien, erhält der Auftraggeber **mit
+vollständiger Zahlung der Vergütung** das einfache, räumlich und zeitlich
+unbeschränkte Recht, diese Materialien für den vereinbarten Zweck zu
+nutzen.
 
 13.2 Eine Bearbeitung, Weitergabe an Dritte oder Nutzung für andere
 Zwecke bedarf der Zustimmung von VERA in Textform.
@@ -677,33 +677,66 @@ aus der Zusammenarbeit weiter zu verwenden.
 13.4 Rechte Dritter an beigestellten Materialien bleiben unberührt. Der
 Auftraggeber stellt sicher, dass er zur Überlassung berechtigt ist.
 
-`[VOR VERWENDUNG KLÄREN: Reicht ein einfaches Nutzungsrecht, oder soll
-im Einzelfall ein ausschließliches eingeräumt werden? Ein
-ausschließliches Recht ist erheblich weitreichender und sollte gesondert
-vergütet werden.]`
+13.5 **Für Foto- und Videoaufnahmen gilt vorrangig Ziffer 14.**
 
 ---
 
 ## 14. Foto- und Videoaufnahmen
 
-14.1 Sollen bei der Veranstaltung Aufnahmen entstehen, wird dies im
-Angebot festgelegt: wer aufnimmt, zu welchem Zweck und wer die
-erforderlichen Einwilligungen einholt.
+> ✅ **Neu gefasst am 20.09.2026 (Frage 5.12).** Die frühere Fassung ging
+> davon aus, dass für die Aufnahmen Einwilligungen der Teilnehmenden
+> eingeholt werden. Das entspricht **nicht mehr** dem Konzept aus
+> Dokument 06, Teil VIII: Es gibt ausschließlich Übersichtsaufnahmen auf
+> Grundlage von Art. 6 Abs. 1 Buchst. f DS-GVO, und an die Stelle der
+> Einwilligung tritt das **Widerspruchsrecht** nach Art. 21 DS-GVO.
 
-14.2 **Soweit nichts anderes vereinbart ist, holt der Auftraggeber die
-erforderlichen Einwilligungen der Teilnehmenden ein** und weist sie auf
-die Aufnahmen hin.
+### Aufnahmen durch VERA
 
-14.3 Möchte VERA Aufnahmen für eigene Zwecke verwenden, insbesondere zur
-Darstellung der eigenen Tätigkeit, bedarf dies der Zustimmung des
-Auftraggebers **und** der Einwilligung der abgebildeten Personen. Die
-Zustimmung des Auftraggebers ersetzt die Einwilligung der abgebildeten
-Personen nicht.
+14.1 VERA fertigt bei ihren Veranstaltungen **Übersichtsaufnahmen** an,
+bei denen keine einzelne Person erkennbar im Mittelpunkt steht;
+Videoaufnahmen können allgemeinen Umgebungston enthalten. Einzelheiten,
+Zwecke, Veröffentlichungswege und das Widerspruchsrecht ergeben sich aus
+dem Hinweis zu Foto-, Video- und allgemeinen Tonaufnahmen.
 
-> **Zu 14.3 Satz 2 — der Satz, der oft fehlt.** Ein Unternehmen kann für
-> seine Beschäftigten keine wirksame Einwilligung in Bildaufnahmen
-> erteilen. Eine Klausel, die das suggerierte, wäre für VERA gefährlich:
-> Sie führte zu Veröffentlichungen ohne tragfähige Grundlage.
+14.2 Der Auftraggeber gibt das Informationsblatt nach Ziffer 4.5 weiter
+und leitet ihm mitgeteilte **Widersprüche vor Beginn der Veranstaltung**
+an VERA weiter (Ziffer 4.6a). Liegt die Bestätigung nach Ziffer 4.6 bei
+Beginn nicht vor, fertigt VERA keine Übersichtsaufnahmen an
+(Ziffer 4.6b).
+
+### Überlassung an den Auftraggeber
+
+14.3 **Ohne ausdrückliche Vereinbarung im Angebot besteht kein Anspruch
+auf Herausgabe von Aufnahmen.**
+
+14.4 Ist die Überlassung im Angebot vereinbart, erhält der Auftraggeber
+an den überlassenen Aufnahmen ein **einfaches, nicht ausschließliches**
+Nutzungsrecht. Es gilt **ausschließlich für seine eigene
+Unternehmenskommunikation und Werbung**, ist **nicht übertragbar** und
+berechtigt **nicht zur Unterlizenzierung**. VERA bleibt berechtigt, die
+Aufnahmen für die vereinbarten eigenen Zwecke zu verwenden.
+
+14.5 Überlassen werden **ausschließlich von VERA ausgewählte
+Übersichtsaufnahmen**, bei denen keine einzelne Person erkennbar im
+Mittelpunkt steht. **Aufnahmen, auf denen Beschäftigte des Auftraggebers
+oder andere Einzelpersonen erkennbar hervorgehoben sind, werden nicht
+zur Werbenutzung überlassen**, solange dafür keine gesonderte tragfähige
+Rechtsgrundlage vorliegt.
+
+14.6 Vor der Überlassung prüft VERA, ob Widersprüche entgegenstehen, und
+berücksichtigt sie.
+
+14.7 **Für seine anschließende Nutzung ist der Auftraggeber selbst
+verantwortlich** — für die eigene Rechtsgrundlage ebenso wie für seine
+Informationspflichten gegenüber den betroffenen Personen. Die Überlassung
+durch VERA ersetzt weder das eine noch das andere.
+
+> ⚠️ **Zu 14.5 — der Satz, der oft fehlt.** Ein Unternehmen kann für
+> seine Beschäftigten keine wirksame Einwilligung in Bildaufnahmen zu
+> Werbezwecken erteilen. Eine Klausel, die das suggerierte, wäre für
+> VERA gefährlich: Sie führte zu Überlassungen ohne tragfähige
+> Grundlage — und VERA wäre diejenige, die die Aufnahme angefertigt und
+> weitergegeben hat.
 
 ---
 
@@ -2027,3 +2060,107 @@ richtig verteilt — bei höherer Gewalt ist streitig, wer das Risiko
 bereits gebundener Kosten trägt. Die Normzitate sind Prüfauftrag, kein
 nachgewiesenes Ergebnis — gesetze-im-internet.de und dejure.org sind aus
 dieser Arbeitsumgebung gesperrt.]`
+
+---
+
+# Anhang L: Prüfung der Nutzungsrechte an Aufnahmen (20.09.2026, Frage 5.12)
+
+Geprüft mit `klauselinhalt-und-verbote-pruefen` und
+`klauseltransparenz-pruefen`. **Ergebnis: die Regelung trägt.** Dabei
+wurde zugleich ein **Widerspruch zum aktuellen Aufnahmekonzept**
+beseitigt.
+
+## ⚠️ Der beseitigte Widerspruch
+
+Die bisherige Ziffer 14 stammte aus der Zeit vor der Neufassung von
+Dokument 06. Sie sagte in 14.2, der **Auftraggeber** hole „die
+erforderlichen Einwilligungen der Teilnehmenden" ein, und in 14.3, VERA
+brauche für eigene Zwecke die „Einwilligung der abgebildeten Personen".
+
+**Beides stimmt seit dem 19.09.2026 nicht mehr.** Nach dem geltenden
+Konzept gibt es **keine Einwilligung**: Übersichtsaufnahmen stützen sich
+auf Art. 6 Abs. 1 Buchst. f DS-GVO, und an die Stelle des Widerrufs
+tritt das **Widerspruchsrecht** nach Art. 21 DS-GVO. Wäre die alte
+Fassung stehengeblieben, hätten zwei Regelwerke von VERA gegensätzliche
+Rechtsgrundlagen behauptet — im Streitfall der schlechteste denkbare
+Befund.
+
+Ziffer 14.1 und 14.2 verweisen jetzt auf das Informationsblatt und die
+Bestätigungsregel aus Ziffer 4.5 bis 4.6b. Damit hängen B2B-Bedingungen
+und Aufnahmekonzept an **einer** Kette.
+
+## Warum ein einfaches Nutzungsrecht die richtige Wahl ist
+
+Ein **ausschließliches** Recht nach § 31 Abs. 3 UrhG würde VERA die
+eigene Verwendung nehmen — also genau das, wofür die Aufnahmen
+überhaupt entstehen. Es wäre zudem ohne gesonderte Vergütung sachlich
+nicht zu begründen. Das einfache Recht nach § 31 Abs. 2 UrhG lässt
+beide Seiten nutzen und ist der Normalfall bei Auftragsarbeiten dieser
+Art.
+
+**Ziffer 14.3 entspricht dem Zweckübertragungsgrundsatz** (§ 31 Abs. 5
+UrhG): Ohne ausdrückliche Vereinbarung erhält der Auftraggeber nichts.
+Das ist nicht nur zulässig, sondern die gesetzliche Voreinstellung —
+die Klausel schreibt sie auf, statt sie stillschweigend zu unterstellen.
+
+Die Begrenzung auf **eigene Unternehmenskommunikation und Werbung**,
+ohne Übertragbarkeit und ohne Unterlizenzierung, ist eine zulässige
+inhaltliche Beschränkung nach § 31 Abs. 1 Satz 2 UrhG. Sie verhindert
+den praktisch wichtigsten Fall: dass die Aufnahmen über eine Agentur
+oder einen Konzernverbund weiterwandern, ohne dass VERA davon erfährt.
+
+## Der eigentliche Kern liegt nicht im Urheberrecht
+
+**Das Urheberrecht ist hier der leichtere Teil.** Entscheidend ist die
+datenschutzrechtliche Seite: Die Weitergabe an den Auftraggeber für
+**dessen** Werbung ist ein **anderer Zweck** als VERAs eigene
+Darstellung — dieselbe Konstellation, die bei der Veranstaltungslocation
+zum schwächsten Punkt der Abwägung geworden ist (Dokument 06, Teil
+VIII.4 und VIII.5).
+
+Drei Sicherungen halten das zusammen:
+
+- **Nur Übersichtsaufnahmen** (Ziffer 14.5). Je weniger eine einzelne
+  Person hervortritt, desto geringer der Eingriff und desto eher trägt
+  die Abwägung.
+- **Keine hervorgehobenen Einzelpersonen ohne gesonderte Grundlage**
+  (Ziffer 14.5 Satz 2). Das ist die wichtigste Grenze — und sie schützt
+  VERA mehr als den Auftraggeber, weil VERA diejenige ist, die
+  aufgenommen und überlassen hat.
+- **Prüfung auf Widersprüche vor jeder Überlassung** (Ziffer 14.6),
+  parallel zur Prüfung vor Veröffentlichung und vor Weitergabe an die
+  Location.
+
+## Beschäftigte sind der heikelste Fall
+
+Bei einem Firmenevent sind die Teilnehmenden überwiegend **Beschäftigte
+des Auftraggebers**. Für deren Abbildung in der Werbung des eigenen
+Arbeitgebers gelten strengere Maßstäbe: Die Freiwilligkeit einer
+Einwilligung ist im Beschäftigungsverhältnis besonders kritisch zu
+prüfen, weil ein Abhängigkeitsverhältnis besteht. Und **der Arbeitgeber
+kann für seine Beschäftigten keine Einwilligung erteilen** — er ist
+nicht ihr Vertreter.
+
+Ziffer 14.5 Satz 2 zieht daraus die praktische Folge: Solche Aufnahmen
+werden gar nicht erst überlassen, solange keine gesonderte tragfähige
+Grundlage vorliegt. Das ist die einzige Regel, die VERA zuverlässig aus
+der Verantwortung hält — eine Zusicherung des Auftraggebers täte das
+nicht, weil sie nur im Innenverhältnis wirkt.
+
+## Was Ziffer 14.7 leistet und was nicht
+
+Sie stellt klar, dass der Auftraggeber für seine eigene Nutzung selbst
+verantwortlich ist. **Das ist richtig, aber es entlastet VERA nicht
+vollständig:** Für die **Anfertigung** und die **Überlassung** bleibt
+VERA verantwortlich. Die Klausel verteilt also die Verantwortung für die
+jeweils eigene Phase — sie verschiebt nichts nach hinten.
+
+`[FACHLICHE PRÜFUNG: (1) Ob die Überlassung an den Auftraggeber für
+dessen Werbung von Art. 6 Abs. 1 Buchst. f DS-GVO getragen wird — das
+ist derselbe Prüfpunkt wie bei der Veranstaltungslocation und gehört
+zusammen bewertet. (2) Ob die Abgrenzung „erkennbar hervorgehoben" in
+der Praxis handhabbar ist. (3) Der Umgang mit Aufnahmen von
+Beschäftigten, falls ein Auftraggeber sie ausdrücklich wünscht. Die
+Normzitate sind Prüfauftrag, kein nachgewiesenes Ergebnis —
+gesetze-im-internet.de und dejure.org sind aus dieser Arbeitsumgebung
+gesperrt.]`
