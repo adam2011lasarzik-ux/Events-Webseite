@@ -505,8 +505,13 @@ export const de = {
      falsch geworden — und gerade die Empfängerangabe darf nicht
      falsch sein (Art. 13 Abs. 1 Buchst. e DS-GVO).
 
-     ⚠️ Ein Platzhalter ist noch offen und bewusst als solcher
-     formuliert: die Instagram-Kanäle (B-12). */
+     B-12 (Instagram-Kanäle) ist seit 21.09.2026 geklärt: VERA hat
+     aktuell KEINEN eigenen Instagram-Kanal. Instagram wird deshalb
+     hier nicht als aktiver Veröffentlichungsweg genannt, bis ein
+     offizielles Konto eingerichtet ist — vorher zu schreiben, es gäbe
+     einen, wäre schlicht falsch. Der Kanal der Veranstaltungsstätte
+     ist davon unberührt; ob sie einen hat, ist weiterhin ungeklärt
+     (siehe Dokument 16, Frage 5) und wird nicht behauptet. */
   aufnahmen: {
     titel: "Hinweise zu Foto-, Video- und Tonaufnahmen",
     fusszeile: "Aufnahmen",
@@ -532,12 +537,12 @@ export const de = {
         id: "verwendung",
         titel: "Wofür wir sie verwenden",
         absaetze: [
-          "Die Aufnahmen erscheinen auf der Website von VERA und auf dem offiziellen " +
-            "Instagram-Kanal von VERA. Zusätzlich können sie an die jeweilige " +
-            "Veranstaltungsstätte weitergegeben werden, die sie auf ihrer eigenen Website und " +
-            "ihrem eigenen Instagram-Kanal verwenden darf.",
-          "[PLATZHALTER: Hier stehen vor der Freischaltung die Kontonamen und Links der " +
-            "beiden Instagram-Kanäle.]",
+          "Die Aufnahmen erscheinen auf der Website von VERA. Einen eigenen " +
+            "Instagram-Kanal hat VERA derzeit nicht; sobald einer eingerichtet ist, wird " +
+            "diese Seite ergänzt und der Kanal hier verlinkt.",
+          "Zusätzlich können die Aufnahmen an die jeweilige Veranstaltungsstätte " +
+            "weitergegeben werden, die sie im Rahmen ihrer eigenen Öffentlichkeitsarbeit " +
+            "verwenden darf.",
           "Eine Weitergabe an Presse, Sponsoren, Kooperationspartner oder sonstige Dritte " +
             "findet nicht statt. Auch für Flyer, Plakate, Facebook oder TikTok verwenden wir " +
             "die Aufnahmen nicht.",

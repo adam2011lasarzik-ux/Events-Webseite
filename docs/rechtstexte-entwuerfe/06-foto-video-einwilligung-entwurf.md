@@ -1198,6 +1198,16 @@ bleibt als Begründungsmaterial nutzbar, aber nicht als Regelwerk.
   und Instagram-Kanal von VERA, Website und Instagram-Kanal der
   jeweiligen Veranstaltungslocation. Keine Weitergabe an Presse,
   Sponsoren oder sonstige Dritte (Entscheidung 4.5).
+
+  ⚠️ **Stand 21.09.2026 (B-12):** VERA hat aktuell **keinen** eigenen
+  Instagram-Kanal. Von den vier vorgesehenen Wegen ist damit heute nur
+  die Website von VERA tatsächlich in Betrieb; Instagram wird auf der
+  Hinweisseite `/aufnahmen` und im Adminbereich bewusst **nicht** als
+  aktiver Weg genannt oder angeboten, bis ein offizielles Konto
+  eingerichtet ist. Die vier Wege aus Entscheidung 4.4 bleiben als
+  **Rahmen** gültig — es ändert sich nur, welche davon heute schon
+  genutzt werden. Der Instagram-Kanal der Veranstaltungsstätte ist
+  davon unberührt und weiterhin ungeklärt (Dokument 16, Frage 5).
 - Die Dauer bleibt zweckgebunden und ohne feste Frist mit jährlicher
   dokumentierter Prüfung (Entscheidung 4.6) — mit **einer sprachlichen
   Korrektur**: Es endet nicht mehr „mit dem Widerruf", sondern **mit
@@ -1398,7 +1408,9 @@ stattdessen wird sie an Bedingungen geknüpft.
   müssen vor dem Ticketkauf und im Datenschutzhinweis eindeutig genannt
   werden.** „Der Veranstaltungsort" genügt nicht — es braucht Firmierung
   und Anschrift je Event (B-11, ✅ erledigt am 21.09.2026) und die
-  benannten Kanäle (B-12, weiterhin offen).
+  benannten Kanäle (B-12, ✅ erledigt am 21.09.2026: VERA hat noch
+  keinen Instagram-Kanal, wird deshalb nicht als Ziel angeboten; der
+  Kanal der Location bleibt offen).
 - **Verständliche Gespräche werden vor der Weitergabe entfernt.**
 - **Jede Aufnahme wird vor Veröffentlichung und vor Weitergabe
   kontrolliert.**

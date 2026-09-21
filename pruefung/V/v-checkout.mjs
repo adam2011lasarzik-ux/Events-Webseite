@@ -139,8 +139,12 @@ pruefe(
   !/Einwilligung erteil|Sie willigen ein/.test(de.slice(de.indexOf("aufnahmen: {"), de.indexOf("recht: {"))),
 );
 pruefe(
-  "Die offenen Angaben sind als Platzhalter erkennbar",
-  de.includes("[PLATZHALTER:"),
+  "Es wird nicht behauptet, VERA habe schon einen Instagram-Kanal (B-12)",
+  !/Instagram-Kanal von VERA\./.test(de),
+);
+pruefe(
+  "Stattdessen steht dort ehrlich, dass es noch keinen gibt",
+  de.includes("Instagram-Kanal hat VERA derzeit nicht"),
 );
 pruefe("Sie ist aus dem Fussbereich erreichbar", lies("components/Footer.tsx").includes('"/aufnahmen"'));
 

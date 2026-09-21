@@ -42,7 +42,7 @@ const HINWEISE: Record<string, { text: string; gut: boolean }> = {
     gut: false,
   },
   "name-fehlt": { text: "Ohne Namen lässt sich ein Widerspruch später niemandem zuordnen.", gut: false },
-  "ziel-fehlt": { text: "Ohne Ziel („Website“, „Instagram“ …) ist der Prüfvermerk wertlos.", gut: false },
+  "ziel-fehlt": { text: "Ohne Ziel („Website“, „Weitergabe an die Halle“ …) ist der Prüfvermerk wertlos.", gut: false },
   "ergebnis-fehlt": { text: "Bitte das Ergebnis der Sichtung angeben. Es gibt hier bewusst keinen Standardwert.", gut: false },
   "event-fehlt": { text: "Diese Veranstaltung gibt es nicht.", gut: false },
 };
@@ -176,14 +176,21 @@ export default async function AufnahmenSeite({
       )}
 
       <div className={stil.karte}>
-        <h2 className={stil.karteTitel}>Noch offen</h2>
+        <h2 className={stil.karteTitel}>Instagram (B-12)</h2>
         <p>
-          <b>[PLATZHALTER — B-12]</b> Die Instagram-Kanäle sind noch nicht bestätigt. Bis
-          dahin ist nicht abschließend festgelegt, wohin veröffentlicht wird. Beim
-          Prüfvermerk trägst du das Ziel deshalb vorerst von Hand ein.
+          <b>Geklärt am 21.09.2026:</b> VERA hat derzeit keinen eigenen Instagram-Kanal.
+          Deshalb wird Instagram hier nicht als Veröffentlichungsziel angeboten — auf der
+          Hinweisseite <Link href="/aufnahmen">/aufnahmen</Link> steht das entsprechend, und
+          das Feld „Ziel" schlägt Instagram nicht mehr vor.
         </p>
         <p>
-          Wird nachgezogen, sobald die Halle geantwortet hat — siehe{" "}
+          Richtet VERA später ein offizielles Konto ein, wird das hier nachgezogen: Text auf
+          der Hinweisseite ergänzen, Kontoname und Link eintragen, dann erst als Ziel
+          verwenden.
+        </p>
+        <p>
+          Der Instagram-Kanal der Veranstaltungsstätte ist davon unberührt und weiterhin
+          ungeklärt — siehe Dokument 16, Frage 5, und die Übersicht{" "}
           <Link href="/admin">Übersicht</Link>.
         </p>
       </div>
@@ -487,7 +494,9 @@ function PruefFormular({
               placeholder="Website"
             />
             <span className={stil.feldHilfe}>
-              Wohin veröffentlicht wird: „Website“, „Instagram“, „Weitergabe an die Halle“.
+              Wohin veröffentlicht wird: „Website“, „Weitergabe an die Halle“. VERA hat
+              derzeit keinen eigenen Instagram-Kanal (B-12) — Instagram taucht deshalb hier
+              noch nicht als Beispiel auf.
             </span>
           </label>
           <label className={stil.feld}>

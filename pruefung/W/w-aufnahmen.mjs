@@ -393,8 +393,8 @@ pruefe("Angemeldet ist die Seite erreichbar", seite.status === 200, `Antwort ${s
 pruefe("Die Seite trägt noindex — Namen gehören in keine Suchmaschine", /noindex/i.test(seite.html));
 pruefe("Die geltenden Widersprüche sind sichtbar", seite.html.includes("Anna Meier"));
 pruefe(
-  "Der Platzhalter B-12 ist als solcher gekennzeichnet",
-  /PLATZHALTER — B-12/.test(seite.html),
+  "B-12 ist im Adminbereich als erledigt dokumentiert, kein Platzhalter mehr",
+  seite.html.includes("Instagram (B-12)") && !/\[PLATZHALTER/i.test(seite.html),
 );
 pruefe(
   "Der Platzhalter B-11 ist verschwunden — die Firmierung steht jetzt am Event",
@@ -533,9 +533,17 @@ pruefe(
   "B-11 ist erledigt",
 );
 pruefe(
-  "Der Platzhalter für die Instagram-Kanäle steht noch da und ist als solcher erkennbar",
-  /PLATZHALTER[^\]]*Instagram/i.test(hinweisText),
-  "B-12 ist weiterhin offen — das soll man sehen",
+  "Es wird NICHT behauptet, VERA habe bereits einen Instagram-Kanal (B-12, erledigt)",
+  !/Instagram-Kanal von VERA\./.test(hinweisText),
+);
+pruefe(
+  "Stattdessen steht ehrlich da, dass VERA derzeit keinen eigenen Kanal hat",
+  hinweisText.includes("Instagram-Kanal hat VERA derzeit nicht"),
+);
+pruefe(
+  "Kein eckiger Platzhalter mehr für die Instagram-Kontonamen",
+  !/\[PLATZHALTER/i.test(hinweisText),
+  "B-11 und B-12 sind beide erledigt",
 );
 
 console.log("\nW13 · Der Adminbereich zeigt die Empfängerangabe");
