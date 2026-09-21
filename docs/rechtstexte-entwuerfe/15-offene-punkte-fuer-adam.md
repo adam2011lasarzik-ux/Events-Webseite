@@ -705,8 +705,9 @@ Volltext heute.
 > bereits umgesetzt — die Website wurde für diesen Auftrag nicht
 > verändert.
 
-- **B-0** — ⚠️ **Die aktuell live auf veraevents.de stehende AGB-Seite (`content/de.ts:688`) enthält noch die alte Aussage „Die Betreuung durch VERA Events beginnt mit dem vereinbarten Check-in und endet mit dem offiziellen Veranstaltungsende" — das widerspricht dem am 17./18.09.2026 gewählten Anlagenmodell (VERA übernimmt keine Aufsicht).** Das ist kein Entwurfsproblem, sondern ein **live stehender Text**, der etwas zusagt, was jetzt nicht mehr gilt. Diese Runde hat ausdrücklich **nichts** auf der Website geändert — die Korrektur (Ziffer 6 in Dokument 03 als Vorlage) ist ein eigener, kleiner Freigabeschritt, sobald du ihn willst.
-  *Betrifft:* `content/de.ts`, `app/(seite)/agb`
+- ~~**B-0**~~ — ✅ **Erledigt am 21.09.2026, im Zuge der vollständigen AGB-Konsolidierung.** Die AGB (jetzt alle 18 Ziffern ausformuliert, kein Platzhalter mehr) sagen in Ziffer 6 das Anlagenmodell wörtlich zu — die alte Betreuungszusage ist restlos entfernt, auch aus der Einverständniserklärung
+  (public/dokumente/einverstaendniserklaerung-minderjaehrige.pdf, dort zusätzlich die Gesundheitsdaten-Frist von "30 Tage" auf die tatsächlich geltenden "7 Tage" korrigiert) und aus der Datenschutzerklärung, die zusätzlich um "3. Empfänger und Auftragsverarbeiter" (Hostinger, Stripe, PayPal, Backblaze, UptimeRobot — nur bereits bestätigte Angaben aus Dokument 02/15, Punkt 1.5) und "5. Ihre Rechte" (Art. 15-21, 77 DSGVO) ergänzt wurde. Geprüft: Prüfliste `N` (98/98), `V` (40/40), `U` (42/42).
+  *Betrifft:* `content/de.ts`, `app/(seite)/agb`, `app/(seite)/datenschutz`, `public/dokumente/`
 
 - **B-1** — Die **Anwesenheitsliste** (Ankunftsvorgang, Entscheidung 3.27) ist bisher ein reiner Papiervorgang. Falls sie später digitalisiert werden soll, existiert dafür noch keine Datenbanktabelle.
   *Betrifft:* Dokument 02, Ziffer 4b

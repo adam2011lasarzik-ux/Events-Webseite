@@ -5,21 +5,68 @@ import { chromium } from "playwright";
 import zlib from "node:zlib";
 const BASIS = "http://127.0.0.1:3249";
 
+/** Adobe-Basis-85 (PDF-Variante von ASCII85) dekodieren — ohne
+ *  Fremdpaket, nur die paar Zeilen, die reportlab-Streams brauchen.
+ *  "z" steht für eine Nullgruppe, ein "~>"-Terminator wird ignoriert. */
+function entpackeAscii85(text) {
+  const bereinigt = text.replace(/~>[\s\S]*$/, "").replace(/\s+/g, "");
+  const bytes = [];
+  let gruppe = [];
+  for (const zeichen of bereinigt) {
+    if (zeichen === "z" && gruppe.length === 0) {
+      bytes.push(0, 0, 0, 0);
+      continue;
+    }
+    gruppe.push(zeichen.charCodeAt(0) - 33);
+    if (gruppe.length === 5) {
+      let wert = 0;
+      for (const g of gruppe) wert = wert * 85 + g;
+      bytes.push((wert >>> 24) & 0xff, (wert >>> 16) & 0xff, (wert >>> 8) & 0xff, wert & 0xff);
+      gruppe = [];
+    }
+  }
+  if (gruppe.length > 0) {
+    // Ein Rest aus n Zeichen (2..4) kodiert n-1 Bytes: mit "u" (Wert 84)
+    // auf 5 auffuellen, wie eine volle Gruppe entschluesseln, aber nur
+    // die ersten n-1 der vier entstehenden Bytes behalten.
+    const echte = gruppe.length - 1;
+    while (gruppe.length < 5) gruppe.push(84);
+    let wert = 0;
+    for (const g of gruppe) wert = wert * 85 + g;
+    const alle = [(wert >>> 24) & 0xff, (wert >>> 16) & 0xff, (wert >>> 8) & 0xff, wert & 0xff];
+    bytes.push(...alle.slice(0, echte));
+  }
+  return Buffer.from(bytes);
+}
+
 /** Die Seiteninhalte einer PDF auspacken, damit der Text prüfbar wird.
- *  Die Datei nutzt inkrementelle Updates — deshalb wird JEDER Stream
- *  gelesen. Ein überschatteter alter Stand faellt dabei mit auf, und
- *  genau das ist gewollt: Eine gestrichene Zusage darf auch als Leiche
- *  nicht in der Datei liegen bleiben. */
+ *  Generatoren kodieren Streams unterschiedlich — reportlab verkettet
+ *  bei den Seiteninhalten ASCII85Decode vor FlateDecode, ältere
+ *  Generatoren nutzten reines FlateDecode. Deshalb wird die Filterliste
+ *  gelesen und in der angegebenen Reihenfolge entschlüsselt, statt nur
+ *  ein festes Muster zu erwarten — sonst prüft dieser Test nach dem
+ *  nächsten Generatorwechsel wieder nur sich selbst.
+ *
+ *  Frühere Fassungen dieser Datei nutzten inkrementelle Updates,
+ *  deshalb wird JEDER Stream gelesen. Ein überschatteter alter Stand
+ *  fiele dabei mit auf, und genau das ist gewollt: Eine gestrichene
+ *  Zusage darf auch als Leiche nicht in der Datei liegen bleiben. */
 function entpackePdfText(roh) {
   let text = "";
-  const muster = /\/Filter \[ \/FlateDecode \] \/Length (\d+)\s*>>\s*stream\r?\n/g;
+  const muster = /\/Filter\s*\[\s*([^\]]+?)\s*\]\s*\/Length\s+(\d+)(?:\s*\/\w+\s+\d+)*\s*>>\s*stream\r?\n/g;
   const latin = roh.toString("latin1");
   let treffer;
   while ((treffer = muster.exec(latin)) !== null) {
-    const laenge = Number(treffer[1]);
+    const filter = treffer[1].split(/\s+/).filter(Boolean);
+    const laenge = Number(treffer[2]);
     const start = treffer.index + treffer[0].length;
     try {
-      text += zlib.inflateSync(roh.subarray(start, start + laenge)).toString("latin1");
+      let daten = roh.subarray(start, start + laenge);
+      for (const stufe of filter) {
+        if (stufe === "/ASCII85Decode") daten = entpackeAscii85(daten.toString("latin1"));
+        else if (stufe === "/FlateDecode") daten = zlib.inflateSync(daten);
+      }
+      text += daten.toString("latin1");
     } catch {
       /* Schriftschnitte und andere Binaerdaten — nicht von Belang. */
     }
@@ -49,25 +96,37 @@ for (const [name, pfad, ueberschrift] of [
     `${name}: trägt die richtige Hauptüberschrift`,
     (await page.locator("h1").innerText()) === ueberschrift,
   );
-  /* Die Marke wird per CSS in Grossbuchstaben gesetzt (text-transform),
-     und innerText gibt den GERENDERTEN Text zurück — deshalb ohne
-     Rücksicht auf Gross- und Kleinschreibung vergleichen.
-
-     Beide Seiten tragen die Markierung inzwischen ABSCHNITTSWEISE:
-     Widerruf seit den Stornobedingungen, AGB seit dem Abschnitt
-     „Teilnahme Minderjähriger". Eine Seite, die geltende Bedingungen
-     enthält und sich zugleich als „noch nicht ausgefüllt" bezeichnet,
-     wäre in beide Richtungen irreführend. */
-  pruefe(
-    `${name}: markiert den offenen Abschnitt sichtbar als Platzhalter`,
-    /platzhalter/i.test(text) && text.includes("Dieser Abschnitt ist noch nicht ausgefüllt"),
-  );
   pruefe(
     `${name}: bezeichnet sich nicht mehr pauschal als unausgefüllt`,
     !text.includes("Diese Seite ist noch nicht ausgefüllt"),
   );
   pruefe(`${name}: Seitentitel gesetzt`, (await page.title()).includes(ueberschrift), await page.title());
 }
+/* Die Marke wird per CSS in Grossbuchstaben gesetzt (text-transform),
+   und innerText gibt den GERENDERTEN Text zurück — deshalb ohne
+   Rücksicht auf Gross- und Kleinschreibung vergleichen.
+
+   Seit 21.09.2026 gilt das nur noch für Widerruf: Dort ist Abschnitt 1
+   (das gesetzliche Widerrufsrecht) weiterhin offen — die Frage nach
+   § 312g Abs. 2 Nr. 9 BGB ist ungeklärt. Die AGB sind seitdem
+   VOLLSTÄNDIG ausgefüllt (Doc03) und tragen deshalb KEINE
+   Platzhalter-Markierung mehr — eine Seite, die geltende Bedingungen
+   enthält und sich zugleich als „noch nicht ausgefüllt" bezeichnet,
+   wäre in beide Richtungen irreführend. */
+await page.goto(BASIS + "/widerruf", { waitUntil: "networkidle" });
+const widerrufOffenText = await page.locator("body").innerText();
+pruefe(
+  "Widerruf: markiert den offenen Abschnitt 1 sichtbar als Platzhalter",
+  /platzhalter/i.test(widerrufOffenText) &&
+    widerrufOffenText.includes("Dieser Abschnitt ist noch nicht ausgefüllt"),
+);
+await page.goto(BASIS + "/agb", { waitUntil: "networkidle" });
+const agbKeinPlatzhalterText = await page.locator("body").innerText();
+pruefe(
+  "AGB: enthält KEINE Platzhalter-Markierung mehr — vollständig ausgefüllt",
+  !/platzhalter/i.test(agbKeinPlatzhalterText) &&
+    !agbKeinPlatzhalterText.includes("Dieser Abschnitt ist noch nicht ausgefüllt"),
+);
 
 /* Der Punkt, der leicht übersehen wird — und der Grund, warum die
    Seite überhaupt jetzt schon entsteht. */
@@ -110,9 +169,25 @@ pruefe(
   "Widerruf: sagt, dass der volle Betrag erstattet wird",
   wText.includes("volle Betrag"),
 );
+/* Entfernt am 21.09.2026: Seit Entscheidung 2.5 lässt sich ohne
+   feststehenden Termin gar nicht erst buchen — die Klausel regelte
+   einen Fall, den es nicht mehr geben kann, und blieb als tote
+   Textleiche stehen. Diese Prüfung hält sie jetzt fern, statt sie zu
+   verlangen. */
 pruefe(
-  "Widerruf: regelt den Fall ohne feststehenden Termin",
-  wText.includes("noch kein Termin feststeht"),
+  "Widerruf: die tote Klausel zum fehlenden Termin ist entfernt",
+  !wText.includes("noch kein Termin feststeht"),
+);
+/* Ergänzt am 21.09.2026 (§ 309 Nr. 5 BGB): Die Pauschalverweigerung
+   nach Fristablauf braucht Anrechnung und einen Nachweisvorbehalt,
+   sonst wäre sie angreifbar. */
+pruefe(
+  "Widerruf: rechnet ersparte Aufwendungen auf den einbehaltenen Betrag an",
+  /anrechnen lassen, was an Aufwendungen erspart/i.test(wText),
+);
+pruefe(
+  "Widerruf: lässt den Nachweis eines geringeren Schadens ausdrücklich zu",
+  /Nachweis vorbehalten, dass VERA kein oder ein wesentlich geringerer Schaden/i.test(wText),
 );
 pruefe(
   "Widerruf: schliesst die Übertragung auf eine andere Person aus",
@@ -135,9 +210,14 @@ pruefe(
 );
 
 await page.goto(BASIS + "/agb", { waitUntil: "networkidle" });
+/* "storno" ist NICHT in "Stornierung" enthalten (…stor-n-I-erung, nicht
+   …stor-n-O) — die alte Prüfung suchte nach einem Wortstamm, der seit
+   der vollständigen AGB-Konsolidierung (21.09.2026, Ziffer 7) gar
+   nicht mehr vorkommt. Geprüft wird jetzt die tatsächlich verwendete
+   Form. */
 pruefe(
-  "AGB: die Stornobedingungen sind darin genannt",
-  (await page.locator("body").innerText()).toLowerCase().includes("storno"),
+  "AGB: die Stornierungsbedingungen sind darin genannt",
+  (await page.locator("body").innerText()).toLowerCase().includes("stornierung"),
 );
 
 // Datenschutz: die Tatsache zur Zahlung ist ergänzt
@@ -240,27 +320,35 @@ pruefe(
   /Angaben auf der Einverständniserklärung/i.test(dsText),
 );
 
-// AGB: dürfen nicht als Pflicht dargestellt werden
+/* Seit 21.09.2026 vollständig ausgefüllt (Doc03), kein Platzhalter
+   mehr — geprüft wird jetzt der tatsächliche Geltungsbereich statt
+   des früheren Platzhalter-Hinweises "nicht vorgeschrieben". */
 await page.goto(BASIS + "/agb", { waitUntil: "networkidle" });
 const agbText = await page.locator("body").innerText();
 pruefe(
-  "AGB: stellen klar, dass eigene AGB nicht vorgeschrieben sind",
-  /nicht für jede Webseite vorgeschrieben/i.test(agbText),
+  "AGB: legen den Geltungsbereich fest (Verbraucher/Unternehmer)",
+  /Verbraucher ist, wer den Vertrag zu Zwecken abschließt/i.test(agbText),
 );
 pruefe(
   "AGB: unterscheiden Stornierung vom gesetzlichen Widerrufsrecht",
-  /etwas anderes als das gesetzliche Widerrufsrecht/i.test(agbText),
+  /wird durch ein etwaiges Widerrufsrecht nicht berührt/i.test(agbText),
 );
 
-/* ── Teilnahme Minderjähriger ───────────────────────────────────
+/* ── Anmeldung Minderjähriger ────────────────────────────────────
 
    Der Abschnitt ist verbindlich, nicht Platzhalter. Geprüft wird
    nicht nur, DASS er da ist, sondern dass die tragenden Aussagen
    darin stehen — und dass die alte Fassung mit pauschalem
-   Haftungsausschluss nicht zurückkehrt. */
+   Haftungsausschluss nicht zurückkehrt.
+
+   Überschrift seit der vollständigen AGB-Konsolidierung (21.09.2026)
+   "6. Anmeldung Minderjähriger" statt vormals "Teilnahme
+   Minderjähriger" — mit Ziffer 3 (Vertragsschluss) und Ziffer 9
+   (Pflichten während der Veranstaltung) abgestimmt, die den Begriff
+   "Anmeldung" bzw. "Teilnahme" jeweils konsequent nutzen. */
 pruefe(
-  "AGB: enthalten den Abschnitt „Teilnahme Minderjähriger“",
-  agbText.includes("Teilnahme Minderjähriger"),
+  "AGB: enthalten den Abschnitt „Anmeldung Minderjähriger“",
+  agbText.includes("Anmeldung Minderjähriger"),
 );
 pruefe(
   "AGB: verlangen die Zustimmung einer erziehungsberechtigten Person",
@@ -283,15 +371,29 @@ pruefe(
   "AGB: weisen Hin- und Rückweg der erziehungsberechtigten Person zu",
   /Hin- und Rückwegs ist die erziehungsberechtigte Person verantwortlich/i.test(agbText),
 );
+/* Korrigiert am 21.09.2026 auf das Anlagenmodell (Entscheidung 3.20).
+   Die frühere Fassung sagte eine Betreuung/Aufsicht durch VERA zu
+   ("Betreuung beginnt mit dem Check-in und endet mit dem offiziellen
+   Veranstaltungsende") — das widersprach der späteren Entscheidung,
+   dass VERA KEINE Aufsicht übernimmt, und stand als Widerspruch
+   sowohl in den AGB als auch im unterschriebenen Papierformular.
+   Diese Prüfung hält die falsche Zusage jetzt fern, genau wie die
+   Prüfung zur "elektronischen Übermittlung" darüber. */
 pruefe(
-  "AGB: begrenzen die Betreuung auf Check-in bis Veranstaltungsende",
-  /beginnt mit dem vereinbarten Check-in und endet mit dem offiziellen Veranstaltungsende/i.test(
-    agbText,
-  ),
+  "AGB: sagen KEINE Betreuung/Aufsicht durch VERA mehr zu (Anlagenmodell)",
+  !/Betreuung durch VERA Events beginnt mit dem vereinbarten Check-in/i.test(agbText),
+);
+pruefe(
+  "AGB: übernehmen ausdrücklich keine Aufsicht über unbegleitete Minderjährige",
+  /VERA übernimmt keine Aufsicht über unbegleitete minderjährige Teilnehmende/i.test(agbText),
+);
+pruefe(
+  "AGB: schuldet stattdessen eine Sicherheitseinweisung",
+  /Sicherheitseinweisung vor dem ersten Spielen/i.test(agbText),
 );
 pruefe(
   "AGB: schliessen die Haftung für Leben, Körper und Gesundheit NICHT aus",
-  /Verletzung des Lebens, des Körpers oder der Gesundheit[\s\S]{0,140}nicht ausgeschlossen oder beschränkt/i.test(
+  /VERA haftet unbeschränkt für Schäden aus der Verletzung des Lebens, des Körpers oder der Gesundheit/i.test(
     agbText,
   ),
 );
@@ -480,7 +582,10 @@ pruefe(
 
 /* Der Aufbau der Seite ist der endgueltige. Ein Banner „diese Seite
    ist noch nicht ausgefuellt" gehoert deshalb NICHT darauf — anders
-   als bei AGB und Widerruf, wo der ganze Text noch fehlt. */
+   als bei Widerruf, wo Abschnitt 1 (das gesetzliche Widerrufsrecht)
+   weiterhin offen ist. Die AGB sind seit 21.09.2026 ebenfalls
+   vollstaendig ausgefuellt und tragen deshalb ebenso keinen Banner
+   mehr. */
 pruefe(
   "Impressum: traegt keinen Unfertig-Banner mehr",
   !impText.includes("noch nicht ausgefüllt"),
@@ -519,9 +624,19 @@ pruefe("Kontakt: kein Telefon-Platzhalter mehr", !/Telefonnummer folgt/.test(kon
 
    Die Abschluss-Seite sagte dem Kunden aber genau das Gegenteil
    ("Dein Platz ist fuer kurze Zeit reserviert"). Diese Pruefung
-   verhindert, dass so eine Formulierung zurueckkehrt. */
+   verhindert, dass so eine Formulierung zurueckkehrt.
+
+   Ausnahme seit der AGB-Konsolidierung (21.09.2026): /agb selbst
+   beschreibt in Ziffer 3.5 wahrheitsgemaess den technischen
+   30-Minuten-Reservierungsmechanismus — UND stellt in derselben
+   Ziffer sowie in 3.8 sofort klar, dass daraus kein Anspruch auf
+   einen Platz entsteht. Das ist die korrekte, transparente
+   Offenlegung des Mechanismus, nicht das Versprechen, das diese
+   Pruefung verhindern soll — genau deshalb gehoert die Erklaerung
+   dorthin, wo Kunden den Vertragstext nachlesen. */
 const versprechen = [];
 for (const pfad of gesehen) {
+  if (pfad === "/agb") continue;
   const antwort = await page.goto(BASIS + pfad, { waitUntil: "networkidle" });
   if (!antwort || antwort.status() !== 200) continue;
   const text = await page.locator("body").innerText();

@@ -644,20 +644,34 @@ export const de = {
     impressumAnschrift: "Anschrift",
     impressumKontakt: "Kontakt",
     impressumUmsatzsteuer: "Umsatzsteuer",
-    /* Wie bei den AGB: Seit die Seite einen verbindlichen Abschnitt
-       enthält, gehört die Platzhalter-Markierung an den offenen Teil
-       und nicht mehr über die ganze Seite. */
+    /* ── Allgemeine Erklärung ───────────────────────────────────────
+       Seit 21.09.2026 KEIN Platzhalter mehr. Der frühere Platzhaltertext
+       ("Hier steht später...") plus die daneben stehende Platzhalter-
+       Markierung widersprachen sich mit den bereits verbindlichen
+       Nachbarabschnitten (Zahlung, Cookies) auf derselben Seite — genau
+       die Mischung, die im Projekt als Fehler gilt. Ersetzt durch die
+       tatsächliche Verantwortlicher- und Online-Anmeldungs-Angabe,
+       Grundlage: docs/rechtstexte-entwuerfe/02-datenschutzerklaerung-
+       entwurf.md (Ziffer 1 und 4) und lib/anmeldung.ts (die einzigen
+       Felder, die das Online-Formular tatsächlich abfragt: Vorname,
+       Nachname, E-Mail, Telefon optional; bei Minderjährigen zusätzlich
+       die Angaben aus Abschnitt 2). */
     datenschutzAllgemeinUeberschrift: "1. Allgemeine Erklärung",
-    /* ­ ist eine WEICHE Trennstelle: unsichtbar, solange das Wort
-       passt, und ein Bindestrich, sobald umgebrochen werden muss. Ohne
-       sie bricht „Einverständniserklärungen" auf dem Handy mitten im
-       Wort ohne Bindestrich um — dasselbe Mittel steht schon im Titel
-       der Seite (`datenschutzTitel`). Wer den Wortlaut vergleicht,
-       entfernt sie vorher mit ohneTrennstellen() aus lib/formate.ts. */
-    datenschutzOffenMarke: "Dieser Abschnitt ist noch nicht ausgefüllt",
+    datenschutzVerantwortlicher:
+      "Verantwortlicher für die Datenverarbeitung auf dieser Website ist VERA Events, " +
+      "Inhaber Adam Lasarzik. Die vollständige Anschrift steht im Impressum " +
+      "(veraevents.de/impressum), Kontakt: kontakt@veraevents.de.",
     datenschutzText:
-      "Hier steht später, welche Daten bei einer Anmeldung erhoben werden, wozu sie verwendet " +
-      "werden, wie lange sie gespeichert bleiben und welche Rechte Besucher haben.",
+      "Bei einer Online-Anmeldung erheben wir Vorname, Nachname, E-Mail-Adresse und, wenn " +
+      "angegeben, Telefonnummer der anmeldenden Person sowie Vorname und Nachname jeder " +
+      "teilnehmenden Person. Meldet eine erziehungsberechtigte Person ein minderjähriges " +
+      "Kind an, gelten zusätzlich die Angaben aus Abschnitt 2. Die Verarbeitung dient dem " +
+      "Zustandekommen und der Durchführung der Anmeldung, der Platzverwaltung und, soweit " +
+      "bezahlt wird, der Zuordnung der Zahlung; Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. b " +
+      "DSGVO (Erfüllung des Vertrags). Beim Aufruf der Website verarbeitet der Hosting-" +
+      "Anbieter zudem die für den technischen Betrieb erforderlichen Server-Protokolldaten " +
+      "(unter anderem IP-Adresse, Zeitpunkt, aufgerufene Seite); Rechtsgrundlage ist Art. 6 " +
+      "Abs. 1 Buchst. f DSGVO (sicherer Betrieb der Website).",
     /* Keine Rechtsformulierung, sondern eine Tatsache aus dem eigenen
        Code (lib/zahlung.ts). Sie steht hier, damit sie beim späteren
        Ausformulieren nicht vergessen wird — sie ist der einzige Punkt,
@@ -670,9 +684,9 @@ export const de = {
       "Anmeldenummer, die E-Mail-Adresse sowie der Titel der Veranstaltung und die Anzahl " +
       "der Personen. Bezahlt wird ausschließlich auf der gesicherten Seite von Stripe. " +
       "Kartennummern und Bankdaten erreichen diese Seite zu keinem Zeitpunkt — sie werden " +
-      "hier weder entgegengenommen noch gespeichert. Welche Rechtsgrundlage gilt, wie lange " +
-      "gespeichert wird und wie der Auftragsverarbeitungsvertrag mit Stripe einzuordnen ist, " +
-      "gehört in die fertige Erklärung.",
+      "hier weder entgegengenommen noch gespeichert. Rechtsgrundlage ist Art. 6 Abs. 1 " +
+      "Buchst. b DSGVO. Weitere Einzelheiten zu Stripe stehen im nächsten Abschnitt " +
+      "„Empfänger und Auftragsverarbeiter“.",
     /* Die frühere Fassung sagte pauschal „diese Seite setzt keine
        Cookies". Das stimmt nicht: lib/adminAuth.ts setzt für die
        Anmeldung am Adminbereich das Cookie `vera_admin`. Besucher
@@ -761,6 +775,46 @@ export const de = {
         "Datenschutzerklärung aufgeführten Rechte der betroffenen Personen.",
     ],
 
+    /* ── Empfänger und Auftragsverarbeiter ──────────────────────────
+       KEIN Platzhalter. Nennt nur Dienstleister, deren Rolle und
+       Anschrift bereits recherchiert und bestätigt sind (siehe
+       docs/rechtstexte-entwuerfe/02-datenschutzerklaerung-entwurf.md,
+       Ziffer 14, und Dokument 15, Punkt 1.5 — dort als "erledigt"
+       vermerkt am 20.09.2026). Bewusst NICHT aufgeführt: PayPal (Rolle
+       und Anschrift laut Dokument 02 weiterhin "[klären]") und eine
+       feste Firmierung der Veranstaltungsstätte — die steht je Event
+       auf /aufnahmen (siehe dort), nicht pauschal auf dieser Seite,
+       weil sie sich mit jedem Veranstaltungsort ändern kann. */
+    datenschutzEmpfaengerUeberschrift: "3. Empfänger und Auftragsverarbeiter",
+    datenschutzEmpfaengerEinleitung:
+      "Wir geben personenbezogene Daten nur an die folgenden Empfänger weiter, soweit dies " +
+      "für den jeweiligen Zweck erforderlich ist. Weitere Empfänger gibt es nicht — " +
+      "insbesondere keine Werbenetzwerke und keine Analysedienste.",
+    datenschutzEmpfaengerAbsaetze: [
+      "Hostinger International Ltd., 61 Lordou Vironos Street, 6023 Larnaca, Zypern, " +
+        "betreibt den Server dieser Website (Serverstandort Frankreich) und das " +
+        "E-Mail-Postfach, über das automatische Bestätigungsmails versendet werden.",
+      "Stripe Payments Europe, Limited, One Wilton Park, Wilton Place, Dublin 2, D02 FX04, " +
+        "Irland (bei bestimmten Zahlungsdiensten zusätzlich Stripe Technology Europe, " +
+        "Limited, unter derselben Anschrift), wickelt Zahlungen ab; Einzelheiten stehen im " +
+        "vorherigen Abschnitt.",
+      "Wird ausdrücklich PayPal als Zahlungsart gewählt, verarbeitet PayPal die dafür " +
+        "erforderlichen Zugangs- und Zahlungsdaten als eigenständig Verantwortlicher nach " +
+        "eigener Datenschutzerklärung.",
+      "Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA, speichert " +
+        "verschlüsselte Sicherungskopien der Datenbank in einem Rechenzentrum in der EU. " +
+        "Backblaze erhält ausschließlich die verschlüsselte Datei, keinen lesbaren Inhalt.",
+      "UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei, ruft in " +
+        "regelmäßigen Abständen die öffentliche Startseite auf, um die Erreichbarkeit der " +
+        "Website zu prüfen. Dabei fallen keine Besucher- oder Teilnehmerdaten an.",
+      "Mitarbeiter der jeweiligen Veranstaltungsstätte dürfen die Papierformulare für " +
+        "minderjährige Teilnehmer am Empfang ausschließlich für VERA Events entgegennehmen " +
+        "und weitergeben; Einzelheiten stehen in Abschnitt 2. Wer die Veranstaltungsstätte " +
+        "einer konkreten Veranstaltung ist, steht auf /aufnahmen.",
+      "In einem akuten Notfall können erforderliche Angaben an Rettungsdienst oder " +
+        "ärztliches Personal weitergegeben werden.",
+    ],
+
     /* ── Speicherdauer und Löschung ────────────────────────────────
        KEIN Platzhalter. Dieser Abschnitt beschreibt, was der Code
        wirklich tut: die Fristen aus lib/loeschfristen.ts, den
@@ -773,7 +827,7 @@ export const de = {
        hier steht, ist die Beschreibung der tatsächlichen Verarbeitung.
        Ob jede Frist rechtlich die richtige ist, gehört fachkundig
        geprüft — das steht so auch in docs/rechtliches.md. */
-    datenschutzLoeschungUeberschrift: "3. Speicherdauer und Löschung",
+    datenschutzLoeschungUeberschrift: "4. Speicherdauer und Löschung",
     datenschutzLoeschungEinleitung:
       "Daten werden nicht länger gespeichert, als es der jeweilige Zweck und die gesetzlichen " +
       "Aufbewahrungspflichten erfordern. Welche Frist gilt, hängt von der Art der Angaben ab; " +
@@ -783,9 +837,10 @@ export const de = {
         "sieben Tage nach Ende der Veranstaltung vernichtet.",
       "Vollständige Einverständniserklärungen für minderjährige Teilnehmer werden drei Jahre " +
         "ab dem Ende des Kalenderjahres der Veranstaltung aufbewahrt und danach vernichtet. " +
-        "Anschließend kann ein reduzierter Nachweis darüber aufbewahrt werden, dass eine " +
-        "Zustimmung vorlag; er enthält kein Geburtsdatum, keine Mobilnummer und keine " +
-        "Gesundheitsangaben.",
+        "Anschließend wird ein reduzierter Nachweis darüber aufbewahrt, dass eine Zustimmung " +
+        "vorlag; er enthält kein Geburtsdatum, keine Mobilnummer und keine " +
+        "Gesundheitsangaben und wird zehn Jahre ab dem Ende des Kalenderjahres der " +
+        "Veranstaltung aufbewahrt und danach gelöscht.",
       "Anmeldedaten sowie Anwesenheitsangaben zu An- und Abmeldung werden drei Jahre ab dem " +
         "Ende des Kalenderjahres der Veranstaltung aufbewahrt. Danach werden Name, " +
         "E-Mail-Adresse und Telefonnummer überschrieben; die Buchung selbst bleibt ohne " +
@@ -803,6 +858,12 @@ export const de = {
         "gesetzlichen Aufbewahrungsfristen nach § 147 der Abgabenordnung. Sie werden von der " +
         "automatischen Löschung ausdrücklich nicht erfasst und bleiben unabhängig davon " +
         "erhalten, ob die übrigen Angaben zu derselben Anmeldung bereits gelöscht wurden.",
+      "Der Nachweis über einen erklärten Widerspruch gegen Foto- oder Videoaufnahmen (siehe " +
+        "„Ihr Widerspruchsrecht“ auf /aufnahmen) wird aufbewahrt, solange Aufnahmen dieser " +
+        "Veranstaltung noch veröffentlicht sind, und danach weitere drei Jahre ab dem Ende " +
+        "des betreffenden Kalenderjahres. Die veröffentlichten Aufnahmen selbst unterliegen " +
+        "keiner automatischen Löschfrist; ihre Entfernung wird von Hand veranlasst und " +
+        "dokumentiert.",
       "Einzelne Datensätze können von der automatischen Löschung ausgenommen werden, wenn " +
         "ein Unfall, eine Beschwerde, eine Rückbuchung, ein Versicherungsfall oder ein " +
         "dokumentierter Rechtsstreit dies erfordert. Eine solche Sperre wird mit Grund, " +
@@ -817,89 +878,430 @@ export const de = {
         "Datensatzes, die Datenart und die durchgeführte Maßnahme.",
     ],
 
-    /* ── AGB und Widerruf ──────────────────────────────────────────
-       Beide werden Pflicht, sobald online bezahlt wird. Sie stehen
-       hier bewusst NUR als sichtbar markierte Platzhalter: Was
-       rechtlich gilt, schreibt eine fachkundige Person, nicht ich.
-       Ein Platzhalter, den man für echten Inhalt halten kann, geht
-       irgendwann versehentlich online. */
+    /* ── Ihre Rechte ─────────────────────────────────────────────────
+       KEIN Platzhalter. Reine Aufzählung der gesetzlichen Rechte nach
+       Art. 15-21 und Art. 7 Abs. 3 DSGVO sowie des Beschwerderechts
+       nach Art. 77 DSGVO. Die Aufsichtsbehörde wird bewusst NUR mit
+       Namen und Website genannt, ohne Anschrift — dieselbe Fassung wie
+       auf Seite 2 der Einverständniserklärung
+       (public/dokumente/einverstaendniserklaerung-minderjaehrige.pdf).
+       Eine Anschrift liegt zwar recherchiert vor (docs/rechtstexte-
+       entwuerfe/14-vergleichsrecherche-und-quellen-update.md), ist dort
+       aber selbst als "vor Verwendung auf der Behördenseite
+       gegenprüfen" markiert (Dokument 02, Ziffer 16 / D-8) — aus dieser
+       Arbeitsumgebung heraus nicht nachprüfbar, weil der Zugriff auf
+       Behördenseiten blockiert ist. Bis zur Bestätigung bleibt es bei
+       der ungeprüften, aber sicheren Kurzfassung. */
+    datenschutzRechteUeberschrift: "5. Ihre Rechte",
+    datenschutzRechteEinleitung: "Sie haben das Recht,",
+    datenschutzRechtePunkte: [
+      "Auskunft über die von uns verarbeiteten Daten zu verlangen (Art. 15 DSGVO),",
+      "deren Berichtigung zu verlangen (Art. 16 DSGVO),",
+      "deren Löschung zu verlangen (Art. 17 DSGVO),",
+      "die Einschränkung der Verarbeitung zu verlangen (Art. 18 DSGVO),",
+      "die Sie betreffenden Daten in einem übertragbaren Format zu erhalten (Art. 20 DSGVO),",
+      "der Verarbeitung zu widersprechen, soweit sie auf Art. 6 Abs. 1 Buchst. f DSGVO " +
+        "beruht (Art. 21 DSGVO),",
+      "eine erteilte Einwilligung jederzeit mit Wirkung für die Zukunft zu widerrufen, ohne " +
+        "dass die Rechtmäßigkeit der bis dahin erfolgten Verarbeitung berührt wird " +
+        "(Art. 7 Abs. 3 DSGVO).",
+    ],
+    datenschutzRechteKontakt: "Wenden Sie sich dafür an kontakt@veraevents.de.",
+    datenschutzRechteBeschwerde:
+      "Ihnen steht außerdem ein Beschwerderecht bei einer Datenschutz-Aufsichtsbehörde zu " +
+      "(Art. 77 DSGVO). Für uns zuständig ist die Berliner Beauftragte für Datenschutz und " +
+      "Informationsfreiheit, datenschutz-berlin.de.",
+    datenschutzRechteAutomatisiert:
+      "Es findet keine automatisierte Entscheidungsfindung im Sinne von Art. 22 DSGVO statt.",
+
+    /* ── AGB — vollständige Teilnahmebedingungen (Stand 21.09.2026) ──
+       KEIN Platzhalter mehr. Textgrundlage: die mit Adam abgestimmten
+       und mit den AGB-Prüf-Skills (haftungsbegrenzung-pruefen-und-
+       formulieren, klauselinhalt-und-verbote-pruefen,
+       klauseltransparenz-pruefen) geprüften Ziffern aus
+       docs/rechtstexte-entwuerfe/03-agb-b2c-events-entwurf.md.
+
+       Bewusst NICHT übernommen, weil technisch nicht eingelöst:
+       - Mindestteilnehmerzahl/Entscheidungsfrist (Doc03 Ziffer 8.3) —
+         Event kennt dafür noch kein Datenmodell-Feld.
+       - Stornoentgelt 0,35 € (Doc03 Ziffer 7.1/7.1a) — der Code
+         erstattet heute den vollen Betrag; die Reihenfolge "erst Code,
+         dann Text" aus Doc03 gilt weiter.
+       Ziffer 7 beschreibt deshalb bewusst den tatsächlichen (kostenlosen)
+       Stornoweg, nur die frühere unwirksame Pauschal-Verweigerung nach
+       Fristablauf (§ 309 Nr. 5 BGB: fehlende Anrechnung, fehlender
+       Nachweisvorbehalt) ist korrigiert.
+
+       Ziffer 6 (Minderjährige) übernimmt NICHT Doc03 wortwörtlich,
+       sondern die bereits gewachsene, mit der Einverständniserklärung
+       und dem Anmeldeformular abgestimmte Fassung — nur auf das
+       Anlagenmodell (Entscheidung 3.20) korrigiert: VERA sagt keine
+       Betreuung/Aufsicht mehr zu. Diese drei Stellen (hier, die
+       Einverständniserklärung unter public/dokumente/ und der Hinweis
+       im Anmeldebereich) dürfen nur gemeinsam geändert werden.
+
+       Ziffer 11 (Haftung) ist ab jetzt die EINZIGE Haftungsregelung im
+       Projekt — die frühere pauschale "Haftung gilt uneingeschränkt
+       nach Gesetz" in Ziffer 6 verweist jetzt hierher, statt sich zu
+       wiederholen.
+
+       Bewusst weiterhin offen (siehe Prüfbericht): Ziffer 12 beschreibt
+       nur die Verantwortungsbereiche, entscheidet aber NICHT
+       abschließend, ob der von der Halle gestellte Trainer
+       Erfüllungsgehilfe von VERA ist — das hängt vom tatsächlichen
+       Vertrag zwischen VERA und der Halle ab und ist als eigener Punkt
+       vor der ersten echten Veranstaltung zu bestätigen. */
     agb: "AGB",
     agbTitel: "Allgemeine Geschäftsbedingungen",
-    /* Die frühere Fassung las sich, als seien AGB Pflicht. Sind sie
-       nicht — ohne eigene AGB gilt schlicht das Gesetz. Pflicht sind
-       dagegen bestimmte Informationen VOR Vertragsschluss im
-       Fernabsatz. Welche das hier sind, entscheidet keine
-       Programmiererin. */
-    /* Die Überschrift kam mit dem Abschnitt „Teilnahme Minderjähriger"
-       dazu: Sobald eine Seite einen verbindlichen und einen offenen
-       Teil hat, muss erkennbar sein, welcher welcher ist. */
-    /* Weiche Trennstelle wie bei der Datenschutzseite — siehe dort. */
-    agbAllgemeinUeberschrift: "1. Allgemeine Vertrags­bedingungen",
-    agbOffenMarke: "Dieser Abschnitt ist noch nicht ausgefüllt",
-    /* Endete früher auf „… und die Besonderheiten bei Minderjährigen".
-       Das steht seit Abschnitt 2 wirklich dort — der Satz hätte es
-       weiterhin als offen ausgewiesen und der eigenen Seite
-       widersprochen. */
-    agbText:
-      "Eigene Geschäftsbedingungen sind nicht für jede Webseite vorgeschrieben. Ohne sie " +
-      "gilt das Gesetz. Wenn VERA eigene verwenden soll, gehören sie zum tatsächlichen " +
-      "Ablauf: wer Vertragspartner ist, wann eine Anmeldung verbindlich wird, welche " +
-      "Leistung eine Veranstaltung umfasst, wie und wann bezahlt wird, was bei Verhinderung " +
-      "gilt, was bei Ausfall oder Verlegung passiert, die Haftung und die Regeln vor Ort. " +
-      "Die Teilnahme Minderjähriger ist bereits in Abschnitt 2 geregelt.",
-    agbHinweisPflichtinfos:
-      "Unabhängig davon gibt es beim Verkauf über das Internet Angaben, die vor dem " +
-      "Absenden der Bestellung erscheinen müssen. Welche das für dieses Eventmodell sind " +
-      "und wo sie stehen müssen, gehört fachkundig geprüft.",
-    agbStorno:
-      "In denselben Text gehören die Stornobedingungen: ob und bis wann eine Buchung " +
-      "abgesagt werden kann, welche Gebühr dann anfällt und wie Erstattungen ablaufen. Das " +
-      "ist eine vertragliche Regelung und etwas anderes als das gesetzliche Widerrufsrecht " +
-      "(siehe „Widerruf und Stornierung“). Sie bekommen bewusst keine eigene Seite — sie " +
-      "gehören dorthin, wo auch der Rest des Vertrags steht.",
 
-    /* ── Teilnahme Minderjähriger ───────────────────────────────────
+    agbGeltungsbereichUeberschrift: "1. Geltungsbereich und Begriffe",
+    agbGeltungsbereichAbsaetze: [
+      "1.1 Diese Teilnahmebedingungen gelten für alle Verträge über die Teilnahme an " +
+        "öffentlich angebotenen Veranstaltungen, die Adam Maurice Lasarzik, Mühlenstr. 8a, " +
+        "14167 Berlin (im Folgenden „VERA“) über den Ticketshop auf veraevents.de schließt. " +
+        "Sie gelten unabhängig davon, ob die buchende Person als Verbraucher oder als " +
+        "Unternehmer handelt; Unternehmen, Schulen und andere Organisationen können Tickets " +
+        "für öffentlich angebotene Veranstaltungen zu diesen Bedingungen erwerben.",
+      "1.2 Verbraucher ist, wer den Vertrag zu Zwecken abschließt, die überwiegend weder der " +
+        "gewerblichen noch der selbständigen beruflichen Tätigkeit zugerechnet werden können " +
+        "(§ 13 BGB). Unternehmer ist, wer bei Abschluss des Vertrags in Ausübung seiner " +
+        "gewerblichen oder selbständigen beruflichen Tätigkeit handelt (§ 14 BGB). Einzelne " +
+        "Regelungen dieser Bedingungen gelten nur gegenüber Verbrauchern; sie sind jeweils " +
+        "ausdrücklich als solche gekennzeichnet. Im Übrigen gelten diese Bedingungen für alle " +
+        "Buchenden gleichermaßen.",
+      "1.3 Für individuell beauftragte Veranstaltungen — insbesondere Firmen- und " +
+        "Schulveranstaltungen, die auf Anfrage geplant und abgestimmt werden — gelten nicht " +
+        "diese Bedingungen, sondern gesonderte, im Einzelfall vereinbarte Bedingungen. Solche " +
+        "Veranstaltungen werden nicht über den Ticketshop gebucht, sondern auf Anfrage per " +
+        "E-Mail vereinbart.",
+      "1.4 „Veranstaltung“ ist das jeweils auf der Website beschriebene Angebot. „Anmeldung“ " +
+        "ist die Buchung eines oder mehrerer Plätze durch eine Person. „Teilnehmende“ sind " +
+        "die in der Anmeldung namentlich benannten Personen.",
+      "1.5 Abweichende Bedingungen der anmeldenden Person werden nicht Vertragsbestandteil, " +
+        "es sei denn, VERA stimmt ihnen ausdrücklich in Textform zu.",
+    ],
+
+    agbLeistungUeberschrift: "2. Welche Leistung geschuldet ist",
+    agbLeistungAbsaetze: [
+      "2.1 Was eine Veranstaltung umfasst, ergibt sich ausschließlich aus der Beschreibung " +
+        "auf der jeweiligen Eventseite zum Zeitpunkt der Anmeldung. Diese Beschreibung ist " +
+        "maßgeblich.",
+      "2.2 Leistungen wie Betreuung durch einen Trainer, die Bereitstellung von Schlägern " +
+        "und Bällen oder Speisen und Getränke sind nur dann im Preis enthalten, wenn die " +
+        "Eventseite sie ausdrücklich als enthalten ausweist. Sind sie dort nicht genannt, " +
+        "sind sie nicht geschuldet.",
+      "2.3 Allgemeine Darstellungen auf der Startseite, in Kurztexten oder in Werbematerial " +
+        "beschreiben das Angebot, begründen aber für sich genommen keinen Anspruch auf eine " +
+        "bestimmte Einzelleistung.",
+      "2.4 Steht für eine Veranstaltung noch kein Termin fest, ist das auf der Eventseite " +
+        "als solches gekennzeichnet. Eine solche Veranstaltung ist eine reine Ankündigung: " +
+        "Sie kann noch nicht gebucht werden. Erst wenn Datum und Uhrzeit feststehen und auf " +
+        "der Eventseite angegeben sind, ist eine Anmeldung möglich.",
+    ],
+
+    agbVertragsschlussUeberschrift: "3. Wie der Vertrag zustande kommt",
+    agbVertragsschlussAbsaetze: [
+      "3.1 Die Darstellung der Veranstaltungen auf der Website ist kein bindendes Angebot, " +
+        "sondern eine Aufforderung zur Anmeldung.",
+      "3.2 Die Anmeldung läuft über diese Schritte: Auswahl der Veranstaltung und der " +
+        "Teilnehmenden, wobei der Gesamtpreis laufend angezeigt wird; Eingabe der Kontakt- " +
+        "und Teilnehmerdaten; Anzeige einer Übersicht mit allen Einzelposten und dem " +
+        "Gesamtbetrag; Absenden der Anmeldung über die Schaltfläche „Zahlungspflichtig " +
+        "bestellen“, nachdem das Häkchen „Ich akzeptiere die AGB.“ gesetzt wurde; " +
+        "Weiterleitung auf die gesicherte Bezahlseite des Zahlungsdienstleisters; nach " +
+        "erfolgreicher Zahlung die Bestätigung der Anmeldung per E-Mail.",
+      "3.3 Mit dem Absenden der Anmeldung geben Sie ein verbindliches Angebot auf Abschluss " +
+        "des Teilnahmevertrags ab. Der Vertrag kommt zustande, sobald VERA die Anmeldung " +
+        "bestätigt. Die Bestätigung erfolgt bei kostenpflichtigen Veranstaltungen nach " +
+        "Eingang der Zahlung, bei kostenlosen Veranstaltungen unmittelbar nach dem Absenden.",
+      "3.4 Der Eingang der Anmeldung wird unverzüglich elektronisch bestätigt. Diese " +
+        "Eingangsbestätigung ist noch keine Annahme des Angebots.",
+      "3.5 Der Platz wird ab dem Absenden für 30 Minuten reserviert, damit die Zahlung " +
+        "abgeschlossen werden kann. Wird in dieser Zeit nicht bezahlt, verfällt die " +
+        "Reservierung und der Platz steht wieder zur Verfügung. Die Anmeldung bleibt " +
+        "gespeichert und kann über den Link auf der Abschluss-Seite fortgesetzt werden, " +
+        "solange Plätze frei sind.",
+      "3.6 Der Vertragstext wird bei VERA gespeichert. Die Bestätigungsmail enthält die " +
+        "Daten der Anmeldung. Diese Teilnahmebedingungen sind jederzeit auf der Website " +
+        "abrufbar.",
+      "3.7 Der Vertrag wird in deutscher Sprache geschlossen.",
+      "3.8 Eine Anmeldung ist erst mit vollständiger Zahlung verbindlich angenommen. " +
+        "Solange nicht bezahlt ist, besteht kein Anspruch auf einen Platz — auch nicht " +
+        "während der Reservierungszeit nach Ziffer 3.5, wenn diese abgelaufen ist.",
+    ],
+
+    agbPreiseUeberschrift: "4. Preise und Zahlung",
+    agbPreiseAbsaetze: [
+      "4.1 Es gelten die auf der jeweiligen Eventseite angegebenen Preise zum Zeitpunkt der " +
+        "Anmeldung.",
+      "4.2 VERA ist Kleinunternehmen im Sinne von § 19 UStG. Es wird keine Umsatzsteuer " +
+        "berechnet und daher auch keine ausgewiesen. Die angegebenen Preise sind Endpreise.",
+      "4.3 Der Gesamtpreis wird vor dem Absenden der Anmeldung vollständig angezeigt. " +
+        "Zusätzliche Kosten fallen nicht an; insbesondere werden keine Buchungs-, Service- " +
+        "oder Zahlungsgebühren erhoben.",
+      "4.4 Die Zahlung erfolgt über den auf der Bezahlseite angebotenen Weg. Die " +
+        "Zahlungsdaten geben Sie unmittelbar beim Zahlungsdienstleister ein; sie erreichen " +
+        "die Website von VERA zu keinem Zeitpunkt.",
+      "4.5 Der Gesamtbetrag ist mit dem Absenden der Anmeldung fällig.",
+    ],
+
+    agbTeilnahmeUeberschrift: "5. Wer teilnehmen darf",
+    agbTeilnahmeAbsaetze: [
+      "5.1 Die Teilnahme setzt eine wirksame Anmeldung und die vollständige Zahlung voraus.",
+      "5.2 Für einzelne Veranstaltungen können auf der Eventseite besondere Voraussetzungen " +
+        "genannt sein, etwa ein Mindestalter oder eine Zielgruppe. Diese Angaben sind " +
+        "verbindlich.",
+      "5.3 Die Teilnahme setzt eine dem Angebot entsprechende gesundheitliche Eignung " +
+        "voraus. Siehe Ziffer 10.",
+    ],
+
+    /* ── Anmeldung Minderjähriger ───────────────────────────────────
        KEIN Platzhalter: Das sind vom Betreiber festgelegte Bedingungen.
        Sie beschreiben denselben Ablauf wie die Einverständniserklärung
        (public/dokumente/) und der Hinweis im Anmeldebereich — die drei
        Stellen sind wörtlich aufeinander abgestimmt und dürfen nur
        gemeinsam geändert werden.
 
-       Der letzte Absatz ist die EINZIGE Haftungsregelung im Projekt.
-       Er schliesst nichts aus, sondern verweist auf das Gesetz und
-       stellt klar, dass für Leben, Körper, Gesundheit sowie Vorsatz und
-       grobe Fahrlässigkeit nichts beschränkt wird. Ein pauschaler
-       Haftungsausschluss stand hier nie und gehört auch nicht her. */
-    agbMinderjaehrigUeberschrift: "2. Teilnahme Minderjähriger",
+       Seit 21.09.2026 auf das Anlagenmodell (Entscheidung 3.20)
+       korrigiert: Die frühere Fassung sagte eine Betreuung/Aufsicht
+       durch VERA zu ("Betreuung beginnt mit dem Check-in..."), die es
+       nach dieser Entscheidung nicht mehr gibt. VERA schuldet
+       stattdessen eine Sicherheitseinweisung und erkennbare
+       Ansprechpersonen. Der letzte Absatz verweist jetzt auf Ziffer 11
+       statt die Haftung ein zweites Mal (und unvollständig) zu
+       beschreiben. */
+    agbMinderjaehrigUeberschrift: "6. Anmeldung Minderjähriger",
     agbMinderjaehrigAbsaetze: [
       "Minderjährige dürfen an einer Veranstaltung nur mit Zustimmung einer " +
         "erziehungsberechtigten Person teilnehmen. Die anmeldende beziehungsweise " +
         "unterschreibende Person bestätigt, erziehungsberechtigt und zur Abgabe der " +
         "erforderlichen Erklärungen berechtigt zu sein. Soweit die Zustimmung einer weiteren " +
-        "sorgeberechtigten Person erforderlich ist, muss diese ebenfalls vorliegen.",
+        "sorgeberechtigten Person erforderlich ist, muss diese ebenfalls vorliegen. " +
+        "Vertragspartner ist die anmeldende erziehungsberechtigte Person, nicht die " +
+        "minderjährige teilnehmende Person.",
       "Die von VERA Events bereitgestellte Einverständniserklärung muss vollständig " +
         "ausgefüllt, unterschrieben und spätestens beim Check-in abgegeben werden. Liegt die " +
         "erforderliche Erklärung bei Veranstaltungsbeginn nicht vor, kann die Teilnahme des " +
         "Minderjährigen abgelehnt werden. Gesetzliche und vertragliche Erstattungsansprüche " +
         "bleiben unberührt.",
-      "Für die Organisation des Hin- und Rückwegs ist die erziehungsberechtigte Person " +
-        "verantwortlich. Die Betreuung durch VERA Events beginnt mit dem vereinbarten " +
-        "Check-in und endet mit dem offiziellen Veranstaltungsende, soweit nicht " +
-        "ausdrücklich etwas anderes vereinbart wurde.",
+      "VERA übernimmt keine Aufsicht über unbegleitete minderjährige Teilnehmende. Es gibt " +
+        "kein von VERA festgelegtes Mindestalter für die Teilnahme oder für das " +
+        "selbstständige Kommen und Gehen — das entscheidet die erziehungsberechtigte Person " +
+        "mit ihrer Unterschrift auf der Einverständniserklärung. VERA erfasst beim Ankommen, " +
+        "wer erschienen ist, überwacht aber nicht, wer das Gelände wann verlässt. Für die " +
+        "Organisation des Hin- und Rückwegs ist die erziehungsberechtigte Person " +
+        "verantwortlich; sie muss während der gesamten Veranstaltung unter der angegebenen " +
+        "Mobilnummer erreichbar sein und den Minderjährigen erforderlichenfalls zeitnah " +
+        "abholen.",
+      "Statt einer Aufsichtsübernahme schuldet VERA jeder teilnehmenden Person eine " +
+        "Sicherheitseinweisung vor dem ersten Spielen sowie erkennbare Ansprechpersonen, die " +
+        "bei einer erkannten Gefahr eingreifen.",
       "Minderjährige Teilnehmer müssen die Sicherheits-, Verhaltens- und Hausregeln sowie " +
         "die Anweisungen des Veranstaltungs-, Betreuungs- und Hallenpersonals beachten. Bei " +
         "erheblichen oder wiederholten Regelverstößen kann der Teilnehmer von der weiteren " +
-        "Teilnahme ausgeschlossen werden. Die erziehungsberechtigte Person muss während der " +
-        "Veranstaltung unter der angegebenen Mobilnummer erreichbar sein und den " +
-        "Minderjährigen erforderlichenfalls zeitnah abholen.",
+        "Teilnahme ausgeschlossen werden.",
       "Bei einem Unfall oder akuten gesundheitlichen Problem dürfen angemessene " +
         "Erste-Hilfe-Maßnahmen eingeleitet und bei Bedarf Rettungsdienst oder ärztliche " +
         "Hilfe verständigt werden. Die erziehungsberechtigte Person beziehungsweise der " +
         "angegebene Notfallkontakt wird schnellstmöglich informiert.",
-      "Für die Haftung von VERA Events gelten die gesetzlichen Vorschriften. Insbesondere " +
-        "wird die Haftung für Schäden aus der Verletzung des Lebens, des Körpers oder der " +
-        "Gesundheit sowie für vorsätzlich oder grob fahrlässig verursachte Schäden nicht " +
-        "ausgeschlossen oder beschränkt.",
+      "Für die Haftung von VERA Events gilt Ziffer 11.",
+    ],
+
+    /* ── Stornierung durch Teilnehmende ─────────────────────────────
+       Beschreibt den tatsächlichen, kostenlosen Stornoweg (volle
+       Erstattung bis 24 Stunden vorher). Die frühere Pauschalklausel
+       "danach grundsätzlich kein Anspruch auf Erstattung" ist um
+       Anrechnung und Nachweisvorbehalt ergänzt (§ 309 Nr. 5 BGB). Die
+       frühere, seit Entscheidung 2.5 gegenstandslose Klausel zu
+       Veranstaltungen ohne Termin ist ersatzlos entfallen. */
+    agbStornoUeberschrift: "7. Stornierung durch Teilnehmende",
+    agbStornoAbsaetze: [
+      "7.1 Sie können eine Buchung bis 24 Stunden vor dem angekündigten Beginn der " +
+        "Veranstaltung kostenlos stornieren. Erstattet wird der vollständige gezahlte " +
+        "Betrag.",
+      "7.2 Die Stornierung erfolgt über den Link in der Bestätigungsmail. Er führt zu einer " +
+        "Seite, die die Buchung anzeigt; storniert wird erst mit einem Klick auf die " +
+        "dortige Schaltfläche. Der Betrag wird unmittelbar zur Rückerstattung angewiesen — " +
+        "auf demselben Weg, über den gezahlt wurde. Je nach Zahlungsdienstleister und Bank " +
+        "kann die Gutschrift einige Werktage dauern. Der Platz wird sofort wieder frei.",
+      "7.3 Ist die Bestätigungsmail nicht mehr auffindbar, genügt eine Nachricht an " +
+        "kontakt@veraevents.de.",
+      "7.4 Nach Ablauf der Frist nach Ziffer 7.1 und bei Nichterscheinen ist eine " +
+        "Stornierung über den Link nicht mehr möglich, und es besteht grundsätzlich kein " +
+        "Anspruch auf Erstattung. VERA muss sich jedoch anrechnen lassen, was an " +
+        "Aufwendungen erspart oder durch anderweitige Vergabe des Platzes erlangt wird. " +
+        "Ihnen bleibt der Nachweis vorbehalten, dass VERA kein oder ein wesentlich " +
+        "geringerer Schaden entstanden ist; in diesem Fall ermäßigt sich der einbehaltene " +
+        "Betrag entsprechend. Wenden Sie sich dafür an kontakt@veraevents.de.",
+      "7.5 VERA kann im Einzelfall eine kulantere Lösung anbieten. Ein Anspruch darauf " +
+        "besteht nicht. Wenden Sie sich in jedem Fall an kontakt@veraevents.de — auch nach " +
+        "Ablauf der Frist.",
+      "7.6 Ein gebuchter Platz kann nicht auf eine andere Person übertragen werden. Das ist " +
+        "auch nicht erforderlich: Wer verhindert ist, storniert nach Ziffer 7.1 kostenlos; " +
+        "die andere Person meldet sich selbst an, solange Plätze frei sind.",
+      "7.7 Diese Bedingungen legt VERA selbst fest. Ein etwaiges gesetzliches " +
+        "Widerrufsrecht (siehe Ziffer 13) besteht unabhängig davon und wird durch sie nicht " +
+        "eingeschränkt.",
+    ],
+
+    /* ── Absage und Programmänderungen ──────────────────────────────
+       Ohne die Ziffer zur Mindestteilnehmerzahl (Doc03 Ziffer 8.3):
+       Event kennt dafür noch kein Datenmodell-Feld, und eine Klausel
+       über einen Mechanismus zu veröffentlichen, den es nicht gibt,
+       wäre eine Zusage, die die Technik nicht einlöst. */
+    agbAbsageUeberschrift: "8. Absage und Programmänderungen",
+    agbAbsageAbsaetze: [
+      "8.1 Muss eine Veranstaltung ausfallen, wird allen Angemeldeten automatisch der volle " +
+        "Betrag erstattet, ohne dass dafür etwas beantragt werden muss. Die Absage wird so " +
+        "früh wie möglich per E-Mail mitgeteilt.",
+      "8.2 VERA kann eine Veranstaltung absagen, wenn die Durchführung aus Gründen " +
+        "unmöglich oder unzumutbar wird, die VERA nicht zu vertreten hat — insbesondere bei " +
+        "Ausfall der Veranstaltungsstätte, behördlichen Anordnungen, Unwetter oder sonstigen " +
+        "Ereignissen höherer Gewalt. Es gilt Ziffer 8.1.",
+      "8.3 Eine Verlegung bereits gebuchter Veranstaltungen auf einen anderen Termin findet " +
+        "nicht statt. Kann eine Veranstaltung zum angekündigten Termin nicht stattfinden, " +
+        "wird sie nach Ziffer 8.1 abgesagt und der volle Betrag erstattet. Ein neuer Termin " +
+        "wird als eigene Veranstaltung veröffentlicht, für die Sie sich freiwillig neu " +
+        "anmelden können. Eine Übertragung Ihrer Buchung auf einen anderen Termin erfolgt " +
+        "nur mit Ihrer ausdrücklichen Zustimmung.",
+      "8.4 VERA kann den Ablauf einer Veranstaltung ändern, soweit die Änderung den " +
+        "Gesamtcharakter der Veranstaltung nicht beeinträchtigt und für Sie zumutbar ist. " +
+        "Das gilt insbesondere für die zeitliche Einteilung, die Reihenfolge der " +
+        "Programmpunkte und den Wechsel einzelner Betreuungspersonen.",
+      "8.5 Fällt eine auf der Eventseite ausdrücklich als enthalten ausgewiesene " +
+        "Einzelleistung ersatzlos aus, können Sie eine angemessene Minderung des Preises " +
+        "verlangen. Weitergehende Ansprüche richten sich nach Ziffer 11.",
+    ],
+
+    agbPflichtenUeberschrift: "9. Ihre Pflichten vor Ort",
+    agbPflichtenAbsaetze: [
+      "9.1 Den Anweisungen des Veranstaltungs-, Betreuungs- und Hallenpersonals ist Folge " +
+        "zu leisten, soweit sie der Sicherheit, dem geordneten Ablauf oder dem Schutz " +
+        "anderer dienen.",
+      "9.2 Es gilt die Hausordnung der jeweiligen Veranstaltungsstätte. Sie ist vor Ort " +
+        "aushängend oder auf Nachfrage einsehbar. Bei Widersprüchen zwischen diesen " +
+        "Teilnahmebedingungen und der Hausordnung gilt für die Nutzung der Räume und " +
+        "Anlagen die Hausordnung.",
+      "9.3 Sportgeräte und Einrichtungen sind bestimmungsgemäß und sorgfältig zu benutzen.",
+      "9.4 Bei erheblichen oder wiederholten Verstößen gegen diese Ziffer, insbesondere bei " +
+        "Gefährdung anderer Personen, kann VERA Sie von der weiteren Teilnahme ausschließen. " +
+        "Ein Anspruch auf Erstattung besteht in diesem Fall nicht, soweit der Ausschluss " +
+        "berechtigt war.",
+    ],
+
+    agbGesundheitUeberschrift: "10. Gesundheitliche Eigenverantwortung",
+    agbGesundheitAbsaetze: [
+      "10.1 Die Teilnahme an sportlichen Veranstaltungen setzt eine entsprechende " +
+        "gesundheitliche Eignung voraus. Sie entscheiden eigenverantwortlich, ob Sie an " +
+        "einer Veranstaltung teilnehmen. VERA führt keine Gesundheitsprüfung durch und " +
+        "schuldet keine solche.",
+      "10.2 Bestehen Zweifel an der eigenen Belastbarkeit, sollte vor der Teilnahme " +
+        "ärztlicher Rat eingeholt werden.",
+      "10.3 Gesundheitliche Einschränkungen, die für die Sicherheit während der " +
+        "Veranstaltung erheblich sind, sollten dem Betreuungspersonal vor Beginn mitgeteilt " +
+        "werden. Die Mitteilung ist freiwillig.",
+      "10.4 Diese Ziffer schränkt die Haftung von VERA nicht ein. Insbesondere bleiben die " +
+        "Pflichten von VERA zur Verkehrssicherung, zur ordnungsgemäßen Einweisung und zur " +
+        "Bereitstellung geeigneter Ausrüstung unberührt.",
+    ],
+
+    /* ── Haftung ─────────────────────────────────────────────────────
+       Von Adam am 18.09.2026 entschieden ("Ja, die begrenzte Fassung
+       gilt") und mit den drei installierten AGB-Skills geprüft. Erst
+       die zwingenden Ausnahmen, dann die Begrenzung — nicht umgekehrt,
+       sonst liest sich die Klausel beim ersten Blick als Ausschluss.
+       Diese Ziffer ist ab jetzt die EINZIGE Haftungsregelung im
+       Projekt; Ziffer 6 verweist hierher. */
+    agbHaftungUeberschrift: "11. Haftung",
+    agbHaftungAbsaetze: [
+      "11.1 VERA haftet unbeschränkt für Schäden aus der Verletzung des Lebens, des " +
+        "Körpers oder der Gesundheit, die auf einer Pflichtverletzung von VERA oder einer " +
+        "Person beruhen, deren VERA sich zur Erfüllung bedient, für sonstige Schäden, die " +
+        "auf Vorsatz oder grober Fahrlässigkeit von VERA oder einer solchen Person beruhen, " +
+        "bei Übernahme einer Garantie sowie nach den Vorschriften des " +
+        "Produkthaftungsgesetzes.",
+      "11.2 Bei einfacher Fahrlässigkeit haftet VERA nur für die Verletzung einer Pflicht, " +
+        "deren Erfüllung die ordnungsgemäße Durchführung des Vertrags überhaupt erst " +
+        "ermöglicht und auf deren Einhaltung Sie regelmäßig vertrauen dürfen. Solche " +
+        "Pflichten sind insbesondere: die Veranstaltung zum angekündigten Zeitpunkt am " +
+        "angekündigten Ort durchzuführen; die auf der Eventseite als enthalten " +
+        "ausgewiesenen Leistungen zu erbringen; eine für die Veranstaltung geeignete " +
+        "Veranstaltungslocation sorgfältig auszuwählen und bekannt gewordene Mängel an " +
+        "Fläche oder Ausrüstung nicht zu verschweigen — die Verkehrssicherungspflicht für " +
+        "Gebäude, Bodenbeläge, fest installierte Einrichtungen sowie für die von der " +
+        "Location gestellte Ausrüstung liegt beim Betreiber der Anlage (Ziffer 12.1); in " +
+        "die Nutzung der Anlage und der Ausrüstung ordnungsgemäß einzuweisen, insbesondere " +
+        "durch eine Sicherheitseinweisung vor dem ersten Spielen; den gezahlten Betrag nach " +
+        "Ziffer 7 und 8 zurückzuerstatten. In diesen Fällen ist die Haftung auf den bei " +
+        "Vertragsschluss vorhersehbaren, vertragstypischen Schaden begrenzt.",
+      "11.3 Im Übrigen ist die Haftung von VERA für einfache Fahrlässigkeit " +
+        "ausgeschlossen.",
+      "11.4 Diese Ziffer 11 gilt auch zugunsten der Mitarbeitenden, Betreuungspersonen und " +
+        "sonstigen Erfüllungsgehilfen von VERA.",
+      "11.5 Eine Änderung der gesetzlichen Beweislast zu Ihrem Nachteil ist mit diesen " +
+        "Bedingungen nicht verbunden.",
+    ],
+
+    /* ── Veranstaltungsstätte und weitere Beteiligte ────────────────
+       Beschreibt nur die Verantwortungsbereiche, entscheidet NICHT
+       abschließend die Erfüllungsgehilfen-Frage zum Trainer — siehe
+       Kommentar am Anfang dieses Abschnitts. */
+    agbVeranstaltungsstaetteUeberschrift: "12. Veranstaltungsstätte und weitere Beteiligte",
+    agbVeranstaltungsstaetteAbsaetze: [
+      "12.1 Veranstaltungen finden in Räumen und auf Anlagen statt, die VERA nicht selbst " +
+        "betreibt. Betreiberpflichten der jeweiligen Anlage — insbesondere die " +
+        "Verkehrssicherungspflicht für Gebäude, Bodenbeläge und fest installierte " +
+        "Einrichtungen — treffen den Betreiber der Anlage.",
+      "12.2 VERA bleibt verantwortlich für die eigene Leistung: Organisation und " +
+        "Durchführung der Veranstaltung, sorgfältige Auswahl geeigneter Anlagen sowie des " +
+        "eingesetzten Trainer- und Betreuungspersonals, und die Sicherheitseinweisung.",
+      "12.3 Diese Ziffer stellt die Verantwortungsbereiche klar; sie beschränkt die " +
+        "Haftung von VERA nach Ziffer 11 nicht.",
+    ],
+
+    agbWiderrufsrechtUeberschrift: "13. Widerrufsrecht",
+    agbWiderrufsrechtAbsaetze: [
+      "13.1 Ob Ihnen ein gesetzliches Widerrufsrecht zusteht, hängt von der jeweiligen " +
+        "Veranstaltung ab. Die Einzelheiten stehen in der gesonderten Information „Widerruf " +
+        "und Stornierung“.",
+      "13.2 Das freiwillige Stornierungsrecht nach Ziffer 7 besteht unabhängig davon und " +
+        "wird durch ein etwaiges Widerrufsrecht nicht berührt.",
+    ],
+
+    agbVertragsdauerUeberschrift: "14. Vertragsdauer",
+    agbVertragsdauerText:
+      "Der Vertrag ist auf die Teilnahme an der jeweiligen Veranstaltung gerichtet und " +
+      "endet mit deren Durchführung, mit einer wirksamen Stornierung oder mit einer " +
+      "Absage. Ein Dauerschuldverhältnis entsteht nicht; eine Kündigung ist daher nicht " +
+      "erforderlich.",
+
+    agbRechtGerichtsstandUeberschrift: "15. Anwendbares Recht und Gerichtsstand",
+    agbRechtGerichtsstandAbsaetze: [
+      "15.1 Es gilt das Recht der Bundesrepublik Deutschland unter Ausschluss des " +
+        "UN-Kaufrechts. Haben Sie Ihren gewöhnlichen Aufenthalt in einem anderen Staat, " +
+        "bleiben die zwingenden Verbraucherschutzvorschriften dieses Staates unberührt.",
+      "15.2 Eine Gerichtsstandsvereinbarung wird nicht getroffen. Es gelten die " +
+        "gesetzlichen Vorschriften.",
+    ],
+
+    /* Nicht-Teilnahme an einer Verbraucherschlichtungsstelle ist keine
+       Rechtsformulierung, sondern eine Tatsache: Es gibt keine solche
+       Mitgliedschaft. § 36 Abs. 1 VSBG verlangt genau diese Angabe,
+       unabhängig davon, wie sie ausfällt. */
+    agbStreitbeilegungUeberschrift: "16. Verbraucherstreitbeilegung",
+    agbStreitbeilegungText:
+      "VERA nimmt nicht an einem Streitbeilegungsverfahren vor einer " +
+      "Verbraucherschlichtungsstelle teil und ist hierzu auch nicht verpflichtet.",
+
+    agbSchlussUeberschrift: "17. Schlussbestimmungen",
+    agbSchlussAbsaetze: [
+      "17.1 Sollte eine Bestimmung dieser Teilnahmebedingungen unwirksam sein oder werden, " +
+        "bleibt die Wirksamkeit der übrigen Bestimmungen unberührt. An die Stelle der " +
+        "unwirksamen Bestimmung treten die gesetzlichen Vorschriften.",
+      "17.2 Änderungen dieser Teilnahmebedingungen gelten nur für Anmeldungen, die nach " +
+        "ihrem Inkrafttreten abgegeben werden. Für bereits geschlossene Verträge gilt die " +
+        "bei der Anmeldung einbezogene Fassung.",
+      "17.3 Stand dieser Bedingungen: 21. September 2026.",
     ],
 
     /* ── Foto- und Videoaufnahmen — nur ein kurzer Verweis ───────────
@@ -908,7 +1310,7 @@ export const de = {
        Widerspruch) stehen bereits ausführlich auf /aufnahmen und in
        der Datenschutzerklärung — sie hier zu wiederholen würde nur
        eine dritte Stelle schaffen, die aus dem Takt geraten kann. */
-    agbAufnahmenUeberschrift: "3. Foto- und Videoaufnahmen",
+    agbAufnahmenUeberschrift: "18. Foto- und Videoaufnahmen",
     agbAufnahmenText:
       "Bei Veranstaltungen können VERA Events und die jeweilige Veranstaltungsstätte " +
       "Übersichtsaufnahmen anfertigen und veröffentlichen. Was das im Einzelnen bedeutet, " +
@@ -942,7 +1344,19 @@ export const de = {
        festgelegten Bedingungen, und sie beschreiben genau das, was die
        Seite tatsächlich tut. Ändert sich der Ablauf, ändert sich
        dieser Text mit — sonst steht hier eine Zusage, die die Technik
-       nicht einlöst. */
+       nicht einlöst.
+
+       Zwei Korrekturen vom 21.09.2026, deckungsgleich mit AGB Ziffer 7:
+       - Die frühere Klausel "Solange für eine Veranstaltung noch kein
+         Termin feststeht, ist eine Stornierung jederzeit möglich" ist
+         ersatzlos entfallen. Seit Entscheidung 2.5 lässt sich ohne
+         feststehenden Termin gar nicht erst buchen — die Klausel regelte
+         einen Fall, den es nicht mehr geben kann.
+       - Die pauschale Formulierung "besteht grundsätzlich kein Anspruch
+         auf Erstattung" ist um Anrechnung und Nachweisvorbehalt ergänzt.
+         Ohne beides wäre eine solche Klausel an § 309 Nr. 5 BGB gemessen
+         angreifbar (Pauschale ohne Anrechnung ersparter Aufwendungen,
+         kein Vorbehalt eines geringeren Schadens). */
     stornoUeberschrift: "2. Stornierung durch Teilnehmende",
     stornoAbsaetze: [
       "Eine Buchung kann bis 24 Stunden vor Beginn der Veranstaltung kostenlos storniert " +
@@ -954,11 +1368,13 @@ export const de = {
         "Bestätigung kommt per E-Mail. Der Platz ist sofort wieder frei.",
       "Ist die Bestätigungsmail nicht mehr auffindbar, genügt eine Nachricht an " +
         "kontakt@veraevents.de.",
-      "Bei einer Absage weniger als 24 Stunden vor Beginn und bei Nichterscheinen besteht " +
-        "grundsätzlich kein Anspruch auf Erstattung. Die Stornierung über den Link ist dann " +
-        "nicht mehr möglich. Wer verhindert ist, schreibt uns trotzdem — wir finden eine Lösung.",
-      "Solange für eine Veranstaltung noch kein Termin feststeht, ist eine Stornierung " +
-        "jederzeit möglich.",
+      "Nach Ablauf dieser Frist und bei Nichterscheinen ist eine Stornierung über den Link " +
+        "nicht mehr möglich, und es besteht grundsätzlich kein Anspruch auf Erstattung. VERA " +
+        "muss sich jedoch anrechnen lassen, was an Aufwendungen erspart oder durch " +
+        "anderweitige Vergabe des Platzes erlangt wird. Ihnen bleibt der Nachweis " +
+        "vorbehalten, dass VERA kein oder ein wesentlich geringerer Schaden entstanden ist; " +
+        "in diesem Fall ermäßigt sich der einbehaltene Betrag entsprechend. Wer verhindert " +
+        "ist, schreibt uns trotzdem an kontakt@veraevents.de — wir finden eine Lösung.",
       "Ein gebuchter Platz kann nicht auf eine andere Person übertragen werden. Das ist auch " +
         "nicht nötig: Wer nicht kann, storniert kostenlos, und die andere Person meldet sich " +
         "selbst an, solange Plätze frei sind.",

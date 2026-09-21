@@ -124,17 +124,35 @@ ist.** Die Begründungen stehen in
 dessen Abschnitt 6. Das ist die Grenze dessen, was ohne fachkundige
 Prüfung feststehen kann.
 
-**Ein Widerspruch dabei, der aufgefallen ist und benannt gehört:**
-Abschnitt 2 nannte für freiwillige Gesundheitsangaben „spätestens
-30 Tage nach Veranstaltungsende". Das Löschkonzept setzt **sieben Tage**
-um. Sieben liegen innerhalb von dreißig — beides ist also zugleich
-zutreffend, und die kürzere Frist ist bei Gesundheitsdaten die richtige
-Richtung. Auf der Seite steht jetzt die tatsächlich geltende Frist von
-sieben Tagen. **Das unterschriebene Formular
-(`public/dokumente/einverstaendniserklaerung-minderjaehrige.pdf`) nennt
-weiterhin dreißig Tage** — beim nächsten Neusatz des Formulars gehört
-die Zahl angeglichen. Bis dahin ist keine der beiden Angaben falsch,
-aber nur eine ist genau.
+**✅ Behoben am 21.09.2026:** Abschnitt 2 nannte für freiwillige
+Gesundheitsangaben früher „spätestens 30 Tage nach Veranstaltungsende",
+während das Löschkonzept **sieben Tage** umsetzt (beides zugleich
+zutreffend, aber nur die kürzere Angabe genau). Das unterschriebene
+Formular (`public/dokumente/einverstaendniserklaerung-minderjaehrige.pdf`)
+nannte ebenfalls noch dreißig Tage. Beide Stellen sind jetzt auf sieben
+Tage angeglichen; die PDF wurde dafür neu erzeugt (gleiches Layout,
+gleiche Tabellen) und nennt zusätzlich das Anlagenmodell statt der
+überholten Betreuungszusage sowie „Stand 21.09.2026".
+
+**Neu seit dem 21.09.2026, im Zuge der vollständigen Konsolidierung
+aller Rechtstexte:**
+- **Abschnitt 1 ist kein Platzhalter mehr.** Verantwortlicher, die
+  Online-Anmeldung (Vorname, Nachname, E-Mail, Telefon optional nach
+  `lib/anmeldung.ts`) und deren Rechtsgrundlage stehen jetzt dort statt
+  eines allgemeinen Ankündigungssatzes.
+- **Neuer Abschnitt 3 „Empfänger und Auftragsverarbeiter"** — Hostinger,
+  Stripe, PayPal, Backblaze, UptimeRobot, Veranstaltungsstätte,
+  Rettungsdienst. Nur Angaben, die in Dokument 02/15 (Punkt 1.5) bereits
+  als bestätigt vermerkt sind; PayPals genaue Anschrift/Rolle bleibt
+  bewusst aussen vor (dort weiterhin „[klären]").
+- **Speicherdauer und Löschung (jetzt Abschnitt 4)** nennt zusätzlich die
+  zehn Jahre für den reduzierten Zustimmungsnachweis (K3) und die Frist
+  für den Nachweis eines Aufnahmenwiderspruchs (K8).
+- **Neuer Abschnitt 5 „Ihre Rechte"** (Art. 15-21, 7 Abs. 3, 77 DSGVO).
+  Die Aufsichtsbehörde wird bewusst nur mit Namen und Website genannt,
+  **ohne** Anschrift — eine vollständige Anschrift liegt recherchiert vor
+  (Dokument 14), ist dort aber selbst als vor Verwendung gegenzuprüfen
+  markiert und aus dieser Arbeitsumgebung nicht nachprüfbar.
 
 ## Allgemeine Geschäftsbedingungen · `/agb`
 
