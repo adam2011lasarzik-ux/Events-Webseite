@@ -13,9 +13,17 @@ import {
   type Widerspruchsweg,
 } from "@/lib/aufnahmen";
 import { db } from "@/lib/db";
+import { AUFNAHMEWIDERSPRUCH_NACHLAUF_JAHRE, faelligAufnahmewiderspruch } from "@/lib/loeschfristen";
+import { alsIsoDatum } from "@/lib/zeit";
 import { AdminRahmen } from "@/components/admin/AdminRahmen";
 import stil from "../admin.module.css";
-import { pruefungErfassen, widerspruchErfassen, widerspruchUmstellen } from "./aktion";
+import {
+  aufnahmenOfflineSetzen,
+  aufnahmenOfflineZuruecknehmen,
+  pruefungErfassen,
+  widerspruchErfassen,
+  widerspruchUmstellen,
+} from "./aktion";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
@@ -39,6 +47,24 @@ const HINWEISE: Record<string, { text: string; gut: boolean }> = {
   },
   gesperrt: {
     text: "Prüfung festgehalten: jemand ist erkennbar. So darf nicht veröffentlicht werden — zuerst bearbeiten oder weglassen.",
+    gut: false,
+  },
+  "offline-gesetzt": {
+    text: "Als endgültig offline markiert. Die dreijährige Nachlauffrist für Widerspruch und Prüfvermerk läuft ab jetzt.",
+    gut: true,
+  },
+  "offline-zurueckgenommen": {
+    text: "Offline-Markierung zurückgenommen. Widerspruch und Prüfvermerk haben wieder keine Fälligkeit.",
+    gut: true,
+  },
+  "offline-datum-fehlt": { text: "Ohne Datum lässt sich die Frist nicht berechnen.", gut: false },
+  "offline-datum-ungueltig": { text: "Das Datum konnte nicht gelesen werden.", gut: false },
+  "offline-datum-zukunft": {
+    text: "Das Datum darf nicht in der Zukunft liegen — die Markierung ist eine Feststellung, keine Ankündigung.",
+    gut: false,
+  },
+  "offline-notiz-fehlt": {
+    text: "Ohne Prüfvermerk lässt sich später nicht nachvollziehen, was tatsächlich geprüft wurde.",
     gut: false,
   },
   "name-fehlt": { text: "Ohne Namen lässt sich ein Widerspruch später niemandem zuordnen.", gut: false },
@@ -84,6 +110,9 @@ export default async function AufnahmenSeite({
       plz: true,
       stadt: true,
       ortRegister: true,
+      aufnahmenOfflineAm: true,
+      aufnahmenOfflineVon: true,
+      aufnahmenOfflineNotiz: true,
     },
   });
 
@@ -165,6 +194,7 @@ export default async function AufnahmenSeite({
           {event && (
             <>
               <Empfaenger event={event} />
+              <AufnahmenOffline event={event} />
               <Freigabe geltende={geltende} jeZiel={jeZiel} />
               <WiderspruchsListe eintraege={alle} />
               <ErfassenFormular eventId={event.id} />
@@ -208,6 +238,100 @@ export default async function AufnahmenSeite({
  * Empfängerangabe sieht auf der öffentlichen Seite aus wie eine
  * ganze.
  */
+/**
+ * Alle Aufnahmen dieser Veranstaltung endgültig offline (K8).
+ *
+ * Von Hand gesetzt, NICHT vom automatischen Löschlauf — erst dadurch
+ * beginnt die Nachlauffrist für Widerspruch und Prüfvermerk zu
+ * laufen. Kein vorausgefülltes Datum: Wer nicht bewusst eines
+ * einträgt, löst hier nichts aus.
+ */
+function AufnahmenOffline({
+  event,
+}: {
+  event: {
+    id: string;
+    aufnahmenOfflineAm: Date | null;
+    aufnahmenOfflineVon: string | null;
+    aufnahmenOfflineNotiz: string | null;
+  };
+}) {
+  if (event.aufnahmenOfflineAm) {
+    // Dieselbe Funktion, die auch der Löschlauf verwendet — keine
+    // zweite, möglicherweise abweichende Berechnung in der Anzeige.
+    const loeschtermin = faelligAufnahmewiderspruch(event.aufnahmenOfflineAm);
+
+    return (
+      <div className={stil.karte}>
+        <h2 className={stil.karteTitel}>Aufnahmen dieser Veranstaltung: offline</h2>
+        <p>
+          Festgestellt am <b>{alsIsoDatum(event.aufnahmenOfflineAm)}</b> von{" "}
+          <code>{event.aufnahmenOfflineVon}</code>.
+        </p>
+        {event.aufnahmenOfflineNotiz && (
+          <p>
+            <b>Prüfvermerk:</b> {event.aufnahmenOfflineNotiz}
+          </p>
+        )}
+        <p className={`${stil.marker} ${stil.markerWartet}`}>
+          Löschtermin für Widerspruch und Prüfvermerk: <b>{alsIsoDatum(loeschtermin)}</b> (
+          {AUFNAHMEWIDERSPRUCH_NACHLAUF_JAHRE} Jahre Nachlauf zur Beweissicherung) — sofern bis
+          dahin keine Löschsperre besteht (Beschwerde, Rechtsstreit, laufendes Verfahren).
+        </p>
+        <form action={aufnahmenOfflineZuruecknehmen}>
+          <input type="hidden" name="eventId" value={event.id} />
+          <button type="submit" className={`${stil.knopf} ${stil.knopfLeise} ${stil.knopfKlein}`}>
+            Markierung zurücknehmen
+          </button>
+        </form>
+      </div>
+    );
+  }
+
+  return (
+    <div className={stil.karte}>
+      <h2 className={stil.karteTitel}>Aufnahmen dieser Veranstaltung endgültig offline?</h2>
+      <p>
+        Solange diese Markierung fehlt, haben Widerspruch und Prüfvermerk keine Fälligkeit und
+        werden vom Löschlauf nie angefasst — richtig so, solange Aufnahmen noch veröffentlicht
+        sind. Erst wenn wirklich <b>alle</b> Aufnahmen dieser Veranstaltung von jeder Website,
+        jedem Instagram-Kanal und jeder Weitergabe entfernt sind, beginnt die{" "}
+        {AUFNAHMEWIDERSPRUCH_NACHLAUF_JAHRE}-jährige Nachlauffrist zur Beweissicherung.
+      </p>
+      <p>
+        Diese Entscheidung gehört in die jährliche Erforderlichkeitsprüfung der Aufnahmen —
+        sie wird hier bewusst von Hand getroffen, nie automatisch.
+      </p>
+      <form action={aufnahmenOfflineSetzen}>
+        <input type="hidden" name="eventId" value={event.id} />
+        <div className={stil.raster}>
+          <label className={stil.feld}>
+            <span className={stil.feldLabel}>Offline seit</span>
+            <input name="datum" type="date" className={stil.eingabe} required />
+            <span className={stil.feldHilfe}>
+              Nicht vorausgefüllt — bitte bewusst das Datum eintragen, an dem die letzte
+              Aufnahme entfernt wurde.
+            </span>
+          </label>
+        </div>
+        <label className={stil.feld}>
+          <span className={stil.feldLabel}>Prüfvermerk</span>
+          <textarea name="notiz" className={stil.textfeld} maxLength={1000} required />
+          <span className={stil.feldHilfe}>
+            Was wurde geprüft? Etwa „Website und Instagram-Beitrag entfernt, Weitergabe an die
+            Halle widerrufen und von ihr bestätigt".
+          </span>
+        </label>
+        <div className={stil.knopfReihe}>
+          <button type="submit" className={stil.knopf}>
+            Als endgültig offline markieren
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
 function Empfaenger({
   event,
 }: {
@@ -343,6 +467,7 @@ function WiderspruchsListe({
     erfasstVon: string;
     zurueckgenommenAm: Date | null;
     registrationId: string | null;
+    faelligAm: Date | null;
   }[];
 }) {
   return (
@@ -359,6 +484,7 @@ function WiderspruchsListe({
                 <th>Weg</th>
                 <th>erklärt</th>
                 <th>Stand</th>
+                <th>Löschtermin</th>
               </tr>
             </thead>
             <tbody>
@@ -403,6 +529,13 @@ function WiderspruchsListe({
                           {gilt ? "Zurücknahme vermerken" : "Wieder gültig setzen"}
                         </button>
                       </form>
+                    </td>
+                    <td>
+                      {w.faelligAm ? (
+                        alsIsoDatum(w.faelligAm)
+                      ) : (
+                        <span className={stil.sperrNeben}>läuft, solange offline nicht gesetzt</span>
+                      )}
                     </td>
                   </tr>
                 );
@@ -538,6 +671,7 @@ function VermerkListe({
     notiz: string | null;
     geprueftAm: Date;
     geprueftVon: string;
+    faelligAm: Date | null;
   }[];
 }) {
   return (
@@ -554,6 +688,7 @@ function VermerkListe({
                 <th>geprüft</th>
                 <th>damals bekannt</th>
                 <th>Ergebnis</th>
+                <th>Löschtermin</th>
               </tr>
             </thead>
             <tbody>
@@ -587,6 +722,13 @@ function VermerkListe({
                       <span className={`${stil.marker} ${stil.markerGut}`}>
                         niemand erkennbar
                       </span>
+                    )}
+                  </td>
+                  <td>
+                    {v.faelligAm ? (
+                      alsIsoDatum(v.faelligAm)
+                    ) : (
+                      <span className={stil.sperrNeben}>läuft, solange offline nicht gesetzt</span>
                     )}
                   </td>
                 </tr>

@@ -51,6 +51,8 @@ export const PROTOKOLL_AKTIONEN = {
   aufnahmeWiderspruchErfasst: "aufnahme.widerspruch-erfasst",
   aufnahmeWiderspruchGeaendert: "aufnahme.widerspruch-geaendert",
   veroeffentlichungGeprueft: "veroeffentlichung.geprueft",
+  aufnahmenOfflineGesetzt: "aufnahmen.offline-gesetzt",
+  aufnahmenOfflineZurueckgenommen: "aufnahmen.offline-zurueckgenommen",
 } as const;
 
 export type ProtokollAktion = (typeof PROTOKOLL_AKTIONEN)[keyof typeof PROTOKOLL_AKTIONEN];

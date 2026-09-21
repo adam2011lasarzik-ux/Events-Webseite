@@ -17,6 +17,7 @@
    --------------------------------------------------------------- */
 
 import { db } from "./db";
+import { faelligAufnahmewiderspruch } from "./loeschfristen";
 
 /** Auf welchem Weg ein Widerspruch erklärt wurde. */
 export type Widerspruchsweg = "CHECKIN" | "VOR_ORT" | "EMAIL" | "SONSTIGES";
@@ -226,6 +227,7 @@ export async function widersprueche(eventId: string) {
       erfasstVon: true,
       zurueckgenommenAm: true,
       registrationId: true,
+      faelligAm: true,
     },
   });
 }
@@ -329,6 +331,69 @@ export async function pruefungen(eventId: string) {
       notiz: true,
       geprueftAm: true,
       geprueftVon: true,
+      faelligAm: true,
     },
+  });
+}
+
+/* ── K8: Aufnahmen "endgültig offline" ─────────────────────────── */
+
+/**
+ * Alle Aufnahmen dieser Veranstaltung als endgültig offline markieren.
+ *
+ * Erst ab diesem Zeitpunkt beginnt die dreijährige Nachlauffrist für
+ * K8 zu laufen (faelligAufnahmewiderspruch() in lib/loeschfristen.ts).
+ * Beide betroffenen Tabellen werden im selben Zug aktualisiert, statt
+ * bis zum nächsten Löschlauf auf der alten — oder auf gar keiner —
+ * Frist stehen zu bleiben.
+ *
+ * Bewusst KEIN eigener Verlauf mit mehreren Einträgen: Eine
+ * Korrektur überschreibt die vorherige Angabe, das Admin-Protokoll
+ * hält fest, wer wann welchen Wert gesetzt hat. Eine zweite Ablage
+ * nur für diese eine, selten benötigte Angabe wäre eine weitere
+ * Datensammlung ohne echten Nutzen.
+ */
+export async function aufnahmenOfflineSetzen(daten: {
+  eventId: string;
+  datum: Date;
+  notiz: string;
+  gesetztVon: string;
+}): Promise<void> {
+  const faelligAm = faelligAufnahmewiderspruch(daten.datum);
+  await db.$transaction(async (tx) => {
+    await tx.event.update({
+      where: { id: daten.eventId },
+      data: {
+        aufnahmenOfflineAm: daten.datum,
+        aufnahmenOfflineVon: daten.gesetztVon,
+        aufnahmenOfflineNotiz: daten.notiz,
+      },
+    });
+    await tx.aufnahmewiderspruch.updateMany({
+      where: { eventId: daten.eventId },
+      data: { faelligAm },
+    });
+    await tx.veroeffentlichungspruefung.updateMany({
+      where: { eventId: daten.eventId },
+      data: { faelligAm },
+    });
+  });
+}
+
+/**
+ * Die Offline-Markierung zurücknehmen — etwa nach einer Fehleingabe
+ * oder weil doch noch Material auftaucht, das online steht.
+ *
+ * Setzt die Fälligkeit der zugehörigen K8-Datensätze wieder auf
+ * `null` zurück: Ohne die Feststellung "offline" gibt es keine Frist.
+ */
+export async function aufnahmenOfflineZuruecknehmen(eventId: string): Promise<void> {
+  await db.$transaction(async (tx) => {
+    await tx.event.update({
+      where: { id: eventId },
+      data: { aufnahmenOfflineAm: null, aufnahmenOfflineVon: null, aufnahmenOfflineNotiz: null },
+    });
+    await tx.aufnahmewiderspruch.updateMany({ where: { eventId }, data: { faelligAm: null } });
+    await tx.veroeffentlichungspruefung.updateMany({ where: { eventId }, data: { faelligAm: null } });
   });
 }

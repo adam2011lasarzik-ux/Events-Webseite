@@ -25,6 +25,8 @@ import { db } from "../../lib/db.js";
 import {
   WEGNAME,
   WIDERSPRUCHSWEGE,
+  aufnahmenOfflineSetzen,
+  aufnahmenOfflineZuruecknehmen,
   darfVeroeffentlichen,
   freigabe,
   geltendeWidersprueche,
@@ -40,7 +42,12 @@ import {
   widerspruchZuruecknehmen,
   widersprueche,
 } from "../../lib/aufnahmen.js";
-import { AKTION_JE_KLASSE } from "../../lib/loeschfristen.js";
+import {
+  AKTION_JE_KLASSE,
+  AUFNAHMEWIDERSPRUCH_NACHLAUF_JAHRE,
+  faelligAufnahmewiderspruch,
+} from "../../lib/loeschfristen.js";
+import { alsIsoDatum } from "../../lib/zeit.js";
 import { actionFelder, anmelden, hole, sende } from "../H/admin-senden.mjs";
 
 let ok = 0;
@@ -201,11 +208,16 @@ pruefe(
 
 /* ══ Teil 2 · Datenmodell und Datenbank ══════════════════════════ */
 
-console.log("\nW7 · Löschklasse K8 — der Widerspruch überlebt den Löschlauf");
+console.log("\nW7 · Löschklasse K8 — ereignisbezogen, nicht mehr pauschal „niemals“");
 pruefe(
-  "AUFNAHMEWIDERSPRUCH wird NIEMALS gelöscht",
-  AKTION_JE_KLASSE.AUFNAHMEWIDERSPRUCH === "niemals",
+  "AUFNAHMEWIDERSPRUCH darf der Löschlauf grundsätzlich anfassen (\"loeschen\")",
+  AKTION_JE_KLASSE.AUFNAHMEWIDERSPRUCH === "loeschen",
   `steht auf: ${AKTION_JE_KLASSE.AUFNAHMEWIDERSPRUCH}`,
+);
+pruefe(
+  "Geschützt wird die Klasse ausschließlich über das fehlende Fälligkeitsdatum",
+  faelligAufnahmewiderspruch(null) === null,
+  "Details dazu prüft Prüfliste S, Teil 1 (Fristen) und Teil 2 (Löschlauf)",
 );
 const schema = lies("prisma/schema.prisma");
 pruefe(
@@ -366,6 +378,73 @@ pruefe(
   (await widersprueche(event.id)).length === 2,
 );
 
+console.log("\nW9a · Aufnahmen offline setzen (Datenbank)");
+
+const offlineSeit = new Date("2020-06-15T00:00:00Z");
+await aufnahmenOfflineSetzen({
+  eventId: event.id,
+  datum: offlineSeit,
+  notiz: "S-Probe: Website und Instagram-Beitrag entfernt.",
+  gesetztVon: "pruefung",
+});
+
+const eventNachOffline = await db.event.findUniqueOrThrow({ where: { id: event.id } });
+pruefe(
+  "Das Event trägt Datum, Bearbeiter und Prüfvermerk",
+  eventNachOffline.aufnahmenOfflineAm?.getTime() === offlineSeit.getTime() &&
+    eventNachOffline.aufnahmenOfflineVon === "pruefung" &&
+    eventNachOffline.aufnahmenOfflineNotiz?.includes("Website und Instagram-Beitrag entfernt"),
+);
+
+const erwarteteFaelligkeit = faelligAufnahmewiderspruch(offlineSeit);
+const widersprueceNachOffline = await widersprueche(event.id);
+pruefe(
+  `Alle bestehenden Widersprüche bekommen sofort die neue Fälligkeit (${AUFNAHMEWIDERSPRUCH_NACHLAUF_JAHRE} Jahre Nachlauf)`,
+  widersprueceNachOffline.length > 0 &&
+    widersprueceNachOffline.every(
+      (w) => w.faelligAm?.getTime() === erwarteteFaelligkeit.getTime(),
+    ),
+);
+const vermerkeNachOffline = await pruefungen(event.id);
+pruefe(
+  "Alle bestehenden Prüfvermerke ebenso — keine zweite, abweichende Berechnung",
+  vermerkeNachOffline.length > 0 &&
+    vermerkeNachOffline.every((v) => v.faelligAm?.getTime() === erwarteteFaelligkeit.getTime()),
+);
+
+/* Ein NEUER Widerspruch nach der Offline-Markierung bekommt (bewusst)
+   noch KEINE Fälligkeit direkt bei der Anlage — dieselbe Systematik
+   wie bei Anmeldungen, deren Fälligkeit auch erst der Löschlauf
+   nachzieht (faelligkeitenAuffrischen(), geprüft in Prüfliste S). */
+const spaeterAngelegt = await widerspruchAnlegen({
+  eventId: event.id,
+  name: "Nachzügler",
+  weg: "EMAIL",
+  erfasstVon: "pruefung",
+});
+const spaeterGeladen = await db.aufnahmewiderspruch.findUniqueOrThrow({
+  where: { id: spaeterAngelegt.id },
+});
+pruefe(
+  "Ein Widerspruch, der NACH der Offline-Markierung entsteht, hat noch keine Fälligkeit — der Löschlauf zieht sie nach",
+  spaeterGeladen.faelligAm === null,
+);
+await db.aufnahmewiderspruch.delete({ where: { id: spaeterAngelegt.id } });
+
+await aufnahmenOfflineZuruecknehmen(event.id);
+const eventNachZuruecknahme = await db.event.findUniqueOrThrow({ where: { id: event.id } });
+pruefe(
+  "Zurückgenommen: Event trägt wieder keine Offline-Angaben",
+  eventNachZuruecknahme.aufnahmenOfflineAm === null &&
+    eventNachZuruecknahme.aufnahmenOfflineVon === null &&
+    eventNachZuruecknahme.aufnahmenOfflineNotiz === null,
+);
+const widersprueceNachZuruecknahme = await widersprueche(event.id);
+pruefe(
+  "… und die Widersprüche haben wieder keine Fälligkeit",
+  widersprueceNachZuruecknahme.every((w) => w.faelligAm === null),
+);
+
 /* ══ Teil 3 · Zugang und Serveraktionen ══════════════════════════ */
 
 console.log("\nW10 · Zugangsschutz");
@@ -498,6 +577,132 @@ pruefe(
   (await db.veroeffentlichungspruefung.count({ where: { eventId: event.id, ziel: "Instagram" } })) ===
     0,
 );
+
+console.log("\nW11a · Aufnahmen offline setzen — als Serveraktion");
+
+/* Sauberer Ausgangspunkt: das Event trägt seit W9a (dort
+   zurückgenommen) keine Offline-Angaben mehr. */
+const seiteVorOffline = await hole(`/admin/aufnahmen?event=${event.id}`, sitzung.cookie);
+pruefe(
+  "Die Seite bietet das Formular zum Setzen an, solange nichts markiert ist",
+  seiteVorOffline.html.includes('name="datum"'),
+);
+const offlineFelder = actionFelder(seiteVorOffline.html, 'name="datum"');
+
+const morgen = new Date(Date.now() + 24 * 60 * 60 * 1000);
+const heuteIso = alsIsoDatum(new Date());
+const morgenIso = alsIsoDatum(morgen);
+
+await sende(
+  "/admin/aufnahmen",
+  offlineFelder,
+  { eventId: event.id, datum: "2020-01-01", notiz: "Eingeschleust ohne Sitzung" },
+  null,
+);
+pruefe(
+  "Ohne Sitzung: keine Offline-Markierung gesetzt",
+  (await db.event.findUniqueOrThrow({ where: { id: event.id } })).aufnahmenOfflineAm === null,
+);
+await sende(
+  "/admin/aufnahmen",
+  offlineFelder,
+  { eventId: event.id, datum: "2020-01-01", notiz: "Eingeschleust mit erfundenem Cookie" },
+  GEFAELSCHT,
+);
+pruefe(
+  "… und mit erfundenem Cookie ebenfalls nicht",
+  (await db.event.findUniqueOrThrow({ where: { id: event.id } })).aufnahmenOfflineAm === null,
+);
+
+await sende(
+  "/admin/aufnahmen",
+  offlineFelder,
+  { eventId: event.id, datum: "", notiz: "Ein Vermerk" },
+  sitzung.cookie,
+);
+pruefe(
+  "Angemeldet, aber ohne Datum: abgelehnt",
+  (await db.event.findUniqueOrThrow({ where: { id: event.id } })).aufnahmenOfflineAm === null,
+);
+await sende(
+  "/admin/aufnahmen",
+  offlineFelder,
+  { eventId: event.id, datum: heuteIso, notiz: "" },
+  sitzung.cookie,
+);
+pruefe(
+  "Angemeldet, aber ohne Prüfvermerk: abgelehnt",
+  (await db.event.findUniqueOrThrow({ where: { id: event.id } })).aufnahmenOfflineAm === null,
+  "ohne Prüfvermerk lässt sich später nicht nachvollziehen, was geprüft wurde",
+);
+await sende(
+  "/admin/aufnahmen",
+  offlineFelder,
+  { eventId: event.id, datum: morgenIso, notiz: "Ein Vermerk" },
+  sitzung.cookie,
+);
+pruefe(
+  "Ein Datum in der Zukunft wird abgelehnt — die Markierung ist eine Feststellung, keine Ankündigung",
+  (await db.event.findUniqueOrThrow({ where: { id: event.id } })).aufnahmenOfflineAm === null,
+);
+
+await sende(
+  "/admin/aufnahmen",
+  offlineFelder,
+  { eventId: event.id, datum: "2020-06-15", notiz: "S-Probe: HTTP-Weg, echte Eingabe" },
+  sitzung.cookie,
+);
+const eventNachHttp = await db.event.findUniqueOrThrow({ where: { id: event.id } });
+pruefe(
+  "Gültige Eingabe: Event trägt jetzt Datum, Bearbeiter und Prüfvermerk",
+  eventNachHttp.aufnahmenOfflineAm !== null &&
+    alsIsoDatum(eventNachHttp.aufnahmenOfflineAm) === "2020-06-15" &&
+    eventNachHttp.aufnahmenOfflineNotiz?.includes("HTTP-Weg"),
+);
+const widersprueceNachHttp = await widersprueche(event.id);
+pruefe(
+  "… und die Fälligkeit der bestehenden Widersprüche ist mitgewandert",
+  widersprueceNachHttp.every(
+    (w) => w.faelligAm?.getTime() === faelligAufnahmewiderspruch(eventNachHttp.aufnahmenOfflineAm).getTime(),
+  ),
+);
+
+const seiteNachOffline = await hole(`/admin/aufnahmen?event=${event.id}`, sitzung.cookie);
+pruefe(
+  "Die Seite zeigt den festgestellten Zeitpunkt, den Bearbeiter und den Prüfvermerk",
+  seiteNachOffline.html.includes("2020-06-15") &&
+    seiteNachOffline.html.includes(eventNachHttp.aufnahmenOfflineVon) &&
+    seiteNachOffline.html.includes("HTTP-Weg, echte Eingabe"),
+  `Bearbeiter in der DB: ${eventNachHttp.aufnahmenOfflineVon}`,
+);
+pruefe(
+  "Die Seite zeigt den berechneten Löschtermin",
+  seiteNachOffline.html.includes(
+    alsIsoDatum(faelligAufnahmewiderspruch(eventNachHttp.aufnahmenOfflineAm)),
+  ),
+);
+
+const zuruecknehmenFelder = actionFelder(seiteNachOffline.html, "Markierung zurücknehmen");
+
+await sende("/admin/aufnahmen", zuruecknehmenFelder, { eventId: event.id }, null);
+pruefe(
+  "Zurücknehmen ohne Sitzung: die Markierung bleibt bestehen",
+  (await db.event.findUniqueOrThrow({ where: { id: event.id } })).aufnahmenOfflineAm !== null,
+);
+await sende("/admin/aufnahmen", zuruecknehmenFelder, { eventId: event.id }, sitzung.cookie);
+const eventNachRuecknahme = await db.event.findUniqueOrThrow({ where: { id: event.id } });
+pruefe(
+  "Angemeldet: die Markierung ist zurückgenommen",
+  eventNachRuecknahme.aufnahmenOfflineAm === null &&
+    eventNachRuecknahme.aufnahmenOfflineVon === null &&
+    eventNachRuecknahme.aufnahmenOfflineNotiz === null,
+);
+const widersprueceNachRuecknahme = await widersprueche(event.id);
+pruefe(
+  "… und die Widersprüche haben wieder keine Fälligkeit",
+  widersprueceNachRuecknahme.every((w) => w.faelligAm === null),
+);
+
 
 console.log("\nW12 · Die öffentliche Hinweisseite nennt die Empfängerin");
 await db.event.update({

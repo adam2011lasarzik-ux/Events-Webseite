@@ -11,6 +11,9 @@
      · automatische Sperren entstehen bei Erstattung und offenem Vorfall
      · das Protokoll enthält keine Namen und keine E-Mail-Adressen
      · ein zweiter Lauf über dieselben Daten tut nichts mehr
+     · K8 (Aufnahmewiderspruch/Prüfvermerk): ohne "Aufnahmen offline"
+       keine Fälligkeit, mit Fälligkeit + Sperre kein Löschen, erst
+       nach dem Aufheben der Sperre wird wirklich gelöscht
 
    Der Lauf legt seine eigenen Daten an und räumt sie danach weg.
    --------------------------------------------------------------- */
@@ -20,6 +23,7 @@ import "../schutz.mjs";
 import { db } from "../../lib/db.js";
 import { loeschlauf } from "../../lib/loeschlauf.js";
 import { STEUERRELEVANTE_FELDER } from "../../lib/anonymisieren.js";
+import { faelligAufnahmewiderspruch } from "../../lib/loeschfristen.js";
 
 let nummer = 0;
 const fehlgeschlagen = [];
@@ -400,7 +404,268 @@ pruefe(
   protokoll.some((p) => p.aktion === "uebersprungen" && p.grund === "gesperrt"),
 );
 
-/* ── Zweiter Lauf: nichts mehr zu tun ─────────────────────────── */
+/* ── K8: Aufnahmewiderspruch und Prüfvermerk ─────────────────── */
+
+console.log("\n── K8: ereignisbezogene Löschung ──\n");
+
+/* Drei getrennte Events, weil "Aufnahmen offline" eine Eigenschaft
+   der VERANSTALTUNG ist und alle ihre K8-Datensätze gleichermaßen
+   betrifft — ein gemeinsames Event würde die Fälle gegenseitig
+   verfälschen. */
+
+/* Event 1: von Anfang an als offline markiert, Frist längst
+   abgelaufen. Enthält den fälligen UND den gesperrten Fall. */
+const laengstOffline = new Date("2015-01-01T00:00:00Z");
+const k8EventOffline = await db.event.create({
+  data: {
+    slug: "s-probe-loeschlauf-k8-offline",
+    titel: "S-Probe Löschlauf K8 offline",
+    beschreibung: "Nur zum Prüfen.",
+    kurz: "Prüfung",
+    karteTitel: "S-Probe K8a",
+    karteKurz: "Prüfung",
+    karteZielgruppe: "Prüfung",
+    startAt: LANGE_HER,
+    endAt: LANGE_HER,
+    stadt: "Falkensee",
+    maxPersonen: 100,
+    schwelleWenigPlaetze: 10,
+    schuelerAktiv: true,
+    preisSchuelerCents: 700,
+    preisErwachsenerCents: 1400,
+    status: "VEROEFFENTLICHT",
+    aufnahmenOfflineAm: laengstOffline,
+    aufnahmenOfflineVon: "pruefung",
+    aufnahmenOfflineNotiz: "S-Probe",
+  },
+});
+
+/* Event 2: NIE als offline markiert. */
+const k8EventOhneOffline = await db.event.create({
+  data: {
+    slug: "s-probe-loeschlauf-k8-ohne",
+    titel: "S-Probe Löschlauf K8 ohne Offline",
+    beschreibung: "Nur zum Prüfen.",
+    kurz: "Prüfung",
+    karteTitel: "S-Probe K8b",
+    karteKurz: "Prüfung",
+    karteZielgruppe: "Prüfung",
+    startAt: LANGE_HER,
+    endAt: LANGE_HER,
+    stadt: "Falkensee",
+    maxPersonen: 100,
+    schwelleWenigPlaetze: 10,
+    schuelerAktiv: true,
+    preisSchuelerCents: 700,
+    preisErwachsenerCents: 1400,
+    status: "VEROEFFENTLICHT",
+  },
+});
+
+/* Event 3: wird ERST NACH der Anlage seines Widerspruchs als offline
+   markiert — der Fall "faelligkeitenAuffrischen() muss nachziehen". */
+const k8EventSpaeter = await db.event.create({
+  data: {
+    slug: "s-probe-loeschlauf-k8-spaeter",
+    titel: "S-Probe Löschlauf K8 später",
+    beschreibung: "Nur zum Prüfen.",
+    kurz: "Prüfung",
+    karteTitel: "S-Probe K8c",
+    karteKurz: "Prüfung",
+    karteZielgruppe: "Prüfung",
+    startAt: LANGE_HER,
+    endAt: LANGE_HER,
+    stadt: "Falkensee",
+    maxPersonen: 100,
+    schwelleWenigPlaetze: 10,
+    schuelerAktiv: true,
+    preisSchuelerCents: 700,
+    preisErwachsenerCents: 1400,
+    status: "VEROEFFENTLICHT",
+  },
+});
+
+/* Fall A: Offline seit 2015, Frist längst abgelaufen, KEINE Sperre —
+   muss beim echten Lauf gelöscht werden. faelligAm wird hier absichtlich
+   schon korrekt gesetzt: faelligkeitenAuffrischen() läuft bei jedem
+   Aufruf und würde einen falsch gesetzten Wert ohnehin überschreiben —
+   genau das prüft Fall D weiter unten eigens. */
+const k8Faellig = await db.aufnahmewiderspruch.create({
+  data: {
+    eventId: k8EventOffline.id,
+    name: "S-Probe fällig",
+    weg: "VOR_ORT",
+    erfasstVon: "pruefung",
+    faelligAm: faelligAufnahmewiderspruch(laengstOffline),
+  },
+});
+const pruefvermerkFaellig = await db.veroeffentlichungspruefung.create({
+  data: {
+    eventId: k8EventOffline.id,
+    ziel: "S-Probe Website",
+    widersprueche: 0,
+    erkennbar: false,
+    geprueftVon: "pruefung",
+    faelligAm: faelligAufnahmewiderspruch(laengstOffline),
+  },
+});
+
+/* Fall B: ebenfalls offline seit 2015 und fällig, ABER gesperrt
+   (laufendes Verfahren) — darf trotz Fälligkeit nicht verschwinden. */
+const k8Gesperrt = await db.aufnahmewiderspruch.create({
+  data: {
+    eventId: k8EventOffline.id,
+    name: "S-Probe gesperrt",
+    weg: "EMAIL",
+    erfasstVon: "pruefung",
+    faelligAm: faelligAufnahmewiderspruch(laengstOffline),
+  },
+});
+await db.loeschsperre.create({
+  data: {
+    zielArt: "Aufnahmewiderspruch",
+    zielId: k8Gesperrt.id,
+    grund: "RECHTSSTREIT",
+    gesetztVon: "pruefung",
+  },
+});
+
+/* Fall C: das zugehörige Event wurde nie als offline markiert. */
+const k8OhneOffline = await db.aufnahmewiderspruch.create({
+  data: {
+    eventId: k8EventOhneOffline.id,
+    name: "S-Probe ohne Offline",
+    weg: "VOR_ORT",
+    erfasstVon: "pruefung",
+    faelligAm: null,
+  },
+});
+
+const k8ProbeVorher = await loeschlauf(true);
+pruefe(
+  "Probelauf meldet die beiden fälligen K8-Datensätze",
+  k8ProbeVorher.eintraege.some(
+    (e) => e.zielArt === "Aufnahmewiderspruch" && e.zielId === k8Faellig.id && e.aktion === "faellig",
+  ) &&
+    k8ProbeVorher.eintraege.some(
+      (e) =>
+        e.zielArt === "Veroeffentlichungspruefung" &&
+        e.zielId === pruefvermerkFaellig.id &&
+        e.aktion === "faellig",
+    ),
+);
+pruefe(
+  "Probelauf meldet den gesperrten K8-Datensatz als übersprungen, nicht als fällig",
+  k8ProbeVorher.eintraege.some(
+    (e) =>
+      e.zielArt === "Aufnahmewiderspruch" &&
+      e.zielId === k8Gesperrt.id &&
+      e.aktion === "uebersprungen" &&
+      e.grund === "gesperrt",
+  ),
+);
+pruefe(
+  "Probelauf rührt den Datensatz ohne Offline-Datum gar nicht erst an",
+  !k8ProbeVorher.eintraege.some((e) => e.zielId === k8OhneOffline.id),
+);
+pruefe(
+  "Probelauf verändert nichts — alle drei Widersprüche stehen noch da",
+  (await db.aufnahmewiderspruch.count({
+    where: { id: { in: [k8Faellig.id, k8Gesperrt.id, k8OhneOffline.id] } },
+  })) === 3,
+);
+
+const k8Echt = await loeschlauf(false);
+
+pruefe(
+  "Echter Lauf: der fällige, ungesperrte Widerspruch ist gelöscht",
+  (await db.aufnahmewiderspruch.findUnique({ where: { id: k8Faellig.id } })) === null,
+);
+pruefe(
+  "Echter Lauf: der fällige, ungesperrte Prüfvermerk ist gelöscht",
+  (await db.veroeffentlichungspruefung.findUnique({ where: { id: pruefvermerkFaellig.id } })) ===
+    null,
+);
+pruefe(
+  "Echter Lauf: der gesperrte Widerspruch bleibt trotz Fälligkeit erhalten",
+  (await db.aufnahmewiderspruch.findUnique({ where: { id: k8Gesperrt.id } })) !== null,
+  "ein laufendes Verfahren sperrt die Löschung",
+);
+pruefe(
+  "Echter Lauf: der Widerspruch ohne Offline-Datum bleibt erhalten",
+  (await db.aufnahmewiderspruch.findUnique({ where: { id: k8OhneOffline.id } })) !== null,
+  "solange niemand feststellt, dass alle Aufnahmen offline sind, gibt es keine Fälligkeit",
+);
+pruefe(
+  "Das Protokoll nennt K8-Löschungen mit Zielart, aber keinen Namen",
+  k8Echt.eintraege.some((e) => e.zielArt === "Aufnahmewiderspruch" && e.aktion === "geloescht") &&
+    !JSON.stringify(k8Echt.eintraege).includes("S-Probe fällig"),
+);
+
+/* Fall D: Die Sperre wird aufgehoben — danach muss der nächste Lauf
+   wirklich löschen. */
+await db.loeschsperre.updateMany({
+  where: { zielArt: "Aufnahmewiderspruch", zielId: k8Gesperrt.id, aufgehobenAm: null },
+  data: { aufgehobenAm: new Date(), aufgehobenVon: "pruefung" },
+});
+await loeschlauf(false);
+pruefe(
+  "Nach dem Aufheben der Sperre: der vormals gesperrte Widerspruch ist jetzt gelöscht",
+  (await db.aufnahmewiderspruch.findUnique({ where: { id: k8Gesperrt.id } })) === null,
+);
+
+/* Fall E: faelligkeitenAuffrischen() korrigiert die Frist, wenn das
+   Offline-Datum NACH der Anlage des Widerspruchs gesetzt wird —
+   genau der Fall, dass ein Widerspruch schon vor der
+   Offline-Markierung bestand. */
+const k8Spaeter = await db.aufnahmewiderspruch.create({
+  data: {
+    eventId: k8EventSpaeter.id,
+    name: "S-Probe später offline",
+    weg: "VOR_ORT",
+    erfasstVon: "pruefung",
+    faelligAm: null,
+  },
+});
+const k8SpaeterVorAuffrischen = await db.aufnahmewiderspruch.findUnique({
+  where: { id: k8Spaeter.id },
+});
+pruefe(
+  "Vor der Offline-Markierung: keine Fälligkeit",
+  k8SpaeterVorAuffrischen.faelligAm === null,
+);
+await db.event.update({
+  where: { id: k8EventSpaeter.id },
+  data: {
+    aufnahmenOfflineAm: laengstOffline,
+    aufnahmenOfflineVon: "pruefung",
+    aufnahmenOfflineNotiz: "S-Probe",
+  },
+});
+await loeschlauf(true); // Probelauf frischt Fälligkeiten trotzdem auf.
+const k8SpaeterNachAuffrischen = await db.aufnahmewiderspruch.findUnique({
+  where: { id: k8Spaeter.id },
+});
+pruefe(
+  "faelligkeitenAuffrischen() setzt die Frist eines schon bestehenden Widerspruchs nach, wenn das Event nachträglich als offline markiert wird",
+  k8SpaeterNachAuffrischen.faelligAm !== null &&
+    k8SpaeterNachAuffrischen.faelligAm.getTime() ===
+      faelligAufnahmewiderspruch(laengstOffline).getTime(),
+);
+await loeschlauf(false);
+pruefe(
+  "… und ein anschließender echter Lauf löscht ihn dann auch",
+  (await db.aufnahmewiderspruch.findUnique({ where: { id: k8Spaeter.id } })) === null,
+);
+
+/* ── Aufräumen K8 ─────────────────────────────────────────────── */
+for (const ev of [k8EventOffline, k8EventOhneOffline, k8EventSpaeter]) {
+  await db.veroeffentlichungspruefung.deleteMany({ where: { eventId: ev.id } });
+  await db.aufnahmewiderspruch.deleteMany({ where: { eventId: ev.id } });
+  await db.event.delete({ where: { id: ev.id } });
+}
+
+/* ── Zweiter Lauf: nichts mehr zu tun ─────────────────────────── *//* ── Zweiter Lauf: nichts mehr zu tun ─────────────────────────── */
 
 console.log("\n── Ein zweiter Lauf ──\n");
 

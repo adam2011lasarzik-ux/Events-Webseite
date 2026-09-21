@@ -763,7 +763,7 @@ Analysedienste, keine sozialen Netzwerke.
 > Löschfrist" **stimmt seit der Umsetzung nicht mehr** und darf so nicht
 > stehen bleiben.
 
-**Die sieben Klassen im Überblick** (Einzelheiten und Rechtsgrundlagen
+**Die acht Klassen im Überblick** (Einzelheiten und Rechtsgrundlagen
 in `docs/loeschkonzept-betrieb.md`):
 
 | Klasse | Datenart | Frist | danach |
@@ -775,29 +775,37 @@ in `docs/loeschkonzept-betrieb.md`):
 | K5 | Veranstaltungs- und Sicherheitschecklisten | 3 Jahre zum Jahresende | Personenbezug entfernen |
 | K6 | Vorfall- und Versicherungsakten | 10 Jahre, bei schwerem Personen-/Gesundheitsschaden bis 30 Jahre, ab Abschluss des Vorgangs | löschen |
 | K7 | Steuerunterlagen (§ 147 AO) | 10 / 8 / 6 Jahre | **niemals** vom Löschlauf angefasst |
-| K8 | Widerspruch gegen Foto- und Videoaufnahmen samt Prüfvermerk (Art. 21 DS-GVO) | keine Frist, solange Aufnahmen veröffentlicht sind | **niemals** vom Löschlauf angefasst |
+| K8 | Widerspruch gegen Foto- und Videoaufnahmen samt Prüfvermerk (Art. 21 DS-GVO) | 3 Jahre Nachlauf ab der von Hand gesetzten „Aufnahmen offline“-Markierung; davor keine Frist | löschen — erst ab der Markierung fällig |
 
-> ⚠️ **Offen seit Entscheidung 4.6 (19.09.2026) — zwei Lücken in dieser
-> Tabelle.** Die Foto- und Videoaufnahmen werden künftig **unbefristet**
-> genutzt, solange der Werbezweck besteht (Dokument 06). Daraus folgt:
+> ⚠️ **Seit Entscheidung 4.6 (19.09.2026) — eine von zwei Lücken in
+> dieser Tabelle ist erledigt.** Die Foto- und Videoaufnahmen werden
+> künftig **unbefristet** genutzt, solange der Werbezweck besteht
+> (Dokument 06). Daraus folgte:
 >
 > 1. **Die veröffentlichten Aufnahmen selbst haben keine Löschklasse.**
->    K1–K7 erfassen Erklärungen, Nachweise, Anmeldedaten, Checklisten,
->    Vorfallakten und Steuerunterlagen — nicht die Bilddateien und nicht
->    die Beiträge auf Website und Instagram. Der automatische Löschlauf
->    wird dort nie etwas tun. Das ist vertretbar, muss aber ausdrücklich
->    so dastehen, statt den Eindruck zu erwecken, der Lauf decke alles ab.
-> 2. **K3 und die unbefristete Nutzung passen nicht zusammen.** Wird der
->    reduzierte Zustimmungsnachweis nach 10 Jahren gelöscht, die Aufnahme
->    steht aber noch online, ist die Einwilligung nicht mehr nachweisbar
->    (Art. 7 Abs. 1 DS-GVO). Der Nachweis muss mindestens so lange
->    bestehen bleiben wie die Nutzung.
->
-> Auflösung — fachlich zu bestätigen: eine eigene Löschklasse für die
-> **Nachweise zu Aufnahmen** (Kenntnisnahme und Widersprüche) mit der
-> Frist „Ende der Nutzung zuzüglich
-> Verjährungspuffer", oder eine Löschsperre, solange die Aufnahme
-> veröffentlicht ist. Bauauftrag **B-14** in Dokument 15.
+>    K1–K8 erfassen Erklärungen, Nachweise, Anmeldedaten, Checklisten,
+>    Vorfallakten, Steuerunterlagen und jetzt auch den Nachweis über
+>    Widerspruch/Prüfung — nicht die Bilddateien und nicht die
+>    Beiträge auf Website und Instagram selbst. Der automatische
+>    Löschlauf wird dort weiterhin nie etwas tun. Das bleibt vertretbar,
+>    muss aber ausdrücklich so dastehen, statt den Eindruck zu erwecken,
+>    der Lauf decke alles ab. **Weiterhin offen.**
+> 2. ✅ **Erledigt am 21.09.2026.** K8 hat jetzt genau die vorgeschlagene
+>    eigene Löschklasse für die **Nachweise zu Aufnahmen** (Widerspruch
+>    und Prüfvermerk) mit der Frist „Ende der Nutzung zuzüglich
+>    Verjährungspuffer" — technisch umgesetzt als „Ende der Nutzung"
+>    gleich der von Hand gesetzten `aufnahmenOfflineAm`-Markierung
+>    („Alle Aufnahmen dieser Veranstaltung endgültig offline", mit
+>    Datum, Bearbeiter und Prüfvermerk) und „Verjährungspuffer" gleich
+>    3 Jahre Nachlauf ab deren Jahresende
+>    (`faelligAufnahmewiderspruch()` in `lib/loeschfristen.ts`).
+>    Zusätzlich, wie ursprünglich als Alternative vorgeschlagen: Eine
+>    Löschsperre hält die Löschung an, solange ein Streit, eine
+>    Beschwerde oder ein laufendes Verfahren dazu besteht — beide
+>    Auflösungswege aus dem ursprünglichen Vorschlag sind damit
+>    kombiniert, nicht nur einer davon gewählt. Bauauftrag **B-14** in
+>    Dokument 15, dort als erledigt vermerkt. Einzelheiten in
+>    `docs/loeschkonzept-betrieb.md`.
 
 **Löschsperre.** Einzelne Datensätze können von der Löschung
 ausgenommen werden — bei einem Unfall, einer Beschwerde, einer

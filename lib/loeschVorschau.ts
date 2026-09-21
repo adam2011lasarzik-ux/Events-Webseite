@@ -270,6 +270,62 @@ export async function loeschVorschau(jetzt: Date = new Date()): Promise<Vorschau
     if (z) zeilen.push(z);
   }
 
+  const widersprueche = await db.aufnahmewiderspruch.findMany({
+    select: {
+      id: true,
+      faelligAm: true,
+      loeschklasse: true,
+      name: true,
+      event: { select: { titel: true, startAt: true, endAt: true } },
+    },
+  });
+  for (const w of widersprueche) {
+    const z = zeileBauen(
+      {
+        klasse: w.loeschklasse,
+        zielArt: "Aufnahmewiderspruch",
+        zielId: w.id,
+        faelligAm: w.faelligAm,
+        sperren: karte.get(`Aufnahmewiderspruch:${w.id}`) ?? [],
+        bezeichnung: w.name,
+        eventTitel: w.event.titel,
+        veranstaltungAm: w.event.startAt ?? w.event.endAt,
+        email: null,
+      },
+      jetzt,
+      grenze,
+    );
+    if (z) zeilen.push(z);
+  }
+
+  const pruefvermerke = await db.veroeffentlichungspruefung.findMany({
+    select: {
+      id: true,
+      faelligAm: true,
+      loeschklasse: true,
+      ziel: true,
+      event: { select: { titel: true, startAt: true, endAt: true } },
+    },
+  });
+  for (const p of pruefvermerke) {
+    const z = zeileBauen(
+      {
+        klasse: p.loeschklasse,
+        zielArt: "Veroeffentlichungspruefung",
+        zielId: p.id,
+        faelligAm: p.faelligAm,
+        sperren: karte.get(`Veroeffentlichungspruefung:${p.id}`) ?? [],
+        bezeichnung: `Prüfung: ${p.ziel}`,
+        eventTitel: p.event.titel,
+        veranstaltungAm: p.event.startAt ?? p.event.endAt,
+        email: null,
+      },
+      jetzt,
+      grenze,
+    );
+    if (z) zeilen.push(z);
+  }
+
   // Überfälliges zuerst, danach nach Termin — das ist die
   // Reihenfolge, in der man es abarbeitet.
   zeilen.sort((a, b) => a.faelligAm.getTime() - b.faelligAm.getTime());
@@ -307,36 +363,55 @@ export async function offeneSperrenListe(): Promise<OffeneSperre[]> {
   const idsVon = (art: string) =>
     sperren.filter((s) => s.zielArt === art).map((s) => s.zielId);
 
-  const [anmeldungen, vorfaelle, checklisten, nachweise] = await Promise.all([
-    db.registration.findMany({
-      where: { id: { in: idsVon("Registration") } },
-      select: {
-        id: true,
-        kontaktVorname: true,
-        kontaktNachname: true,
-        kontaktEmail: true,
-        anonymisiertAm: true,
-        event: { select: { titel: true, startAt: true, endAt: true } },
-      },
-    }),
-    db.vorfall.findMany({
-      where: { id: { in: idsVon("Vorfall") } },
-      select: { id: true, titel: true, eroeffnetAm: true, status: true },
-    }),
-    db.checkliste.findMany({
-      where: { id: { in: idsVon("Checkliste") } },
-      select: { id: true, durchgefuehrtAm: true, anonymisiertAm: true },
-    }),
-    db.zustimmungsnachweis.findMany({
-      where: { id: { in: idsVon("Zustimmungsnachweis") } },
-      select: { id: true, teilnehmerName: true, veranstaltungAm: true },
-    }),
-  ]);
+  const [anmeldungen, vorfaelle, checklisten, nachweise, widersprueche, pruefvermerke] =
+    await Promise.all([
+      db.registration.findMany({
+        where: { id: { in: idsVon("Registration") } },
+        select: {
+          id: true,
+          kontaktVorname: true,
+          kontaktNachname: true,
+          kontaktEmail: true,
+          anonymisiertAm: true,
+          event: { select: { titel: true, startAt: true, endAt: true } },
+        },
+      }),
+      db.vorfall.findMany({
+        where: { id: { in: idsVon("Vorfall") } },
+        select: { id: true, titel: true, eroeffnetAm: true, status: true },
+      }),
+      db.checkliste.findMany({
+        where: { id: { in: idsVon("Checkliste") } },
+        select: { id: true, durchgefuehrtAm: true, anonymisiertAm: true },
+      }),
+      db.zustimmungsnachweis.findMany({
+        where: { id: { in: idsVon("Zustimmungsnachweis") } },
+        select: { id: true, teilnehmerName: true, veranstaltungAm: true },
+      }),
+      db.aufnahmewiderspruch.findMany({
+        where: { id: { in: idsVon("Aufnahmewiderspruch") } },
+        select: {
+          id: true,
+          name: true,
+          event: { select: { titel: true, startAt: true, endAt: true } },
+        },
+      }),
+      db.veroeffentlichungspruefung.findMany({
+        where: { id: { in: idsVon("Veroeffentlichungspruefung") } },
+        select: {
+          id: true,
+          ziel: true,
+          event: { select: { titel: true, startAt: true, endAt: true } },
+        },
+      }),
+    ]);
 
   const a = new Map(anmeldungen.map((x) => [x.id, x]));
   const v = new Map(vorfaelle.map((x) => [x.id, x]));
   const c = new Map(checklisten.map((x) => [x.id, x]));
   const z = new Map(nachweise.map((x) => [x.id, x]));
+  const w = new Map(widersprueche.map((x) => [x.id, x]));
+  const pv = new Map(pruefvermerke.map((x) => [x.id, x]));
 
   return sperren.map((s) => {
     const leer = {
@@ -388,13 +463,39 @@ export async function offeneSperrenListe(): Promise<OffeneSperre[]> {
         vorhanden: true,
       };
     }
-    const t = z.get(s.zielId);
+    if (s.zielArt === "Zustimmungsnachweis") {
+      const t = z.get(s.zielId);
+      if (!t) return leer;
+      return {
+        ...s,
+        bezeichnung: t.teilnehmerName,
+        eventTitel: null,
+        veranstaltungAm: t.veranstaltungAm,
+        email: null,
+        anonymisiert: false,
+        vorhanden: true,
+      };
+    }
+    if (s.zielArt === "Aufnahmewiderspruch") {
+      const t = w.get(s.zielId);
+      if (!t) return leer;
+      return {
+        ...s,
+        bezeichnung: t.name,
+        eventTitel: t.event.titel,
+        veranstaltungAm: t.event.startAt ?? t.event.endAt,
+        email: null,
+        anonymisiert: false,
+        vorhanden: true,
+      };
+    }
+    const t = pv.get(s.zielId);
     if (!t) return leer;
     return {
       ...s,
-      bezeichnung: t.teilnehmerName,
-      eventTitel: null,
-      veranstaltungAm: t.veranstaltungAm,
+      bezeichnung: `Prüfung: ${t.ziel}`,
+      eventTitel: t.event.titel,
+      veranstaltungAm: t.event.startAt ?? t.event.endAt,
       email: null,
       anonymisiert: false,
       vorhanden: true,

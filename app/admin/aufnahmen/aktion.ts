@@ -25,12 +25,15 @@ import { verlangeAdmin } from "@/lib/adminAuth";
 import { protokolliere, PROTOKOLL_AKTIONEN } from "@/lib/adminProtokoll";
 import {
   WIDERSPRUCHSWEGE,
+  aufnahmenOfflineSetzen as aufnahmenOfflineSetzenDb,
+  aufnahmenOfflineZuruecknehmen as aufnahmenOfflineZuruecknehmenDb,
   pruefungFesthalten,
   widerspruchAnlegen,
   widerspruchZuruecknehmen,
   type Widerspruchsweg,
 } from "@/lib/aufnahmen";
 import { db } from "@/lib/db";
+import { ausFormular, alsIsoDatum } from "@/lib/zeit";
 
 const NAME_MAX = 180;
 const TEXT_MAX = 2000;
@@ -170,4 +173,78 @@ export async function pruefungErfassen(formular: FormData): Promise<void> {
 
   revalidatePath("/admin/aufnahmen");
   zurueck(eventId, ergebnis === "ja" ? "gesperrt" : "freigegeben");
+}
+
+const OFFLINE_NOTIZ_MAX = 1000;
+
+/**
+ * Alle Aufnahmen einer Veranstaltung als endgültig offline markieren
+ * (Löschklasse K8). Erst dadurch beginnt die dreijährige
+ * Nachlauffrist für Widerspruch und Prüfvermerk zu laufen.
+ *
+ * Bewusst kein vorausgefülltes Datum: Wer nicht bewusst ein Datum
+ * einträgt, soll hier nichts auslösen können. Das Datum darf nicht
+ * in der Zukunft liegen — die Markierung ist eine Feststellung, keine
+ * Ankündigung.
+ */
+export async function aufnahmenOfflineSetzen(formular: FormData): Promise<void> {
+  const admin = await verlangeAdmin();
+
+  const eventId = text(formular.get("eventId"));
+  if (!(await gibtEsDieVeranstaltung(eventId))) {
+    redirect("/admin/aufnahmen?hinweis=event-fehlt");
+  }
+
+  const datumRoh = text(formular.get("datum"));
+  if (!datumRoh) zurueck(eventId, "offline-datum-fehlt");
+
+  const datum = ausFormular(`${datumRoh}T00:00`);
+  if (!datum) zurueck(eventId, "offline-datum-ungueltig");
+  if (datum.getTime() > Date.now()) zurueck(eventId, "offline-datum-zukunft");
+
+  const notiz = text(formular.get("notiz")).slice(0, OFFLINE_NOTIZ_MAX);
+  if (!notiz) zurueck(eventId, "offline-notiz-fehlt");
+
+  await aufnahmenOfflineSetzenDb({ eventId, datum, notiz, gesetztVon: admin.id });
+
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.aufnahmenOfflineGesetzt,
+    zielArt: "Event",
+    zielId: eventId,
+    detail: alsIsoDatum(datum) ?? undefined,
+  });
+
+  revalidatePath("/admin/aufnahmen");
+  revalidatePath("/admin/loeschen");
+  zurueck(eventId, "offline-gesetzt");
+}
+
+/**
+ * Die Offline-Markierung zurücknehmen — etwa nach einer Fehleingabe.
+ *
+ * Setzt die Fälligkeit der zugehörigen K8-Datensätze wieder auf
+ * "keine" zurück: Ohne die Feststellung "offline" gibt es keine
+ * Frist, wie bei jedem anderen Datensatz ohne Fälligkeitsdatum auch.
+ */
+export async function aufnahmenOfflineZuruecknehmen(formular: FormData): Promise<void> {
+  const admin = await verlangeAdmin();
+
+  const eventId = text(formular.get("eventId"));
+  if (!(await gibtEsDieVeranstaltung(eventId))) {
+    redirect("/admin/aufnahmen?hinweis=event-fehlt");
+  }
+
+  await aufnahmenOfflineZuruecknehmenDb(eventId);
+
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.aufnahmenOfflineZurueckgenommen,
+    zielArt: "Event",
+    zielId: eventId,
+  });
+
+  revalidatePath("/admin/aufnahmen");
+  revalidatePath("/admin/loeschen");
+  zurueck(eventId, "offline-zurueckgenommen");
 }

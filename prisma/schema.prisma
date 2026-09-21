@@ -171,6 +171,24 @@ model Event {
   anmeldungAb  DateTime?
   anmeldungBis DateTime?
 
+  // ── Aufnahmen: endgültig offline (K8) ─────────────────────────
+  //
+  // Von Hand gesetzt, NICHT vom automatischen Löschlauf: Alle Foto-
+  // und Videoaufnahmen dieser Veranstaltung sind von keiner Website,
+  // keinem Instagram-Kanal und keiner Weitergabe mehr erreichbar.
+  // Erst ab diesem Zeitpunkt beginnt die dreijährige Nachlauffrist
+  // für Aufnahmewiderspruch und Veröffentlichungsprüfung zu laufen —
+  // siehe faelligAufnahmewiderspruch() in lib/loeschfristen.ts.
+  // Diese Entscheidung fällt im Rahmen der jährlichen
+  // Erforderlichkeitsprüfung der Aufnahmen (Entscheidung 4.6), aber
+  // ausdrücklich nicht automatisch durch sie.
+  aufnahmenOfflineAm    DateTime?
+  /// Wer die Entscheidung getroffen hat (AdminUser-Kennung).
+  aufnahmenOfflineVon   String?
+  /// Was geprüft wurde, z. B. "Website und Instagram-Beitrag entfernt,
+  /// Weitergabe an die Halle widerrufen".
+  aufnahmenOfflineNotiz String?   @db.Text
+
   erstelltAm  DateTime @default(now())
   geaendertAm DateTime @updatedAt
 
@@ -639,20 +657,27 @@ enum Loeschklasse {
   /// K7 — steuerrelevant. Wird vom Löschlauf NIEMALS angefasst.
   STEUERUNTERLAGEN
 
-  /// K8 — erklärter Widerspruch gegen Aufnahmen. Wird vom Löschlauf
-  /// NIEMALS angefasst, solange Aufnahmen der Veranstaltung
-  /// veröffentlicht sind.
+  /// K8 — erklärter Widerspruch gegen Aufnahmen samt Prüfvermerk.
+  /// EREIGNISBEZOGENE Frist (Entscheidung vom 21.09.2026, löst die
+  /// frühere Fassung "niemals" ab):
   ///
-  /// Begründung: Der Widerspruch ist der einzige Nachweis, dass eine
-  /// Person nicht abgebildet werden möchte. Löschte ihn der
-  /// nächtliche Lauf nach drei Jahren weg, während die Aufnahmen
-  /// weiterhin online stehen, liefe die Prüfung vor jeder
-  /// Veröffentlichung ins Leere — und niemand wüsste mehr, warum.
-  /// Das Gegenstück dazu ist Bauauftrag B-14: Auch die
-  /// veröffentlichten Aufnahmen selbst haben bis heute keine
-  /// Löschklasse. Beides gehört zusammen abgeräumt, wenn eine
-  /// Veranstaltung endgültig aus der Öffentlichkeitsarbeit
-  /// verschwindet — von Hand und dokumentiert, nicht nebenbei.
+  /// Solange `Event.aufnahmenOfflineAm` nicht gesetzt ist, gibt es
+  /// kein Fälligkeitsdatum — der Löschlauf lässt den Datensatz in
+  /// Ruhe (entscheide() in lib/loeschfristen.ts: kein faelligAm, also
+  /// nie fällig). Begründung: Der Widerspruch ist der einzige
+  /// Nachweis, dass eine Person nicht abgebildet werden möchte.
+  /// Gelöscht, während Aufnahmen noch online stehen, liefe die
+  /// Prüfung vor jeder Veröffentlichung ins Leere.
+  ///
+  /// Erst wenn ein Admin von Hand festhält, dass ALLE Aufnahmen
+  /// dieser Veranstaltung endgültig offline sind (mit Datum,
+  /// Bearbeiter und Prüfvermerk — nie automatisch durch den
+  /// jährlichen Prüflauf allein), beginnt eine Nachlauffrist von drei
+  /// Jahren zur Beweissicherung: faelligAufnahmewiderspruch() in
+  /// lib/loeschfristen.ts, Fristende zum Jahresende des dritten
+  /// Kalenderjahres danach. Ein zu diesem Zeitpunkt bestehender
+  /// Streit, eine Beschwerde oder ein laufendes Verfahren sperrt die
+  /// Löschung wie bei jeder anderen Klasse über eine Loeschsperre.
   AUFNAHMEWIDERSPRUCH
 }
 

@@ -29,6 +29,7 @@ import { db } from "./db";
 import {
   entscheide,
   faelligAnmeldedaten,
+  faelligAufnahmewiderspruch,
   faelligEinverstaendnis,
   faelligGesundheit,
   faelligVorfall,
@@ -208,6 +209,38 @@ export async function faelligkeitenAuffrischen(): Promise<number> {
     geaendert++;
   }
 
+  /* K8: faelligAm hängt an Event.aufnahmenOfflineAm, nicht an einem
+     bei der Anlage fest eingetragenen Datum. Wird die Offline-
+     Markierung nachträglich korrigiert, oder entsteht ein neuer
+     Widerspruch bzw. Prüfvermerk NACHDEM ein Event schon als offline
+     markiert wurde, muss die Frist mitwandern — dieselbe Systematik
+     wie bei Vorfällen und der Einstufung. */
+  const widersprueche = await db.aufnahmewiderspruch.findMany({
+    select: { id: true, faelligAm: true, event: { select: { aufnahmenOfflineAm: true } } },
+  });
+  for (const w of widersprueche) {
+    const soll = faelligAufnahmewiderspruch(w.event.aufnahmenOfflineAm);
+    const istGleich =
+      (soll === null && w.faelligAm === null) ||
+      (soll !== null && w.faelligAm !== null && soll.getTime() === w.faelligAm.getTime());
+    if (istGleich) continue;
+    await db.aufnahmewiderspruch.update({ where: { id: w.id }, data: { faelligAm: soll } });
+    geaendert++;
+  }
+
+  const pruefvermerke = await db.veroeffentlichungspruefung.findMany({
+    select: { id: true, faelligAm: true, event: { select: { aufnahmenOfflineAm: true } } },
+  });
+  for (const p of pruefvermerke) {
+    const soll = faelligAufnahmewiderspruch(p.event.aufnahmenOfflineAm);
+    const istGleich =
+      (soll === null && p.faelligAm === null) ||
+      (soll !== null && p.faelligAm !== null && soll.getTime() === p.faelligAm.getTime());
+    if (istGleich) continue;
+    await db.veroeffentlichungspruefung.update({ where: { id: p.id }, data: { faelligAm: soll } });
+    geaendert++;
+  }
+
   return geaendert;
 }
 
@@ -233,6 +266,8 @@ export async function loeschlauf(probelauf: boolean): Promise<Laufergebnis> {
   const sperrenVorfall = await offeneSperren("Vorfall");
   const sperrenCheckliste = await offeneSperren("Checkliste");
   const sperrenNachweis = await offeneSperren("Zustimmungsnachweis");
+  const sperrenAufnahmewiderspruch = await offeneSperren("Aufnahmewiderspruch");
+  const sperrenVeroeffentlichungspruefung = await offeneSperren("Veroeffentlichungspruefung");
 
   /* ── K4: Anmelde- und Check-in-Daten → anonymisieren ─────────── */
   const anmeldungen = await db.registration.findMany({
@@ -395,6 +430,90 @@ export async function loeschlauf(probelauf: boolean): Promise<Laufergebnis> {
       klasse: v.loeschklasse,
       zielArt: "Vorfall",
       zielId: v.id,
+      aktion: "geloescht",
+    });
+  }
+
+  /* ── K8a: Aufnahmewidersprüche → löschen ─────────────────────── */
+  const widersprueche = await db.aufnahmewiderspruch.findMany({
+    select: { id: true, faelligAm: true, loeschklasse: true },
+  });
+
+  for (const w of widersprueche) {
+    const e = entscheide(
+      w.loeschklasse,
+      w.faelligAm,
+      sperrenAufnahmewiderspruch.get(w.id) ?? [],
+      begonnenAm,
+    );
+    if (!e.handeln) {
+      if (e.grund === "gesperrt" || e.grund === "steuerrelevant") {
+        eintraege.push({
+          klasse: w.loeschklasse,
+          zielArt: "Aufnahmewiderspruch",
+          zielId: w.id,
+          aktion: "uebersprungen",
+          grund: e.grund,
+        });
+      }
+      continue;
+    }
+    if (probelauf) {
+      eintraege.push({
+        klasse: w.loeschklasse,
+        zielArt: "Aufnahmewiderspruch",
+        zielId: w.id,
+        aktion: "faellig",
+      });
+      continue;
+    }
+    await db.aufnahmewiderspruch.delete({ where: { id: w.id } });
+    eintraege.push({
+      klasse: w.loeschklasse,
+      zielArt: "Aufnahmewiderspruch",
+      zielId: w.id,
+      aktion: "geloescht",
+    });
+  }
+
+  /* ── K8b: Veröffentlichungsprüfungen → löschen ────────────────── */
+  const pruefvermerke = await db.veroeffentlichungspruefung.findMany({
+    select: { id: true, faelligAm: true, loeschklasse: true },
+  });
+
+  for (const p of pruefvermerke) {
+    const e = entscheide(
+      p.loeschklasse,
+      p.faelligAm,
+      sperrenVeroeffentlichungspruefung.get(p.id) ?? [],
+      begonnenAm,
+    );
+    if (!e.handeln) {
+      if (e.grund === "gesperrt" || e.grund === "steuerrelevant") {
+        eintraege.push({
+          klasse: p.loeschklasse,
+          zielArt: "Veroeffentlichungspruefung",
+          zielId: p.id,
+          aktion: "uebersprungen",
+          grund: e.grund,
+        });
+      }
+      continue;
+    }
+    if (probelauf) {
+      eintraege.push({
+        klasse: p.loeschklasse,
+        zielArt: "Veroeffentlichungspruefung",
+        zielId: p.id,
+        aktion: "faellig",
+      });
+      continue;
+    }
+    await db.veroeffentlichungspruefung.delete({ where: { id: p.id } });
+    eintraege.push({
+      klasse: p.loeschklasse,
+      zielArt: "Veroeffentlichungspruefung",
+      zielId: p.id,
       aktion: "geloescht",
     });
   }

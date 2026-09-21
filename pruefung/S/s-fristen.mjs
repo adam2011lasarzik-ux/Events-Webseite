@@ -13,6 +13,7 @@
 import {
   AKTION_JE_KLASSE,
   ANMELDEDATEN_JAHRE,
+  AUFNAHMEWIDERSPRUCH_NACHLAUF_JAHRE,
   CHECKLISTE_JAHRE,
   EINVERSTAENDNIS_JAHRE,
   GESUNDHEIT_TAGE,
@@ -22,6 +23,7 @@ import {
   darfLoeschlaufAnfassen,
   entscheide,
   faelligAnmeldedaten,
+  faelligAufnahmewiderspruch,
   faelligCheckliste,
   faelligEinverstaendnis,
   faelligGesundheit,
@@ -124,6 +126,39 @@ pruefe(
 );
 pruefe("K6 schwer liegt später als K6 leicht", k6schwer > k6leicht);
 
+/* K8 — Aufnahmewiderspruch: Frist beginnt erst mit "Aufnahmen offline",
+   nicht mit der Veranstaltung und nicht mit der Erklärung selbst. */
+pruefe(
+  "K8 ohne Offline-Datum: KEIN Fälligkeitsdatum — genau wie ein offener Vorfall",
+  faelligAufnahmewiderspruch(null) === null,
+  "solange niemand feststellt, dass alle Aufnahmen offline sind, bleibt der Beleg stehen",
+);
+const offlineSeit = new Date("2027-05-15T12:00:00Z");
+const k8 = faelligAufnahmewiderspruch(offlineSeit);
+pruefe(
+  `K8: ${AUFNAHMEWIDERSPRUCH_NACHLAUF_JAHRE} Jahre Nachlauf ab Jahresende des Offline-Datums`,
+  k8.getUTCFullYear() === 2027 + AUFNAHMEWIDERSPRUCH_NACHLAUF_JAHRE &&
+    k8.getUTCMonth() === 11 &&
+    k8.getUTCDate() === 31,
+  k8.toISOString().slice(0, 10),
+);
+pruefe(
+  "K8 rechnet vom OFFLINE-Datum, nicht von der Veranstaltung",
+  faelligAufnahmewiderspruch(VERANSTALTUNG).getUTCFullYear() !==
+    faelligAufnahmewiderspruch(offlineSeit).getUTCFullYear(),
+  "zwei verschiedene Jahre, zwei verschiedene Fristen",
+);
+pruefe(
+  "Ein Offline-Datum am Jahresende rechnet trotzdem ab DIESEM Jahresende",
+  faelligAufnahmewiderspruch(new Date("2027-12-31T23:59:59.999Z")).getUTCFullYear() ===
+    2027 + AUFNAHMEWIDERSPRUCH_NACHLAUF_JAHRE,
+);
+pruefe(
+  "Der Nachlauf ist wirklich DREI Jahre — fest verglichen, nicht nur gegen die eigene Konstante",
+  AUFNAHMEWIDERSPRUCH_NACHLAUF_JAHRE === 3 && k8.getUTCFullYear() === 2030,
+  "eine Änderung der Konstante allein darf diesen Vergleich nicht mehr bestehen lassen",
+);
+
 console.log("\n── Vorgesehene Aktion je Klasse ──\n");
 
 pruefe(
@@ -137,6 +172,11 @@ pruefe("K4 → anonymisieren (Buchhaltung bleibt)", AKTION_JE_KLASSE.ANMELDEDATE
 pruefe("K5 → anonymisieren (Sicherheitsdoku bleibt)", AKTION_JE_KLASSE.CHECKLISTE === "anonymisieren");
 pruefe("K6 → löschen", AKTION_JE_KLASSE.VORFALLAKTE === "loeschen");
 pruefe("K7 → NIEMALS", AKTION_JE_KLASSE.STEUERUNTERLAGEN === "niemals");
+pruefe(
+  "K8 → löschen — die Klasse selbst darf angefasst werden, geschützt wird sie NUR über das fehlende Fälligkeitsdatum",
+  AKTION_JE_KLASSE.AUFNAHMEWIDERSPRUCH === "loeschen",
+  "dieselbe Systematik wie bei K6 (Vorfall), nicht wie bei K7 (Steuer)",
+);
 
 console.log("\n── Sperren ──\n");
 
@@ -196,11 +236,35 @@ pruefe(
   "Prüfung 1 vor Prüfung 2",
 );
 pruefe(
-  "darfLoeschlaufAnfassen: K7 nein, alle anderen ja",
+  "darfLoeschlaufAnfassen: K7 nein, alle anderen ja — auch K8",
   darfLoeschlaufAnfassen("STEUERUNTERLAGEN") === false &&
-    ["GESUNDHEITSANGABEN", "EINVERSTAENDNIS_VOLL", "ZUSTIMMUNGSNACHWEIS", "ANMELDEDATEN", "CHECKLISTE", "VORFALLAKTE"].every(
-      (k) => darfLoeschlaufAnfassen(k) === true,
-    ),
+    [
+      "GESUNDHEITSANGABEN",
+      "EINVERSTAENDNIS_VOLL",
+      "ZUSTIMMUNGSNACHWEIS",
+      "ANMELDEDATEN",
+      "CHECKLISTE",
+      "VORFALLAKTE",
+      "AUFNAHMEWIDERSPRUCH",
+    ].every((k) => darfLoeschlaufAnfassen(k) === true),
+  "K8 unterscheidet sich von K7: geschützt über faelligAm, nicht über einen eigenen Riegel",
+);
+pruefe(
+  "K8 ohne Offline-Datum: kein-termin — dieselbe Schutzwirkung wie K7, aber anders begründet",
+  entscheide("AUFNAHMEWIDERSPRUCH", null, offen).grund === "kein-termin",
+);
+pruefe(
+  "K8 mit Offline-Datum in ferner Zukunft der Fälligkeit: noch nicht fällig",
+  entscheide("AUFNAHMEWIDERSPRUCH", faelligAufnahmewiderspruch(new Date()), offen).grund ===
+    "nicht-faellig",
+);
+pruefe(
+  "K8 längst fällig, nicht gesperrt: handeln — anders als K7, das NIE handelt",
+  entscheide("AUFNAHMEWIDERSPRUCH", laengstFaellig, offen).handeln === true,
+);
+pruefe(
+  "K8 längst fällig, aber gesperrt (Beschwerde/Rechtsstreit): nicht handeln",
+  entscheide("AUFNAHMEWIDERSPRUCH", laengstFaellig, gesperrt).grund === "gesperrt",
 );
 
 pruefe(

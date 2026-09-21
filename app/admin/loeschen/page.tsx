@@ -44,6 +44,8 @@ const ZIELART_NAME: Record<string, string> = {
   Vorfall: "Vorfall",
   Checkliste: "Checkliste",
   Zustimmungsnachweis: "Zustimmungsnachweis",
+  Aufnahmewiderspruch: "Widerspruch gegen Aufnahmen",
+  Veroeffentlichungspruefung: "Prüfvermerk (Aufnahmen)",
 };
 
 const SPERRGRUND_NAME: Record<string, string> = {

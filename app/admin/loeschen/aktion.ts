@@ -27,7 +27,14 @@ const SPERRGRUENDE = [
   "RECHTSSTREIT",
 ] as const;
 
-const ZIELARTEN = ["Registration", "Vorfall", "Checkliste", "Zustimmungsnachweis"] as const;
+const ZIELARTEN = [
+  "Registration",
+  "Vorfall",
+  "Checkliste",
+  "Zustimmungsnachweis",
+  "Aufnahmewiderspruch",
+  "Veroeffentlichungspruefung",
+] as const;
 
 type Sperrgrund = (typeof SPERRGRUENDE)[number];
 type Zielart = (typeof ZIELARTEN)[number];

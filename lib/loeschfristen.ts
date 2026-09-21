@@ -51,6 +51,12 @@ export const CHECKLISTE_JAHRE = 3;
 export const VORFALL_LEICHT_JAHRE = 10;
 /** K6 — Vorfallakte bei Personen- oder Gesundheitsschaden (§ 199 Abs. 2 BGB). */
 export const VORFALL_SCHWER_JAHRE = 30;
+/**
+ * K8 — Nachlauffrist zur Beweissicherung, in Jahren ab Jahresende des
+ * Offline-Datums. Entscheidung vom 21.09.2026: Weder unbefristet noch
+ * eine erfundene Zahl — ein Wert, den ein Betreiber bestätigt hat.
+ */
+export const AUFNAHMEWIDERSPRUCH_NACHLAUF_JAHRE = 3;
 
 /**
  * Welche Aktion gehört zu welcher Klasse?
@@ -68,16 +74,15 @@ export const AKTION_JE_KLASSE: Record<Loeschklasse, Loeschaktion> = {
   CHECKLISTE: "anonymisieren",
   VORFALLAKTE: "loeschen",
   STEUERUNTERLAGEN: "niemals",
-  /* K8 — wie K7 ausdrücklich „niemals", und aus einem verwandten
-     Grund: Der Widerspruch ist der einzige Nachweis, dass eine Person
-     nicht abgebildet werden möchte. Löschte ihn der nächtliche Lauf
-     weg, während Aufnahmen der Veranstaltung noch online stehen,
-     liefe die Prüfung vor jeder Veröffentlichung ins Leere — und
-     niemand wüsste mehr, warum.
-
-     Abgeräumt wird er zusammen mit den veröffentlichten Aufnahmen,
-     von Hand und dokumentiert (Bauauftrag B-14). */
-  AUFNAHMEWIDERSPRUCH: "niemals",
+  /* K8 — seit 21.09.2026 EREIGNISBEZOGEN, nicht mehr pauschal
+     "niemals". Die Klasse selbst darf der Löschlauf grundsätzlich
+     anfassen ("loeschen") — was sie davor bewahrt, ist ausschließlich
+     das fehlende faelligAm: Ohne Event.aufnahmenOfflineAm gibt es
+     kein Fälligkeitsdatum (siehe faelligAufnahmewiderspruch()), und
+     ein Datensatz ohne Fälligkeit wird laut entscheide() nie fällig.
+     Genau dieselbe Systematik wie bei VORFALLAKTE, deren Frist auch
+     erst mit dem Abschluss beginnt. */
+  AUFNAHMEWIDERSPRUCH: "loeschen",
 };
 
 /**
@@ -164,6 +169,20 @@ export function faelligVorfall(
   if (!abgeschlossenAm) return null;
   const jahre = einstufung === "SCHWER" ? VORFALL_SCHWER_JAHRE : VORFALL_LEICHT_JAHRE;
   return plusJahre(abgeschlossenAm, jahre);
+}
+
+/**
+ * K8 — Aufnahmewiderspruch und Prüfvermerk: erst ab dem dokumentierten
+ * Offline-Datum, nicht ab der Veranstaltung oder der Erklärung selbst.
+ *
+ * `null` heißt hier: Aufnahmen sind (soweit bekannt) noch veröffentlicht
+ * — also KEINE Fälligkeit, wie bei einem offenen Vorfall. Das ist die
+ * vorsichtige Richtung: Ohne die ausdrückliche Feststellung "offline"
+ * bleibt der Beleg des Widerspruchs stehen.
+ */
+export function faelligAufnahmewiderspruch(aufnahmenOfflineAm: Date | null): Date | null {
+  if (!aufnahmenOfflineAm) return null;
+  return plusJahre(jahresende(aufnahmenOfflineAm), AUFNAHMEWIDERSPRUCH_NACHLAUF_JAHRE);
 }
 
 /* ── Fälligkeit prüfen ─────────────────────────────────────────── */

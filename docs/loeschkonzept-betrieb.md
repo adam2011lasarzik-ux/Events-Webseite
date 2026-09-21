@@ -22,7 +22,7 @@ Dieses Dokument beschreibt nur den laufenden Betrieb.
 | **K5** | Veranstaltungs- und Sicherheitschecklisten | 3 Jahre | Ende des Kalenderjahres | Personenbezug unwiderruflich entfernen |
 | **K6** | Vorfall- und Versicherungsakten | 10 Jahre, bei schwerem Personen-/Gesundheitsschaden bis 30 | **Abschluss** des Vorgangs | löschen |
 | **K7** | Steuerunterlagen (§ 147 AO) | 10 / 8 / 6 Jahre | Ende des Kalenderjahres | **vom Löschlauf niemals angefasst** |
-| **K8** | Widerspruch gegen Aufnahmen und Veröffentlichungsprüfung (Art. 21 DS-GVO) | keine Frist | — | **vom Löschlauf niemals angefasst** |
+| **K8** | Widerspruch gegen Aufnahmen und Veröffentlichungsprüfung (Art. 21 DS-GVO) | 3 Jahre Nachlauf | „Aufnahmen offline“-Markierung (von Hand) | löschen — erst ab dieser Markierung fällig, davor nie |
 
 **K1 und K2 liegen auf Papier.** Die Anwendung kann sie nicht
 vernichten — sie erinnert nur daran. Das ist keine Lücke der Umsetzung,
@@ -33,22 +33,48 @@ UTC) und nur dann, wenn wirklich etwas ansteht — eine monatliche Mail
 dann auch die vierte, in der etwas steht. Sie nennt Klasse,
 Veranstaltung, Fälligkeit und Anzahl, aber **keine Namen**.
 
-**K8 ist der zweite Riegel — aus einem anderen Grund.** Seit dem
-Wegfall der Foto-Einwilligung (B-17) stützen sich die Aufnahmen auf das
-berechtigte Interesse; der Widerspruch nach Art. 21 DS-GVO ist damit die
-**einzige** Sicherung des Konzepts. Er darf nicht verfallen, solange
-Aufnahmen veröffentlicht sind — sonst stünde im elften Jahr eine
-Veröffentlichung online, zu der niemand mehr sagen könnte, ob ihr
-widersprochen wurde. Deshalb tragen `Aufnahmewiderspruch` und
-`Veroeffentlichungspruefung` **kein** Fälligkeitsdatum und werden vom
-Lauf nie angefasst. Wird ein Widerspruch zurückgenommen, bleibt die
-Zeile stehen: Sie belegt, dass zwischen Erklärung und Rücknahme einer
-bestand. Verwaltet wird beides unter **Verwaltung → Aufnahmen**.
+**K8 war bis zum 21.09.2026 pauschal „niemals“ — das ist seitdem
+korrigiert.** Seit dem Wegfall der Foto-Einwilligung (B-17) stützen sich
+die Aufnahmen auf das berechtigte Interesse; der Widerspruch nach
+Art. 21 DS-GVO ist damit die **einzige** Sicherung des Konzepts. Er darf
+nicht verfallen, solange Aufnahmen veröffentlicht sind — sonst stünde im
+elften Jahr eine Veröffentlichung online, zu der niemand mehr sagen
+könnte, ob ihr widersprochen wurde. Eine Frist **ohne jedes Ende** stand
+damit aber im Widerspruch zum eigenen Konzept: Anders als K7 (echte,
+berechenbare Frist, nur vom Löschlauf nicht angefasst) hatte K8 gar
+keinen Endpunkt — die einzige Klasse im ganzen System ohne Löschfrist
+**und** ohne Aussonderungsprüffrist nach DIN 66398, und ein Verstoß
+gegen die Speicherbegrenzung nach Art. 5 Abs. 1 Buchst. e DS-GVO, sobald
+der Zweck (Aufnahmen sind online) tatsächlich wegfällt.
 
-**K7 ist der Riegel.** `entscheide()` in `lib/loeschfristen.ts` prüft
-die Steuerrelevanz an **erster** Stelle, noch vor der Sperre. Wer die
-Reihenfolge tauscht, könnte eine steuerrelevante Zeile anfassen, nur
-weil zufällig keine Sperre darauf lag. Die Reihenfolge ist:
+**Die Lösung ist ereignisbezogen, wie bei K6 (Vorfall).** `Event`
+bekommt drei neue Felder: `aufnahmenOfflineAm`, `aufnahmenOfflineVon`,
+`aufnahmenOfflineNotiz` — von Hand gesetzt unter **Verwaltung →
+Aufnahmen**, mit Datum, Bearbeiter und Prüfvermerk, **nicht
+vorausgewählt** und **nicht** vom jährlichen Prüflauf allein gesetzt.
+Erst ab diesem Zeitpunkt hat ein `Aufnahmewiderspruch` oder eine
+`Veroeffentlichungspruefung` überhaupt ein Fälligkeitsdatum
+(`faelligAufnahmewiderspruch()` in `lib/loeschfristen.ts`: **3 Jahre
+Nachlauf zur Beweissicherung**, Ende des dritten Kalenderjahres nach dem
+Offline-Datum). Ohne diese Markierung bleibt `faelligAm` `null` — und
+ein Datensatz ohne Fälligkeit wird laut `entscheide()` nie fällig,
+genau wie ein offener Vorfall. Besteht bei Fälligkeit ein Streit, eine
+Beschwerde oder ein laufendes Verfahren, sperrt eine gewöhnliche
+`Loeschsperre` (`zielArt: "Aufnahmewiderspruch"` bzw.
+`"Veroeffentlichungspruefung"`) die Löschung wie bei jeder anderen
+Klasse — nach deren Abschluss wird erneut geprüft und gelöscht.
+
+Wird ein Widerspruch zurückgenommen, bleibt die Zeile trotzdem stehen:
+Sie belegt, dass zwischen Erklärung und Rücknahme einer bestand.
+Verwaltet wird beides unter **Verwaltung → Aufnahmen**.
+
+**K7 ist der Riegel — K8 nicht.** `entscheide()` in
+`lib/loeschfristen.ts` prüft die Steuerrelevanz an **erster** Stelle,
+noch vor der Sperre. Wer die Reihenfolge tauscht, könnte eine
+steuerrelevante Zeile anfassen, nur weil zufällig keine Sperre darauf
+lag. K8 braucht diesen Riegel nicht: Seine Klasse selbst darf der
+Löschlauf grundsätzlich anfassen (`loeschen`), geschützt wird sie
+ausschließlich über das fehlende `faelligAm`. Die Reihenfolge ist:
 
 1. steuerrelevant? → niemals anfassen
 2. gesperrt? → nichts tun, auch wenn längst fällig
