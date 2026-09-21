@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { verlangeAdmin } from "@/lib/adminAuth";
 import {
+  VERANTWORTLICH_NAME,
   WEGNAME,
   WIDERSPRUCHSWEGE,
   freigabe,
@@ -9,6 +10,7 @@ import {
   pruefungen,
   staetteVollstaendig,
   staetteZeile,
+  veroeffentlichungen,
   widersprueche,
   type Widerspruchsweg,
 } from "@/lib/aufnahmen";
@@ -21,6 +23,9 @@ import {
   aufnahmenOfflineSetzen,
   aufnahmenOfflineZuruecknehmen,
   pruefungErfassen,
+  veroeffentlichungAlsEntferntMarkieren,
+  veroeffentlichungErfassen,
+  veroeffentlichungWiederherstellenAktion,
   widerspruchErfassen,
   widerspruchUmstellen,
 } from "./aktion";
@@ -71,6 +76,30 @@ const HINWEISE: Record<string, { text: string; gut: boolean }> = {
   "ziel-fehlt": { text: "Ohne Ziel („Website“, „Weitergabe an die Halle“ …) ist der Prüfvermerk wertlos.", gut: false },
   "ergebnis-fehlt": { text: "Bitte das Ergebnis der Sichtung angeben. Es gibt hier bewusst keinen Standardwert.", gut: false },
   "event-fehlt": { text: "Diese Veranstaltung gibt es nicht.", gut: false },
+  "veroeffentlichung-erfasst": {
+    text: "Veröffentlichung festgehalten. Solange sie als aktiv gilt, bleiben die zugehörigen Widerspruchsnachweise gespeichert.",
+    gut: true,
+  },
+  "veroeffentlichung-entfernt": {
+    text: "Als entfernt markiert. Erst wenn alle Veröffentlichungen dieser Veranstaltung so markiert sind, lässt sich die Offline-Feststellung setzen.",
+    gut: true,
+  },
+  "veroeffentlichung-wiederhergestellt": {
+    text: "Wieder als aktiv vermerkt.",
+    gut: true,
+  },
+  "veroeffentlichung-ort-fehlt": {
+    text: "Ohne Ort lässt sich eine Veröffentlichung später nicht zuordnen.",
+    gut: false,
+  },
+  "veroeffentlichung-zweck-fehlt": {
+    text: "Ohne Zweck ist eine Veröffentlichung nicht dokumentiert, nur behauptet.",
+    gut: false,
+  },
+  "offline-noch-veroeffentlicht": {
+    text: "Es sind noch Veröffentlichungen dieser Veranstaltung als aktiv vermerkt — die Offline-Feststellung lässt sich erst setzen, wenn alle unten in der Liste als entfernt markiert sind.",
+    gut: false,
+  },
 };
 
 const GRUND_TEXT: Record<"ungeprueft" | "erkennbar" | "veraltet", string> = {
@@ -119,13 +148,14 @@ export default async function AufnahmenSeite({
   const event = events.find((e) => e.id === gewaehlt) ?? events[0] ?? null;
   const meldung = hinweis ? HINWEISE[hinweis] : undefined;
 
-  const [alle, geltende, vermerke] = event
+  const [alle, geltende, vermerke, veroeff] = event
     ? await Promise.all([
         widersprueche(event.id),
         geltendeWidersprueche(event.id),
         pruefungen(event.id),
+        veroeffentlichungen(event.id),
       ])
-    : [[], [], []];
+    : [[], [], [], []];
 
   const jeZiel = letzteJeZiel(vermerke);
 
@@ -194,7 +224,8 @@ export default async function AufnahmenSeite({
           {event && (
             <>
               <Empfaenger event={event} />
-              <AufnahmenOffline event={event} />
+              <VeroeffentlichungenKarte eventId={event.id} eintraege={veroeff} vermerke={vermerke} />
+              <AufnahmenOffline event={event} offenAnzahl={veroeff.filter((v) => v.entferntAm === null).length} />
               <Freigabe geltende={geltende} jeZiel={jeZiel} />
               <WiderspruchsListe eintraege={alle} />
               <ErfassenFormular eventId={event.id} />
@@ -248,6 +279,7 @@ export default async function AufnahmenSeite({
  */
 function AufnahmenOffline({
   event,
+  offenAnzahl,
 }: {
   event: {
     id: string;
@@ -255,6 +287,7 @@ function AufnahmenOffline({
     aufnahmenOfflineVon: string | null;
     aufnahmenOfflineNotiz: string | null;
   };
+  offenAnzahl: number;
 }) {
   if (event.aufnahmenOfflineAm) {
     // Dieselbe Funktion, die auch der Löschlauf verwendet — keine
@@ -302,6 +335,13 @@ function AufnahmenOffline({
         Diese Entscheidung gehört in die jährliche Erforderlichkeitsprüfung der Aufnahmen —
         sie wird hier bewusst von Hand getroffen, nie automatisch.
       </p>
+      {offenAnzahl > 0 && (
+        <p className={`${stil.marker} ${stil.markerOffen}`}>
+          Noch {offenAnzahl} {offenAnzahl === 1 ? "Veröffentlichung" : "Veröffentlichungen"} oben
+          als aktiv vermerkt — die Markierung lässt sich erst setzen, wenn alle als entfernt
+          gekennzeichnet sind.
+        </p>
+      )}
       <form action={aufnahmenOfflineSetzen}>
         <input type="hidden" name="eventId" value={event.id} />
         <div className={stil.raster}>
@@ -375,6 +415,183 @@ function Empfaenger({
           und Ort“
         </p>
       )}
+    </div>
+  );
+}
+
+/**
+ * Veröffentlichungen dieser Veranstaltung (B-14).
+ *
+ * Jede Veröffentlichung braucht Ort, Verantwortlichen und Zweck —
+ * ohne diese Angaben lässt sich später nicht sagen, wohin eine
+ * Aufnahme gegangen ist. Solange mindestens eine als aktiv gilt,
+ * blockiert aufnahmenOfflineSetzenDb (lib/aufnahmen.ts) die
+ * Offline-Feststellung und damit den Beginn der K8-Nachlauffrist.
+ */
+function VeroeffentlichungenKarte({
+  eventId,
+  eintraege,
+  vermerke,
+}: {
+  eventId: string;
+  eintraege: {
+    id: string;
+    ort: string;
+    verantwortlich: "VERA" | "VERANSTALTUNGSSTAETTE";
+    zweck: string;
+    pruefungId: string | null;
+    veroeffentlichtAm: Date;
+    entferntAm: Date | null;
+    entferntVon: string | null;
+    entfernungNotiz: string | null;
+    erfasstVon: string;
+  }[];
+  vermerke: { id: string; ziel: string; geprueftAm: Date }[];
+}) {
+  return (
+    <div className={stil.karte}>
+      <h2 className={stil.karteTitel}>Veröffentlichungen ({eintraege.length})</h2>
+      <p>
+        Übersichtsaufnahmen können der Veranstaltungsstätte zur Veröffentlichung auf ihrer
+        Website und ihren offiziellen Social-Media-Kanälen übermittelt werden — die Halle ist
+        für ihre eigene Veröffentlichung verantwortlich. Jede Veröffentlichung wird hier mit
+        Ort, Verantwortlichem und Zweck festgehalten (Art. 13 Abs. 1 Buchst. e DS-GVO).
+      </p>
+
+      {eintraege.length === 0 ? (
+        <p>Für diese Veranstaltung ist noch keine Veröffentlichung erfasst.</p>
+      ) : (
+        <div className={stil.tabelleUmschlag}>
+          <table className={stil.tabelle}>
+            <thead>
+              <tr>
+                <th>Ort</th>
+                <th>Verantwortlich</th>
+                <th>Zweck</th>
+                <th>veröffentlicht</th>
+                <th>Stand</th>
+              </tr>
+            </thead>
+            <tbody>
+              {eintraege.map((v) => {
+                const aktiv = v.entferntAm === null;
+                return (
+                  <tr key={v.id}>
+                    <td>
+                      <b>{v.ort}</b>
+                    </td>
+                    <td>{VERANTWORTLICH_NAME[v.verantwortlich]}</td>
+                    <td>{v.zweck}</td>
+                    <td>{zeitpunkt(v.veroeffentlichtAm)}</td>
+                    <td>
+                      {aktiv ? (
+                        <>
+                          <span className={`${stil.marker} ${stil.markerOffen}`}>aktiv</span>
+                          <form action={veroeffentlichungAlsEntferntMarkieren}>
+                            <input type="hidden" name="veroeffentlichungId" value={v.id} />
+                            <label className={stil.feld}>
+                              <span className={stil.feldHilfe}>Notiz zur Entfernung (optional)</span>
+                              <input
+                                name="notiz"
+                                className={stil.eingabe}
+                                maxLength={1000}
+                              />
+                            </label>
+                            <button
+                              type="submit"
+                              className={`${stil.knopf} ${stil.knopfLeise} ${stil.knopfKlein}`}
+                            >
+                              Als entfernt markieren
+                            </button>
+                          </form>
+                        </>
+                      ) : (
+                        <>
+                          <span className={`${stil.marker} ${stil.markerGut}`}>
+                            entfernt {zeitpunkt(v.entferntAm as Date)}
+                          </span>
+                          {v.entferntVon && (
+                            <>
+                              <br />
+                              von <code>{v.entferntVon}</code>
+                            </>
+                          )}
+                          {v.entfernungNotiz && (
+                            <details>
+                              <summary>Notiz</summary>
+                              <p>{v.entfernungNotiz}</p>
+                            </details>
+                          )}
+                          <form action={veroeffentlichungWiederherstellenAktion}>
+                            <input type="hidden" name="veroeffentlichungId" value={v.id} />
+                            <button
+                              type="submit"
+                              className={`${stil.knopf} ${stil.knopfLeise} ${stil.knopfKlein}`}
+                            >
+                              Wieder als aktiv vermerken
+                            </button>
+                          </form>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <form action={veroeffentlichungErfassen}>
+        <input type="hidden" name="eventId" value={eventId} />
+        <div className={stil.raster}>
+          <label className={stil.feld}>
+            <span className={stil.feldLabel}>Ort</span>
+            <input
+              name="ort"
+              className={stil.eingabe}
+              required
+              maxLength={180}
+              placeholder="Website der Veranstaltungsstätte"
+            />
+          </label>
+          <label className={stil.feld}>
+            <span className={stil.feldLabel}>Verantwortlich</span>
+            <select name="verantwortlich" className={stil.auswahl} defaultValue="VERANSTALTUNGSSTAETTE">
+              <option value="VERANSTALTUNGSSTAETTE">die Veranstaltungsstätte</option>
+              <option value="VERA">VERA selbst</option>
+            </select>
+          </label>
+          {vermerke.length > 0 && (
+            <label className={stil.feld}>
+              <span className={stil.feldLabel}>Zugehöriger Prüfvermerk (optional)</span>
+              <select name="pruefungId" className={stil.auswahl} defaultValue="">
+                <option value="">— keiner —</option>
+                {vermerke.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.ziel} — {zeitpunkt(p.geprueftAm)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+        </div>
+        <label className={stil.feld}>
+          <span className={stil.feldLabel}>Zweck</span>
+          <textarea
+            name="zweck"
+            className={stil.textfeld}
+            required
+            maxLength={500}
+            placeholder="Eigene Öffentlichkeitsarbeit der Veranstaltungsstätte"
+          />
+        </label>
+        <div className={stil.knopfReihe}>
+          <button type="submit" className={stil.knopf}>
+            Veröffentlichung festhalten
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

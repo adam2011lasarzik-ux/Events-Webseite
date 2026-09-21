@@ -23,6 +23,8 @@ import "../schutz.mjs";
 import { readFileSync } from "node:fs";
 import { db } from "../../lib/db.js";
 import {
+  VERANTWORTLICH_NAME,
+  VeroeffentlichungenNochOffen,
   WEGNAME,
   WIDERSPRUCHSWEGE,
   aufnahmenOfflineSetzen,
@@ -33,11 +35,16 @@ import {
   giltNoch,
   letzteJeZiel,
   namenZeile,
+  offeneVeroeffentlichungen,
   pruefungFesthalten,
   pruefungen,
   staetteVollstaendig,
   staetteZeile,
   veranstaltungsstaetten,
+  veroeffentlichungAnlegen,
+  veroeffentlichungEntfernen,
+  veroeffentlichungWiederherstellen,
+  veroeffentlichungen,
   widerspruchAnlegen,
   widerspruchZuruecknehmen,
   widersprueche,
@@ -271,6 +278,18 @@ const event = await db.event.create({
   },
 });
 
+console.log("\nW7b · Modell Veroeffentlichung (B-14)");
+const veroeffModell = (schema.match(/model Veroeffentlichung \{[\s\S]*?\n\}/) ?? [""])[0];
+pruefe("Das Modell steht im Schema", veroeffModell.length > 0);
+pruefe(
+  "Es hat KEINE Löschklasse — es ist Rechenschaftsnachweis, kein K8-Datensatz",
+  !/loeschklasse/.test(veroeffModell),
+);
+pruefe(
+  "Fällt die Veranstaltung weg, fällt die Veröffentlichung mit",
+  /event\s+Event\s+@relation\([^)]*onDelete: Cascade/.test(veroeffModell),
+);
+
 console.log("\nW8 · Widerspruch anlegen und zurücknehmen");
 const w1 = await widerspruchAnlegen({
   eventId: event.id,
@@ -444,6 +463,148 @@ pruefe(
   "… und die Widersprüche haben wieder keine Fälligkeit",
   widersprueceNachZuruecknahme.every((w) => w.faelligAm === null),
 );
+
+console.log("\nW9b · Veröffentlichungen (B-14) — Löschsperre über offene Einträge");
+
+pruefe(
+  "Beide Verantwortlichen haben einen deutschen Namen",
+  VERANTWORTLICH_NAME.VERA === "VERA selbst" &&
+    VERANTWORTLICH_NAME.VERANSTALTUNGSSTAETTE === "die Veranstaltungsstätte",
+);
+
+let ohneOrt = false;
+try {
+  await veroeffentlichungAnlegen({
+    eventId: event.id,
+    ort: "  ",
+    verantwortlich: "VERA",
+    zweck: "Werbung",
+    erfasstVon: "pruefung",
+  });
+} catch {
+  ohneOrt = true;
+}
+pruefe("Eine Veröffentlichung ohne Ort wird abgelehnt", ohneOrt);
+
+let ohneZweck = false;
+try {
+  await veroeffentlichungAnlegen({
+    eventId: event.id,
+    ort: "Website",
+    verantwortlich: "VERA",
+    zweck: "   ",
+    erfasstVon: "pruefung",
+  });
+} catch {
+  ohneZweck = true;
+}
+pruefe("Eine Veröffentlichung ohne Zweck wird abgelehnt", ohneZweck);
+
+const vv1 = await veroeffentlichungAnlegen({
+  eventId: event.id,
+  ort: "  Website der Veranstaltungsstätte  ",
+  verantwortlich: "VERANSTALTUNGSSTAETTE",
+  zweck: "  eigene Öffentlichkeitsarbeit  ",
+  erfasstVon: "pruefung",
+});
+const v1Geladen = await db.veroeffentlichung.findUniqueOrThrow({ where: { id: vv1.id } });
+pruefe(
+  "Ort und Zweck sind bereinigt gespeichert",
+  v1Geladen.ort === "Website der Veranstaltungsstätte" &&
+    v1Geladen.zweck === "eigene Öffentlichkeitsarbeit",
+);
+pruefe("Sie gilt sofort als aktiv (nicht entfernt)", v1Geladen.entferntAm === null);
+pruefe(
+  "Sie hat keine eigene Löschklasse — sie ist Rechenschaftsnachweis, kein K8-Datensatz",
+  !("loeschklasse" in v1Geladen),
+);
+
+const offeneVorher = await offeneVeroeffentlichungen(event.id);
+pruefe("Sie erscheint unter den offenen Veröffentlichungen", offeneVorher.length === 1);
+
+let gesperrtesFehler = null;
+try {
+  await aufnahmenOfflineSetzen({
+    eventId: event.id,
+    datum: new Date("2020-06-15T00:00:00Z"),
+    notiz: "Darf nicht durchgehen — es gibt noch eine offene Veröffentlichung.",
+    gesetztVon: "pruefung",
+  });
+} catch (fehler) {
+  gesperrtesFehler = fehler;
+}
+pruefe(
+  "Solange eine Veröffentlichung offen ist, blockiert aufnahmenOfflineSetzen",
+  gesperrtesFehler instanceof VeroeffentlichungenNochOffen,
+);
+pruefe(
+  "Der Fehler nennt den Ort der offenen Veröffentlichung",
+  gesperrtesFehler?.offene?.some((o) => o.ort === "Website der Veranstaltungsstätte"),
+);
+pruefe(
+  "Das Event trägt trotzdem weiterhin keine Offline-Angaben",
+  (await db.event.findUniqueOrThrow({ where: { id: event.id } })).aufnahmenOfflineAm === null,
+);
+
+await veroeffentlichungEntfernen(vv1.id, { entferntVon: "pruefung", entfernungNotiz: "  entfernt  " });
+const v1NachEntfernen = await db.veroeffentlichung.findUniqueOrThrow({ where: { id: vv1.id } });
+pruefe("Nach dem Entfernen ist der Zeitpunkt gesetzt", v1NachEntfernen.entferntAm !== null);
+pruefe("… und wer es getan hat", v1NachEntfernen.entferntVon === "pruefung");
+pruefe("… und die Notiz ist bereinigt", v1NachEntfernen.entfernungNotiz === "entfernt");
+pruefe(
+  "Jetzt gibt es keine offene Veröffentlichung mehr",
+  (await offeneVeroeffentlichungen(event.id)).length === 0,
+);
+
+await aufnahmenOfflineSetzen({
+  eventId: event.id,
+  datum: new Date("2020-06-15T00:00:00Z"),
+  notiz: "Jetzt darf es durchgehen — alle Veröffentlichungen sind entfernt.",
+  gesetztVon: "pruefung",
+});
+pruefe(
+  "Sind alle Veröffentlichungen entfernt, lässt sich die Offline-Markierung setzen",
+  (await db.event.findUniqueOrThrow({ where: { id: event.id } })).aufnahmenOfflineAm !== null,
+);
+await aufnahmenOfflineZuruecknehmen(event.id);
+
+await veroeffentlichungWiederherstellen(vv1.id);
+const v1NachWiederherstellen = await db.veroeffentlichung.findUniqueOrThrow({
+  where: { id: vv1.id },
+});
+pruefe(
+  "Wiederhergestellt: keine Entfernungsangaben mehr",
+  v1NachWiederherstellen.entferntAm === null &&
+    v1NachWiederherstellen.entferntVon === null &&
+    v1NachWiederherstellen.entfernungNotiz === null,
+);
+
+const alleVeroeffentlichungen = await veroeffentlichungen(event.id);
+pruefe(
+  "veroeffentlichungen() liefert die aktive Veröffentlichung zuerst",
+  alleVeroeffentlichungen[0]?.id === vv1.id,
+);
+
+/* Ein Event OHNE jede Veroeffentlichung-Zeile (ältere Veranstaltung,
+   vor B-14 angelegt) darf weiterhin offline gesetzt werden — sonst
+   wäre jede bestehende Veranstaltung plötzlich blockiert. */
+await veroeffentlichungEntfernen(vv1.id, { entferntVon: "pruefung" });
+await db.veroeffentlichung.delete({ where: { id: vv1.id } });
+pruefe(
+  "Ohne jede Veröffentlichungs-Zeile bleibt das Event unblockiert",
+  (await offeneVeroeffentlichungen(event.id)).length === 0,
+);
+await aufnahmenOfflineSetzen({
+  eventId: event.id,
+  datum: new Date("2020-06-15T00:00:00Z"),
+  notiz: "Rückwärtskompatibilität: keine Veröffentlichungs-Zeile, trotzdem erlaubt.",
+  gesetztVon: "pruefung",
+});
+pruefe(
+  "… und die Markierung lässt sich setzen",
+  (await db.event.findUniqueOrThrow({ where: { id: event.id } })).aufnahmenOfflineAm !== null,
+);
+await aufnahmenOfflineZuruecknehmen(event.id);
 
 /* ══ Teil 3 · Zugang und Serveraktionen ══════════════════════════ */
 
@@ -703,6 +864,168 @@ pruefe(
   widersprueceNachRuecknahme.every((w) => w.faelligAm === null),
 );
 
+console.log("\nW11b · Veröffentlichungen (B-14) — als Serveraktion");
+
+const seiteVorVeroeff = await hole(`/admin/aufnahmen?event=${event.id}`, sitzung.cookie);
+pruefe(
+  "Die Seite bietet das Formular zum Festhalten einer Veröffentlichung an",
+  seiteVorVeroeff.html.includes('name="ort"'),
+);
+const erfassenVeroeffFelder = actionFelder(seiteVorVeroeff.html, 'name="ort"');
+
+const anzahlVorher = await db.veroeffentlichung.count({ where: { eventId: event.id } });
+
+await sende(
+  "/admin/aufnahmen",
+  erfassenVeroeffFelder,
+  { eventId: event.id, ort: "Eingeschleust", verantwortlich: "VERA", zweck: "ohne Sitzung" },
+  null,
+);
+pruefe(
+  "Ohne Sitzung: keine Veröffentlichung angelegt",
+  (await db.veroeffentlichung.count({ where: { eventId: event.id } })) === anzahlVorher,
+);
+await sende(
+  "/admin/aufnahmen",
+  erfassenVeroeffFelder,
+  { eventId: event.id, ort: "Eingeschleust", verantwortlich: "VERA", zweck: "erfundenes Cookie" },
+  GEFAELSCHT,
+);
+pruefe(
+  "… und mit erfundenem Cookie ebenfalls nicht",
+  (await db.veroeffentlichung.count({ where: { eventId: event.id } })) === anzahlVorher,
+);
+
+await sende(
+  "/admin/aufnahmen",
+  erfassenVeroeffFelder,
+  { eventId: event.id, ort: "  ", verantwortlich: "VERA", zweck: "Ein Zweck" },
+  sitzung.cookie,
+);
+pruefe(
+  "Angemeldet, aber ohne Ort: abgelehnt",
+  (await db.veroeffentlichung.count({ where: { eventId: event.id } })) === anzahlVorher,
+);
+await sende(
+  "/admin/aufnahmen",
+  erfassenVeroeffFelder,
+  { eventId: event.id, ort: "Website der Halle", verantwortlich: "VERA", zweck: "  " },
+  sitzung.cookie,
+);
+pruefe(
+  "Angemeldet, aber ohne Zweck: abgelehnt",
+  (await db.veroeffentlichung.count({ where: { eventId: event.id } })) === anzahlVorher,
+);
+
+await sende(
+  "/admin/aufnahmen",
+  erfassenVeroeffFelder,
+  {
+    eventId: event.id,
+    ort: "Website der Veranstaltungsstätte",
+    verantwortlich: "VERANSTALTUNGSSTAETTE",
+    zweck: "eigene Öffentlichkeitsarbeit der Halle",
+  },
+  sitzung.cookie,
+);
+const vv2 = await db.veroeffentlichung.findFirstOrThrow({
+  where: { eventId: event.id, ort: "Website der Veranstaltungsstätte" },
+});
+pruefe(
+  "Gültige Eingabe: die Veröffentlichung ist angelegt",
+  vv2.verantwortlich === "VERANSTALTUNGSSTAETTE" &&
+    vv2.zweck === "eigene Öffentlichkeitsarbeit der Halle" &&
+    vv2.entferntAm === null,
+);
+
+const seiteNachErfassen = await hole(`/admin/aufnahmen?event=${event.id}`, sitzung.cookie);
+pruefe(
+  "Die Seite zeigt die neue Veröffentlichung",
+  seiteNachErfassen.html.includes("Website der Veranstaltungsstätte") &&
+    seiteNachErfassen.html.includes("eigene Öffentlichkeitsarbeit der Halle"),
+);
+
+console.log("\nW11c · Solange sie offen ist, blockiert die Offline-Markierung (HTTP)");
+const offlineFelderBlock = actionFelder(seiteNachErfassen.html, 'name="datum"');
+await sende(
+  "/admin/aufnahmen",
+  offlineFelderBlock,
+  { eventId: event.id, datum: "2020-06-15", notiz: "Darf nicht durchgehen" },
+  sitzung.cookie,
+);
+pruefe(
+  "Offen geblieben: die Offline-Markierung wurde NICHT gesetzt",
+  (await db.event.findUniqueOrThrow({ where: { id: event.id } })).aufnahmenOfflineAm === null,
+);
+const seiteBlockiert = await hole(`/admin/aufnahmen?event=${event.id}`, sitzung.cookie);
+pruefe(
+  "Die Seite weist auf die noch offene Veröffentlichung hin",
+  seiteBlockiert.html.includes("Noch") && seiteBlockiert.html.includes("als aktiv vermerkt"),
+);
+
+console.log("\nW11d · Als entfernt markieren, dann geht die Offline-Markierung durch");
+const entferntFelder = actionFelder(seiteBlockiert.html, "Als entfernt markieren");
+
+await sende("/admin/aufnahmen", entferntFelder, { veroeffentlichungId: vv2.id }, null);
+pruefe(
+  "Ohne Sitzung: nicht als entfernt markiert",
+  (await db.veroeffentlichung.findUniqueOrThrow({ where: { id: vv2.id } })).entferntAm === null,
+);
+await sende(
+  "/admin/aufnahmen",
+  entferntFelder,
+  { veroeffentlichungId: vv2.id, notiz: "Vom Portal genommen" },
+  sitzung.cookie,
+);
+const v2NachHttp = await db.veroeffentlichung.findUniqueOrThrow({ where: { id: vv2.id } });
+pruefe(
+  "Angemeldet: als entfernt markiert, mit Notiz",
+  v2NachHttp.entferntAm !== null &&
+    v2NachHttp.entferntVon !== null &&
+    v2NachHttp.entfernungNotiz === "Vom Portal genommen",
+);
+
+await sende(
+  "/admin/aufnahmen",
+  offlineFelderBlock,
+  { eventId: event.id, datum: "2020-06-15", notiz: "Jetzt geht es durch" },
+  sitzung.cookie,
+);
+pruefe(
+  "Alle Veröffentlichungen entfernt: die Offline-Markierung ist jetzt gesetzt",
+  (await db.event.findUniqueOrThrow({ where: { id: event.id } })).aufnahmenOfflineAm !== null,
+);
+
+console.log("\nW11e · Eine entfernte Veröffentlichung wiederherstellen (HTTP)");
+const seiteNachEntfernen = await hole(`/admin/aufnahmen?event=${event.id}`, sitzung.cookie);
+const wiederherstellenFelder = actionFelder(seiteNachEntfernen.html, "Wieder als aktiv vermerken");
+
+await sende("/admin/aufnahmen", wiederherstellenFelder, { veroeffentlichungId: vv2.id }, null);
+pruefe(
+  "Ohne Sitzung: nicht wiederhergestellt",
+  (await db.veroeffentlichung.findUniqueOrThrow({ where: { id: vv2.id } })).entferntAm !== null,
+);
+await sende(
+  "/admin/aufnahmen",
+  wiederherstellenFelder,
+  { veroeffentlichungId: vv2.id },
+  sitzung.cookie,
+);
+const v2NachWiederherstellen = await db.veroeffentlichung.findUniqueOrThrow({
+  where: { id: vv2.id },
+});
+pruefe(
+  "Angemeldet: wiederhergestellt, keine Entfernungsangaben mehr",
+  v2NachWiederherstellen.entferntAm === null &&
+    v2NachWiederherstellen.entferntVon === null &&
+    v2NachWiederherstellen.entfernungNotiz === null,
+);
+
+/* ── Aufräumen dieses Blocks: zurück auf einen sauberen Ausgangspunkt,
+   damit W12/W13 und die Testdaten-Entfernung am Dateiende nicht von
+   diesem Testlauf beeinflusst werden. */
+await aufnahmenOfflineZuruecknehmen(event.id);
+await db.veroeffentlichung.deleteMany({ where: { eventId: event.id } });
 
 console.log("\nW12 · Die öffentliche Hinweisseite nennt die Empfängerin");
 await db.event.update({
@@ -768,6 +1091,7 @@ pruefe(
 
 /* ── Aufräumen ──────────────────────────────────────────────────── */
 
+await db.veroeffentlichung.deleteMany({ where: { eventId: event.id } });
 await db.veroeffentlichungspruefung.deleteMany({ where: { eventId: event.id } });
 await db.aufnahmewiderspruch.deleteMany({ where: { eventId: event.id } });
 await db.event.delete({ where: { id: event.id } });

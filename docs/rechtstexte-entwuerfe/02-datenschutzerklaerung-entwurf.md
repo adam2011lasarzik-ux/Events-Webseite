@@ -728,6 +728,41 @@ Erklärung verweist, die es nicht gibt.]`
 >   den Besuch der Website nicht. Diese Unterscheidung muss im Text
 >   erkennbar bleiben, sonst wirkt sie wie ein Widerspruch.
 
+> ✅ **Ergänzung vom 21.09.2026 (Entscheidung 4.4a — B-14).** Die
+> Veröffentlichungswege der **Veranstaltungsstätte** wurden gegenüber
+> Entscheidung 4.4 bewusst erweitert: Sie darf Übersichtsaufnahmen nicht
+> mehr nur auf ihrer Website und ihrem Instagram-Kanal veröffentlichen,
+> sondern auf ihrer **Website und ihren offiziellen Social-Media-Kanälen
+> allgemein**, beispielhaft genannt Instagram oder TikTok. Ausdrücklich
+> **unverändert**:
+>
+> - **VERAs eigener Kanal-Umfang** bleibt bei den bisherigen zwei
+>   (Website, und — sobald eingerichtet — der eigene Instagram-Kanal).
+>   Solange VERA keinen eigenen Instagram-Kanal hat (B-12), bleibt es bei
+>   der eigenen Website.
+> - **Entscheidung 4.5 (kein Drittempfänger)** bleibt vollständig in
+>   Kraft — Presse, Sponsoren und Kooperationspartner erhalten weiterhin
+>   keine Aufnahmen.
+> - **Kein neuer Empfänger für TikTok/ByteDance in dieser Übersicht.**
+>   Nach dem bereits etablierten Phasenmodell (EuGH, Urt. v. 29.07.2019,
+>   Rs. C-40/17 — *Fashion ID*, dazu Entscheidung 4.3) ist die
+>   Veranstaltungsstätte VERAs alleiniger, eigenständig verantwortlicher
+>   Empfänger für die Weitergabe der Übersichtsaufnahme. Was die
+>   Veranstaltungsstätte mit dieser Aufnahme anschliessend selbst tut —
+>   ob sie sie auf ihrer Website, ihrem Instagram- oder ihrem
+>   TikTok-Kanal veröffentlicht — ist eine eigene, nachgelagerte
+>   Verarbeitung der Veranstaltungsstätte unter deren eigener
+>   Datenschutzerklärung, genau wie VERAs eigenes Verhältnis zu Meta nur
+>   für VERAs **eigenen** Instagram-Kanal ausgewiesen ist, nicht für jeden
+>   Kanal, auf dem eine VERA-Aufnahme irgendwann landen könnte.
+> - Die Zeile zur Veranstaltungsstätte in Ziffer 14 wird entsprechend
+>   auf „Website und offizielle Social-Media-Kanäle" verallgemeinert.
+>
+> Technisch abgesichert wird dies durch das neue Datenmodell
+> `Veroeffentlichung` (`prisma/schema.prisma`): Jede Veröffentlichung
+> wird mit Ort, Verantwortlichem (VERA oder Veranstaltungsstätte) und
+> Zweck festgehalten, admin-verwaltet unter `/admin/aufnahmen`.
+
 ---
 
 ## 14. Empfänger und Auftragsverarbeiter — Übersicht
@@ -740,7 +775,7 @@ Erklärung verweist, die es nicht gibt.]`
 | PayPal (nur bei Auswahl dieser Zahlungsart) | Bezahlung | PayPal-Zugangsdaten, Betrag | eigenständig Verantwortlicher | `[klären]` |
 | Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | Speicherort: **EU** (Bucket-Endpoint `eu-central-003`, bestätigt 18.09.2026) — Gesellschaft selbst US-amerikanisch, Drittlandbezug `[fachlich zu bewerten]` |
 | Meta Platforms Ireland Ltd., Merrion Road, Dublin 4, D04 X2K5, Irland (Instagram) — **sofern Übersichtsaufnahmen veröffentlicht werden** | Veröffentlichung von Aufnahmen auf dem offiziellen Instagram-Kanal von VERA | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher | Irland, mit möglicher Übermittlung in die **USA**; Grundlage derzeit der EU-US-Angemessenheitsbeschluss `[Stand 18.09.2026 in Kraft, aber unter Überprüfung — siehe Dokument 06]` |
-| Veranstaltungslocation `[Firmierung je Event aus `Event.ortFirma`; erste Veranstaltung: Quality Padel GmbH, Straße der Einheit 112, 14612 Falkensee, Amtsgericht Potsdam, HRB 42437]` — **sofern Übersichtsaufnahmen weitergegeben werden** | eigene Werbung der Location auf deren Website und Instagram-Kanal | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher (Entscheidung 4.3) | `[je Event zu ergänzen]` |
+| Veranstaltungslocation `[Firmierung je Event aus `Event.ortFirma`; erste Veranstaltung: Quality Padel GmbH, Straße der Einheit 112, 14612 Falkensee, Amtsgericht Potsdam, HRB 42437]` — **sofern Übersichtsaufnahmen weitergegeben werden** | eigene Werbung der Location auf deren Website und offiziellen Social-Media-Kanälen (z. B. Instagram oder TikTok, Entscheidung 4.4a) | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher (Entscheidung 4.3) | `[je Event zu ergänzen]` |
 | UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei | Erreichbarkeitsprüfung | nur öffentliche Seitenaufrufe | Auftragsverarbeiter; **AVV automatisch über die Nutzungsbedingungen einbezogen** (bestätigt 20.09.2026) | EU (Slowakei) |
 | Veranstaltungslocation | Entgegennahme der Papierformulare am Empfang | die unterschriebenen Einverständniserklärungen | siehe Datenschutz Abschnitt 2 | Inland |
 | Rettungsdienst / ärztliches Personal | Notfall | die im Notfall erforderlichen Angaben | eigener Verantwortlicher | Inland |

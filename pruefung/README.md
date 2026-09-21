@@ -1,13 +1,14 @@
 # Die automatischen Prüfungen
 
-Rund 1.080 Prüfungen, die gegen die **echte** Datenbank und den **echten**
+Rund 1.130 Prüfungen, die gegen die **echte** Datenbank und den **echten**
 Server laufen — nicht gegen nachgebaute Logik. Was hier grün ist, ist
 wirklich geprüft.
 
 Die Zahlen unten sind die des Sammellaufs vom 21.09.2026
-(`bash pruefung/alle.sh`, 42 Listen). `L` ist ohne Zahl, weil die
-fliessende Messung der Responsivität Tausende von Einzelmessungen
-erzeugt und getrennt gestartet wird.
+(`bash pruefung/alle.sh`, 42 Listen, danach `W` um die Veröffentlichungen
+aus B-14 ergänzt). `L` ist ohne Zahl, weil die fliessende Messung der
+Responsivität Tausende von Einzelmessungen erzeugt und getrennt gestartet
+wird.
 
 Wie man sie startet, steht in **[../docs/pruefen.md](../docs/pruefen.md)**.
 
@@ -33,7 +34,7 @@ Wie man sie startet, steht in **[../docs/pruefen.md](../docs/pruefen.md)**.
 | `T` | Terminpflicht: ohne feststehenden Termin keine Buchung und keine Zahlung — die Regel, ihre Verdrahtung an allen sechs Stellen und der Umgehungsversuch über eine direkte Serveranfrage | 40 |
 | `U` | Versionierte Rechtstexte: Prüfsumme, Versionsnummern, welche Fassung wann gilt, Unveränderbarkeit (auch projektweit geprüft), Fassung je Buchung, Volltext in der Bestätigungsmail | 42 |
 | `V` | Bestellknopf nach § 312j Abs. 3 BGB, AGB-Häkchen (§ 305 Abs. 2 BGB), Kenntnisnahme zu Aufnahmen und der abgesetzte Widerspruchshinweis (Art. 21 Abs. 4 DS-GVO) — jeweils auch serverseitig erzwungen | 40 |
-| `W` | Widerspruch gegen Foto- und Videoaufnahmen (Art. 21 DS-GVO): Speicherung, Rücknahme ohne Löschung, die ereignisbezogene K8-Frist samt „Aufnahmen offline"-Markierung (Datum, Bearbeiter, Prüfvermerk), der Prüfvermerk vor jeder Veröffentlichung, die Sperre bei einem Widerspruch nach der letzten Prüfung, die Empfängerangabe der Veranstaltungsstätte (Art. 13 Abs. 1 Buchst. e DS-GVO) — und dass VERA ehrlich sagt, noch keinen Instagram-Kanal zu haben (B-12) | 108 |
+| `W` | Widerspruch gegen Foto- und Videoaufnahmen (Art. 21 DS-GVO): Speicherung, Rücknahme ohne Löschung, die ereignisbezogene K8-Frist samt „Aufnahmen offline"-Markierung (Datum, Bearbeiter, Prüfvermerk), der Prüfvermerk vor jeder Veröffentlichung, die Sperre bei einem Widerspruch nach der letzten Prüfung, die Empfängerangabe der Veranstaltungsstätte (Art. 13 Abs. 1 Buchst. e DS-GVO), dass VERA ehrlich sagt, noch keinen Instagram-Kanal zu haben (B-12) — und die Veröffentlichungen selbst (B-14): Ort, Verantwortlicher, Zweck, die Löschsperre über offene Veröffentlichungen vor der K8-Offline-Markierung, Entfernen und Wiederherstellen | 144 |
 
 ## Zu den Schlüsseln in diesen Dateien
 

@@ -196,6 +196,7 @@ model Event {
   abschnitte                   EventAbschnitt[]
   aufnahmewidersprueche        Aufnahmewiderspruch[]
   veroeffentlichungspruefungen Veroeffentlichungspruefung[]
+  veroeffentlichungen          Veroeffentlichung[]
 
   @@index([status, startAt])
 }
@@ -998,5 +999,91 @@ model Veroeffentlichungspruefung {
   loeschklasse Loeschklasse @default(AUFNAHMEWIDERSPRUCH)
   faelligAm    DateTime?
 
+  veroeffentlichungen Veroeffentlichung[]
+
   @@index([eventId, geprueftAm])
+}
+
+/// Wer für eine konkrete Veröffentlichung verantwortlich ist.
+///
+/// Nur diese zwei Rollen — genau die Beteiligten aus dem bereits
+/// geprüften Konzept (Entscheidung 4.3, Phasenmodell nach EuGH
+/// *Fashion ID*): VERA und die Veranstaltungsstätte sind getrennte,
+/// nacheinander tätige Verantwortliche. Ein Dritter (Presse, Sponsor,
+/// Kooperationspartner) ist im Konzept ausdrücklich NICHT vorgesehen
+/// (Entscheidung 4.5) und taucht deshalb hier auch nicht als Rolle auf
+/// — eine Veröffentlichung an einen Dritten wäre ein Verstoß gegen das
+/// Konzept, kein regulärer Fall, den man auswählt.
+enum VeroeffentlichungVerantwortlich {
+  VERA
+  VERANSTALTUNGSSTAETTE
+}
+
+/**
+ * Eine einzelne, tatsächliche Veröffentlichung — der fehlende Teil
+ * von B-14 (Bauauftrag B-14, Teil a): K8 (oben) speichert den
+ * NACHWEIS über Widerspruch und Prüfung, aber bis hierher gab es
+ * nirgends im System einen Datensatz für die Aufnahme SELBST — wo sie
+ * hängt, wer dafür verantwortlich ist, und ob sie noch online steht.
+ *
+ * ── Warum kein eigenes Dateifeld ──
+ * Die Aufnahme selbst liegt nicht in dieser Datenbank — sie liegt auf
+ * der Website von VERA, auf der Website der Veranstaltungsstätte oder
+ * auf einer Plattform wie Instagram oder TikTok. VERA kann sie von
+ * hier aus nicht automatisch entfernen. Diese Zeile ist deshalb kein
+ * Dateispeicher, sondern das PROTOKOLL: wo etwas veröffentlicht wurde
+ * und — sobald ein Mensch es dort tatsächlich entfernt hat — wann.
+ *
+ * ── Die Verbindung zu K8 ──
+ * `entferntAm` ist NICHT dasselbe wie `Event.aufnahmenOfflineAm`.
+ * Erst wenn für ein Event KEINE einzige Veroeffentlichung mehr offen
+ * ist (jede `entferntAm` trägt), darf `Event.aufnahmenOfflineAm`
+ * überhaupt gesetzt werden — das erzwingt `aufnahmenOfflineSetzen()`
+ * in lib/aufnahmen.ts. Genau das setzt „solange Inhalte veröffentlicht
+ * sind, bleiben die Widerspruchsnachweise gespeichert" technisch um,
+ * statt es nur zu behaupten.
+ *
+ * ── Warum diese Zeile selbst KEINE eigene Löschklasse hat ──
+ * Sie enthält keine personenbezogenen Daten Teilnehmender — nur
+ * organisatorische Fakten (Ort, Zweck, Verantwortlicher, Zeitpunkte).
+ * Sie bleibt deshalb wie das Admin-Protokoll dauerhaft als
+ * Rechenschaftsnachweis stehen (Art. 5 Abs. 2 DS-GVO) und wird vom
+ * Löschlauf nicht angefasst — bewusste Entscheidung, kein Versehen.
+ */
+model Veroeffentlichung {
+  id      String @id @default(cuid())
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  /// Wo veröffentlicht wurde, in Worten: „Website VERA", „Instagram
+  /// VERA", „Website der Veranstaltungsstätte", „Instagram der
+  /// Veranstaltungsstätte", „TikTok der Veranstaltungsstätte" — und
+  /// so weiter, je nachdem, was die Veranstaltungsstätte tatsächlich
+  /// betreibt.
+  ort String
+
+  verantwortlich VeroeffentlichungVerantwortlich
+
+  /// Wofür, in Worten — z. B. „eigene Veranstaltungswerbung".
+  zweck String
+
+  /// Die Prüfung (B-13), die diese Veröffentlichung freigegeben hat,
+  /// falls bekannt. Optional: eine Veröffentlichung lässt sich auch
+  /// nachträglich dokumentieren, ohne dass sich der ursprüngliche
+  /// Prüfvermerk mehr eindeutig zuordnen lässt.
+  pruefungId String?
+  pruefung   Veroeffentlichungspruefung? @relation(fields: [pruefungId], references: [id], onDelete: SetNull)
+
+  veroeffentlichtAm DateTime @default(now())
+
+  /// null = noch veröffentlicht. Erst ab hier zählt diese Zeile als
+  /// „entfernt" im Sinne der K8-Regel.
+  entferntAm      DateTime?
+  entferntVon     String?
+  entfernungNotiz String?   @db.Text
+
+  erfasstVon String
+  erfasstAm  DateTime @default(now())
+
+  @@index([eventId, entferntAm])
 }

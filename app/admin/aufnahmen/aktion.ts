@@ -24,10 +24,15 @@ import { redirect } from "next/navigation";
 import { verlangeAdmin } from "@/lib/adminAuth";
 import { protokolliere, PROTOKOLL_AKTIONEN } from "@/lib/adminProtokoll";
 import {
+  VERANTWORTLICH_NAME,
+  VeroeffentlichungenNochOffen,
   WIDERSPRUCHSWEGE,
   aufnahmenOfflineSetzen as aufnahmenOfflineSetzenDb,
   aufnahmenOfflineZuruecknehmen as aufnahmenOfflineZuruecknehmenDb,
   pruefungFesthalten,
+  veroeffentlichungAnlegen,
+  veroeffentlichungEntfernen as veroeffentlichungEntfernenDb,
+  veroeffentlichungWiederherstellen as veroeffentlichungWiederherstellenDb,
   widerspruchAnlegen,
   widerspruchZuruecknehmen,
   type Widerspruchsweg,
@@ -205,7 +210,14 @@ export async function aufnahmenOfflineSetzen(formular: FormData): Promise<void> 
   const notiz = text(formular.get("notiz")).slice(0, OFFLINE_NOTIZ_MAX);
   if (!notiz) zurueck(eventId, "offline-notiz-fehlt");
 
-  await aufnahmenOfflineSetzenDb({ eventId, datum, notiz, gesetztVon: admin.id });
+  try {
+    await aufnahmenOfflineSetzenDb({ eventId, datum, notiz, gesetztVon: admin.id });
+  } catch (fehler) {
+    if (fehler instanceof VeroeffentlichungenNochOffen) {
+      zurueck(eventId, "offline-noch-veroeffentlicht");
+    }
+    throw fehler;
+  }
 
   await protokolliere({
     adminId: admin.id,
@@ -247,4 +259,127 @@ export async function aufnahmenOfflineZuruecknehmen(formular: FormData): Promise
   revalidatePath("/admin/aufnahmen");
   revalidatePath("/admin/loeschen");
   zurueck(eventId, "offline-zurueckgenommen");
+}
+
+const VEROEFFENTLICHUNG_ORT_MAX = 180;
+const VEROEFFENTLICHUNG_ZWECK_MAX = 500;
+const VEROEFFENTLICHUNG_NOTIZ_MAX = 1000;
+
+/**
+ * Eine Veröffentlichung erfassen — Ort, Verantwortlicher und Zweck (B-14).
+ *
+ * Ohne diese Angaben wäre nicht nachvollziehbar, wohin eine Aufnahme
+ * gegangen ist und wer dafür verantwortlich ist. Solange mindestens
+ * eine Veröffentlichung eines Events offen ist, blockiert
+ * aufnahmenOfflineSetzenDb die K8-Fälligkeit — das ist der technische
+ * Zusammenhang, den diese Erfassung erst herstellt.
+ */
+export async function veroeffentlichungErfassen(formular: FormData): Promise<void> {
+  const admin = await verlangeAdmin();
+
+  const eventId = text(formular.get("eventId"));
+  if (!(await gibtEsDieVeranstaltung(eventId))) {
+    redirect("/admin/aufnahmen?hinweis=event-fehlt");
+  }
+
+  const ort = text(formular.get("ort")).slice(0, VEROEFFENTLICHUNG_ORT_MAX);
+  if (!ort) zurueck(eventId, "veroeffentlichung-ort-fehlt");
+
+  const rohVerantwortlich = text(formular.get("verantwortlich"));
+  const verantwortlich =
+    rohVerantwortlich === "VERANSTALTUNGSSTAETTE" ? "VERANSTALTUNGSSTAETTE" : "VERA";
+
+  const zweck = text(formular.get("zweck")).slice(0, VEROEFFENTLICHUNG_ZWECK_MAX);
+  if (!zweck) zurueck(eventId, "veroeffentlichung-zweck-fehlt");
+
+  const pruefungId = text(formular.get("pruefungId")) || null;
+
+  const eintrag = await veroeffentlichungAnlegen({
+    eventId,
+    ort,
+    verantwortlich,
+    zweck,
+    pruefungId,
+    erfasstVon: admin.id,
+  });
+
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.veroeffentlichungAngelegt,
+    zielArt: "Veroeffentlichung",
+    zielId: eintrag.id,
+    detail: `${VERANTWORTLICH_NAME[verantwortlich]} · ${ort}`,
+  });
+
+  revalidatePath("/admin/aufnahmen");
+  revalidatePath("/admin/loeschen");
+  zurueck(eventId, "veroeffentlichung-erfasst");
+}
+
+/**
+ * Eine Veröffentlichung als endgültig entfernt markieren.
+ *
+ * Erst wenn ALLE Veröffentlichungen eines Events so markiert sind, lässt
+ * sich die K8-Offline-Feststellung setzen (aufnahmenOfflineSetzenDb prüft
+ * das). Diese Markierung ist also der eigentliche fachliche Auslöser der
+ * Nachlauffrist, nicht die spätere Offline-Feststellung selbst.
+ */
+export async function veroeffentlichungAlsEntferntMarkieren(formular: FormData): Promise<void> {
+  const admin = await verlangeAdmin();
+
+  const id = text(formular.get("veroeffentlichungId"));
+  if (!id) return;
+
+  const vorhanden = await db.veroeffentlichung.findUnique({
+    where: { id },
+    select: { id: true, eventId: true, ort: true },
+  });
+  if (!vorhanden) return;
+
+  const notiz = text(formular.get("notiz")).slice(0, VEROEFFENTLICHUNG_NOTIZ_MAX);
+
+  await veroeffentlichungEntfernenDb(id, {
+    entferntVon: admin.id,
+    entfernungNotiz: notiz || null,
+  });
+
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.veroeffentlichungEntfernt,
+    zielArt: "Veroeffentlichung",
+    zielId: id,
+    detail: vorhanden.ort,
+  });
+
+  revalidatePath("/admin/aufnahmen");
+  revalidatePath("/admin/loeschen");
+  zurueck(vorhanden.eventId, "veroeffentlichung-entfernt");
+}
+
+/** Eine als entfernt markierte Veröffentlichung wieder als aktiv setzen. */
+export async function veroeffentlichungWiederherstellenAktion(formular: FormData): Promise<void> {
+  const admin = await verlangeAdmin();
+
+  const id = text(formular.get("veroeffentlichungId"));
+  if (!id) return;
+
+  const vorhanden = await db.veroeffentlichung.findUnique({
+    where: { id },
+    select: { id: true, eventId: true, ort: true },
+  });
+  if (!vorhanden) return;
+
+  await veroeffentlichungWiederherstellenDb(id);
+
+  await protokolliere({
+    adminId: admin.id,
+    aktion: PROTOKOLL_AKTIONEN.veroeffentlichungWiederhergestellt,
+    zielArt: "Veroeffentlichung",
+    zielId: id,
+    detail: vorhanden.ort,
+  });
+
+  revalidatePath("/admin/aufnahmen");
+  revalidatePath("/admin/loeschen");
+  zurueck(vorhanden.eventId, "veroeffentlichung-wiederhergestellt");
 }

@@ -68,6 +68,44 @@ Wird ein Widerspruch zurückgenommen, bleibt die Zeile trotzdem stehen:
 Sie belegt, dass zwischen Erklärung und Rücknahme einer bestand.
 Verwaltet wird beides unter **Verwaltung → Aufnahmen**.
 
+**Seit 21.09.2026 (B-14) gibt es eine zweite, vorgelagerte Absicherung:
+die Veröffentlichungen selbst.** Bis dahin war „Aufnahmen offline
+setzen" eine reine Vertrauensfrage — nichts hinderte daran, die
+Markierung zu setzen, während eine Aufnahme tatsächlich noch irgendwo
+veröffentlicht war. Das Modell `Veroeffentlichung` schließt diese
+Lücke: Jede Veröffentlichung eines Events (Ort, Verantwortlicher — VERA
+oder die Veranstaltungsstätte —, Zweck) wird unter **Verwaltung →
+Aufnahmen** einzeln festgehalten und beim endgültigen Entfernen als
+`entferntAm` markiert. `aufnahmenOfflineSetzen()` in `lib/aufnahmen.ts`
+prüft **vor** jeder K8-Offline-Feststellung, ob noch mindestens eine
+Veröffentlichung dieses Events ohne `entferntAm` dasteht — ist das der
+Fall, wird die Feststellung mit `VeroeffentlichungenNochOffen`
+verweigert. Ein Event **ohne** jede erfasste `Veroeffentlichung` (etwa
+eine ältere Veranstaltung von vor B-14) bleibt davon unberührt und lässt
+sich wie bisher offline setzen — sonst wäre jede bestehende Veranstaltung
+rückwirkend blockiert.
+
+**`Veroeffentlichung` selbst trägt keine Löschklasse und wird vom
+Löschlauf nicht angefasst.** Sie enthält keine personenbezogenen Daten
+der Teilnehmenden — nur organisatorische Fakten (Ort, Verantwortlicher,
+Zweck, Zeitpunkte, Bearbeiter) — und wird wie `AdminProtokoll` auf Dauer
+als Rechenschaftsnachweis nach Art. 5 Abs. 2 DS-GVO aufbewahrt: Sie belegt
+später, wohin eine Aufnahme ging und wann sie entfernt wurde. Eine eigene
+`Loeschsperre` auf `Veroeffentlichung` wäre deshalb wirkungslos (es gibt
+nichts, was sie sperren könnte) und ist bewusst nicht vorgesehen — die
+vom Nutzer verlangte Sperre bei Streit, Beschwerde oder laufendem
+Verfahren wirkt weiterhin dort, wo sie etwas bewirkt: auf den K8-Datensätzen
+selbst (`Aufnahmewiderspruch`, `Veroeffentlichungspruefung`), wie oben
+beschrieben.
+
+**Wichtig, damit hier nichts missverstanden wird:** `Veroeffentlichung`
+ist ein Nachweis- und Arbeits­werkzeug, **keine automatisierte Löschung**
+extern gehosteter Inhalte. VERA kann einen Instagram- oder TikTok-Beitrag
+der Veranstaltungsstätte technisch nicht selbst entfernen — das
+„Entfernen" in diesem Modell bedeutet ausschließlich: Ein Mensch hat
+geprüft und dokumentiert, dass die Aufnahme an diesem Ort nicht mehr
+veröffentlicht ist.
+
 **K7 ist der Riegel — K8 nicht.** `entscheide()` in
 `lib/loeschfristen.ts` prüft die Steuerrelevanz an **erster** Stelle,
 noch vor der Sperre. Wer die Reihenfolge tauscht, könnte eine

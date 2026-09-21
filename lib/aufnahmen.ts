@@ -339,6 +339,26 @@ export async function pruefungen(eventId: string) {
 /* ── K8: Aufnahmen "endgültig offline" ─────────────────────────── */
 
 /**
+ * Wird geworfen, wenn "Aufnahmen offline" gesetzt werden soll, obwohl
+ * noch mindestens eine dokumentierte Veröffentlichung als live gilt.
+ *
+ * Genau das setzt "solange Inhalte veröffentlicht sind, bleiben die
+ * Widerspruchsnachweise gespeichert" technisch durch, statt es nur zu
+ * behaupten: Wer die Markierung setzen will, muss vorher jede
+ * bekannte Veröffentlichung tatsächlich als entfernt vermerkt haben.
+ */
+export class VeroeffentlichungenNochOffen extends Error {
+  constructor(public readonly offene: { id: string; ort: string }[]) {
+    super(
+      `Noch ${offene.length} Veröffentlichung(en) als aktiv vermerkt: ${offene
+        .map((o) => o.ort)
+        .join(", ")}`,
+    );
+    this.name = "VeroeffentlichungenNochOffen";
+  }
+}
+
+/**
  * Alle Aufnahmen dieser Veranstaltung als endgültig offline markieren.
  *
  * Erst ab diesem Zeitpunkt beginnt die dreijährige Nachlauffrist für
@@ -347,11 +367,20 @@ export async function pruefungen(eventId: string) {
  * bis zum nächsten Löschlauf auf der alten — oder auf gar keiner —
  * Frist stehen zu bleiben.
  *
- * Bewusst KEIN eigener Verlauf mit mehreren Einträgen: Eine
- * Korrektur überschreibt die vorherige Angabe, das Admin-Protokoll
- * hält fest, wer wann welchen Wert gesetzt hat. Eine zweite Ablage
- * nur für diese eine, selten benötigte Angabe wäre eine weitere
- * Datensammlung ohne echten Nutzen.
+ * ── Die Sperre, die B-14 verlangt ──
+ * Sind für dieses Event Veröffentlichungen dokumentiert (siehe
+ * `Veroeffentlichung` weiter unten) und ist mindestens eine davon noch
+ * NICHT als entfernt vermerkt, wird abgelehnt — mit
+ * VeroeffentlichungenNochOffen. Gibt es überhaupt keine dokumentierten
+ * Veröffentlichungen zu diesem Event (ältere Veranstaltung, vor
+ * Einführung dieser Verwaltung), bleibt die bisherige, rein manuelle
+ * Markierung möglich — sonst bräche das für jede Altveranstaltung.
+ *
+ * Bewusst KEIN eigener Verlauf mit mehreren Einträgen für die
+ * Event-Markierung selbst: Eine Korrektur überschreibt die vorherige
+ * Angabe, das Admin-Protokoll hält fest, wer wann welchen Wert
+ * gesetzt hat. Eine zweite Ablage nur für diese eine, selten benötigte
+ * Angabe wäre eine weitere Datensammlung ohne echten Nutzen.
  */
 export async function aufnahmenOfflineSetzen(daten: {
   eventId: string;
@@ -359,6 +388,14 @@ export async function aufnahmenOfflineSetzen(daten: {
   notiz: string;
   gesetztVon: string;
 }): Promise<void> {
+  const offene = await db.veroeffentlichung.findMany({
+    where: { eventId: daten.eventId, entferntAm: null },
+    select: { id: true, ort: true },
+  });
+  if (offene.length > 0) {
+    throw new VeroeffentlichungenNochOffen(offene);
+  }
+
   const faelligAm = faelligAufnahmewiderspruch(daten.datum);
   await db.$transaction(async (tx) => {
     await tx.event.update({
@@ -395,5 +432,122 @@ export async function aufnahmenOfflineZuruecknehmen(eventId: string): Promise<vo
     });
     await tx.aufnahmewiderspruch.updateMany({ where: { eventId }, data: { faelligAm: null } });
     await tx.veroeffentlichungspruefung.updateMany({ where: { eventId }, data: { faelligAm: null } });
+  });
+}
+
+/* ── Veröffentlichungen — wo eine Aufnahme tatsächlich steht ─────── */
+
+/**
+ * Die beiden Rollen im Klartext — für Formular und Anzeige.
+ *
+ * Bewusst nur diese zwei, siehe die Begründung am Enum im Schema:
+ * ein Dritter ist im Konzept nicht vorgesehen.
+ */
+export const VERANTWORTLICH_NAME: Record<"VERA" | "VERANSTALTUNGSSTAETTE", string> = {
+  VERA: "VERA selbst",
+  VERANSTALTUNGSSTAETTE: "die Veranstaltungsstätte",
+};
+
+/** Alle Veröffentlichungen einer Veranstaltung, offene zuerst, dann neueste zuerst. */
+export async function veroeffentlichungen(eventId: string) {
+  const alle = await db.veroeffentlichung.findMany({
+    where: { eventId },
+    orderBy: { veroeffentlichtAm: "desc" },
+    select: {
+      id: true,
+      ort: true,
+      verantwortlich: true,
+      zweck: true,
+      pruefungId: true,
+      veroeffentlichtAm: true,
+      entferntAm: true,
+      entferntVon: true,
+      entfernungNotiz: true,
+      erfasstVon: true,
+    },
+  });
+  // Offene zuerst — das ist die Reihenfolge, in der man sie abarbeitet.
+  return alle.sort((a, b) => {
+    const aOffen = a.entferntAm === null;
+    const bOffen = b.entferntAm === null;
+    if (aOffen !== bOffen) return aOffen ? -1 : 1;
+    return b.veroeffentlichtAm.getTime() - a.veroeffentlichtAm.getTime();
+  });
+}
+
+/** Nur die noch offenen (nicht entfernten) Veröffentlichungen. */
+export async function offeneVeroeffentlichungen(eventId: string) {
+  return db.veroeffentlichung.findMany({
+    where: { eventId, entferntAm: null },
+    orderBy: { veroeffentlichtAm: "asc" },
+    select: { id: true, ort: true, verantwortlich: true, veroeffentlichtAm: true },
+  });
+}
+
+/**
+ * Eine Veröffentlichung festhalten — der Nachweis, WO eine Aufnahme
+ * tatsächlich veröffentlicht wurde.
+ *
+ * Ort, Verantwortlicher und Zweck sind Pflichtangaben: Genau diese
+ * drei verlangt der Bauauftrag ausdrücklich ("Veröffentlichungen
+ * müssen einem Event, Veröffentlichungsort und Verantwortlichen
+ * zugeordnet werden"), das Event ergibt sich aus `eventId`.
+ */
+export async function veroeffentlichungAnlegen(daten: {
+  eventId: string;
+  ort: string;
+  verantwortlich: "VERA" | "VERANSTALTUNGSSTAETTE";
+  zweck: string;
+  pruefungId?: string | null;
+  erfasstVon: string;
+}): Promise<{ id: string }> {
+  const ort = daten.ort.trim();
+  const zweck = daten.zweck.trim();
+  if (ort.length === 0) throw new Error("Eine Veröffentlichung ohne Ort lässt sich später nicht zuordnen.");
+  if (zweck.length === 0) throw new Error("Eine Veröffentlichung ohne Zweck ist nicht dokumentiert, nur behauptet.");
+
+  return db.veroeffentlichung.create({
+    data: {
+      eventId: daten.eventId,
+      ort,
+      verantwortlich: daten.verantwortlich,
+      zweck,
+      pruefungId: daten.pruefungId || null,
+      erfasstVon: daten.erfasstVon,
+    },
+    select: { id: true },
+  });
+}
+
+/**
+ * Eine Veröffentlichung als entfernt vermerken.
+ *
+ * Das ist der Moment, den ein Mensch bestätigt, nachdem er den
+ * Beitrag tatsächlich gelöscht oder das Bild von der Website
+ * genommen hat — die Anwendung kann das auf Instagram, TikTok oder
+ * der Website der Veranstaltungsstätte nicht selbst auslösen.
+ */
+export async function veroeffentlichungEntfernen(
+  id: string,
+  daten: { entferntVon: string; entfernungNotiz?: string | null },
+): Promise<void> {
+  await db.veroeffentlichung.update({
+    where: { id },
+    data: {
+      entferntAm: new Date(),
+      entferntVon: daten.entferntVon,
+      entfernungNotiz: daten.entfernungNotiz?.trim() || null,
+    },
+  });
+}
+
+/**
+ * Eine Entfernung zurücknehmen — etwa weil sie versehentlich
+ * vermerkt wurde oder der Inhalt doch wieder sichtbar ist.
+ */
+export async function veroeffentlichungWiederherstellen(id: string): Promise<void> {
+  await db.veroeffentlichung.update({
+    where: { id },
+    data: { entferntAm: null, entferntVon: null, entfernungNotiz: null },
   });
 }

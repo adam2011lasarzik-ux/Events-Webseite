@@ -1194,20 +1194,22 @@ bleibt als Begründungsmaterial nutzbar, aber nicht als Regelwerk.
   bildrechtlich gestützt auf **§ 23 Abs. 1 Nr. 3 KunstUrhG**.
 - Das Gegenstück dazu ist das **Widerspruchsrecht nach Art. 21 DS-GVO**.
   Es tritt an die Stelle des Widerrufs.
-- Veröffentlichungswege bleiben die vier aus Entscheidung 4.4: Website
-  und Instagram-Kanal von VERA, Website und Instagram-Kanal der
-  jeweiligen Veranstaltungslocation. Keine Weitergabe an Presse,
-  Sponsoren oder sonstige Dritte (Entscheidung 4.5).
+- Veröffentlichungswege, Stand Entscheidung 4.4a (21.09.2026, B-14):
+  **VERA** veröffentlicht auf ihrer Website und — sobald eingerichtet —
+  ihrem offiziellen Instagram-Kanal. Die **Veranstaltungslocation**
+  veröffentlicht auf ihrer Website und ihren offiziellen
+  Social-Media-Kanälen allgemein (z. B. Instagram oder TikTok) — sie ist
+  dafür eigenständig Verantwortliche (Entscheidung 4.3). Keine Weitergabe
+  an Presse, Sponsoren oder sonstige Dritte (Entscheidung 4.5).
 
   ⚠️ **Stand 21.09.2026 (B-12):** VERA hat aktuell **keinen** eigenen
-  Instagram-Kanal. Von den vier vorgesehenen Wegen ist damit heute nur
+  Instagram-Kanal. Von den vorgesehenen Wegen ist damit heute nur
   die Website von VERA tatsächlich in Betrieb; Instagram wird auf der
   Hinweisseite `/aufnahmen` und im Adminbereich bewusst **nicht** als
   aktiver Weg genannt oder angeboten, bis ein offizielles Konto
-  eingerichtet ist. Die vier Wege aus Entscheidung 4.4 bleiben als
-  **Rahmen** gültig — es ändert sich nur, welche davon heute schon
-  genutzt werden. Der Instagram-Kanal der Veranstaltungsstätte ist
-  davon unberührt und weiterhin ungeklärt (Dokument 16, Frage 5).
+  eingerichtet ist. Ob die Veranstaltungsstätte selbst filmt oder nur
+  die von VERA bereitgestellten Übersichtsaufnahmen weiterverwendet, ist
+  weiterhin ungeklärt (Dokument 16, Frage 5).
 - Die Dauer bleibt zweckgebunden und ohne feste Frist mit jährlicher
   dokumentierter Prüfung (Entscheidung 4.6) — mit **einer sprachlichen
   Korrektur**: Es endet nicht mehr „mit dem Widerruf", sondern **mit

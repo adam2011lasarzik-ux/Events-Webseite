@@ -53,6 +53,9 @@ export const PROTOKOLL_AKTIONEN = {
   veroeffentlichungGeprueft: "veroeffentlichung.geprueft",
   aufnahmenOfflineGesetzt: "aufnahmen.offline-gesetzt",
   aufnahmenOfflineZurueckgenommen: "aufnahmen.offline-zurueckgenommen",
+  veroeffentlichungAngelegt: "veroeffentlichung.angelegt",
+  veroeffentlichungEntfernt: "veroeffentlichung.entfernt",
+  veroeffentlichungWiederhergestellt: "veroeffentlichung.wiederhergestellt",
 } as const;
 
 export type ProtokollAktion = (typeof PROTOKOLL_AKTIONEN)[keyof typeof PROTOKOLL_AKTIONEN];

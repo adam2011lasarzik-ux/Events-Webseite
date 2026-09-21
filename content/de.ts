@@ -507,11 +507,18 @@ export const de = {
 
      B-12 (Instagram-Kanäle) ist seit 21.09.2026 geklärt: VERA hat
      aktuell KEINEN eigenen Instagram-Kanal. Instagram wird deshalb
-     hier nicht als aktiver Veröffentlichungsweg genannt, bis ein
+     hier nicht als aktiver Veröffentlichungsweg VERAs genannt, bis ein
      offizielles Konto eingerichtet ist — vorher zu schreiben, es gäbe
-     einen, wäre schlicht falsch. Der Kanal der Veranstaltungsstätte
-     ist davon unberührt; ob sie einen hat, ist weiterhin ungeklärt
-     (siehe Dokument 16, Frage 5) und wird nicht behauptet. */
+     einen, wäre schlicht falsch.
+
+     B-14 (21.09.2026, Entscheidung 4.4a): Der Kanal-Umfang der
+     Veranstaltungsstätte wurde bewusst breiter gefasst als VERAs
+     eigener — sie darf ihre Website UND ihre offiziellen
+     Social-Media-Kanäle nutzen (z.B. Instagram oder TikTok), weil sie
+     dafür als eigenständige Verantwortliche auftritt (Phasenmodell,
+     Entscheidung 4.3 / EuGH Fashion ID). Ob die Veranstaltungsstätte
+     überhaupt selbst filmt, ist weiterhin ungeklärt (siehe Dokument
+     16, Frage 5) und wird hier nicht behauptet. */
   aufnahmen: {
     titel: "Hinweise zu Foto-, Video- und Tonaufnahmen",
     fusszeile: "Aufnahmen",
@@ -541,11 +548,14 @@ export const de = {
             "Instagram-Kanal hat VERA derzeit nicht; sobald einer eingerichtet ist, wird " +
             "diese Seite ergänzt und der Kanal hier verlinkt.",
           "Zusätzlich können die Aufnahmen an die jeweilige Veranstaltungsstätte " +
-            "weitergegeben werden, die sie im Rahmen ihrer eigenen Öffentlichkeitsarbeit " +
-            "verwenden darf.",
+            "weitergegeben werden. Sie darf sie auf ihrer eigenen Website und ihren " +
+            "offiziellen Social-Media-Kanälen veröffentlichen, zum Beispiel Instagram oder " +
+            "TikTok — für diese eigene Veröffentlichung ist die Veranstaltungsstätte selbst " +
+            "verantwortlich.",
           "Eine Weitergabe an Presse, Sponsoren, Kooperationspartner oder sonstige Dritte " +
-            "findet nicht statt. Auch für Flyer, Plakate, Facebook oder TikTok verwenden wir " +
-            "die Aufnahmen nicht.",
+            "außerhalb der Veranstaltungsstätte findet nicht statt. VERA selbst nutzt die " +
+            "Aufnahmen ausschliesslich auf der eigenen Website — nicht für Flyer, Plakate " +
+            "oder eigene Social-Media-Kanäle wie Facebook oder TikTok.",
         ],
       },
       {
