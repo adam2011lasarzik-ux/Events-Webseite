@@ -516,9 +516,21 @@ export const de = {
      eigener — sie darf ihre Website UND ihre offiziellen
      Social-Media-Kanäle nutzen (z.B. Instagram oder TikTok), weil sie
      dafür als eigenständige Verantwortliche auftritt (Phasenmodell,
-     Entscheidung 4.3 / EuGH Fashion ID). Ob die Veranstaltungsstätte
-     überhaupt selbst filmt, ist weiterhin ungeklärt (siehe Dokument
-     16, Frage 5) und wird hier nicht behauptet. */
+     Entscheidung 4.3 / EuGH Fashion ID).
+
+     Dokument 16, Frage 5 ist seit 21.09.2026 beantwortet: Die
+     Veranstaltungsstätte fertigt AUCH eigene Aufnahmen an, unabhängig
+     von VERA — nicht nur Weitergabe von VERAs Material. Das ändert
+     die Einordnung in Dokument 06, Teil VIII.5 grundlegend (dort
+     „VERA allein verantwortlich für die Anfertigung" ausdrücklich nur
+     unter Vorbehalt). VERAs Prüfung vor Veröffentlichung (Entscheidung
+     4.8) greift für die eigenen Aufnahmen der Veranstaltungsstätte
+     NICHT — ein Widerspruch dagegen lässt sich nur über die
+     Veranstaltungsstätte selbst durchsetzen, deshalb der eigene Hinweis
+     unten im Abschnitt „Ihr Widerspruchsrecht". Die schriftliche
+     Vereinbarung nach B-18 (eigener Vor-Ort-Hinweis und eigenes
+     Widerspruchsverfahren der Veranstaltungsstätte) ist dadurch
+     zwingend geworden und bleibt offen — siehe Dokument 15, B-18. */
   aufnahmen: {
     titel: "Hinweise zu Foto-, Video- und Tonaufnahmen",
     fusszeile: "Aufnahmen",
@@ -530,42 +542,53 @@ export const de = {
         id: "was",
         titel: "Was aufgenommen wird",
         absaetze: [
-          "Wir machen ausschliesslich Übersichtsaufnahmen der Veranstaltung: " +
-            "Weitwinkelbilder und kurze Videos vom Spielbetrieb und von der Atmosphäre. " +
-            "Gezielte Porträts und Nahaufnahmen einzelner Personen machen wir nicht.",
-          "Die Videos können allgemeinen Umgebungston enthalten — Spielgeräusche, Applaus, " +
-            "Hallengeräusche. Einzelne Gespräche, Interviews oder private Äusserungen werden " +
-            "nicht gezielt aufgenommen und nicht veröffentlicht. Ist ein persönliches Gespräch " +
-            "deutlich verständlich, wird der Ton vor einer Veröffentlichung entfernt oder " +
-            "bearbeitet.",
+          "Während der Veranstaltung können sowohl VERA Events als auch die jeweilige " +
+            "Veranstaltungsstätte Übersichtsaufnahmen des Spiel- und Veranstaltungsgeschehens " +
+            "anfertigen: Weitwinkelbilder und kurze Videos vom Spielbetrieb und von der " +
+            "Atmosphäre. Gezielte Porträts und Nahaufnahmen einzelner Personen erfolgen nur " +
+            "mit gesonderter Zustimmung.",
+          "Für VERAs eigene Aufnahmen gilt zusätzlich: Die Videos können allgemeinen " +
+            "Umgebungston enthalten — Spielgeräusche, Applaus, Hallengeräusche. Einzelne " +
+            "Gespräche, Interviews oder private Äusserungen werden nicht gezielt aufgenommen " +
+            "und nicht veröffentlicht. Ist ein persönliches Gespräch deutlich verständlich, " +
+            "wird der Ton vor einer Veröffentlichung entfernt oder bearbeitet.",
+          "Für ihre eigenen Aufnahmen ist die Veranstaltungsstätte selbst verantwortlich, " +
+            "einschliesslich der Frage, welche Praxis sie dabei anwendet.",
         ],
       },
       {
         id: "verwendung",
         titel: "Wofür wir sie verwenden",
         absaetze: [
-          "Die Aufnahmen erscheinen auf der Website von VERA. Einen eigenen " +
+          "VERA verwendet die eigenen Aufnahmen auf der Website von VERA. Einen eigenen " +
             "Instagram-Kanal hat VERA derzeit nicht; sobald einer eingerichtet ist, wird " +
-            "diese Seite ergänzt und der Kanal hier verlinkt.",
-          "Zusätzlich können die Aufnahmen an die jeweilige Veranstaltungsstätte " +
-            "weitergegeben werden. Sie darf sie auf ihrer eigenen Website und ihren " +
-            "offiziellen Social-Media-Kanälen veröffentlichen, zum Beispiel Instagram oder " +
-            "TikTok — für diese eigene Veröffentlichung ist die Veranstaltungsstätte selbst " +
-            "verantwortlich.",
+            "diese Seite ergänzt und der Kanal hier verlinkt. Zusätzlich können von VERA " +
+            "erstellte Aufnahmen an die jeweilige Veranstaltungsstätte weitergegeben werden, " +
+            "die sie dann für ihre eigene Öffentlichkeitsarbeit nutzen darf.",
+          "Die Veranstaltungsstätte kann ihre eigenen Aufnahmen auf ihrer eigenen Website " +
+            "und ihren offiziellen Social-Media-Kanälen veröffentlichen, zum Beispiel " +
+            "Instagram oder TikTok.",
+          "Für ihre jeweils selbst erstellten und veröffentlichten Aufnahmen sind VERA " +
+            "Events und die Veranstaltungsstätte eigenständig verantwortlich — Einzelheiten " +
+            "dazu stehen in der Datenschutzerklärung.",
           "Eine Weitergabe an Presse, Sponsoren, Kooperationspartner oder sonstige Dritte " +
-            "außerhalb der Veranstaltungsstätte findet nicht statt. VERA selbst nutzt die " +
-            "Aufnahmen ausschliesslich auf der eigenen Website — nicht für Flyer, Plakate " +
-            "oder eigene Social-Media-Kanäle wie Facebook oder TikTok.",
+            "außerhalb der Veranstaltungsstätte findet nicht statt. Auch für Flyer, Plakate " +
+            "oder eigene Social-Media-Kanäle wie Facebook oder TikTok verwendet VERA die " +
+            "eigenen Aufnahmen nicht.",
         ],
       },
       {
         id: "grundlage",
         titel: "Auf welcher Grundlage",
         absaetze: [
-          "Rechtsgrundlage ist unser berechtigtes Interesse nach Art. 6 Abs. 1 Buchst. f " +
-            "DS-GVO: Wir möchten zeigen, wie unsere Veranstaltungen aussehen. Wir holen dafür " +
-            "bewusst keine Einwilligung ein — eine Einwilligung, ohne die man nicht teilnehmen " +
-            "könnte, wäre nicht freiwillig und damit unwirksam.",
+          "Rechtsgrundlage für VERAs eigene Aufnahmen ist unser berechtigtes Interesse " +
+            "nach Art. 6 Abs. 1 Buchst. f DS-GVO: Wir möchten zeigen, wie unsere " +
+            "Veranstaltungen aussehen. Wir holen dafür bewusst keine Einwilligung ein — eine " +
+            "Einwilligung, ohne die man nicht teilnehmen könnte, wäre nicht freiwillig und " +
+            "damit unwirksam.",
+          "Für die eigenen Aufnahmen der Veranstaltungsstätte gilt deren eigene " +
+            "Rechtsgrundlage und Verantwortlichkeit — nähere Angaben dazu finden Sie " +
+            "gegebenenfalls in ihren eigenen Datenschutzhinweisen.",
           "Ihre Teilnahme hängt deshalb nicht davon ab, ob Sie mit Aufnahmen einverstanden " +
             "sind. Sie hängt nur davon ab, dass Sie diesen Hinweis gelesen haben.",
         ],
@@ -600,6 +623,11 @@ export const de = {
         "gegebenenfalls ein aufnahmefreier Bereich zur Verfügung. Vor jeder Veröffentlichung " +
         "und vor jeder Weitergabe an die Veranstaltungsstätte prüfen wir, ob widersprechende " +
         "Personen erkennbar sind.",
+      "Dieses Verfahren deckt VERAs eigene Aufnahmen sowie deren Weitergabe an die " +
+        "Veranstaltungsstätte ab. Für die eigenen Aufnahmen der Veranstaltungsstätte gilt " +
+        "Ihr Widerspruchsrecht ebenso — wir haben darauf aber keinen unmittelbaren Zugriff. " +
+        "Bitte teilen Sie einen Widerspruch deshalb nach Möglichkeit zusätzlich direkt dem " +
+        "Personal der Veranstaltungsstätte vor Ort mit.",
     ],
   },
 
@@ -873,6 +901,19 @@ export const de = {
         "Gesundheit sowie für vorsätzlich oder grob fahrlässig verursachte Schäden nicht " +
         "ausgeschlossen oder beschränkt.",
     ],
+
+    /* ── Foto- und Videoaufnahmen — nur ein kurzer Verweis ───────────
+       KEIN Platzhalter, aber auch keine eigene Regelung: Die
+       Einzelheiten (was aufgenommen wird, wofür, Rechtsgrundlage,
+       Widerspruch) stehen bereits ausführlich auf /aufnahmen und in
+       der Datenschutzerklärung — sie hier zu wiederholen würde nur
+       eine dritte Stelle schaffen, die aus dem Takt geraten kann. */
+    agbAufnahmenUeberschrift: "3. Foto- und Videoaufnahmen",
+    agbAufnahmenText:
+      "Bei Veranstaltungen können VERA Events und die jeweilige Veranstaltungsstätte " +
+      "Übersichtsaufnahmen anfertigen und veröffentlichen. Was das im Einzelnen bedeutet, " +
+      "wer dafür verantwortlich ist und wie Sie widersprechen können, steht auf der Seite " +
+      "„Hinweise zu Aufnahmen“ sowie in der Datenschutzerklärung.",
 
     /* Hiess einmal „Widerruf" / „Widerrufsbelehrung". Beides setzt
        voraus, dass es ein Widerrufsrecht überhaupt gibt — und genau

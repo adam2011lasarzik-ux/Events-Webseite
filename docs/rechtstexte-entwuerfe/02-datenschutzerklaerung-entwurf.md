@@ -763,6 +763,60 @@ Erklärung verweist, die es nicht gibt.]`
 > wird mit Ort, Verantwortlichem (VERA oder Veranstaltungsstätte) und
 > Zweck festgehalten, admin-verwaltet unter `/admin/aufnahmen`.
 
+> ✅ **Ergänzung vom 21.09.2026 (Dokument 16, Frage 5 beantwortet — B-18
+> weiterhin offen).** Die Veranstaltungsstätte hat bestätigt: Sie
+> fertigt während der Veranstaltung **auch eigene** Übersichtsaufnahmen
+> an, unabhängig von VERA, und veröffentlicht sie über ihre eigenen
+> Kanäle. Damit ändert sich die Einordnung aus Dokument 06, Teil VIII.5
+> grundlegend — dort war „VERA allein verantwortlich für die
+> Anfertigung" ausdrücklich unter dem Vorbehalt formuliert, dass die
+> Veranstaltungsstätte NICHT selbst fotografiert. Für diesen Abschnitt
+> folgt:
+>
+> - **Zwei parallele, unabhängige Verarbeitungen statt einer rein
+>   sequenziellen Weitergabe.** Neben VERAs eigenen Aufnahmen (mit
+>   optionaler Weitergabe an die Veranstaltungsstätte, siehe oben)
+>   fertigt die Veranstaltungsstätte **eigene** Aufnahmen an. Für diese
+>   eigenen Aufnahmen ist sie von der ersten Sekunde an **eigenständig
+>   verantwortlich** — eigene Rechtsgrundlage, eigene
+>   Informationspflicht nach Art. 13 DS-GVO. VERA ist für dieses
+>   Material **nicht** Verantwortlicher und tritt dafür auch **nicht
+>   als Empfänger oder Übermittler** auf — anders als bei der
+>   Weitergabe von VERAs eigenem Material.
+> - **VERAs Prüfung vor Veröffentlichung greift für dieses Material
+>   nicht.** Die Kontrolle, ob widersprechende Personen erkennbar sind
+>   (Entscheidung 4.8), findet nur für Material statt, das VERA
+>   tatsächlich in der Hand hat. Für die eigenen Aufnahmen der
+>   Veranstaltungsstätte lässt sich ein Widerspruch nur über die
+>   Veranstaltungsstätte selbst durchsetzen.
+> - **Empfänger-Tabelle (Ziffer 14) bleibt unverändert für die
+>   Weitergabe VERAs** — sie beschreibt weiterhin nur, was VERA an die
+>   Veranstaltungsstätte übermittelt. Die eigenen Aufnahmen der
+>   Veranstaltungsstätte werden hier aus Transparenzgründen erwähnt,
+>   obwohl VERA dafür keine Verantwortlichkeit trägt und keine
+>   Übermittlung stattfindet.
+> - **B-18 (schriftliche Vereinbarung) ist damit nicht erledigt, sondern
+>   zwingender geworden.** Sie muss jetzt zusätzlich regeln: einen
+>   eigenen Vor-Ort-Hinweis und ein eigenes Widerspruchsverfahren der
+>   Veranstaltungsstätte für deren eigene Aufnahmen (Dokument 06, Teil
+>   VIII.5). Ohne diese Vereinbarung bleibt offen, wie ein Widerspruch
+>   gegen die eigenen Aufnahmen der Veranstaltungsstätte dort
+>   tatsächlich wirkt.
+>
+> **Kurzfassung für den Verbrauchertext:** `/aufnahmen` nennt seit
+> 21.09.2026 ausdrücklich, dass auch die Veranstaltungsstätte eigene
+> Aufnahmen anfertigen und veröffentlichen kann, wer dafür
+> verantwortlich ist, und dass ein Widerspruch dagegen zusätzlich
+> direkt bei der Veranstaltungsstätte erklärt werden sollte
+> (`content/de.ts`). Die Teilnahmebedingungen (`/agb`, Abschnitt 3)
+> verweisen mit einem kurzen Satz auf diese Seite und auf diese
+> Datenschutzerklärung, ohne den Inhalt zu wiederholen.
+>
+> ⚠️ **Weiterhin offen und NICHT durch diese Ergänzung ersetzt:** die
+> schriftliche Vereinbarung nach B-18 selbst, und die genauen
+> Kanalnamen der Veranstaltungsstätte (bleiben `[je Event zu
+> ergänzen]`, Ziffer 14).
+
 ---
 
 ## 14. Empfänger und Auftragsverarbeiter — Übersicht

@@ -1530,11 +1530,42 @@ selbst**, ändert sich das Bild grundlegend:
   Material nie in der Hand hat. Ein Widerspruch ließe sich dort nur über
   die Halle durchsetzen.
 
-`[VOR FREISCHALTUNG KLÄREN: Mit der Halle verbindlich vereinbaren, dass
-während der VERA-Veranstaltung ausschließlich VERA aufnimmt. Lässt sich
-das nicht durchsetzen, braucht die Halle einen eigenen Hinweis vor Ort
-und ein eigenes Widerspruchsverfahren — und das gehört dann ebenfalls in
-die schriftliche Vereinbarung.]`
+> ✅ **Beantwortet am 21.09.2026 (Dokument 16, Frage 5): Ja, die
+> Veranstaltungsstätte fotografiert und filmt während der
+> VERA-Veranstaltung auch selbst.** Die drei oben genannten Folgen
+> treten damit **tatsächlich ein**, nicht nur hypothetisch:
+>
+> - Die Veranstaltungsstätte ist für ihre eigenen Aufnahmen von Anfang
+>   an eigenständig verantwortlich, mit eigener Rechtsgrundlage und
+>   eigener Informationspflicht nach Art. 13 DS-GVO.
+> - VERAs Hinweistext (`/aufnahmen`) deckt diese Aufnahmen **nicht** ab
+>   — er beschreibt nur VERAs eigene Aufnahmen und deren Weitergabe.
+> - Die Prüfung vor der Veröffentlichung (Entscheidung 4.8) greift für
+>   dieses Material **nicht**, weil VERA es nie in der Hand hat. Ein
+>   Widerspruch dagegen lässt sich nur über die Veranstaltungsstätte
+>   selbst durchsetzen.
+>
+> **Die „drei Phasen" oben (Anfertigung durch VERA, Prüfung und
+> Übermittlung durch VERA, Nutzung durch die Halle für ihre eigene
+> Werbung) werden dadurch um eine vierte, parallele Phase ergänzt, nicht
+> ersetzt: die eigene Anfertigung durch die Halle**, bei der die Halle
+> von Anfang an allein verantwortlich ist. Diese vierte Phase steht
+> **ausserhalb** der Weitergabekette zwischen VERA und Halle und wird
+> deshalb auch nicht über Art. 26 DS-GVO oder eine gemeinsame
+> Verantwortlichkeit erfasst — sie ist schlicht eine zweite, unabhängige
+> Aufnahme derselben Veranstaltung durch eine zweite Stelle, so wie zwei
+> Personen mit eigenen Kameras beim selben Ereignis.
+>
+> **Folge für B-18 (schriftliche Vereinbarung): zwingend, nicht mehr nur
+> vorsorglich.** Die Klammer unten ist damit die verbindliche Vorgabe.
+
+`[VOR FREISCHALTUNG NOCH ZU TUN: Mit der Halle schriftlich vereinbaren
+(B-18), wie ihr eigener Vor-Ort-Hinweis und ihr eigenes
+Widerspruchsverfahren für die eigenen Aufnahmen der Halle aussehen —
+inklusive Anlaufstelle und Frist. Ohne diese Vereinbarung bleibt offen,
+ob und wie ein Widerspruch gegen die eigenen Aufnahmen der Halle dort
+tatsächlich wirkt. Diese Vereinbarung ist Stand 21.09.2026 noch NICHT
+geschlossen.]`
 
 `[ANWALTLICHE PRÜFUNG — jetzt vier Punkte: (1) werbliche Nutzung von
 Übersichtsaufnahmen auf Art. 6 Abs. 1 Buchst. f DS-GVO und § 23 Abs. 1

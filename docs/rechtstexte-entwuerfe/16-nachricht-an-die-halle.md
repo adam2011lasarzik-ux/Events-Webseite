@@ -116,7 +116,19 @@ nicht braucht, streicht sie, ohne dass der Rest unvollständig wird.
   Material nicht, und die Prüfung vor der Veröffentlichung liefe ins
   Leere.
 
+✅ **Antwort erhalten (Stand 21.09.2026): Ja, die Veranstaltungsstätte
+fotografiert und filmt während der Veranstaltung auch selbst,** für
+ihre eigenen Kanäle. Damit tritt genau der Fall ein, den Dokument 06,
+Teil VIII.5 als Wendepunkt beschrieben hatte. Umgesetzt: Dokument 06
+(neue Einordnung der Anfertigungsphase), Dokument 02 Ziffer 13 (neue
+Ergänzung), `/aufnahmen` (`content/de.ts`) und ein kurzer Verweis in
+den Teilnahmebedingungen (`/agb`, Abschnitt 3).
+
 ⚠️ **Die Antwort auf Frage 5 ersetzt die schriftliche Vereinbarung nach
-B-18 nicht.** Sie klärt nur die Tatsachenfrage. Die Vereinbarung über
-Rollen, Zweckbindung und Umgang mit Widersprüchen bleibt ein eigenes
-Dokument, das vor der Freischaltung vorliegen muss.
+B-18 nicht — im Gegenteil, sie macht sie zwingend.** Die Vereinbarung
+über Rollen, Zweckbindung und Umgang mit Widersprüchen bleibt ein
+eigenes Dokument, das vor der Freischaltung vorliegen muss, und muss
+jetzt zusätzlich einen eigenen Vor-Ort-Hinweis und ein eigenes
+Widerspruchsverfahren der Veranstaltungsstätte für deren eigene
+Aufnahmen regeln (Dokument 06, Teil VIII.5). Diese Vereinbarung selbst
+ist **noch nicht** geschlossen.

@@ -14,6 +14,11 @@ import stil from "@/components/Textseite.module.css";
  * denselben Ablauf wie die Einverständniserklärung und der Hinweis im
  * Anmeldebereich.
  *
+ * Abschnitt 3 ist bewusst nur ein kurzer Verweis auf /aufnahmen und
+ * die Datenschutzerklärung, kein eigener Regelungstext — die
+ * Einzelheiten stehen dort, damit es nicht drei Stellen gibt, die
+ * auseinanderlaufen können.
+ *
  * Deshalb steht die Markierung seit dieser Ergänzung bei Abschnitt 1
  * statt über der ganzen Seite — dasselbe Muster wie auf der
  * Widerrufsseite. Eine Seite, die geltende Bedingungen enthält und
@@ -45,6 +50,9 @@ export default function Seite() {
         {t.recht.agbMinderjaehrigAbsaetze.map((absatz) => (
           <p key={absatz.slice(0, 40)}>{absatz}</p>
         ))}
+
+        <h2>{t.recht.agbAufnahmenUeberschrift}</h2>
+        <p>{t.recht.agbAufnahmenText}</p>
       </div>
     </Abschnitt>
   );
