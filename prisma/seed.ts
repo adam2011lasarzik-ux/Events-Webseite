@@ -59,14 +59,22 @@ const daten = {
       "Essen und Getränke gibt es für alle.",
   ].join("\n\n"),
 
-  // Datum und genaue Adresse stehen noch nicht fest. null bedeutet
-  // „Platzhalter" und wird auf der Seite sichtbar so gekennzeichnet.
+  // Das Datum steht noch nicht fest. null bedeutet „Platzhalter" und
+  // wird auf der Seite sichtbar so gekennzeichnet.
   startAt: null,
   endAt: null,
-  ortName: null,
-  strasse: null,
-  plz: null,
+
+  // Die Veranstaltungsstätte ist bestätigt (Bauauftrag B-11,
+  // 21.09.2026). `ortFirma` ist die rechtliche Gesellschaft, nicht der
+  // Anzeigename: Sie ist Empfängerin der Übersichtsaufnahmen und muss
+  // als solche benannt werden (Art. 13 Abs. 1 Buchst. e DS-GVO). Die
+  // Seite /aufnahmen holt sie von hier.
+  ortName: "Quality Padel Falkensee",
+  strasse: "Straße der Einheit 112",
+  plz: "14612",
   stadt: "Falkensee",
+  ortFirma: "Quality Padel GmbH",
+  ortRegister: "Amtsgericht Potsdam, HRB 42437",
 
   bildUrl: "/images/event-padel.jpg",
   videoUrl: "/videos/padel-hero.mp4",

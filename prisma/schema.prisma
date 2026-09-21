@@ -110,6 +110,22 @@ model Event {
   plz     String?
   stadt   String
 
+  /// Die vollständige Firmierung der Veranstaltungsstätte, also die
+  /// rechtliche Gesellschaft — nicht der Anzeigename aus `ortName`.
+  ///
+  /// Gebraucht wird sie, weil die Veranstaltungsstätte Empfängerin der
+  /// Übersichtsaufnahmen ist und als solche benannt werden muss
+  /// (Art. 13 Abs. 1 Buchst. e DS-GVO). Sie steht hier am Event und
+  /// nicht in einem Text, weil jede Veranstaltung an einem anderen
+  /// Ort stattfinden kann — ein fest eingetragener Firmenname wäre
+  /// beim zweiten Veranstaltungsort stillschweigend falsch.
+  ortFirma String?
+
+  /// Registergericht und Registernummer der Veranstaltungsstätte,
+  /// etwa „Amtsgericht Potsdam, HRB 42437". Optional: Nicht jede
+  /// Veranstaltungsstätte ist im Handelsregister eingetragen.
+  ortRegister String?
+
   // Medien. Bewusst je Event: eine globale Variable würde jedem
   // zweiten Event dasselbe Video verpassen.
   bildUrl  String?

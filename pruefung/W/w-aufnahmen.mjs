@@ -33,6 +33,9 @@ import {
   namenZeile,
   pruefungFesthalten,
   pruefungen,
+  staetteVollstaendig,
+  staetteZeile,
+  veranstaltungsstaetten,
   widerspruchAnlegen,
   widerspruchZuruecknehmen,
   widersprueche,
@@ -149,6 +152,51 @@ pruefe("Vier Wege sind vorgesehen", WIDERSPRUCHSWEGE.length === 4);
 pruefe(
   "Jeder Weg hat einen deutschen Namen",
   WIDERSPRUCHSWEGE.every((w) => typeof WEGNAME[w] === "string" && WEGNAME[w].length > 0),
+);
+
+console.log("\nW6a · Empfängerangabe der Veranstaltungsstätte (B-11)");
+const halle = {
+  firma: "Quality Padel GmbH",
+  name: "Quality Padel Falkensee",
+  strasse: "Straße der Einheit 112",
+  plz: "14612",
+  stadt: "Falkensee",
+  register: "Amtsgericht Potsdam, HRB 42437",
+};
+pruefe(
+  "Die Zeile nennt Firmierung, Anschrift und Register",
+  staetteZeile(halle) ===
+    "Quality Padel GmbH, Straße der Einheit 112, 14612 Falkensee (Amtsgericht Potsdam, HRB 42437)",
+  staetteZeile(halle),
+);
+pruefe(
+  "Die Firmierung verdrängt den Anzeigenamen",
+  !staetteZeile(halle).includes("Quality Padel Falkensee"),
+  "der Anzeigename ist nicht die rechtliche Gesellschaft",
+);
+pruefe(
+  "Ohne Register fehlt die Klammer",
+  staetteZeile({ ...halle, register: null }) ===
+    "Quality Padel GmbH, Straße der Einheit 112, 14612 Falkensee",
+);
+pruefe(
+  "Ohne Firmierung wird auf den Anzeigenamen zurückgefallen",
+  staetteZeile({ ...halle, firma: null, register: null }).startsWith("Quality Padel Falkensee"),
+);
+pruefe(
+  "Ohne alles bleibt wenigstens die Stadt lesbar",
+  staetteZeile({ firma: null, name: null, strasse: null, plz: null, stadt: "Falkensee", register: null }) ===
+    "Falkensee",
+);
+pruefe("Vollständig, wenn Firmierung und Anschrift stehen", staetteVollstaendig(halle));
+pruefe(
+  "Ohne Firmierung NICHT vollständig — eine halbe Angabe sieht aus wie eine ganze",
+  !staetteVollstaendig({ ...halle, firma: null }),
+);
+pruefe("Ohne Straße nicht vollständig", !staetteVollstaendig({ ...halle, strasse: null }));
+pruefe(
+  "Leerzeichen zählen nicht als Angabe",
+  !staetteVollstaendig({ ...halle, firma: "   " }),
 );
 
 /* ══ Teil 2 · Datenmodell und Datenbank ══════════════════════════ */
@@ -345,8 +393,12 @@ pruefe("Angemeldet ist die Seite erreichbar", seite.status === 200, `Antwort ${s
 pruefe("Die Seite trägt noindex — Namen gehören in keine Suchmaschine", /noindex/i.test(seite.html));
 pruefe("Die geltenden Widersprüche sind sichtbar", seite.html.includes("Anna Meier"));
 pruefe(
-  "Die Platzhalter B-11 und B-12 sind als solche gekennzeichnet",
-  /PLATZHALTER — B-11/.test(seite.html) && /PLATZHALTER — B-12/.test(seite.html),
+  "Der Platzhalter B-12 ist als solcher gekennzeichnet",
+  /PLATZHALTER — B-12/.test(seite.html),
+);
+pruefe(
+  "Der Platzhalter B-11 ist verschwunden — die Firmierung steht jetzt am Event",
+  !/PLATZHALTER — B-11/.test(seite.html),
 );
 
 const erfassenFelder = actionFelder(seite.html, 'name="name"');
@@ -445,6 +497,60 @@ pruefe(
   "Eine Prüfung ohne Ergebnis wird abgelehnt — es gibt keinen Standardwert",
   (await db.veroeffentlichungspruefung.count({ where: { eventId: event.id, ziel: "Instagram" } })) ===
     0,
+);
+
+console.log("\nW12 · Die öffentliche Hinweisseite nennt die Empfängerin");
+await db.event.update({
+  where: { id: event.id },
+  data: {
+    ortFirma: "Quality Padel GmbH",
+    ortName: "Quality Padel Falkensee",
+    strasse: "Straße der Einheit 112",
+    plz: "14612",
+    stadt: "Falkensee",
+    ortRegister: "Amtsgericht Potsdam, HRB 42437",
+  },
+});
+const staetten = await veranstaltungsstaetten();
+pruefe(
+  "Die Veranstaltungsstätte steht in der Liste der Empfänger",
+  staetten.some((z) => z.includes("Quality Padel GmbH")),
+  staetten.join(" · "),
+);
+
+const hinweisSeite = await fetch("http://127.0.0.1:3213/aufnahmen");
+const hinweisText = await hinweisSeite.text();
+pruefe("Die Seite /aufnahmen ist erreichbar", hinweisSeite.status === 200);
+pruefe(
+  "Sie nennt die vollständige Firmierung der Halle",
+  hinweisText.includes("Quality Padel GmbH"),
+);
+pruefe("Sie nennt die Anschrift", hinweisText.includes("Straße der Einheit 112"));
+pruefe("Sie nennt den Registereintrag", hinweisText.includes("Amtsgericht Potsdam, HRB 42437"));
+pruefe(
+  "Der Platzhalter für die Firmierung ist verschwunden",
+  !/PLATZHALTER[^\]]*Firmierung/i.test(hinweisText),
+  "B-11 ist erledigt",
+);
+pruefe(
+  "Der Platzhalter für die Instagram-Kanäle steht noch da und ist als solcher erkennbar",
+  /PLATZHALTER[^\]]*Instagram/i.test(hinweisText),
+  "B-12 ist weiterhin offen — das soll man sehen",
+);
+
+console.log("\nW13 · Der Adminbereich zeigt die Empfängerangabe");
+const adminSeite = await hole(`/admin/aufnahmen?event=${event.id}`, sitzung.cookie);
+pruefe("Die Empfängerangabe steht im Adminbereich", adminSeite.html.includes("Quality Padel GmbH"));
+pruefe(
+  "… und ist als vollständig gekennzeichnet",
+  adminSeite.html.includes("vollständig — Firmierung"),
+);
+await db.event.update({ where: { id: event.id }, data: { ortFirma: null } });
+const ohneFirma = await hole(`/admin/aufnahmen?event=${event.id}`, sitzung.cookie);
+pruefe(
+  "Fehlt die Firmierung, sagt der Adminbereich das deutlich",
+  ohneFirma.html.includes("unvollständig"),
+  "eine halbe Empfängerangabe darf nicht wie eine ganze aussehen",
 );
 
 /* ── Aufräumen ──────────────────────────────────────────────────── */

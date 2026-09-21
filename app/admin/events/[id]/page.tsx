@@ -63,6 +63,8 @@ export default async function EventBearbeiten({
     startAt: fuerFormular(e.startAt),
     endAt: fuerFormular(e.endAt),
     ortName: oderLeer(e.ortName),
+    ortFirma: oderLeer(e.ortFirma),
+    ortRegister: oderLeer(e.ortRegister),
     strasse: oderLeer(e.strasse),
     plz: oderLeer(e.plz),
     stadt: e.stadt,

@@ -43,6 +43,8 @@ export interface EventVorbelegung {
   strasse: string;
   plz: string;
   stadt: string;
+  ortFirma: string;
+  ortRegister: string;
   bildUrl: string;
   videoUrl: string;
   maxPersonen: string;
@@ -257,6 +259,21 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
           {feld("stadt", "Stadt", { pflicht: true })}
           {feld("strasse", "Straße und Hausnummer")}
           {feld("plz", "Postleitzahl")}
+        </div>
+        {/* Die rechtliche Gesellschaft hinter der Anlage — nicht ihr
+            Anzeigename. Sie wird gebraucht, weil die Veranstaltungs-
+            stätte Empfängerin der Übersichtsaufnahmen ist und als
+            solche benannt werden muss (Art. 13 Abs. 1 Buchst. e
+            DS-GVO). Sie erscheint auf der Seite „Hinweise zu
+            Aufnahmen". */}
+        <div className={stil.raster}>
+          {feld("ortFirma", "Firmierung der Anlage", {
+            hilfe:
+              'Die vollständige Gesellschaft, z. B. „Quality Padel GmbH“. Erscheint unter „Hinweise zu Aufnahmen“ als Empfängerin der Aufnahmen.',
+          })}
+          {feld("ortRegister", "Registereintrag der Anlage", {
+            hilfe: 'Falls vorhanden, z. B. „Amtsgericht Potsdam, HRB 42437“.',
+          })}
         </div>
       </div>
 

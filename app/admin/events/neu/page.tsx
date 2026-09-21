@@ -36,6 +36,8 @@ export const LEERES_EVENT: EventVorbelegung = {
   startAt: "",
   endAt: "",
   ortName: "",
+  ortFirma: "",
+  ortRegister: "",
   strasse: "",
   plz: "",
   stadt: "",

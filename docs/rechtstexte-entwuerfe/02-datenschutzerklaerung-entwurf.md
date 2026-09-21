@@ -659,7 +659,7 @@ Erklärung verweist, die es nicht gibt.]`
 > Veranstaltungswerbung verwenden. Für diesen Abschnitt heißt das:
 >
 > - **Beide Verantwortlichen müssen namentlich genannt werden** — VERA
->   und die Location mit Firmierung und Anschrift je Event (B-11) —,
+>   und die Location mit Firmierung und Anschrift je Event (B-11, ✅ erledigt am 21.09.2026) —,
 >   dazu beide Zweckrichtungen und alle vier Veröffentlichungskanäle
 >   (B-12). „Der Veranstaltungsort" genügt nicht.
 > - **Einordnung:** nach dem geplanten Zuschnitt **getrennte,
@@ -720,7 +720,7 @@ Erklärung verweist, die es nicht gibt.]`
 >   Ziffer 14 — siehe die dortige Zeile.
 > - **Die Location wird zum eigenständig Verantwortlichen** für ihre
 >   eigene Veröffentlichung (Entscheidung 4.3). Auch sie gehört in die
->   Übersicht, mit Firmierung je Event (B-11).
+>   Übersicht, mit Firmierung je Event (B-11, ✅ erledigt am 21.09.2026 — die Angabe steht in `Event.ortFirma`/`ortRegister` und wird von `/aufnahmen` ausgelesen).
 > - **Ziffer 12 bleibt richtig.** Die Aussage „keine
 >   Social-Media-Bausteine" betrifft **eingebettete Inhalte auf
 >   veraevents.de** — die gibt es weiterhin nicht. Dass VERA selbst
@@ -740,7 +740,7 @@ Erklärung verweist, die es nicht gibt.]`
 | PayPal (nur bei Auswahl dieser Zahlungsart) | Bezahlung | PayPal-Zugangsdaten, Betrag | eigenständig Verantwortlicher | `[klären]` |
 | Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA | verschlüsselte Sicherungen | verschlüsselte Datei, kein lesbarer Inhalt | Auftragsverarbeiter `[bestätigen]` | Speicherort: **EU** (Bucket-Endpoint `eu-central-003`, bestätigt 18.09.2026) — Gesellschaft selbst US-amerikanisch, Drittlandbezug `[fachlich zu bewerten]` |
 | Meta Platforms Ireland Ltd., Merrion Road, Dublin 4, D04 X2K5, Irland (Instagram) — **sofern Übersichtsaufnahmen veröffentlicht werden** | Veröffentlichung von Aufnahmen auf dem offiziellen Instagram-Kanal von VERA | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher | Irland, mit möglicher Übermittlung in die **USA**; Grundlage derzeit der EU-US-Angemessenheitsbeschluss `[Stand 18.09.2026 in Kraft, aber unter Überprüfung — siehe Dokument 06]` |
-| Veranstaltungslocation `[Firmierung je Event, siehe B-11]` — **sofern Übersichtsaufnahmen weitergegeben werden** | eigene Werbung der Location auf deren Website und Instagram-Kanal | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher (Entscheidung 4.3) | `[je Event zu ergänzen]` |
+| Veranstaltungslocation `[Firmierung je Event aus `Event.ortFirma`; erste Veranstaltung: Quality Padel GmbH, Straße der Einheit 112, 14612 Falkensee, Amtsgericht Potsdam, HRB 42437]` — **sofern Übersichtsaufnahmen weitergegeben werden** | eigene Werbung der Location auf deren Website und Instagram-Kanal | die veröffentlichte Aufnahme selbst | eigenständig Verantwortlicher (Entscheidung 4.3) | `[je Event zu ergänzen]` |
 | UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei | Erreichbarkeitsprüfung | nur öffentliche Seitenaufrufe | Auftragsverarbeiter; **AVV automatisch über die Nutzungsbedingungen einbezogen** (bestätigt 20.09.2026) | EU (Slowakei) |
 | Veranstaltungslocation | Entgegennahme der Papierformulare am Empfang | die unterschriebenen Einverständniserklärungen | siehe Datenschutz Abschnitt 2 | Inland |
 | Rettungsdienst / ärztliches Personal | Notfall | die im Notfall erforderlichen Angaben | eigener Verantwortlicher | Inland |

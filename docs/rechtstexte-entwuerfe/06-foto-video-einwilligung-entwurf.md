@@ -246,10 +246,19 @@ Da VERA in wechselnden Hallen veranstaltet, muss die konkrete
 Gesellschaft samt Anschrift **pro Event** in den Einwilligungstext
 eingesetzt werden.
 
-⚠️ **Dafür fehlt heute das Datenfeld.** `Event` kennt nur `ortName`,
-`strasse`, `plz`, `stadt` (`prisma/schema.prisma:108–111`) — also den
-Anzeigenamen der Halle, **nicht** deren rechtliche Firmierung. Siehe
-Dokument 15, Punkt B-11.
+✅ **Erledigt am 21.09.2026 (B-11).** `Event` hat jetzt die Felder
+`ortFirma` (rechtliche Gesellschaft) und `ortRegister` (Registergericht
+und -nummer), zusätzlich zu `ortName`, `strasse`, `plz`, `stadt`. Für die
+erste Veranstaltung ist eingetragen:
+
+> Quality Padel GmbH, Straße der Einheit 112, 14612 Falkensee
+> (Amtsgericht Potsdam, HRB 42437)
+
+Die Angabe steht **am Event** und nicht in einem Text: Ein fest
+eingetippter Firmenname wäre beim zweiten Veranstaltungsort
+stillschweigend falsch geworden, und ausgerechnet die Empfängerangabe
+nach Art. 13 Abs. 1 Buchst. e DS-GVO darf das nicht sein. Die Seite
+`/aufnahmen` holt sie aus der Datenbank.
 
 ### 3. Der Widerruf erreicht nicht automatisch beide
 
@@ -318,7 +327,9 @@ keine bestimmte Angabe im Sinne von Art. 4 Nr. 11 DS-GVO.]`
 **Einwilligung 2 — Veranstaltungsort:**
 
 > - auf der Website von `[Firmierung und Anschrift der Location je Event
->   — siehe B-11]`
+>   — steht seit 21.09.2026 in `Event.ortFirma`/`ortRegister`; für die
+>   erste Veranstaltung: Quality Padel GmbH, Straße der Einheit 112,
+>   14612 Falkensee, Amtsgericht Potsdam, HRB 42437]`
 > - auf dem offiziellen Instagram-Kanal dieser Location
 >   `[VOR FREISCHALTUNG EINSETZEN: @handle und Link]`
 
@@ -1386,7 +1397,8 @@ stattdessen wird sie an Bedingungen geknüpft.
 - **Beide Verantwortlichen, die Zwecke und die Veröffentlichungskanäle
   müssen vor dem Ticketkauf und im Datenschutzhinweis eindeutig genannt
   werden.** „Der Veranstaltungsort" genügt nicht — es braucht Firmierung
-  und Anschrift je Event (B-11) und die benannten Kanäle (B-12).
+  und Anschrift je Event (B-11, ✅ erledigt am 21.09.2026) und die
+  benannten Kanäle (B-12, weiterhin offen).
 - **Verständliche Gespräche werden vor der Weitergabe entfernt.**
 - **Jede Aufnahme wird vor Veröffentlichung und vor Weitergabe
   kontrolliert.**

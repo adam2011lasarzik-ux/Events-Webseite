@@ -114,6 +114,8 @@ export interface EventDaten {
   strasse: string | null;
   plz: string | null;
   stadt: string;
+  ortFirma: string | null;
+  ortRegister: string | null;
   /* bildUrl wird NICHT mehr aus dem Formular gelesen: Das Titelbild
      kommt seit dem Upload als Datei, und ein frei eintippbarer Pfad
      wäre eine Möglichkeit, auf beliebige Adressen zu zeigen. Die
@@ -304,6 +306,8 @@ export function pruefeEvent(
       strasse: oderNull(sauber(roh.strasse)),
       plz: oderNull(sauber(roh.plz)),
       stadt,
+      ortFirma: oderNull(sauber(roh.ortFirma)),
+      ortRegister: oderNull(sauber(roh.ortRegister)),
       videoUrl: oderNull(sauber(roh.videoUrl)),
       maxPersonen,
       schwelleWenigPlaetze: schwelle!,

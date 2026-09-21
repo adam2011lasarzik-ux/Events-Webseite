@@ -7,6 +7,8 @@ import {
   geltendeWidersprueche,
   letzteJeZiel,
   pruefungen,
+  staetteVollstaendig,
+  staetteZeile,
   widersprueche,
   type Widerspruchsweg,
 } from "@/lib/aufnahmen";
@@ -72,7 +74,17 @@ export default async function AufnahmenSeite({
 
   const events = await db.event.findMany({
     orderBy: { startAt: "desc" },
-    select: { id: true, titel: true, startAt: true },
+    select: {
+      id: true,
+      titel: true,
+      startAt: true,
+      ortFirma: true,
+      ortName: true,
+      strasse: true,
+      plz: true,
+      stadt: true,
+      ortRegister: true,
+    },
   });
 
   const event = events.find((e) => e.id === gewaehlt) ?? events[0] ?? null;
@@ -152,6 +164,7 @@ export default async function AufnahmenSeite({
 
           {event && (
             <>
+              <Empfaenger event={event} />
               <Freigabe geltende={geltende} jeZiel={jeZiel} />
               <WiderspruchsListe eintraege={alle} />
               <ErfassenFormular eventId={event.id} />
@@ -165,20 +178,73 @@ export default async function AufnahmenSeite({
       <div className={stil.karte}>
         <h2 className={stil.karteTitel}>Noch offen</h2>
         <p>
-          <b>[PLATZHALTER — B-11]</b> Der Firmenname der Halle steht noch aus. Bis dahin
-          lässt sich in den Texten nicht benennen, wer dort neben VERA Aufnahmen macht.
-        </p>
-        <p>
           <b>[PLATZHALTER — B-12]</b> Die Instagram-Kanäle sind noch nicht bestätigt. Bis
           dahin ist nicht abschließend festgelegt, wohin veröffentlicht wird. Beim
           Prüfvermerk trägst du das Ziel deshalb vorerst von Hand ein.
         </p>
         <p>
-          Beides wird nachgezogen, sobald die Halle geantwortet hat — siehe{" "}
+          Wird nachgezogen, sobald die Halle geantwortet hat — siehe{" "}
           <Link href="/admin">Übersicht</Link>.
         </p>
       </div>
     </AdminRahmen>
+  );
+}
+
+/**
+ * Wer die Aufnahmen bekommt — die Empfängerangabe nach
+ * Art. 13 Abs. 1 Buchst. e DS-GVO (Bauauftrag B-11).
+ *
+ * Sie steht am Event und nicht in einem Text, weil jede Veranstaltung
+ * an einem anderen Ort stattfinden kann. Fehlt sie oder ist sie
+ * unvollständig, sagt diese Karte das deutlich: Eine halbe
+ * Empfängerangabe sieht auf der öffentlichen Seite aus wie eine
+ * ganze.
+ */
+function Empfaenger({
+  event,
+}: {
+  event: {
+    ortFirma: string | null;
+    ortName: string | null;
+    strasse: string | null;
+    plz: string | null;
+    stadt: string;
+    ortRegister: string | null;
+  };
+}) {
+  const ort = {
+    firma: event.ortFirma,
+    name: event.ortName,
+    strasse: event.strasse,
+    plz: event.plz,
+    stadt: event.stadt,
+    register: event.ortRegister,
+  };
+  const vollstaendig = staetteVollstaendig(ort);
+
+  return (
+    <div className={stil.karte}>
+      <h2 className={stil.karteTitel}>Wer die Aufnahmen bekommt</h2>
+      <p>
+        Die Veranstaltungsstätte darf die Übersichtsaufnahmen für ihre eigene Werbung
+        nutzen und ist damit <b>Empfängerin</b>. Genau so steht sie auf der Seite{" "}
+        <Link href="/aufnahmen">Hinweise zu Aufnahmen</Link>:
+      </p>
+      <p>
+        <b>{staetteZeile(ort)}</b>
+      </p>
+      {vollstaendig ? (
+        <p className={`${stil.marker} ${stil.markerGut}`}>
+          vollständig — Firmierung, Anschrift und Ort sind hinterlegt
+        </p>
+      ) : (
+        <p className={`${stil.marker} ${stil.markerOffen}`}>
+          unvollständig — Firmierung und Anschrift gehören ins Event-Formular unter „Zeit
+          und Ort“
+        </p>
+      )}
+    </div>
   );
 }
 

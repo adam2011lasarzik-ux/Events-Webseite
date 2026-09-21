@@ -138,7 +138,79 @@ export function namenZeile(namen: string[]): string {
   return [...new Set(sauber)].join(", ");
 }
 
+/** Die Angaben zu einer Veranstaltungsstätte, wie sie am Event stehen. */
+export interface Staette {
+  firma: string | null;
+  name: string | null;
+  strasse: string | null;
+  plz: string | null;
+  stadt: string;
+  register: string | null;
+}
+
+/**
+ * Eine Veranstaltungsstätte in einer Zeile, wie sie in der
+ * Empfängerangabe stehen muss (Art. 13 Abs. 1 Buchst. e DS-GVO).
+ *
+ * Ohne Firmierung wird auf den Anzeigenamen zurückgefallen und sonst
+ * auf die Stadt — die Zeile bleibt damit immer lesbar. Sie ist dann
+ * aber rechtlich unvollständig; `staetteVollstaendig()` sagt das, und
+ * der Adminbereich soll es zeigen, statt eine halbe Angabe als fertig
+ * auszugeben.
+ */
+export function staetteZeile(ort: Staette): string {
+  const anschrift = [ort.strasse, [ort.plz, ort.stadt].filter(Boolean).join(" ")]
+    .filter((t) => t && t.trim().length > 0)
+    .join(", ");
+  /* Der Kopf darf leer bleiben. Stünde hier ersatzweise die Stadt,
+     hiesse eine Stätte ohne jede Angabe „Falkensee, Falkensee". */
+  const kopf = ort.firma?.trim() || ort.name?.trim() || "";
+  const teile = [kopf, anschrift].filter((t) => t.length > 0);
+  const zeile = teile.length > 0 ? teile.join(", ") : ort.stadt.trim();
+  const register = ort.register?.trim();
+  return register ? `${zeile} (${register})` : zeile;
+}
+
+/** Ist die Empfängerangabe vollständig genug, um veröffentlicht zu werden? */
+export function staetteVollstaendig(ort: Staette): boolean {
+  return Boolean(ort.firma?.trim() && ort.strasse?.trim() && ort.plz?.trim() && ort.stadt.trim());
+}
+
 /* ── Mit Datenbank ──────────────────────────────────────────────── */
+
+/**
+ * Die Veranstaltungsstätten der angekündigten Veranstaltungen.
+ *
+ * Grundlage der Empfängerangabe auf der Seite „Hinweise zu
+ * Aufnahmen". Doppelte werden zusammengefasst: Finden drei
+ * Veranstaltungen in derselben Halle statt, steht sie einmal da.
+ */
+export async function veranstaltungsstaetten(): Promise<string[]> {
+  const events = await db.event.findMany({
+    where: { status: "VEROEFFENTLICHT" },
+    orderBy: { startAt: "asc" },
+    select: {
+      ortFirma: true,
+      ortName: true,
+      strasse: true,
+      plz: true,
+      stadt: true,
+      ortRegister: true,
+    },
+  });
+  const zeilen = events.map((e) =>
+    staetteZeile({
+      firma: e.ortFirma,
+      name: e.ortName,
+      strasse: e.strasse,
+      plz: e.plz,
+      stadt: e.stadt,
+      register: e.ortRegister,
+    }),
+  );
+  return [...new Set(zeilen)];
+}
+
 
 /** Alle Widersprüche einer Veranstaltung, neueste zuerst. */
 export async function widersprueche(eventId: string) {

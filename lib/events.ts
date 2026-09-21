@@ -28,6 +28,10 @@ export interface EventOrt {
   strasse: string | null;
   plz: string | null;
   stadt: string;
+  /** Vollständige Firmierung der Veranstaltungsstätte (B-11). */
+  firma: string | null;
+  /** Registergericht und Registernummer, falls eingetragen. */
+  register: string | null;
 }
 
 export interface EventTexte {
@@ -143,7 +147,14 @@ function alsAnzeigeEvent(e: DbEvent, belegt: number): VeraEvent {
     datum: alsIsoDatum(e.startAt),
     zeitVon: alsUhrzeit(e.startAt),
     zeitBis: alsUhrzeit(e.endAt),
-    ort: { name: e.ortName, strasse: e.strasse, plz: e.plz, stadt: e.stadt },
+    ort: {
+      name: e.ortName,
+      strasse: e.strasse,
+      plz: e.plz,
+      stadt: e.stadt,
+      firma: e.ortFirma,
+      register: e.ortRegister,
+    },
     maxPersonen: e.maxPersonen,
     schwelle: e.schwelleWenigPlaetze,
     belegtePersonen: belegt,

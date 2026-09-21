@@ -498,9 +498,15 @@ export const de = {
      DS-GVO, und wer nicht abgebildet werden möchte, widerspricht nach
      Art. 21 DS-GVO.
 
-     ⚠️ Zwei Platzhalter sind bewusst als solche formuliert und vor der
-     Freischaltung einzusetzen: die Instagram-Kanäle (B-12) und die
-     Firmierung der Veranstaltungsstätte (B-11). */
+     Die Firmierung der Veranstaltungsstätte (B-11) steht NICHT mehr
+     hier, sondern am jeweiligen Event (`Event.ortFirma`) und wird von
+     der Seite aus der Datenbank geholt. Ein fest eingetippter
+     Firmenname wäre beim zweiten Veranstaltungsort stillschweigend
+     falsch geworden — und gerade die Empfängerangabe darf nicht
+     falsch sein (Art. 13 Abs. 1 Buchst. e DS-GVO).
+
+     ⚠️ Ein Platzhalter ist noch offen und bewusst als solcher
+     formuliert: die Instagram-Kanäle (B-12). */
   aufnahmen: {
     titel: "Hinweise zu Foto-, Video- und Tonaufnahmen",
     fusszeile: "Aufnahmen",
@@ -509,6 +515,7 @@ export const de = {
       "Hier steht, welche das sind, was damit geschieht und wie Sie widersprechen können.",
     abschnitte: [
       {
+        id: "was",
         titel: "Was aufgenommen wird",
         absaetze: [
           "Wir machen ausschliesslich Übersichtsaufnahmen der Veranstaltung: " +
@@ -522,6 +529,7 @@ export const de = {
         ],
       },
       {
+        id: "verwendung",
         titel: "Wofür wir sie verwenden",
         absaetze: [
           "Die Aufnahmen erscheinen auf der Website von VERA und auf dem offiziellen " +
@@ -529,14 +537,14 @@ export const de = {
             "Veranstaltungsstätte weitergegeben werden, die sie auf ihrer eigenen Website und " +
             "ihrem eigenen Instagram-Kanal verwenden darf.",
           "[PLATZHALTER: Hier stehen vor der Freischaltung die Kontonamen und Links der " +
-            "beiden Instagram-Kanäle sowie die vollständige Firmierung der " +
-            "Veranstaltungsstätte.]",
+            "beiden Instagram-Kanäle.]",
           "Eine Weitergabe an Presse, Sponsoren, Kooperationspartner oder sonstige Dritte " +
             "findet nicht statt. Auch für Flyer, Plakate, Facebook oder TikTok verwenden wir " +
             "die Aufnahmen nicht.",
         ],
       },
       {
+        id: "grundlage",
         titel: "Auf welcher Grundlage",
         absaetze: [
           "Rechtsgrundlage ist unser berechtigtes Interesse nach Art. 6 Abs. 1 Buchst. f " +
@@ -548,6 +556,7 @@ export const de = {
         ],
       },
       {
+        id: "dauer",
         titel: "Wie lange",
         absaetze: [
           "Die Aufnahmen bleiben veröffentlicht, solange der genannte Zweck fortbesteht. " +
@@ -555,6 +564,15 @@ export const de = {
         ],
       },
     ],
+    /* Die Empfänger der Aufnahmen, Art. 13 Abs. 1 Buchst. e DS-GVO.
+       Die Namen selbst stehen NICHT hier, sondern am Event — die Seite
+       holt sie aus der Datenbank. */
+    staettenTitel: "Diese Veranstaltungsstätten erhalten Aufnahmen",
+    staettenEinleitung:
+      "Für die Veranstaltungen, die derzeit angekündigt sind, ist das im Einzelnen:",
+    staettenLeer:
+      "Derzeit ist keine Veranstaltung angekündigt. Die jeweilige Veranstaltungsstätte " +
+      "wird auf der Seite der Veranstaltung mit vollständiger Firmierung genannt.",
     widerspruchTitel: "Ihr Widerspruchsrecht",
     widerspruchAbsaetze: [
       "Sie können der Anfertigung und Veröffentlichung von Aufnahmen, auf denen Sie " +
