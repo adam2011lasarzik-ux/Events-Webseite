@@ -982,11 +982,16 @@ der so nicht stattfindet.
 > Bereits umgesetzt in `content/de.ts`
 > (`recht.datenschutzRechteBeschwerde`) und in
 > `public/dokumente/einverstaendniserklaerung-minderjaehrige.pdf`.
-> Offen, separat zu prüfen: Ob der Berliner Postdienstleister durch
-> Öffnen, Scannen oder digitales Speichern der Geschäftspost eine
-> eigene Auftragsverarbeiter-Rolle hat — dafür fehlt bislang jede
-> Vertragsprüfung, er wird deshalb nirgends als Auftragsverarbeiter
-> genannt.
+> ✅ **Geklärt am 22.09.2026, vom Nutzer bestätigt.** Der Anbieter der
+> Berliner Post-/Impressumsadresse öffnet oder scannt die eingehenden
+> Briefe **nicht**, sondern leitet sie **ungeöffnet** direkt an Adam
+> weiter. Er nimmt damit vom Inhalt der Geschäftspost keine Kenntnis
+> und verarbeitet oder speichert ihn nicht — es entsteht keine eigene
+> Auftragsverarbeiter-Rolle nach Art. 28 DSGVO, weil es an einer
+> Verarbeitung personenbezogener Daten aus den Briefen durch den
+> Anbieter fehlt. Er wird deshalb weiterhin nirgends als
+> Auftragsverarbeiter genannt. Damit ist der zuvor offene Prüfpunkt
+> erledigt.
 
 **Entwurfstext (Stand vor der Korrektur, nur zum Nachlesen):**
 

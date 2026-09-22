@@ -47,6 +47,7 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 | ~~1.6~~ | ✅ **Beantwortet 18.09.2026:** Frankreich (genaue Stadt unbekannt, nicht erforderlich) | hPanel-Kundenkonto |
 | ~~1.7~~ | ✅ **Beantwortet 18.09.2026:** Bucket „Vera-Sicherungen" liegt in der EU (`eu-central-003`). Backblaze, Inc. selbst bleibt aber eine US-Gesellschaft — der Drittlandbezug ist damit nicht vollständig erledigt, siehe Abschnitt F | Backblaze-Konto |
 | ~~1.8~~ | ✅ **Am 20.09.2026 vollständig erledigt.** Adam hat im eigenen Konto geprüft: **Der DPA von UptimeRobot ist automatisch in die Nutzungsbedingungen einbezogen; eine gesonderte Unterschrift ist nicht erforderlich.** Damit gilt für **alle vier** Dienstleister dasselbe — Hostinger, Stripe, Backblaze und UptimeRobot binden den Auftragsverarbeitungsvertrag per Verweis in die Kontoeröffnung ein. Es ist nirgends etwas zu unterschreiben, anzufordern oder nachzureichen; **Art. 28 Abs. 3 DS-GVO ist für alle vier erfüllt**. Die frühere Unsicherheit hatte einen sprachlichen Grund: UptimeRobot beschrieb seinen DPA als „verfügbar" und „auf Anfrage zugänglich", was nach einem gesonderten Schritt klang — der Blick ins Konto hat das geklärt. | ✅ erledigt |
+| ~~1.9~~ | ✅ **Beantwortet 22.09.2026:** Der Anbieter der Berliner Post-/Impressumsadresse leitet eingehende Geschäftspost **ungeöffnet** weiter, öffnet oder scannt sie nicht und verarbeitet oder speichert daher keine Briefinhalte — keine eigene Auftragsverarbeiter-Rolle. Bisher nur als offene Randnotiz in Dokument 02 (Abschnitt „Ihre Rechte") vermerkt, hier zur besseren Auffindbarkeit erstmals als eigener Punkt nachgetragen und dort als erledigt markiert. | eigene Angabe zum Postanbieter |
 | ~~2.15~~ | ⚠️ **Beantwortet 18.09.2026: Noch keine Versicherung vorhanden.** Wichtiger offener Punkt **vor dem ersten echten Event** (nicht mehr Testmodus) — ohne sie trägt VERA jedes Haftungsrisiko selbst. Keine Versicherung wird in den Texten behauptet (Dokument 03, Ziffer 11.3). | Versicherungsunterlagen |
 | ~~2.16~~ | ✅ **Beantwortet 18.09.2026:** Die Halle stellt Trainer und Ausrüstung. Erste Einordnung: Der Trainer ist trotzdem voraussichtlich Erfüllungsgehilfe von VERA nach § 278 BGB, weil er die von VERA versprochene Betreuung erbringt — **fachlich zu bestätigen** anhand des Vertrags zwischen VERA und der Halle (Dokument 03, Ziffer 12). Seit 22.09.2026 ausdrücklich bekräftigt: Diese Einordnung bleibt eine vorläufige Einschätzung und wird **nicht** in AGB, Datenschutzerklärung oder anderem Rechtstext als feststehende rechtliche Tatsache behauptet, solange sie nicht durch den Rechtstext-Prüfer bestätigt ist (`content/de.ts`, AGB Ziffer 12.2 nennt deshalb nur, wer den Trainer stellt, nicht seine rechtliche Einordnung). | eigener Vertrag mit der Halle |
 | 3.5/3.6 | ⬜ **Geprüft 18.09.2026, weiterhin offen:** Öffentliche Playtomic-Seite von Quality Padel nennt keine Hausordnung und keine Schuhwerk-Vorgabe. Adam fragt direkt bei der Halle nach (Dokument 16, Fragen 1–2) | direkt bei der Halle |
@@ -608,6 +609,13 @@ Die vollständige Ausgangsliste steht in Dokument 11, Gruppe 6.
 
 Diese Punkte kann weder ich noch du allein beantworten; sie gehören zu
 dem, was ein Rechtstexte-Anbieter oder Anwalt bestätigen soll:
+
+> ⚖️ **Ausdrücklich bestätigt am 22.09.2026: Diese abschließende
+> fachliche Prüfung steht weiterhin für den gesamten Bestand aus —
+> alle AGB-Formulierungen (B2C wie B2B), die gesamte
+> Datenschutzerklärung und sämtliche Löschfristen (K1–K8). Nichts
+> davon gilt bis dahin als anwaltlich bestätigt, unabhängig davon, wie
+> gut eine einzelne Begründung in diesem Dokument belegt ist.**
 
 1. **Trägt das Anlagenmodell?** *(Stand 18.09.2026: für das erste Event
    nicht einschlägig, weil dort nur begleitete Minderjährige teilnehmen
