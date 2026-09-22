@@ -980,7 +980,9 @@ export const de = {
     datenschutzRechteAutomatisiert:
       "Es findet keine automatisierte Entscheidungsfindung im Sinne von Art. 22 DSGVO statt.",
 
-    /* ── AGB — vollständige Teilnahmebedingungen (Stand 21.09.2026) ──
+    /* ── AGB — vollständige Teilnahmebedingungen (Stand 22.09.2026) ──
+       Erstfassung 21.09.2026; am 22.09.2026 um Ziffer 9.4 bis 9.6
+       erweitert, Stand-Datum in Ziffer 17.3 entsprechend nachgezogen.
        KEIN Platzhalter mehr. Textgrundlage: die mit Adam abgestimmten
        und mit den AGB-Prüf-Skills (haftungsbegrenzung-pruefen-und-
        formulieren, klauselinhalt-und-verbote-pruefen,
@@ -993,6 +995,20 @@ export const de = {
        - Stornoentgelt 0,35 € (Doc03 Ziffer 7.1/7.1a) — der Code
          erstattet heute den vollen Betrag; die Reihenfolge "erst Code,
          dann Text" aus Doc03 gilt weiter.
+       - Abbruch-/Unterbrechungsregel mit Zeitschwelle (Vorschlag vom
+         22.09.2026) — es gibt weder einen Event-Status "abgesagt" noch
+         eine Sammelerstattung, die eine solche Schwelle einlösen
+         könnte (Dokument 15, B-7; dort am 22.09.2026 bewusst als
+         spätere Erweiterung zurückgestellt).
+
+       Bewusst NICHT übernommen, weil es eine Tatsache wäre, die
+       niemand festgelegt hat (Entscheidung vom 22.09.2026):
+       - eine allgemeine Veranstaltungsdauer ("regulär etwa X
+         Stunden"). Die Dauer steht ausschließlich beim konkreten
+         Event auf dessen Eventseite, nicht in den Rechtstexten. Ein
+         in den AGB genannter Richtwert würde für jede künftige
+         Veranstaltung mitgelten, auch wenn sie ganz anders angelegt
+         ist.
        Ziffer 7 beschreibt deshalb bewusst den tatsächlichen (kostenlosen)
        Stornoweg, nur die frühere unwirksame Pauschal-Verweigerung nach
        Fristablauf (§ 309 Nr. 5 BGB: fehlende Anrechnung, fehlender
@@ -1250,7 +1266,40 @@ export const de = {
         "verlangen. Weitergehende Ansprüche richten sich nach Ziffer 11.",
     ],
 
-    agbPflichtenUeberschrift: "9. Ihre Pflichten vor Ort",
+    /* ── Pflichten vor Ort ──────────────────────────────────────────
+       Seit 22.09.2026 um zwei Absätze erweitert, beide aus Dokument 09
+       (Teilnahmehinweise) übernommen, das dafür NICHT als eigene Seite
+       veröffentlicht wird — eine Regel, eine Stelle:
+
+       - 9.4 (persönliche Gegenstände) ist Dokument 09, Ziffer 8 in
+         einem Absatz. Bewusst KEINE pauschale Haftungsfreistellung
+         ("für abhandengekommene Gegenstände wird keine Haftung
+         übernommen") — die erfasste auch Vorsatz und grobe
+         Fahrlässigkeit und wäre nach § 309 Nr. 7 Buchst. b BGB
+         unwirksam. Stattdessen der Verweis auf Ziffer 11: Zwei
+         verschieden formulierte Haftungsaussagen zum selben Vorgang
+         gingen nach § 305c Abs. 2 BGB zu Lasten von VERA.
+         "VERA nimmt nichts zur Verwahrung an" ist dabei eine
+         Leistungsbeschreibung, keine Freizeichnung — ohne Obhut
+         entsteht kein Verwahrungsvertrag (§§ 688 ff. BGB).
+
+       - 9.5/9.6 (Ausschluss) ergänzen die frühere Fassung um
+         Selbstgefährdung und die Missachtung von Sicherheitsanweisungen
+         und benennen die Verweisung vom Gelände.
+         9.6 ist der Grund, warum das kein Widerspruch zum
+         Anlagenmodell ist: Eine minderjährige Person, die das Gelände
+         laut Einverständniserklärung nicht allein verlassen darf, wird
+         NICHT hinausgewiesen (Dokument 09, Ziffer 7.3) — beaufsichtigt
+         wird sie aber auch nicht, sonst wäre es die Aufsichtsübernahme,
+         die Entscheidung 3.20 gerade ausschließt.
+
+       Die Dopplung zu Ziffer 6 Satz 5 (Ausschluss Minderjähriger)
+       bleibt bewusst stehen: Dieser Satz ist mit der
+       Einverständniserklärung (public/dokumente/) wörtlich abgestimmt
+       und dürfte nur gemeinsam mit ihr geändert werden. Er ist enger
+       als Ziffer 9.5, aber nicht abschließend formuliert — kein
+       Widerspruch. */
+    agbPflichtenUeberschrift: "9. Ihre Pflichten vor Ort und persönliche Gegenstände",
     agbPflichtenAbsaetze: [
       "9.1 Den Anweisungen des Veranstaltungs-, Betreuungs- und Hallenpersonals ist Folge " +
         "zu leisten, soweit sie der Sicherheit, dem geordneten Ablauf oder dem Schutz " +
@@ -1260,10 +1309,24 @@ export const de = {
         "Teilnahmebedingungen und der Hausordnung gilt für die Nutzung der Räume und " +
         "Anlagen die Hausordnung.",
       "9.3 Sportgeräte und Einrichtungen sind bestimmungsgemäß und sorgfältig zu benutzen.",
-      "9.4 Bei erheblichen oder wiederholten Verstößen gegen diese Ziffer, insbesondere bei " +
-        "Gefährdung anderer Personen, kann VERA Sie von der weiteren Teilnahme ausschließen. " +
-        "Ein Anspruch auf Erstattung besteht in diesem Fall nicht, soweit der Ausschluss " +
-        "berechtigt war.",
+      "9.4 Für persönliche Gegenstände, Kleidung, Sportausrüstung und Wertsachen sind Sie " +
+        "selbst verantwortlich; Wertgegenstände sollten nicht unbeaufsichtigt " +
+        "zurückgelassen werden. VERA nimmt keine Gegenstände zur Verwahrung an — es gibt " +
+        "weder eine Garderobe noch eine Annahmestelle. Stellt die Veranstaltungsstätte " +
+        "Schließfächer bereit, erfolgt deren Nutzung eigenverantwortlich; VERA betreibt sie " +
+        "nicht. Für Fundsachen gelten die Regeln der Veranstaltungsstätte. Für die Haftung " +
+        "von VERA gilt Ziffer 11.",
+      "9.5 Bei erheblichen oder wiederholten Verstößen gegen diese Ziffer, bei Missachtung " +
+        "von Sicherheitsanweisungen sowie dann, wenn Sie sich selbst oder andere Personen " +
+        "gefährden, kann VERA Sie von der weiteren Teilnahme ausschließen und vom " +
+        "Veranstaltungsgelände verweisen. Bei einer Gefährdung kann der Ausschluss ohne " +
+        "vorherigen Hinweis erfolgen. Ein Anspruch auf Erstattung besteht in diesem Fall " +
+        "nicht, soweit der Ausschluss berechtigt war.",
+      "9.6 Bei minderjährigen Teilnehmenden, deren erziehungsberechtigte Person das " +
+        "selbstständige Verlassen der Veranstaltung nicht gestattet hat, erfolgt keine " +
+        "Verweisung vom Gelände. Stattdessen wird die erziehungsberechtigte Person " +
+        "unverzüglich unter der angegebenen Mobilnummer informiert. Eine Beaufsichtigung " +
+        "bis zu deren Eintreffen übernimmt VERA nicht (siehe Ziffer 6).",
     ],
 
     agbGesundheitUeberschrift: "10. Gesundheitliche Eigenverantwortung",
@@ -1381,7 +1444,7 @@ export const de = {
       "17.2 Änderungen dieser Teilnahmebedingungen gelten nur für Anmeldungen, die nach " +
         "ihrem Inkrafttreten abgegeben werden. Für bereits geschlossene Verträge gilt die " +
         "bei der Anmeldung einbezogene Fassung.",
-      "17.3 Stand dieser Bedingungen: 21. September 2026.",
+      "17.3 Stand dieser Bedingungen: 22. September 2026.",
     ],
 
     /* ── Foto- und Videoaufnahmen — nur ein kurzer Verweis ───────────

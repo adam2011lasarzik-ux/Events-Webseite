@@ -334,6 +334,59 @@ pruefe(
   /wird durch ein etwaiges Widerrufsrecht nicht berührt/i.test(agbText),
 );
 
+/* ── Ziffer 9.4 bis 9.6, ergänzt am 22.09.2026 ───────────────────
+
+   Übernommen aus Dokument 09, das dafür NICHT als eigene Seite
+   veröffentlicht wird. Geprüft wird hier vor allem, was NICHT
+   dastehen darf: die pauschale Haftungsfreistellung für
+   abhandengekommene Sachen (§ 309 Nr. 7 Buchst. b BGB) und eine
+   Verweisung Minderjähriger vom Gelände, die dem Anlagenmodell
+   widerspräche. */
+pruefe(
+  "AGB: regeln persönliche Gegenstände und Wertsachen",
+  /Für persönliche Gegenstände, Kleidung, Sportausrüstung und Wertsachen sind Sie selbst verantwortlich/i.test(
+    agbText,
+  ),
+);
+pruefe(
+  "AGB: nennen die fehlende Verwahrung als Leistungsbeschreibung",
+  /nimmt keine Gegenstände zur Verwahrung an/i.test(agbText) &&
+    /weder eine Garderobe noch eine Annahmestelle/i.test(agbText),
+);
+pruefe(
+  "AGB: verweisen für Gegenstände auf die Haftungsziffer statt auf eine eigene Regel",
+  /Für die Haftung von VERA gilt Ziffer 11/i.test(agbText),
+);
+pruefe(
+  "AGB: enthalten KEINE pauschale Haftungsfreistellung für Gegenstände",
+  !/für abhandengekommene Gegenstände wird keine Haftung/i.test(agbText) &&
+    !/Haftung für Verlust[^.]{0,40}ausgeschlossen/i.test(agbText),
+);
+pruefe(
+  "AGB: erlauben den Ausschluss bei Selbst- UND Fremdgefährdung",
+  /wenn Sie sich selbst oder andere Personen gefährden/i.test(agbText),
+);
+pruefe(
+  "AGB: nennen die Missachtung von Sicherheitsanweisungen als Ausschlussgrund",
+  /bei Missachtung von Sicherheitsanweisungen/i.test(agbText),
+);
+pruefe(
+  "AGB: nennen die Verweisung vom Veranstaltungsgelände",
+  /vom Veranstaltungsgelände verweisen/i.test(agbText),
+);
+pruefe(
+  "AGB: weisen Minderjährige ohne Erlaubnis NICHT vom Gelände",
+  /erfolgt keine Verweisung vom Gelände/i.test(agbText),
+);
+pruefe(
+  "AGB: sagen auch beim Ausschluss keine Beaufsichtigung zu (Anlagenmodell)",
+  /Beaufsichtigung bis zu deren Eintreffen übernimmt VERA nicht/i.test(agbText),
+);
+pruefe(
+  "AGB: nennen KEINE allgemeine Veranstaltungsdauer",
+  !/regulären? Dauer von etwa/i.test(agbText) && !/Dauer von etwa \w+ Stunden/i.test(agbText),
+);
+
 /* ── Anmeldung Minderjähriger ────────────────────────────────────
 
    Der Abschnitt ist verbindlich, nicht Platzhalter. Geprüft wird

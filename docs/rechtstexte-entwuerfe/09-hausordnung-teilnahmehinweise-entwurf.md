@@ -1,5 +1,35 @@
 # 09 — Hausordnung und Teilnahmehinweise (Entwurf)
 
+> ✅ **ERLEDIGT am 22.09.2026 — Entscheidung von Adam: Dieses Dokument
+> wird NICHT als eigene Seite veröffentlicht.** Die tragenden Regeln
+> sind stattdessen **einmal** in die bestehenden Teilnahmebedingungen
+> übernommen worden; eine zweite Textstelle für dieselbe Regel soll es
+> nicht geben. Damit ist dieses Dokument ein abgeschlossener
+> Arbeitsstand und keine offene Aufgabe mehr.
+>
+> **Was übernommen wurde und wo es jetzt steht** (`content/de.ts`,
+> `recht.agbPflichtenAbsaetze`):
+>
+> | Hier | Jetzt live in | Anmerkung |
+> |---|---|---|
+> | Ziffer 8.1–8.4 (Fundsachen und Wertgegenstände) | **AGB Ziffer 9.4** | in einen Absatz gefasst; Verweis auf Ziffer 11 beibehalten, **keine** pauschale Haftungsfreistellung |
+> | Ziffer 7.1/7.2 (Ausschluss, auch ohne Vorwarnung bei Gefährdung) | **AGB Ziffer 9.5** | erweitert um Selbstgefährdung und Missachtung von Sicherheitsanweisungen; nennt die Verweisung vom Gelände |
+> | Ziffer 7.3 (Sonderfall Minderjährige) | **AGB Ziffer 9.6** | unverändert im Kern: keine Verweisung vom Gelände, aber auch keine Beaufsichtigung |
+> | Ziffer 2 (Anweisungen des Personals) | AGB Ziffer 9.1 | war schon vorher live |
+> | Vorbemerkung (Verhältnis zur Hausordnung der Halle) | AGB Ziffer 9.2 | war schon vorher live |
+> | Ziffer 6.1 (sorgfältige Nutzung) | AGB Ziffer 9.3 | war schon vorher live |
+> | Ziffer 4.6 (bei Unwohlsein unterbrechen), Ziffer 4.8 (Sicherheitseinweisung) | AGB Ziffer 10 bzw. 11.2 | sinngemäß bereits abgedeckt |
+> | Ziffer 9 (Foto/Video) | AGB Ziffer 18, `/aufnahmen`, Datenschutzerklärung | war schon vorher live, dort ausführlicher |
+>
+> **Was bewusst NICHT übernommen wurde und wo es weiterlebt:**
+> Die Detailregeln zu Schuhwerk (Ziffer 4.2), Alkohol (Ziffer 5) und
+> zur Hausordnung der Halle hängen an Angaben, die die Halle noch nicht
+> bestätigt hat. Sie bleiben offen über **Dokument 15, Punkt 3.5/3.6**
+> und **Dokument 16, Fragen 1–2** — dieses Dokument ist nicht mehr ihr
+> Träger. Ziffer 6.3 (Schäden durch Teilnehmende) ist ebenfalls nicht
+> übernommen: Sie sagt nur, dass das Gesetz gilt, und braucht dafür
+> keine eigene Klausel.
+
 > **Status:** Entwurf, **Version 2 vom 18.09.2026**. **Nicht anwaltlich
 > geprüft.**
 >
