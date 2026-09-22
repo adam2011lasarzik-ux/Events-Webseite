@@ -83,6 +83,14 @@ nicht braucht, streicht sie, ohne dass der Rest unvollständig wird.
 > Kanäle? Das Zweite ist für uns wichtig, weil wir unsere Teilnehmenden
 > vorab informieren müssen, wer Aufnahmen macht.
 >
+> [OPTIONALER TEIL 4 — Versicherung]
+>
+> **6. Haftpflichtversicherung.** Deckt Ihre Betriebs- beziehungsweise
+> Veranstaltungshaftpflicht auch Veranstaltungen ab, die ein externer
+> Veranstalter bei Ihnen durchführt — und damit auch meine Tätigkeit
+> und meine Teilnehmenden? Eine kurze schriftliche Bestätigung dazu
+> wäre mir wichtig, bevor ich das öffentlich so darstelle.
+>
 > [ENDE DER OPTIONALEN TEILE]
 >
 > Über eine kurze Rückmeldung per E-Mail würde ich mich freuen — am
@@ -132,3 +140,14 @@ jetzt zusätzlich einen eigenen Vor-Ort-Hinweis und ein eigenes
 Widerspruchsverfahren der Veranstaltungsstätte für deren eigene
 Aufnahmen regeln (Dokument 06, Teil VIII.5). Diese Vereinbarung selbst
 ist **noch nicht** geschlossen.
+
+🛑 **Neu am 22.09.2026: Frage 6 (Haftpflichtversicherung) hinzugefügt,
+noch keine Antwort.** Adam geht davon aus, dass die Haftpflicht der
+Halle für dieses Event greift, hat das aber noch nicht schriftlich von
+der Halle bestätigt bekommen. Bis eine schriftliche Bestätigung
+vorliegt, darf an keiner Stelle — AGB, Datenschutzerklärung,
+Hausordnungs-Hinweis, Werbematerial — ein Versicherungsschutz zugunsten
+von VERA oder der Teilnehmenden behauptet werden. Für andere
+Veranstaltungsorte gilt das unabhängig davon und muss dort jeweils neu
+geklärt werden — eine Zusage der Halle in Falkensee deckt keinen
+anderen Ort.

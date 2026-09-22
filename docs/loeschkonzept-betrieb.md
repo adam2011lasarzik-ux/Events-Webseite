@@ -361,13 +361,24 @@ beim nächsten Mal nicht neu gefunden werden muss.
 ## Was bewusst offen bleibt
 
 - **K1 und K2 werden nur erinnert, nicht vernichtet.** Papier.
-- **Der reduzierte Zustimmungsnachweis (K3) entsteht noch nicht
-  automatisch**, wenn eine vollständige Erklärung vernichtet wird. Er
-  wird angelegt, wenn jemand ihn anlegt — die Vernichtung des Papiers
-  passiert ohnehin von Hand, und die beiden gehören zusammen.
-- **Checklisten (K5) werden noch nicht im Adminbereich erfasst.** Das
-  Datenmodell und der Löschlauf stehen; ein Eingabeformular fehlt.
+- **Der reduzierte Zustimmungsnachweis (K3) entsteht nicht
+  automatisch**, wenn eine vollständige Erklärung vernichtet wird. Seit
+  22.09.2026 gibt es dafür einen geschützten Erfassungsweg im
+  Adminbereich (`/admin/zustimmungsnachweise`) — angelegt wird er aber
+  weiterhin von Hand, wenn das Papier vernichtet wird; die beiden
+  Schritte gehören zusammen und geschehen bewusst nicht automatisch.
+- **Checklisten (K5) werden seit 22.09.2026 im Adminbereich erfasst**
+  (`/admin/checklisten`): Einweisung durch die Halle, Sicherheits-/
+  Organisationsprüfung, zuständige Person (Kürzel) und Prüfdatum. Ändert
+  sich der Veranstaltungstermin nachträglich, rechnet
+  `faelligkeitenAuffrischen()` (`lib/loeschlauf.ts`) die Frist automatisch
+  neu — dieselbe Systematik wie bei Anmeldungen (K4).
 - **Die rechtliche Prüfung der Fristen steht aus.** Die Begründungen
   stehen in `13-loeschkonzept.md`, die offenen Punkte in dessen
   Abschnitt 6. Das ist kein Programmierfehler, sondern die Grenze
-  dessen, was ohne fachkundige Prüfung feststehen kann.
+  dessen, was ohne fachkundige Prüfung feststehen kann. **Ausdrücklich
+  eingeschlossen: die 30-Jahres-Frist bei K6 (schwerer Personen- oder
+  Gesundheitsschaden)** — vorläufig als Staffel 10/30 Jahre umgesetzt
+  (`VORFALL_LEICHT_JAHRE`/`VORFALL_SCHWER_JAHRE` in
+  `lib/loeschfristen.ts`), aber noch nicht endgültig bestätigt
+  (`13-loeschkonzept.md`, Klasse 6, Punkt K-4).

@@ -52,6 +52,7 @@ export default function Seite() {
         </p>
         <p>{t.recht.widerrufText}</p>
         <p>{t.recht.widerrufHinweis}</p>
+        <p>{t.recht.widerrufTerminHinweis}</p>
 
         <h2>{t.recht.stornoUeberschrift}</h2>
         {t.recht.stornoAbsaetze.map((absatz) => (

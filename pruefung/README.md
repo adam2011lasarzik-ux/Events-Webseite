@@ -30,7 +30,7 @@ Wie man sie startet, steht in **[../docs/pruefen.md](../docs/pruefen.md)**.
 | `P` | Stornierung: Regeln, Mails, Erstattung und Kulanz, Ablauf, Storno durch den Veranstalter, endgültiges Löschen | 127 |
 | `Q` | Überwachung: Mail-Texte und Wächter-Logik | 26 |
 | `R` | Der Riegel vor der echten Datenbank | 12 |
-| `S` | Löschkonzept: Fristen je Klasse (inkl. K8, ereignisbezogen), jede Sperrsituation, Probelauf, Steuerriegel, Protokoll, Zugang, Papiererinnerung, Server-Skripte, Bedienung der Sperren, Vorschau in Klartext | 184 |
+| `S` | Löschkonzept: Fristen je Klasse (inkl. K8, ereignisbezogen), jede Sperrsituation, Probelauf, Steuerriegel, Protokoll, Zugang, Papiererinnerung, Server-Skripte, Bedienung der Sperren, Vorschau in Klartext, Erfassungswege K3/K5 samt Terminverschiebung | 206 |
 | `T` | Terminpflicht: ohne feststehenden Termin keine Buchung und keine Zahlung — die Regel, ihre Verdrahtung an allen sechs Stellen und der Umgehungsversuch über eine direkte Serveranfrage | 40 |
 | `U` | Versionierte Rechtstexte: Prüfsumme, Versionsnummern, welche Fassung wann gilt, Unveränderbarkeit (auch projektweit geprüft), Fassung je Buchung, Volltext in der Bestätigungsmail | 42 |
 | `V` | Bestellknopf nach § 312j Abs. 3 BGB, AGB-Häkchen (§ 305 Abs. 2 BGB), Kenntnisnahme zu Aufnahmen und der abgesetzte Widerspruchshinweis (Art. 21 Abs. 4 DS-GVO) — jeweils auch serverseitig erzwungen | 40 |

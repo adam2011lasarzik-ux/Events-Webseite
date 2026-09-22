@@ -36,6 +36,8 @@ export function AdminRahmen({
             <Link href="/admin/events/neu">Neues Event</Link>
             <Link href="/admin/einstellungen">Gründerbereich</Link>
             <Link href="/admin/vorfaelle">Vorfälle</Link>
+            <Link href="/admin/zustimmungsnachweise">Zustimmungsnachweise</Link>
+            <Link href="/admin/checklisten">Checklisten</Link>
             <Link href="/admin/aufnahmen">Aufnahmen</Link>
             <Link href="/admin/loeschen">Löschlauf</Link>
             <Link href="/admin/rechtstexte">Rechtstexte</Link>

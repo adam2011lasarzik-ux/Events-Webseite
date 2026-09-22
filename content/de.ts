@@ -16,6 +16,7 @@ export const de = {
     menueSchliessen: "Menü schließen",
     events: "Events",
     schulen: "Für Schulen",
+    unternehmen: "Für Unternehmen",
     ueber: "Über VERA",
     faq: "Fragen",
     kontakt: "Kontakt",
@@ -123,6 +124,53 @@ export const de = {
       "90 Minuten, während der Schulzeit (08:00–15:00 Uhr)",
       "Bis zu 20 Personen gleichzeitig auf dem Platz",
     ],
+  },
+
+  /* Neu am 22.09.2026, Nutzer-Entscheidung: Firmenveranstaltungen laufen
+     ausschließlich über eine Anfrage, es gibt keine Online-Buchung.
+     Preis, Termin, Ort und Leistungsumfang werden im individuellen
+     Angebot festgelegt — genau wie AGB Ziffer 1.3 es bereits vorsieht.
+
+     Die hier genannte Abschlags-, Zusatzleistungs- und Ausfallstaffel
+     ist die vom Nutzer bestätigte Zahlungsmechanik aus dem B2B-Entwurf
+     (docs/rechtstexte-entwuerfe/04-b2b-eventbedingungen-entwurf.md,
+     Ziffern 9.3a, 10.3a, 11.2). Dieser Entwurf trägt selbst den
+     Vermerk "nicht anwaltlich geprüft, nicht rechtssicher" — deshalb
+     wird die Staffel hier als informative Beschreibung dargestellt,
+     nicht als bereits geprüfte AGB-Klausel. Die verbindliche Fassung
+     steht im jeweiligen Angebot und wird vor dem ersten echten
+     Firmenauftrag vom Rechtstext-Prüfer kontrolliert. */
+  unternehmen: {
+    ueberschrift: "Für Unternehmen",
+    kurz:
+      "Sie planen ein Firmenevent oder Teamevent? Schreiben Sie uns eine Anfrage — Termin, " +
+      "Ort, Teilnehmerzahl und Leistungsumfang stimmen wir individuell in einem Angebot ab.",
+    titel: "Firmenveranstaltungen bei VERA",
+    absaetze: [
+      "Für Unternehmen gibt es keine direkte Online-Buchung über den Ticketshop. Am Anfang " +
+        "steht eine formlose Anfrage per E-Mail: Anlass, ungefährer Zeitraum, gewünschter " +
+        "Ort und die ungefähre Teilnehmerzahl genügen.",
+      "Auf dieser Grundlage erstellt VERA ein individuelles Angebot. Erst darin werden " +
+        "Preis, verbindlicher Termin, Ort und der genaue Leistungsumfang festgelegt — ein " +
+        "Vertrag kommt erst mit der beiderseitigen Bestätigung dieses Angebots zustande. " +
+        "Die allgemeinen Teilnahmebedingungen für Einzeltickets gelten für Firmenaufträge " +
+        "ausdrücklich nicht; es gelten die im Angebot mitgeteilten, gesondert vereinbarten " +
+        "Bedingungen.",
+      "Zur Orientierung, wie Anzahlung, Zusatzleistungen und eine Absage seitens des " +
+        "Unternehmens abgerechnet werden — die endgültige Formulierung steht im jeweiligen " +
+        "Angebot:",
+    ],
+    punkte: [
+      "Ab einem Auftragswert von 1.000 € wird eine Anzahlung von 50 % fällig",
+      "Zusätzliche, nicht im Angebot enthaltene Leistungen: 60 € je Stunde, je angefangene halbe Stunde",
+      "Absage 28 Tage oder mehr vor dem Termin: keine Ausfallgebühr, gebundene Fremdkosten werden erstattet",
+      "Absage 14 bis 27 Tage vorher: 25 % des Auftragswerts",
+      "Absage 4 bis 13 Tage vorher: 50 % des Auftragswerts",
+      "Absage bis 3 Tage vorher oder Nichterscheinen: 80 % des Auftragswerts",
+    ],
+    hinweis:
+      "Keine Umsatzsteuer, § 19 UStG. Diese Übersicht ersetzt kein individuelles Angebot " +
+      "und keine geprüften Vertragsbedingungen — beides folgt nach Ihrer Anfrage.",
   },
 
   ueber: {
@@ -680,13 +728,16 @@ export const de = {
        lib/zahlungRegeln.ts — der Titel der Veranstaltung und die
        Personenzahl gehen als Beschriftung des Postens mit. */
     datenschutzZahlung:
-      "Beim Bezahlen werden an den Zahlungsanbieter Stripe übermittelt: der Betrag, die " +
-      "Anmeldenummer, die E-Mail-Adresse sowie der Titel der Veranstaltung und die Anzahl " +
-      "der Personen. Bezahlt wird ausschließlich auf der gesicherten Seite von Stripe. " +
-      "Kartennummern und Bankdaten erreichen diese Seite zu keinem Zeitpunkt — sie werden " +
-      "hier weder entgegengenommen noch gespeichert. Rechtsgrundlage ist Art. 6 Abs. 1 " +
-      "Buchst. b DSGVO. Weitere Einzelheiten zu Stripe stehen im nächsten Abschnitt " +
-      "„Empfänger und Auftragsverarbeiter“.",
+      "Bezahlt werden kann mit Kredit- oder Debitkarte (auf unterstützten Geräten als " +
+      "Apple Pay oder Google Pay), oder mit PayPal — alle vier Wege laufen technisch über " +
+      "den Zahlungsanbieter Stripe. Beim Bezahlen werden an Stripe übermittelt: der Betrag, " +
+      "die Anmeldenummer, die E-Mail-Adresse sowie der Titel der Veranstaltung und die " +
+      "Anzahl der Personen. Bezahlt wird ausschließlich auf der gesicherten Seite von " +
+      "Stripe. Kartennummern und Bankdaten erreichen diese Seite zu keinem Zeitpunkt — sie " +
+      "werden hier weder entgegengenommen noch gespeichert. Rechtsgrundlage ist Art. 6 " +
+      "Abs. 1 Buchst. b DSGVO. Weitere Einzelheiten zu Stripe und, bei Auswahl dieser " +
+      "Zahlungsart, zu PayPal stehen im nächsten Abschnitt „Empfänger und " +
+      "Auftragsverarbeiter“.",
     /* Die frühere Fassung sagte pauschal „diese Seite setzt keine
        Cookies". Das stimmt nicht: lib/adminAuth.ts setzt für die
        Anmeldung am Adminbereich das Cookie `vera_admin`. Besucher
@@ -780,11 +831,14 @@ export const de = {
        Anschrift bereits recherchiert und bestätigt sind (siehe
        docs/rechtstexte-entwuerfe/02-datenschutzerklaerung-entwurf.md,
        Ziffer 14, und Dokument 15, Punkt 1.5 — dort als "erledigt"
-       vermerkt am 20.09.2026). Bewusst NICHT aufgeführt: PayPal (Rolle
-       und Anschrift laut Dokument 02 weiterhin "[klären]") und eine
-       feste Firmierung der Veranstaltungsstätte — die steht je Event
-       auf /aufnahmen (siehe dort), nicht pauschal auf dieser Seite,
-       weil sie sich mit jedem Veranstaltungsort ändern kann. */
+       vermerkt am 20.09.2026). Die Hostinger-DPA-Angaben (gilt für
+       VPS, elektronische Annahme, englische Fassung maßgeblich, Stand
+       15.09.2026) sind Angaben des Nutzers vom 22.09.2026, keine
+       eigene Recherche. Bewusst NICHT genannt: eine Anschrift für
+       PayPal (weiterhin nicht bestätigt) und eine feste Firmierung der
+       Veranstaltungsstätte — die steht je Event auf /aufnahmen (siehe
+       dort), nicht pauschal auf dieser Seite, weil sie sich mit jedem
+       Veranstaltungsort ändern kann. */
     datenschutzEmpfaengerUeberschrift: "3. Empfänger und Auftragsverarbeiter",
     datenschutzEmpfaengerEinleitung:
       "Wir geben personenbezogene Daten nur an die folgenden Empfänger weiter, soweit dies " +
@@ -792,15 +846,20 @@ export const de = {
       "insbesondere keine Werbenetzwerke und keine Analysedienste.",
     datenschutzEmpfaengerAbsaetze: [
       "Hostinger International Ltd., 61 Lordou Vironos Street, 6023 Larnaca, Zypern, " +
-        "betreibt den Server dieser Website (Serverstandort Frankreich) und das " +
-        "E-Mail-Postfach, über das automatische Bestätigungsmails versendet werden.",
+        "betreibt den Server dieser Website — auch als virtuellen Server (VPS) — und das " +
+        "E-Mail-Postfach, über das automatische Bestätigungsmails versendet werden " +
+        "(Serverstandort Frankreich). Hostinger ist dabei Auftragsverarbeiter, VERA " +
+        "Events Verantwortlicher; der Auftragsverarbeitungsvertrag gilt nach den " +
+        "Nutzungsbedingungen von Hostinger durch deren elektronische Annahme als " +
+        "abgeschlossen (maßgeblich ist die englische Fassung, Dokumentstand 15.09.2026).",
       "Stripe Payments Europe, Limited, One Wilton Park, Wilton Place, Dublin 2, D02 FX04, " +
         "Irland (bei bestimmten Zahlungsdiensten zusätzlich Stripe Technology Europe, " +
         "Limited, unter derselben Anschrift), wickelt Zahlungen ab; Einzelheiten stehen im " +
         "vorherigen Abschnitt.",
-      "Wird ausdrücklich PayPal als Zahlungsart gewählt, verarbeitet PayPal die dafür " +
-        "erforderlichen Zugangs- und Zahlungsdaten als eigenständig Verantwortlicher nach " +
-        "eigener Datenschutzerklärung.",
+      "Wird beim Bezahlen PayPal gewählt, verarbeitet PayPal als eigenständig " +
+        "Verantwortlicher nach eigener Datenschutzerklärung die dafür erforderlichen " +
+        "Zugangs- und Zahlungsdaten — die Zahlung läuft dabei über die Verbindung von " +
+        "Stripe zu PayPal, es gibt keine eigene PayPal-Anbindung von VERA.",
       "Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA, speichert " +
         "verschlüsselte Sicherungskopien der Datenbank in einem Rechenzentrum in der EU. " +
         "Backblaze erhält ausschließlich die verschlüsselte Datei, keinen lesbaren Inhalt.",
@@ -841,10 +900,13 @@ export const de = {
         "vorlag; er enthält kein Geburtsdatum, keine Mobilnummer und keine " +
         "Gesundheitsangaben und wird zehn Jahre ab dem Ende des Kalenderjahres der " +
         "Veranstaltung aufbewahrt und danach gelöscht.",
-      "Anmeldedaten sowie Anwesenheitsangaben zu An- und Abmeldung werden drei Jahre ab dem " +
-        "Ende des Kalenderjahres der Veranstaltung aufbewahrt. Danach werden Name, " +
-        "E-Mail-Adresse und Telefonnummer überschrieben; die Buchung selbst bleibt ohne " +
-        "Personenbezug bestehen, weil Betrag und Datum zu den steuerlichen Unterlagen gehören.",
+      "Anmeldedaten (Vor- und Nachname, E-Mail-Adresse, Telefonnummer der anmeldenden " +
+        "Person sowie die Namen der Teilnehmenden) werden drei Jahre ab dem Ende des " +
+        "Kalenderjahres der Veranstaltung aufbewahrt und danach automatisch überschrieben; " +
+        "die Buchung selbst bleibt ohne Personenbezug bestehen, weil Betrag und Datum zu " +
+        "den steuerlichen Unterlagen gehören. Ein Check-out oder eine Abmeldung beim " +
+        "Verlassen der Veranstaltung ist nicht vorgesehen — VERA erhebt und speichert dafür " +
+        "keinen Zeitpunkt.",
       "Veranstaltungs- und Sicherheitschecklisten werden drei Jahre ab dem Ende des " +
         "Kalenderjahres aufbewahrt. Danach werden alle personenbezogenen und mittelbar " +
         "zuordenbaren Angaben — insbesondere Mitarbeiterkürzel und Freitextnotizen — " +
@@ -881,17 +943,20 @@ export const de = {
     /* ── Ihre Rechte ─────────────────────────────────────────────────
        KEIN Platzhalter. Reine Aufzählung der gesetzlichen Rechte nach
        Art. 15-21 und Art. 7 Abs. 3 DSGVO sowie des Beschwerderechts
-       nach Art. 77 DSGVO. Die Aufsichtsbehörde wird bewusst NUR mit
-       Namen und Website genannt, ohne Anschrift — dieselbe Fassung wie
-       auf Seite 2 der Einverständniserklärung
-       (public/dokumente/einverstaendniserklaerung-minderjaehrige.pdf).
-       Eine Anschrift liegt zwar recherchiert vor (docs/rechtstexte-
-       entwuerfe/14-vergleichsrecherche-und-quellen-update.md), ist dort
-       aber selbst als "vor Verwendung auf der Behördenseite
-       gegenprüfen" markiert (Dokument 02, Ziffer 16 / D-8) — aus dieser
-       Arbeitsumgebung heraus nicht nachprüfbar, weil der Zugriff auf
-       Behördenseiten blockiert ist. Bis zur Bestätigung bleibt es bei
-       der ungeprüften, aber sicheren Kurzfassung. */
+       nach Art. 77 DSGVO.
+
+       Zuständige Behörde seit 22.09.2026: die Landesbeauftragte für
+       den Datenschutz und für das Recht auf Akteneinsicht Brandenburg
+       — vom Nutzer bestätigt, NICHT selbst recherchiert (Zugriff auf
+       Behördenseiten ist aus dieser Arbeitsumgebung blockiert). Grund:
+       Das Einzelunternehmen ist in Brandenburg angemeldet und wird von
+       dort geführt; die Berliner Anschrift ist eine gemietete
+       Post-/Impressumsadresse und ändert die Hauptniederlassung nicht.
+       Vorher stand hier die Berliner Beauftragte, mit Namen und
+       Website ohne Anschrift, weil die vollständige Anschrift damals
+       nicht selbst nachprüfbar war. Diese Einschränkung entfällt jetzt
+       nicht durch eigene Prüfung, sondern weil der Nutzer die
+       Brandenburger Anschrift direkt mitgeteilt hat. */
     datenschutzRechteUeberschrift: "5. Ihre Rechte",
     datenschutzRechteEinleitung: "Sie haben das Recht,",
     datenschutzRechtePunkte: [
@@ -909,8 +974,9 @@ export const de = {
     datenschutzRechteKontakt: "Wenden Sie sich dafür an kontakt@veraevents.de.",
     datenschutzRechteBeschwerde:
       "Ihnen steht außerdem ein Beschwerderecht bei einer Datenschutz-Aufsichtsbehörde zu " +
-      "(Art. 77 DSGVO). Für uns zuständig ist die Berliner Beauftragte für Datenschutz und " +
-      "Informationsfreiheit, datenschutz-berlin.de.",
+      "(Art. 77 DSGVO). Für uns zuständig ist die Landesbeauftragte für den Datenschutz " +
+      "und für das Recht auf Akteneinsicht Brandenburg, Stahnsdorfer Damm 77, 14532 " +
+      "Kleinmachnow, Poststelle@LDA.Brandenburg.de.",
     datenschutzRechteAutomatisiert:
       "Es findet keine automatisierte Entscheidungsfindung im Sinne von Art. 22 DSGVO statt.",
 
@@ -950,7 +1016,18 @@ export const de = {
        abschließend, ob der von der Halle gestellte Trainer
        Erfüllungsgehilfe von VERA ist — das hängt vom tatsächlichen
        Vertrag zwischen VERA und der Halle ab und ist als eigener Punkt
-       vor der ersten echten Veranstaltung zu bestätigen. */
+       vor der ersten echten Veranstaltung zu bestätigen.
+
+       Seit 22.09.2026 (Padel-Event Falkensee bestätigt): Trainer und
+       Einweisung werden dort von der Halle gestellt, nicht von VERA
+       beschäftigt. Ziffer 12.2 nennt deshalb keine "von VERA
+       eingesetzten" Trainer mehr, sondern hält offen, wer sie je
+       Veranstaltung stellt — die rechtliche Einordnung als
+       Erfüllungsgehilfe bleibt weiterhin offen, siehe oben. Die
+       Haftpflichtversicherung der Halle soll für dieses Event gelten,
+       ist aber schriftlich noch nicht bestätigt (Dokument 16, Frage 6)
+       — deshalb wird an keiner Stelle ein Versicherungsschutz zugunsten
+       von VERA behauptet. */
     agb: "AGB",
     agbTitel: "Allgemeine Geschäftsbedingungen",
 
@@ -973,7 +1050,7 @@ export const de = {
         "Schulveranstaltungen, die auf Anfrage geplant und abgestimmt werden — gelten nicht " +
         "diese Bedingungen, sondern gesonderte, im Einzelfall vereinbarte Bedingungen. Solche " +
         "Veranstaltungen werden nicht über den Ticketshop gebucht, sondern auf Anfrage per " +
-        "E-Mail vereinbart.",
+        "E-Mail vereinbart (siehe „Für Unternehmen“ bzw. „Für Schulen“).",
       "1.4 „Veranstaltung“ ist das jeweils auf der Website beschriebene Angebot. „Anmeldung“ " +
         "ist die Buchung eines oder mehrerer Plätze durch eine Person. „Teilnehmende“ sind " +
         "die in der Anmeldung namentlich benannten Personen.",
@@ -1253,8 +1330,11 @@ export const de = {
         "Verkehrssicherungspflicht für Gebäude, Bodenbeläge und fest installierte " +
         "Einrichtungen — treffen den Betreiber der Anlage.",
       "12.2 VERA bleibt verantwortlich für die eigene Leistung: Organisation und " +
-        "Durchführung der Veranstaltung, sorgfältige Auswahl geeigneter Anlagen sowie des " +
-        "eingesetzten Trainer- und Betreuungspersonals, und die Sicherheitseinweisung.",
+        "Durchführung der Veranstaltung sowie die sorgfältige Auswahl einer geeigneten " +
+        "Veranstaltungsstätte. Trainer-, Einweisungs- und Betreuungspersonal vor Ort kann " +
+        "je nach Veranstaltung von VERA oder von der Veranstaltungsstätte gestellt werden; " +
+        "die Eventseite der jeweiligen Veranstaltung weist das aus. VERA schuldet die " +
+        "Sicherheitseinweisung als Ergebnis, unabhängig davon, wer sie durchführt.",
       "12.3 Diese Ziffer stellt die Verantwortungsbereiche klar; sie beschränkt die " +
         "Haftung von VERA nach Ziffer 11 nicht.",
     ],
@@ -1340,6 +1420,11 @@ export const de = {
       "Nachmittag an einem festen Datum fällt möglicherweise darunter. Ob das hier zutrifft " +
       "und wie die Information dann lauten muss, ist eine Rechtsfrage und keine " +
       "Programmierfrage.",
+    widerrufTerminHinweis:
+      "Tickets über den Ticketshop verkauft VERA ausschließlich für Veranstaltungen mit " +
+      "bereits feststehendem Termin; ohne Termin ist keine Buchung möglich. Bei individuell " +
+      "beauftragten Firmenveranstaltungen wird der Termin im jeweiligen Angebot vereinbart, " +
+      "bevor der Vertrag zustande kommt (siehe „Für Unternehmen“).",
     /* Ab hier KEIN Platzhalter mehr: Das sind die vom Betreiber
        festgelegten Bedingungen, und sie beschreiben genau das, was die
        Seite tatsächlich tut. Ändert sich der Ablauf, ändert sich

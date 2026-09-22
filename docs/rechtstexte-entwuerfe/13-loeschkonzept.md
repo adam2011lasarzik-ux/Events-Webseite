@@ -184,6 +184,21 @@ Streit wieder aufleben kann.]`
 > **Hinweis:** Nach Entscheidung 3.20 (Anlagenmodell) gibt es **keinen
 > Check-out**. Diese Klasse umfasst nur die Ankunftserfassung.
 
+> ✅ **Klargestellt am 22.09.2026.** Die tatsächlich als K4 gebaute
+> Klasse (`ANMELDEDATEN` in `lib/loeschfristen.ts`) ist **nicht** diese
+> hier beschriebene Papier-Anwesenheitsliste, sondern die
+> Datenbank-Kontaktdaten der Anmeldung (`Registration.kontaktVorname`
+> usw., `Participant.vorname`/`nachname`) — automatisiert anonymisiert,
+> Startzeitpunkt Ende des Kalenderjahres der Veranstaltung (nicht
+> „Ende der Veranstaltung" wie unten für die Papierliste angenommen).
+> Die hier beschriebene Papier-Anwesenheitsliste bleibt weiterhin
+> **nicht automatisierbar** und ist bislang nirgends als eigene Klasse
+> umgesetzt — sie müsste, falls sie je digitalisiert wird, eine eigene
+> Klasse mit eigenem Startzeitpunkt bekommen, nicht denselben Namen K4
+> wie die Anmeldedaten. Frist 3 Jahre und „kein Check-out" gelten für
+> beide gleichermaßen und sind insofern nicht falsch — nur die Angabe
+> zu *was* automatisiert wird, war ungenau.
+
 | | |
 |---|---|
 | **Umfasst** | ausgedruckte Anwesenheitsliste mit Häkchen; bei begleiteten Minderjährigen der Name der Begleitperson; heruntergeladene CSV-Dateien |

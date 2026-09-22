@@ -30,6 +30,7 @@ import {
   entscheide,
   faelligAnmeldedaten,
   faelligAufnahmewiderspruch,
+  faelligCheckliste,
   faelligEinverstaendnis,
   faelligGesundheit,
   faelligVorfall,
@@ -190,6 +191,37 @@ export async function faelligkeitenAuffrischen(): Promise<number> {
     if (istGleich) continue;
 
     await db.registration.update({ where: { id: a.id }, data: { faelligAm: soll } });
+    geaendert++;
+  }
+
+  /* K5: Checklisten hängen wie die Anmeldungen am Veranstaltungstermin.
+     Wird ein Termin verschoben, nachdem die Checkliste schon angelegt
+     wurde, muss faelligAm mitwandern — sonst löscht der Lauf am alten
+     Termin vorbei (docs/loeschkonzept-betrieb.md, K5).
+
+     Checkliste.eventId ist bewusst KEINE Prisma-Relation (wie bei
+     Vorfall/Zustimmungsnachweis auch) — die Termine werden deshalb in
+     einem zweiten, gesammelten Zugriff nachgeladen statt per `include`. */
+  const checklisten = await db.checkliste.findMany({
+    select: { id: true, eventId: true, faelligAm: true },
+  });
+  const checklistenEventIds = [...new Set(checklisten.map((c) => c.eventId))];
+  const checklistenEvents = await db.event.findMany({
+    where: { id: { in: checklistenEventIds } },
+    select: { id: true, startAt: true, endAt: true },
+  });
+  const terminNachEventId = new Map(
+    checklistenEvents.map((e) => [e.id, e.endAt ?? e.startAt]),
+  );
+  for (const c of checklisten) {
+    const termin = terminNachEventId.get(c.eventId) ?? null;
+    const soll = termin ? faelligCheckliste(termin) : null;
+    const istGleich =
+      (soll === null && c.faelligAm === null) ||
+      (soll !== null && c.faelligAm !== null && soll.getTime() === c.faelligAm.getTime());
+    if (istGleich) continue;
+    if (soll === null) continue; // faelligAm ist nicht nullable — ohne Termin nichts ändern
+    await db.checkliste.update({ where: { id: c.id }, data: { faelligAm: soll } });
     geaendert++;
   }
 

@@ -21,6 +21,7 @@ export function Footer({ t }: { t: Woerterbuch }) {
             <ul className={stil.liste}>
               <li><Link href={"/"}>{t.nav.events}</Link></li>
               <li><Link href={"/fuer-schulen"}>{t.nav.schulen}</Link></li>
+              <li><Link href={"/fuer-unternehmen"}>{t.nav.unternehmen}</Link></li>
               <li><Link href={"/ueber-vera"}>{t.nav.ueber}</Link></li>
               <li><Link href={"/faq"}>{t.nav.faq}</Link></li>
             </ul>

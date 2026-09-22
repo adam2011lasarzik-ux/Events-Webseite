@@ -971,7 +971,24 @@ der so nicht stattfindet.
 
 ## 16. Ihre Rechte
 
-**Entwurfstext:**
+> ✅ **Korrigiert am 22.09.2026, vom Nutzer bestätigt.** Zuständig ist
+> **nicht** die Berliner Beauftragte, sondern die **Landesbeauftragte
+> für den Datenschutz und für das Recht auf Akteneinsicht
+> Brandenburg**, Stahnsdorfer Damm 77, 14532 Kleinmachnow,
+> Poststelle@LDA.Brandenburg.de — weil das Einzelunternehmen in
+> Brandenburg angemeldet ist und von dort geführt wird. Die Berliner
+> Anschrift (Mühlenstr. 8a, 14167 Berlin) ist eine gemietete
+> Post-/Impressumsadresse und ändert die Hauptniederlassung nicht.
+> Bereits umgesetzt in `content/de.ts`
+> (`recht.datenschutzRechteBeschwerde`) und in
+> `public/dokumente/einverstaendniserklaerung-minderjaehrige.pdf`.
+> Offen, separat zu prüfen: Ob der Berliner Postdienstleister durch
+> Öffnen, Scannen oder digitales Speichern der Geschäftspost eine
+> eigene Auftragsverarbeiter-Rolle hat — dafür fehlt bislang jede
+> Vertragsprüfung, er wird deshalb nirgends als Auftragsverarbeiter
+> genannt.
+
+**Entwurfstext (Stand vor der Korrektur, nur zum Nachlesen):**
 
 > Sie haben das Recht,
 >
@@ -1016,6 +1033,6 @@ DSGVO statt — das ist im Code belegbar, es gibt keine solche Funktion.
 | D-5 | Region des Backblaze-Buckets | nur im Konto ablesbar |
 | D-6 | AV-Verträge: welche liegen vor | Tatsachenfrage |
 | D-7 | ~~Regelaufbewahrungsfrist für Anmeldungen~~ | ✅ gelöst durch das Löschkonzept (K1–K7, Ziffer 15) — die Fristen selbst sind aber weiterhin fachlich zu bestätigen |
-| D-8 | ~~Anschrift der Aufsichtsbehörde~~ | ✅ recherchiert (Dokument 14): Berliner Beauftragte für Datenschutz und Informationsfreiheit, Alt-Moabit 59–61, 10555 Berlin — **vor Verwendung auf der Behördenseite gegenprüfen** |
+| D-8 | ~~Anschrift der Aufsichtsbehörde~~ | ✅ **erledigt am 22.09.2026, vom Nutzer bestätigt.** Nicht Berlin, sondern die Landesbeauftragte für den Datenschutz und für das Recht auf Akteneinsicht Brandenburg, Stahnsdorfer Damm 77, 14532 Kleinmachnow (Sitz des Einzelunternehmens) — siehe Ziffer 16 oben |
 | D-9 | Datenschutzbeauftragter nötig? | Bewertung, auch wegen Gesundheitsangaben |
 | D-10 | Foto-Einwilligung: alle Angaben aus Dokument 06 | Entscheidung des Unternehmers |

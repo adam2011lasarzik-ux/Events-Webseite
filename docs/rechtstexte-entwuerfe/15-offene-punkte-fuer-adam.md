@@ -48,8 +48,9 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 | ~~1.7~~ | ✅ **Beantwortet 18.09.2026:** Bucket „Vera-Sicherungen" liegt in der EU (`eu-central-003`). Backblaze, Inc. selbst bleibt aber eine US-Gesellschaft — der Drittlandbezug ist damit nicht vollständig erledigt, siehe Abschnitt F | Backblaze-Konto |
 | ~~1.8~~ | ✅ **Am 20.09.2026 vollständig erledigt.** Adam hat im eigenen Konto geprüft: **Der DPA von UptimeRobot ist automatisch in die Nutzungsbedingungen einbezogen; eine gesonderte Unterschrift ist nicht erforderlich.** Damit gilt für **alle vier** Dienstleister dasselbe — Hostinger, Stripe, Backblaze und UptimeRobot binden den Auftragsverarbeitungsvertrag per Verweis in die Kontoeröffnung ein. Es ist nirgends etwas zu unterschreiben, anzufordern oder nachzureichen; **Art. 28 Abs. 3 DS-GVO ist für alle vier erfüllt**. Die frühere Unsicherheit hatte einen sprachlichen Grund: UptimeRobot beschrieb seinen DPA als „verfügbar" und „auf Anfrage zugänglich", was nach einem gesonderten Schritt klang — der Blick ins Konto hat das geklärt. | ✅ erledigt |
 | ~~2.15~~ | ⚠️ **Beantwortet 18.09.2026: Noch keine Versicherung vorhanden.** Wichtiger offener Punkt **vor dem ersten echten Event** (nicht mehr Testmodus) — ohne sie trägt VERA jedes Haftungsrisiko selbst. Keine Versicherung wird in den Texten behauptet (Dokument 03, Ziffer 11.3). | Versicherungsunterlagen |
-| ~~2.16~~ | ✅ **Beantwortet 18.09.2026:** Die Halle stellt Trainer und Ausrüstung. Erste Einordnung: Der Trainer ist trotzdem voraussichtlich Erfüllungsgehilfe von VERA nach § 278 BGB, weil er die von VERA versprochene Betreuung erbringt — **fachlich zu bestätigen** anhand des Vertrags zwischen VERA und der Halle (Dokument 03, Ziffer 12) | eigener Vertrag mit der Halle |
-| 3.5/3.6 | ⬜ **Geprüft 18.09.2026, weiterhin offen:** Öffentliche Playtomic-Seite von Quality Padel nennt keine Hausordnung und keine Schuhwerk-Vorgabe. Adam fragt direkt bei der Halle nach | direkt bei der Halle |
+| ~~2.16~~ | ✅ **Beantwortet 18.09.2026:** Die Halle stellt Trainer und Ausrüstung. Erste Einordnung: Der Trainer ist trotzdem voraussichtlich Erfüllungsgehilfe von VERA nach § 278 BGB, weil er die von VERA versprochene Betreuung erbringt — **fachlich zu bestätigen** anhand des Vertrags zwischen VERA und der Halle (Dokument 03, Ziffer 12). Seit 22.09.2026 ausdrücklich bekräftigt: Diese Einordnung bleibt eine vorläufige Einschätzung und wird **nicht** in AGB, Datenschutzerklärung oder anderem Rechtstext als feststehende rechtliche Tatsache behauptet, solange sie nicht durch den Rechtstext-Prüfer bestätigt ist (`content/de.ts`, AGB Ziffer 12.2 nennt deshalb nur, wer den Trainer stellt, nicht seine rechtliche Einordnung). | eigener Vertrag mit der Halle |
+| 3.5/3.6 | ⬜ **Geprüft 18.09.2026, weiterhin offen:** Öffentliche Playtomic-Seite von Quality Padel nennt keine Hausordnung und keine Schuhwerk-Vorgabe. Adam fragt direkt bei der Halle nach (Dokument 16, Fragen 1–2) | direkt bei der Halle |
+| 3.7 | 🛑 **Neu am 22.09.2026: Haftpflichtversicherung der Halle für dieses Event.** Adam geht davon aus, dass die Haftpflicht der Halle das Event abdeckt (auch VERAs Tätigkeit und die Teilnehmenden), hat das aber noch nicht schriftlich von der Halle bestätigt bekommen (Dokument 16, Frage 6). Bis zur schriftlichen Bestätigung wird **an keiner Stelle** ein Versicherungsschutz zugunsten von VERA behauptet. Für jeden weiteren Veranstaltungsort ist das unabhängig davon neu zu klären — eine Zusage der Halle in Falkensee deckt keinen anderen Ort. | direkt bei der Halle |
 | ~~6.4~~ | ✅ **Erledigt am 20.09.2026 — die Frage hat sich aufgelöst.** Entscheidung 6.4 hat Ziffer 8 der Hausordnung so gefasst, dass sie **unabhängig** davon gilt, ob es Schließfächer gibt (8.3 ist ein Bedingungssatz). Es ist nichts mehr abzulesen und bei einer Veranstaltung in einer anderen Halle nichts nachzuziehen. | — |
 
 ---
@@ -522,6 +523,20 @@ wofür VERA Fotos überhaupt braucht.
 > Platzhalter — **alle 18 Fragen aus Gruppe 5 sind offen.** Diese Gruppe
 > ist nur relevant, sobald VERA tatsächlich Firmen- oder
 > Schulaufträge annehmen will; bis dahin niedrige Priorität.
+>
+> ✅ **Neu am 22.09.2026:** Die Anfrageseite existiert jetzt
+> (`/fuer-unternehmen`, `content/de.ts` → `unternehmen`): kein
+> Online-Buchungsweg, nur eine formlose Anfrage per E-Mail, Preis/
+> Termin/Ort/Leistungsumfang folgen im individuellen Angebot — genau
+> die in 5.1 bestätigte Regel. Die Seite nennt zur Orientierung die
+> vom Nutzer bestätigte Zahlungsmechanik (Abschlag ab 1.000 € Auftrags­
+> wert, Zusatzleistungen 60 €/Stunde, Ausfallstaffel 0/25/50/80 %,
+> Dokument 04 Ziffern 9.3a/10.3a/11.2) ausdrücklich als **informative
+> Übersicht, nicht als geprüfte AGB-Klausel** — Dokument 04 selbst trägt
+> weiterhin den Vermerk „nicht anwaltlich geprüft". Kein neuer Preis
+> wurde erfunden; es gibt weiterhin keine Preisstaffel pro Person für
+> B2B, B2B-Preise werden vollständig frei im Angebot verhandelt (siehe
+> Nutzerantwort vom 22.09.2026: „Gemeint war die Zahlungsmechanik").
 
 Kernfragen, wenn es losgehen soll: Sollen Firmen/Schulen online buchen
 (5.1)? Welche Auftragsarten (5.2)? Wer ist bei Klassenbuchungen
