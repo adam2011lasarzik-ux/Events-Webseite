@@ -765,15 +765,22 @@ model Vorfall {
 /// Entsteht, wenn die vollständige Einverständniserklärung nach drei
 /// Jahren vernichtet wird. Enthält bewusst KEIN Geburtsdatum, KEINE
 /// Mobilnummer und KEINE Gesundheitsangaben.
+///
+/// `selbstVerlassenGestattet` ist am 22.09.2026 entfallen: Es hielt
+/// fest, ob die erziehungsberechtigte Person das selbstständige
+/// Verlassen erlaubt hatte. Seit Adams Entscheidung dürfen ALLE
+/// minderjährigen Teilnehmenden jederzeit selbstständig gehen — es
+/// gibt also nichts mehr zu unterscheiden, und ein Feld, das eine
+/// Erlaubnis dokumentiert, die niemand mehr erteilen muss, wäre ein
+/// Widerspruch zum Rechtstext. Echte Daten gab es noch nicht.
 model Zustimmungsnachweis {
   id String @id @default(cuid())
 
-  eventId                  String
-  veranstaltungAm          DateTime
+  eventId          String
+  veranstaltungAm  DateTime
   /// Name der minderjährigen Person — der einzige Personenbezug.
-  teilnehmerName           String
-  zustimmungLagVor         Boolean  @default(true)
-  selbstVerlassenGestattet Boolean  @default(false)
+  teilnehmerName   String
+  zustimmungLagVor Boolean  @default(true)
 
   angelegtAm   DateTime     @default(now())
   faelligAm    DateTime
@@ -1025,7 +1032,6 @@ enum VeroeffentlichungVerantwortlich {
  * NACHWEIS über Widerspruch und Prüfung, aber bis hierher gab es
  * nirgends im System einen Datensatz für die Aufnahme SELBST — wo sie
  * hängt, wer dafür verantwortlich ist, und ob sie noch online steht.
- *
  * ── Warum kein eigenes Dateifeld ──
  * Die Aufnahme selbst liegt nicht in dieser Datenbank — sie liegt auf
  * der Website von VERA, auf der Website der Veranstaltungsstätte oder
@@ -1033,7 +1039,6 @@ enum VeroeffentlichungVerantwortlich {
  * hier aus nicht automatisch entfernen. Diese Zeile ist deshalb kein
  * Dateispeicher, sondern das PROTOKOLL: wo etwas veröffentlicht wurde
  * und — sobald ein Mensch es dort tatsächlich entfernt hat — wann.
- *
  * ── Die Verbindung zu K8 ──
  * `entferntAm` ist NICHT dasselbe wie `Event.aufnahmenOfflineAm`.
  * Erst wenn für ein Event KEINE einzige Veroeffentlichung mehr offen
@@ -1042,7 +1047,6 @@ enum VeroeffentlichungVerantwortlich {
  * in lib/aufnahmen.ts. Genau das setzt „solange Inhalte veröffentlicht
  * sind, bleiben die Widerspruchsnachweise gespeichert" technisch um,
  * statt es nur zu behaupten.
- *
  * ── Warum diese Zeile selbst KEINE eigene Löschklasse hat ──
  * Sie enthält keine personenbezogenen Daten Teilnehmender — nur
  * organisatorische Fakten (Ort, Zweck, Verantwortlicher, Zeitpunkte).

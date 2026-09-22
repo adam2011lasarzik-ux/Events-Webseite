@@ -84,7 +84,7 @@ export default async function ZustimmungsnachweiseSeite({
                 <tr>
                   <th>Person</th>
                   <th>Veranstaltung</th>
-                  <th>Vermerke</th>
+                  <th>Vermerk</th>
                   <th>fällig zur Löschung</th>
                 </tr>
               </thead>
@@ -97,12 +97,7 @@ export default async function ZustimmungsnachweiseSeite({
                       <br />
                       <code>{n.eventId}</code>
                     </td>
-                    <td>
-                      {n.zustimmungLagVor && <div>Zustimmung lag vor</div>}
-                      {n.selbstVerlassenGestattet && (
-                        <div>Selbstständiges Verlassen gestattet</div>
-                      )}
-                    </td>
+                    <td>{n.zustimmungLagVor && <div>Zustimmung lag vor</div>}</td>
                     <td>{datum(n.faelligAm)}</td>
                   </tr>
                 ))}
@@ -137,10 +132,6 @@ export default async function ZustimmungsnachweiseSeite({
           <label className={stil.haken}>
             <input type="checkbox" name="zustimmungLagVor" value="an" defaultChecked />
             <span>Zustimmung der Erziehungsberechtigten lag vor</span>
-          </label>
-          <label className={stil.haken}>
-            <input type="checkbox" name="selbstVerlassenGestattet" value="an" />
-            <span>Selbstständiges Verlassen der Veranstaltung war gestattet</span>
           </label>
           <div className={stil.knopfReihe}>
             <button type="submit" className={stil.knopf}>

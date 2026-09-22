@@ -137,6 +137,9 @@ await sende(
     eventId: event.id,
     teilnehmerName: "S-Probe Teilnehmer",
     zustimmungLagVor: "an",
+    /* Bewusst mitgeschickt, obwohl es das Feld nicht mehr gibt: Ein
+       Formularwert, den der Server nicht kennt, darf nichts bewirken
+       und erst recht keinen Fehler auslösen. */
     selbstVerlassenGestattet: "an",
   },
   sitzung.cookie,
@@ -145,9 +148,11 @@ const k3Angelegt = await db.zustimmungsnachweis.findFirst({
   where: { eventId: event.id, teilnehmerName: "S-Probe Teilnehmer" },
 });
 pruefe("K3 mit Sitzung angelegt: Datensatz existiert", k3Angelegt !== null);
+pruefe("K3: Häkchen korrekt übernommen", k3Angelegt?.zustimmungLagVor === true);
 pruefe(
-  "K3: Häkchen korrekt übernommen",
-  k3Angelegt?.zustimmungLagVor === true && k3Angelegt?.selbstVerlassenGestattet === true,
+  "K3: das Feld „selbstständiges Verlassen gestattet“ gibt es nicht mehr",
+  k3Angelegt !== null && !("selbstVerlassenGestattet" in k3Angelegt),
+  "Minderjährige dürfen ausnahmslos selbstständig gehen",
 );
 pruefe(
   "K3: faelligAm serverseitig aus dem Veranstaltungstermin berechnet, nicht erfunden",

@@ -232,11 +232,21 @@ erschienen ist, überwacht aber nicht, wer das Gelände wann verlässt.
 Für die Organisation des Hin- und Rückwegs ist die
 erziehungsberechtigte Person verantwortlich.
 
-6.5 Die erziehungsberechtigte Person muss während der gesamten
-Veranstaltung unter der angegebenen Mobilnummer erreichbar sein. Hat sie
-das selbstständige Verlassen des Geländes nicht erlaubt, weist VERA die
-minderjährige Person nicht des Geländes; eine Beaufsichtigung während
-der Zeit bis zur Abholung übernimmt VERA nicht.
+6.5 Minderjährige dürfen die Veranstaltung jederzeit selbstständig
+verlassen; eine Abmeldung ist dafür nicht erforderlich. Eine Abholung
+durch VERA und eine Beaufsichtigung bis zum Eintreffen der
+erziehungsberechtigten Person finden nicht statt. Die angegebene
+Mobilnummer dient als Notfallkontakt.
+
+> 🛑 **Ersetzt am 22.09.2026 (Adams Korrektur).** Vorher stand hier:
+> „Die erziehungsberechtigte Person muss während der gesamten
+> Veranstaltung unter der angegebenen Mobilnummer erreichbar sein. Hat
+> sie das selbstständige Verlassen des Geländes nicht erlaubt, weist
+> VERA die minderjährige Person nicht des Geländes; eine
+> Beaufsichtigung während der Zeit bis zur Abholung übernimmt VERA
+> nicht." Diese Fassung setzte eine Abholung voraus, die es nicht
+> gibt. Live umgesetzt in `content/de.ts` (AGB Ziffer 6 und 9.6) und
+> im Elternformular.
 
 6.6 Statt einer Aufsichtsübernahme schuldet VERA jeder teilnehmenden
 Person eine Sicherheitseinweisung vor dem ersten Spielen (siehe Ziffer

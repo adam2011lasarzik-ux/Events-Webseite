@@ -14,7 +14,7 @@
 > |---|---|---|
 > | Ziffer 8.1–8.4 (Fundsachen und Wertgegenstände) | **AGB Ziffer 9.4** | in einen Absatz gefasst; Verweis auf Ziffer 11 beibehalten, **keine** pauschale Haftungsfreistellung |
 > | Ziffer 7.1/7.2 (Ausschluss, auch ohne Vorwarnung bei Gefährdung) | **AGB Ziffer 9.5** | erweitert um Selbstgefährdung und Missachtung von Sicherheitsanweisungen; nennt die Verweisung vom Gelände |
-> | Ziffer 7.3 (Sonderfall Minderjährige) | **AGB Ziffer 9.6** | unverändert im Kern: keine Verweisung vom Gelände, aber auch keine Beaufsichtigung |
+> | Ziffer 7.3 (Minderjährige beim Ausschluss) | **AGB Ziffer 9.6** | am 22.09.2026 korrigiert: Die erziehungsberechtigte Person wird informiert, mehr nicht — keine Abholung, keine Beaufsichtigung, kein Zurückhalten |
 > | Ziffer 2 (Anweisungen des Personals) | AGB Ziffer 9.1 | war schon vorher live |
 > | Vorbemerkung (Verhältnis zur Hausordnung der Halle) | AGB Ziffer 9.2 | war schon vorher live |
 > | Ziffer 6.1 (sorgfältige Nutzung) | AGB Ziffer 9.3 | war schon vorher live |
@@ -269,11 +269,22 @@ sie
 vorherigen Hinweis**.
 
 7.3 Bei minderjährigen Teilnehmenden wird die erziehungsberechtigte
-Person unverzüglich unter der angegebenen Mobilnummer informiert. Hat
-sie das selbstständige Verlassen erlaubt, kann die Person das Gelände
-nach dem Ausschluss verlassen. Hat sie es nicht erlaubt, weisen wir die
-Person nicht des Geländes; eine Beaufsichtigung bis zur Abholung
-übernehmen wir nicht.
+Person unverzüglich unter der als Notfallkontakt angegebenen
+Mobilnummer informiert. Die minderjährige Person kann das Gelände
+verlassen; eine Abholung durch VERA und eine Beaufsichtigung bis zum
+Eintreffen der erziehungsberechtigten Person finden nicht statt.
+
+> 🛑 **Ersetzt am 22.09.2026 (Adams Korrektur).** Die frühere Fassung
+> unterschied danach, ob die erziehungsberechtigte Person das
+> selbstständige Verlassen **erlaubt** hatte, und ließ die Person im
+> Fall „nicht erlaubt" auf dem Gelände. Diese Unterscheidung gibt es
+> nicht mehr: **Alle** minderjährigen Teilnehmenden dürfen jederzeit
+> selbstständig gehen, es gibt keine Abholung und keine Wartezeit. Die
+> Formulierung oben ist entsprechend ersetzt; die alte Fassung lautete:
+> „Hat sie das selbstständige Verlassen erlaubt, kann die Person das
+> Gelände nach dem Ausschluss verlassen. Hat sie es nicht erlaubt,
+> weisen wir die Person nicht des Geländes; eine Beaufsichtigung bis
+> zur Abholung übernehmen wir nicht."
 
 7.4 Ein Anspruch auf Erstattung besteht bei einem berechtigten
 Ausschluss nicht. Dokument 03, Ziffer 7.5 Satz 3 gilt entsprechend —

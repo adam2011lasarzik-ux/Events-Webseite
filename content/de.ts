@@ -1177,15 +1177,14 @@ export const de = {
         "erforderliche Erklärung bei Veranstaltungsbeginn nicht vor, kann die Teilnahme des " +
         "Minderjährigen abgelehnt werden. Gesetzliche und vertragliche Erstattungsansprüche " +
         "bleiben unberührt.",
-      "VERA übernimmt keine Aufsicht über unbegleitete minderjährige Teilnehmende. Es gibt " +
-        "kein von VERA festgelegtes Mindestalter für die Teilnahme oder für das " +
-        "selbstständige Kommen und Gehen — das entscheidet die erziehungsberechtigte Person " +
-        "mit ihrer Unterschrift auf der Einverständniserklärung. VERA erfasst beim Ankommen, " +
-        "wer erschienen ist, überwacht aber nicht, wer das Gelände wann verlässt. Für die " +
-        "Organisation des Hin- und Rückwegs ist die erziehungsberechtigte Person " +
-        "verantwortlich; sie muss während der gesamten Veranstaltung unter der angegebenen " +
-        "Mobilnummer erreichbar sein und den Minderjährigen erforderlichenfalls zeitnah " +
-        "abholen.",
+      "VERA übernimmt keine Aufsicht über minderjährige Teilnehmende. Es gibt kein von VERA " +
+        "festgelegtes Mindestalter. Minderjährige dürfen die Veranstaltung jederzeit " +
+        "selbstständig verlassen; eine Abmeldung ist dafür nicht erforderlich. VERA erfasst " +
+        "beim Ankommen, wer erschienen ist, überwacht aber nicht, wer das Gelände wann " +
+        "verlässt. Eine Abholung durch VERA und eine Beaufsichtigung bis zum Eintreffen der " +
+        "erziehungsberechtigten Person finden nicht statt. Für die Organisation des Hin- und " +
+        "Rückwegs ist die erziehungsberechtigte Person verantwortlich; mit der Anmeldung " +
+        "stimmt sie diesem Ablauf zu. Die angegebene Mobilnummer dient als Notfallkontakt.",
       "Statt einer Aufsichtsübernahme schuldet VERA jeder teilnehmenden Person eine " +
         "Sicherheitseinweisung vor dem ersten Spielen sowie erkennbare Ansprechpersonen, die " +
         "bei einer erkannten Gefahr eingreifen.",
@@ -1286,12 +1285,20 @@ export const de = {
        - 9.5/9.6 (Ausschluss) ergänzen die frühere Fassung um
          Selbstgefährdung und die Missachtung von Sicherheitsanweisungen
          und benennen die Verweisung vom Gelände.
-         9.6 ist der Grund, warum das kein Widerspruch zum
-         Anlagenmodell ist: Eine minderjährige Person, die das Gelände
-         laut Einverständniserklärung nicht allein verlassen darf, wird
-         NICHT hinausgewiesen (Dokument 09, Ziffer 7.3) — beaufsichtigt
-         wird sie aber auch nicht, sonst wäre es die Aufsichtsübernahme,
-         die Entscheidung 3.20 gerade ausschließt.
+
+       Korrektur vom 22.09.2026 (Adams Entscheidung, gilt für ALLE
+       Stellen im Projekt): Es gibt KEINE Abhol-, Warte- oder
+       Zurückhaltungsregel mehr. Minderjährige dürfen die Veranstaltung
+       jederzeit selbstständig verlassen — ohne Abmeldung, ohne
+       Check-out, ohne dass die erziehungsberechtigte Person sie
+       abholen müsste. Die frühere Unterscheidung "Verlassen erlaubt /
+       nicht erlaubt" (Dokument 05, Dokument 09 Ziffer 7.3) ist damit
+       gegenstandslos; das Datenbankfeld `selbstVerlassenGestattet` ist
+       entfallen. 9.6 sagt deshalb nur noch, wer bei einem Ausschluss
+       informiert wird — nicht mehr, dass jemand zurückgehalten oder
+       beaufsichtigt würde. Die Mobilnummer bleibt als
+       Notfallkontakt; die Verantwortung für Hin- und Rückweg liegt
+       unverändert bei der erziehungsberechtigten Person (Ziffer 6).
 
        Die Dopplung zu Ziffer 6 Satz 5 (Ausschluss Minderjähriger)
        bleibt bewusst stehen: Dieser Satz ist mit der
@@ -1322,11 +1329,12 @@ export const de = {
         "Veranstaltungsgelände verweisen. Bei einer Gefährdung kann der Ausschluss ohne " +
         "vorherigen Hinweis erfolgen. Ein Anspruch auf Erstattung besteht in diesem Fall " +
         "nicht, soweit der Ausschluss berechtigt war.",
-      "9.6 Bei minderjährigen Teilnehmenden, deren erziehungsberechtigte Person das " +
-        "selbstständige Verlassen der Veranstaltung nicht gestattet hat, erfolgt keine " +
-        "Verweisung vom Gelände. Stattdessen wird die erziehungsberechtigte Person " +
-        "unverzüglich unter der angegebenen Mobilnummer informiert. Eine Beaufsichtigung " +
-        "bis zu deren Eintreffen übernimmt VERA nicht (siehe Ziffer 6).",
+      "9.6 Bei minderjährigen Teilnehmenden wird die erziehungsberechtigte Person über " +
+        "einen Ausschluss unverzüglich unter der als Notfallkontakt angegebenen Mobilnummer " +
+        "informiert. Auch in diesem Fall gilt Ziffer 6: Minderjährige dürfen die " +
+        "Veranstaltung selbstständig verlassen; eine Abholung durch VERA oder eine " +
+        "Beaufsichtigung bis zum Eintreffen der erziehungsberechtigten Person findet nicht " +
+        "statt.",
     ],
 
     agbGesundheitUeberschrift: "10. Gesundheitliche Eigenverantwortung",

@@ -339,9 +339,16 @@ pruefe(
    Übernommen aus Dokument 09, das dafür NICHT als eigene Seite
    veröffentlicht wird. Geprüft wird hier vor allem, was NICHT
    dastehen darf: die pauschale Haftungsfreistellung für
-   abhandengekommene Sachen (§ 309 Nr. 7 Buchst. b BGB) und eine
-   Verweisung Minderjähriger vom Gelände, die dem Anlagenmodell
-   widerspräche. */
+   abhandengekommene Sachen (§ 309 Nr. 7 Buchst. b BGB) und jede
+   Abhol-, Warte- oder Zurückhaltungsregel für Minderjährige.
+
+   Korrektur vom 22.09.2026: Hier stand einen Tag lang das Gegenteil —
+   geprüft wurde, dass Minderjährige ohne Erlaubnis NICHT vom Gelände
+   gewiesen werden und dass VERA bis zum Eintreffen der Eltern nicht
+   beaufsichtigt. Beides setzte eine Abholung voraus, die es nach
+   Adams Entscheidung nicht gibt: Minderjährige dürfen jederzeit
+   selbstständig gehen. Die Prüfungen sind deshalb umgedreht — sie
+   halten die alte Regel jetzt fern, statt sie zu verlangen. */
 pruefe(
   "AGB: regeln persönliche Gegenstände und Wertsachen",
   /Für persönliche Gegenstände, Kleidung, Sportausrüstung und Wertsachen sind Sie selbst verantwortlich/i.test(
@@ -375,12 +382,33 @@ pruefe(
   /vom Veranstaltungsgelände verweisen/i.test(agbText),
 );
 pruefe(
-  "AGB: weisen Minderjährige ohne Erlaubnis NICHT vom Gelände",
-  /erfolgt keine Verweisung vom Gelände/i.test(agbText),
+  "AGB: Minderjährige dürfen die Veranstaltung selbstständig verlassen",
+  /Minderjährige dürfen die Veranstaltung jederzeit selbstständig verlassen/i.test(agbText),
 );
 pruefe(
-  "AGB: sagen auch beim Ausschluss keine Beaufsichtigung zu (Anlagenmodell)",
-  /Beaufsichtigung bis zu deren Eintreffen übernimmt VERA nicht/i.test(agbText),
+  "AGB: sagen ausdrücklich KEINE Abholung und KEINE Beaufsichtigung zu",
+  /Eine Abholung durch VERA und eine Beaufsichtigung bis zum Eintreffen der erziehungsberechtigten Person finden nicht statt/i.test(
+    agbText,
+  ),
+);
+pruefe(
+  "AGB: verlangen KEINE Abholung durch die Erziehungsberechtigten",
+  !/erforderlichenfalls zeitnah abholen/i.test(agbText) &&
+    !/bis zur Abholung/i.test(agbText) &&
+    !/holt? (?:es|ihn|sie) bei Bedarf ab/i.test(agbText),
+);
+pruefe(
+  "AGB: halten Minderjährige nicht zurück (keine Wartepflicht)",
+  !/lässt sie nicht allein gehen/i.test(agbText) &&
+    !/nicht des Geländes/i.test(agbText),
+);
+pruefe(
+  "AGB: nennen die Mobilnummer als Notfallkontakt",
+  /Mobilnummer dient als Notfallkontakt/i.test(agbText),
+);
+pruefe(
+  "AGB: belassen Hin- und Rückweg bei der erziehungsberechtigten Person",
+  /Hin- und Rückwegs ist die erziehungsberechtigte Person verantwortlich/i.test(agbText),
 );
 pruefe(
   "AGB: nennen KEINE allgemeine Veranstaltungsdauer",
@@ -436,9 +464,12 @@ pruefe(
   "AGB: sagen KEINE Betreuung/Aufsicht durch VERA mehr zu (Anlagenmodell)",
   !/Betreuung durch VERA Events beginnt mit dem vereinbarten Check-in/i.test(agbText),
 );
+/* Seit 22.09.2026 ohne das Wort „unbegleitete": Die Aussage gilt für
+   ALLE minderjährigen Teilnehmenden, nicht nur für die ohne Begleitung
+   — VERA beaufsichtigt niemanden, und alle dürfen jederzeit gehen. */
 pruefe(
-  "AGB: übernehmen ausdrücklich keine Aufsicht über unbegleitete Minderjährige",
-  /VERA übernimmt keine Aufsicht über unbegleitete minderjährige Teilnehmende/i.test(agbText),
+  "AGB: übernehmen ausdrücklich keine Aufsicht über Minderjährige",
+  /VERA übernimmt keine Aufsicht über minderjährige Teilnehmende/i.test(agbText),
 );
 pruefe(
   "AGB: schuldet stattdessen eine Sicherheitseinweisung",

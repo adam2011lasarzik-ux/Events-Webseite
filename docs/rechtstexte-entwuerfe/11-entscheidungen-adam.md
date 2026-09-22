@@ -1108,6 +1108,15 @@ Frage 3.5.]`
 
 ### Die eine Formulierungsfrage, die dabei sauber gelöst werden muss
 
+> 🛑 **Überholt am 22.09.2026.** Dieser ganze Abschnitt beruht auf der
+> Annahme, die Eltern könnten das selbstständige Verlassen verweigern.
+> Adam hat entschieden, dass es diese Möglichkeit nicht gibt: **Alle**
+> minderjährigen Teilnehmenden dürfen jederzeit gehen, niemand wird
+> zurückgehalten, niemand wird abgeholt. Damit erledigt sich auch die
+> hier gesuchte „Unterlassen statt Leistung"-Formulierung — es gibt
+> nichts mehr zu unterlassen. Der Abschnitt bleibt als Beleg des
+> Denkwegs stehen.
+
 Haben die Eltern das selbstständige Verlassen **nicht** erlaubt und soll
 die Person vorzeitig gehen, kann VERA sie nicht hinausschicken. Sie
 bleibt, bis jemand sie abholt.

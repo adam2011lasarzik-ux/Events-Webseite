@@ -113,10 +113,21 @@ Ferienfreizeit.
 > Regelungen einbauen, die unnötig wieder eine dauerhafte Aufsicht oder
 > Betreuung durch VERA voraussetzen." — Adam, wörtlich
 
+> 🛑 **Die ersten beiden Zeilen sind am 22.09.2026 durch Adams
+> Korrektur ersetzt worden.** Es gibt **keine** Unterscheidung mehr
+> danach, ob das selbstständige Verlassen erlaubt wurde: **Alle**
+> minderjährigen Teilnehmenden dürfen die Veranstaltung jederzeit
+> selbstständig verlassen — ohne Abmeldung, ohne Check-out, ohne
+> Abholung durch VERA und ohne Beaufsichtigung bis zum Eintreffen der
+> Eltern. Damit ist auch das Datenbankfeld `selbstVerlassenGestattet`
+> entfallen (Migration `20260922143925_zustimmungsnachweis_ohne_selbstverlassen`).
+> Die Zeilen bleiben zur Nachvollziehbarkeit stehen, gelten aber
+> nicht mehr.
+
 | Fall | Was geschieht |
 |---|---|
-| Die erziehungsberechtigte Person hat das selbstständige Verlassen **erlaubt** | die Person kann jederzeit gehen, keine Abmeldung |
-| Die erziehungsberechtigte Person hat es **nicht erlaubt** | VERA weist die Person nicht des Geländes und lässt sie nicht allein gehen. Eine **Beaufsichtigung** während der Wartezeit bis zur Abholung übernimmt VERA **nicht** |
+| ~~Die erziehungsberechtigte Person hat das selbstständige Verlassen **erlaubt**~~ → **gilt jetzt für alle** | die Person kann jederzeit gehen, keine Abmeldung |
+| ~~Die erziehungsberechtigte Person hat es **nicht erlaubt**~~ → **entfallen** | ~~VERA weist die Person nicht des Geländes und lässt sie nicht allein gehen. Eine **Beaufsichtigung** während der Wartezeit bis zur Abholung übernimmt VERA **nicht**~~ |
 | Unwohlsein oder Verletzung | Erste Hilfe je nach Situation, bei Bedarf Rettungsdienst; die erziehungsberechtigte Person bzw. der Notfallkontakt wird informiert |
 | Ausschluss wegen Fehlverhaltens | die erziehungsberechtigte Person wird informiert |
 
@@ -238,10 +249,15 @@ Mobilnummer erreichbar.
 **selbstständig und ohne Abmeldung** zu betreten und zu verlassen —
 auch vor dem offiziellen Ende.
 
-  ☐ *abweichend:* Die Person darf **nicht** selbstständig gehen. Hat sie
-  das nicht erlaubte Verlassen vor, wird sie nicht des Geländes
-  gewiesen; eine Beaufsichtigung bis zur Abholung übernimmt VERA nicht
-  (siehe Seite 2).
+> 🛑 **Am 22.09.2026 gestrichen (Adams Korrektur):** Das Ankreuzfeld
+> „*abweichend:* Die Person darf **nicht** selbstständig gehen. Hat sie
+> das nicht erlaubte Verlassen vor, wird sie nicht des Geländes
+> gewiesen; eine Beaufsichtigung bis zur Abholung übernimmt VERA nicht"
+> gibt es nicht mehr. Alle minderjährigen Teilnehmenden dürfen
+> jederzeit selbstständig gehen; es gibt keine abweichende Wahl und
+> damit auch kein Feld dafür — im ausgelieferten Formular
+> (`public/dokumente/…pdf`, erzeugt von
+> `werkzeuge/einverstaendniserklaerung.py`) ist es entfallen.
 
 ☐ Ich habe die Hinweise auf Seite 2 gelesen — insbesondere dazu, dass
 VERA **keine Aufsicht** über die teilnehmende Person übernimmt.
