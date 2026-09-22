@@ -289,7 +289,8 @@ Löschung von Klasse 4.
 | **Startzeitpunkt** | **Abschluss des Vorgangs** — nicht das Veranstaltungsdatum |
 | **Prüffrist** | 3 Jahre nach Abschluss |
 | **Löschfrist** | siehe Varianten |
-| **Rechtsgrundlage** | Art. 6 Abs. 1 Buchst. f, Art. 17 Abs. 3 Buchst. e DSGVO; §§ 195, 199 BGB |
+| **Rechtsgrundlage — Grundfrist (kein bekannter Streit)** | Art. 6 Abs. 1 Buchst. f DSGVO als dokumentierte, kategorienbasierte Interessenabwägung; §§ 195, 199 BGB liefern dafür die Obergrenze (Verjährungshöchstfrist), **nicht** die Pflicht selbst |
+| **Rechtsgrundlage — bei laufendem/drohendem Verfahren** | Art. 17 Abs. 3 Buchst. e DSGVO — ausschließlich für die Löschsperre, nicht für die Grundfrist |
 | **Aktion** | löschen bzw. vernichten |
 | **Ausnahme** | solange ein Verfahren läuft, keine Löschung |
 
@@ -312,6 +313,68 @@ Löschung von Klasse 4.
 > ⚖️ **Nicht abschließend belegt.** Ob 30 Jahre im Einzelfall
 > verhältnismäßig sind, ist eine Wertung. **Keine endgültige Frist**,
 > bis das geprüft ist.
+
+> ✅ **Drei Präzisierungen, vom Nutzer bestätigt am 22.09.2026 — nach
+> rechtlicher Prüfung anhand §§ 195, 199 BGB (insbesondere der
+> Unterscheidung Abs. 2/Abs. 3), der VVG-Reform 2008 und Art. 5 Abs. 1
+> Buchst. e, Art. 6 Abs. 1 Buchst. f, Art. 17 Abs. 3 Buchst. e DSGVO.
+> **Die Zahlen 10 und 30 Jahre ändern sich dabei nicht** — präzisiert
+> wird nur, worauf sie sich stützen und worauf nicht.
+>
+> **1. Zwei getrennte Rechtsgrundlagen, nicht eine gemeinsame.**
+> Bisher stand hier "Art. 6 Abs. 1 Buchst. f, Art. 17 Abs. 3 Buchst. e
+> DSGVO" in einem Atemzug für dieselbe Frist — das vermischt zwei
+> verschiedene Dinge. Art. 17 Abs. 3 Buchst. e DSGVO setzt voraus, dass
+> eine Verteidigung gegen einen Anspruch **tatsächlich stattfindet oder
+> mit einiger Wahrscheinlichkeit zu erwarten ist**; die bloße
+> abstrakte Möglichkeit künftiger Streitigkeiten genügt dafür
+> ausdrücklich nicht. Das trägt die Löschsperre (`Loeschsperre`,
+> Grund RECHTSSTREIT/BESCHWERDE) — dort besteht ein **konkreter**
+> Anlass, und die Sperre gilt unabhängig von jeder Frist, solange der
+> Vorgang läuft. Die **Grundfrist** dagegen — 10 bzw. 30 Jahre für
+> Akten **ohne** bekannten Streit — kann sich nicht auf einen
+> konkreten Einzelfall stützen, sondern auf eine generelle,
+> dokumentierte Kategorienregel nach Art. 6 Abs. 1 Buchst. f DSGVO.
+> §§ 195, 199 BGB liefern dafür die **Obergrenze** (den Zeitpunkt, ab
+> dem ein Anspruch endgültig nicht mehr durchsetzbar wäre) — sie
+> begründen keine eigene Aufbewahrungspflicht.
+>
+> **2. Versicherungsunterlagen sind keine eigene Fristkategorie.**
+> Seit der VVG-Reform 2008 ist § 12 Abs. 1 VVG a. F. (die frühere
+> eigene, kürzere Verjährung für Ansprüche aus dem
+> Versicherungsvertrag) ersatzlos gestrichen; seither gelten dafür
+> dieselben §§ 195, 199 BGB wie für jeden anderen Anspruch. Es gibt
+> also keine eigenständige Rechtsgrundlage, die Versicherungsschrift­
+> wechsel länger oder kürzer aufbewahrt als den Vorfall, zu dem er
+> gehört. **Versicherungsunterlagen übernehmen deshalb Einstufung und
+> Frist des zugehörigen Vorfalls** — sie sind Teil derselben Akte,
+> nicht eine dritte, eigenständig fristbestimmte Kategorie. Im
+> Datenmodell ist das bereits so angelegt: Es gibt kein eigenes Feld
+> für einen "Versicherungsfall", sondern nur `Vorfall` mit
+> `einstufung` LEICHT/SCHWER.
+>
+> **3. „Schwer" ist an die Schadensart gebunden, nicht an das
+> subjektive Gewicht des Vorfalls.** § 199 Abs. 2 BGB mit seiner
+> 30-Jahres-Höchstfrist gilt **ausschließlich** für Schadensersatz­
+> ansprüche wegen Verletzung des Lebens, des Körpers, der Gesundheit
+> oder der Freiheit. Ein — auch sehr hoher — reiner Sachschaden fällt
+> stattdessen unter § 199 Abs. 3 BGB (10 Jahre ab Entstehung bzw. 30
+> Jahre ab der Handlung, maßgeblich die früher endende Frist) und
+> bleibt deshalb bei **10 Jahren**. „SCHWER" darf folglich **nie**
+> für einen teuren oder aufwendigen, aber personenbezugsfreien
+> Vorfall vergeben werden, auch wenn er sich subjektiv "schwerwiegend"
+> anfühlt — nur ein dokumentierter Personen- oder Gesundheitsschaden
+> rechtfertigt die 30-Jahres-Frist. Im Adminbereich steht das bereits
+> so an der Auswahl ("Schwer (Personen-/Gesundheitsschaden)",
+> `app/admin/vorfaelle/page.tsx`); diese Bindung bleibt verbindlich.
+>
+> **Weiterhin ausdrücklich vorläufig.** Ob eine automatische, nicht
+> im Einzelfall neu geprüfte Speicherung bis zur jeweiligen
+> Verjährungshöchstfrist in jedem Fall verhältnismäßig ist
+> (Art. 5 Abs. 1 Buchst. e DSGVO), bleibt eine Wertung. **10 und 30
+> Jahre gelten weiterhin nur vorläufig** und sind durch den
+> Rechtstext-Prüfer zu bestätigen — an dieser Einschränkung ändert
+> keine der drei Präzisierungen etwas.
 
 ---
 

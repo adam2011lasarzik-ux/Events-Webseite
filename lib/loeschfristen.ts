@@ -47,9 +47,30 @@ export const ZUSTIMMUNGSNACHWEIS_JAHRE = 10;
 export const ANMELDEDATEN_JAHRE = 3;
 /** K5 — Checkliste mit Personenbezug, in Jahren ab Jahresende. */
 export const CHECKLISTE_JAHRE = 3;
-/** K6 — Vorfallakte, leichte Einstufung, in Jahren ab Abschluss. */
+/**
+ * K6 — Vorfallakte, leichte Einstufung ("sonstige Schäden", auch ein
+ * hoher reiner Sachschaden), in Jahren ab Abschluss. Obergrenze
+ * angelehnt an § 199 Abs. 3 BGB (10 Jahre ab Entstehung bzw. 30 Jahre
+ * ab der Handlung, maßgeblich die früher endende Frist) — als
+ * Anhaltspunkt für eine Art. 6 Abs. 1 Buchst. f DSGVO gestützte
+ * Grundfrist, nicht als gesetzliche Aufbewahrungspflicht. Gilt auch
+ * für Versicherungsschriftwechsel zu einem als LEICHT eingestuften
+ * Vorfall — dafür gibt es keine eigene Frist, siehe Dokument 13.
+ * Vorläufig, noch nicht durch den Rechtstext-Prüfer bestätigt.
+ */
 export const VORFALL_LEICHT_JAHRE = 10;
-/** K6 — Vorfallakte bei Personen- oder Gesundheitsschaden (§ 199 Abs. 2 BGB). */
+/**
+ * K6 — Vorfallakte bei dokumentiertem Personen- oder Gesundheitsschaden.
+ * Ausschließlich für diese Schadensart, NICHT für einen subjektiv
+ * "schweren" oder teuren reinen Sachschaden (der bleibt LEICHT). Die
+ * Obergrenze lehnt sich an § 199 Abs. 2 BGB an — dessen absolute
+ * 30-Jahres-Höchstfrist gilt gerade nur für Verletzungen von Leben,
+ * Körper, Gesundheit oder Freiheit. Auch hier: Anhaltspunkt für die
+ * Art. 6 Abs. 1 Buchst. f DSGVO gestützte Grundfrist, keine eigene
+ * Aufbewahrungspflicht. Gilt ebenso für zugehörigen
+ * Versicherungsschriftwechsel — keine eigene Frist, siehe Dokument
+ * 13. Vorläufig, noch nicht durch den Rechtstext-Prüfer bestätigt.
+ */
 export const VORFALL_SCHWER_JAHRE = 30;
 /**
  * K8 — Nachlauffrist zur Beweissicherung, in Jahren ab Jahresende des
