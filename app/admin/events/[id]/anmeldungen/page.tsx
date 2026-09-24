@@ -38,33 +38,42 @@ export default async function AnmeldungenSeite({
   // sechs Plätze — würde man Anmeldungen zählen, wäre die Anlage voll,
   // während die Seite noch freie Plätze meldet.
   //
-  // Belegt sind bestätigte Anmeldungen UND Reservierungen, deren Frist
-  // noch läuft — dieselbe Regel wie auf der öffentlichen Seite. Sonst
-  // stünden hier mehr freie Plätze als dort.
+  // Belegt sind ausschliesslich bestätigte, also bezahlte Anmeldungen
+  // — dieselbe Regel wie auf der öffentlichen Seite (lib/plaetze.ts).
+  // Sonst stünden hier andere freie Plätze als dort.
+  //
+  // Offene Zahlungsversuche zählen seit dem 24.09.2026 NICHT mit. Sie
+  // werden weiter angezeigt, weil der Veranstalter sehen soll, dass es
+  // sie gibt — aber als das, was sie sind: Versuche, keine Buchungen.
   const jetzt = new Date();
   const laeuftNoch = (a: { status: string; reserviertBis: Date | null }) =>
     a.status === "RESERVIERT" && a.reserviertBis !== null && a.reserviertBis > jetzt;
 
-  // Feste Teilnehmer und gehaltene Plätze getrennt: Beides bedeutet
-  // etwas anderes. Für die Kapazität zählt die Summe.
   const teilnehmer = anmeldungen
     .filter((a) => a.status === "BESTAETIGT")
     .reduce((s, a) => s + a.teilnehmer.length, 0);
-  const reserviert = anmeldungen
-    .filter(laeuftNoch)
+  const offenePersonen = anmeldungen
+    .filter((a) => a.status === "RESERVIERT")
     .reduce((s, a) => s + a.teilnehmer.length, 0);
-  const belegt = teilnehmer + reserviert;
+  const belegt = teilnehmer;
   const frei = event.maxPersonen === null ? null : Math.max(0, event.maxPersonen - belegt);
   const ueberbucht = event.maxPersonen !== null && belegt > event.maxPersonen;
+  // Verbindlich ist, wer bezahlt hat oder wartet — ein offener Versuch
+  // nicht. Dieselbe Zählweise wie in lib/adminDaten.ts.
+  const verbindlich = anmeldungen.filter(
+    (a) => a.status === "BESTAETIGT" || a.status === "WARTELISTE",
+  ).length;
 
   return (
     <AdminRahmen
       admin={admin}
       titel={`Anmeldungen — ${event.titel}`}
       unterzeile={
-        `${anmeldungen.length} Anmeldung${anmeldungen.length === 1 ? "" : "en"} · ` +
+        `${verbindlich} Anmeldung${verbindlich === 1 ? "" : "en"} · ` +
         `${teilnehmer} feste Teilnehmer` +
-        (reserviert > 0 ? ` · ${reserviert} Plätze reserviert` : "") +
+        (offenePersonen > 0
+          ? ` · ${offenePersonen} in offener Zahlung (zählen nicht mit)`
+          : "") +
         ` · ${belegt} von ${event.maxPersonen ?? "∞"} Plätzen belegt` +
         (frei === null ? "" : ` · ${frei} frei`)
       }
@@ -82,14 +91,17 @@ export default async function AnmeldungenSeite({
       <StornoHinweis hinweis={hinweis} />
 
       {/* Eine bezahlte Anmeldung wird niemals stillschweigend
-          abgelehnt — läuft die Reservierung ab, während das Geld
-          unterwegs ist, kann das Event dadurch überbucht werden. Der
-          Fall ist selten, aber er muss sichtbar sein. */}
+          abgelehnt. Seit dem 24.09.2026 wird auch kein Platz mehr
+          gehalten, während jemand bezahlt — dadurch ist dieser Fall
+          nicht mehr selten, sondern die bewusst in Kauf genommene
+          Kehrseite der Entscheidung (lib/plaetze.ts). Er muss deshalb
+          sichtbar sein und beim Namen genannt werden. */}
       {ueberbucht && (
         <p className={`${stil.meldung} ${stil.meldungFehler}`} role="alert">
-          Dieses Event ist überbucht: {belegt} Personen bei {event.maxPersonen} Plätzen. Das
-          passiert, wenn eine Zahlung erst nach Ablauf der Reservierung eingeht — bezahlte
-          Plätze werden nie abgelehnt. Bitte klären.
+          Dieses Event ist überbucht: {belegt} bezahlte Personen bei {event.maxPersonen}{" "}
+          Plätzen. Das passiert, wenn mehrere gleichzeitig um die letzten Plätze bezahlen —
+          ein Platz wird während der Zahlung nicht gehalten, und bezahlte Plätze werden nie
+          abgelehnt. Bitte klären.
         </p>
       )}
 
@@ -194,9 +206,9 @@ export default async function AnmeldungenSeite({
                         {a.status === "RESERVIERT" && a.reserviertBis && (
                           <>
                             <br />
-                            {a.reserviertBis > new Date()
-                              ? `Platz reserviert bis ${alsLesbar(a.reserviertBis)}`
-                              : `Reservierung abgelaufen am ${alsLesbar(a.reserviertBis)} — der Platz ist wieder frei`}
+                            {laeuftNoch(a)
+                              ? `Zahlung offen, Versuch läuft bis ${alsLesbar(a.reserviertBis)} — kein Platz belegt`
+                              : `Zahlungsversuch beendet am ${alsLesbar(a.reserviertBis)} — nicht bezahlt, kein Platz belegt`}
                           </>
                         )}
                         {a.zahlungsReferenz && (

@@ -166,9 +166,13 @@ export async function anmeldungAbsenden(
     // Veranstaltungstag auffällt.
     neueId = await db.$transaction(async (tx) => {
       /* Zuerst nachsehen, ob es für diese Adresse schon eine Anmeldung
-         gibt — VOR der Platzprüfung. Sonst zählte bei einem zweiten
-         Anlauf die eigene noch laufende Reservierung als belegter
-         Platz mit, und man stünde sich selbst im Weg. */
+         gibt — VOR der Platzprüfung. Seit dem 24.09.2026 zählt ein
+         offener Versuch ohnehin nicht als belegter Platz; gebraucht
+         wird die Abfrage weiterhin für den zweiten Zweck: zu
+         entscheiden, ob ergänzt oder neu angelegt wird. Die
+         Platzprüfung nimmt die eigene Anmeldung weiter aus, damit
+         eine bereits BESTÄTIGTE eigene Buchung beim Ergänzen nicht
+         doppelt zählt. */
       const vorhanden = await tx.registration.findUnique({
         where: {
           eventId_kontaktEmail: { eventId: event.id, kontaktEmail: anmeldung.kontakt.email },
@@ -176,14 +180,21 @@ export async function anmeldungAbsenden(
       });
 
       if (event.maxPersonen !== null) {
-        /* Belegt sind bestätigte Anmeldungen UND Reservierungen,
-           deren Frist noch läuft. Die Regel steht in lib/plaetze.ts,
-           damit Anzeige, Adminbereich und diese Prüfung nicht
-           auseinanderlaufen können. */
+        /* Belegt sind ausschliesslich bestätigte, also bezahlte
+           Anmeldungen. Die Regel steht in lib/plaetze.ts, damit
+           Anzeige, Adminbereich und diese Prüfung nicht
+           auseinanderlaufen können.
+
+           Seit dem 24.09.2026 ist diese Prüfung eine Momentaufnahme
+           und keine Zusage: Weil kein Platz mehr gehalten wird, kann
+           zwischen hier und der Zahlung jemand anders bezahlen. Sie
+           bleibt trotzdem stehen — niemanden zur Bezahlseite zu
+           schicken, wenn schon jetzt kein Platz frei ist, ist immer
+           noch besser als das Gegenteil. */
         const bestaetigte = await tx.registration.findMany({
           where: {
             eventId: event.id,
-            ...belegtFilter(jetzt),
+            ...belegtFilter(),
             // Die eigene bestehende Anmeldung nicht mitzählen: Sie wird
             // gleich ersetzt, nicht ergänzt.
             ...(vorhanden ? { id: { not: vorhanden.id } } : {}),

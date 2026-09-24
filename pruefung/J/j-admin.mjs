@@ -1,4 +1,12 @@
-/* Der Adminbereich muss die Reservierung und die Zahlung zeigen. */
+/* Der Adminbereich muss den Zahlungsversuch und die Zahlung zeigen.
+
+   Umgeschrieben am 24.09.2026. Diese Liste prüfte vorher, dass eine
+   Reservierung „als belegter Platz" zählt. Genau das war der beim Test
+   gemeldete Fehler: Schon das Öffnen der Bezahlseite erschien als
+   „1 Anmeldung · 1 Platz reserviert", obwohl niemand bezahlt hatte.
+   Die Prüfungen sind deshalb umgedreht — sie halten jetzt fest, dass
+   ein offener Versuch SICHTBAR bleibt, aber weder als Anmeldung noch
+   als belegter Platz zählt. */
 /* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
 import "../schutz.mjs";
 
@@ -32,11 +40,29 @@ const anmeldung = await db.registration.findFirstOrThrow({ where: { kontaktEmail
 
 let seite = await hole(`/admin/events/${event.id}/anmeldungen`, K);
 let text = alsText(seite.html);
-pruefe("Die Anmeldungsliste zeigt „Platz reserviert“", text.includes("Platz reserviert"));
-pruefe("… mit dem Ablaufzeitpunkt", text.includes("Platz reserviert bis"));
-pruefe("… und der Zahlungsreferenz", text.includes("Zahlungsreferenz:"));
-pruefe("Die Reservierung zählt als belegter Platz", text.includes("1 von 100 Plätzen belegt"),
+pruefe("Die Anmeldungsliste zeigt den offenen Zahlungsversuch",
+  text.includes("Zahlung offen, Versuch läuft bis"));
+pruefe("… und sagt dabei ausdrücklich, dass kein Platz belegt ist",
+  text.includes("kein Platz belegt"));
+pruefe("… und nennt die Zahlungsreferenz", text.includes("Zahlungsreferenz:"));
+pruefe("Der offene Versuch belegt KEINEN Platz",
+  text.includes("0 von 100 Plätzen belegt"),
   (text.match(/\d+ von \d+ Plätzen belegt/) ?? ["—"])[0]);
+pruefe("… und zählt NICHT als Anmeldung",
+  text.includes("0 Anmeldungen"),
+  (text.match(/\d+ Anmeldung(en)?/) ?? ["—"])[0]);
+pruefe("… wird aber mit seinen Personen ausgewiesen",
+  text.includes("1 in offener Zahlung (zählen nicht mit)"));
+pruefe("Und das Wort „reserviert“ steht nirgends mehr — VERA reserviert nichts",
+  !/Platz reserviert|Plätze reserviert|Reservierung/i.test(text),
+  (text.match(/[^.]*eservier[^.]*/) ?? ["—"])[0].slice(0, 90));
+
+/* Die Übersichtsseite muss dasselbe sagen. Zwei Seiten, die
+   verschieden zählen, wären genau der Fehler, der gemeldet wurde. */
+const uebersicht = alsText((await hole("/admin", K)).html);
+pruefe("Die Übersicht zählt den offenen Versuch ebenfalls nicht als Anmeldung",
+  /1\s*in offener Zahlung \(zählt nicht mit\)/.test(uebersicht),
+  (uebersicht.match(/\d+ in offener Zahlung[^0-9]*/) ?? ["—"])[0]);
 
 // Von Hand als bezahlt markieren bestätigt zugleich
 const { actionFelder, sende } = await import("./admin-senden.mjs");
@@ -46,18 +72,25 @@ await sende(`/admin/events/${event.id}/anmeldungen`, felder,
 const nach = await db.registration.findUniqueOrThrow({ where: { id: anmeldung.id } });
 pruefe("Von Hand auf „bezahlt“ setzen bestätigt die Anmeldung",
   nach.status === "BESTAETIGT" && nach.zahlungsStatus === "BEZAHLT", `${nach.status} / ${nach.zahlungsStatus}`);
-pruefe("… und beendet die Reservierung", nach.reserviertBis === null);
+pruefe("… und beendet den Zahlungsversuch", nach.reserviertBis === null);
+const nachZahlung = alsText((await hole(`/admin/events/${event.id}/anmeldungen`, K)).html);
+pruefe("Erst die Zahlung macht daraus einen belegten Platz",
+  nachZahlung.includes("1 von 100 Plätzen belegt"),
+  (nachZahlung.match(/\d+ von \d+ Plätzen belegt/) ?? ["—"])[0]);
+pruefe("… und eine gezählte Anmeldung",
+  nachZahlung.includes("1 Anmeldung "),
+  (nachZahlung.match(/\d+ Anmeldung(en)?/) ?? ["—"])[0]);
 
-// Abgelaufene Reservierung wird als abgelaufen ausgewiesen
+// Ein beendeter Zahlungsversuch wird als beendet ausgewiesen
 await db.registration.update({
   where: { id: anmeldung.id },
   data: { status: "RESERVIERT", zahlungsStatus: "OFFEN", reserviertBis: new Date(Date.now() - 60_000) },
 });
 seite = await hole(`/admin/events/${event.id}/anmeldungen`, K);
 text = alsText(seite.html);
-pruefe("Eine abgelaufene Reservierung wird als abgelaufen ausgewiesen",
-  text.includes("Reservierung abgelaufen"));
-pruefe("… und belegt keinen Platz mehr", text.includes("0 von 100 Plätzen belegt"),
+pruefe("Ein beendeter Zahlungsversuch wird als beendet ausgewiesen",
+  text.includes("Zahlungsversuch beendet am"));
+pruefe("… und belegt keinen Platz", text.includes("0 von 100 Plätzen belegt"),
   (text.match(/\d+ von \d+ Plätzen belegt/) ?? ["—"])[0]);
 
 // Ohne Anmeldung kein Zugang zur Rückmeldung? (die ist öffentlich, aber

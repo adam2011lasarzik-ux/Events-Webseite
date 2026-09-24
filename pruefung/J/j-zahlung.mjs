@@ -109,16 +109,28 @@ pruefe("Der Betrag kommt aus der Datenbank",
 pruefe("Die Anmeldenummer wird mitgegeben",
   meine?.client_reference_id === a1.anmeldung.id && meine?.metadata?.anmeldungId === a1.anmeldung.id);
 
-// ── 3. Reservierung belegt den Platz ───────────────────────────
-const { belegtFilter } = await import("../../lib/plaetze.js");
-const belegteJetzt = async () => {
+// ── 3. Ein offener Zahlungsversuch belegt KEINEN Platz ─────────
+//
+// Umgedreht am 24.09.2026. Vorher stand hier „Die Reservierung belegt
+// sofort einen Platz". Beim Test fiel auf, dass schon das Öffnen der
+// Bezahlseite im Adminbereich als „1 Anmeldung · 1 Platz reserviert"
+// erschien, obwohl niemand bezahlt hatte. Seitdem gilt: Ein Platz ist
+// erst belegt, wenn bezahlt wurde (lib/plaetze.ts → belegtFilter).
+const { belegtFilter, offenerVersuchFilter } = await import("../../lib/plaetze.js");
+const zaehle = async (filter) => {
   const rows = await db.registration.findMany({
-    where: { event: { slug: "padel-falkensee" }, ...belegtFilter() },
+    where: { event: { slug: "padel-falkensee" }, ...filter },
     select: { _count: { select: { teilnehmer: true } } },
   });
   return rows.reduce((s, r) => s + r._count.teilnehmer, 0);
 };
-pruefe("Die Reservierung belegt sofort einen Platz", (await belegteJetzt()) === 1, `${await belegteJetzt()} belegt`);
+const belegteJetzt = () => zaehle(belegtFilter());
+const offeneJetzt = () => zaehle(offenerVersuchFilter());
+
+pruefe("Ein offener Zahlungsversuch belegt KEINEN Platz",
+  (await belegteJetzt()) === 0, `${await belegteJetzt()} belegt`);
+pruefe("… wird aber weiterhin gespeichert und als offener Versuch geführt",
+  (await offeneJetzt()) === 1, `${await offeneJetzt()} offen`);
 
 // ── 4. Rückmeldung ohne gültige Unterschrift ───────────────────
 const sitzungBezahlt = await (await fetch(
@@ -174,12 +186,16 @@ r = await rueckmeldung({
 nach = await db.registration.findUnique({ where: { id: a1.anmeldung.id } });
 pruefe("Erstattung wird vermerkt", nach.zahlungsStatus === "ERSTATTET", nach.zahlungsStatus);
 
-// ── 9. Abgelaufene Reservierung ────────────────────────────────
+// ── 9. Abgelaufener Zahlungsversuch ────────────────────────────
+//
+// Belegt hat er auch vorher schon nichts — die Prüfung bleibt
+// trotzdem: Sie belegt, dass das Ablaufen der Frist an der
+// Platzzählung nichts ändert und nichts gelöscht wird.
 await db.registration.update({
   where: { id: a2.anmeldung.id },
   data: { reserviertBis: new Date(Date.now() - 60_000) },
 });
-pruefe("Eine abgelaufene Reservierung belegt keinen Platz mehr",
+pruefe("Ein abgelaufener Zahlungsversuch belegt keinen Platz",
   (await belegteJetzt()) === 1, `${await belegteJetzt()} belegt`);
 pruefe("… und wurde dabei NICHT gelöscht",
   (await db.registration.count({ where: { id: a2.anmeldung.id } })) === 1);

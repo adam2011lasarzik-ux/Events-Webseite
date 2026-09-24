@@ -123,9 +123,10 @@ async function belegtePlaetze(eventIds: string[]): Promise<Map<string, number>> 
   if (eventIds.length === 0) return stand;
 
   const anmeldungen = await db.registration.findMany({
-    // Bestätigte Anmeldungen UND laufende Reservierungen — die Regel
-    // steht in lib/plaetze.ts, damit Anzeige, Adminbereich und
-    // Platzprüfung nicht auseinanderlaufen können.
+    // Nur bestätigte, also bezahlte Anmeldungen — die Regel steht in
+    // lib/plaetze.ts, damit Anzeige, Adminbereich und Platzprüfung
+    // nicht auseinanderlaufen können. Ein offener Zahlungsversuch
+    // nimmt seit dem 24.09.2026 keinen Platz mehr weg.
     where: { eventId: { in: eventIds }, ...belegtFilter() },
     select: { eventId: true, _count: { select: { teilnehmer: true } } },
   });

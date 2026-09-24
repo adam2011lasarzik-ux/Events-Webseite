@@ -16,13 +16,13 @@ Wie man sie startet, steht in **[../docs/pruefen.md](../docs/pruefen.md)**.
 
 | Ordner | Inhalt | Anzahl |
 |---|---|---|
-| `E`, `H` | Anmeldung: Preise, Plätze, Überbuchung, Duplikate, manipulierte Werte, Honigtopf, Bremse | 32 |
+| `E`, `H` | Anmeldung: Preise, Plätze, Überbuchung, Duplikate, manipulierte Werte, Honigtopf, Bremse; dass eine unbezahlte Anmeldung keinen Platz hält und erst die Zahlung ausbucht | 33 |
 | `F`, `H` | Adminbereich: Zugang, Sitzungen, Aktionen ohne Sitzung, CSV, Anonymisieren, Event-Formular, Protokoll, zweiter Faktor (TOTP) | 116 |
 | `G`, `H` | Designs, Inhaltsblöcke, Anmeldung je Event | 38 |
 | `H` | Bild-Upload: Formate, Grössen, EXIF/GPS, getarnte Dateien, Pfad-Tricks | 20 |
 | `I` | Gründerbereich, Kontraste, Wortmarke | 29 |
-| `J` | Zahlung: Unterschrift, doppelte Meldungen, Betragsabgleich, Reservierung, Riegel | 59 |
-| `K` | Anmeldung und Bezahlung als ein Ablauf — die 15 geforderten Fälle | 48 |
+| `J` | Zahlung: Unterschrift, doppelte Meldungen, Betragsabgleich, Riegel; offene Zahlungsversuche — sichtbar im Adminbereich, aber weder Anmeldung noch belegter Platz | 66 |
+| `K` | Anmeldung und Bezahlung als ein Ablauf — die 15 geforderten Fälle, samt beider Seiten der Platzregel: unbezahlte Versuche halten nichts zurück, gegen bezahlte Plätze wird kein Platz zweimal verkauft | 58 |
 | `L` | Responsivität: fliessende Messung 320–1920 px, Querformat, Pixelvergleich; dazu die Kopfleiste (Menü, Anmelde-Knopf) | 27 + Messung |
 | `M` | Fehlgeschlagene und späte Zahlung | 43 |
 | `N` | Rechtsseiten: erreichbar, als Platzhalter gekennzeichnet, verlinkt | 94 |

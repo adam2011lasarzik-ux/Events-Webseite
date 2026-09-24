@@ -46,13 +46,21 @@ export default async function AdminUebersicht() {
       )}
 
       {events.map((e) => {
-        /* Freie Plätze rechnen sich gegen feste Teilnehmer UND
-           laufende Reservierungen — sonst würde ein gerade laufender
-           Bezahlvorgang doppelt verkauft. */
+        /* Freie Plätze rechnen sich ausschliesslich gegen feste,
+           also bezahlte Teilnehmer. Ein offener Zahlungsversuch nimmt
+           seit dem 24.09.2026 keinen Platz mehr weg (lib/plaetze.ts).
+
+           Dafür ist eine Überbuchung möglich: Wird gleichzeitig um den
+           letzten Platz bezahlt, gelten beide Zahlungen. `ueberbucht`
+           macht genau das sichtbar — ohne diese Anzeige wäre die
+           Kehrseite der Entscheidung unsichtbar, und `Math.max(0, …)`
+           würde sie sogar verstecken. */
         const frei =
           e.maxPersonen === null
             ? null
-            : Math.max(0, e.maxPersonen - e.belegtePersonen - e.reserviertePersonen);
+            : Math.max(0, e.maxPersonen - e.belegtePersonen);
+        const ueberbucht =
+          e.maxPersonen === null ? 0 : Math.max(0, e.belegtePersonen - e.maxPersonen);
         return (
           <div key={e.id} className={stil.karte}>
             <div className={stil.karteKopf}>
@@ -68,18 +76,26 @@ export default async function AdminUebersicht() {
                 <span className={stil.zahl}>{e.belegtePersonen}</span>
                 feste Teilnehmer
               </div>
-              {/* Getrennt ausgewiesen: Eine Reservierung hält einen
-                  Platz, ist aber noch keine bestätigte Teilnahme. */}
-              {e.reserviertePersonen > 0 && (
+              {/* Getrennt ausgewiesen und ausdrücklich beschriftet:
+                  Ein offener Versuch hält keinen Platz und ist keine
+                  Anmeldung. Die Beschriftung sagt das, damit die Zahl
+                  nicht doch wieder wie eine Buchung gelesen wird. */}
+              {e.offenePersonen > 0 && (
                 <div>
-                  <span className={stil.zahl}>{e.reserviertePersonen}</span>
-                  Plätze reserviert
+                  <span className={stil.zahl}>{e.offenePersonen}</span>
+                  in offener Zahlung (zählt nicht mit)
                 </div>
               )}
               <div>
                 <span className={stil.zahl}>{frei === null ? "∞" : frei}</span>
                 freie Plätze
               </div>
+              {ueberbucht > 0 && (
+                <div>
+                  <span className={stil.zahl}>{ueberbucht}</span>
+                  Plätze überbucht — bitte klären
+                </div>
+              )}
               <div>
                 <span className={stil.zahl}>{e.anzahlAnmeldungen}</span>
                 Anmeldungen

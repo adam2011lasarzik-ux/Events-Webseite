@@ -53,9 +53,11 @@ export async function statusSetzen(formular: FormData): Promise<void> {
       // Die Zeitstempel mitführen, damit später nachvollziehbar
       // bleibt, wann was passiert ist.
       storniertAm: neu === "STORNIERT" ? new Date() : null,
-      // Wer von Hand bestätigt oder storniert, beendet damit eine
-      // laufende Reservierung. Bliebe sie stehen, hielte sie den Platz
-      // weiter besetzt, obwohl niemand mehr auf eine Zahlung wartet.
+      // Wer von Hand bestätigt oder storniert, beendet damit einen
+      // laufenden Zahlungsversuch. Ein Platz hing daran seit dem
+      // 24.09.2026 nicht mehr (lib/plaetze.ts) — die Frist zu löschen
+      // hält aber die Anzeige ehrlich: Es wartet niemand mehr auf eine
+      // Zahlung.
       reserviertBis: null,
       reaktiviertAm:
         vorhanden.status === "STORNIERT" && neu !== "STORNIERT"

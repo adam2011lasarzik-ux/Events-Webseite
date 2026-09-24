@@ -210,9 +210,11 @@ async function vollziehen(
     data: {
       status: "STORNIERT",
       storniertAm: jetzt,
-      /* Die Reservierung beenden: Damit fällt die Buchung sofort aus
-         der Platzzählung (lib/plaetze.ts → belegtFilter) und der Platz
-         ist frei. Dafür braucht es keinen zusätzlichen Code. */
+      /* Aus der Platzzählung fällt die Buchung schon durch den
+         Status „STORNIERT" (lib/plaetze.ts → belegtFilter zählt nur
+         „BESTAETIGT"). Die Frist des Zahlungsversuchs wird trotzdem
+         gelöscht: Sonst stünde im Adminbereich weiter, dass eine
+         Zahlung läuft, obwohl storniert ist. */
       reserviertBis: null,
       ...(erstattet ? { zahlungsStatus: "ERSTATTET" as const } : {}),
     },

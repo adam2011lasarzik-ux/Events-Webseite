@@ -178,12 +178,15 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
     return;
   }
 
-  /* Geld ist geflossen — der Platz gilt.
+  /* Geld ist geflossen — der Platz gilt. Erst hier, an dieser
+     Stelle, wird ein Platz überhaupt belegt.
 
-     Auch dann, wenn die Reservierung inzwischen abgelaufen und das
-     Event voll ist. Einen bezahlten Platz stillschweigend abzulehnen
-     wäre der schlimmere Fehler; eine Überbuchung sieht der
-     Veranstalter im Adminbereich und kann sie klären. */
+     Auch dann, wenn das Event inzwischen voll ist. Einen bezahlten
+     Platz stillschweigend abzulehnen wäre der schlimmere Fehler; die
+     Überbuchung sieht der Veranstalter im Adminbereich und kann sie
+     klären. Seit dem 24.09.2026 wird während der Zahlung kein Platz
+     mehr gehalten — dieser Fall ist damit die bewusst in Kauf
+     genommene Kehrseite und nicht mehr die seltene Ausnahme. */
   await db.registration.update({
     where: { id },
     data: {
@@ -237,15 +240,15 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
  *
  * Nicht jede Zahlart entscheidet sich sofort: Bei PayPal und ähnlichen
  * Wegen meldet der Anbieter erst später, dass es doch nicht geklappt
- * hat. Ohne diesen Zweig bliebe die Anmeldung stumm reserviert und
- * hielte den Platz bis zum Ende der halben Stunde besetzt, obwohl
- * längst feststeht, dass kein Geld kommt.
+ * hat. Ohne diesen Zweig sähe der Versuch bis zum Ende der halben
+ * Stunde nach „Bezahlung läuft" aus, obwohl längst feststeht, dass
+ * kein Geld kommt. (Einen Platz hielt er schon vorher nicht — seit
+ * dem 24.09.2026 zählt nur eine bezahlte Anmeldung, lib/plaetze.ts.)
  *
  * Bewusst wird die Anmeldung NICHT gelöscht und NICHT storniert: Der
  * Mensch soll es noch einmal versuchen können, ohne alles neu
- * einzutippen. Beendet wird nur die Reservierung — der Platz ist damit
- * sofort wieder frei, und die Anmeldung erscheint überall als „nicht
- * abgeschlossen".
+ * einzutippen. Beendet wird nur der Versuch, und die Anmeldung
+ * erscheint überall als „nicht abgeschlossen".
  */
 async function fehlgeschlagenVermerken(sitzung: Stripe.Checkout.Session): Promise<void> {
   const id = sitzung.metadata?.anmeldungId ?? sitzung.client_reference_id;

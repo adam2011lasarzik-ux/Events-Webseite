@@ -74,7 +74,11 @@ await absenden(
 
 const a1 = await db.registration.findFirstOrThrow({ where: { kontaktEmail: "mia.fehl@example.org" } });
 pruefe("Anmeldung entsteht als Reservierung", a1.status === "RESERVIERT" && a1.zahlungsStatus === "OFFEN");
-pruefe("… und belegt sofort vier Plätze", (await belegte(event.id)) === 4, `${await belegte(event.id)} belegt`);
+/* Seit dem 24.09.2026 belegt erst eine BEZAHLTE Anmeldung einen
+   Platz (lib/plaetze.ts). Vorher stand hier „belegt sofort vier
+   Plätze" — genau das Verhalten, das beim Test als Fehler auffiel. */
+pruefe("… belegt aber noch keinen Platz — es wurde nicht bezahlt",
+  (await belegte(event.id)) === 0, `${await belegte(event.id)} belegt`);
 pruefe("… mit einer Bezahlseite beim Anbieter", Boolean(a1.zahlungsReferenz), a1.zahlungsReferenz ?? "keine");
 
 // ── Der Anbieter meldet: Zahlung fehlgeschlagen ─────────────────
@@ -86,17 +90,18 @@ const a2 = await db.registration.findUniqueOrThrow({ where: { id: a1.id } });
 pruefe("Die Anmeldung bleibt bestehen", a2 !== null);
 pruefe("Sie gilt NICHT als bezahlt", a2.zahlungsStatus === "OFFEN", a2.zahlungsStatus);
 pruefe("Sie gilt NICHT als bestätigt", a2.status === "RESERVIERT", a2.status);
-pruefe("Die Reservierung ist beendet",
+pruefe("Der Zahlungsversuch ist beendet",
   a2.reserviertBis !== null && a2.reserviertBis <= new Date(),
   String(a2.reserviertBis));
-pruefe("… und der Platz ist damit sofort wieder frei", (await belegte(event.id)) === 0,
+pruefe("… und es ist weiterhin kein Platz belegt", (await belegte(event.id)) === 0,
   `${await belegte(event.id)} belegt`);
 
 // ── Zweiter Anlauf ──────────────────────────────────────────────
 const zweiter = await bezahlseiteFuer(a1.id, new Date());
 pruefe("Ein zweiter Anlauf ist möglich", Boolean(zweiter.url), JSON.stringify(zweiter).slice(0, 90));
 const a3 = await db.registration.findUniqueOrThrow({ where: { id: a1.id } });
-pruefe("… und hält den Platz wieder", (await belegte(event.id)) === 4, `${await belegte(event.id)} belegt`);
+pruefe("… hält dabei aber weiterhin keinen Platz", (await belegte(event.id)) === 0,
+  `${await belegte(event.id)} belegt`);
 pruefe("… ohne dass ein zweiter Datensatz entsteht",
   (await db.registration.count({ where: { kontaktEmail: "mia.fehl@example.org" } })) === 1);
 
@@ -104,7 +109,7 @@ pruefe("… ohne dass ein zweiter Datensatz entsteht",
 const wieder = await rueckmeldung(ereignis("evt_m_fehl_1",
   { id: a1.zahlungsReferenz, anmeldungId: a1.id, betrag: a1.gesamtpreisCents }));
 pruefe("Dieselbe Meldung wirkt nicht doppelt", wieder.status === 200 && wieder.text.includes("Bereits"));
-pruefe("… der zweite Anlauf bleibt unangetastet", (await belegte(event.id)) === 4,
+pruefe("… der zweite Anlauf bleibt unangetastet", (await belegte(event.id)) === 0,
   `${await belegte(event.id)} belegt`);
 
 // ── Eine Fehlermeldung NACH erfolgreicher Zahlung ───────────────

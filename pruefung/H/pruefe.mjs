@@ -292,13 +292,36 @@ async function main() {
   pruefe("… der eine freie Platz lässt sich aber buchen",
     (await db.registration.count()) === 1);
 
+  /* Ab hier zwei getrennte Schritte — seit dem 24.09.2026 belegt erst
+     eine BEZAHLTE Anmeldung einen Platz (lib/plaetze.ts). Beides
+     gehört geprüft, damit niemand das eine für das andere hält. */
+  const trotzUnbezahlt = await absenden(
+    { eventSlug: SLUG, weg: "selbst", selbstAls: "student", schueler: 1, erwachsene: 0, webseite: "",
+      ...personen([{ vorname: "Noch", nachname: "Moeglich", email: "moeglich@example.org", telefon: "" }]) },
+    neueIp(),
+  );
+  pruefe("Solange nicht bezahlt ist, hält die erste Anmeldung den Platz NICHT",
+    (await db.registration.count()) === 2 && !trotzUnbezahlt.text.includes("ausgebucht"),
+    `${await db.registration.count()} Anmeldungen`);
+
+  // Jetzt gilt der Platz als bezahlt — und erst jetzt ist zu.
+  await db.registration.updateMany({
+    where: { kontaktEmail: { in: ["letzter@example.org", "moeglich@example.org"] } },
+    data: { status: "STORNIERT" },
+  });
+  await db.registration.updateMany({
+    where: { kontaktEmail: "letzter@example.org" },
+    data: { status: "BESTAETIGT", zahlungsStatus: "BEZAHLT", reserviertBis: null },
+  });
+
   const ausgebucht = await absenden(
     { eventSlug: SLUG, weg: "selbst", selbstAls: "student", schueler: 1, erwachsene: 0, webseite: "",
       ...personen([{ vorname: "Zu", nachname: "Spaet", email: "spaet@example.org", telefon: "" }]) },
     neueIp(),
   );
-  pruefe("Danach meldet der Server „ausgebucht\"",
-    (await db.registration.count()) === 1 && ausgebucht.text.includes("ausgebucht"));
+  pruefe("Ist der Platz bezahlt, meldet der Server „ausgebucht\"",
+    ausgebucht.text.includes("ausgebucht"),
+    ausgebucht.text.slice(0, 90));
 
   await db.event.update({ where: { id: event.id }, data: { maxPersonen: event.maxPersonen } });
 

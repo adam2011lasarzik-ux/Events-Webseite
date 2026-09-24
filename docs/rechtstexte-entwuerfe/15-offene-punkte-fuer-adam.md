@@ -70,6 +70,56 @@ Impressum und Datenschutzerklärung an diesen Stellen Platzhalter.
 > ✅ **Stand 20.09.2026: Abschnitt B enthält keine offenen Fragen mehr.**
 > Alle vierzehn Entscheidungen (2.1 bis 2.14) sind seit dem 18.09.2026
 > beantwortet. Was aussteht, ist **Umsetzung**, nicht Entscheidung.
+
+> 🛑 **Neu am 24.09.2026 — eine Entscheidung hat den AGB-Text überholt.
+> Das ist der einzige Punkt, der vor dem nächsten Ausrollen beantwortet
+> sein muss.**
+>
+> **Was entschieden wurde:** Ein unbezahlter Zahlungsversuch belegt
+> keinen Platz mehr. Aufgefallen ist es beim Test: Schon das Öffnen der
+> Stripe-Bezahlseite erschien im Adminbereich als „1 Anmeldung · 1 Platz
+> reserviert", obwohl niemand bezahlt hatte. Umgesetzt in
+> `lib/plaetze.ts`; ein Platz gilt jetzt erst mit der bestätigten
+> Zahlung als belegt.
+>
+> **Was dadurch nicht mehr stimmt:** **AGB Ziffer 3.5** verspricht
+> wörtlich „Der Platz wird ab dem Absenden für 30 Minuten reserviert".
+> Das tut das System seitdem nicht mehr. Eine veröffentlichte
+> Vertragsbedingung, die etwas zusagt, was die Technik nicht einlöst,
+> ist der Fehler, den dieses Projekt an keiner Stelle stehen lassen
+> will — und hier wiegt er doppelt, weil es eine **Zusage zugunsten des
+> Kunden** ist.
+>
+> **Vorschlag für Ziffer 3.5** (nicht eingebaut — Formulierungen ändere
+> ich nicht ohne deine Zustimmung):
+>
+> > „3.5 Ein Platz wird während des Bezahlvorgangs nicht freigehalten.
+> > Verbindlich belegt ist ein Platz erst, wenn die Zahlung eingegangen
+> > ist. Eine nicht oder nicht rechtzeitig bezahlte Anmeldung bleibt
+> > gespeichert und kann über den Link auf der Abschluss-Seite
+> > fortgesetzt werden, solange Plätze frei sind."
+>
+> **Und in Ziffer 3.8** entfällt der Verweis auf die Reservierungszeit:
+> statt „— auch nicht während der Reservierungszeit nach Ziffer 3.5,
+> wenn diese abgelaufen ist" schlicht „— auch nicht während eines
+> laufenden Bezahlvorgangs". Ziffer 3.8 sagt schon heute, dass vor der
+> Zahlung kein Anspruch auf einen Platz besteht; die Änderung bringt
+> 3.5 mit 3.8 in Einklang, statt einen neuen Gedanken einzuführen.
+>
+> **Folge für die Fassungen:** Eine Änderung am Wortlaut ist eine neue
+> Fassung. Nach dem Einbau also `npm run rechtstext:export` und
+> anschließend auf dem Server `npm run rechtstext -- AGB_B2C
+> rechtstexte/agb-b2c.txt <neues Stand-Datum>` — das legt Version 2 an
+> (siehe `docs/rechtstexte-fassungen.md`).
+>
+> ⚠️ **Der Preis der Entscheidung, damit er nicht übersehen wird:** Weil
+> kein Platz mehr gehalten wird, können zwei Personen gleichzeitig um
+> den letzten Platz bezahlen. Beide Zahlungen gelten — einen bezahlten
+> Platz lehnt VERA nie ab. Das Ergebnis ist eine Überbuchung, die der
+> Adminbereich jetzt ausdrücklich ausweist („Plätze überbucht — bitte
+> klären") und die von Hand geklärt werden muss. Bei kleinen
+> Teilnehmerzahlen und wenig gleichzeitigem Andrang ist das selten; bei
+> einem ausgebuchten Event mit Andrang auf die letzten Plätze nicht.
 >
 > ⚠️ **Der Abgleich am 20.09.2026 hat dabei zwei Entscheidungen
 > gefunden, zu denen es überhaupt keinen Bauauftrag gab** — und es sind

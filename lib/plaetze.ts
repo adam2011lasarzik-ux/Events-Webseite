@@ -53,27 +53,59 @@ export function platzstand(
  * Liefen die drei auseinander, zeigte die Seite freie Plätze an,
  * während die Anlage längst voll ist.
  *
- * Belegt sind:
- *   - bestätigte Anmeldungen
- *   - Reservierungen, deren Frist noch läuft
+ * Belegt ist ausschliesslich eine **bestätigte** Anmeldung — also
+ * eine, für die bezahlt wurde (oder die bei einer kostenlosen
+ * Veranstaltung sofort bestätigt wird).
  *
- * Eine ABGELAUFENE Reservierung zählt nicht mehr — dafür wird nichts
- * gelöscht und nichts aufgeräumt, die Bedingung vergleicht einfach mit
- * der Uhrzeit. Ein Aufräumlauf im Hintergrund wäre auf geteiltem
- * Hosting nicht verlässlich; diese Lösung braucht keinen.
+ * ── Geändert am 24.09.2026, Entscheidung von Adam ──
+ *
+ * Vorher galt zusätzlich: „Reservierungen, deren Frist noch läuft".
+ * Ein bloßes Öffnen der Bezahlseite belegte damit sofort einen Platz
+ * und erschien im Adminbereich als „1 Anmeldung · 1 Platz reserviert",
+ * obwohl niemand bezahlt hatte. Wer die Seite nur ansah und wegklickte,
+ * hielt den Platz eine halbe Stunde lang besetzt.
+ *
+ * Was das kostet, gehört ausgesprochen: Ein Platz wird jetzt NICHT
+ * mehr gehalten, während jemand bezahlt. Stehen zwei Personen
+ * gleichzeitig am letzten Platz, können beide bezahlen — und beide
+ * Zahlungen gelten, denn Geld ist geflossen (siehe
+ * app/zahlung/rueckmeldung/route.ts). Die Überbuchung wird im
+ * Adminbereich ausgewiesen und muss von Hand geklärt werden. Das ist
+ * der bewusst in Kauf genommene Preis dafür, dass eine unbezahlte
+ * Anmeldung niemandem einen Platz wegnimmt.
+ *
+ * `reserviertBis` bleibt als Feld bestehen, bedeutet aber seitdem
+ * etwas anderes: die Frist des ZAHLUNGSVERSUCHS, nicht die eines
+ * Platzes. Sie steuert nur noch, ob die Abschluss-Seite „Zahlung
+ * nicht abgeschlossen" zeigt, und ob der Adminbereich einen Versuch
+ * als laufend oder als abgebrochen darstellt.
  */
-export function belegtFilter(jetzt: Date = new Date()) {
-  return {
-    OR: [
-      { status: "BESTAETIGT" as const },
-      { status: "RESERVIERT" as const, reserviertBis: { gt: jetzt } },
-    ],
-  };
+export function belegtFilter() {
+  return { status: "BESTAETIGT" as const };
 }
 
-/** Wie lange ein Platz gehalten wird, während die Zahlung läuft. */
-export const RESERVIERUNG_MINUTEN = 30;
+/**
+ * Anmeldungen mit einem offenen Zahlungsversuch.
+ *
+ * Sie bleiben gespeichert — die Person soll die Zahlung fortsetzen
+ * können, ohne alles neu einzugeben — zählen aber weder als
+ * Teilnehmer noch gegen die Plätze. Der Adminbereich weist sie
+ * getrennt aus, damit sichtbar bleibt, dass es sie gibt.
+ */
+export function offenerVersuchFilter() {
+  return { status: "RESERVIERT" as const };
+}
+
+/**
+ * Wie lange ein Zahlungsversuch als laufend gilt.
+ *
+ * Hiess einmal „wie lange ein Platz gehalten wird". Seit dem
+ * 24.09.2026 wird kein Platz mehr gehalten (siehe belegtFilter): Die
+ * Frist entscheidet nur noch darüber, ob die Abschluss-Seite zum
+ * Weiterbezahlen einlädt oder sagt, dass der Versuch beendet ist.
+ */
+export const ZAHLFRIST_MINUTEN = 30;
 
 export function reserviertBis(jetzt: Date = new Date()): Date {
-  return new Date(jetzt.getTime() + RESERVIERUNG_MINUTEN * 60 * 1000);
+  return new Date(jetzt.getTime() + ZAHLFRIST_MINUTEN * 60 * 1000);
 }

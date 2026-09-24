@@ -19,9 +19,10 @@ import stil from "@/components/Textseite.module.css";
  *
  * Eine Zwischenbestätigung („Danke, wir haben deine Anmeldung") vor
  * der Bezahlung wäre irreführend: Sie klingt nach fertig, obwohl noch
- * nichts fest ist. Die 30-Minuten-Reservierung ist eine technische
- * Sicherung während des Bezahlens, keine Anmeldung und keine
- * Warteliste — und wird hier auch nicht so genannt.
+ * nichts fest ist. Die 30 Minuten sind seit dem 24.09.2026 nur noch
+ * die Frist des Zahlungsversuchs — sie halten keinen Platz mehr
+ * (lib/plaetze.ts). Sie sind weder eine Anmeldung noch eine
+ * Warteliste und werden hier auch nicht so genannt.
  *
  * Die Seite liest bei jedem Aufruf frisch aus der Datenbank.
  */

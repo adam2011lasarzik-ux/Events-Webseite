@@ -65,15 +65,21 @@ export async function bezahlseiteFuer(
 
   /* ── Reichen die Plätze noch? ────────────────────────────────
      Auch beim zweiten Anlauf. Zwischen dem ersten Versuch und jetzt
-     können andere gebucht haben — und für einen Platz zu bezahlen,
+     können andere bezahlt haben — und für einen Platz zu bezahlen,
      den es nicht mehr gibt, ist der unangenehmste Fehler von allen.
+
+     Seit dem 24.09.2026 ist das eine Momentaufnahme und keine Zusage:
+     Weil während der Zahlung kein Platz gehalten wird, kann auch
+     zwischen dieser Prüfung und dem Klick auf „Bezahlen" jemand
+     anders bezahlen. Die Prüfung bleibt trotzdem — sie fängt den
+     häufigen Fall ab, dass längst ausgebucht ist.
 
      Die eigene Anmeldung wird ausgenommen: Sie wird bezahlt, nicht
      zusätzlich gebucht. */
   const belegte = await db.registration.findMany({
     where: {
       eventId: anmeldung.event.id,
-      ...belegtFilter(jetzt),
+      ...belegtFilter(),
       id: { not: anmeldung.id },
     },
     select: { _count: { select: { teilnehmer: true } } },
@@ -106,7 +112,7 @@ export async function bezahlseiteFuer(
       }
 
       if (stand?.lage === "open" && stand.url && betragPasst(stand.betragCents, anmeldung.gesamtpreisCents)) {
-        // Reservierung auffrischen, aber KEINE zweite Sitzung.
+        // Frist des Versuchs auffrischen, aber KEINE zweite Sitzung.
         await db.registration.update({
           where: { id: anmeldung.id },
           data:
@@ -136,10 +142,11 @@ export async function bezahlseiteFuer(
        Sitzungskennung in der Datenbank, die es beim Anbieter gar nicht
        gibt.
 
-       Die Reservierung wird dabei aufgefrischt. Wer einen zweiten
-       Anlauf nimmt, soll nicht daran scheitern, dass die erste Frist
-       schon abgelaufen ist. Eine bereits bestätigte Anmeldung behält
-       ihren Status — sie hat ihren Platz sicher. */
+       Die Frist des Zahlungsversuchs wird dabei aufgefrischt. Wer
+       einen zweiten Anlauf nimmt, soll nicht sofort wieder „nicht
+       abgeschlossen" lesen. Ein Platz hängt daran seit dem 24.09.2026
+       nicht mehr (lib/plaetze.ts). Eine bereits bestätigte Anmeldung
+       behält ihren Status — sie hat ihren Platz sicher. */
     await db.registration.update({
       where: { id: anmeldung.id },
       data: {
