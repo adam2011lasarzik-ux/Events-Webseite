@@ -1,0 +1,102 @@
+Datenschutzerklärung
+
+
+1. Allgemeine Erklärung
+
+Verantwortlicher für die Datenverarbeitung auf dieser Website ist VERA Events, Inhaber Adam Lasarzik. Die vollständige Anschrift steht im Impressum (veraevents.de/impressum), Kontakt: kontakt@veraevents.de.
+
+Bei einer Online-Anmeldung erheben wir Vorname, Nachname, E-Mail-Adresse und, wenn angegeben, Telefonnummer der anmeldenden Person sowie Vorname und Nachname jeder teilnehmenden Person. Meldet eine erziehungsberechtigte Person ein minderjähriges Kind an, gelten zusätzlich die Angaben aus Abschnitt 2. Die Verarbeitung dient dem Zustandekommen und der Durchführung der Anmeldung, der Platzverwaltung und, soweit bezahlt wird, der Zuordnung der Zahlung; Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. b DSGVO (Erfüllung des Vertrags). Beim Aufruf der Website verarbeitet der Hosting-Anbieter zudem die für den technischen Betrieb erforderlichen Server-Protokolldaten (unter anderem IP-Adresse, Zeitpunkt, aufgerufene Seite); Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. f DSGVO (sicherer Betrieb der Website).
+
+Bezahlt werden kann mit Kredit- oder Debitkarte (auf unterstützten Geräten als Apple Pay oder Google Pay), oder mit PayPal — alle vier Wege laufen technisch über den Zahlungsanbieter Stripe. Beim Bezahlen werden an Stripe übermittelt: der Betrag, die Anmeldenummer, die E-Mail-Adresse sowie der Titel der Veranstaltung und die Anzahl der Personen. Bezahlt wird ausschließlich auf der gesicherten Seite von Stripe. Kartennummern und Bankdaten erreichen diese Seite zu keinem Zeitpunkt — sie werden hier weder entgegengenommen noch gespeichert. Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. b DSGVO. Weitere Einzelheiten zu Stripe und, bei Auswahl dieser Zahlungsart, zu PayPal stehen im nächsten Abschnitt „Empfänger und Auftragsverarbeiter“.
+
+Diese Seite zählt keine Besucher, verfolgt niemanden über andere Seiten hinweg und lädt keine Inhalte von fremden Servern nach — auch die Schriften liegen auf dieser Domain. Es gibt keine Werbe- oder Statistik-Cookies und deshalb auch kein Zustimmungsfenster. Das einzige Cookie entsteht, wenn sich der Betreiber am Verwaltungsbereich anmeldet; es hält nur diese Anmeldung und ist technisch notwendig.
+
+
+2. Einverständniserklärungen für minderjährige Teilnehmer
+
+Dieser Abschnitt betrifft die Angaben auf der Einverständniserklärung, die für minderjährige Teilnehmer abgegeben wird.
+
+Bei der Anmeldung und Teilnahme minderjähriger Personen verarbeitet VERA Events insbesondere den Namen und das Geburtsdatum des minderjährigen Teilnehmers, den Namen und die Mobilnummer der erziehungsberechtigten Person, gegebenenfalls deren E-Mail-Adresse, Angaben zur Veranstaltung sowie freiwillige Angaben zu Allergien, Erkrankungen oder erforderlichen Notfallmedikamenten.
+
+Die Verarbeitung erfolgt zur Entgegennahme des Formulars am Empfang, zur Organisation und Durchführung der Veranstaltung, zur Prüfung der Teilnahmeberechtigung, zur Kontaktaufnahme während der Veranstaltung, zur Gewährleistung der Sicherheit, zur Notfallhilfe und zur Dokumentation der erteilten Einverständniserklärung.
+
+Rechtsgrundlagen für die teilnahmebezogenen Daten sind Art. 6 Abs. 1 Buchst. b DSGVO und, hinsichtlich Erreichbarkeit, Sicherheit und Dokumentation, Art. 6 Abs. 1 Buchst. f DSGVO. In einem akuten Notfall kann die Verarbeitung außerdem auf Art. 6 Abs. 1 Buchst. d DSGVO gestützt werden.
+
+Angaben zu Allergien, Erkrankungen oder erforderlichen Notfallmedikamenten sind freiwillig. Soweit solche Gesundheitsdaten angegeben werden, erfolgt ihre Verarbeitung aufgrund einer ausdrücklichen Einwilligung gemäß Art. 9 Abs. 2 Buchst. a in Verbindung mit Art. 6 Abs. 1 Buchst. a DSGVO. In einem akuten Notfall kann Art. 9 Abs. 2 Buchst. c DSGVO Anwendung finden. Die Einwilligung kann jederzeit mit Wirkung für die Zukunft widerrufen werden.
+
+Mitarbeiter der jeweiligen Veranstaltungslocation dürfen die Formulare am Empfang ausschließlich für VERA Events entgegennehmen, kurzfristig sicher verwahren und vollständig an VERA Events weitergeben. Die Veranstaltungslocation behält keine Kopie und verwendet die Angaben nicht für eigene Zwecke.
+
+Zugriff erhalten im Übrigen nur Personen, die die Daten für die Veranstaltungsdurchführung benötigen. Im Notfall können erforderliche Angaben an Rettungsdienst oder medizinisches Personal weitergegeben werden. Eine sonstige Weitergabe erfolgt nur, wenn hierfür eine gesetzliche Verpflichtung besteht.
+
+Freiwillige Gesundheitsangaben werden spätestens sieben Tage nach Veranstaltungsende gelöscht oder vernichtet, sofern kein Vorfall dokumentiert ist, der eine längere Aufbewahrung erforderlich macht. Die übrigen Angaben werden gelöscht, sobald sie für die genannten Zwecke nicht mehr erforderlich sind. Eine längere Speicherung erfolgt nur, soweit sie zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen erforderlich ist oder gesetzliche Aufbewahrungspflichten bestehen.
+
+Die erforderlichen Pflichtangaben werden für die Teilnahme Minderjähriger benötigt. Die E-Mail-Adresse und Gesundheitsangaben sind freiwillig. Ohne erforderliche Pflichtangaben kann die Teilnahme abgelehnt werden. Im Übrigen gelten die in der Datenschutzerklärung aufgeführten Rechte der betroffenen Personen.
+
+
+3. Empfänger und Auftragsverarbeiter
+
+Wir geben personenbezogene Daten nur an die folgenden Empfänger weiter, soweit dies für den jeweiligen Zweck erforderlich ist. Weitere Empfänger gibt es nicht — insbesondere keine Werbenetzwerke und keine Analysedienste.
+
+- Hostinger International Ltd., 61 Lordou Vironos Street, 6023 Larnaca, Zypern, betreibt den Server dieser Website — auch als virtuellen Server (VPS) — und das E-Mail-Postfach, über das automatische Bestätigungsmails versendet werden (Serverstandort Frankreich). Hostinger ist dabei Auftragsverarbeiter, VERA Events Verantwortlicher; der Auftragsverarbeitungsvertrag gilt nach den Nutzungsbedingungen von Hostinger durch deren elektronische Annahme als abgeschlossen (maßgeblich ist die englische Fassung, Dokumentstand 15.09.2026).
+
+- Stripe Payments Europe, Limited, One Wilton Park, Wilton Place, Dublin 2, D02 FX04, Irland (bei bestimmten Zahlungsdiensten zusätzlich Stripe Technology Europe, Limited, unter derselben Anschrift), wickelt Zahlungen ab; Einzelheiten stehen im vorherigen Abschnitt.
+
+- Wird beim Bezahlen PayPal gewählt, verarbeitet PayPal als eigenständig Verantwortlicher nach eigener Datenschutzerklärung die dafür erforderlichen Zugangs- und Zahlungsdaten — die Zahlung läuft dabei über die Verbindung von Stripe zu PayPal, es gibt keine eigene PayPal-Anbindung von VERA.
+
+- Backblaze, Inc., 500 Ben Franklin Ct, San Mateo, CA 94401, USA, speichert verschlüsselte Sicherungskopien der Datenbank in einem Rechenzentrum in der EU. Backblaze erhält ausschließlich die verschlüsselte Datei, keinen lesbaren Inhalt.
+
+- UptimeRobot s. r. o., Obchodná 507/2, 811 06 Bratislava, Slowakei, ruft in regelmäßigen Abständen die öffentliche Startseite auf, um die Erreichbarkeit der Website zu prüfen. Dabei fallen keine Besucher- oder Teilnehmerdaten an.
+
+- Mitarbeiter der jeweiligen Veranstaltungsstätte dürfen die Papierformulare für minderjährige Teilnehmer am Empfang ausschließlich für VERA Events entgegennehmen und weitergeben; Einzelheiten stehen in Abschnitt 2. Wer die Veranstaltungsstätte einer konkreten Veranstaltung ist, steht auf /aufnahmen.
+
+- In einem akuten Notfall können erforderliche Angaben an Rettungsdienst oder ärztliches Personal weitergegeben werden.
+
+
+4. Speicherdauer und Löschung
+
+Daten werden nicht länger gespeichert, als es der jeweilige Zweck und die gesetzlichen Aufbewahrungspflichten erfordern. Welche Frist gilt, hängt von der Art der Angaben ab; die Löschung läuft automatisch.
+
+Gesundheits- und Notfallangaben auf der Einverständniserklärung werden spätestens sieben Tage nach Ende der Veranstaltung vernichtet.
+
+Vollständige Einverständniserklärungen für minderjährige Teilnehmer werden drei Jahre ab dem Ende des Kalenderjahres der Veranstaltung aufbewahrt und danach vernichtet. Anschließend wird ein reduzierter Nachweis darüber aufbewahrt, dass eine Zustimmung vorlag; er enthält kein Geburtsdatum, keine Mobilnummer und keine Gesundheitsangaben und wird zehn Jahre ab dem Ende des Kalenderjahres der Veranstaltung aufbewahrt und danach gelöscht.
+
+Anmeldedaten (Vor- und Nachname, E-Mail-Adresse, Telefonnummer der anmeldenden Person sowie die Namen der Teilnehmenden) werden drei Jahre ab dem Ende des Kalenderjahres der Veranstaltung aufbewahrt und danach automatisch überschrieben; die Buchung selbst bleibt ohne Personenbezug bestehen, weil Betrag und Datum zu den steuerlichen Unterlagen gehören. Ein Check-out oder eine Abmeldung beim Verlassen der Veranstaltung ist nicht vorgesehen — VERA erhebt und speichert dafür keinen Zeitpunkt.
+
+Veranstaltungs- und Sicherheitschecklisten werden drei Jahre ab dem Ende des Kalenderjahres aufbewahrt. Danach werden alle personenbezogenen und mittelbar zuordenbaren Angaben — insbesondere Mitarbeiterkürzel und Freitextnotizen — unwiderruflich entfernt. Nur die dann tatsächlich anonyme Sicherheitsdokumentation bleibt erhalten.
+
+Unterlagen zu einem Vorfall, einer Beschwerde oder einem Versicherungsfall werden nicht automatisch gelöscht, solange der Vorgang offen ist. Nach seinem Abschluss werden sie zehn Jahre aufbewahrt; bei schweren Personen- oder Gesundheitsschäden höchstens dreißig Jahre.
+
+Rechnungen, Buchungsbelege und sonstige steuerrelevante Unterlagen unterliegen den gesetzlichen Aufbewahrungsfristen nach § 147 der Abgabenordnung. Sie werden von der automatischen Löschung ausdrücklich nicht erfasst und bleiben unabhängig davon erhalten, ob die übrigen Angaben zu derselben Anmeldung bereits gelöscht wurden.
+
+Der Nachweis über einen erklärten Widerspruch gegen Foto- oder Videoaufnahmen (siehe „Ihr Widerspruchsrecht“ auf /aufnahmen) wird aufbewahrt, solange Aufnahmen dieser Veranstaltung noch veröffentlicht sind, und danach weitere drei Jahre ab dem Ende des betreffenden Kalenderjahres. Die veröffentlichten Aufnahmen selbst unterliegen keiner automatischen Löschfrist; ihre Entfernung wird von Hand veranlasst und dokumentiert.
+
+Einzelne Datensätze können von der automatischen Löschung ausgenommen werden, wenn ein Unfall, eine Beschwerde, eine Rückbuchung, ein Versicherungsfall oder ein dokumentierter Rechtsstreit dies erfordert. Eine solche Sperre wird mit Grund, Datum und verantwortlicher Person festgehalten und wieder aufgehoben, sobald der Grund entfallen ist.
+
+Zur Ausfallsicherheit werden verschlüsselte Sicherungen der Datenbank erstellt. Sie werden nach spätestens 180 Tagen automatisch gelöscht. Muss eine Sicherung eingespielt werden, wird die Löschung unmittelbar danach erneut ausgeführt, damit bereits gelöschte Daten nicht dauerhaft wieder in Gebrauch kommen.
+
+Über jeden Löschlauf wird ein Protokoll geführt. Es enthält bewusst keine Namen, E-Mail-Adressen oder Telefonnummern, sondern nur die Kennung des betroffenen Datensatzes, die Datenart und die durchgeführte Maßnahme.
+
+
+5. Ihre Rechte
+
+Sie haben das Recht,
+
+- Auskunft über die von uns verarbeiteten Daten zu verlangen (Art. 15 DSGVO),
+
+- deren Berichtigung zu verlangen (Art. 16 DSGVO),
+
+- deren Löschung zu verlangen (Art. 17 DSGVO),
+
+- die Einschränkung der Verarbeitung zu verlangen (Art. 18 DSGVO),
+
+- die Sie betreffenden Daten in einem übertragbaren Format zu erhalten (Art. 20 DSGVO),
+
+- der Verarbeitung zu widersprechen, soweit sie auf Art. 6 Abs. 1 Buchst. f DSGVO beruht (Art. 21 DSGVO),
+
+- eine erteilte Einwilligung jederzeit mit Wirkung für die Zukunft zu widerrufen, ohne dass die Rechtmäßigkeit der bis dahin erfolgten Verarbeitung berührt wird (Art. 7 Abs. 3 DSGVO).
+
+Wenden Sie sich dafür an kontakt@veraevents.de.
+
+Ihnen steht außerdem ein Beschwerderecht bei einer Datenschutz-Aufsichtsbehörde zu (Art. 77 DSGVO). Für uns zuständig ist die Landesbeauftragte für den Datenschutz und für das Recht auf Akteneinsicht Brandenburg, Stahnsdorfer Damm 77, 14532 Kleinmachnow, Poststelle@LDA.Brandenburg.de.
+
+Es findet keine automatisierte Entscheidungsfindung im Sinne von Art. 22 DSGVO statt.

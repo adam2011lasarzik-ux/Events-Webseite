@@ -24,7 +24,8 @@
     "loeschen:vorschau": "tsx --env-file=.env prisma/loeschlauf.ts",
     "loeschen": "tsx --env-file=.env prisma/loeschlauf.ts --echt",
     "papier:erinnern": "tsx --env-file=.env prisma/papiererinnerung.ts",
-    "rechtstext": "tsx --env-file=.env prisma/rechtstextAnlegen.ts"
+    "rechtstext": "tsx --env-file=.env prisma/rechtstextAnlegen.ts",
+    "rechtstext:export": "tsx werkzeuge/rechtstextExport.ts"
   },
   "dependencies": {
     "@prisma/adapter-mariadb": "^7.9.1",

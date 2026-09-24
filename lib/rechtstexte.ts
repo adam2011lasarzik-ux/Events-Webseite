@@ -9,77 +9,45 @@
    gegenüber einem Kunden kein Nachweis, sondern ein internes
    Werkzeug, das VERA selbst ändern kann.
 
-   Zwei Dinge trennt diese Datei bewusst:
+   Zwei Dinge sind bewusst getrennt:
 
      - die REINEN Regeln (Prüfsumme, nächste Version, welche Fassung
        gilt) — ohne Datenbank, einzeln prüfbar, so wie in
-       lib/preise.ts und lib/storno.ts;
-     - die Datenbankzugriffe, die darauf aufbauen.
+       lib/preise.ts und lib/storno.ts. Sie stehen seit dem 24.09.2026
+       in lib/rechtstexteRegeln.ts, weil das Werkzeug, das den
+       Wortlaut in eine Datei schreibt, sie ohne DATABASE_URL braucht.
+       Diese Datei reicht sie weiter, damit es nur EINE Definition
+       gibt;
+     - die Datenbankzugriffe, die darauf aufbauen — ab hier.
 
    Prüfliste U prüft beides getrennt.
    --------------------------------------------------------------- */
 
-import { createHash } from "node:crypto";
 import { db } from "./db";
+import {
+  pruefsumme,
+  naechsteVersion,
+  geltendeFassung,
+  RECHTSTEXTARTEN,
+  ARTNAME,
+  type Rechtstextart,
+  type Fassung,
+} from "./rechtstexteRegeln";
 
-/** Die Textarten, wie sie im Datenmodell heißen. */
-export type Rechtstextart = "AGB_B2C" | "AGB_B2B" | "DATENSCHUTZ";
-
-/** Alle Arten, für Prüfungen und Adminanzeige. */
-export const RECHTSTEXTARTEN: Rechtstextart[] = ["AGB_B2C", "AGB_B2B", "DATENSCHUTZ"];
-
-/** Wie die Arten in der Oberfläche heißen. */
-export const ARTNAME: Record<Rechtstextart, string> = {
-  AGB_B2C: "Teilnahmebedingungen (Verbraucher)",
-  AGB_B2B: "Bedingungen für Geschäftskunden",
-  DATENSCHUTZ: "Datenschutzerklärung",
+/* Die reinen Regeln stehen seit dem 24.09.2026 in
+   lib/rechtstexteRegeln.ts — sie müssen ohne Datenbank benutzbar
+   sein (werkzeuge/rechtstextExport.ts). Hier werden sie
+   weitergereicht, damit jeder bestehende Import weiter gilt und es
+   trotzdem nur EINE Definition gibt. */
+export {
+  pruefsumme,
+  naechsteVersion,
+  geltendeFassung,
+  RECHTSTEXTARTEN,
+  ARTNAME,
+  type Rechtstextart,
+  type Fassung,
 };
-
-/**
- * Die Prüfsumme über einen Wortlaut.
- *
- * Sie belegt nicht gegenüber Dritten, dass nichts geändert wurde — wer
- * die Zeile ändern kann, kann auch die Prüfsumme neu setzen. Sie macht
- * eine UNBEABSICHTIGTE Änderung aber sofort sichtbar, und genau dafür
- * ist sie da.
- *
- * Der Wortlaut wird vorher NICHT normalisiert: Ein geändertes
- * Leerzeichen ist eine geänderte Fassung. Wer den Text anfasst, legt
- * eine neue Version an.
- */
-export function pruefsumme(inhalt: string): string {
-  return createHash("sha256").update(inhalt, "utf8").digest("hex");
-}
-
-/** Die nächste freie Versionsnummer. Fassungen beginnen bei 1. */
-export function naechsteVersion(vorhandene: number[]): number {
-  return vorhandene.length === 0 ? 1 : Math.max(...vorhandene) + 1;
-}
-
-/** Das Nötigste, um zu entscheiden, welche Fassung gilt. */
-export interface Fassung {
-  id: string;
-  version: number;
-  gueltigAb: Date;
-}
-
-/**
- * Welche Fassung galt zu einem bestimmten Zeitpunkt?
- *
- * Die neueste, deren `gueltigAb` nicht NACH dem Zeitpunkt liegt —
- * **nicht** schlicht die neueste. Das ist der Unterschied, auf den es
- * ankommt: Eine Fassung, die erst morgen gilt, darf heute nicht
- * einbezogen werden, und eine Buchung von letztem Monat trägt die
- * Fassung von letztem Monat.
- *
- * Gibt es keine gültige Fassung, ist die Antwort null. Der Aufrufer
- * entscheidet, was das bedeutet — diese Funktion rät nicht.
- */
-export function geltendeFassung<T extends Fassung>(fassungen: T[], zeitpunkt: Date): T | null {
-  const gueltige = fassungen.filter((f) => f.gueltigAb.getTime() <= zeitpunkt.getTime());
-  if (gueltige.length === 0) return null;
-  return gueltige.reduce((a, b) => (a.version >= b.version ? a : b));
-}
 
 /* ── Ab hier mit Datenbank ──────────────────────────────────────── */
 

@@ -138,6 +138,170 @@ pruefe(
   lies("app/(seite)/anmeldung/aktion.ts").includes("geltendeFassungJetzt"),
 );
 
+console.log("\nU5b · Der Wortlaut in der Datei stimmt mit der Seite überein");
+
+/* Hintergrund (24.09.2026): `npm run rechtstext` legt eine Fassung aus
+   einer DATEI an, die Texte selbst stehen aber in content/de.ts. Die
+   Datei wird deshalb erzeugt, nicht abgetippt
+   (werkzeuge/rechtstextExport.ts). Diese Prüfungen sind der Riegel
+   davor, dass beide auseinanderlaufen — der Fehler wäre sonst
+   unsichtbar: Die Seite zeigte den neuen Text, die Mail schickte den
+   alten mit, und keine Anzeige wäre rot.
+
+   Die reine Aufzählung der Felder ist Absicht. Eine neue Ziffer, die
+   jemand in content/de.ts ergänzt, aber in die Abschnittsliste nicht
+   einträgt, fällt hier auf — und nur hier. */
+const { texte } = await import("../../content/index.ts");
+const { agbWortlaut, datenschutzWortlaut, agbAbschnitte, datenschutzAbschnitte, FASSUNGSDATEIEN } =
+  await import("../../lib/rechtstextFassung.ts");
+const { ohneTrennstellen } = await import("../../lib/formate.ts");
+
+const agbDatei = lies(FASSUNGSDATEIEN.AGB_B2C);
+const dsDatei = lies(FASSUNGSDATEIEN.DATENSCHUTZ);
+
+pruefe("Die erzeugte Fassung der AGB steht als Datei im Projekt", agbDatei.length > 5000);
+pruefe("Die erzeugte Datenschutzerklärung ebenfalls", dsDatei.length > 3000);
+pruefe(
+  "Die AGB-Datei ist auf dem Stand von content/de.ts",
+  agbDatei === agbWortlaut(),
+  "npm run rechtstext:export vergessen?",
+);
+pruefe(
+  "Die Datenschutz-Datei ist auf dem Stand von content/de.ts",
+  dsDatei === datenschutzWortlaut(),
+  "npm run rechtstext:export vergessen?",
+);
+
+/* Feld für Feld. `agb` und `datenschutz` sind die Beschriftungen im
+   Menü („AGB", „Datenschutz") und gehören nicht in den Vertragstext —
+   sie sind die einzige Ausnahme, und sie steht hier namentlich, damit
+   niemand sie versehentlich erweitert.
+
+   `keineCookies` heisst nicht nach seiner Seite, steht aber in
+   Abschnitt 1 der Datenschutzerklärung. Deshalb ausdrücklich dazu:
+   Eine Prüfung, die nur nach dem Namensanfang geht, übersähe genau
+   die Felder, die aus der Reihe fallen. */
+const NUR_MENUE = new Set(["agb", "datenschutz"]);
+const felder = [
+  ...Object.keys(texte.recht).filter((k) => /^(agb|datenschutz)/.test(k) && !NUR_MENUE.has(k)),
+  "keineCookies",
+];
+const fehlende = [];
+for (const k of felder) {
+  const wert = texte.recht[k];
+  const stuecke = Array.isArray(wert) ? wert : [wert];
+  const ziel = k.startsWith("agb") ? agbDatei : dsDatei;
+  for (const stueck of stuecke) {
+    if (!ziel.includes(ohneTrennstellen(stueck))) fehlende.push(`${k}: ${stueck.slice(0, 50)}…`);
+  }
+}
+pruefe(
+  `Jeder der ${felder.length} Rechtstext-Bausteine steht wörtlich in seiner Datei`,
+  fehlende.length === 0,
+  fehlende.slice(0, 3).join(" | "),
+);
+
+/* Die Gegenprobe: Dass alles drinsteht, genügt nicht — es darf auch
+   nichts drinstehen, was auf der Seite nicht steht. Geprüft über die
+   Zeilenzahl: Jede nicht leere Zeile der Datei muss einem Baustein
+   entsprechen (bei Aufzählungen ohne das vorangestellte „- "). */
+const bausteine = new Set([
+  ohneTrennstellen(texte.recht.agbTitel),
+  ohneTrennstellen(texte.recht.datenschutzTitel),
+]);
+for (const a of [...agbAbschnitte(), ...datenschutzAbschnitte()]) {
+  for (const stueck of [a.titel, ...a.absaetze, ...(a.punkte ?? []), ...(a.nachsatz ?? [])]) {
+    bausteine.add(ohneTrennstellen(stueck));
+  }
+}
+const fremd = [...agbDatei.split("\n"), ...dsDatei.split("\n")]
+  .map((z) => z.replace(/^- /, "").trim())
+  .filter((z) => z.length > 0 && !bausteine.has(z));
+pruefe(
+  "Und die Dateien enthalten NICHTS, was nicht aus content/de.ts stammt",
+  fremd.length === 0,
+  fremd.slice(0, 3).join(" | "),
+);
+
+pruefe(
+  "Die Prüfsumme der Datei ist der SHA-256 über ihre Bytes — sha256sum liefert denselben Wert",
+  pruefsumme(agbDatei) === createHash("sha256").update(agbDatei, "utf8").digest("hex"),
+);
+
+/* Der Aufruf, den auch ein Mensch macht. Er meldet Abweichungen mit
+   einem Satz statt mit einem Stapelabzug — und sein Exitcode ist das,
+   worauf sich ein späterer Prüflauf verlassen kann. */
+const exportPruefung = (() => {
+  try {
+    execSync("npx tsx werkzeuge/rechtstextExport.ts --pruefen", {
+      cwd: new URL("../../", import.meta.url).pathname,
+      encoding: "utf8",
+      stdio: "pipe",
+    });
+    return 0;
+  } catch (f) {
+    return f.status ?? 1;
+  }
+})();
+pruefe("npm run rechtstext:export -- --pruefen meldet keine Abweichung", exportPruefung === 0);
+
+console.log("\nU5c · Das Anlegeskript läuft wirklich");
+
+/* Warum diese Prüfungen existieren: prisma/rechtstextAnlegen.ts wurde
+   am 20.09.2026 gebaut, geprüft — und nie ausgeführt. Es benutzte
+   `await` auf oberster Ebene, was `tsx` in diesem Projekt (CJS) nicht
+   übersetzen kann; jeder Aufruf brach mit "Top-level await is
+   currently not supported" ab. Gemerkt hat das niemand, weil die
+   damaligen Prüfungen den QUELLTEXT des Skripts lasen, statt es
+   aufzurufen. Ein Skript, das nur gelesen wird, ist nicht geprüft.
+
+   Deshalb wird es hier wirklich gestartet — einmal ohne Angaben
+   (es muss die Aufrufhilfe zeigen) und einmal vollständig, mit einer
+   Art, die das Projekt sonst nicht benutzt. */
+const starteSkript = (args) => {
+  try {
+    return {
+      code: 0,
+      ausgabe: execSync(`npx tsx --env-file=.env prisma/rechtstextAnlegen.ts ${args} 2>&1`, {
+        cwd: new URL("../../", import.meta.url).pathname,
+        encoding: "utf8",
+      }),
+    };
+  } catch (f) {
+    return { code: f.status ?? 1, ausgabe: String(f.stdout ?? "") + String(f.stderr ?? "") };
+  }
+};
+
+const ohneAngaben = starteSkript("");
+pruefe(
+  "Ohne Angaben zeigt es die Aufrufhilfe — es stürzt nicht beim Übersetzen ab",
+  ohneAngaben.ausgabe.includes("Aufruf: npm run rechtstext"),
+  ohneAngaben.ausgabe.slice(0, 160),
+);
+pruefe(
+  "… und zwar ohne „Top-level await\" — der Fehler, der es seit dem 20.09.2026 unbenutzbar machte",
+  !ohneAngaben.ausgabe.includes("Top-level await"),
+);
+pruefe("… mit einem Exitcode ungleich null", ohneAngaben.code !== 0);
+
+const echterLauf = starteSkript(`AGB_B2B ${FASSUNGSDATEIEN.AGB_B2C} 2026-01-05`);
+pruefe(
+  "Mit Angaben legt es wirklich eine Fassung an",
+  echterLauf.code === 0 && echterLauf.ausgabe.includes("Version 1 angelegt"),
+  echterLauf.ausgabe.slice(0, 160),
+);
+const b2b = await db.rechtstext.findFirst({ where: { art: "AGB_B2B" } });
+pruefe("Die Fassung steht danach in der Datenbank", b2b !== null);
+pruefe(
+  "Ihr Wortlaut ist der der Datei, Zeichen für Zeichen",
+  b2b?.inhalt === agbDatei,
+);
+pruefe(
+  "Und ihre Prüfsumme ist die der Datei — sha256sum auf dem Server liefert denselben Wert",
+  b2b?.pruefsumme === pruefsumme(agbDatei),
+);
+await db.rechtstext.deleteMany({ where: { art: "AGB_B2B" } });
+
 /* ══ Teil 2 · Gegen die echte Datenbank ══════════════════════════ */
 
 console.log("\nU6 · Anlegen, und nur anlegen");

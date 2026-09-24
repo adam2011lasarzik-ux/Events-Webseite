@@ -54,14 +54,33 @@ try {
 
 if (inhalt.trim().length === 0) abbruch("Die Datei ist leer.");
 
-const neu = await fassungAnlegen(art as Rechtstextart, inhalt, datum, gueltigAb);
+/* Warum eine Funktion statt `await` auf oberster Ebene:
+   `tsx` übersetzt dieses Projekt nach CJS (package.json hat kein
+   "type": "module"), und CJS kennt kein Warten auf oberster Ebene.
+   Bis zum 24.09.2026 stand hier genau das — und dieses Skript ist
+   deshalb nie gelaufen, sondern brach mit
+   "Top-level await is currently not supported" ab.
 
-console.log(`\n✓ ${ARTNAME[art as Rechtstextart]} — Version ${neu.version} angelegt.`);
-console.log(`  Stand:     ${datumRoh}`);
-console.log(`  Gültig ab: ${gueltigAb.toISOString().slice(0, 10)}`);
-console.log(`  Zeichen:   ${inhalt.length}`);
-console.log(`  Kennung:   ${neu.id}\n`);
-console.log("Bestehende Fassungen bleiben unverändert — sie werden von");
-console.log("Buchungen referenziert, die unter ihnen zustande kamen.\n");
+   Aufgefallen ist es erst, als die Fassungen wirklich angelegt werden
+   sollten: Das Skript war gebaut und geprüft worden, aber nie
+   ausgeführt. Prüfliste U ruft es seitdem wirklich auf, statt nur
+   seinen Quelltext zu lesen. */
+async function hauptlauf(): Promise<void> {
+  const neu = await fassungAnlegen(art as Rechtstextart, inhalt, datum, gueltigAb);
 
-await db.$disconnect();
+  console.log(`\n✓ ${ARTNAME[art as Rechtstextart]} — Version ${neu.version} angelegt.`);
+  console.log(`  Stand:     ${datumRoh}`);
+  console.log(`  Gültig ab: ${gueltigAb.toISOString().slice(0, 10)}`);
+  console.log(`  Zeichen:   ${inhalt.length}`);
+  console.log(`  Kennung:   ${neu.id}\n`);
+  console.log("Bestehende Fassungen bleiben unverändert — sie werden von");
+  console.log("Buchungen referenziert, die unter ihnen zustande kamen.\n");
+
+  await db.$disconnect();
+}
+
+hauptlauf().catch(async (fehler) => {
+  console.error(`\n✗ ${fehler instanceof Error ? fehler.message : String(fehler)}\n`);
+  await db.$disconnect();
+  process.exit(1);
+});
