@@ -20,6 +20,27 @@ npm run build
 In `.env` müssen `DATABASE_URL` und `OEFFENTLICHE_ADRESSE` stehen; die
 Vorlage dafür ist `.env.example`.
 
+Seit dem 25.09.2026 gehört `ANMELDUNG_SCHLUESSEL` dazu — ohne ihn lassen
+sich die verschlüsselten Anmeldedaten nicht lesen. Erzeugen:
+
+```bash
+echo "ANMELDUNG_SCHLUESSEL=\"$(openssl rand -base64 32)\"" >> .env
+```
+
+> **Vor dem Ausrollen der Migration `zahlung_erst_dann_anmeldung`:** Sie
+> legt einen eindeutigen Index auf `zahlungsReferenz`. Gäbe es dort
+> Dubletten, schlüge sie fehl. Der Lesebefehl dafür, ohne Änderung:
+>
+> ```bash
+> sudo -u vera bash -c 'cd /var/www/vera && npx prisma db execute --stdin' <<'SQL'
+> SELECT zahlungsReferenz, COUNT(*) AS anzahl FROM Registration
+>  WHERE zahlungsReferenz IS NOT NULL
+>  GROUP BY zahlungsReferenz HAVING anzahl > 1;
+> SQL
+> ```
+>
+> Kommt keine Zeile zurück, kann die Migration laufen.
+
 Für die vier Browser-Prüfungen wird Chromium gebraucht. Playwright
 selbst steht als devDependency in der `package.json` und kommt mit
 `npm install` mit; der Browser wird einmal separat geholt:

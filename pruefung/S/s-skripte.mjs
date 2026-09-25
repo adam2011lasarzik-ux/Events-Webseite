@@ -92,6 +92,45 @@ if (loeschlauf) {
   );
 }
 
+/* ── Die Nginx-Bremse ────────────────────────────────────────────
+
+   Neu am 25.09.2026. Sie ersetzt für den Anmeldeweg die Bremse, die
+   bisher eine Zeile in die Datenbank schrieb — vor einer erfolgreichen
+   Zahlung darf dort nichts entstehen. Zwei Eigenschaften dieser Datei
+   sind nicht verhandelbar, und beide sind leicht zu verlieren, wenn
+   jemand sie später überarbeitet:
+
+     1. Der Weg, auf dem der Zahlungsanbieter meldet, ist ausgenommen.
+        Eine gebremste Rückmeldung wäre eine verlorene Zahlung.
+     2. Gezählt wird nur POST. Sonst bremste sie auch Seitenaufrufe.  */
+{
+  const bremse = readFileSync(join(SERVER, "vera-bremse.conf"), "utf8");
+
+  pruefe("vera-bremse.conf ist vorhanden", bremse.length > 0);
+  pruefe(
+    "vera-bremse.conf: der Weg des Zahlungsanbieters ist ausgenommen",
+    /POST\/zahlung\/rueckmeldung\s+""/.test(bremse),
+    "eine gebremste Rückmeldung wäre eine verlorene Zahlung",
+  );
+  pruefe(
+    "vera-bremse.conf: gezählt wird nur POST",
+    /~\^POST\s+\$binary_remote_addr/.test(bremse),
+  );
+  pruefe(
+    "vera-bremse.conf: legt eine Zone mit Begrenzung an",
+    /limit_req_zone\s+\$vera_bremse_schluessel\s+zone=vera_anmeldung/.test(bremse),
+  );
+  pruefe(
+    "vera-bremse.conf: antwortet mit 429, nicht mit 503",
+    /limit_req_status\s+429/.test(bremse),
+  );
+  pruefe(
+    "vera-bremse.conf: sagt, wie sie eingebaut wird",
+    bremse.includes("limit_req zone=vera_anmeldung"),
+    "ohne die Zeile in sites-available wirkt die Zone nicht",
+  );
+}
+
 console.log(
   schief.length === 0
     ? `\n${n} von ${n} in Ordnung.`

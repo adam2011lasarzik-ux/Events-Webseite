@@ -306,7 +306,20 @@ model Registration {
   /// Referenz des Zahlungsanbieters, für den Abgleich.
   /// Das ist die BEZAHLSEITE (Checkout-Sitzung, "cs_…"), nicht die
   /// Zahlung selbst.
-  zahlungsReferenz String?
+  ///
+  /// **Eindeutig seit dem 25.09.2026.** Ab dem Umbau entsteht eine
+  /// Anmeldung erst mit der bestätigten Zahlung, und drei Wege dürfen
+  /// sie anlegen: die Rückmeldung des Anbieters, die Rückfrage auf der
+  /// Abschluss-Seite und der nächtliche Abgleich. Damit dieselbe
+  /// Zahlung nicht zweimal zu einer Anmeldung wird, entscheidet die
+  /// DATENBANK und nicht eine Prüfung im Code: Der zweite Versuch
+  /// scheitert am Index. Eine Prüfung im Code liesse sich vergessen
+  /// oder überholen, ein eindeutiger Index nicht.
+  ///
+  /// Mehrere leere Werte bleiben erlaubt — MySQL zählt NULL nicht als
+  /// Dubletten. Anmeldungen ohne Bezahlseite (kostenlose
+  /// Veranstaltungen, Erfassung von Hand) stören also nicht.
+  zahlungsReferenz String? @unique
 
   /// Die eigentliche Zahlung hinter der Bezahlseite ("pi_…").
   ///
@@ -566,6 +579,65 @@ model ZahlungsEreignis {
   id          String   @id
   art         String
   empfangenAm DateTime @default(now())
+}
+
+/// Eine Zahlung, die eingegangen ist, aber zu keiner Anmeldung führen konnte.
+///
+/// Ab dem Umbau vom 25.09.2026 entsteht eine Anmeldung erst mit der
+/// bestätigten Zahlung. Zwischen dem Absenden des Formulars und dem
+/// Zahlungseingang wird kein Platz mehr freigehalten — es kann also
+/// passieren, dass in der Zwischenzeit jemand anders den letzten Platz
+/// bezahlt hat. Dann gilt: Das Geld ist da, ein Vertrag kommt nicht
+/// zustande, der Betrag geht vollständig zurück.
+///
+/// Diese Tabelle ist der Beleg dafür. Sie ist Pflicht, nicht Komfort:
+/// Ein eingegangener und zurückgezahlter Betrag ist ein Geschäftsvorfall
+/// und unterliegt § 147 AO. Sie gehört deshalb in die steuerrelevante
+/// Klasse des Löschkonzepts und wird von der automatischen Löschung
+/// ausdrücklich NICHT erfasst.
+///
+/// Bewusst OHNE Personenbezug: kein Name, keine E-Mail, keine
+/// Teilnehmer. Wer nachforschen muss, findet die zahlende Person beim
+/// Zahlungsanbieter unter derselben `sitzungId`. Sie hier ein zweites
+/// Mal zu speichern, wäre eine Sammlung ohne Zweck.
+///
+/// **Nur bei echtem Geldeingang.** Ein Abbruch, eine abgelaufene
+/// Bezahlseite oder eine fehlgeschlagene Karte hinterlassen KEINE
+/// Zeile — dort ist kein Geld geflossen, und es gibt nichts zu belegen.
+model Fehlbuchung {
+  id String @id @default(cuid())
+
+  /// Die Bezahlseite („cs_…") — die einzige Klammer zum Zahlungsanbieter.
+  /// Eindeutig, damit eine doppelt zugestellte Rückmeldung nicht zu
+  /// zwei Erstattungen führt.
+  sitzungId   String @unique
+  betragCents Int
+
+  /// Warum keine Anmeldung entstehen konnte. Die vier Fälle sind am
+  /// 25.09.2026 festgelegt worden:
+  ///   keine-plaetze      der Platz war bei Zahlungseingang vergeben
+  ///   doppelte-adresse   für diese Adresse gibt es schon eine Buchung
+  ///   kein-termin        der Termin wurde inzwischen entfernt
+  ///   betrag-abweichend  der gemeldete Betrag passt nicht
+  grund String
+
+  angelegtAm DateTime @default(now())
+
+  /// Wann erstattet wurde. Leer heisst: noch offen.
+  ///
+  /// Bei den ersten drei Gründen wird sofort und vollständig erstattet;
+  /// bleibt das Feld dort leer, ist die Erstattung steckengeblieben und
+  /// der Abgleichlauf holt sie nach.
+  ///
+  /// Bei `betrag-abweichend` bleibt es ABSICHTLICH leer: Ein
+  /// abweichender Betrag ist entweder ein Fehler oder ein Angriff, und
+  /// beides gehört angesehen statt stillschweigend zurückgebucht. Der
+  /// Adminbereich weist solche Zeilen als Warnung aus.
+  erstattetAm  DateTime?
+  /// Die Kennung der Erstattung beim Anbieter („re_…").
+  erstattungId String?
+
+  @@index([erstattetAm])
 }
 
 /// Wer hat wann was im Adminbereich getan.

@@ -167,6 +167,69 @@ export async function sitzungPruefen(sitzungId: string): Promise<Sitzungsstand> 
   };
 }
 
+/** Was der Anbieter über eine Bezahlseite weiß — vollständig, nur lesend. */
+export interface Zahlungsspur {
+  /** Die Lage der Bezahlseite: "open", "complete", "expired". */
+  lage: string | null;
+  /** "paid", "unpaid" oder "no_payment_required". */
+  zahlungslage: string | null;
+  betragCents: number | null;
+  zahlungId: string | null;
+  /** Die einzelnen Abbuchungen zu dieser Zahlung — leer heißt: keine. */
+  buchungen: { id: string; betragCents: number; erfolgreich: boolean; erstattet: number }[];
+}
+
+/**
+ * Ist für diese Bezahlseite jemals Geld geflossen?
+ *
+ * Rein lesend — es wird nichts angelegt, nichts geschlossen, nichts
+ * erstattet. Gedacht für die Frage, ob eine Anmeldung gefahrlos
+ * entfernt werden darf (prisma/anmeldungPruefen.ts).
+ *
+ * Warum nicht `sitzungPruefen()` genügt: Die liefert nur ein Ja/Nein
+ * zum Bezahltstatus. Vor dem endgültigen Entfernen eines Datensatzes
+ * ist das zu wenig — dort will man die Abbuchungen selbst sehen, auch
+ * eine fehlgeschlagene. Eine fehlgeschlagene Abbuchung bedeutet zwar
+ * kein Geld, aber sie bedeutet, dass jemand es versucht hat, und das
+ * gehört im Protokoll gezeigt statt verschwiegen.
+ */
+export async function zahlungsspurPruefen(sitzungId: string): Promise<Zahlungsspur> {
+  const s = stripe();
+  const sitzung = await s.checkout.sessions.retrieve(sitzungId);
+
+  const zahlungId =
+    typeof sitzung.payment_intent === "string"
+      ? sitzung.payment_intent
+      : (sitzung.payment_intent?.id ?? null);
+
+  const buchungen: Zahlungsspur["buchungen"] = [];
+  if (zahlungId) {
+    /* Die Abbuchungen hängen an der Zahlung, nicht an der Bezahlseite.
+       Schlägt der Abruf fehl, wird das NICHT als "keine Abbuchung"
+       ausgegeben — der Aufrufer bekommt den Fehler und meldet
+       "unklar". Ein Fehler, der wie Entwarnung aussieht, wäre hier der
+       teuerste Fehler überhaupt. */
+    const zahlung = await s.paymentIntents.retrieve(zahlungId, { expand: ["latest_charge"] });
+    const letzte = zahlung.latest_charge;
+    if (letzte && typeof letzte !== "string") {
+      buchungen.push({
+        id: letzte.id,
+        betragCents: letzte.amount,
+        erfolgreich: letzte.status === "succeeded",
+        erstattet: letzte.amount_refunded,
+      });
+    }
+  }
+
+  return {
+    lage: sitzung.status ?? null,
+    zahlungslage: sitzung.payment_status ?? null,
+    betragCents: sitzung.amount_total ?? null,
+    zahlungId,
+    buchungen,
+  };
+}
+
 /**
  * Eine noch offene Bezahlseite schließen.
  *

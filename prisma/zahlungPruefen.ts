@@ -70,6 +70,64 @@ if (
   );
 }
 
+/* ── 1b. Der Schlüssel für die Anmeldedaten ───────────────────── */
+
+/* Neu am 25.09.2026. Zwischen dem Absenden des Formulars und der
+   bestätigten Zahlung liegen die Anmeldedaten AUSSCHLIESSLICH
+   verschlüsselt beim Zahlungsanbieter — in der VERA-Datenbank steht
+   bis dahin nichts. Fehlt dieser Schlüssel, kommt keine Anmeldung mehr
+   zustande; geht er verloren, während jemand bezahlt, ist das Geld da
+   und die Anmeldung unlesbar.
+
+   Deshalb steht er hier neben den Zahlungswerten und nicht in einer
+   Nebenbemerkung: Wer diese Prüfung laufen lässt, soll ihn sehen. */
+
+const anmeldeSchluessel = (process.env.ANMELDUNG_SCHLUESSEL ?? "").trim();
+const anmeldeSchluesselAlt = (process.env.ANMELDUNG_SCHLUESSEL_ALT ?? "").trim();
+
+if (
+  pruefe(
+    "Ein Schlüssel für die Anmeldedaten ist hinterlegt",
+    anmeldeSchluessel !== "",
+    "ANMELDUNG_SCHLUESSEL setzen. Neu erzeugen mit:  openssl rand -base64 32\n" +
+      "     Ohne ihn kann keine Anmeldung mehr entstehen.",
+  )
+) {
+  const bytes = Buffer.from(anmeldeSchluessel, "base64");
+  pruefe(
+    "Er ist 32 Byte lang (AES-256)",
+    bytes.length === 32,
+    `Gefunden sind ${bytes.length} Byte. Erwartet werden 32 Byte als base64 ` +
+      "(44 Zeichen). Neu erzeugen mit:  openssl rand -base64 32",
+  );
+  /* Derselbe Wert wie ein Stripe-Schlüssel wäre kein Tippfehler,
+     sondern zwei Geheimnisse mit einem Leben: Wer eines erfährt, hat
+     beide. */
+  pruefe(
+    "Er ist nicht derselbe Wert wie ein Zahlungsschlüssel",
+    anmeldeSchluessel !== schluessel && anmeldeSchluessel !== geheimnis,
+    "Zwei verschiedene Zwecke brauchen zwei verschiedene Geheimnisse.",
+  );
+
+  if (anmeldeSchluesselAlt !== "") {
+    const altBytes = Buffer.from(anmeldeSchluesselAlt, "base64");
+    pruefe(
+      "Der alte Schlüssel (Wechsel läuft) ist ebenfalls 32 Byte lang",
+      altBytes.length === 32,
+      `Gefunden sind ${altBytes.length} Byte.`,
+    );
+    pruefe(
+      "Alter und neuer Schlüssel sind verschieden",
+      anmeldeSchluesselAlt !== anmeldeSchluessel,
+      "Sind sie gleich, ist der Wechsel nur zur Hälfte gemacht — er wirkt nicht.",
+    );
+    console.log(
+      "     Hinweis: ANMELDUNG_SCHLUESSEL_ALT ist gesetzt. Nach 24 Stunden kann er weg —\n" +
+        "     so lange lebt eine Bezahlseite beim Anbieter längstens.",
+    );
+  }
+}
+
 /* ── 2. Das Webhook-Geheimnis ─────────────────────────────────── */
 
 if (

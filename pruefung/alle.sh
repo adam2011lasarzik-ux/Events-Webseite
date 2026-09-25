@@ -168,6 +168,7 @@ lauf "T · Termin-Pflicht: Ablauf und Umgehung" "$P/T/t-http.mjs"
 lauf "U · Versionierte Rechtstexte" "$P/U/u-rechtstexte.mjs"
 lauf "V · Bestellknopf, AGB-Haken, Aufnahmehinweis" "$P/V/v-checkout.mjs"
 lauf "W · Widerspruch gegen Aufnahmen" "$P/W/w-aufnahmen.mjs"
+lauf "X · Anmeldung erst nach bezahlter Zahlung" "$P/X/x-anlage.mjs"
 
 # Diese beiden laufen gegen den Server OHNE Sonderwerte (Port 3249).
 lauf_rein "N · Rechtsseiten"           node "$P/N/n-seiten.mjs"
@@ -178,6 +179,8 @@ lauf_rein "L · Kopfleiste: Menü und Anmelden" npx tsx "$P/L/l-schulen.mjs"
 lauf_rein "Q · Überwachung (Mail-Texte und Wächter-Logik)" npx tsx "$P/Q/q-wache.mjs"
 lauf_rein "R · Riegel vor der echten Datenbank" node "$P/R/r-schutz.mjs"
 lauf_rein "S · Loeschfristen (reine Regeln)" npx tsx "$P/S/s-fristen.mjs"
+lauf_rein "X · Verschluesselte Nutzlast (reine Regeln)" npx tsx "$P/X/x-nutzlast.mjs"
+lauf_rein "X · Fluechtige Bremse (reine Regeln)" npx tsx "$P/X/x-bremse.mjs"
 lauf_rein "S · Server-Skripte (grep-Falle)" node "$P/S/s-skripte.mjs"
 lauf_rein "T · Termin-Pflicht: Regel und Verdrahtung" npx tsx "$P/T/t-regel.mjs"
 

@@ -103,8 +103,14 @@ async function anmeldungAnlegen(kennung, zusatz = {}) {
       bezahlterBetragCents: 1400,
       bezahltAm: new Date("2015-06-01T10:00:00Z"),
       zahlungsStatus: "BEZAHLT",
-      zahlungsReferenz: "cs_test_probe",
-      zahlungsAbsicht: "pi_test_probe",
+      /* Je Anmeldung eine eigene Sitzungskennung. Sie waren einmal alle
+         gleich; seit dem eindeutigen Index auf `zahlungsReferenz`
+         (25.09.2026) geht das nicht mehr — und das ist genau der Sinn
+         des Index: Dieselbe Zahlung darf nicht zu zwei Anmeldungen
+         werden. Die Prüfliste muss sich daran halten wie der echte
+         Ablauf. */
+      zahlungsReferenz: `cs_test_probe_${kennung}`,
+      zahlungsAbsicht: `pi_test_probe_${kennung}`,
       status: "BESTAETIGT",
       teilnehmer: {
         create: [{ vorname: "Erika", nachname: "Mustermann", typ: "ERWACHSENER" }],
