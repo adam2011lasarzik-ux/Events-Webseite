@@ -52,11 +52,28 @@
    ── Warum vorher gepackt wird ───────────────────────────────────
 
    Eine Familie mit vielen Personen und langen Namen kommt roh auf
-   knapp 5000 Zeichen. Gepackt bleiben davon im schlimmsten Fall rund
-   3800 Zeichen — gemessen, nicht geschätzt. Der Anbieter nimmt
-   Felder zu je 500 Zeichen; am 25.09.2026 wurde gegen die echte
-   Schnittstelle belegt, dass 20 solcher Felder durchgehen. Gebraucht
-   werden 8.
+   knapp 5000 Zeichen. Gepackt und verschlüsselt bleibt davon weit
+   weniger — am 26.09.2026 nachgemessen:
+
+     20 Personen, realistische lange Namen      631 Zeichen,  3 Felder
+     20 Personen, rein zufaellige 40-Zeichen-
+       Namen samt Geburtsjahr (Bestfall fuer
+       niemanden, Worstcase fuer gzip)         2583 Zeichen,  7 Felder
+
+   Der Anbieter nimmt Felder zu je 500 Zeichen; am 25.09.2026 wurde
+   gegen die echte Schnittstelle belegt, dass 20 solcher Felder
+   durchgehen — 10.000 Zeichen. Selbst der unkomprimierbare Fall
+   braucht davon gut ein Viertel.
+
+   Hier stand bis zum 26.09.2026 „im schlimmsten Fall rund 3800
+   Zeichen … gebraucht werden 8". Das war zu pessimistisch und
+   stammte aus einer Schätzung, nicht aus einer Messung. Die Zahlen
+   oben lassen sich jederzeit nachrechnen.
+
+   WICHTIG BEI JEDEM NEUEN FELD: Diese Messung gilt für die heutigen
+   Felder. Kommen Notfallkontakte, Allergien oder Ähnliches dazu,
+   gehört sie wiederholt — die Grenze ist hart, und sie schlägt im
+   ungünstigsten Moment zu: beim Absenden einer grossen Buchung.
    --------------------------------------------------------------- */
 
 import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:crypto";

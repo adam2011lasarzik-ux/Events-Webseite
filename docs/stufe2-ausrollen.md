@@ -146,6 +146,35 @@ Bezahlseite. Über die Schnittstelle allein lässt er sich nicht
 herstellen; dafür braucht es einen Klick durch die Testkasse. Das ist
 **Schritt 17b**.
 
+### 0.5 Ein offener Punkt vor der Freigabe: das Rückblickfenster
+
+Der stündliche Abgleichlauf sieht sich die Bezahlseiten der letzten
+**zwei Tage** an (`TAGE = 2` in `prisma/zahlungAbgleich.ts`). Das Räumen
+der Marken läuft in derselben Schleife.
+
+Für den Normalbetrieb reicht das mit Abstand: Eine abgebrochene
+Bezahlseite wird binnen Sekunden geräumt, eine bezahlte nach 24
+Stunden — und bis die zwei Tage um sind, hatte der Lauf zwei Dutzend
+Gelegenheiten.
+
+**Es gibt aber ein Loch.** Steht der Server länger als etwa einen Tag
+still und ist genau in dieser Zeit eine Bezahlseite fällig geworden,
+rutscht sie aus dem Fenster und wird **nie wieder** angesehen. Ihre
+Marke bliebe dauerhaft beim Anbieter liegen.
+
+Das ist unwahrscheinlich, aber der Datenschutztext gibt ein
+Versprechen ab, und ein Versprechen mit einem Loch ist keins.
+
+**Vorschlag:** Für das Räumen ein eigenes, längeres Fenster — etwa 30
+Tage. Das Nachlegen von Anmeldungen bleibt bei zwei Tagen; eine sehr
+alte Zahlung nachträglich zu verbuchen ist ausdrücklich nicht
+gewollt. Räumen dagegen ist billig und wiederholbar: Nur Sitzungen,
+die noch eine Marke tragen, erzeugen überhaupt einen Aufruf.
+
+Das ist eine Konstante plus eine Prüfung, etwa eine halbe Stunde
+Arbeit. **Ohne diese Änderung sollte Fassung B nicht gesetzt
+werden** — sie verspricht sonst mehr, als der Mechanismus hält.
+
 ## 1. Der vollständige Ablauf, in der richtigen Reihenfolge
 
 ### 1.1 Was vorher feststehen muss
@@ -542,15 +571,25 @@ Angabe an genau der Stelle, an der Genauigkeit zählt.
 > der ausschließlich VERA vorliegt; Stripe kann ihn nicht lesen.
 >
 > Der Zeitpunkt seiner Erzeugung ist untrennbar mitverschlüsselt und
-> lässt sich nicht nachträglich ändern. Der Bezahlvorgang selbst
-> verfällt nach 30 Minuten, und die Anmeldesysteme von VERA nehmen
-> keinen Datensatz an, der älter als 24 Stunden ist; danach kann aus
-> ihm keine Anmeldung mehr entstehen. Der Schlüssel bleibt bei VERA
-> weiterhin vorhanden — die zeitliche Grenze ist eine Regel der
-> Anmeldesysteme und keine Eigenschaft der Verschlüsselung selbst.
+> lässt sich nicht nachträglich ändern. Der Bezahlvorgang verfällt
+> nach 30 Minuten, und die Anmeldesysteme von VERA nehmen keinen
+> Datensatz an, der älter als 24 Stunden ist; danach kann aus ihm
+> keine Anmeldung mehr entstehen.
 >
-> Wird der Bezahlvorgang abgebrochen, entsteht bei VERA kein
-> Datensatz.
+> Wird ein Bezahlvorgang abgebrochen oder verfällt er, entfernt VERA
+> den verschlüsselten Datensatz beim Zahlungsdienstleister, sobald
+> dieser den Abbruch oder Verfall meldet. Bleibt diese Meldung aus,
+> geschieht die Entfernung beim nächsten regelmäßigen Abgleich, der
+> stündlich läuft. Bei abgeschlossenen Bezahlvorgängen ist eine
+> Entfernung derzeit technisch nicht möglich; dort richtet sich die
+> Aufbewahrung nach den Regeln des Zahlungsdienstleisters.
+>
+> Der Schlüssel bleibt bei VERA vorhanden — die zeitliche Grenze von
+> 24 Stunden ist eine Regel der Anmeldesysteme und keine Eigenschaft
+> der Verschlüsselung selbst.
+>
+> Wird der Bezahlvorgang abgebrochen, entsteht bei VERA keine
+> Anmeldung und kein Datensatz über Sie.
 >
 > Bezahlt wird ausschließlich auf der gesicherten Seite von Stripe.
 > Kartennummern und Bankdaten erreichen diese Seite zu keinem
@@ -655,17 +694,29 @@ Fall wahr.
 In Fassung B ändert sich **nur der vierte Absatz** von 3.4:
 
 > Der Zeitpunkt seiner Erzeugung ist untrennbar mitverschlüsselt und
-> lässt sich nicht nachträglich ändern. Der Bezahlvorgang selbst
-> verfällt nach 30 Minuten, und die Anmeldesysteme von VERA nehmen
-> keinen Datensatz an, der älter als 24 Stunden ist. VERA löscht den
-> verschlüsselten Datensatz beim Zahlungsanbieter, sobald der Vorgang
-> abgeschlossen ist: bei abgebrochenen oder verfallenen
-> Bezahlvorgängen unmittelbar, bei abgeschlossenen spätestens 24
-> Stunden nach ihrer Erzeugung. Die Angaben zum Zahlungsvorgang selbst
-> — Betrag, Zeitpunkt, Zahlungs- und Erstattungsnummern — bleiben
-> davon unberührt; sie werden für Buchhaltung und Erstattungen
-> benötigt. Der Schlüssel bleibt bei VERA vorhanden — die zeitliche
-> Grenze ist eine Regel der Anmeldesysteme und keine Eigenschaft der
+> lässt sich nicht nachträglich ändern. Der Bezahlvorgang verfällt
+> nach 30 Minuten, und die Anmeldesysteme von VERA nehmen keinen
+> Datensatz an, der älter als 24 Stunden ist; danach kann aus ihm
+> keine Anmeldung mehr entstehen.
+>
+> VERA entfernt den verschlüsselten Datensatz beim
+> Zahlungsdienstleister, sobald er nicht mehr benötigt wird. Ist die
+> Zahlung eingegangen und die Anmeldung bei VERA verbucht, geschieht
+> das, nachdem seit der Erzeugung des Datensatzes 24 Stunden vergangen
+> sind, mit dem darauffolgenden stündlichen Bereinigungslauf. Wird der
+> Bezahlvorgang abgebrochen oder verfällt er, geschieht es, sobald der
+> Zahlungsdienstleister dies meldet; bleibt die Meldung aus, beim
+> nächsten regelmäßigen Abgleich, der ebenfalls stündlich läuft.
+>
+> Ist eine Zahlung eingegangen, die Anmeldung bei VERA aber noch nicht
+> verbucht, bleibt der Datensatz erhalten: Er ist dann die einzige
+> Grundlage, aus der die Anmeldung noch entstehen kann.
+>
+> Die Angaben zum Zahlungsvorgang selbst — Betrag, Zeitpunkt,
+> Zahlungs- und Erstattungsnummern — bleiben davon unberührt; sie
+> werden für Buchhaltung und Erstattungen benötigt. Der Schlüssel
+> bleibt bei VERA vorhanden — die zeitliche Grenze von 24 Stunden ist
+> eine Regel der Anmeldesysteme und keine Eigenschaft der
 > Verschlüsselung selbst.
 
 Und im Abschnitt „3. Empfänger und Auftragsverarbeiter" der
@@ -678,9 +729,9 @@ Stripe-Eintrag:
 > Die übrigen Angaben zum Bezahlvorgang bewahrt Stripe nach seinen
 > eigenen Regeln auf.  ⟵ **Frist weiterhin offen**
 
-**Ergibt Schritt 17b `GEHT NICHT`**, bleibt Fassung A — mit einem
-Zusatz, der dann die Wahrheit ist: Bei abgebrochenen und verfallenen
-Bezahlvorgängen wird gelöscht, bei abgeschlossenen nicht.
+**Ergibt Schritt 17b `GEHT NICHT`**, bleibt Fassung A. Sie ist genau
+für diesen Fall geschrieben: Abbruch und Verfall werden geräumt,
+abgeschlossene Bezahlvorgänge nicht — und sie sagt das auch so.
 
 ---
 
@@ -1465,7 +1516,7 @@ Testzahlung aus Abschnitt 5.
 | # | Bedingung |
 |---|---|
 | 1 | Die Website bleibt **passwortgeschützt**. Die Sperre wird für diesen Schritt nicht angefasst. |
-| 2 | Es wird **ausschliesslich eine Stripe-Testzahlung** verwendet — dieselbe aus Abschnitt 5, mit der Testkarte. Kein echtes Geld. |
+| 2 | Es wird **ausschliesslich eine vollständige Stripe-Testzahlung** verwendet — dieselbe aus Abschnitt 5, von der Anmeldung bis zur bestätigten Zahlung durchgeklickt, mit der Testkarte. Kein echtes Geld, kein abgekürzter Weg über die Schnittstelle. |
 | 3 | Es wird geprüft, dass die Sitzung **`complete` / `paid`** ist. |
 | 4 | Es wird geprüft, dass **PaymentIntent und Charge keine** verschlüsselten Anmeldedaten übernommen haben. |
 | 5 | Es wird geprüft, ob sich die **Session-Metadaten auch im Zustand `complete`** entfernen lassen. |
