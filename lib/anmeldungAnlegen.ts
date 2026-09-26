@@ -63,10 +63,14 @@ export type Fehlbuchungsgrund =
    * Der fünfte Fall, nachgetragen am 26.09.2026 beim Bauen von
    * Stufe 2. Er entsteht, wenn beim Ausrollen noch eine Bezahlseite
    * aus der Zeit davor offen war — oder bei etwas, das niemand
-   * vorhergesehen hat. Wie `betrag-abweichend` wird er NICHT
-   * automatisch erstattet: Bei einem Vorgang, den das Programm nicht
-   * versteht, eigenmächtig Geld zurückzubuchen wäre die falsche
-   * Antwort.
+   * vorhergesehen hat.
+   *
+   * Er wird sofort und vollständig erstattet (Entscheidung vom
+   * 26.09.2026). Die Überlegung dahinter: Ohne Anmeldedaten kann
+   * niemals eine Anmeldung daraus werden — und wenn feststeht, dass
+   * jemand für nichts bezahlt hat, ist sein Geld zurückzugeben die
+   * einzige richtige Antwort. Das unterscheidet diesen Fall von
+   * `betrag-abweichend`, wo unklar ist, WAS gekauft wurde.
    */
   | "ohne-marke";
 
@@ -83,10 +87,16 @@ export const SOFORT_ERSTATTEN: readonly Fehlbuchungsgrund[] = [
   "keine-plaetze",
   "doppelte-adresse",
   "kein-termin",
+  "ohne-marke",
 ];
 
-/** Die Gründe, die von Hand angesehen werden müssen. */
-export const ZUR_KLAERUNG: readonly Fehlbuchungsgrund[] = ["betrag-abweichend", "ohne-marke"];
+/**
+ * Die Gründe, die von Hand angesehen werden müssen.
+ *
+ * Genau einer, und das soll so bleiben: Jeder weitere wäre eine
+ * Zeile, die auf jemanden wartet.
+ */
+export const ZUR_KLAERUNG: readonly Fehlbuchungsgrund[] = ["betrag-abweichend"];
 
 export type Anlageergebnis =
   /** Die Anmeldung ist neu entstanden. */
@@ -266,7 +276,16 @@ export async function fehlbuchungFesthalten(
   return { id: neu.id, schonDa: false };
 }
 
-/** Festhalten, dass erstattet wurde. */
+/**
+ * Festhalten, dass erstattet wurde.
+ *
+ * Diese Zeile IST das Protokoll der Erstattung: Sie trägt die
+ * Bezahlseite, den Betrag, den Grund, den Zeitpunkt des Eingangs, den
+ * Zeitpunkt der Erstattung und deren Kennung beim Anbieter. Damit
+ * lässt sich jeder automatisch zurückgebuchte Betrag Jahre später
+ * noch einem Vorgang zuordnen — in beide Richtungen, von hier ins
+ * Dashboard des Anbieters und zurück.
+ */
 export async function erstattungVermerken(
   sitzungId: string,
   erstattungId: string,
@@ -276,4 +295,29 @@ export async function erstattungVermerken(
     where: { sitzungId },
     data: { erstattetAm: jetzt, erstattungId },
   });
+}
+
+/**
+ * Eine Fehlbuchung von Hand als geklärt abhaken.
+ *
+ * LÖSCHT NICHTS. Die Zeile bleibt mit Betrag, Grund und
+ * Sitzungskennung vollständig stehen — sie wird nur nicht mehr
+ * angemahnt. Wer sie später sucht, findet sie.
+ *
+ * Gibt `false` zurück, wenn es die Zeile nicht gibt oder sie schon
+ * abgehakt war. Zweimal abhaken soll nicht den ersten Vermerk
+ * überschreiben: Wer es getan hat und wann, ist der eigentliche Wert
+ * dieses Feldes.
+ */
+export async function erledigtVermerken(
+  sitzungId: string,
+  adminId: string,
+  notiz: string | null = null,
+  jetzt: Date = new Date(),
+): Promise<boolean> {
+  const ergebnis = await db.fehlbuchung.updateMany({
+    where: { sitzungId, erledigtAm: null },
+    data: { erledigtAm: jetzt, erledigtVon: adminId, erledigtNotiz: notiz },
+  });
+  return ergebnis.count > 0;
 }

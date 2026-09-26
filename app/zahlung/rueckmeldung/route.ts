@@ -125,6 +125,19 @@ export async function POST(anfrage: Request) {
   return new Response("Angenommen.", { status: 200 });
 }
 
+/**
+ * Die E-Mail-Adresse aus einer Bezahlseite holen.
+ *
+ * Zwei Stellen, weil der Anbieter sie an zwei Stellen führt: die beim
+ * Erzeugen mitgegebene (`customer_email`) und die, die der Mensch auf
+ * der Bezahlseite tatsächlich eingetippt hat (`customer_details`).
+ * Gebraucht wird sie nur für den Fall ohne Anmeldedaten — sonst steht
+ * sie in der Nutzlast.
+ */
+function adresseAusSitzung(sitzung: Stripe.Checkout.Session): string | null {
+  return sitzung.customer_details?.email ?? sitzung.customer_email ?? null;
+}
+
 /** Die Zahlungskennung („pi_…") aus einer Bezahlseite holen. */
 function zahlungsAbsichtVon(sitzung: Stripe.Checkout.Session): string | null {
   return typeof sitzung.payment_intent === "string"
@@ -148,20 +161,31 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
      eine Bezahlseite aus der Zeit vor dem Umbau, die beim Ausrollen
      noch offen war — oder etwas, das niemand vorhergesehen hat.
 
-     In beiden Fällen gilt: Geld ist da, eine Anmeldung kann nicht
-     entstehen. Es wird ein Beleg geschrieben, aber NICHT automatisch
-     erstattet. Bei einem Vorgang, den das Programm nicht versteht,
-     eigenmächtig Geld zurückzubuchen wäre die falsche Antwort; der
-     Adminbereich weist ihn zur Klärung aus.
+     In beiden Fällen ist eines sicher: Ohne Anmeldedaten kann hieraus
+     NIEMALS eine Anmeldung werden. Jemand hat für nichts bezahlt.
+     Also geht das Geld vollständig zurück (Entscheidung vom
+     26.09.2026), und die Fehlbuchung hält den ganzen Vorgang fest.
 
-     Der Ausrollplan sieht deshalb vor, vorher nachzusehen, dass keine
-     Bezahlseite mehr offen ist. */
+     Die Adresse für die Hinweismail kommt aus der Sitzung selbst —
+     sie ist das Einzige, was wir über diesen Menschen wissen. Fehlt
+     sie, wird trotzdem erstattet; eine Erstattung ohne Mail ist
+     besser als eine Mail ohne Erstattung.
+
+     Der Ausrollplan sieht vor, vorher nachzusehen, dass keine
+     Bezahlseite mehr offen ist — damit dieser Fall gar nicht erst
+     eintritt. */
   if (!eventId || !marke) {
     console.error(
-      `Bezahlte Sitzung ohne verschlüsselte Anmeldung (${sitzung.id}). ` +
-        "Bitte im Adminbereich klären — es wurde NICHT automatisch erstattet.",
+      `Bezahlte Sitzung ohne verschlüsselte Anmeldung (${sitzung.id}), ` +
+        `${(betragCents / 100).toFixed(2)} €. Wird vollständig erstattet.`,
     );
-    await fehlbuchungFesthalten(sitzung.id, betragCents, "ohne-marke");
+    await fehlbuchungAbwickeln(
+      sitzung.id,
+      betragCents,
+      zahlungsAbsichtVon(sitzung),
+      "ohne-marke",
+      adresseAusSitzung(sitzung),
+    );
     return;
   }
 
@@ -224,7 +248,7 @@ async function fehlbuchungAbwickeln(
   betragCents: number,
   zahlungId: string | null,
   grund: Fehlbuchungsgrund,
-  email: string,
+  email: string | null,
 ): Promise<void> {
   const { schonDa } = await fehlbuchungFesthalten(sitzungId, betragCents, grund);
   if (schonDa) return;
@@ -252,6 +276,24 @@ async function fehlbuchungAbwickeln(
        beim zweiten Mal stünde die Zeile schon, sodass er gar nicht
        mehr hierher käme. */
     console.error(`Erstattung für ${sitzungId} fehlgeschlagen, wird nachgeholt:`, e);
+    return;
+  }
+
+  /* Das Protokoll der Erstattung steht in der Fehlbuchungszeile
+     (Betrag, Grund, Eingang, Erstattung, Kennung beim Anbieter).
+     Diese Zeile im Journal kommt dazu, weil sie den Vorgang zeitlich
+     zwischen den übrigen Meldungen des Dienstes einordnet — beim
+     Nachforschen ist das oft das, was fehlt. */
+  console.info(
+    `Fehlbuchung ${sitzungId} (${grund}): ${(betragCents / 100).toFixed(2)} € ` +
+      "vollständig erstattet.",
+  );
+
+  if (!email) {
+    console.warn(
+      `Fehlbuchung ${sitzungId}: keine E-Mail-Adresse bekannt, ` +
+        "es konnte kein Hinweis verschickt werden. Erstattet wurde trotzdem.",
+    );
     return;
   }
 

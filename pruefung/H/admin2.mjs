@@ -77,6 +77,41 @@ stand = await db.registration.findUniqueOrThrow({ where: { id: testAnmeldung.id 
 pruefe("Anonymisieren ohne Sitzung ändert nichts",
   stand.kontaktVorname === "Prüf" && stand.anonymisiertAm === null);
 
+// ── 5b. Fehlbuchung abhaken ohne Sitzung ───────────────────────
+//
+// Die jüngste Server-Aktion (26.09.2026). Sie steht auf der
+// Übersichtsseite und ändert eine Zeile, die Geld betrifft — sie
+// gehört damit in genau diese Liste.
+await db.fehlbuchung.deleteMany({ where: { sitzungId: "cs_pruef_admin2" } });
+await db.fehlbuchung.create({
+  data: { sitzungId: "cs_pruef_admin2", betragCents: 1400, grund: "betrag-abweichend" },
+});
+const uebersicht = await hole("/admin", sitzung.cookie);
+const erledigtFelder = actionFelder(uebersicht.html, 'name="sitzungId"');
+
+await sende("/admin", erledigtFelder, { sitzungId: "cs_pruef_admin2", notiz: "X" }, null);
+let fehlbuchung = await db.fehlbuchung.findUniqueOrThrow({
+  where: { sitzungId: "cs_pruef_admin2" },
+});
+pruefe("Fehlbuchung abhaken ohne Sitzung ändert nichts", fehlbuchung.erledigtAm === null);
+
+await sende("/admin", erledigtFelder, { sitzungId: "cs_pruef_admin2", notiz: "X" },
+  "vera_admin=voellig-ausgedacht-aber-lang-genug-xxxxxxxxxxxxxxx");
+fehlbuchung = await db.fehlbuchung.findUniqueOrThrow({
+  where: { sitzungId: "cs_pruef_admin2" },
+});
+pruefe("… auch nicht mit erfundenem Cookie", fehlbuchung.erledigtAm === null);
+
+await sende("/admin", erledigtFelder, { sitzungId: "cs_pruef_admin2", notiz: "X" },
+  sitzung.cookie);
+fehlbuchung = await db.fehlbuchung.findUniqueOrThrow({
+  where: { sitzungId: "cs_pruef_admin2" },
+});
+pruefe("Mit gültiger Sitzung wird abgehakt", fehlbuchung.erledigtAm !== null);
+pruefe("… und der Datensatz bleibt dabei vollständig stehen",
+  fehlbuchung.betragCents === 1400 && fehlbuchung.grund === "betrag-abweichend");
+await db.fehlbuchung.delete({ where: { sitzungId: "cs_pruef_admin2" } });
+
 // ── 6. Abgelaufene Sitzung ─────────────────────────────────────
 const eigene = await db.adminSession.findFirstOrThrow({ orderBy: { erstelltAm: "desc" } });
 await db.adminSession.update({

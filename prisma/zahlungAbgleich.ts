@@ -28,8 +28,8 @@
    1. Steckengebliebene Erstattungen. Eine Fehlbuchung wird erst
       festgehalten und dann erstattet. Stürzt der Dienst dazwischen ab,
       bleibt die Zeile offen — dieser Lauf holt die Erstattung nach.
-   2. Melden, was ein Mensch ansehen muss: `betrag-abweichend` und
-      `ohne-marke` werden bewusst nicht automatisch erstattet.
+   2. Melden, was ein Mensch ansehen muss: `betrag-abweichend` wird
+      bewusst nicht automatisch erstattet.
 
    ── Warum er ohne --echt nichts tut ─────────────────────────────
 
@@ -93,10 +93,26 @@ async function sitzungenNacharbeiten(): Promise<void> {
 
     console.log(`\n⚠ Bezahlt, aber ohne Anmeldung: ${sitzung.id} (${euro(betrag ?? 0)})`);
 
-    if (betrag === null || !eventId || !marke) {
-      console.log("   Keine verschlüsselte Anmeldung dabei — gehört angesehen.");
+    /* Ein bezahlter Vorgang ohne gemeldeten Betrag. Das sollte es
+       beim Anbieter nicht geben, und solange unklar ist, WIE VIEL
+       eingegangen ist, wird hier weder eine Zeile mit einem
+       erfundenen Betrag geschrieben noch erstattet. Er wird gemeldet
+       und beim nächsten Lauf wieder gemeldet — genau das ist bei
+       etwas Unverstandenem das richtige Verhalten. */
+    if (betrag === null) {
+      console.log("   Der Anbieter meldet keinen Betrag — gehört angesehen.");
       zuKlaeren++;
-      if (echt) await fehlbuchungFesthalten(sitzung.id, betrag ?? 0, "ohne-marke");
+      continue;
+    }
+
+    /* Bezahlt, aber ohne Anmeldedaten. Daraus kann niemals eine
+       Anmeldung werden: Jemand hat für nichts bezahlt. Die Zeile wird
+       festgehalten; `erstattungenNachholen()` weiter unten im selben
+       Lauf bucht das Geld zurück (Entscheidung vom 26.09.2026). */
+    if (!eventId || !marke) {
+      console.log("   Keine verschlüsselte Anmeldung dabei — wird vollständig erstattet.");
+      if (echt) await fehlbuchungFesthalten(sitzung.id, betrag, "ohne-marke");
+      else nacherstattet++;
       continue;
     }
 
@@ -142,9 +158,13 @@ async function sitzungenNacharbeiten(): Promise<void> {
  * Erstattungen, die steckengeblieben sind.
  *
  * Nur die drei Gründe, die automatisch erstattet werden.
- * `betrag-abweichend` und `ohne-marke` bleiben ausdrücklich liegen —
- * bei ihnen ist die fehlende Erstattung kein Versehen, sondern die
- * Entscheidung vom 25.09.2026.
+ * `betrag-abweichend` bleibt ausdrücklich liegen — dort ist die
+ * fehlende Erstattung kein Versehen, sondern die Entscheidung vom
+ * 25.09.2026.
+ *
+ * `ohne-marke` gehörte bis zum 26.09.2026 auch dazu und wird seitdem
+ * mit erstattet: Ohne Anmeldedaten kann daraus niemals eine Anmeldung
+ * werden, also hat jemand für nichts bezahlt.
  */
 async function erstattungenNachholen(): Promise<void> {
   const offen = await db.fehlbuchung.findMany({
@@ -182,8 +202,12 @@ async function erstattungenNachholen(): Promise<void> {
 
 /** Was ein Mensch ansehen muss. */
 async function zuKlaerendeMelden(): Promise<void> {
+  /* Abgehakte Zeilen sind hier fertig. Sie stehen weiterhin in der
+     Tabelle — abhaken löscht nichts —, aber ein stündlicher Lauf, der
+     einen längst geklärten Vorgang jede Stunde erneut meldet, macht
+     seine eigene Ausgabe wertlos. */
   const liegen = await db.fehlbuchung.findMany({
-    where: { erstattetAm: null, grund: { in: [...ZUR_KLAERUNG] } },
+    where: { erstattetAm: null, erledigtAm: null, grund: { in: [...ZUR_KLAERUNG] } },
   });
   for (const f of liegen) {
     console.log(

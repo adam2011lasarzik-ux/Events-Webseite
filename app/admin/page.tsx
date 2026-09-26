@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { verlangeAdmin } from "@/lib/adminAuth";
-import { eventUeberblick, offeneFehlbuchungen } from "@/lib/adminDaten";
+import { eventUeberblick, offeneFehlbuchungen, erledigteFehlbuchungen } from "@/lib/adminDaten";
 import { alsEuro } from "@/lib/preise";
 import { AdminRahmen } from "@/components/admin/AdminRahmen";
 import { StatusMarker } from "@/components/admin/StatusMarker";
+import { fehlbuchungErledigen } from "./fehlbuchungen/aktion";
 import stil from "./admin.module.css";
 
 export const dynamic = "force-dynamic";
@@ -23,24 +24,36 @@ function alsDatum(wert: Date | null): string {
 function grundKlartext(grund: string): string {
   switch (grund) {
     case "keine-plaetze":
-      return "Platz war vergeben — Erstattung läuft";
+      return "Platz war vergeben";
     case "doppelte-adresse":
-      return "Adresse hatte schon eine Buchung — Erstattung läuft";
+      return "Adresse hatte schon eine Buchung";
     case "kein-termin":
-      return "Termin war entfernt — Erstattung läuft";
+      return "Termin war entfernt";
     case "betrag-abweichend":
-      return "Betrag passt nicht — NICHT automatisch erstattet, bitte ansehen";
+      return "Betrag passt nicht";
     case "ohne-marke":
-      return "Zahlung ohne Anmeldedaten — NICHT automatisch erstattet, bitte ansehen";
+      return "Anmeldedaten kamen nicht an";
     default:
       return grund;
   }
 }
 
+/**
+ * Wird dieser Grund von selbst zurückgebucht?
+ *
+ * Steht eine solche Zeile trotzdem in der Warnung, ist die Erstattung
+ * steckengeblieben — dann holt der stündliche Abgleichlauf sie nach,
+ * und der Satz daneben soll das sagen statt zum Handeln aufzufordern.
+ * Bei `betrag-abweichend` ist es umgekehrt: Dort wartet die Zeile
+ * wirklich auf einen Menschen.
+ */
+const ERSTATTET_VON_SELBST = ["keine-plaetze", "doppelte-adresse", "kein-termin", "ohne-marke"];
+
 export default async function AdminUebersicht() {
   const admin = await verlangeAdmin();
   const events = await eventUeberblick();
   const fehlbuchungen = await offeneFehlbuchungen();
+  const rueckschau = await erledigteFehlbuchungen();
 
   return (
     <AdminRahmen
@@ -73,9 +86,99 @@ export default async function AdminUebersicht() {
           </strong>
           <ul style={{ margin: "0.75rem 0 0", paddingLeft: "1.2rem" }}>
             {fehlbuchungen.map((f) => (
-              <li key={f.id}>
+              <li key={f.id} style={{ marginBottom: "0.9rem" }}>
                 {alsEuro(f.betragCents)} · {grundKlartext(f.grund)} ·{" "}
                 {f.angelegtAm.toLocaleString("de-DE", { timeZone: "Europe/Berlin" })}
+                <br />
+                {ERSTATTET_VON_SELBST.includes(f.grund) ? (
+                  <span>
+                    Wird automatisch vollständig erstattet. Steht diese Zeile über
+                    Stunden hier, ist die Erstattung steckengeblieben — dann bitte im
+                    Dashboard des Zahlungsanbieters nachsehen.
+                  </span>
+                ) : (
+                  <span>
+                    <strong>Nicht automatisch erstattet.</strong> Bitte im Dashboard des
+                    Zahlungsanbieters ansehen und dort entscheiden.
+                  </span>
+                )}
+                <br />
+                <code style={{ fontSize: "0.85em" }}>{f.sitzungId}</code>
+
+                {/* Abhaken löscht nichts. Die Zeile bleibt vollständig
+                    stehen und rutscht nur in die Rückschau weiter
+                    unten. Der Vermerk ist freiwillig, aber er ist das
+                    Einzige, was in einem halben Jahr noch erklärt,
+                    warum hier jemand auf „erledigt" gedrückt hat. */}
+                <form action={fehlbuchungErledigen} style={{ marginTop: "0.5rem" }}>
+                  <input type="hidden" name="sitzungId" value={f.sitzungId} />
+                  <label
+                    className={stil.feldLabel}
+                    htmlFor={`notiz-${f.id}`}
+                    style={{ display: "block", marginBottom: "0.25rem" }}
+                  >
+                    Vermerk (freiwillig)
+                  </label>
+                  <input
+                    id={`notiz-${f.id}`}
+                    name="notiz"
+                    type="text"
+                    className={stil.eingabe}
+                    maxLength={300}
+                    placeholder="z. B. im Dashboard von Hand erstattet am ..."
+                  />
+                  <button type="submit" className={`${stil.knopf} ${stil.knopfKlein}`}
+                    style={{ marginTop: "0.4rem" }}>
+                    Als erledigt markieren
+                  </button>
+                </form>
+              </li>
+            ))}
+          </ul>
+          <p style={{ margin: "0.5rem 0 0", fontSize: "0.9em" }}>
+            „Als erledigt markieren" löscht nichts. Der Vorgang bleibt mit Betrag, Grund
+            und Kennung gespeichert und steht danach unten in der Rückschau.
+          </p>
+        </div>
+      )}
+
+      {/* Die Rückschau: was geschehen IST.
+
+          Die Warnung oben sagt, was zu tun ist. Ohne diese Liste wäre
+          eine automatisch zurückgebuchte Zahlung nur im Journal des
+          Servers nachzulesen — also praktisch gar nicht. Sie ist der
+          Nachweis, dass jede Erstattung wirklich stattgefunden hat,
+          und trägt die Kennung, mit der sie sich beim Anbieter
+          wiederfinden lässt. */}
+      {rueckschau.length > 0 && (
+        <div className={stil.karte}>
+          <div className={stil.karteKopf}>
+            <h2 className={stil.karteTitel}>Zahlungen ohne Anmeldung — letzte 30 Tage</h2>
+          </div>
+          <ul style={{ margin: 0, paddingLeft: "1.2rem" }}>
+            {rueckschau.map((f) => (
+              <li key={f.id} style={{ marginBottom: "0.6rem" }}>
+                {alsEuro(f.betragCents)} · {grundKlartext(f.grund)} · eingegangen{" "}
+                {f.angelegtAm.toLocaleString("de-DE", { timeZone: "Europe/Berlin" })}
+                <br />
+                {f.erstattetAm ? (
+                  <span>
+                    Vollständig erstattet am{" "}
+                    {f.erstattetAm.toLocaleString("de-DE", { timeZone: "Europe/Berlin" })}
+                    {f.erstattungId ? (
+                      <>
+                        {" · "}
+                        <code style={{ fontSize: "0.85em" }}>{f.erstattungId}</code>
+                      </>
+                    ) : null}
+                  </span>
+                ) : (
+                  <span>
+                    Von Hand als erledigt markiert am{" "}
+                    {f.erledigtAm?.toLocaleString("de-DE", { timeZone: "Europe/Berlin" })}
+                    {f.erledigtNotiz ? ` — ${f.erledigtNotiz}` : ""}
+                  </span>
+                )}
                 <br />
                 <code style={{ fontSize: "0.85em" }}>{f.sitzungId}</code>
               </li>

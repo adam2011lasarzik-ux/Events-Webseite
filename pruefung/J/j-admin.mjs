@@ -120,33 +120,87 @@ pruefe("Von Hand auf „bezahlt“ setzen bestätigt die Anmeldung",
 await db.fehlbuchung.create({
   data: { sitzungId: "cs_test_pruefung_fehlbuchung", betragCents: 1400, grund: "betrag-abweichend" },
 });
-const mitWarnung = alsText((await hole("/admin", K)).html);
+let mitWarnung = await hole("/admin", K);
+let warnText = alsText(mitWarnung.html);
 pruefe("Eine Fehlbuchung erscheint als Warnung auf der Übersicht",
-  /1 eingegangene Zahlung ohne Anmeldung/.test(mitWarnung),
-  (mitWarnung.match(/\d+ eingegangene Zahlung[^·]*/) ?? ["—"])[0].slice(0, 70));
-pruefe("… mit dem Betrag", /14,00/.test(mitWarnung));
-pruefe("… mit dem Grund in Klartext", /Betrag passt nicht/.test(mitWarnung));
+  /1 eingegangene Zahlung ohne Anmeldung/.test(warnText),
+  (warnText.match(/\d+ eingegangene Zahlung[^·]*/) ?? ["—"])[0].slice(0, 70));
+pruefe("… mit dem Betrag", /14,00/.test(warnText));
+pruefe("… mit dem Grund in Klartext", /Betrag passt nicht/.test(warnText));
 pruefe("… mit dem ausdrücklichen Hinweis, dass NICHT erstattet wurde",
-  /NICHT automatisch erstattet/.test(mitWarnung));
+  /Nicht automatisch erstattet/.test(warnText));
 pruefe("… und mit der Sitzungskennung zum Wiederfinden",
-  mitWarnung.includes("cs_test_pruefung_fehlbuchung"));
+  warnText.includes("cs_test_pruefung_fehlbuchung"));
 
-/* Eine erstattete Fehlbuchung ist erledigt und verschwindet wieder.
-
-   ACHTUNG, offener Punkt vom 26.09.2026: Das gilt nur für die drei
-   Gründe, bei denen automatisch erstattet wird. Eine Zeile mit
-   „betrag-abweichend" oder „ohne-marke" wird ABSICHTLICH nicht
-   erstattet — und hat damit heute keinen Weg, jemals wieder zu
-   verschwinden. Wer sie von Hand geklärt hat, sieht die Warnung
-   trotzdem weiter. Das ist Adam zur Entscheidung vorgelegt: Es
-   bräuchte ein Feld „erledigt am" und einen Knopf dafür. */
-await db.fehlbuchung.update({
-  where: { sitzungId: "cs_test_pruefung_fehlbuchung" },
-  data: { erstattetAm: new Date(), erstattungId: "re_test_von_hand" },
+/* Ein Grund, der von selbst erstattet, darf NICHT zum Handeln
+   auffordern — sonst sucht jemand im Dashboard nach etwas, das dort
+   längst erledigt ist. */
+await db.fehlbuchung.create({
+  data: { sitzungId: "cs_test_pruefung_selbst", betragCents: 700, grund: "ohne-marke" },
 });
+warnText = alsText((await hole("/admin", K)).html);
+pruefe("Ein selbst erstattender Grund sagt das auch",
+  /Wird automatisch vollständig erstattet/.test(warnText));
+await db.fehlbuchung.delete({ where: { sitzungId: "cs_test_pruefung_selbst" } });
+
+// ── 4b. „Als erledigt markieren" ───────────────────────────────
+//
+// Der Weg aus der Warnung heraus für den einen Grund, der nie von
+// selbst erstattet. Ohne ihn stünde die Zeile für immer da — und eine
+// Warnung, die immer dasteht, wird nach zwei Wochen nicht mehr
+// gelesen.
+mitWarnung = await hole("/admin", K);
+const erledigtFelder = actionFelder(mitWarnung.html, 'name="sitzungId"');
+pruefe("Die Warnung trägt einen Knopf „Als erledigt markieren“",
+  alsText(mitWarnung.html).includes("Als erledigt markieren"));
+
+await sende("/admin", erledigtFelder,
+  { sitzungId: "cs_test_pruefung_fehlbuchung", notiz: "im Dashboard von Hand geprueft" },
+  K, "198.51.100.34");
+
+const abgehakt = await db.fehlbuchung.findUniqueOrThrow({
+  where: { sitzungId: "cs_test_pruefung_fehlbuchung" },
+});
+pruefe("Der Knopf hakt die Fehlbuchung ab", abgehakt.erledigtAm !== null);
+pruefe("… und hält fest, WER es war", Boolean(abgehakt.erledigtVon), abgehakt.erledigtVon ?? "—");
+pruefe("… samt Vermerk", abgehakt.erledigtNotiz === "im Dashboard von Hand geprueft");
+/* Die Anforderung, ausdrücklich: Der Datensatz darf dabei nicht
+   gelöscht werden. */
+pruefe("Der Datensatz ist NICHT gelöscht — Betrag und Grund stehen weiter da",
+  abgehakt.betragCents === 1400 && abgehakt.grund === "betrag-abweichend");
+pruefe("… und es wurde dabei nichts erstattet",
+  abgehakt.erstattetAm === null && abgehakt.erstattungId === null);
+
 const ohneWarnung = alsText((await hole("/admin", K)).html);
-pruefe("Eine erledigte Fehlbuchung wird nicht mehr angemahnt",
-  !/eingegangene Zahlung(en)? ohne Anmeldung/.test(ohneWarnung));
+pruefe("Die Warnung ist fort", !/eingegangene Zahlung(en)? ohne Anmeldung/.test(ohneWarnung));
+pruefe("… der Vorgang steht aber weiterhin in der Rückschau",
+  ohneWarnung.includes("cs_test_pruefung_fehlbuchung") &&
+    /Zahlungen ohne Anmeldung/.test(ohneWarnung));
+pruefe("… mit dem Vermerk, warum er erledigt ist",
+  ohneWarnung.includes("im Dashboard von Hand geprueft"));
+
+/* Das Protokoll ist der Nachweis, wer entschieden hat. Ohne ihn wäre
+   „erledigt" eine Angabe ohne Urheber. */
+const protokoll = await db.adminProtokoll.findFirst({
+  where: { aktion: "fehlbuchung.erledigt", zielId: "cs_test_pruefung_fehlbuchung" },
+});
+pruefe("Das Abhaken steht im Protokoll der Admin-Aktionen", protokoll !== null);
+pruefe("… mit dem Vermerk als Zusatz",
+  protokoll?.detail === "im Dashboard von Hand geprueft", protokoll?.detail ?? "—");
+
+/* Eine erstattete Fehlbuchung verschwindet ebenfalls aus der Warnung
+   — und steht dann mit ihrer Erstattungskennung in der Rückschau. */
+await db.fehlbuchung.create({
+  data: {
+    sitzungId: "cs_test_pruefung_erstattet", betragCents: 2100, grund: "keine-plaetze",
+    erstattetAm: new Date(), erstattungId: "re_test_pruefung",
+  },
+});
+const mitRueckschau = alsText((await hole("/admin", K)).html);
+pruefe("Eine erstattete Fehlbuchung mahnt nicht mehr",
+  !/eingegangene Zahlung(en)? ohne Anmeldung/.test(mitRueckschau));
+pruefe("… steht aber mit ihrer Erstattungskennung in der Rückschau",
+  mitRueckschau.includes("re_test_pruefung") && mitRueckschau.includes("21,00"));
 
 // ── 5. Zugang ──────────────────────────────────────────────────
 const ohne = await hole(`/admin/events/${event.id}/anmeldungen`);

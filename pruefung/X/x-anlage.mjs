@@ -13,6 +13,7 @@
 import "../schutz.mjs";
 
 import { randomBytes } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { db } from "../../lib/db.js";
 import { alsSchluessel, verschluesseln, entschluesseln } from "../../lib/anmeldeNutzlast.ts";
 import {
@@ -20,6 +21,8 @@ import {
   fehlbuchungFesthalten,
   erstattungVermerken,
   SOFORT_ERSTATTEN,
+  ZUR_KLAERUNG,
+  erledigtVermerken,
 } from "../../lib/anmeldungAnlegen.ts";
 
 let ok = 0;
@@ -28,6 +31,27 @@ const pruefe = (name, bedingung, zusatz = "") => {
   if (bedingung) { ok++; console.log("  ✓", name); }
   else { fehl++; console.log("  ✗", name, zusatz); }
 };
+
+/**
+ * Alle Fehlbuchungsgründe — aus dem Quelltext gelesen, nicht von Hand
+ * abgeschrieben.
+ *
+ * Der Typ `Fehlbuchungsgrund` existiert zur Laufzeit nicht; eine
+ * abgeschriebene Liste wäre beim nächsten neuen Grund still veraltet.
+ * Genau das soll nicht passieren: Jeder neue Grund muss eine
+ * Entscheidung auslösen — erstattet er von selbst, oder wartet er auf
+ * einen Menschen? Wird er in keine der beiden Listen aufgenommen,
+ * fällt er durch und niemand merkt es. Deshalb wird die Aufzählung
+ * hier aus der Datei gelesen und gegen beide Listen geprüft.
+ */
+const ALLE_GRUENDE = (() => {
+  const quelle = readFileSync("lib/anmeldungAnlegen.ts", "utf8");
+  const block = quelle.slice(
+    quelle.indexOf("export type Fehlbuchungsgrund"),
+    quelle.indexOf("export const SOFORT_ERSTATTEN"),
+  );
+  return [...block.matchAll(/\|\s*"([a-z-]+)"/g)].map((t) => t[1]);
+})();
 
 const bund = { aktuell: alsSchluessel(randomBytes(32)), weitere: [] };
 const ADRESSE = "@pruef-x.example";
@@ -200,13 +224,59 @@ const nachher = await db.fehlbuchung.findUniqueOrThrow({ where: { sitzungId: "cs
 pruefe("Die Erstattung wird vermerkt",
   nachher.erstattetAm !== null && nachher.erstattungId === "re_pruef_x_90");
 
-console.log("\nX3.8 · Bei abweichendem Betrag wird NICHT automatisch erstattet");
+console.log("\nX3.8 · Welcher Grund erstattet von selbst, welcher nicht");
 /* Entscheidung vom 25.09.2026: Ein abweichender Betrag ist entweder ein
-   Fehler oder ein Angriff. Beides gehört angesehen. */
+   Fehler oder ein Angriff. Beides gehört angesehen — und solange
+   unklar ist, WAS gekauft wurde, wird nichts zurückgebucht.
+
+   Entscheidung vom 26.09.2026: `ohne-marke` dagegen schon. Dort ist
+   nichts unklar: Ohne Anmeldedaten kann daraus niemals eine Anmeldung
+   werden, also hat jemand für nichts bezahlt. */
 pruefe("„betrag-abweichend“ steht nicht in der Sofort-Erstattungsliste",
   !SOFORT_ERSTATTEN.includes("betrag-abweichend"), SOFORT_ERSTATTEN.join(", "));
-pruefe("Die drei anderen Gründe stehen darin",
-  ["keine-plaetze", "doppelte-adresse", "kein-termin"].every((g) => SOFORT_ERSTATTEN.includes(g)));
+pruefe("Die vier anderen Gründe stehen darin",
+  ["keine-plaetze", "doppelte-adresse", "kein-termin", "ohne-marke"]
+    .every((g) => SOFORT_ERSTATTEN.includes(g)), SOFORT_ERSTATTEN.join(", "));
+pruefe("Genau ein Grund wartet auf einen Menschen",
+  ZUR_KLAERUNG.length === 1 && ZUR_KLAERUNG[0] === "betrag-abweichend",
+  ZUR_KLAERUNG.join(", "));
+pruefe("… und jeder Grund ist genau einer von beiden, keiner fällt durch",
+  ALLE_GRUENDE.every(
+    (g) => SOFORT_ERSTATTEN.includes(g) !== ZUR_KLAERUNG.includes(g)),
+  `${SOFORT_ERSTATTEN.length} + ${ZUR_KLAERUNG.length} von ${ALLE_GRUENDE.length}`);
+
+console.log("\nX3.8b · Eine Fehlbuchung lässt sich abhaken, ohne sie zu löschen");
+await leeren();
+{
+  const sitzung = "cs_pruef_x_erledigt";
+  await fehlbuchungFesthalten(sitzung, 1400, "betrag-abweichend");
+
+  const ersteAbhakung = await erledigtVermerken(sitzung, "admin-pruefung", "von Hand geklärt");
+  pruefe("Abhaken meldet Erfolg", ersteAbhakung === true);
+
+  const nach = await db.fehlbuchung.findUniqueOrThrow({ where: { sitzungId: sitzung } });
+  pruefe("Die Zeile ist NICHT gelöscht — Betrag und Grund stehen weiter da",
+    nach.betragCents === 1400 && nach.grund === "betrag-abweichend");
+  pruefe("Wer abgehakt hat und wann, ist festgehalten",
+    nach.erledigtAm !== null && nach.erledigtVon === "admin-pruefung");
+  pruefe("… samt Vermerk", nach.erledigtNotiz === "von Hand geklärt");
+  pruefe("Abhaken erstattet NICHT — dafür ist es nicht da",
+    nach.erstattetAm === null && nach.erstattungId === null);
+
+  /* Zweimal abhaken darf den ersten Vermerk nicht überschreiben. Wer
+     es getan hat und wann, ist der eigentliche Wert dieses Feldes —
+     ein zweiter Klick aus einem zweiten Fenster würde sonst den
+     Ersten überschreiben, der entschieden hat. */
+  const zweiteAbhakung = await erledigtVermerken(sitzung, "jemand-anders", "andere Notiz");
+  pruefe("Ein zweites Abhaken meldet, dass nichts mehr zu tun war",
+    zweiteAbhakung === false);
+  const nachZwei = await db.fehlbuchung.findUniqueOrThrow({ where: { sitzungId: sitzung } });
+  pruefe("… und überschreibt den ersten Vermerk nicht",
+    nachZwei.erledigtVon === "admin-pruefung" &&
+      nachZwei.erledigtAm?.getTime() === nach.erledigtAm?.getTime());
+
+  await db.fehlbuchung.delete({ where: { sitzungId: sitzung } });
+}
 
 /* ══ X3.9 · Die Fassungen aus der Nutzlast ═══════════════════════ */
 console.log("\nX3.9 · Es gilt die Rechtstext-Fassung vom ABSENDEN");

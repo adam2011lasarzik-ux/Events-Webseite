@@ -8,70 +8,99 @@ Anmeldeformulars und der serverseitig bestätigten Zahlung steht in der
 VERA-Datenbank **nichts** — keine Anmeldung, kein Teilnehmer, keine
 Platzsperre, kein Zahlungsversuch, keine personenbezogenen Daten.
 
-Der Code dafür ist gebaut und geprüft (Commit `2b8f1c3`, 47 Prüflisten,
-rund 1.330 Prüfungen, alle in Ordnung).
+Der Code dafür ist gebaut und geprüft: 47 Prüflisten, rund 1.360
+Prüfungen, alle in Ordnung.
 
 ---
 
-## 0. Was vorher entschieden sein muss
+## 0. Die beiden offenen Punkte sind entschieden und eingebaut
 
-Zwei Punkte sind beim Bauen aufgetaucht und in diesem Plan noch offen.
-Beide sind klein, aber beide gehören entschieden, **bevor** ausgerollt
-wird — danach ist jede Änderung wieder ein Deployment.
+Der erste Entwurf dieses Plans liess zwei Fragen offen. Beide sind
+beantwortet und umgesetzt; sie stehen hier, weil sie erklären, warum
+der Ablauf unten anders aussieht als im ersten Entwurf.
 
-### 0.1 Ein fünfter Fehlbuchungsgrund: `ohne-marke`
+### 0.1 `ohne-marke` wird vollständig erstattet
 
-Freigegeben waren vier Gründe, aus denen Geld eingeht, ohne dass eine
-Anmeldung entsteht:
+Es gibt fünf Gründe, aus denen Geld eingeht, ohne dass eine Anmeldung
+entsteht. Vier davon buchen das Geld von selbst vollständig zurück:
 
 | Grund | Was passiert |
 |---|---|
 | `keine-plaetze` | automatisch vollständig erstattet |
 | `doppelte-adresse` | automatisch vollständig erstattet |
 | `kein-termin` | automatisch vollständig erstattet |
+| `ohne-marke` | automatisch vollständig erstattet |
 | `betrag-abweichend` | **nicht** erstattet, Warnung im Adminbereich |
 
-Beim Bauen kam ein fünfter dazu, den es geben **muss**:
+`ohne-marke` greift, wenn eine bezahlte Bezahlseite **ohne**
+verschlüsselte Anmeldedaten zurückkommt — eine Seite aus der Zeit vor
+dem Umbau, die beim Ausrollen noch offen war.
 
-| `ohne-marke` | **nicht** erstattet, Warnung im Adminbereich |
+Warum dieser Fall erstattet und `betrag-abweichend` nicht: Hier ist
+nichts unklar. Ohne Anmeldedaten kann daraus **niemals** eine
+Anmeldung werden; jemand hat für nichts bezahlt, und das Geld gehört
+ihm. Bei einem abweichenden Betrag ist dagegen offen, *was* gekauft
+wurde — und solange das offen ist, wird nichts zurückgebucht.
 
-Er greift, wenn eine bezahlte Bezahlseite **ohne** verschlüsselte
-Anmeldedaten zurückkommt. Das kann genau zweierlei sein: eine
-Bezahlseite aus der Zeit **vor** dem Umbau, die beim Ausrollen noch
-offen war — oder etwas, das niemand vorhergesehen hat.
+**Wie die Erstattung nachvollziehbar bleibt**, an drei Stellen:
 
-Ohne diesen Fall würde das Geld stillschweigend liegenbleiben. Dass er
-**nicht** automatisch erstattet, ist dieselbe Überlegung wie bei
-`betrag-abweichend`: Bei einem Vorgang, den das Programm nicht
-versteht, eigenmächtig Geld zurückzubuchen wäre die falsche Antwort.
+1. **Die Zeile in `Fehlbuchung`** trägt Bezahlseite, Betrag, Grund,
+   Zeitpunkt des Eingangs, Zeitpunkt der Erstattung und deren Kennung
+   beim Anbieter (`re_…`). Damit lässt sich jeder zurückgebuchte
+   Betrag Jahre später einem Vorgang zuordnen, in beide Richtungen.
+2. **Im Adminbereich** steht sie in der neuen Rückschau „Zahlungen
+   ohne Anmeldung — letzte 30 Tage", mit Betrag, Grund, beiden
+   Zeitpunkten und der Erstattungskennung. Ohne diese Liste wäre eine
+   automatische Rückbuchung nur im Journal des Servers nachzulesen —
+   also praktisch gar nicht.
+3. **Im Journal des Dienstes** eine Zeile, die den Vorgang zeitlich
+   zwischen den übrigen Meldungen einordnet.
 
-**Bitte bestätigen.**
+Der Mensch, der bezahlt hat, bekommt eine Mail, die den Grund richtig
+nennt („Deine Anmeldedaten sind bei uns technisch nicht angekommen —
+das liegt an uns, nicht an dir"). Ist keine Adresse bekannt, wird
+trotzdem erstattet und das im Journal vermerkt: Eine Erstattung ohne
+Mail ist besser als eine Mail ohne Erstattung.
 
-### 0.2 Eine Warnung, die man nicht abhaken kann
+### 0.2 „Als erledigt markieren"
 
-Die Warnung im Adminbereich verschwindet, sobald die Fehlbuchung
-erstattet ist. Bei `betrag-abweichend` und `ohne-marke` wird
-absichtlich **nie** automatisch erstattet — diese beiden Warnungen
-haben damit heute keinen Weg, jemals wieder zu verschwinden.
+`betrag-abweichend` wird absichtlich nie automatisch erstattet — die
+Warnung dazu hatte damit keinen Weg, jemals wieder zu verschwinden.
+Eine Warnung, die immer dasteht, wird nach zwei Wochen nicht mehr
+gelesen.
 
-Wer den Vorgang im Stripe-Dashboard von Hand geklärt hat, sieht die
-Warnung trotzdem weiter. Eine Warnung, die immer dasteht, wird nach
-zwei Wochen nicht mehr gelesen — und dann ist sie schlimmer als keine.
+Neu in der Warnung: ein Feld für einen freiwilligen Vermerk und ein
+Knopf **„Als erledigt markieren"**.
 
-Es bräuchte ein Feld „erledigt am" und einen Knopf daneben. Das ist
-etwa eine halbe Stunde Arbeit.
+**Er löscht nichts.** Die Zeile bleibt mit Betrag, Grund, Zeitpunkt
+und Sitzungskennung vollständig stehen und rutscht in die Rückschau
+darunter. Festgehalten wird zusätzlich, **wer** abgehakt hat, **wann**
+und **warum** — und derselbe Vorgang steht im Protokoll der
+Admin-Aktionen.
 
-**Drei Möglichkeiten:**
+**Er erstattet auch nichts.** Wer Geld zurückgeben will, tut das im
+Dashboard des Anbieters. Ein Knopf, der beides zugleich täte, würde
+die Frage „ist das Geld zurück?" mit „jemand hat draufgedrückt"
+beantworten.
 
-1. Jetzt einbauen, dann ausrollen. *(Empfehlung.)*
-2. Ausrollen und später nachziehen — mit dem Wissen, dass bis dahin
-   eine geklärte Warnung stehenbleibt.
-3. So lassen: Die Warnung von Hand über die Datenbank abhaken
-   (`erstattetAm` setzen). Ehrlicher wäre das nicht — es stünde dann
-   „erstattet" an einem Vorgang, bei dem vielleicht gar nicht erstattet
-   wurde.
+Zweimal abhaken überschreibt den ersten Vermerk nicht: Wer entschieden
+hat und wann, ist der eigentliche Wert dieses Feldes.
 
----
+### 0.3 Was dafür an der Datenbank geändert wird
+
+Eine zweite Migration, `20260926150000_fehlbuchung_erledigt`. Sie
+**fügt nur hinzu** und entfernt nichts:
+
+```sql
+ALTER TABLE `Fehlbuchung`
+  ADD COLUMN `erledigtAm` DATETIME(3) NULL,
+  ADD COLUMN `erledigtVon` VARCHAR(191) NULL,
+  ADD COLUMN `erledigtNotiz` TEXT NULL;
+CREATE INDEX `Fehlbuchung_erledigtAm_idx` ON `Fehlbuchung`(`erledigtAm`);
+```
+
+Beide Migrationen laufen in einem Aufruf (`npm run db:deploy`), in
+dieser Reihenfolge.
 
 ## 1. Der vollständige Ablauf, in der richtigen Reihenfolge
 
@@ -83,8 +112,9 @@ Die Reihenfolge ist nicht beliebig. Drei Dinge hängen aneinander:
   eine gewöhnliche Stornierung. Sie muss also **vorher** weg.
 - **Keine offene Bezahlseite beim Umschalten.** Eine Bezahlseite, die
   vor dem Umbau geöffnet wurde und danach bezahlt wird, bringt keine
-  verschlüsselten Anmeldedaten mit → Fehlbuchung `ohne-marke`, Geld da,
-  keine Anmeldung, Klärung von Hand. Vermeidbar, indem man nachsieht.
+  verschlüsselten Anmeldedaten mit → Fehlbuchung `ohne-marke`. Das Geld
+  geht automatisch zurück, aber der Mensch hat umsonst bezahlt und muss
+  sich neu anmelden. Vermeidbar, indem man nachsieht.
 - **Der Dienst steht während der Migration.** Der alte Code schreibt
   `reserviertBis` und `RESERVIERT`; beide gibt es nach der Migration
   nicht mehr. Liefe er weiter, scheiterte jede Anmeldung mit einem
@@ -101,7 +131,7 @@ Die Reihenfolge ist nicht beliebig. Drei Dinge hängen aneinander:
 | 6 | Doppelte `zahlungsReferenz` nachsehen (die Migration legt darauf einen eindeutigen Index) | nein |
 | 7 | Neuen Stand holen und bauen | **ja, Server** |
 | 8 | Dienst anhalten | **ja, Server** |
-| 9 | Migration ausführen | **ja, Live-Daten** |
+| 9 | Beide Migrationen ausführen (ein Aufruf) | **ja, Live-Daten** |
 | 10 | Dienst starten | **ja, Server** |
 | 11 | Erste Sichtprüfung: Seite da, Adminbereich da | nein |
 | 12 | Nginx-Bremse einbauen und neu laden | **ja, Server** |
@@ -126,14 +156,18 @@ bleibt sie gelöscht — sie kommt aus der Sicherung zurück, wenn nötig.
 
 ### 2.2 Nach Schritt 9 (Migration ist gelaufen)
 
-Die Migration ist **nicht** von selbst umkehrbar: Sie hat die Spalte
-`reserviertBis` entfernt, und die Werte darin sind fort.
+Die **erste** Migration ist nicht von selbst umkehrbar: Sie hat die
+Spalte `reserviertBis` entfernt, und die Werte darin sind fort.
 
 Aber sie musste auch nichts Unersetzliches löschen. Was sie getan hat:
 
 - Zeilen im Zustand `RESERVIERT` auf `STORNIERT` gesetzt — die Zeilen
   selbst stehen alle noch da, mit allen Daten.
 - Den Aufzählungstyp verengt und `reserviertBis` entfernt.
+
+Die **zweite** Migration fügt nur drei Spalten an `Fehlbuchung` an.
+Sie ist harmlos: Der alte Code kennt diese Spalten nicht und lässt sie
+einfach stehen. Sie muss für eine Rückkehr gar nicht angefasst werden.
 
 **Der schnelle Weg zurück** (Code zurück, Schema vorwärts lassen):
 
@@ -182,10 +216,15 @@ hingen echte Buchungen daran. Stattdessen:
 
 ---
 
-## 3. Die Änderungen an AGB und Datenschutz — zur Freigabe
+## 3. Die Änderungen an AGB und Datenschutz — endgültiger Wortlaut
 
-Vier Stellen beschreiben heute einen Ablauf, den es nach dem Umbau
+Fünf Stellen beschreiben heute einen Ablauf, den es nach dem Umbau
 nicht mehr gibt. Sie stehen alle in `content/de.ts`.
+
+Unten steht jeweils der **heutige** Wortlaut und darunter die
+**endgültige neue Fassung**, wörtlich und vollständig — so, wie sie
+nach deiner Freigabe eingesetzt wird. Es ist nichts gekürzt und nichts
+angedeutet.
 
 > **Kein Rechtsrat.** Ich bin kein Anwalt. Die Formulierungen unten
 > beschreiben, was der Code tatsächlich tut — sie sind ein Entwurf zur
@@ -218,13 +257,24 @@ keinen Link zum Fortsetzen.
 > Teilnahme ist das Anmeldeformular dann erneut auszufüllen.
 >
 > Zwischen dem Absenden und dem Eingang der Zahlung können die letzten
-> freien Plätze anderweitig vergeben werden. Geht in diesem Fall
-> gleichwohl eine Zahlung ein, kommt kein Vertrag zustande und der
-> gezahlte Betrag wird unverzüglich und vollständig erstattet.
+> freien Plätze anderweitig vergeben werden. Kommt aus diesem oder
+> einem anderen Grund kein Vertrag zustande, obwohl eine Zahlung
+> eingegangen ist, wird der gezahlte Betrag unverzüglich und
+> vollständig auf demselben Weg erstattet, über den gezahlt wurde. Sie
+> müssen dafür nichts veranlassen; VERA teilt Ihnen die Erstattung per
+> E-Mail mit.
 
 Der zweite Absatz ist neu und beschreibt einen Fall, den es vorher
 nicht gab. Er ist der ehrliche Preis dafür, dass kein Platz mehr
 gehalten wird — und er gehört genannt, bevor er eintritt.
+
+Er ist bewusst **nicht** auf die Plätze beschränkt („aus diesem oder
+einem anderen Grund"). Es gibt vier Lagen, in denen Geld eingeht, ohne
+dass ein Vertrag zustande kommt; alle vier werden vollständig
+erstattet, und alle vier sollen von diesem Satz gedeckt sein. Eine
+Aufzählung im Vertragstext wäre bei der nächsten Änderung am Programm
+unvollständig — und eine unvollständige Aufzählung ist schlechter als
+keine.
 
 ### 3.2 AGB Ziffer 3.8 — verweist auf die Reservierung
 
@@ -309,12 +359,26 @@ berufen.
 
 ### 3.5 Datenschutz — Speicherdauer
 
-Ein Satz am Anfang von Abschnitt 4 („Speicherdauer und Löschung"),
-neu:
+Zwei neue Absätze in Abschnitt 4 („Speicherdauer und Löschung"). Der
+erste gehört an den Anfang, direkt unter die Einleitung:
 
 > Angaben aus einem abgebrochenen oder nicht abgeschlossenen
 > Bezahlvorgang werden gar nicht erst gespeichert. Es entsteht kein
 > Datensatz, der gelöscht werden müsste.
+
+Der zweite gehört in die Aufzählung der Fristen:
+
+> Geht eine Zahlung ein, ohne dass daraus eine Anmeldung wird, hält
+> VERA den Vorgang zur Buchführung und zum Nachweis der Erstattung
+> fest: die Kennung des Bezahlvorgangs beim Zahlungsdienstleister, den
+> Betrag, den Grund und die Zeitpunkte. Namen, E-Mail-Adressen und
+> Telefonnummern werden dabei nicht gespeichert. Diese Angaben
+> unterliegen den gesetzlichen Aufbewahrungsfristen nach § 147 der
+> Abgabenordnung.
+
+Das beschreibt die Tabelle `Fehlbuchung`. Sie ist der Grund, warum
+sich jede automatische Rückbuchung Jahre später noch einem Vorgang
+zuordnen lässt — und sie enthält bewusst keine Personendaten.
 
 ### 3.6 Neue Fassung, nicht stille Änderung
 
@@ -818,7 +882,7 @@ cd /var/www/vera && sudo -u vera env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm ci
 cd /var/www/vera && sudo -u vera npm run build
 ```
 
-### 4.7 Dienst anhalten, migrieren, starten *(**ändert Server und Live-Daten**)*
+### 4.7 Dienst anhalten, beide Migrationen ausführen, starten *(**ändert Server und Live-Daten**)*
 
 Die drei Befehle gehören unmittelbar hintereinander. Dazwischen ist
 die Seite nicht erreichbar.
@@ -830,6 +894,10 @@ sudo systemctl stop vera
 ```bash
 cd /var/www/vera && sudo -u vera npm run db:deploy
 ```
+
+Es müssen **zwei** Migrationen als angewendet gemeldet werden:
+`20260926120000_ohne_reserviert` und
+`20260926150000_fehlbuchung_erledigt`.
 
 ```bash
 sudo systemctl start vera
@@ -989,6 +1057,10 @@ Danach den alten Commit auschecken, bauen und starten. Die Werte in
 heisst dort „keine laufende Reservierung"), die betroffenen Zeilen
 stehen auf `STORNIERT` und müssten von Hand angesehen werden.
 
+Die drei Spalten der zweiten Migration bleiben dabei stehen. Das ist
+Absicht: Der alte Code kennt sie nicht und stört sich nicht an ihnen,
+und wer sie entfernte, verlöre die Vermerke darin.
+
 ---
 
 ## 5. Die Abschlussprüfung
@@ -1007,8 +1079,27 @@ Testzahlung, im Stripe-**Testmodus**.
 7. Oben im Adminbereich darf **keine** Fehlbuchungs-Warnung stehen.
 8. Die Testbuchung wieder entfernen — über den Storno-Weg im
    Adminbereich, nicht über die Datenbank.
+9. Nach dem Storno muss die Buchung in der Rückschau des Anbieters als
+   erstattet erscheinen.
 
 Schlägt einer der Punkte 2 bis 7 fehl: Abschnitt 2, Rückkehrplan.
+
+### Der neue Knopf, einmal ausprobiert
+
+Der Knopf „Als erledigt markieren" erscheint nur, wenn es wirklich
+eine Fehlbuchung gibt — und die entsteht nur, wenn etwas schiefgeht.
+Er lässt sich deshalb nicht nebenbei mitprüfen, und dafür eigens eine
+Fehlbuchung von Hand anzulegen hiesse, in der Live-Datenbank eine
+Zeile zu erfinden.
+
+Er ist in der Entwicklungsumgebung durchgespielt (Liste `J`,
+Prüfungen 18 bis 30: abhaken, Datensatz bleibt vollständig stehen,
+Protokolleintrag, Warnung verschwindet, Vorgang steht in der
+Rückschau; Liste `F`: ohne gültige Anmeldung passiert nichts).
+
+Auf dem Server gilt deshalb: **Beim ersten Mal, wenn eine Fehlbuchung
+auftaucht**, den Knopf benutzen und danach nachsehen, dass die Zeile
+unten in der Rückschau steht. Nicht vorher eine erfinden.
 
 ---
 
@@ -1025,3 +1116,18 @@ Damit es niemanden überrascht:
 - Die Bezahlseite läuft nach **30 Minuten** ab statt nach 24 Stunden.
   Gehalten wird dadurch nichts; es verhindert nur, dass jemand am
   Abend eine Seite vom Vormittag bezahlt, wenn längst ausgebucht ist.
+- Wer bezahlt hat, ohne dass eine Anmeldung zustande kam, bekommt sein
+  Geld **von selbst** zurück und dazu eine Mail, die den Grund nennt.
+  In vier von fünf Lagen geschieht das ohne Zutun; nur bei einem
+  abweichenden Betrag wartet der Vorgang auf eine Entscheidung.
+
+Und für dich im Adminbereich:
+
+- Ganz oben steht eine Warnung, wenn Geld eingegangen ist, ohne dass
+  eine Anmeldung daraus wurde — mit Betrag, Grund im Klartext und der
+  Kennung, mit der sich der Vorgang beim Anbieter wiederfinden lässt.
+  Sie sagt dazu, ob automatisch erstattet wird oder nicht.
+- Darunter eine Rückschau „Zahlungen ohne Anmeldung — letzte 30 Tage":
+  was erstattet wurde, wann, und unter welcher Kennung.
+- In der Warnung ein Feld für einen Vermerk und der Knopf „Als
+  erledigt markieren". Er löscht nichts.

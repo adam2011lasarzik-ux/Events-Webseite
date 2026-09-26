@@ -88,22 +88,60 @@ export async function eventUeberblick(): Promise<EventUeberblick[]> {
  * „Offen" heisst: noch nicht erstattet. Zwei Sorten landen hier, und
  * sie bedeuten Verschiedenes:
  *
- *   - `keine-plaetze`, `doppelte-adresse`, `kein-termin` — diese
- *     werden automatisch erstattet. Stehen sie hier, ist die
- *     Erstattung steckengeblieben; der Abgleichlauf holt sie nach.
- *     Bleiben sie über Stunden stehen, stimmt etwas nicht.
- *   - `betrag-abweichend`, `ohne-marke` — diese werden ABSICHTLICH
- *     nicht automatisch erstattet (Entscheidung vom 25.09.2026). Sie
- *     gehören angesehen, und zwar von einem Menschen.
+ *   - `keine-plaetze`, `doppelte-adresse`, `kein-termin`,
+ *     `ohne-marke` — diese werden automatisch erstattet. Stehen sie
+ *     hier, ist die Erstattung steckengeblieben; der Abgleichlauf
+ *     holt sie nach. Bleiben sie über Stunden stehen, stimmt etwas
+ *     nicht.
+ *   - `betrag-abweichend` — wird ABSICHTLICH nicht automatisch
+ *     erstattet (Entscheidung vom 25.09.2026). Ein abweichender
+ *     Betrag ist entweder ein Fehler oder ein Angriff; beides gehört
+ *     angesehen, und zwar von einem Menschen.
+ *
+ * Abgehakte Zeilen (`erledigtAm`) fehlen hier. Sie sind NICHT
+ * gelöscht — sie stehen vollständig in der Tabelle und in der
+ * Rückschau unten auf der Übersicht. Ohne diesen Ausweg stünde eine
+ * `betrag-abweichend`-Warnung für immer da: Dort wird nie automatisch
+ * erstattet, `erstattetAm` bliebe also ewig leer. Eine Warnung, die
+ * sich nicht erledigen lässt, wird nach zwei Wochen nicht mehr
+ * gelesen.
  *
  * Deshalb steht hier keine Zahl, sondern die Zeilen selbst: Eine Zahl
  * lässt sich wegsehen, eine Liste mit Betrag und Grund nicht.
  */
 export async function offeneFehlbuchungen() {
   return db.fehlbuchung.findMany({
-    where: { erstattetAm: null },
+    where: { erstattetAm: null, erledigtAm: null },
     orderBy: { angelegtAm: "desc" },
     select: { id: true, sitzungId: true, betragCents: true, grund: true, angelegtAm: true },
+  });
+}
+
+/**
+ * Die Rückschau: was zuletzt eingegangen ist, ohne eine Anmeldung zu
+ * werden — erstattet oder von Hand abgehakt.
+ *
+ * Sie ist der Gegenpol zur Warnung. Die Warnung sagt, was zu tun ist;
+ * diese Liste sagt, was geschehen IST. Ohne sie wäre eine automatisch
+ * zurückgebuchte Zahlung nur im Journal des Servers nachzulesen —
+ * also praktisch gar nicht.
+ *
+ * Dreissig Tage, damit die Liste nicht endlos wird. Wer weiter zurück
+ * muss, findet die Zeilen in der Tabelle `Fehlbuchung`; gelöscht wird
+ * dort nichts.
+ */
+export async function erledigteFehlbuchungen(tage = 30) {
+  const seit = new Date(Date.now() - tage * 24 * 60 * 60 * 1000);
+  return db.fehlbuchung.findMany({
+    where: {
+      angelegtAm: { gte: seit },
+      OR: [{ erstattetAm: { not: null } }, { erledigtAm: { not: null } }],
+    },
+    orderBy: { angelegtAm: "desc" },
+    select: {
+      id: true, sitzungId: true, betragCents: true, grund: true, angelegtAm: true,
+      erstattetAm: true, erstattungId: true, erledigtAm: true, erledigtNotiz: true,
+    },
   });
 }
 

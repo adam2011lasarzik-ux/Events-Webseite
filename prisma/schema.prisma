@@ -619,7 +619,7 @@ model Fehlbuchung {
 
   /// Wann erstattet wurde. Leer heisst: noch offen.
   ///
-  /// Bei den ersten drei Gründen wird sofort und vollständig erstattet;
+  /// Bei vier der fünf Gründe wird sofort und vollständig erstattet;
   /// bleibt das Feld dort leer, ist die Erstattung steckengeblieben und
   /// der Abgleichlauf holt sie nach.
   ///
@@ -631,7 +631,26 @@ model Fehlbuchung {
   /// Die Kennung der Erstattung beim Anbieter („re_…").
   erstattungId String?
 
+  /// Wann jemand diesen Vorgang von Hand als geklärt abgehakt hat.
+  ///
+  /// Nachgetragen am 26.09.2026. Ohne dieses Feld hätte eine Zeile mit
+  /// `betrag-abweichend` keinen Weg, jemals wieder aus der Warnung zu
+  /// verschwinden: Dort wird absichtlich nicht automatisch erstattet,
+  /// und `erstattetAm` bliebe für immer leer. Eine Warnung, die immer
+  /// dasteht, wird nach zwei Wochen nicht mehr gelesen — und ist dann
+  /// schlimmer als keine.
+  ///
+  /// Abhaken LÖSCHT NICHTS. Die Zeile bleibt mit Betrag, Grund und
+  /// Sitzungskennung vollständig stehen; sie wird nur nicht mehr
+  /// angemahnt.
+  erledigtAm  DateTime?
+  /// Wer abgehakt hat — die Kennung des Admin-Zugangs, kein Name.
+  erledigtVon String?
+  /// Ein kurzer Vermerk, warum der Vorgang erledigt ist.
+  erledigtNotiz String? @db.Text
+
   @@index([erstattetAm])
+  @@index([erledigtAm])
 }
 
 /// Wer hat wann was im Adminbereich getan.

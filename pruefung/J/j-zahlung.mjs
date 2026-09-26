@@ -205,6 +205,50 @@ pruefe("… mit dem eingegangenen Betrag", fehl?.betragCents === 1, `${fehl?.bet
    Adminbereich und eine Prüfung von Hand. */
 pruefe("… und wird NICHT automatisch erstattet", fehl?.erstattetAm === null);
 
+// ── 7b. Bezahlt, aber ganz ohne Anmeldedaten ───────────────────
+//
+// Der Fall, den es beim Ausrollen geben kann: eine Bezahlseite, die
+// vor dem Umbau geöffnet und danach bezahlt wurde. Sie bringt keine
+// verschlüsselte Anmeldung mit.
+//
+// Daraus kann niemals eine Anmeldung werden — jemand hat für nichts
+// bezahlt. Entscheidung vom 26.09.2026: vollständig erstatten, nicht
+// liegenlassen.
+{
+  const ohne = await (await fetch(`${ATTRAPPE}/v1/checkout/sessions`, {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      "line_items[0][price_data][unit_amount]": "700",
+      customer_email: "ohnemarke@example.org",
+      success_url: `${BASIS}/anmeldung/danke`,
+      cancel_url: `${BASIS}/anmeldung/danke`,
+    }),
+  })).json();
+
+  const bezahltOhne = await zw.bezahlen(ohne.id);
+  r = await rueckmeldung(sitzungEreignis(bezahltOhne));
+  pruefe("Eine bezahlte Sitzung ohne Anmeldedaten wird angenommen", r.status === 200);
+  pruefe("… legt keine Anmeldung an", (await db.registration.count({
+    where: { kontaktEmail: "ohnemarke@example.org" } })) === 0);
+
+  const fehlOhne = await db.fehlbuchung.findUnique({ where: { sitzungId: ohne.id } });
+  pruefe("… sondern wird als „ohne-marke“ festgehalten",
+    fehlOhne !== null && fehlOhne.grund === "ohne-marke", fehlOhne?.grund ?? "keine");
+  pruefe("… mit dem eingegangenen Betrag", fehlOhne?.betragCents === 700,
+    `${fehlOhne?.betragCents} Cent`);
+  pruefe("… und wird automatisch vollständig erstattet",
+    fehlOhne?.erstattetAm !== null && (fehlOhne?.erstattungId ?? "").startsWith("re_"),
+    `${fehlOhne?.erstattetAm} / ${fehlOhne?.erstattungId}`);
+
+  /* Die Erstattung muss beim ANBIETER angekommen sein, nicht nur in
+     unserer Tabelle. Sonst prüfte diese Zeile nur sich selbst. */
+  const beimAnbieter = await (await fetch(`${ATTRAPPE}/steuerung/erstattungen`)).json();
+  pruefe("… und der Anbieter hat sie wirklich verzeichnet",
+    beimAnbieter.some((e) => e.id === fehlOhne?.erstattungId),
+    `${beimAnbieter.length} verzeichnet`);
+}
+
 // ── 8. Erstattung ──────────────────────────────────────────────
 r = await rueckmeldung({
   id: "evt_pruef_erstattung", object: "event", type: "charge.refunded",

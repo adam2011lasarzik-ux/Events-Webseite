@@ -59,6 +59,7 @@ export const PROTOKOLL_AKTIONEN = {
   veroeffentlichungAngelegt: "veroeffentlichung.angelegt",
   veroeffentlichungEntfernt: "veroeffentlichung.entfernt",
   veroeffentlichungWiederhergestellt: "veroeffentlichung.wiederhergestellt",
+  fehlbuchungErledigt: "fehlbuchung.erledigt",
 } as const;
 
 export type ProtokollAktion = (typeof PROTOKOLL_AKTIONEN)[keyof typeof PROTOKOLL_AKTIONEN];

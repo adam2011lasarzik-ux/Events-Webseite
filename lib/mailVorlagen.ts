@@ -153,15 +153,40 @@ export function bestaetigungsMail(
  * zurückbekommt, soll nicht rätseln müssen, ob er betrogen wurde.
  */
 export function erstattungsHinweisMail(grund: string): { betreff: string; text: string } {
-  const erklaerung =
-    grund === "keine-plaetze"
-      ? "In der Zeit zwischen deiner Zahlung und dem Eingang bei uns sind die letzten " +
-        "Plätze vergeben worden. Deine Anmeldung ist deshalb nicht zustande gekommen."
-      : grund === "doppelte-adresse"
-        ? "Für diese E-Mail-Adresse gibt es zu dieser Veranstaltung bereits eine Anmeldung. " +
-          "Es ist deshalb keine zweite zustande gekommen."
-        : "Der Termin der Veranstaltung steht nicht mehr fest. Deine Anmeldung ist deshalb " +
-          "nicht zustande gekommen.";
+  /* Ein `switch` und kein verschachteltes Fragezeichen mehr.
+     
+     Vorher fiel jeder unbekannte Grund in den Zweig „der Termin steht
+     nicht mehr fest". Als am 26.09.2026 der Grund `ohne-marke`
+     dazukam, hätte diese Mail also einem Menschen erzählt, der Termin
+     sei weggefallen — obwohl der Termin steht und in Wirklichkeit
+     seine Anmeldedaten nicht angekommen sind. Eine Mail, die einen
+     falschen Grund nennt, ist schlimmer als eine, die vage bleibt. */
+  let erklaerung: string;
+  switch (grund) {
+    case "keine-plaetze":
+      erklaerung =
+        "In der Zeit zwischen deiner Zahlung und dem Eingang bei uns sind die letzten " +
+        "Plätze vergeben worden. Deine Anmeldung ist deshalb nicht zustande gekommen.";
+      break;
+    case "doppelte-adresse":
+      erklaerung =
+        "Für diese E-Mail-Adresse gibt es zu dieser Veranstaltung bereits eine Anmeldung. " +
+        "Es ist deshalb keine zweite zustande gekommen.";
+      break;
+    case "kein-termin":
+      erklaerung =
+        "Der Termin der Veranstaltung steht nicht mehr fest. Deine Anmeldung ist deshalb " +
+        "nicht zustande gekommen.";
+      break;
+    case "ohne-marke":
+      erklaerung =
+        "Deine Anmeldedaten sind bei uns technisch nicht angekommen — das liegt an uns, " +
+        "nicht an dir. Deine Anmeldung ist deshalb nicht zustande gekommen.";
+      break;
+    default:
+      // Bewusst ohne Grund: lieber vage als falsch.
+      erklaerung = "Deine Anmeldung ist leider nicht zustande gekommen.";
+  }
 
   return {
     betreff: "Deine Zahlung wurde zurückerstattet",
