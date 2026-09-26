@@ -8,8 +8,11 @@ Anmeldeformulars und der serverseitig bestätigten Zahlung steht in der
 VERA-Datenbank **nichts** — keine Anmeldung, kein Teilnehmer, keine
 Platzsperre, kein Zahlungsversuch, keine personenbezogenen Daten.
 
-Der Code dafür ist gebaut und geprüft: 47 Prüflisten, rund 1.360
-Prüfungen, alle in Ordnung.
+Der Code dafür ist gebaut und geprüft: 48 Prüflisten, rund 1.410
+Prüfungen, zwei Sammelläufe hintereinander vollständig grün.
+
+Dazu gehört seit dem 26.09.2026 das **Aufräumen der verschlüsselten
+Anmeldung** beim Zahlungsanbieter — siehe Abschnitt 0.4.
 
 ---
 
@@ -101,6 +104,47 @@ CREATE INDEX `Fehlbuchung_erledigtAm_idx` ON `Fehlbuchung`(`erledigtAm`);
 
 Beide Migrationen laufen in einem Aufruf (`npm run db:deploy`), in
 dieser Reihenfolge.
+
+### 0.4 Die verschlüsselte Anmeldung wird wieder entfernt
+
+Zwischen Absenden und bestätigter Zahlung liegen die Anmeldedaten
+verschlüsselt beim Zahlungsanbieter. Danach werden sie dort nicht mehr
+gebraucht.
+
+Am 26.09.2026 gegen die echte Schnittstelle gemessen: Ein leerer Wert
+entfernt das Feld vollständig, und auch eine **verfallene** Bezahlseite
+lässt sich noch ändern.
+
+| Lage der Bezahlseite | Wird geleert? |
+|---|---|
+| noch offen | **nie** — die Marke wird gleich gebraucht |
+| bezahlt, bei VERA noch nicht verbucht | **nie** — der Abgleichlauf legt daraus noch die Anmeldung an |
+| bezahlt und verbucht | ja, sobald sie 24 Stunden alt ist |
+| nicht bezahlt, verfallen oder abgebrochen | ja, sofort |
+
+Die 24 Stunden sind keine Willkür: Solange die Marke brauchbar ist, ist
+sie der einzige Weg, eine Buchung nach dem Einspielen einer Sicherung
+wiederherzustellen. Danach weist das Programm sie ohnehin als zu alt
+ab.
+
+**Entfernt wird ausschliesslich die Marke.** Die Veranstaltungskennung,
+der Betrag, die E-Mail-Adresse, die Zahlung, die Erstattungen und die
+Posten bleiben unangetastet — und in der VERA-Datenbank ändert sich gar
+nichts.
+
+Bleibt eine Rückmeldung aus, holt der stündliche Abgleichlauf das
+Aufräumen nach.
+
+**Ein fünfter Fehlbuchungsgrund kam dabei hinzu:**
+`marke-abgelaufen`. Bisher landete jeder Entschlüsselungsfehler unter
+`betrag-abweichend` — an einem Vorgang, bei dem der Betrag nie das
+Problem war. Er wird wie `ohne-marke` vollständig erstattet: Das Geld
+ist da, die Daten sind nicht mehr verwertbar.
+
+**Noch nicht geprüft ist der Fall `complete`** — eine bezahlte
+Bezahlseite. Über die Schnittstelle allein lässt er sich nicht
+herstellen; dafür braucht es einen Klick durch die Testkasse. Das ist
+**Schritt 17b**.
 
 ## 1. Der vollständige Ablauf, in der richtigen Reihenfolge
 
@@ -234,6 +278,7 @@ vorgesehen. Dann gilt für eine Abschlussprüfung:
 | 15 | Nginx-Bremse einbauen und neu laden | **ja, Server** |
 | 16 | Abgleichlauf einrichten (systemd-Timer) | **ja, Server** |
 | 17 | Abschlussprüfung **hinter der Sperre** | legt eine Testbuchung an, die danach entfernt wird |
+| 17b | Aufräumen auf einer **bezahlten** Bezahlseite prüfen | leert die Marke dieser einen Testsitzung |
 | 18 | **Öffentliche Freigabe** — eigener letzter Schritt | **ja, Server:** ab hier können Kunden buchen |
 
 Die Befehle dazu stehen in **Abschnitt 4**, in derselben Reihenfolge:
@@ -254,7 +299,8 @@ Die Befehle dazu stehen in **Abschnitt 4**, in derselben Reihenfolge:
 | 15 | 4.13 |
 | 16 | 4.14 |
 | 17 | Abschnitt 5 |
-| 18 | 4.15 |
+| 17b | 4.15 |
+| 18 | 4.16 |
 
 Die beiden Rückkehrwege stehen in 4.16 (Sicherung einspielen) und
 4.17 (Notausgang altes Schema). Sie gehören zu keinem Schritt — sie
@@ -301,7 +347,7 @@ einfach stehen. Sie muss für eine Rückkehr gar nicht angefasst werden.
 **Der Weg zurück:**
 
 ```
-Sicherung einspielen (Abschnitt 4.16) → alter Commit auschecken →
+Sicherung einspielen (Abschnitt 4.17) → alter Commit auschecken →
 bauen → Dienst starten
 ```
 
@@ -330,7 +376,7 @@ Stattdessen:
 3. Reicht ein Rücksprung des **Codes** ohne Schema? Der alte Code
    braucht `reserviertBis` — also nein, nicht ohne weiteres. Die
    Spalte liesse sich aber in einer Zeile wieder anlegen und der
-   Aufzählungstyp wieder erweitern; beides steht in Abschnitt 4.17.
+   Aufzählungstyp wieder erweitern; beides steht in Abschnitt 4.18.
    Das ist der Notausgang, nicht der Normalweg.
 
 ### 2.4 Woran man merkt, dass es schiefgegangen ist
@@ -574,6 +620,46 @@ beschreibt — und der bliebe dauerhaft an ihr hängen.
 
 Deshalb liegt die öffentliche Freigabe (Schritt 18) hinter diesem
 Schritt und nicht davor.
+
+---
+
+### 3.7 Fassung B — nur nach erfolgreichem Schritt 17b
+
+Seit dem 26.09.2026 räumt VERA die verschlüsselte Anmeldung beim
+Anbieter wieder ab (Abschnitt 0.4). Sobald **Schritt 17b `GEHT`
+ergibt**, darf der Datenschutztext das auch sagen. Bis dahin gilt
+Fassung A aus 3.4 — sie verspricht kein Löschen und ist damit in jedem
+Fall wahr.
+
+In Fassung B ändert sich **nur der vierte Absatz** von 3.4:
+
+> Der Zeitpunkt seiner Erzeugung ist untrennbar mitverschlüsselt und
+> lässt sich nicht nachträglich ändern. Der Bezahlvorgang selbst
+> verfällt nach 30 Minuten, und die Anmeldesysteme von VERA nehmen
+> keinen Datensatz an, der älter als 24 Stunden ist. VERA löscht den
+> verschlüsselten Datensatz beim Zahlungsanbieter, sobald der Vorgang
+> abgeschlossen ist: bei abgebrochenen oder verfallenen
+> Bezahlvorgängen unmittelbar, bei abgeschlossenen spätestens 24
+> Stunden nach ihrer Erzeugung. Die Angaben zum Zahlungsvorgang selbst
+> — Betrag, Zeitpunkt, Zahlungs- und Erstattungsnummern — bleiben
+> davon unberührt; sie werden für Buchhaltung und Erstattungen
+> benötigt. Der Schlüssel bleibt bei VERA vorhanden — die zeitliche
+> Grenze ist eine Regel der Anmeldesysteme und keine Eigenschaft der
+> Verschlüsselung selbst.
+
+Und im Abschnitt „3. Empfänger und Auftragsverarbeiter" der
+Stripe-Eintrag:
+
+> Stripe Payments Europe, Limited, … wickelt Zahlungen ab;
+> Einzelheiten stehen im vorherigen Abschnitt. Der verschlüsselte
+> Datensatz mit Ihren Anmeldeangaben wird dort nur bis zum Abschluss
+> des Bezahlvorgangs gespeichert und anschliessend von VERA gelöscht.
+> Die übrigen Angaben zum Bezahlvorgang bewahrt Stripe nach seinen
+> eigenen Regeln auf.  ⟵ **Frist weiterhin offen**
+
+**Ergibt Schritt 17b `GEHT NICHT`**, bleibt Fassung A — mit einem
+Zusatz, der dann die Wahrheit ist: Bei abgebrochenen und verfallenen
+Bezahlvorgängen wird gelöscht, bei abgeschlossenen nicht.
 
 ---
 
@@ -1148,7 +1234,7 @@ SQL
 cd /var/www/vera && sudo -u vera git fetch origin && sudo -u vera git log --oneline -1 origin/claude/frontend-design-skill-folder-luremb
 ```
 
-Es muss `99fe92b` erscheinen — oder neuer, falls bis dahin noch
+Es muss `7bbd1d7` erscheinen — oder neuer, falls bis dahin noch
 etwas dazukommt. Steht dort etwas Älteres, ist der Push nicht
 angekommen; dann hier abbrechen.
 
@@ -1346,9 +1432,63 @@ Einmal von Hand starten und ansehen:
 sudo systemctl start vera-zahlungsabgleich.service && journalctl -u vera-zahlungsabgleich.service -n 30 --no-pager
 ```
 
-### 4.15 Öffentliche Freigabe — der letzte Schritt *(**ändert den Server**)*
+### 4.15 Aufräumen auf einer bezahlten Bezahlseite prüfen *(leert die Marke dieser Testsitzung)*
 
-**Erst ausführen, wenn Abschnitt 5 vollständig grün ist.** Ab diesem
+Direkt nach der Testzahlung aus Abschnitt 5, mit deren Sitzungskennung.
+Sie steht in der Adresszeile der Abschluss-Seite (`…?sitzung=cs_…`)
+und im Dashboard des Anbieters.
+
+Der Befehl beantwortet drei Fragen auf einmal, gibt den Schlüssel
+niemals aus und fasst nichts ausser dieser einen Sitzung an:
+
+```bash
+cd /var/www/vera && sudo -u vera node --env-file=.env -e '
+const Stripe = require("stripe");
+const k = (process.env.ZAHLUNG_GEHEIMSCHLUESSEL || "").trim();
+const id = process.argv[1];
+const s = new Stripe(k);
+(async () => {
+  const a = await s.checkout.sessions.retrieve(id);
+  const felder = Object.keys(a.metadata || {}).filter((x) => /^marke_/.test(x));
+  console.log("Zustand      :", a.status, "/", a.payment_status);
+  console.log("Marke        :", felder.length ? felder.join(", ") : "schon fort");
+  if (a.payment_intent) {
+    const p = await s.paymentIntents.retrieve(
+      typeof a.payment_intent === "string" ? a.payment_intent : a.payment_intent.id);
+    console.log("Zahlung traegt:", JSON.stringify(p.metadata || {}));
+  }
+  if (!felder.length) return console.log("LEEREN       : nichts zu tun");
+  const leer = {}; for (const f of felder) leer[f] = "";
+  try {
+    const b = await s.checkout.sessions.update(id, { metadata: leer });
+    console.log("LEEREN       : GEHT —", JSON.stringify(b.metadata));
+  } catch (e) { console.log("LEEREN       : GEHT NICHT —", e.message); }
+})().catch((e) => console.error("FEHLER:", e.message));
+' cs_HIER_DIE_SITZUNGSKENNUNG
+```
+
+Erwartet:
+
+- **`Zustand`** — `complete / paid`.
+- **`Zahlung traegt`** — `{}`. Damit ist belegt, dass die
+  verschlüsselte Anmeldung **nicht** auf die Zahlung übertragen wird
+  und wirklich nur an einem einzigen Objekt liegt.
+- **`LEEREN : GEHT`** — und in der Ausgabe daneben nur noch
+  `{"event":"…"}`.
+
+`LEEREN : GEHT NICHT` ist kein Grund zum Abbrechen des Ausrollens —
+der Rest läuft davon unabhängig. Aber dann gilt: **Fassung B des
+Datenschutztextes darf nicht gesetzt werden**, weil dann nur
+abgebrochene und verfallene Bezahlseiten geleert werden, bezahlte
+nicht. Schick mir in dem Fall die Ausgabe, ich passe den Text an.
+
+Trägt `Zahlung traegt` wider Erwarten Felder, ebenfalls melden: Dann
+liegt die Marke an einem zweiten Objekt, und der Plan braucht eine
+Ergänzung.
+
+### 4.16 Öffentliche Freigabe — der letzte Schritt *(**ändert den Server**)*
+
+**Erst ausführen, wenn Abschnitt 5 und Schritt 17b durch sind.** Ab diesem
 Befehl können Kunden buchen.
 
 In `/etc/nginx/sites-available/vera` die beiden Zeilen wieder
@@ -1389,7 +1529,7 @@ sudo rm -f /etc/nginx/conf.d/vera-sperre.conf /etc/nginx/.htpasswd-vera && sudo 
 > verlangt Abschnitt 2.3, wenn nach Tagen etwas auffällt. Ich würde
 > sie liegen lassen, bis das erste Event durch ist.
 
-### 4.16 Sicherung einspielen — nur im Rückkehrfall *(**ändert Live-Daten**)*
+### 4.17 Sicherung einspielen — nur im Rückkehrfall *(**ändert Live-Daten**)*
 
 ```bash
 sudo /usr/local/bin/vera-nach-wiederherstellung.sh
@@ -1399,7 +1539,7 @@ Der genaue Weg samt Entschlüsselung steht in
 [sicherung.md](sicherung.md). **Er überschreibt die Datenbank
 vollständig.**
 
-### 4.17 Notausgang: das alte Schema wiederherstellen *(**ändert Live-Daten**)*
+### 4.18 Notausgang: das alte Schema wiederherstellen *(**ändert Live-Daten**)*
 
 Nur, wenn erst nach Stunden etwas auffällt und die Sicherung deshalb
 keine Option mehr ist:
@@ -1466,6 +1606,11 @@ anwendbar. Dann gilt Abschnitt 5.3.
 
 Schlägt einer der Punkte 3 bis 11 fehl: Abschnitt 2, Rückkehrplan. Die
 Sperre bleibt dabei stehen.
+
+**Die Sitzungskennung aus Punkt 5 aufschreiben** — sie steht in der
+Adresszeile der Abschluss-Seite (`…?sitzung=cs_…`) und wird in Schritt
+17b (Abschnitt 4.15) gebraucht. Das Aufräumen dort läuft, bevor du die
+Testbuchung stornierst.
 
 ### 5.3 Später, wenn echte Zahlungen freigeschaltet sind
 
