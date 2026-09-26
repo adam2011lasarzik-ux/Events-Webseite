@@ -38,7 +38,7 @@
    --------------------------------------------------------------- */
 
 export interface LoeschbarkeitsAngaben {
-  status: "RESERVIERT" | "BESTAETIGT" | "WARTELISTE" | "STORNIERT";
+  status: "BESTAETIGT" | "WARTELISTE" | "STORNIERT";
   zahlungsStatus: "OFFEN" | "BEZAHLT" | "ERSTATTET" | "TEILWEISE_ERSTATTET";
   zahlungsAbsicht: string | null;
   bezahlterBetragCents: number | null;

@@ -53,12 +53,6 @@ export async function statusSetzen(formular: FormData): Promise<void> {
       // Die Zeitstempel mitführen, damit später nachvollziehbar
       // bleibt, wann was passiert ist.
       storniertAm: neu === "STORNIERT" ? new Date() : null,
-      // Wer von Hand bestätigt oder storniert, beendet damit einen
-      // laufenden Zahlungsversuch. Ein Platz hing daran seit dem
-      // 24.09.2026 nicht mehr (lib/plaetze.ts) — die Frist zu löschen
-      // hält aber die Anzeige ehrlich: Es wartet niemand mehr auf eine
-      // Zahlung.
-      reserviertBis: null,
       reaktiviertAm:
         vorhanden.status === "STORNIERT" && neu !== "STORNIERT"
           ? new Date()
@@ -97,8 +91,8 @@ export async function zahlungSetzen(formular: FormData): Promise<void> {
          ausbleibt. Eine bezahlte Anmeldung, die als bloße Reservierung
          weiterläuft und dann verfällt, wäre die schlechteste
          Überraschung von allen. */
-      ...(neu === "BEZAHLT" && vorhanden.status === "RESERVIERT"
-        ? { status: "BESTAETIGT" as const, reserviertBis: null }
+      ...(neu === "BEZAHLT" && vorhanden.status !== "BESTAETIGT"
+        ? { status: "BESTAETIGT" as const }
         : {}),
       bezahltAm: neu === "BEZAHLT" ? (vorhanden.bezahltAm ?? new Date()) : null,
       // Der Betrag wird NICHT aus dem Formular übernommen, sondern aus

@@ -3,6 +3,7 @@
 import "../schutz.mjs";
 
 import { anmelden, hole, sende, actionFelder, alsText, BASIS } from "./admin-senden.mjs";
+import * as zw from "../zahlweg.mjs";
 import { db } from "../../lib/db.js";
 
 let n = 0; const schief = [];
@@ -71,7 +72,7 @@ pruefe("/anmeldung leitet auf die nächste Veranstaltung",
 // ── Eine echte Anmeldung landet beim RICHTIGEN Event ───────────
 const anmeldeSeite = await hole("/events/probe-business/anmeldung");
 const AF = actionFelder(anmeldeSeite.html, 'name="eventSlug"');
-await sende("/events/probe-business/anmeldung", AF, {
+const abgesendet = await sende("/events/probe-business/anmeldung", AF, {
   eventSlug: "probe-business", weg: "selbst", selbstAls: "adult",
   schueler: 0, erwachsene: 1, webseite: "",
   /* Die beiden Pflichthaken (B-29, B-17) — ohne sie lehnt der Server
@@ -80,6 +81,15 @@ await sende("/events/probe-business/anmeldung", AF, {
   "person.0.vorname": "Theme", "person.0.nachname": "Prüfer",
   "person.0.email": "theme@example.org", "person.0.telefon": "",
 }, null, "198.51.100.77");
+
+/* Seit Stufe 2 (26.09.2026) entsteht die Anmeldung erst mit der
+   bestätigten Zahlung. Geprüft wird hier aber, bei WELCHEM Event sie
+   landet — dafür muss sie erst einmal entstehen. Also den Weg zu
+   Ende gehen: bezahlen und die Rückmeldung schicken. */
+const sitzungId = zw.sitzungAusZiel(abgesendet.ziel);
+pruefe("Das Absenden führt zur Bezahlseite", sitzungId !== null,
+  abgesendet.ziel ?? "keine Weiterleitung");
+if (sitzungId) await zw.rueckmeldung(BASIS, await zw.bezahlen(sitzungId));
 
 const gespeichert = await db.registration.findFirst({
   where: { kontaktEmail: "theme@example.org" }, include: { event: true, teilnehmer: true },

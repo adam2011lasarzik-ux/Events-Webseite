@@ -11,7 +11,7 @@
 import "../schutz.mjs";
 
 import { db } from "../../lib/db.ts";
-import { sitzungErstellen, sitzungPruefen } from "../../lib/zahlung.ts";
+import { bezahlteSitzung } from "../zahlweg.mjs";
 import { neuerStornoSchluessel } from "../../lib/storno.ts";
 import { stornoansichtFuer, stornoAusfuehren } from "../../lib/stornoAusfuehren.ts";
 import { belegtFilter } from "../../lib/plaetze.ts";
@@ -47,8 +47,12 @@ async function buchung({ email, bezahlen = true, startAt = undefined, personen =
       kontaktVorname: "Storno",
       kontaktNachname: "Ablauf",
       kontaktEmail: email,
-      status: "RESERVIERT",
-      reserviertBis: new Date(Date.now() + 30 * 60 * 1000),
+      /* Seit Stufe 2 (26.09.2026) gibt es keinen Zustand zwischen
+         Absenden und Zahlung mehr. Eine unbezahlte Buchung ist
+         deshalb keine Reservierung, sondern eine bestätigte Buchung
+         mit offenem Zahlungsstatus — der Fall „kostenlos" oder
+         „zahlt vor Ort". */
+      status: "BESTAETIGT",
       gesamtpreisCents: 2500 * personen,
       stornoSchluessel: schluessel,
       teilnehmer: {
@@ -62,21 +66,18 @@ async function buchung({ email, bezahlen = true, startAt = undefined, personen =
   });
 
   if (bezahlen) {
-    const sitzung = await sitzungErstellen({
-      anmeldungId: anmeldung.id,
-      email,
+    const { sitzung, stand } = await bezahlteSitzung({
+      eventId: event.id,
       eventTitel: event.titel,
+      email,
       personen,
       gesamtCents: 2500 * personen,
     });
-    await fetch(`${ATTRAPPE}/steuerung/bezahlt/${sitzung.id}`, { method: "POST" });
-    const stand = await sitzungPruefen(sitzung.id);
     await db.registration.update({
       where: { id: anmeldung.id },
       data: {
-        status: "BESTAETIGT",
-        reserviertBis: null,
         zahlungsStatus: "BEZAHLT",
+        zahlungsWeg: "ONLINE",
         zahlungsReferenz: sitzung.id,
         zahlungsAbsicht: stand.zahlungId,
         bezahlterBetragCents: 2500 * personen,

@@ -5,8 +5,9 @@ import { db } from "@/lib/db";
 import { alsEuro } from "@/lib/preise";
 import { fuelle } from "@/lib/formate";
 import { sitzungPruefen } from "@/lib/zahlung";
-import { betragPasst } from "@/lib/zahlungRegeln";
-import { zahlungStarten } from "../zahlung";
+import { entschluesseln } from "@/lib/anmeldeNutzlast";
+import { schluesselbund } from "@/lib/anmeldeSchluessel";
+import { anmeldungAusZahlung } from "@/lib/anmeldungAnlegen";
 import { texte } from "@/content";
 import stil from "@/components/Textseite.module.css";
 
@@ -19,10 +20,23 @@ import stil from "@/components/Textseite.module.css";
  *
  * Eine Zwischenbestätigung („Danke, wir haben deine Anmeldung") vor
  * der Bezahlung wäre irreführend: Sie klingt nach fertig, obwohl noch
- * nichts fest ist. Die 30 Minuten sind seit dem 24.09.2026 nur noch
- * die Frist des Zahlungsversuchs — sie halten keinen Platz mehr
- * (lib/plaetze.ts). Sie sind weder eine Anmeldung noch eine
- * Warteliste und werden hier auch nicht so genannt.
+ * nichts fest ist.
+ *
+ * ── Seit dem Umbau vom 25.09.2026 ───────────────────────────────
+ *
+ * Bei einer kostenpflichtigen Anmeldung GIBT ES vor der Zahlung
+ * nichts, worauf diese Seite zeigen könnte. Sie bekommt deshalb die
+ * Sitzungskennung des Anbieters (`?sitzung=cs_…`) und fragt damit
+ * SELBST beim Anbieter nach, ob bezahlt wurde. Der Browser liefert
+ * nur die Kennung; geglaubt wird ihm nichts.
+ *
+ * Ist bezahlt, legt sie die Anmeldung an — über dieselbe idempotente
+ * Funktion wie die Rückmeldung des Anbieters. Sie ist damit nicht ein
+ * zweiter Weg mit eigener Logik, sondern derselbe Weg, nur früher.
+ * Wer schneller zurück ist als die Rückmeldung, wartet nicht.
+ *
+ * Nach einem Abbruch gibt es weder Kennung noch Datensatz. Dann sagt
+ * die Seite, was wirklich geschehen ist: nichts.
  *
  * Die Seite liest bei jedem Aufruf frisch aus der Datenbank.
  */
@@ -61,64 +75,60 @@ export async function generateMetadata({
  * den Tab schließt. Diese Nachfrage schließt nur die Lücke von wenigen
  * Sekunden dazwischen.
  */
-async function standAbgleichen(anmeldungId: string): Promise<void> {
-  const anmeldung = await db.registration.findUnique({ where: { id: anmeldungId } });
-  if (!anmeldung) return;
-
-  /* Dieselben zwei Wachposten wie in app/zahlung/rueckmeldung (dort
-     steht die ausführliche Begründung): Eine stornierte Buchung wird
-     nie wiederbelebt, und nur eine OFFENE Zahlung darf auf „bezahlt"
-     wechseln.
-
-     Hier wiegt es besonders: Diese Seite ist ohne Anmeldung erreichbar.
-     Wer nach seiner Stornierung den alten Link noch einmal öffnet —
-     aus der Mail, dem Verlauf, einem Lesezeichen — hätte seine
-     erstattete Buchung sonst mit einem bloßen Seitenaufruf
-     zurückgeholt. */
-  if (anmeldung.status === "STORNIERT") return;
-  if (anmeldung.zahlungsStatus !== "OFFEN") return;
-  if (!anmeldung.zahlungsReferenz) return;
-
+async function ausSitzungAnlegen(sitzungId: string): Promise<string | null> {
   try {
-    const stand = await sitzungPruefen(anmeldung.zahlungsReferenz);
-    if (!stand.bezahlt) return;
-    if (!betragPasst(stand.betragCents, anmeldung.gesamtpreisCents)) return;
+    const stand = await sitzungPruefen(sitzungId);
+    if (!stand.bezahlt) return null;
+    if (stand.betragCents === null || !stand.marke) return null;
 
-    await db.registration.update({
-      where: { id: anmeldung.id },
-      data: {
-        status: "BESTAETIGT",
-        reserviertBis: null,
-        zahlungsStatus: "BEZAHLT",
-        zahlungsWeg: "ONLINE",
-        // Wie im Webhook: ohne die Zahlungskennung wäre später weder
-        // eine Erstattung noch deren Zuordnung möglich.
-        zahlungsAbsicht: stand.zahlungId,
-        bezahlterBetragCents: stand.betragCents,
-        bezahltAm: new Date(),
-      },
+    const nutzlast = entschluesseln(stand.marke, schluesselbund(), {
+      eventId: stand.eventId ?? "",
+      preisCents: stand.betragCents,
     });
+
+    const ergebnis = await anmeldungAusZahlung(nutzlast, {
+      sitzungId,
+      zahlungId: stand.zahlungId,
+      bezahlterBetragCents: stand.betragCents,
+    });
+
+    if (ergebnis.lage === "angelegt" || ergebnis.lage === "schon-da") {
+      return ergebnis.anmeldungId;
+    }
+    /* Eine Fehlbuchung wird hier NICHT abgewickelt. Das tut die
+       Rückmeldung des Anbieters, und zwar vollständig: Beleg
+       schreiben, erstatten, Mail verschicken. Zweimal erstatten wäre
+       schlimmer als ein paar Sekunden später zu erstatten. Die Seite
+       sagt derweil, dass die Zahlung geprüft wird. */
+    return null;
   } catch (e) {
     // Kein Drama: Die Rückmeldung des Anbieters erledigt es ohnehin.
     console.error("Nachfrage beim Zahlungsanbieter fehlgeschlagen:", e);
+    return null;
   }
 }
 
 export default async function AbschlussSeite({
   searchParams,
 }: {
-  searchParams: Promise<{ nr?: string; zahlung?: string; frei?: string }>;
+  searchParams: Promise<{ nr?: string; sitzung?: string; zahlung?: string; frei?: string }>;
 }) {
-  const { nr, zahlung, frei } = await searchParams;
+  const { nr, sitzung, zahlung, frei } = await searchParams;
   const t = texte;
 
-  // Nur bei der Rückkehr von der Bezahlseite nachfragen — nicht bei
-  // jedem Seitenaufruf.
-  if (nr && zahlung === "zurueck") await standAbgleichen(nr);
+  /* Nach der Rückkehr von der Bezahlseite beim Anbieter nachfragen —
+     nicht bei jedem Seitenaufruf. Ist bezahlt, entsteht die Anmeldung
+     jetzt; sonst bleibt es bei null und die Seite sagt, dass die
+     Bestätigung noch aussteht. */
+  const ausSitzung = sitzung && zahlung === "zurueck" ? await ausSitzungAnlegen(sitzung) : null;
 
-  const anmeldung = nr
+  /* `nr` gibt es nur noch bei kostenlosen Veranstaltungen — dort
+     entsteht die Anmeldung weiterhin sofort beim Absenden. */
+  const kennung = ausSitzung ?? nr ?? null;
+
+  const anmeldung = kennung
     ? await db.registration.findUnique({
-        where: { id: nr },
+        where: { id: kennung },
         // Nur die ANZAHL der Teilnehmer wird gebraucht (siehe unten) —
         // ihre Namen werden hier bewusst nicht mehr geladen, nicht nur
         // nicht mehr angezeigt.
@@ -127,12 +137,28 @@ export default async function AbschlussSeite({
     : null;
 
   if (!anmeldung) {
+    /* Zwei verschiedene Lagen, die nicht verwechselt werden dürfen:
+
+       Kam die Person gerade von der Bezahlseite zurück, ist die
+       Zahlung womöglich unterwegs und die Anmeldung entsteht in
+       Sekunden — dann wäre „nicht gefunden" schlicht falsch und
+       beunruhigend.
+
+       Wurde dagegen abgebrochen, ist wirklich nichts passiert, und
+       genau das gehört gesagt: kein Geld abgebucht, keine Angaben
+       gespeichert, bitte neu ausfüllen. */
+    const wartetNoch = Boolean(sitzung) && zahlung === "zurueck";
+
     return (
       <Abschnitt>
-        <AbschnittKopf titel={t.danke.nichtGefunden} haupt />
+        <AbschnittKopf
+          titel={wartetNoch ? t.danke.zahlungLaeuft : t.danke.nichtsGespeichertTitel}
+          haupt
+          einleitung={wartetNoch ? t.danke.zahlungLaeuftText : t.danke.nichtsGespeichertText}
+        />
         <div style={{ marginTop: "2rem" }}>
-          <Knopf href="/" art="zweit" pfeil>
-            {t.aktion.zurueck}
+          <Knopf href="/events" art="haupt" pfeil>
+            {t.danke.zurueckZurAnmeldung}
           </Knopf>
         </div>
       </Abschnitt>
@@ -144,11 +170,11 @@ export default async function AbschlussSeite({
   const kostenlos = anmeldung.gesamtpreisCents <= 0;
   const bezahlt = anmeldung.zahlungsStatus === "BEZAHLT" || kostenlos;
   const storniert = anmeldung.status === "STORNIERT";
-  const abgelaufen =
-    !bezahlt &&
-    anmeldung.status === "RESERVIERT" &&
-    anmeldung.reserviertBis !== null &&
-    anmeldung.reserviertBis <= new Date();
+  /* „Abgelaufen" gibt es nicht mehr als Zustand einer Anmeldung: Eine
+     Anmeldung entsteht erst mit der bezahlten Zahlung, eine unbezahlte
+     gibt es also nicht. Der Fall bleibt nur noch für kostenlose
+     Veranstaltungen theoretisch und ist dort nie erreichbar. */
+  const abgelaufen = false;
 
   /* Es hat gar nicht erst zur Bezahlseite gereicht: zu wenige Plätze.
      Dann ist die Anmeldung nicht zustande gekommen, und ein Knopf
@@ -160,8 +186,6 @@ export default async function AbschlussSeite({
      2.5). Ein Knopf „Jetzt bezahlen" führte dann in eine Aktion, die
      ohnehin ablehnt. */
   const keinTermin = zahlung === "kein-termin";
-
-  const zeigtBezahlknopf = !bezahlt && !storniert && !keinePlaetze && !keinTermin;
 
   const titel = bezahlt ? t.danke.bezahltTitel : t.danke.offenTitel;
 
@@ -233,17 +257,12 @@ export default async function AbschlussSeite({
       <div className={stil.inhalt} style={{ marginTop: "2rem" }}>
         <h2 style={{ fontSize: "var(--gr-xl)" }}>{lage.titel}</h2>
         <p>{lage.text}</p>
-        {zeigtBezahlknopf && <p>{t.danke.zahlungText}</p>}
-
-        {zeigtBezahlknopf && (
-          <form action={zahlungStarten} style={{ marginTop: "1.5rem" }}>
-            <input type="hidden" name="anmeldungId" value={anmeldung.id} />
-            <button type="submit" className={stil.zahlKnopf}>
-              {t.danke.zahlungKnopf}
-            </button>
-            <span className={stil.zahlWege}>{t.danke.zahlungWege}</span>
-          </form>
-        )}
+        {/* Der Knopf „Jetzt bezahlen" ist am 26.09.2026 entfallen.
+            Er setzte einen gespeicherten Vorgang voraus, den es nicht
+            mehr gibt: Vor der Zahlung wird nichts gespeichert. Wer
+            abgebrochen hat, füllt das Formular neu aus — das ist der
+            Preis dafür, dass nach einem Abbruch keine Daten
+            zurückbleiben. */}
 
         <h2 style={{ fontSize: "var(--gr-xl)" }}>{t.danke.emailTitel}</h2>
         <p>{t.danke.emailText}</p>

@@ -169,6 +169,7 @@ lauf "U · Versionierte Rechtstexte" "$P/U/u-rechtstexte.mjs"
 lauf "V · Bestellknopf, AGB-Haken, Aufnahmehinweis" "$P/V/v-checkout.mjs"
 lauf "W · Widerspruch gegen Aufnahmen" "$P/W/w-aufnahmen.mjs"
 lauf "X · Anmeldung erst nach bezahlter Zahlung" "$P/X/x-anlage.mjs"
+lauf "X · Abbruch hinterlaesst keine Spur" "$P/X/x-keine-spur.mjs"
 
 # Diese beiden laufen gegen den Server OHNE Sonderwerte (Port 3249).
 lauf_rein "N · Rechtsseiten"           node "$P/N/n-seiten.mjs"

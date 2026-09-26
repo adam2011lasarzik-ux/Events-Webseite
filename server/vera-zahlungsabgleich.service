@@ -1,0 +1,15 @@
+[Unit]
+Description=Gleicht bezahlte Zahlungen ohne Anmeldung ab
+After=network-online.target mariadb.service
+Requires=mariadb.service
+
+[Service]
+Type=oneshot
+# Als "vera", nicht als root: braucht nur Datenbank, Projektordner und
+# einen ausgehenden Aufruf zum Zahlungsanbieter.
+User=vera
+Group=vera
+WorkingDirectory=/var/www/vera
+ExecStart=/usr/local/bin/vera-zahlungsabgleich.sh
+NoNewPrivileges=true
+PrivateTmp=true

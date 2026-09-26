@@ -140,6 +140,49 @@ export function bestaetigungsMail(
   };
 }
 
+/**
+ * Die unangenehme Mail: bezahlt, aber kein Platz.
+ *
+ * Seit dem Umbau vom 25.09.2026 wird während des Bezahlens kein Platz
+ * mehr freigehalten. Wer den letzten Platz knapp verpasst, hat schon
+ * bezahlt. Das Geld geht unaufgefordert und vollständig zurück — und
+ * diese Mail sagt es, bevor jemand es selbst merkt.
+ *
+ * Sie nennt den Grund beim Namen und entschuldigt sich dafür, statt
+ * ihn in einer Formulierung zu verstecken. Wer unerwartet Geld
+ * zurückbekommt, soll nicht rätseln müssen, ob er betrogen wurde.
+ */
+export function erstattungsHinweisMail(grund: string): { betreff: string; text: string } {
+  const erklaerung =
+    grund === "keine-plaetze"
+      ? "In der Zeit zwischen deiner Zahlung und dem Eingang bei uns sind die letzten " +
+        "Plätze vergeben worden. Deine Anmeldung ist deshalb nicht zustande gekommen."
+      : grund === "doppelte-adresse"
+        ? "Für diese E-Mail-Adresse gibt es zu dieser Veranstaltung bereits eine Anmeldung. " +
+          "Es ist deshalb keine zweite zustande gekommen."
+        : "Der Termin der Veranstaltung steht nicht mehr fest. Deine Anmeldung ist deshalb " +
+          "nicht zustande gekommen.";
+
+  return {
+    betreff: "Deine Zahlung wurde zurückerstattet",
+    text: [
+      "Hallo,",
+      "",
+      "es tut uns leid: " + erklaerung,
+      "",
+      "Der vollständige Betrag ist bereits zur Rückerstattung angewiesen — auf demselben",
+      "Weg, über den du gezahlt hast. Je nach Bank kann die Gutschrift einige Werktage",
+      "dauern. Du musst dafür nichts tun.",
+      "",
+      "Wenn du Fragen hast oder wir eine Lösung suchen sollen, schreib uns einfach:",
+      "kontakt@veraevents.de",
+      "",
+      "Viele Grüße",
+      "VERA Events",
+    ].join("\n"),
+  };
+}
+
 /** Zahlungsbestätigung — nach erfolgreicher Zahlung über den Anbieter. */
 export function zahlungsBestaetigungsMail(
   anmeldung: MailAnmeldung,

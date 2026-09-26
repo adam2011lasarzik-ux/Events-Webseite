@@ -78,12 +78,94 @@ function basis(): string {
   return wert;
 }
 
+/**
+ * Wie viele Zeichen ein einzelnes Metadaten-Feld des Anbieters fasst.
+ *
+ * Am 25.09.2026 auf dem Server gegen die echte Schnittstelle gemessen:
+ * 20 Felder zu je 500 Zeichen gehen durch, gebraucht werden im
+ * schlimmsten Fall 7. Die Zahl steht hier und nicht verstreut im Code,
+ * damit sie an einer Stelle steht, wenn der Anbieter sie je ändert.
+ */
+export const METADATEN_ZEICHEN = 500;
+
+/** Höchstens so viele Stücke werden erzeugt. Mehr wäre ein Fehler. */
+export const METADATEN_STUECKE_MAX = 20;
+
 export interface SitzungsAnfrage {
-  anmeldungId: string;
   email: string;
+  /**
+   * Die Kennung der Veranstaltung, im Klartext.
+   *
+   * Sie steht offen in der `metadata`, und das ist kein Versehen:
+   * Beim Entschlüsseln der Marke muss sie von aussen mitgebracht
+   * werden — sie geht als mitversiegelte Zusatzdaten in das Siegel
+   * ein (lib/anmeldeNutzlast.ts). Stünde sie nur IN der Marke, wäre
+   * die Bindung wertlos, weil man sie nicht prüfen könnte, ohne sie
+   * schon zu kennen. Eine Veranstaltungskennung ist ausserdem kein
+   * Personenbezug; sie steht ohnehin in jeder öffentlichen Adresse.
+   */
+  eventId: string;
   eventTitel: string;
   personen: number;
   gesamtCents: number;
+  /**
+   * Die verschlüsselte Anmeldung (lib/anmeldeNutzlast.ts).
+   *
+   * Sie reist in der `metadata` der Bezahlseite mit — das ist seit dem
+   * Umbau vom 25.09.2026 der EINZIGE Ort, an dem die Anmeldedaten
+   * zwischen dem Absenden des Formulars und der bestätigten Zahlung
+   * liegen. In der VERA-Datenbank steht bis dahin nichts.
+   */
+  marke: string;
+}
+
+/**
+ * Die Marke in Stücke schneiden, die in je ein Metadaten-Feld passen.
+ *
+ * Die Stückzahl steht als eigenes Feld dabei. Ohne sie müsste die
+ * Gegenseite raten, wie viele Felder zusammengehören — und ein
+ * fehlendes Stück fiele erst beim Entschlüsseln auf, also zu spät für
+ * eine verständliche Meldung.
+ */
+export function markeZerlegen(marke: string): Record<string, string> {
+  const stuecke: string[] = [];
+  for (let i = 0; i < marke.length; i += METADATEN_ZEICHEN) {
+    stuecke.push(marke.slice(i, i + METADATEN_ZEICHEN));
+  }
+  if (stuecke.length > METADATEN_STUECKE_MAX) {
+    throw new Error(
+      `Die Marke ist ${marke.length} Zeichen lang und braucht ${stuecke.length} Felder — ` +
+        `erlaubt sind ${METADATEN_STUECKE_MAX}.`,
+    );
+  }
+  const felder: Record<string, string> = { marke_teile: String(stuecke.length) };
+  stuecke.forEach((teil, i) => {
+    felder[`marke_${i + 1}`] = teil;
+  });
+  return felder;
+}
+
+/**
+ * Die Marke aus den Metadaten wieder zusammensetzen.
+ *
+ * Gibt null zurück, wenn keine da ist oder ein Stück fehlt. Der
+ * Aufrufer entscheidet, was das bedeutet — ein fehlendes Stück ist
+ * etwas anderes als eine Rückmeldung zu einer Buchung aus der Zeit
+ * vor dem Umbau, und beides soll unterscheidbar bleiben.
+ */
+export function markeZusammensetzen(
+  metadata: Record<string, string> | null | undefined,
+): string | null {
+  const anzahl = Number(metadata?.marke_teile ?? "0");
+  if (!Number.isInteger(anzahl) || anzahl <= 0) return null;
+
+  const teile: string[] = [];
+  for (let i = 1; i <= anzahl; i++) {
+    const teil = metadata?.[`marke_${i}`];
+    if (typeof teil !== "string") return null;
+    teile.push(teil);
+  }
+  return teile.join("");
 }
 
 /**
@@ -107,23 +189,25 @@ export async function sitzungErstellen(
     line_items: [posten(anfrage.eventTitel, anfrage.personen, anfrage.gesamtCents)],
     customer_email: anfrage.email,
     locale: "de",
-    // Beide Angaben, weil beide später beim Abgleich helfen: die eine
-    // steht in der Stripe-Oberfläche gut sichtbar, die andere kommt in
-    // der Rückmeldung zuverlässig mit.
-    client_reference_id: anfrage.anmeldungId,
-    metadata: { anmeldungId: anfrage.anmeldungId },
-    /* Dieselbe Nummer zusätzlich an die ZAHLUNG hängen, nicht nur an
-       die Bezahlseite.
-       Der Grund ist eine Lücke, die erst beim genauen Nachlesen
-       auffiel: Eine Erstattungs-Rückmeldung trägt Zahlungs- und
-       Charge-Kennung — die Sitzung, die wir speichern, kommt darin
-       nicht vor. Ohne diese Zeile fand eine im Dashboard von Hand
-       ausgelöste Kulanz-Erstattung ihre Buchung nicht wieder und
-       blieb still wirkungslos. Nebenbei steht die Nummer damit auch
-       bei der Zahlung selbst im Dashboard. */
-    payment_intent_data: { metadata: { anmeldungId: anfrage.anmeldungId } },
-    success_url: `${basis()}/anmeldung/danke?nr=${anfrage.anmeldungId}&zahlung=zurueck`,
-    cancel_url: `${basis()}/anmeldung/danke?nr=${anfrage.anmeldungId}&zahlung=abgebrochen`,
+    /* Die verschlüsselte Anmeldung, in Stücke zerlegt.
+       Es gibt keine Anmeldenummer mehr, die hier stehen könnte — die
+       Anmeldung entsteht erst mit der bestätigten Zahlung. Was die
+       Rückmeldung zusammenhält, ist die Sitzungskennung, die der
+       Anbieter selbst vergibt. */
+    metadata: { event: anfrage.eventId, ...markeZerlegen(anfrage.marke) },
+    /* Die Bezahlseite läuft nach 30 Minuten ab statt nach 24 Stunden.
+       Gehalten wird dadurch nichts — es wird kein Platz reserviert.
+       Aber eine Bezahlseite, die einen Tag lang bezahlbar bleibt,
+       lädt dazu ein, sie am Abend noch zu öffnen, wenn die
+       Veranstaltung längst ausgebucht ist. Dann käme das Geld an und
+       müsste wieder zurück. Dreissig Minuten ist das Kürzeste, was
+       der Anbieter zulässt. */
+    expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
+    /* Die Rückkehr trägt die Sitzungskennung. Die Abschluss-Seite
+       fragt damit SELBST beim Anbieter nach, ob bezahlt wurde — der
+       Browser liefert nur die Kennung, geglaubt wird ihm nichts. */
+    success_url: `${basis()}/anmeldung/danke?sitzung={CHECKOUT_SESSION_ID}&zahlung=zurueck`,
+    cancel_url: `${basis()}/anmeldung/danke?zahlung=abgebrochen`,
   });
 
   if (!sitzung.url) {
@@ -135,7 +219,15 @@ export async function sitzungErstellen(
 export interface Sitzungsstand {
   bezahlt: boolean;
   betragCents: number | null;
-  anmeldungId: string | null;
+  /**
+   * Die verschlüsselte Anmeldung, falls die Sitzung eine trägt.
+   *
+   * Null bei Sitzungen aus der Zeit vor dem Umbau vom 25.09.2026 —
+   * die trugen eine Anmeldenummer statt einer Marke.
+   */
+  marke: string | null;
+  /** Die Veranstaltungskennung aus der Metadata — für das Aufschliessen nötig. */
+  eventId: string | null;
   /** „open" = noch bezahlbar, „complete" = bezahlt, „expired" = verfallen. */
   lage: string | null;
   /** Die Adresse der Bezahlseite, solange sie noch offen ist. */
@@ -157,7 +249,8 @@ export async function sitzungPruefen(sitzungId: string): Promise<Sitzungsstand> 
   return {
     bezahlt: sitzung.payment_status === "paid",
     betragCents: sitzung.amount_total ?? null,
-    anmeldungId: sitzung.metadata?.anmeldungId ?? sitzung.client_reference_id ?? null,
+    marke: markeZusammensetzen(sitzung.metadata),
+    eventId: sitzung.metadata?.event ?? null,
     lage: sitzung.status ?? null,
     url: sitzung.url ?? null,
     zahlungId:
@@ -308,14 +401,20 @@ export interface Erstattungsergebnis {
  */
 export async function erstattungAusloesen(
   zahlungId: string,
-  anmeldungId: string,
+  /**
+   * Wofür erstattet wird — eine Anmeldenummer beim Storno, eine
+   * Sitzungskennung bei einer Fehlbuchung. Der Wert geht als
+   * Wiedererkennung an den Anbieter und in den Schlüssel gegen
+   * doppelte Erstattungen.
+   */
+  vorgang: string,
 ): Promise<Erstattungsergebnis> {
   const erstattung = await stripe().refunds.create(
     {
       payment_intent: zahlungId,
-      metadata: { anmeldungId },
+      metadata: { vorgang },
     },
-    { idempotencyKey: `storno-${anmeldungId}-${zahlungId}` },
+    { idempotencyKey: `erstattung-${vorgang}-${zahlungId}` },
   );
 
   return {

@@ -17,6 +17,7 @@
     "db:studio": "prisma studio",
     "admin": "tsx --env-file=.env prisma/adminAnlegen.ts",
     "zahlung:pruefen": "tsx --env-file=.env prisma/zahlungPruefen.ts",
+    "zahlung:abgleich": "tsx --env-file=.env prisma/zahlungAbgleich.ts",
     "mail:pruefen": "tsx --env-file=.env prisma/mailPruefen.ts",
     "sicherung:alarm": "tsx --env-file=.env prisma/sicherungsAlarmSenden.ts",
     "system:alarm": "tsx --env-file=.env prisma/systemAlarmSenden.ts",

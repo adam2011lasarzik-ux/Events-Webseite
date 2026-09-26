@@ -22,16 +22,6 @@ export interface EventUeberblick {
   /** Gezählt in PERSONEN, nicht in Anmeldungen. */
   /** Feste Teilnehmer: bezahlt bzw. bestätigt. Nur die zählen. */
   belegtePersonen: number;
-  /**
-   * Personen in offenen Zahlungsversuchen.
-   *
-   * Sie zählen seit dem 24.09.2026 NICHT gegen die Plätze und NICHT
-   * als Anmeldung — sie stehen hier nur, damit sichtbar bleibt, dass
-   * es sie gibt.
-   */
-  offenePersonen: number;
-  /** Anmeldungen mit offenem Zahlungsversuch. Ebenfalls nur Anzeige. */
-  offeneVersuche: number;
   wartelistePersonen: number;
   /** Verbindliche Anmeldungen: bestätigt oder auf der Warteliste. */
   anzahlAnmeldungen: number;
@@ -66,7 +56,7 @@ export async function eventUeberblick(): Promise<EventUeberblick[]> {
   });
 
   const leer = () => ({
-    belegtePersonen: 0, wartelistePersonen: 0, offenePersonen: 0, offeneVersuche: 0,
+    belegtePersonen: 0, wartelistePersonen: 0,
     anzahlAnmeldungen: 0, offenCents: 0, bezahltCents: 0,
   });
   const stand = new Map(events.map((e) => [e.id, leer()]));
@@ -76,34 +66,45 @@ export async function eventUeberblick(): Promise<EventUeberblick[]> {
     if (!s) continue;
     if (a.status === "STORNIERT") continue;
 
-    /* Getrennt gezählt, weil beides etwas anderes bedeutet:
-         belegtePersonen = feste Teilnehmer, bezahlt bzw. bestätigt
-         offenePersonen  = Personen in einem Zahlungsversuch, für den
-                           noch nicht bezahlt ist
-
-       Seit dem 24.09.2026 (Entscheidung von Adam) zählt für die
-       KAPAZITÄT nur noch die erste Zahl. Vorher zählte die Summe, und
-       ein bloßes Öffnen der Bezahlseite erschien hier als
-       „1 Anmeldung · 1 Platz reserviert", obwohl niemand bezahlt
-       hatte. Die Kehrseite steht in lib/plaetze.ts: Ein Platz wird
-       nicht mehr gehalten, eine Überbuchung ist dadurch möglich und
-       wird unten ausgewiesen.
-
-       Aus demselben Grund zählt ein offener Versuch nicht als
-       Anmeldung. Verbindlich ist, wer bezahlt hat oder wartet. */
-    const offen = a.status === "RESERVIERT";
+    /* Seit Stufe 2 (25.09.2026) gibt es nur noch zwei Zustände, die
+       zählen: bestätigt und Warteliste. Eine unbezahlte Anmeldung
+       existiert nicht mehr — sie entsteht erst mit der bestätigten
+       Zahlung. Die früheren Felder `offenePersonen` und
+       `offeneVersuche` sind damit ersatzlos entfallen. */
     if (a.status === "BESTAETIGT" || a.status === "WARTELISTE") s.anzahlAnmeldungen += 1;
     if (a.status === "BESTAETIGT") s.belegtePersonen += a._count.teilnehmer;
-    if (offen) {
-      s.offenePersonen += a._count.teilnehmer;
-      s.offeneVersuche += 1;
-    }
     if (a.status === "WARTELISTE") s.wartelistePersonen += a._count.teilnehmer;
     if (a.zahlungsStatus === "BEZAHLT") s.bezahltCents += a.gesamtpreisCents;
     else s.offenCents += a.gesamtpreisCents;
   }
 
   return events.map((e) => ({ ...e, ...(stand.get(e.id) ?? leer()) }));
+}
+
+/**
+ * Zahlungen, die eingegangen sind, aber zu keiner Anmeldung geführt
+ * haben und noch offen sind.
+ *
+ * „Offen" heisst: noch nicht erstattet. Zwei Sorten landen hier, und
+ * sie bedeuten Verschiedenes:
+ *
+ *   - `keine-plaetze`, `doppelte-adresse`, `kein-termin` — diese
+ *     werden automatisch erstattet. Stehen sie hier, ist die
+ *     Erstattung steckengeblieben; der Abgleichlauf holt sie nach.
+ *     Bleiben sie über Stunden stehen, stimmt etwas nicht.
+ *   - `betrag-abweichend`, `ohne-marke` — diese werden ABSICHTLICH
+ *     nicht automatisch erstattet (Entscheidung vom 25.09.2026). Sie
+ *     gehören angesehen, und zwar von einem Menschen.
+ *
+ * Deshalb steht hier keine Zahl, sondern die Zeilen selbst: Eine Zahl
+ * lässt sich wegsehen, eine Liste mit Betrag und Grund nicht.
+ */
+export async function offeneFehlbuchungen() {
+  return db.fehlbuchung.findMany({
+    where: { erstattetAm: null },
+    orderBy: { angelegtAm: "desc" },
+    select: { id: true, sitzungId: true, betragCents: true, grund: true, angelegtAm: true },
+  });
 }
 
 /** Eine Anmeldung mit ihren Teilnehmern, wie sie die Liste anzeigt. */

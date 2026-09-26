@@ -70,58 +70,59 @@ async function anmelden(email) {
 
 /* Der Weg über den Server ist der ehrliche, braucht aber die
    Server-Aktion. Für diese Liste genügt der direkte Weg: Geprüft wird
-   die Erstattung, nicht das Anmeldeformular. */
-async function buchungAnlegen(email, bezahlen = true) {
+   die Erstattung, nicht das Anmeldeformular.
+
+   Seit Stufe 2 (26.09.2026) gibt es keine Reservierung mehr, aus der
+   eine Buchung würde. Die Zeile entsteht deshalb gleich als bezahlte
+   Buchung — mit einer ECHTEN Bezahlseite bei der Attrappe, denn die
+   Erstattung braucht eine Zahlungskennung, die es wirklich gibt. Die
+   Bezahlseite bekommt eine gültige verschlüsselte Marke, damit sie
+   aussieht wie eine aus dem Betrieb. */
+async function buchungAnlegen(email) {
   await db.registration.deleteMany({ where: { eventId: event.id, kontaktEmail: email } });
 
-  // Eine echte Bezahlseite bei der Attrappe erzeugen …
   const { sitzungErstellen } = await import("../../lib/zahlung.ts");
-  const anmeldung = await db.registration.create({
-    data: {
-      eventId: event.id,
-      kontaktVorname: "Storno",
-      kontaktNachname: "Pruefung",
-      kontaktEmail: email,
-      status: "RESERVIERT",
-      reserviertBis: new Date(Date.now() + 30 * 60 * 1000),
-      gesamtpreisCents: 2500,
-      teilnehmer: { create: [{ vorname: "Storno", nachname: "Pruefung", typ: "ERWACHSENER" }] },
-    },
+  const { verschluesseln } = await import("../../lib/anmeldeNutzlast.ts");
+  const { schluesselbund } = await import("../../lib/anmeldeSchluessel.ts");
+  const { nutzlastFuer } = await import("../zahlweg.mjs");
+
+  const nutzlast = nutzlastFuer(event.id, email, {
+    kontaktVorname: "Storno",
+    kontaktNachname: "Pruefung",
+    gesamtpreisCents: 2500,
+    teilnehmer: [{ vorname: "Storno", nachname: "Pruefung", typ: "E" }],
   });
 
   const sitzung = await sitzungErstellen({
-    anmeldungId: anmeldung.id,
     email,
+    eventId: event.id,
     eventTitel: event.titel,
     personen: 1,
     gesamtCents: 2500,
+    marke: verschluesseln(nutzlast, schluesselbund()),
   });
-
-  if (!bezahlen) {
-    await db.registration.update({
-      where: { id: anmeldung.id },
-      data: { zahlungsReferenz: sitzung.id },
-    });
-    return db.registration.findUnique({ where: { id: anmeldung.id } });
-  }
 
   // … und sie bei der Attrappe als bezahlt markieren.
   await fetch(`${ATTRAPPE}/steuerung/bezahlt/${sitzung.id}`, { method: "POST" });
   const stand = await sitzungPruefen(sitzung.id);
 
-  await db.registration.update({
-    where: { id: anmeldung.id },
+  return db.registration.create({
     data: {
+      eventId: event.id,
+      kontaktVorname: "Storno",
+      kontaktNachname: "Pruefung",
+      kontaktEmail: email,
       status: "BESTAETIGT",
-      reserviertBis: null,
+      gesamtpreisCents: 2500,
       zahlungsStatus: "BEZAHLT",
+      zahlungsWeg: "ONLINE",
       zahlungsReferenz: sitzung.id,
       zahlungsAbsicht: stand.zahlungId,
       bezahlterBetragCents: 2500,
       bezahltAm: new Date(),
+      teilnehmer: { create: [{ vorname: "Storno", nachname: "Pruefung", typ: "ERWACHSENER" }] },
     },
   });
-  return db.registration.findUnique({ where: { id: anmeldung.id } });
 }
 
 const a = await buchungAnlegen("storno-eins@pruefung.example");

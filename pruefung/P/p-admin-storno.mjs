@@ -29,7 +29,7 @@ import { db } from "../../lib/db.ts";
 import { adminStornoEntscheidung, stornoEntscheidung } from "../../lib/storno.ts";
 import { stornoDurchAdmin } from "../../lib/stornoAusfuehren.ts";
 import { stornoBestaetigungsMail } from "../../lib/mailVorlagen.ts";
-import { sitzungPruefen } from "../../lib/zahlung.ts";
+import { bezahlteSitzung } from "../zahlweg.mjs";
 import { belegtFilter } from "../../lib/plaetze.ts";
 
 const ATTRAPPE = "http://127.0.0.1:4242";
@@ -193,43 +193,36 @@ if (!event) {
 async function bezahlteBuchungAnlegen(email) {
   await db.registration.deleteMany({ where: { eventId: event.id, kontaktEmail: email } });
 
-  const { sitzungErstellen } = await import("../../lib/zahlung.ts");
-  const anmeldung = await db.registration.create({
+  /* Seit Stufe 2 (26.09.2026) entsteht eine Anmeldung erst mit der
+     bezahlten Zahlung. Die Zeile wird deshalb gleich als bezahlte
+     Buchung angelegt — hinter einer ECHTEN Bezahlseite bei der
+     Attrappe, weil die Erstattung eine Zahlungskennung braucht, die
+     es wirklich gibt. */
+  const { sitzung, stand } = await bezahlteSitzung({
+    eventId: event.id,
+    eventTitel: event.titel,
+    email,
+    personen: 1,
+    gesamtCents: 2500,
+  });
+
+  return db.registration.create({
     data: {
       eventId: event.id,
       kontaktVorname: "Admin",
       kontaktNachname: "Storno",
       kontaktEmail: email,
-      status: "RESERVIERT",
-      reserviertBis: new Date(Date.now() + 30 * 60 * 1000),
-      gesamtpreisCents: 2500,
-      teilnehmer: { create: [{ vorname: "Admin", nachname: "Storno", typ: "ERWACHSENER" }] },
-    },
-  });
-
-  const sitzung = await sitzungErstellen({
-    anmeldungId: anmeldung.id,
-    email,
-    eventTitel: event.titel,
-    personen: 1,
-    gesamtCents: 2500,
-  });
-  await fetch(`${ATTRAPPE}/steuerung/bezahlt/${sitzung.id}`, { method: "POST" });
-  const stand = await sitzungPruefen(sitzung.id);
-
-  await db.registration.update({
-    where: { id: anmeldung.id },
-    data: {
       status: "BESTAETIGT",
-      reserviertBis: null,
+      gesamtpreisCents: 2500,
       zahlungsStatus: "BEZAHLT",
+      zahlungsWeg: "ONLINE",
       zahlungsReferenz: sitzung.id,
       zahlungsAbsicht: stand.zahlungId,
       bezahlterBetragCents: 2500,
       bezahltAm: new Date(),
+      teilnehmer: { create: [{ vorname: "Admin", nachname: "Storno", typ: "ERWACHSENER" }] },
     },
   });
-  return db.registration.findUnique({ where: { id: anmeldung.id } });
 }
 
 const belegtVorher = await db.registration.count({
@@ -266,7 +259,6 @@ pruefe(
   nachher.zahlungsStatus,
 );
 pruefe("Der Stornozeitpunkt ist festgehalten", nachher.storniertAm !== null);
-pruefe("Die Reservierung ist beendet", nachher.reserviertBis === null);
 
 const belegtNachher = await db.registration.count({
   where: { eventId: event.id, ...belegtFilter(new Date()) },
@@ -311,8 +303,9 @@ const offene = await db.registration.create({
     kontaktVorname: "Admin",
     kontaktNachname: "Offen",
     kontaktEmail: "admin-storno-offen@pruefung.example",
-    status: "RESERVIERT",
-    reserviertBis: new Date(Date.now() + 30 * 60 * 1000),
+    /* Bestätigt, aber ohne Geldeingang — der Fall „kostenlos" oder
+       „zahlt vor Ort". Eine Reservierung gibt es nicht mehr. */
+    status: "BESTAETIGT",
     gesamtpreisCents: 2500,
     teilnehmer: { create: [{ vorname: "Admin", nachname: "Offen", typ: "ERWACHSENER" }] },
   },

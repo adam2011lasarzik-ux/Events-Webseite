@@ -15,6 +15,27 @@ const erstattungen = new Map();
 const erstattungenNachSchluessel = new Map();
 let zaehler = 0;
 
+/**
+ * Alle `metadata[...]`-Felder einsammeln, nicht nur ein bekanntes.
+ *
+ * Bis Stufe 2 stand dort genau ein Wert (`anmeldungId`), und die
+ * Attrappe las ihn einzeln aus. Seit dem 26.09.2026 reist die
+ * verschlüsselte Anmeldung in `event` und `m0`, `m1`, … mit — eine
+ * Attrappe, die nur einen festen Schlüssel kennt, hätte sie still
+ * verschluckt und jede bezahlte Sitzung als „ohne Anmeldung"
+ * erscheinen lassen. Deshalb jetzt generisch.
+ */
+function metadatenSammeln(felder, vorsatz = "metadata") {
+  const raus = {};
+  for (const schluessel of felder.keys()) {
+    const treffer = schluessel.match(
+      new RegExp(`^${vorsatz.replace(/[[\]]/g, "\\$&")}\\[([^\\]]+)\\]$`),
+    );
+    if (treffer) raus[treffer[1]] = felder.get(schluessel);
+  }
+  return raus;
+}
+
 export function starte(port = 4242) {
   const server = http.createServer((anfrage, antwort) => {
     let koerper = "";
@@ -42,7 +63,7 @@ export function starte(port = 4242) {
           amount_total: Number(felder.get("line_items[0][price_data][unit_amount]")),
           currency: "eur",
           client_reference_id: felder.get("client_reference_id"),
-          metadata: { anmeldungId: felder.get("metadata[anmeldungId]") },
+          metadata: metadatenSammeln(felder),
           /* Stripe nummeriert Listen durch: payment_method_types[0],
              [1], … — nicht „[]". Das war beim ersten Anlauf falsch
              gelesen und sah aus wie ein Fehler im Anwendungscode. */
@@ -57,7 +78,7 @@ export function starte(port = 4242) {
              wird — sie landet beim echten Anbieter an der Zahlung und
              damit auch an der Erstattung. Genau daran haengt die
              Zuordnung der Kulanz-Erstattung. */
-          zahlungMetadaten: { anmeldungId: felder.get("payment_intent_data[metadata][anmeldungId]") },
+          zahlungMetadaten: metadatenSammeln(felder, "payment_intent_data[metadata]"),
           customer_email: felder.get("customer_email"),
           locale: felder.get("locale"),
           success_url: felder.get("success_url"),
@@ -121,7 +142,18 @@ export function starte(port = 4242) {
         sitzung.payment_status = "paid";
         sitzung.status = "complete";
         sitzung.payment_intent ??= `pi_test_attrappe_${sitzung.id.split("_").pop()}`;
-        antwort.writeHead(302, { location: sitzung.success_url });
+        /* Der echte Anbieter ersetzt `{CHECKOUT_SESSION_ID}` in der
+           Erfolgsadresse durch die Kennung der Sitzung. Bis zum
+           26.09.2026 tat die Attrappe das nicht — solange die
+           Abschluss-Seite über die Anmeldenummer lief, fiel es nicht
+           auf. Seit Stufe 2 ist die Sitzungskennung der einzige Weg,
+           auf dem diese Seite erfährt, worum es geht: Ohne diese
+           Ersetzung landete der Browser auf „…?sitzung=
+           {CHECKOUT_SESSION_ID}", und die Prüfung hätte einen Fehler
+           bestätigt, den es in Wirklichkeit nicht gibt. */
+        antwort.writeHead(302, {
+          location: (sitzung.success_url ?? "").replaceAll("{CHECKOUT_SESSION_ID}", sitzung.id),
+        });
         return antwort.end();
       }
 
@@ -179,7 +211,7 @@ export function starte(port = 4242) {
           currency: "eur",
           payment_intent: zahlungId,
           status: "succeeded",
-          metadata: { anmeldungId: felder.get("metadata[anmeldungId]") },
+          metadata: metadatenSammeln(felder),
         };
         sitzung.erstattetCents = sitzung.amount_total;
         erstattungen.set(erstattung.id, erstattung);

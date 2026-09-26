@@ -13,13 +13,10 @@ const worte: Record<string, { text: string; klasse: string }> = {
   VEROEFFENTLICHT: { text: "Veröffentlicht",  klasse: "markerGut" },
   ARCHIVIERT:      { text: "Archiviert",      klasse: "markerAus" },
   // Anmeldung
-  /* Zwei getrennte Lagen, damit auf einen Blick klar ist, ob noch
-     etwas passieren kann. „RESERVIERT_ABGELAUFEN" gibt es in der
-     Datenbank nicht — die Seite leitet den Wert aus der Ablaufzeit ab.
-     Bewusst NICHT „Warteliste": Eine Reservierung ist eine technische
-     Sicherung während der Zahlung, keine Wartelistenposition. */
-  RESERVIERT:            { text: "Bezahlung läuft",      klasse: "markerWartet" },
-  RESERVIERT_ABGELAUFEN: { text: "Nicht abgeschlossen",  klasse: "markerAus" },
+  /* „RESERVIERT" und „RESERVIERT_ABGELAUFEN" sind am 26.09.2026
+     entfallen. Seit Stufe 2 entsteht eine Anmeldung erst mit der
+     bestätigten Zahlung; eine unbezahlte gibt es nicht mehr, also
+     auch keine Lage dafür. */
   BESTAETIGT:      { text: "Bestätigt",       klasse: "markerGut" },
   WARTELISTE:      { text: "Warteliste",      klasse: "markerWartet" },
   STORNIERT:       { text: "Storniert",       klasse: "markerAus" },

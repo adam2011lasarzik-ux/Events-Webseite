@@ -18,9 +18,29 @@ const pruefe = (name, ok, zusatz = "") => {
 
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium" });
 
+/**
+ * Ein Browserfenster mit EIGENER Absenderadresse.
+ *
+ * Die Bremse gegen Massen-Einsendungen zählt je IP-Adresse. Bis zum
+ * 26.09.2026 zählte sie in der Datenbank und liess sich vor jedem
+ * Durchlauf leeren; seitdem zählt sie im Arbeitsspeicher des Servers
+ * (Entscheidung: kein Datenbankeintrag vor der Zahlung) und ist von
+ * aussen nicht mehr zurückzusetzen. Also bekommt jedes Fenster eine
+ * eigene Adresse. Der Bereich 198.18.0.0/15 ist für Messungen
+ * reserviert und gehört niemandem.
+ */
+let fensterZaehler = 0;
+const neuesFenster = (viewport) =>
+  browser.newContext({
+    viewport,
+    extraHTTPHeaders: {
+      "x-forwarded-for":
+        `198.18.${Math.floor(Math.random() * 256)}.${((fensterZaehler += 1) % 250) + 1}`,
+    },
+  });
+
 /** Füllt das Formular aus, ohne abzuschicken. */
 async function formularAusfuellen(page, email, { familie = false } = {}) {
-  await db.anmeldeVersuch.deleteMany({});
   await page.goto(`${BASIS}/events/padel-falkensee/anmeldung`, { waitUntil: "networkidle" });
 
   /* force: true — beim automatischen Scrollen schiebt Playwright das
@@ -51,7 +71,7 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
 
 // ── Der Knopf nennt Vorgang UND Betrag ─────────────────────────
 {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const ctx = await neuesFenster({ width: 390, height: 844 });
   const page = await ctx.newPage();
   await formularAusfuellen(page, `knopf-${Date.now()}@example.org`);
   const knopf = page.getByRole("button", { name: /Zahlungspflichtig bestellen/i });
@@ -70,7 +90,7 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
 
 // ── Familienpaket: der Betrag im Knopf passt zur Auswahl ───────
 {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const ctx = await neuesFenster({ width: 390, height: 844 });
   const page = await ctx.newPage();
   const email = `fam-${Date.now()}@example.org`;
   await formularAusfuellen(page, email, { familie: true });
@@ -102,7 +122,10 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   // Bezahlen
   await page.click("#bezahlen");
   await page.waitForURL(/\/anmeldung\/danke/, { timeout: 20000 });
-  await page.waitForLoadState("networkidle");
+  /* „load" statt „networkidle": Die Abschluss-Seite fragt beim
+     Anbieter nach und hält dabei eine Verbindung offen; „networkidle"
+     wartet dann bis zum Zeitablauf, obwohl die Seite längst da ist. */
+  await page.waitForLoadState("load");
   const text = await page.locator("body").innerText();
   pruefe("Nach dem Bezahlen: „Zahlung erfolgreich“ im Plural",
     text.includes("Zahlung erfolgreich") && text.includes("Ihr seid für das Event angemeldet"),
@@ -115,7 +138,7 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
 
 // ── Einzelperson: Einzahl ──────────────────────────────────────
 {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const ctx = await neuesFenster({ width: 390, height: 844 });
   const page = await ctx.newPage();
   await formularAusfuellen(page, `einzel-${Date.now()}@example.org`);
   /* Die beiden Pflichthaken (B-29, B-17). Ohne sie lehnt der Server
@@ -126,7 +149,10 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   await page.waitForURL(/\/bezahlseite\//, { timeout: 20000 });
   await page.click("#bezahlen");
   await page.waitForURL(/\/anmeldung\/danke/, { timeout: 20000 });
-  await page.waitForLoadState("networkidle");
+  /* „load" statt „networkidle": Die Abschluss-Seite fragt beim
+     Anbieter nach und hält dabei eine Verbindung offen; „networkidle"
+     wartet dann bis zum Zeitablauf, obwohl die Seite längst da ist. */
+  await page.waitForLoadState("load");
   const text = await page.locator("body").innerText();
   pruefe("Einzelperson: „Deine Anmeldung ist bestätigt“ in der Einzahl",
     text.includes("Zahlung erfolgreich") && text.includes("Deine Anmeldung ist bestätigt"),
@@ -134,11 +160,12 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   await ctx.close();
 }
 
-// ── Abbruch: keine Zwischenbestätigung ─────────────────────────
+// ── Abbruch: es bleibt NICHTS zurück ──────────────────────────
 {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const ctx = await neuesFenster({ width: 390, height: 844 });
   const page = await ctx.newPage();
-  await formularAusfuellen(page, `abbruch-${Date.now()}@example.org`);
+  const email = `abbruch-${Date.now()}@example.org`;
+  await formularAusfuellen(page, email);
   /* Die beiden Pflichthaken (B-29, B-17). Ohne sie lehnt der Server
      ab — zu Recht. Liste V prüft sie eigens, auch ihr Fehlen. */
   await page.getByRole("checkbox", { name: /Teilnahmebedingungen/i }).check({ force: true });
@@ -147,20 +174,37 @@ async function formularAusfuellen(page, email, { familie = false } = {}) {
   await page.waitForURL(/\/bezahlseite\//, { timeout: 20000 });
   await page.click("#abbrechen");
   await page.waitForURL(/\/anmeldung\/danke/, { timeout: 20000 });
-  await page.waitForLoadState("networkidle");
+  await page.waitForLoadState("load");
   const text = await page.locator("body").innerText();
-  pruefe("Nach Abbruch: „Deine Anmeldung ist noch nicht abgeschlossen“",
-    text.includes("noch nicht abgeschlossen"), text.split("\n")[0]);
+
+  /* Bis zum 26.09.2026 stand hier „Deine Anmeldung ist noch nicht
+     abgeschlossen" samt einem Knopf, der zur alten Bezahlseite
+     zurückführte. Beides setzte voraus, dass es einen Vorgang gibt,
+     den man fortsetzen kann. Den gibt es nicht mehr: Vor der Zahlung
+     wird nichts gespeichert. Die Seite sagt jetzt, was wirklich
+     geschehen ist. */
+  pruefe("Nach Abbruch sagt die Seite, dass nichts abgebucht wurde",
+    text.includes("nichts abgebucht"), text.split("\n").slice(0, 3).join(" / "));
+  pruefe("… und dass die Angaben nicht gespeichert wurden",
+    text.includes("nicht gespeichert"));
   pruefe("… kein „Danke“ und kein „bestätigt“",
     !text.includes("Danke —") && !text.includes("Anmeldung ist bestätigt"));
-  pruefe("… und ein Knopf „Bezahlen“",
-    (await page.getByRole("button", { name: "Bezahlen", exact: true }).count()) === 1);
+  pruefe("… und KEIN Knopf „Bezahlen“, der einen Vorgang fortsetzen würde",
+    (await page.getByRole("button", { name: "Bezahlen", exact: true }).count()) === 0);
+  pruefe("In der Datenbank steht nichts",
+    (await db.registration.count({ where: { kontaktEmail: email } })) === 0);
   await page.screenshot({ path: `${AUS}/offen-handy.png`, fullPage: true });
 
-  // Zweiter Anlauf
-  await page.getByRole("button", { name: "Bezahlen", exact: true }).click({ force: true });
+  /* Der zweite Anlauf ist eine gewöhnliche neue Anmeldung. Dass sie
+     möglich ist, ist zugleich der Beweis, dass der Abbruch nichts
+     hinterlassen hat, das im Weg stünde. */
+  await formularAusfuellen(page, email);
+  await page.getByRole("checkbox", { name: /Teilnahmebedingungen/i }).check({ force: true });
+  await page.getByRole("checkbox", { name: /zur Kenntnis genommen/i }).check({ force: true });
+  await page.getByRole("button", { name: /Zahlungspflichtig bestellen/i }).click({ force: true });
   await page.waitForURL(/\/bezahlseite\//, { timeout: 20000 });
-  pruefe("Der Knopf führt zurück zum Anbieter", page.url().includes("/bezahlseite/"));
+  pruefe("Dieselbe Person kann sich danach neu anmelden",
+    page.url().includes("/bezahlseite/"), page.url());
   await ctx.close();
 }
 
@@ -170,7 +214,7 @@ for (const g of [
   { name: "ipad", width: 820, height: 1180 },
   { name: "desktop", width: 1440, height: 900 },
 ]) {
-  const ctx = await browser.newContext({ viewport: { width: g.width, height: g.height } });
+  const ctx = await neuesFenster({ width: g.width, height: g.height });
   const page = await ctx.newPage();
   await formularAusfuellen(page, `bild-${g.name}-${Date.now()}@example.org`);
   await page.screenshot({ path: `${AUS}/formular-${g.name}.png`, fullPage: true });

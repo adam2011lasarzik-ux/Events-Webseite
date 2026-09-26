@@ -58,11 +58,30 @@ for (const [name, datei] of stellen) {
 }
 
 console.log("\nT5 · Der Ablehnungsgrund ist ein fester Wert, kein Text");
-const regeln = lies("lib/zahlungRegeln.ts");
-pruefe('ZahlungAbgelehnt kennt "kein-termin"', /"kein-termin"/.test(regeln));
+/* Bis zum 26.09.2026 stand der Grund in `ZahlungAbgelehnt`
+   (lib/zahlungRegeln.ts). Diesen Typ gibt es nicht mehr: Er gehörte
+   zu einer Entscheidung über eine gespeicherte Anmeldung, und die
+   gibt es beim Zahlungsstart nicht mehr. Derselbe feste Wert steht
+   jetzt in `StartFehler`. */
+const regeln = lies("lib/zahlungStart.ts");
+pruefe('StartFehler kennt "kein-termin"', /"kein-termin"/.test(regeln));
 const danke = lies("app/(seite)/anmeldung/danke/page.tsx");
 pruefe("Abschluss-Seite behandelt kein-termin", /kein-termin/.test(danke));
-pruefe("Abschluss-Seite blendet den Bezahlknopf aus", /!keinTermin/.test(danke));
+/* Bis zum 26.09.2026 stand hier „blendet den Bezahlknopf aus".
+   Den Knopf gibt es nicht mehr: Vor der Zahlung wird nichts
+   gespeichert, es gibt also keinen Vorgang, den er fortsetzen
+   könnte. Geprüft wird weiterhin dieselbe Sache — dass ohne
+   feststehenden Termin nicht bezahlt werden kann —, nur an der
+   Stelle, an der sie jetzt entschieden wird. */
+pruefe(
+  "Die Abschluss-Seite bietet keinen Weg mehr, die Zahlung fortzusetzen",
+  !/zahlungStarten/.test(danke),
+);
+const start = lies("lib/zahlungStart.ts");
+pruefe(
+  "Die Bezahlseite wird ohne feststehenden Termin gar nicht erst erzeugt",
+  /terminSteht\(event\)/.test(start) && /fehler: "kein-termin"/.test(start),
+);
 const woerter = lies("content/de.ts");
 pruefe("Wörterbuch hat einen Text dafür", /zahlungKeinTermin/.test(woerter));
 pruefe("Wörterbuch hat einen Text für die Anmeldeseite", /keinTerminTitel/.test(woerter));

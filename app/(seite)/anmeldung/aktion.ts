@@ -1,11 +1,32 @@
 "use server";
 
 /* ---------------------------------------------------------------
-   Nimmt eine Anmeldung entgegen und speichert sie.
+   Nimmt eine Anmeldung entgegen.
 
    Grundsatz: Dem Browser wird NICHTS geglaubt. Preis, Teilnehmerzahl
    und freie Plätze ermittelt ausschließlich der Server aus der
    Datenbank. Ein mitgeschickter Betrag wird nicht einmal gelesen.
+
+   ── Zwei Wege, seit dem Umbau vom 25.09.2026 ────────────────────
+
+   KOSTENLOSE Veranstaltung: unverändert. Die Anmeldung entsteht
+   sofort als bestätigt, die Bestätigungsmail geht raus. Es ist kein
+   Zahlungsanbieter im Spiel und nichts zu verschlüsseln.
+
+   KOSTENPFLICHTIGE Veranstaltung: Hier wird NICHTS gespeichert.
+   Kein Anmeldedatensatz, kein Teilnehmer, keine Platzsperre, kein
+   Zahlungsversuch, keine Zeile irgendeiner Art. Die geprüften Daten
+   werden verschlüsselt (lib/anmeldeNutzlast.ts) und reisen in der
+   Bezahlseite des Anbieters mit. Erst wenn die Zahlung bestätigt
+   zurückkommt, entsteht die Anmeldung — in
+   app/zahlung/rueckmeldung/route.ts über lib/anmeldungAnlegen.ts.
+
+   Bricht jemand ab, bleibt hier keine Spur. Das ist der Zweck des
+   ganzen Umbaus, und Prüfliste X4 zählt dafür vor und nach einem
+   abgebrochenen Vorgang die Zeilen ALLER Tabellen.
+
+   Alles unterhalb der Eingabeprüfung ist deshalb LESEND. Wer hier
+   etwas ergänzt, das schreibt, hebt die Zusage auf.
    --------------------------------------------------------------- */
 
 import { redirect } from "next/navigation";
@@ -17,9 +38,10 @@ import { berechnePreis } from "@/lib/preise";
 import { pruefeUndBaue, type AnmeldeEingabe, type AnmeldeErgebnis } from "@/lib/anmeldung";
 import { vorschauRollen, type Anmeldeweg } from "@/lib/vorschau";
 import { alsAuswahl } from "@/lib/anmeldung";
-import { versuchErlaubt } from "@/lib/ratelimit";
-import { belegtFilter, reserviertBis } from "@/lib/plaetze";
-import { bezahlseiteFuer } from "@/lib/zahlungStart";
+import { versuchErlaubt } from "@/lib/bremseFluechtig";
+import { belegtFilter } from "@/lib/plaetze";
+import { bezahlseiteFuerNutzlast } from "@/lib/zahlungStart";
+import type { Nutzlast } from "@/lib/anmeldeNutzlast";
 import { neuerStornoSchluessel, stornoLink } from "@/lib/storno";
 import { mailSendenOhneAbbruch, adminEmpfaenger } from "@/lib/mail";
 import { bestaetigungsMail, adminBenachrichtigungsMail, type MailAnmeldung } from "@/lib/mailVorlagen";
@@ -53,7 +75,11 @@ export async function anmeldungAbsenden(
     kopf.get("x-real-ip") ||
     "unbekannt";
 
-  if (!(await versuchErlaubt(ip))) {
+  /* Die Bremse liegt seit dem 25.09.2026 im Arbeitsspeicher, nicht in
+     der Datenbank: Vor einer erfolgreichen Zahlung darf dort keine
+     Zeile entstehen — auch keine mit einer IP-Adresse darin. Davor
+     bremst zusätzlich Nginx (server/vera-bremse.conf). */
+  if (!versuchErlaubt(ip)) {
     return {
       fehler: [],
       meldung: "Zu viele Versuche in kurzer Zeit. Bitte versuche es später noch einmal.",
@@ -143,36 +169,105 @@ export async function anmeldungAbsenden(
   const personenZahl = anmeldung.teilnehmer.length;
 
   const jetzt = new Date();
-  /* Ein kostenloses Event braucht keine Bezahlung — dort bleibt es
-     beim bisherigen Ablauf: sofort bestätigt, kein Anbieter im Spiel. */
-  const kostenlos = preis.gesamtCents <= 0;
 
   /* Welche Fassung der Rechtstexte bei diesem Vertragsschluss
-     einbezogen wird — VOR der Transaktion ermittelt, weil es zwei
-     reine Lesezugriffe sind und in einer Transaktion nichts zu suchen
-     hat, was den Sperrzeitraum verlängert, ohne ihn zu brauchen. */
+     einbezogen wird. Sie wird JETZT festgehalten, beim Absenden —
+     nicht später beim Zahlungseingang. Massgeblich ist, was der
+     Person angezeigt wurde; würde der Webhook frisch nachschlagen,
+     stünde nach einer Textänderung die falsche Fassung an einer
+     Buchung, die unter der alten zustande kam. Bei der bezahlten
+     Anmeldung reist die Kennung deshalb in der Marke mit. */
   const [agbFassung, datenschutzFassung] = await Promise.all([
     geltendeFassungJetzt("AGB_B2C"),
     geltendeFassungJetzt("DATENSCHUTZ"),
   ]);
 
+  /* ══ Kostenpflichtig: nichts speichern, verschlüsselt weiterreichen ══
+
+     Ab hier wird für diesen Weg NICHTS in die Datenbank geschrieben.
+     Die Anmeldung entsteht erst mit der bestätigten Zahlung. */
+  if (preis.gesamtCents > 0) {
+    const nutzlast: Omit<Nutzlast, "erstelltMs"> = {
+      eventId: event.id,
+      kontaktVorname: anmeldung.kontakt.vorname,
+      kontaktNachname: anmeldung.kontakt.nachname,
+      kontaktEmail: anmeldung.kontakt.email,
+      kontaktTelefon: anmeldung.kontakt.telefon,
+      buchungsart: anmeldung.buchungsart,
+      istVormundBuchung: anmeldung.istVormundBuchung,
+      einwilligungVormund: anmeldung.einwilligungVormund,
+      agbAkzeptiert: anmeldung.agbAkzeptiert,
+      kenntnisAufnahmen: anmeldung.kenntnisAufnahmen,
+      gesamtpreisCents: preis.gesamtCents,
+      agbFassungId: agbFassung?.id ?? null,
+      datenschutzFassungId: datenschutzFassung?.id ?? null,
+      teilnehmer: anmeldung.teilnehmer.map((t) => ({
+        vorname: t.vorname,
+        nachname: t.nachname,
+        /* Ein Zeichen statt eines Wortes: Die Marke muss in die
+           Metadatenfelder des Anbieters passen, und bei zwanzig
+           Personen zählt jedes eingesparte Byte. Zurückübersetzt wird
+           in lib/anmeldungAnlegen.ts. */
+        typ: t.typ === "SCHUELER" ? ("S" as const) : ("E" as const),
+        /* Ein Geburtsjahr erhebt das Online-Formular nicht
+           (lib/anmeldung.ts kennt nur Vorname, Nachname und Typ). Es
+           steht in der Nutzlast trotzdem als Feld, weil das
+           Papierformular es kennt und eine spätere Erfassung sonst die
+           Marke ändern müsste. */
+      })),
+    };
+
+    const bezahlseite = await bezahlseiteFuerNutzlast(nutzlast, event.titel);
+    if ("url" in bezahlseite) redirect(bezahlseite.url);
+
+    /* Kein Datensatz, auf den eine Abschluss-Seite zeigen könnte —
+       die Meldung geht deshalb direkt an das Formular zurück. Die
+       Person behält ihre Eingaben im Browser und kann es erneut
+       versuchen, ohne alles neu zu tippen. */
+    switch (bezahlseite.fehler) {
+      case "kein-termin":
+        return {
+          fehler: [],
+          meldung:
+            "Für diese Veranstaltung steht kein Termin mehr fest. " +
+            "Eine Anmeldung ist deshalb gerade nicht möglich.",
+        };
+      case "keine-plaetze":
+        return {
+          fehler: [],
+          meldung:
+            bezahlseite.frei === 0
+              ? "Die Veranstaltung ist inzwischen ausgebucht."
+              : `Es sind nur noch ${bezahlseite.frei} Plätze frei — für ` +
+                `${personenZahl} Personen reicht das nicht. Schreib uns, wir suchen eine Lösung.`,
+        };
+      case "doppelt":
+        return {
+          fehler: [],
+          meldung:
+            "Für diese E-Mail-Adresse gibt es bereits eine Anmeldung zu dieser Veranstaltung. " +
+            "Schreib uns, wenn du sie ändern möchtest.",
+        };
+      default:
+        return {
+          fehler: [],
+          meldung:
+            "Die Bezahlseite liess sich gerade nicht öffnen. Bitte versuche es noch einmal — " +
+            "es wurde nichts gespeichert und nichts abgebucht.",
+        };
+    }
+  }
+
+  /* ══ Kostenlos: unveränderter Weg ═══════════════════════════════
+
+     Ohne Zahlung gibt es nichts, worauf zu warten wäre. Die Anmeldung
+     entsteht sofort als bestätigt. */
   let neueId: string;
 
   try {
     // Alles in EINER Transaktion: Zwischen „Plätze zählen" und
-    // „speichern" darf niemand dazwischenkommen. Sonst könnten zwei
-    // Personen gleichzeitig die letzten Plätze buchen und beide
-    // durchkommen — ein überbuchtes Event, das erst am
-    // Veranstaltungstag auffällt.
+    // „speichern" darf niemand dazwischenkommen.
     neueId = await db.$transaction(async (tx) => {
-      /* Zuerst nachsehen, ob es für diese Adresse schon eine Anmeldung
-         gibt — VOR der Platzprüfung. Seit dem 24.09.2026 zählt ein
-         offener Versuch ohnehin nicht als belegter Platz; gebraucht
-         wird die Abfrage weiterhin für den zweiten Zweck: zu
-         entscheiden, ob ergänzt oder neu angelegt wird. Die
-         Platzprüfung nimmt die eigene Anmeldung weiter aus, damit
-         eine bereits BESTÄTIGTE eigene Buchung beim Ergänzen nicht
-         doppelt zählt. */
       const vorhanden = await tx.registration.findUnique({
         where: {
           eventId_kontaktEmail: { eventId: event.id, kontaktEmail: anmeldung.kontakt.email },
@@ -180,59 +275,31 @@ export async function anmeldungAbsenden(
       });
 
       if (event.maxPersonen !== null) {
-        /* Belegt sind ausschliesslich bestätigte, also bezahlte
-           Anmeldungen. Die Regel steht in lib/plaetze.ts, damit
-           Anzeige, Adminbereich und diese Prüfung nicht
-           auseinanderlaufen können.
-
-           Seit dem 24.09.2026 ist diese Prüfung eine Momentaufnahme
-           und keine Zusage: Weil kein Platz mehr gehalten wird, kann
-           zwischen hier und der Zahlung jemand anders bezahlen. Sie
-           bleibt trotzdem stehen — niemanden zur Bezahlseite zu
-           schicken, wenn schon jetzt kein Platz frei ist, ist immer
-           noch besser als das Gegenteil. */
+        /* Belegt sind ausschliesslich bestätigte Anmeldungen
+           (lib/plaetze.ts). Die eigene, gleich zu ersetzende zählt
+           nicht mit. */
         const bestaetigte = await tx.registration.findMany({
           where: {
             eventId: event.id,
             ...belegtFilter(),
-            // Die eigene bestehende Anmeldung nicht mitzählen: Sie wird
-            // gleich ersetzt, nicht ergänzt.
             ...(vorhanden ? { id: { not: vorhanden.id } } : {}),
           },
           select: { id: true, _count: { select: { teilnehmer: true } } },
         });
         const belegt = bestaetigte.reduce((s, a) => s + a._count.teilnehmer, 0);
-
-        // Bei einer Reaktivierung zählt die eigene alte Anmeldung
-        // nicht doppelt — sie ist storniert und damit ohnehin nicht
-        // in der Summe.
         if (belegt + personenZahl > event.maxPersonen) {
           throw new PlatzFehler(Math.max(0, event.maxPersonen - belegt));
         }
       }
 
       const felder = {
-        /* ── Welche Fassung der Rechtstexte gilt für DIESE Buchung ──
-           Festgehalten wird die Kennung, nicht der Text (Entscheidung
-           6.7). Massgeblich ist die Fassung, die JETZT gilt — nicht
-           die neueste, falls eine spätere schon vorbereitet ist; das
-           entscheidet geltendeFassungJetzt().
-
-           Ist noch keine Fassung hinterlegt, bleibt das Feld leer.
-           Die Anmeldung daran scheitern zu lassen wäre die schlechtere
-           Antwort: Der Kunde kann nichts dafür, und die Buchung ginge
-           verloren. Der Adminbereich weist solche Buchungen aus. */
         agbFassungId: agbFassung?.id ?? null,
         datenschutzFassungId: datenschutzFassung?.id ?? null,
         kontaktVorname: anmeldung.kontakt.vorname,
         kontaktNachname: anmeldung.kontakt.nachname,
         kontaktTelefon: anmeldung.kontakt.telefon,
         buchungsart: anmeldung.buchungsart,
-        /* Der Platz wird gehalten, bis die Zahlung durch ist. Läuft
-           die Frist ab, zählt die Anmeldung einfach nicht mehr als
-           belegter Platz — gelöscht wird nichts. */
-        status: (kostenlos ? "BESTAETIGT" : "RESERVIERT") as "BESTAETIGT" | "RESERVIERT",
-        reserviertBis: kostenlos ? null : reserviertBis(jetzt),
+        status: "BESTAETIGT" as const,
         istVormundBuchung: anmeldung.istVormundBuchung,
         einwilligungVormund: anmeldung.einwilligungVormund,
         agbAkzeptiert: anmeldung.agbAkzeptiert,
@@ -241,37 +308,12 @@ export async function anmeldungAbsenden(
       };
 
       if (vorhanden) {
-        /* Weitermachen darf, wer storniert hat — und wer selbst noch
-           in einer Reservierung steckt: Das ist derselbe Mensch, der
-           gerade einen zweiten Anlauf nimmt, weil die Bezahlung nicht
-           geklappt hat. Ihn mit „bereits angemeldet" abzuweisen wäre
-           die schlechteste aller Antworten. */
-        const eigeneReservierung = vorhanden.status === "RESERVIERT";
-        if (vorhanden.status !== "STORNIERT" && !eigeneReservierung) throw new DoppeltFehler();
-
-        // Reaktivieren statt einen zweiten Datensatz anlegen — so
-        // bleibt es bei genau einer Anmeldung je Person und Event.
-        /* Eine Rückkehr nach einer Stornierung ist ein NEUER Anlauf —
-           die Spuren der alten Zahlung gehören nicht dazu.
-
-           Ohne dieses Zurücksetzen behielte die Zeile Zahlungsstatus,
-           Betrag, Zeitpunkt und Zahlungskennung der längst erstatteten
-           Zahlung. Zwei Folgen, beide schlecht: Im Adminbereich stünde
-           eine unbezahlte Buchung als „erstattet" — und die Rückmeldung
-           des Anbieters verbuchte eine neue Zahlung gar nicht mehr, weil
-           sie nur von OFFEN aus auf „bezahlt" wechselt. Der Kunde hätte
-           bezahlt und wäre trotzdem nicht bestätigt.
-
-           NICHT beim zweiten Anlauf innerhalb derselben Reservierung:
-           dort wird die vorhandene Bezahlseite bewusst wiederverwendet,
-           damit keine zweite Sitzung und damit keine doppelte Abbuchung
-           entsteht (lib/zahlungStart.ts).
-
-           Eine stornierte, aber noch BEZAHLTE Buchung bleibt ebenfalls
-           unangetastet: Dort liegt das Geld noch bei uns. Das gehört
-           angesehen, nicht stillschweigend überschrieben. */
-        const zahlungZuruecksetzen =
-          vorhanden.status === "STORNIERT" && vorhanden.zahlungsStatus !== "BEZAHLT";
+        /* Nur eine stornierte Buchung darf ersetzt werden. Einen
+           zweiten Anlauf innerhalb eines laufenden Bezahlvorgangs gibt
+           es nicht mehr — dafür müsste es einen Datensatz geben, und
+           genau den gibt es bei kostenpflichtigen Anmeldungen bis zur
+           Zahlung nicht. */
+        if (vorhanden.status !== "STORNIERT") throw new DoppeltFehler();
 
         await tx.participant.deleteMany({ where: { registrationId: vorhanden.id } });
         await tx.registration.update({
@@ -279,23 +321,7 @@ export async function anmeldungAbsenden(
           data: {
             ...felder,
             storniertAm: null,
-            ...(zahlungZuruecksetzen
-              ? {
-                  zahlungsStatus: "OFFEN" as const,
-                  zahlungsAbsicht: null,
-                  zahlungsReferenz: null,
-                  bezahlterBetragCents: null,
-                  bezahltAm: null,
-                }
-              : {}),
-            // Nur eine echte Rückkehr nach einer Stornierung ist eine
-            // Reaktivierung. Ein zweiter Anlauf innerhalb derselben
-            // Reservierung ist keine.
-            reaktiviertAm:
-              vorhanden.status === "STORNIERT" ? new Date() : vorhanden.reaktiviertAm,
-            /* Einen vorhandenen Schlüssel behalten: Ein bereits
-               verschickter Storno-Link soll weiter gelten. Fehlt er
-               (Buchung von vor dieser Änderung), entsteht er jetzt. */
+            reaktiviertAm: new Date(),
             stornoSchluessel: vorhanden.stornoSchluessel ?? neuerStornoSchluessel(),
             teilnehmer: { create: anmeldung.teilnehmer },
           },
@@ -334,7 +360,6 @@ export async function anmeldungAbsenden(
           "Schreib uns, wenn du sie ändern möchtest.",
       };
     }
-    // Besuchern niemals interne Einzelheiten zeigen.
     console.error("Anmeldung fehlgeschlagen:", e);
     return {
       fehler: [],
@@ -342,11 +367,6 @@ export async function anmeldungAbsenden(
     };
   }
 
-  // ── E-Mails: eine angenehme Zugabe, nie ein Grund zum Abbrechen ──
-  // Die Anmeldung steht bereits in der Datenbank; ein Mail-Ausfall
-  // (fehlende Einrichtung ebenso wie ein echter Versandfehler) darf
-  // das nicht rückgängig machen. Deshalb ausschließlich die
-  // schluckende Variante, und ohne await auf den Erfolg zu warten.
   const mailAnmeldung: MailAnmeldung = {
     id: neueId,
     kontaktVorname: anmeldung.kontakt.vorname,
@@ -356,7 +376,12 @@ export async function anmeldungAbsenden(
     gesamtpreisCents: preis.gesamtCents,
     teilnehmer: anmeldung.teilnehmer,
   };
-  const mailEvent = { titel: event.titel, startAt: event.startAt, ortName: event.ortName, stadt: event.stadt };
+  const mailEvent = {
+    titel: event.titel,
+    startAt: event.startAt,
+    ortName: event.ortName,
+    stadt: event.stadt,
+  };
 
   const empfaenger = adminEmpfaenger();
   if (empfaenger) {
@@ -366,42 +391,23 @@ export async function anmeldungAbsenden(
     });
   }
 
-  /* Kostenlos: sofort bestätigt, also auch sofort die Bestätigungsmail.
-     Bei einer bezahlpflichtigen Anmeldung folgt die Bestätigung erst
-     über die Webhook-Rückmeldung des Zahlungsanbieters (dort steht
-     erst fest, dass wirklich bezahlt wurde). */
-  if (kostenlos) {
-    /* Der Storno-Link gehört in die Bestätigung — er ist der einzige
-       Weg, auf dem der Schlüssel den Anmelder erreicht. Fehlt die
-       öffentliche Adresse, bleibt der Abschnitt weg statt kaputt. */
-    const gespeichert = await db.registration.findUnique({
-      where: { id: neueId },
-      select: { stornoSchluessel: true },
-    });
-    await mailSendenOhneAbbruch({
-      an: anmeldung.kontakt.email,
-      ...bestaetigungsMail(
-        mailAnmeldung,
-        mailEvent,
-        stornoLink(process.env.OEFFENTLICHE_ADRESSE, neueId, gespeichert?.stornoSchluessel),
-        // Volltext der einbezogenen Bedingungen — § 312f Abs. 2 BGB
-        // verlangt die Vertragsbestätigung auf dauerhaftem Datenträger
-        // einschliesslich der Bedingungen. Ein Link genügt dafür nicht.
-        await fassungenZurBuchung(neueId),
-      ),
-    });
-    redirect(`/anmeldung/danke?nr=${neueId}`);
-  }
-
-  /* Sonst direkt weiter zur Bezahlseite des Anbieters.
-
-     Klappt das nicht, geht NICHTS verloren: Die Anmeldung ist
-     gespeichert, und auf der Danke-Seite steht ein Knopf „Jetzt
-     bezahlen". Eine Anmeldung darf niemals an der Zahlung scheitern. */
-  const bezahlseite = await bezahlseiteFuer(neueId, jetzt);
-  if ("url" in bezahlseite) redirect(bezahlseite.url);
-  const frei = bezahlseite.frei === undefined ? "" : `&frei=${bezahlseite.frei}`;
-  redirect(`/anmeldung/danke?nr=${neueId}&zahlung=${bezahlseite.fehler}${frei}`);
+  const gespeichert = await db.registration.findUnique({
+    where: { id: neueId },
+    select: { stornoSchluessel: true },
+  });
+  await mailSendenOhneAbbruch({
+    an: anmeldung.kontakt.email,
+    ...bestaetigungsMail(
+      mailAnmeldung,
+      mailEvent,
+      stornoLink(process.env.OEFFENTLICHE_ADRESSE, neueId, gespeichert?.stornoSchluessel),
+      // Volltext der einbezogenen Bedingungen — § 312f Abs. 2 BGB
+      // verlangt die Vertragsbestätigung auf dauerhaftem Datenträger
+      // einschliesslich der Bedingungen. Ein Link genügt dafür nicht.
+      await fassungenZurBuchung(neueId),
+    ),
+  });
+  redirect(`/anmeldung/danke?nr=${neueId}`);
 }
 
 class PlatzFehler extends Error {

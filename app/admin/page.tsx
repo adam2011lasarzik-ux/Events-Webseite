@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { verlangeAdmin } from "@/lib/adminAuth";
-import { eventUeberblick } from "@/lib/adminDaten";
+import { eventUeberblick, offeneFehlbuchungen } from "@/lib/adminDaten";
 import { alsEuro } from "@/lib/preise";
 import { AdminRahmen } from "@/components/admin/AdminRahmen";
 import { StatusMarker } from "@/components/admin/StatusMarker";
@@ -16,9 +16,31 @@ function alsDatum(wert: Date | null): string {
   });
 }
 
+/**
+ * Der Grund einer Fehlbuchung in einem Satz, den man ohne Handbuch
+ * versteht — und mit dem Hinweis, ob schon etwas geschehen ist.
+ */
+function grundKlartext(grund: string): string {
+  switch (grund) {
+    case "keine-plaetze":
+      return "Platz war vergeben — Erstattung läuft";
+    case "doppelte-adresse":
+      return "Adresse hatte schon eine Buchung — Erstattung läuft";
+    case "kein-termin":
+      return "Termin war entfernt — Erstattung läuft";
+    case "betrag-abweichend":
+      return "Betrag passt nicht — NICHT automatisch erstattet, bitte ansehen";
+    case "ohne-marke":
+      return "Zahlung ohne Anmeldedaten — NICHT automatisch erstattet, bitte ansehen";
+    default:
+      return grund;
+  }
+}
+
 export default async function AdminUebersicht() {
   const admin = await verlangeAdmin();
   const events = await eventUeberblick();
+  const fehlbuchungen = await offeneFehlbuchungen();
 
   return (
     <AdminRahmen
@@ -35,6 +57,33 @@ export default async function AdminUebersicht() {
         </Link>
       }
     >
+      {/* Geld ist eingegangen, eine Anmeldung ist nicht entstanden.
+
+          Diese Meldung steht GANZ OBEN und vor den Veranstaltungen,
+          weil sie das Einzige auf dieser Seite ist, das eine Handlung
+          verlangt. Alles andere ist Anzeige. Sie nennt Betrag, Grund
+          und Sitzungskennung, damit der Vorgang im Dashboard des
+          Anbieters sofort auffindbar ist — ohne diese Kennung müsste
+          jemand zwischen Zeitstempeln suchen. */}
+      {fehlbuchungen.length > 0 && (
+        <div className={`${stil.meldung} ${stil.meldungFehler}`} role="alert">
+          <strong>
+            {fehlbuchungen.length} eingegangene Zahlung
+            {fehlbuchungen.length === 1 ? "" : "en"} ohne Anmeldung — bitte klären
+          </strong>
+          <ul style={{ margin: "0.75rem 0 0", paddingLeft: "1.2rem" }}>
+            {fehlbuchungen.map((f) => (
+              <li key={f.id}>
+                {alsEuro(f.betragCents)} · {grundKlartext(f.grund)} ·{" "}
+                {f.angelegtAm.toLocaleString("de-DE", { timeZone: "Europe/Berlin" })}
+                <br />
+                <code style={{ fontSize: "0.85em" }}>{f.sitzungId}</code>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {events.length === 0 && (
         <div className={stil.karte}>
           <p>
@@ -46,9 +95,9 @@ export default async function AdminUebersicht() {
       )}
 
       {events.map((e) => {
-        /* Freie Plätze rechnen sich ausschliesslich gegen feste,
-           also bezahlte Teilnehmer. Ein offener Zahlungsversuch nimmt
-           seit dem 24.09.2026 keinen Platz mehr weg (lib/plaetze.ts).
+        /* Freie Plätze rechnen sich gegen die bezahlten Teilnehmer.
+           Seit Stufe 2 (26.09.2026) gibt es keine andere Art von
+           Anmeldung mehr — sie entsteht erst mit der Zahlung.
 
            Dafür ist eine Überbuchung möglich: Wird gleichzeitig um den
            letzten Platz bezahlt, gelten beide Zahlungen. `ueberbucht`
@@ -76,16 +125,6 @@ export default async function AdminUebersicht() {
                 <span className={stil.zahl}>{e.belegtePersonen}</span>
                 feste Teilnehmer
               </div>
-              {/* Getrennt ausgewiesen und ausdrücklich beschriftet:
-                  Ein offener Versuch hält keinen Platz und ist keine
-                  Anmeldung. Die Beschriftung sagt das, damit die Zahl
-                  nicht doch wieder wie eine Buchung gelesen wird. */}
-              {e.offenePersonen > 0 && (
-                <div>
-                  <span className={stil.zahl}>{e.offenePersonen}</span>
-                  in offener Zahlung (zählt nicht mit)
-                </div>
-              )}
               <div>
                 <span className={stil.zahl}>{frei === null ? "∞" : frei}</span>
                 freie Plätze

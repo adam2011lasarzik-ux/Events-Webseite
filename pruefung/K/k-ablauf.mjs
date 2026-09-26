@@ -3,18 +3,13 @@
 /* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
 import "../schutz.mjs";
 
-import Stripe from "stripe";
 import { absenden, personen, BASIS } from "./senden.mjs";
 import { alsText } from "./admin-senden.mjs";
+import * as zw from "../zahlweg.mjs";
 import { db } from "../../lib/db.js";
-import { belegtFilter, offenerVersuchFilter } from "../../lib/plaetze.js";
+import { belegtFilter } from "../../lib/plaetze.js";
 import { berechnePreis } from "../../lib/preise.js";
 import { plaetzeReichen, istTestschluessel } from "../../lib/zahlungRegeln.js";
-import { bezahlseiteFuer } from "../../lib/zahlungStart.js";
-
-const ATTRAPPE = "http://127.0.0.1:4242";
-const GEHEIMNIS = "whsec_pruefgeheimnis_nur_lokal";
-const stripe = new Stripe("sk_test_pruefung_ohne_echtes_konto");
 
 let n = 0; const schief = [];
 const pruefe = (name, ok, zusatz = "") => {
@@ -25,61 +20,61 @@ const pruefe = (name, ok, zusatz = "") => {
 let ip = 10;
 const neueIp = () => `203.0.113.${(ip = (ip % 240) + 1)}`;
 
-const holeSitzung = async (id) =>
-  (await (await fetch(`${ATTRAPPE}/steuerung/sitzungen`)).json()).find((s) => s.id === id);
-
-async function bezahlen(sitzungId, betrag) {
-  const zusatz = betrag === undefined ? "" : `?betrag=${betrag}`;
-  return (await fetch(`${ATTRAPPE}/steuerung/bezahlt/${sitzungId}${zusatz}`, { method: "POST" })).json();
-}
-
-let ereignisse = 0;
-async function rueckmeldung(sitzung, art = "checkout.session.completed", kennung) {
-  const ereignis = {
-    id: kennung ?? `evt_k_${++ereignisse}`, object: "event", type: art,
-    data: { object: sitzung },
-  };
-  const rohtext = JSON.stringify(ereignis);
-  const kopf = stripe.webhooks.generateTestHeaderString({ payload: rohtext, secret: GEHEIMNIS });
-  const antwort = await fetch(`${BASIS}/zahlung/rueckmeldung`, {
-    method: "POST", body: rohtext,
-    headers: { "content-type": "application/json", "stripe-signature": kopf },
-  });
-  return { status: antwort.status, ereignisId: ereignis.id };
-}
+/* Bezahlen, Rückmeldung und Sitzungskennung liegen seit Stufe 2 in
+   pruefung/zahlweg.mjs — acht Listen brauchen denselben Ablauf. */
+const rueckmeldung = (sitzung, art, kennung) => zw.rueckmeldung(BASIS, sitzung, art, kennung);
+const { bezahlen, holeSitzung, sitzungAusZiel } = zw;
 
 const event = await db.event.findFirstOrThrow({ where: { slug: "padel-falkensee" } });
 
-/* Belegt = bezahlt. Ein offener Zahlungsversuch zählt seit dem
-   24.09.2026 nicht mehr mit (lib/plaetze.ts → belegtFilter); wie viele
-   es davon gibt, zeigt `offeneJetzt`. Die Fälle unten prüfen beides
-   getrennt — sonst liesse sich nicht unterscheiden, ob eine Anmeldung
-   fehlt oder nur nicht zählt. */
-const zaehle = async (filter) => {
+/* Belegt = bezahlt. Seit Stufe 2 (26.09.2026) gibt es gar keine
+   andere Art von Anmeldung mehr: Sie entsteht erst mit der
+   bestätigten Zahlung. `offeneJetzt` ist deshalb entfallen — es gäbe
+   nichts zu zählen. */
+const belegteJetzt = async () => {
   const rows = await db.registration.findMany({
-    where: { eventId: event.id, ...filter },
+    where: { eventId: event.id, ...belegtFilter() },
     select: { _count: { select: { teilnehmer: true } } },
   });
   return rows.reduce((s, r) => s + r._count.teilnehmer, 0);
 };
-const belegteJetzt = () => zaehle(belegtFilter());
-const offeneJetzt = () => zaehle(offenerVersuchFilter());
 
 async function frischeLage() {
   await db.participant.deleteMany({});
   await db.registration.deleteMany({});
   await db.anmeldeVersuch.deleteMany({});
   await db.zahlungsEreignis.deleteMany({});
+  await db.fehlbuchung.deleteMany({});
   await db.event.update({ where: { id: event.id }, data: { maxPersonen: 100 } });
 }
 
-/** Meldet an und liefert Antwort + Anmeldung. */
+/**
+ * Absenden — und was danach WIRKLICH da ist.
+ *
+ * Seit Stufe 2 entsteht beim Absenden keine Anmeldung mehr. Diese
+ * Funktion liefert deshalb die Sitzungskennung der Bezahlseite und,
+ * falls doch schon eine Anmeldung existiert (kostenloses Event), auch
+ * diese. Wer eine bezahlte Anmeldung braucht, nimmt `durchbezahlen`.
+ */
 async function anmelden(email, felder) {
   const antwort = await absenden({ eventSlug: "padel-falkensee", webseite: "", ...felder }, neueIp());
+  const sitzungId = sitzungAusZiel(antwort.ziel);
   const anmeldung = await db.registration.findFirst({
     where: { kontaktEmail: email }, include: { teilnehmer: true },
   });
-  return { antwort, anmeldung };
+  return { antwort, sitzungId, anmeldung };
+}
+
+/** Absenden, bezahlen, Rückmeldung — und die entstandene Anmeldung. */
+async function durchbezahlen(email, felder, betrag) {
+  const erst = await anmelden(email, felder);
+  if (!erst.sitzungId) return erst;
+  const sitzung = await bezahlen(erst.sitzungId, betrag);
+  await rueckmeldung(sitzung);
+  const anmeldung = await db.registration.findFirst({
+    where: { kontaktEmail: email }, include: { teilnehmer: true },
+  });
+  return { ...erst, sitzung, anmeldung };
 }
 
 const einzel = (email) => ({
@@ -101,29 +96,28 @@ const familie = (email) => ({
 await frischeLage();
 
 // ── 1. Einzelperson bezahlt erfolgreich ────────────────────────
+await frischeLage();
 {
   const a = await anmelden("einzel@example.org", einzel("einzel@example.org"));
-  pruefe("1 · Einzelperson: geht direkt zur Bezahlseite",
-    (a.antwort.ziel ?? "").includes("/bezahlseite/"));
-  const sitzung = await bezahlen(a.anmeldung.zahlungsReferenz);
-  await rueckmeldung(sitzung);
-  const nach = await db.registration.findUniqueOrThrow({ where: { id: a.anmeldung.id } });
-  pruefe("1 · … und ist danach bestätigt und bezahlt",
-    nach.status === "BESTAETIGT" && nach.zahlungsStatus === "BEZAHLT",
-    `${nach.status} / ${nach.zahlungsStatus}`);
+  pruefe("1 · Einzelanmeldung geht direkt zur Bezahlseite", a.sitzungId !== null,
+    a.antwort.ziel ?? a.antwort.text.slice(0, 80));
+  pruefe("1 · … und legt dabei NICHTS in der Datenbank an", a.anmeldung === null);
+
+  await rueckmeldung(await bezahlen(a.sitzungId));
+  const nach = await db.registration.findFirst({ where: { kontaktEmail: "einzel@example.org" } });
+  pruefe("1 · Erst die bestätigte Zahlung legt sie an — bestätigt und bezahlt",
+    nach !== null && nach.status === "BESTAETIGT" && nach.zahlungsStatus === "BEZAHLT",
+    `${nach?.status} / ${nach?.zahlungsStatus}`);
 }
 
 // ── 2.–4. Familienpaket ────────────────────────────────────────
 await frischeLage();
 {
   const a = await anmelden("familie@example.org", familie("familie@example.org"));
-  pruefe("2 · Familienpaket: geht direkt zur Bezahlseite",
-    (a.antwort.ziel ?? "").includes("/bezahlseite/"), a.antwort.ziel ?? a.antwort.text.slice(0, 80));
-  pruefe("3 · Vier Personen stehen in der Anmeldung, belegen aber noch keinen Platz",
-    a.anmeldung.teilnehmer.length === 4 && (await belegteJetzt()) === 0,
-    `${a.anmeldung.teilnehmer.length} Teilnehmer, ${await belegteJetzt()} belegt`);
-  pruefe("3 · … sondern zählen als offener Zahlungsversuch",
-    (await offeneJetzt()) === 4, `${await offeneJetzt()} offen`);
+  pruefe("2 · Familienpaket: geht direkt zur Bezahlseite", a.sitzungId !== null,
+    a.antwort.ziel ?? a.antwort.text.slice(0, 80));
+  pruefe("3 · Vor der Zahlung ist kein Platz belegt und nichts gespeichert",
+    (await belegteJetzt()) === 0 && (await db.registration.count()) === 0);
 
   const regeln = {
     schuelerCents: event.preisSchuelerCents,
@@ -138,208 +132,173 @@ await frischeLage();
   };
   // „family", nicht „familie" — so heisst der Wert in lib/preise.ts.
   const erwartet = berechnePreis(regeln, { art: "family", schueler: 2, erwachsene: 2 });
-  const sitzung = await holeSitzung(a.anmeldung.zahlungsReferenz);
+  const sitzung = await holeSitzung(a.sitzungId);
   pruefe("4 · Preis serverseitig berechnet und so an den Anbieter gegeben",
-    a.anmeldung.gesamtpreisCents === erwartet.gesamtCents &&
-      sitzung.amount_total === erwartet.gesamtCents,
+    sitzung.amount_total === erwartet.gesamtCents,
     `${sitzung.amount_total} Cent = ${(sitzung.amount_total / 100).toFixed(2)} €`);
 
-  const bezahlt = await bezahlen(a.anmeldung.zahlungsReferenz);
-  await rueckmeldung(bezahlt);
-  const nach = await db.registration.findUniqueOrThrow({
-    where: { id: a.anmeldung.id }, include: { teilnehmer: true },
+  await rueckmeldung(await bezahlen(a.sitzungId));
+  const nach = await db.registration.findFirstOrThrow({
+    where: { kontaktEmail: "familie@example.org" }, include: { teilnehmer: true },
   });
   pruefe("2 · Familienpaket ist danach bestätigt und bezahlt",
     nach.status === "BESTAETIGT" && nach.zahlungsStatus === "BEZAHLT");
+  pruefe("3 · … mit allen vier Teilnehmern", nach.teilnehmer.length === 4);
   pruefe("3 · … und belegt ERST JETZT genau vier Plätze", (await belegteJetzt()) === 4);
-  pruefe("3 · … und steht nicht mehr als offener Versuch", (await offeneJetzt()) === 0);
+  pruefe("4 · … zum eingefrorenen Preis", nach.gesamtpreisCents === erwartet.gesamtCents);
 
   /* Sicherheitsfund E aus der Prüfung des Adminbereichs: Die
      Bestätigungsseite ist über eine unratbare, aber nicht geheime
-     Anmeldenummer erreichbar (die per E-Mail verschickt wird). Sie
-     darf deshalb nur die Personenzahl zeigen, keine Namen. */
-  const bestaetigung = alsText(await (await fetch(`${BASIS}/anmeldung/danke?nr=${a.anmeldung.id}`)).text());
+     Anmeldenummer erreichbar. Sie darf deshalb nur die Personenzahl
+     zeigen, keine Namen. */
+  const bestaetigung = alsText(await (await fetch(`${BASIS}/anmeldung/danke?nr=${nach.id}`)).text());
   pruefe("Sicherheit · Bestätigungsseite zeigt die Personenzahl", bestaetigung.includes("4"));
   pruefe("Sicherheit · … aber KEINE Teilnehmernamen",
     !["Mama", "Papa", "Muster", "Eins", "Zwei"].some((name) => bestaetigung.includes(name)));
 }
 
-// ── 5.–7. Abbruch und zweiter Anlauf ───────────────────────────
+// ── 5.–7. Abbruch: es bleibt NICHTS zurück ─────────────────────
+//
+// Diese drei Fälle haben mit Stufe 2 ihre Bedeutung geändert, und das
+// ist der Kern des Umbaus. Vorher hiessen sie „Abbruch und zweiter
+// Anlauf": Die Anmeldung blieb gespeichert, und ein Knopf führte
+// zurück zur Bezahlseite. Beides gibt es nicht mehr.
 await frischeLage();
 {
-  const a = await anmelden("abbruch@example.org", einzel("abbruch@example.org"));
-  const nach = await db.registration.findUniqueOrThrow({ where: { id: a.anmeldung.id } });
-  pruefe("5 · Nach dem Abbruch bleibt die Anmeldung unbezahlt",
-    nach.zahlungsStatus === "OFFEN" && nach.status === "RESERVIERT");
+  await anmelden("abbruch@example.org", einzel("abbruch@example.org"));
+  pruefe("5 · Nach dem Abbruch gibt es KEINE Anmeldung",
+    (await db.registration.count({ where: { kontaktEmail: "abbruch@example.org" } })) === 0);
+  pruefe("5 · … und keinen Teilnehmer", (await db.participant.count()) === 0);
+  pruefe("5 · … und keine Fehlbuchung, denn es floss kein Geld",
+    (await db.fehlbuchung.count()) === 0);
 
-  const seite = alsText(await (await fetch(`${BASIS}/anmeldung/danke?nr=${a.anmeldung.id}&zahlung=abgebrochen`)).text());
-  pruefe("6 · Die Seite sagt „noch nicht abgeschlossen“",
-    seite.includes("noch nicht abgeschlossen"));
-  pruefe("6 · … und NICHT „Danke, wir haben deine Anmeldung“",
-    !seite.includes("Danke") || !seite.includes("wir haben deine Anmeldung"));
+  const seite = alsText(await (await fetch(`${BASIS}/anmeldung/danke?zahlung=abgebrochen`)).text());
+  pruefe("6 · Die Seite sagt, dass nichts gespeichert wurde",
+    seite.includes("nichts gespeichert") && seite.includes("nichts abgebucht"));
+  pruefe("6 · … und NICHT „wir haben deine Anmeldung“",
+    !seite.includes("wir haben deine Anmeldung"));
   pruefe("6 · … und nicht „bestätigt“", !seite.includes("Anmeldung ist bestätigt"));
+  pruefe("7 · … und bietet keinen Weg, die Zahlung fortzusetzen",
+    !/Jetzt bezahlen|Zahlung jederzeit/i.test(seite));
 
-  const erneut = await bezahlseiteFuer(a.anmeldung.id);
-  pruefe("7 · „Jetzt bezahlen“ nach Abbruch führt wieder zum Anbieter",
-    "url" in erneut && erneut.url.includes("/bezahlseite/"),
-    "url" in erneut ? erneut.url : JSON.stringify(erneut));
-  const danach = await db.registration.findUniqueOrThrow({
-    where: { id: a.anmeldung.id }, include: { teilnehmer: true },
-  });
-  pruefe("7 · … ohne dass Daten neu eingegeben werden mussten",
-    danach.teilnehmer.length === 1 && danach.kontaktEmail === "abbruch@example.org");
+  /* Der Gegenbeweis: Dieselbe Person kann sich neu anmelden. Der
+     Abbruch hat ihr nichts verbaut — zugleich der Beleg, dass
+     wirklich nichts zurückblieb. */
+  const zweiter = await anmelden("abbruch@example.org", einzel("abbruch@example.org"));
+  pruefe("7 · Dieselbe Person kann sich danach neu anmelden — kein „bereits angemeldet“",
+    zweiter.sitzungId !== null, zweiter.antwort.text.slice(0, 80));
 }
 
-// ── 8./9. Reservierung läuft ab ────────────────────────────────
+// ── 8./9. Die Bezahlseite verfällt ─────────────────────────────
 await frischeLage();
 {
   const a = await anmelden("ablauf@example.org", familie("ablauf@example.org"));
-  pruefe("8 · Vor Ablauf ist kein Platz belegt — es wurde nicht bezahlt",
-    (await belegteJetzt()) === 0, `${await belegteJetzt()} belegt`);
-  pruefe("8 · … die vier Personen stehen aber als offener Versuch da",
-    (await offeneJetzt()) === 4, `${await offeneJetzt()} offen`);
-  await db.registration.update({
-    where: { id: a.anmeldung.id }, data: { reserviertBis: new Date(Date.now() - 60_000) },
-  });
-  pruefe("8 · Nach Ablauf gilt die Anmeldung nicht als bestätigte Teilnahme",
-    (await db.registration.findUniqueOrThrow({ where: { id: a.anmeldung.id } })).status === "RESERVIERT");
-  pruefe("9 · … und die Plätze sind weiterhin frei", (await belegteJetzt()) === 0);
-  pruefe("9 · … die Anmeldung bleibt dabei gespeichert",
-    (await db.registration.count({ where: { id: a.anmeldung.id } })) === 1);
+  pruefe("8 · Vor der Zahlung ist kein Platz belegt", (await belegteJetzt()) === 0);
+  pruefe("8 · … und keine Zeile entstanden", (await db.registration.count()) === 0);
 
-  const seite = alsText(await (await fetch(`${BASIS}/anmeldung/danke?nr=${a.anmeldung.id}`)).text());
-  /* Der Wortlaut hat sich bewusst geändert: Die Seite sprach früher von
-     einer „Reservierung", obwohl VERA keine anbietet. Geprüft wird
-     weiterhin dasselbe Verhalten — die Seite darf nach Ablauf der
-     Zahlfrist keine Bestätigung zeigen —, nur mit dem neuen Wortlaut.
-     Zusätzlich wird sichergestellt, dass das alte Wort nicht
-     zurückkommt. */
-  pruefe("9 · Die Seite zeigt „Zahlung nicht abgeschlossen“ statt einer Bestätigung",
-    seite.includes("Zahlung nicht abgeschlossen") && seite.includes("noch nicht abgeschlossen"));
-  pruefe("9 · … und verspricht dabei keine Reservierung",
-    !/reserviert|Reservierung/i.test(seite));
+  await rueckmeldung(await holeSitzung(a.sitzungId), "checkout.session.expired");
+  pruefe("9 · Nach dem Verfall bleibt es dabei: keine Anmeldung",
+    (await db.registration.count()) === 0);
+  pruefe("9 · … und keine Fehlbuchung — es ist kein Geld geflossen",
+    (await db.fehlbuchung.count()) === 0);
+
+  const seite = alsText(await (await fetch(`${BASIS}/anmeldung/danke?zahlung=abgebrochen`)).text());
+  pruefe("9 · Die Seite zeigt keine Bestätigung", !seite.includes("Zahlung erfolgreich"));
+  pruefe("9 · … und verspricht keine Reservierung", !/reserviert|Reservierung/i.test(seite));
 }
 
 // ── 10./11. Letzte Plätze ──────────────────────────────────────
 //
-// Seit dem 24.09.2026 zählt nur eine BEZAHLTE Anmeldung gegen die
-// Plätze. Diese Fälle prüfen deshalb beides, und beides ausdrücklich:
-//
-//   - die Schutzwirkung, die bleibt: Gegen bezahlte Plätze wird kein
-//     Platz ein zweites Mal verkauft.
-//   - den Preis, der dafür bezahlt wird: Drei unbezahlte Versuche
-//     halten NICHTS zurück. Wer als Vierter kommt, kommt durch.
-//
-// Der zweite Punkt ist kein Versehen, sondern die Kehrseite der
-// Entscheidung. Er steht hier als Prüfung, damit niemand ihn später
-// für einen Fehler hält und die alte Regel zurückbaut, ohne zu
-// wissen, warum sie weg ist.
+// Die Schutzwirkung liegt jetzt vollständig auf der bezahlten Seite.
+// Wer trotzdem durchkommt und bezahlt, bekommt sein Geld zurück.
 await frischeLage();
 {
   await db.event.update({ where: { id: event.id }, data: { maxPersonen: 3 } });
 
-  // Drei Einzelanmeldungen, alle NUR angemeldet, nicht bezahlt.
   for (const i of [1, 2, 3]) {
-    await anmelden(`platz${i}@example.org`, einzel(`platz${i}@example.org`));
+    await durchbezahlen(`platz${i}@example.org`, einzel(`platz${i}@example.org`));
   }
-  pruefe("10 · Drei unbezahlte Versuche belegen keinen Platz",
-    (await belegteJetzt()) === 0, `${await belegteJetzt()} belegt`);
-  pruefe("10 · … und werden als offene Versuche geführt",
-    (await offeneJetzt()) === 3, `${await offeneJetzt()} offen`);
-
-  const vierterUnbezahlt = await anmelden("platz4@example.org", einzel("platz4@example.org"));
-  pruefe("10 · Unbezahlte Versuche halten niemanden zurück — der Vierte kommt durch",
-    vierterUnbezahlt.anmeldung !== null,
-    vierterUnbezahlt.antwort.text.slice(0, 80));
-
-  /* Jetzt bezahlen drei von ihnen. Ab hier greift der Schutz. */
-  for (const adresse of ["platz1@example.org", "platz2@example.org", "platz3@example.org"]) {
-    const eintrag = await db.registration.findFirstOrThrow({ where: { kontaktEmail: adresse } });
-    await rueckmeldung(await bezahlen(eintrag.zahlungsReferenz));
-  }
-  pruefe("10 · Nach der Zahlung sind drei Plätze belegt",
+  pruefe("10 · Drei bezahlte Anmeldungen belegen drei Plätze",
     (await belegteJetzt()) === 3, `${await belegteJetzt()} belegt`);
 
-  const fuenfter = await anmelden("platz5@example.org", einzel("platz5@example.org"));
-  pruefe("10 · Gegen BEZAHLTE Plätze wird kein Platz ein zweites Mal verkauft",
-    fuenfter.anmeldung === null && fuenfter.antwort.text.includes("ausgebucht"),
-    fuenfter.antwort.text.slice(0, 80));
+  const vierter = await anmelden("platz4@example.org", einzel("platz4@example.org"));
+  pruefe("10 · Der letzte Platz wird kein zweites Mal verkauft — es geht gar nicht erst zur Zahlung",
+    vierter.sitzungId === null && vierter.antwort.text.includes("ausgebucht"),
+    vierter.antwort.text.slice(0, 80));
 
   const familieZuGross = await anmelden("drei@example.org", familie("drei@example.org"));
   pruefe("11 · Und eine Familie, die nicht mehr hineinpasst, ebenfalls nicht",
-    familieZuGross.anmeldung === null &&
-      /reicht das nicht|ausgebucht/.test(familieZuGross.antwort.text),
-    (familieZuGross.antwort.text.match(/Es sind nur noch [^<"]*/) ?? ["—"])[0]);
+    familieZuGross.sitzungId === null &&
+      /reicht das nicht|ausgebucht/.test(familieZuGross.antwort.text));
 
-  /* Auch der zweite Anlauf über „Jetzt bezahlen" prüft die Plätze neu
-     — und genau hier zeigt sich, warum das seit dem 24.09.2026 die
-     wichtigere Prüfung ist: Der Vierte ist oben durchgekommen, weil
-     nichts belegt war. Inzwischen haben drei bezahlt. Sein Klick auf
-     „Jetzt bezahlen" muss deshalb abgelehnt werden — sonst zahlte er
-     für einen Platz, den es nicht mehr gibt. */
-  const vierterEintrag = await db.registration.findFirstOrThrow({
-    where: { kontaktEmail: "platz4@example.org" },
-  });
-  const versuch = await bezahlseiteFuer(vierterEintrag.id);
-  pruefe("11 · Zweiter Anlauf wird abgelehnt, wenn inzwischen kein Platz mehr frei ist",
-    "fehler" in versuch && versuch.fehler === "keine-plaetze",
-    JSON.stringify(versuch));
-  pruefe("11 · … und die unbezahlte Anmeldung bleibt dabei erhalten",
-    (await db.registration.count({ where: { id: vierterEintrag.id } })) === 1);
+  /* Der Fall, den Stufe 2 erst möglich macht — und den sie deshalb
+     auch auffangen muss: Jemand hat eine Bezahlseite offen, während
+     die letzten Plätze vergeben werden. Er bezahlt. Es gibt keinen
+     Vertrag, und das Geld geht zurück. */
+  await db.event.update({ where: { id: event.id }, data: { maxPersonen: 4 } });
+  const knapp = await anmelden("knapp@example.org", einzel("knapp@example.org"));
+  pruefe("11 · Bei einem freien Platz kommt der Nächste noch zur Bezahlseite",
+    knapp.sitzungId !== null);
+
+  await durchbezahlen("schneller@example.org", einzel("schneller@example.org"));
+  pruefe("11 · … ein Schnellerer bezahlt und bekommt ihn",
+    (await belegteJetzt()) === 4, `${await belegteJetzt()} belegt`);
+
+  await rueckmeldung(await bezahlen(knapp.sitzungId));
+  pruefe("11 · Der Langsamere bekommt KEINE Anmeldung",
+    (await db.registration.count({ where: { kontaktEmail: "knapp@example.org" } })) === 0);
+
+  const fehl = await db.fehlbuchung.findUnique({ where: { sitzungId: knapp.sitzungId } });
+  pruefe("11 · … sondern eine Fehlbuchung mit dem Grund „keine-plaetze“",
+    fehl !== null && fehl.grund === "keine-plaetze", fehl?.grund);
+  pruefe("11 · … und sein Geld wird automatisch erstattet",
+    fehl?.erstattetAm !== null && (fehl?.erstattungId ?? "").startsWith("re_"),
+    `${fehl?.erstattetAm} / ${fehl?.erstattungId}`);
 
   await db.event.update({ where: { id: event.id }, data: { maxPersonen: 100 } });
 }
 
-// ── 12. Doppelklick ────────────────────────────────────────────
+// ── 12. Zwei Anläufe erzeugen zwei getrennte Bezahlseiten ──────
+//
+// Früher wurde eine offene Bezahlseite wiederverwendet, damit nicht
+// zweimal abgebucht werden kann. Das ging, weil es eine Anmeldung
+// gab, an der die Sitzung hing. Jetzt gibt es sie nicht — zwei
+// Absendungen sind zwei getrennte Vorgänge.
+//
+// Doppelt abgebucht bleibt trotzdem niemand: Bezahlt jemand beide,
+// legt die erste die Anmeldung an, und die zweite wird zur
+// Fehlbuchung „doppelte-adresse" und vollständig erstattet.
 await frischeLage();
 {
-  const a = await anmelden("doppel@example.org", einzel("doppel@example.org"));
-  const ersteSitzung = a.anmeldung.zahlungsReferenz;
+  const erst = await anmelden("doppel@example.org", einzel("doppel@example.org"));
+  const zweit = await anmelden("doppel@example.org", einzel("doppel@example.org"));
+  pruefe("12 · Zwei Absendungen ergeben zwei verschiedene Bezahlseiten",
+    erst.sitzungId !== null && zweit.sitzungId !== null && erst.sitzungId !== zweit.sitzungId);
 
-  const [x, y] = await Promise.all([
-    bezahlseiteFuer(a.anmeldung.id),
-    bezahlseiteFuer(a.anmeldung.id),
-  ]);
-  pruefe("12 · Zwei gleichzeitige Klicks führen zur SELBEN Bezahlseite",
-    "url" in x && "url" in y && x.url === y.url, "url" in x ? x.url : JSON.stringify(x));
+  await rueckmeldung(await bezahlen(erst.sitzungId));
+  pruefe("12 · Die erste Zahlung legt die Anmeldung an",
+    (await db.registration.count({ where: { kontaktEmail: "doppel@example.org" } })) === 1);
 
-  const nach = await db.registration.findUniqueOrThrow({ where: { id: a.anmeldung.id } });
-  pruefe("12 · … und es bleibt bei einer Sitzung", nach.zahlungsReferenz === ersteSitzung);
+  await rueckmeldung(await bezahlen(zweit.sitzungId));
+  pruefe("12 · Die zweite legt KEINE zweite an",
+    (await db.registration.count({ where: { kontaktEmail: "doppel@example.org" } })) === 1);
 
-  const offene = (await (await fetch(`${ATTRAPPE}/steuerung/sitzungen`)).json())
-    .filter((s) => s.metadata?.anmeldungId === a.anmeldung.id && s.status === "open");
-  pruefe("12 · … genau EINE offene Bezahlseite für diese Anmeldung",
-    offene.length === 1, `${offene.length} offen`);
-}
-
-// ── 12b. Neue Sitzung schliesst die alte ───────────────────────
-await frischeLage();
-{
-  const a = await anmelden("neuesitzung@example.org", einzel("neuesitzung@example.org"));
-  const alt = a.anmeldung.zahlungsReferenz;
-  // Betrag ändern erzwingt eine neue Sitzung.
-  await db.registration.update({ where: { id: a.anmeldung.id }, data: { gesamtpreisCents: 1400 } });
-  const neu = await bezahlseiteFuer(a.anmeldung.id);
-  const nach = await db.registration.findUniqueOrThrow({ where: { id: a.anmeldung.id } });
-  pruefe("12 · Bei geändertem Betrag entsteht eine neue Bezahlseite",
-    "url" in neu && nach.zahlungsReferenz !== alt);
-  const alteSitzung = await holeSitzung(alt);
-  pruefe("12 · … und die alte ist geschlossen — sie lässt sich nicht mehr bezahlen",
-    alteSitzung.status === "expired", alteSitzung.status);
-  const versuch = await fetch(`${ATTRAPPE}/steuerung/klick-bezahlt/${alt}`, { redirect: "manual" });
-  pruefe("12 · … auch über den alten Link nicht", versuch.status === 410, `Status ${versuch.status}`);
+  const fehl = await db.fehlbuchung.findUnique({ where: { sitzungId: zweit.sitzungId } });
+  pruefe("12 · … sondern wird zur Fehlbuchung „doppelte-adresse“",
+    fehl !== null && fehl.grund === "doppelte-adresse", fehl?.grund);
+  pruefe("12 · … und wird vollständig erstattet", fehl?.erstattetAm !== null);
 }
 
 // ── 13. Mehrfache Rückmeldung ──────────────────────────────────
 await frischeLage();
 {
   const a = await anmelden("mehrfach@example.org", familie("mehrfach@example.org"));
-  const sitzung = await bezahlen(a.anmeldung.zahlungsReferenz);
+  const sitzung = await bezahlen(a.sitzungId);
   const erste = await rueckmeldung(sitzung);
   await rueckmeldung(sitzung, "checkout.session.completed", erste.ereignisId);
   await rueckmeldung(sitzung, "checkout.session.completed");
-  const nach = await db.registration.findUniqueOrThrow({
-    where: { id: a.anmeldung.id }, include: { teilnehmer: true },
+  const nach = await db.registration.findFirstOrThrow({
+    where: { kontaktEmail: "mehrfach@example.org" }, include: { teilnehmer: true },
   });
   pruefe("13 · Mehrfache Rückmeldung zählt Teilnehmer nicht doppelt",
     nach.teilnehmer.length === 4 && (await belegteJetzt()) === 4,
@@ -347,6 +306,7 @@ await frischeLage();
   pruefe("13 · … und es gibt genau eine Anmeldung",
     (await db.registration.count({ where: { kontaktEmail: "mehrfach@example.org" } })) === 1);
 }
+
 
 // ── 14./15. Schlüssel ──────────────────────────────────────────
 pruefe("14 · Testschlüssel werden akzeptiert", istTestschluessel("sk_test_abc"));

@@ -453,10 +453,15 @@ export const de = {
       "Deine Anmeldung ist bestätigt. Hier steht noch einmal, was wir aufgenommen haben.",
     bezahltEinleitungMehrere:
       "Ihr seid für das Event angemeldet. Hier steht noch einmal, was wir aufgenommen haben.",
-    offenTitel: "Deine Anmeldung ist noch nicht abgeschlossen",
+    offenTitel: "Deine Anmeldung ist nicht zustande gekommen",
+    /* Umformuliert am 26.09.2026. Vorher stand hier „Schließe die
+       Zahlung ab" — das setzte voraus, dass es etwas abzuschliessen
+       gibt. Seit dem Umbau wird vor der Zahlung nichts gespeichert;
+       es gibt keinen Vorgang mehr, den man fortsetzen könnte. Der Weg
+       zurück führt über das Formular, und das muss der Satz sagen. */
     offenEinleitung:
-      "Der Kauf ist noch nicht abgeschlossen. Schließe die Zahlung ab, dann ist dein Platz " +
-      "gebucht.",
+      "Es wurde nichts gekauft und nichts abgebucht. Deine Angaben haben wir nicht " +
+      "gespeichert — wenn du teilnehmen möchtest, fülle das Formular bitte noch einmal aus.",
     ueberschrift: "Danke — wir haben deine Anmeldung",
     einleitung:
       "Deine Anmeldung ist gespeichert. Hier steht noch einmal, was wir aufgenommen haben.",
@@ -488,8 +493,8 @@ export const de = {
       "zustande gekommen. Schreib uns, wir suchen eine Lösung.",
     zahlungAbgelaufen: "Zahlung nicht abgeschlossen",
     zahlungAbgelaufenText:
-      "Die Zahlung wurde nicht rechtzeitig abgeschlossen. Du kannst sie jederzeit neu " +
-      "starten — wir prüfen dann, ob noch genug Plätze frei sind.",
+      "Die Zahlung wurde nicht abgeschlossen. Es wurde nichts abgebucht und nichts " +
+      "gespeichert. Du kannst dich jederzeit neu anmelden, solange Plätze frei sind.",
     zahlungLaeuft: "Zahlung wird geprüft",
     zahlungLaeuftText:
       "Die Bestätigung deiner Zahlung steht noch aus. Das dauert meist nur wenige Augenblicke — " +
@@ -501,23 +506,33 @@ export const de = {
        {minuten} wurde nirgends ersetzt — der Platzhalter stand wörtlich
        auf der Seite. */
     zahlungNochOffenText:
-      "Schließe die Zahlung jetzt ab — danach ist dein Platz verbindlich gebucht.",
+      "Ein Platz ist erst mit dem Eingang der Zahlung gebucht. Ohne abgeschlossene Zahlung " +
+      "entsteht keine Anmeldung.",
     zahlungAbgebrochen:
-      "Es wurde nichts gekauft und nichts abgebucht. Du kannst die Zahlung jederzeit " +
-      "abschließen.",
+      "Es wurde nichts gekauft und nichts abgebucht. Deine Angaben haben wir nicht " +
+      "gespeichert — fülle das Formular bitte noch einmal aus, wenn du teilnehmen möchtest.",
     zahlungFehlerAnbieter:
-      "Die Bezahlseite lässt sich gerade nicht öffnen. Deine Anmeldung ist gespeichert; " +
-      "versuche es in ein paar Minuten noch einmal.",
+      "Die Bezahlseite lässt sich gerade nicht öffnen. Es wurde nichts gespeichert und " +
+      "nichts abgebucht; versuche es in ein paar Minuten noch einmal.",
     zahlungFehlerEingerichtet:
-      "Die Online-Bezahlung ist noch nicht freigeschaltet. Deine Anmeldung ist gespeichert — " +
-      "wir melden uns bei dir unter der angegebenen E-Mail-Adresse.",
-    zahlungKnopf: "Bezahlen",
+      "Die Online-Bezahlung ist gerade nicht verfügbar. Es wurde nichts gespeichert und " +
+      "nichts abgebucht. Schreib uns unter kontakt@veraevents.de, wir melden uns.",
     zahlungWege: "Karte, Apple Pay, Google Pay oder PayPal",
     emailTitel: "Bestätigung per E-Mail",
     emailText:
       "Eine automatische Bestätigungsmail gibt es noch nicht. Bitte notiere dir bis dahin " +
       "deine Anmeldenummer.",
     nichtGefunden: "Diese Anmeldung konnten wir nicht finden.",
+    /* Neu am 26.09.2026: Nach dem Abbruch gibt es keinen Datensatz
+       mehr, auf den diese Seite zeigen könnte. Statt „nicht gefunden"
+       — was nach einem Fehler klingt — sagt sie, was wirklich
+       geschehen ist: nichts. */
+    nichtsGespeichertTitel: "Es wurde nichts gespeichert",
+    nichtsGespeichertText:
+      "Der Bezahlvorgang wurde nicht abgeschlossen. Es wurde nichts abgebucht, und deine " +
+      "Angaben haben wir nicht gespeichert. Wenn du teilnehmen möchtest, fülle das " +
+      "Anmeldeformular bitte noch einmal aus.",
+    zurueckZurAnmeldung: "Zurück zu den Veranstaltungen",
   },
 
   kontakt: {

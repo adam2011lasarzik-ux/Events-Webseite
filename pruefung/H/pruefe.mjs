@@ -7,9 +7,31 @@
 /* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
 import "../schutz.mjs";
 
-import { absenden, personen } from "./senden.mjs";
+import { absenden as formularAbsenden, personen, BASIS } from "./senden.mjs";
+import * as zw from "../zahlweg.mjs";
 import { db } from "../../lib/db.js";
 import { berechnePreis } from "../../lib/preise.js";
+
+/**
+ * Absenden — und die Zahlung gleich mit.
+ *
+ * Bis zum 26.09.2026 genügte hier das Absenden: Die Anmeldung stand
+ * danach in der Datenbank, und die Liste konnte sie nachsehen. Seit
+ * Stufe 2 entsteht sie erst mit der bestätigten Zahlung. Diese Liste
+ * prüft aber nicht den Bezahlweg, sondern das, was das Formular aus
+ * den Eingaben macht: Preise, Teilnehmer, Plätze, Duplikate, Bremse.
+ * Damit diese Fragen dieselben bleiben, geht der Weg bis zum Ende —
+ * und der Rest der Liste steht unverändert.
+ *
+ * Wird gar nicht weitergeleitet (abgelehnt, gebremst, ausgebucht),
+ * wird auch nichts bezahlt; die Antwort kommt unverändert zurück.
+ */
+async function absenden(werte, ip) {
+  const antwort = await formularAbsenden(werte, ip);
+  const sitzungId = zw.sitzungAusZiel(antwort.ziel);
+  if (sitzungId) await zw.rueckmeldung(BASIS, await zw.bezahlen(sitzungId));
+  return { ...antwort, sitzungId };
+}
 
 let nummer = 0;
 const fehlgeschlagen = [];
@@ -29,6 +51,8 @@ async function leeren() {
   await db.participant.deleteMany({});
   await db.registration.deleteMany({});
   await db.anmeldeVersuch.deleteMany({});
+  await db.zahlungsEreignis.deleteMany({});
+  await db.fehlbuchung.deleteMany({});
 }
 
 async function letzte() {
@@ -215,31 +239,24 @@ async function main() {
     vormundAntwort.text.includes("Einwilligung der Erziehungsberechtigten"));
 
   // ── 13. Doppelte Anmeldung ───────────────────────────────────
+  //
+  // Bis zum 26.09.2026 gab es hier zwei Fälle: ein zweiter Anlauf
+  // WÄHREND der laufenden Reservierung (erlaubt, derselbe Datensatz)
+  // und eine zweite Anmeldung zu einer bestätigten (abgelehnt). Den
+  // ersten gibt es nicht mehr — es gibt keine Reservierung, in der
+  // man einen zweiten Anlauf unternehmen könnte. Wer abbricht,
+  // hinterlässt nichts und fängt von vorn an; das prüft Liste K.
+  // Übrig bleibt der Fall, um den es immer ging.
   const doppelt = await absenden(
     { eventSlug: SLUG, weg: "selbst", selbstAls: "student", schueler: 1, erwachsene: 0, webseite: "",
       ...personen([{ vorname: "Lena", nachname: "Schmidt", email: "lena@example.org", telefon: "" }]) },
     neueIp(),
   );
-  /* Seit Schritt J ist ein zweiter Anlauf INNERHALB der laufenden
-     Reservierung kein Doppelversuch, sondern derselbe Mensch, dessen
-     Bezahlung nicht geklappt hat. Er darf weitermachen — aber immer im
-     SELBEN Datensatz. Genau das wird hier geprüft. Eine aktive,
-     bestätigte Anmeldung wird weiterhin abgewiesen (Fall darunter). */
-  const lenaSaetze = await db.registration.findMany({ where: { kontaktEmail: "lena@example.org" } });
-  pruefe("Zweiter Anlauf während der Reservierung legt keinen zweiten Datensatz an",
-    doppelt.status < 400 && lenaSaetze.length === 1, `${lenaSaetze.length} Datensätze`);
-
-  await db.registration.update({
-    where: { id: lenaSaetze[0].id },
-    data: { status: "BESTAETIGT", reserviertBis: null },
-  });
-  const doppeltBestaetigt = await absenden(
-    { eventSlug: SLUG, weg: "selbst", selbstAls: "student", schueler: 1, erwachsene: 0, webseite: "",
-      ...personen([{ vorname: "Lena", nachname: "Schmidt", email: "lena@example.org", telefon: "" }]) },
-    neueIp(),
-  );
   pruefe("Zweite Anmeldung zu einer bestätigten wird abgelehnt",
-    doppeltBestaetigt.status === 200 && doppeltBestaetigt.text.includes("bereits eine Anmeldung"));
+    doppelt.status === 200 && doppelt.text.includes("bereits eine Anmeldung"));
+  pruefe("… und es entsteht kein zweiter Datensatz",
+    (await db.registration.count({ where: { kontaktEmail: "lena@example.org" } })) === 1);
+  pruefe("… und keine Zahlung wird überhaupt erst gestartet", doppelt.sitzungId === null);
 
   // ── 14. Reaktivierung nach Stornierung ───────────────────────
   const lena = await db.registration.findFirstOrThrow({ where: { kontaktEmail: "lena@example.org" } });
@@ -255,12 +272,12 @@ async function main() {
   const wieder = await db.registration.findMany({ where: { kontaktEmail: "lena@example.org" }, include: { teilnehmer: true } });
   pruefe("Nach Stornierung entsteht kein zweiter Datensatz", wieder.length === 1,
     `${wieder.length} Datensätze`);
-  /* Seit Schritt J wartet eine kostenpflichtige Anmeldung zuerst auf
-     die Zahlung: Sie entsteht als RESERVIERT, nicht als BESTAETIGT.
-     Bestätigt wird sie erst durch die geprüfte Rückmeldung des
-     Zahlungsanbieters. */
+  /* Seit Stufe 2 (26.09.2026) entsteht die Anmeldung erst mit der
+     bestätigten Zahlung — die Reaktivierung geschieht deshalb in
+     demselben Schritt und führt gleich zu BESTAETIGT. Den Zustand
+     dazwischen gibt es nicht mehr. */
   pruefe("… derselbe Datensatz wird reaktiviert",
-    wieder[0].id === lena.id && wieder[0].status === "RESERVIERT" &&
+    wieder[0].id === lena.id && wieder[0].status === "BESTAETIGT" &&
     wieder[0].reaktiviertAm !== null && wieder[0].storniertAm === null,
     `Status ${wieder[0].status}`);
   pruefe("… mit neu berechnetem Preis (jetzt Erwachsener, 14,00 €)",
@@ -292,28 +309,11 @@ async function main() {
   pruefe("… der eine freie Platz lässt sich aber buchen",
     (await db.registration.count()) === 1);
 
-  /* Ab hier zwei getrennte Schritte — seit dem 24.09.2026 belegt erst
-     eine BEZAHLTE Anmeldung einen Platz (lib/plaetze.ts). Beides
-     gehört geprüft, damit niemand das eine für das andere hält. */
-  const trotzUnbezahlt = await absenden(
-    { eventSlug: SLUG, weg: "selbst", selbstAls: "student", schueler: 1, erwachsene: 0, webseite: "",
-      ...personen([{ vorname: "Noch", nachname: "Moeglich", email: "moeglich@example.org", telefon: "" }]) },
-    neueIp(),
-  );
-  pruefe("Solange nicht bezahlt ist, hält die erste Anmeldung den Platz NICHT",
-    (await db.registration.count()) === 2 && !trotzUnbezahlt.text.includes("ausgebucht"),
-    `${await db.registration.count()} Anmeldungen`);
-
-  // Jetzt gilt der Platz als bezahlt — und erst jetzt ist zu.
-  await db.registration.updateMany({
-    where: { kontaktEmail: { in: ["letzter@example.org", "moeglich@example.org"] } },
-    data: { status: "STORNIERT" },
-  });
-  await db.registration.updateMany({
-    where: { kontaktEmail: "letzter@example.org" },
-    data: { status: "BESTAETIGT", zahlungsStatus: "BEZAHLT", reserviertBis: null },
-  });
-
+  /* Bis zum 26.09.2026 standen hier zwei Schritte: erst „unbezahlt
+     hält den Platz nicht", dann „bezahlt hält ihn". Der erste ist
+     entfallen — eine unbezahlte Anmeldung gibt es nicht mehr, sie
+     entsteht mit der Zahlung oder gar nicht. Geprüft wird weiterhin
+     dasselbe: Ein bezahlter Platz ist weg. */
   const ausgebucht = await absenden(
     { eventSlug: SLUG, weg: "selbst", selbstAls: "student", schueler: 1, erwachsene: 0, webseite: "",
       ...personen([{ vorname: "Zu", nachname: "Spaet", email: "spaet@example.org", telefon: "" }]) },
@@ -322,12 +322,26 @@ async function main() {
   pruefe("Ist der Platz bezahlt, meldet der Server „ausgebucht\"",
     ausgebucht.text.includes("ausgebucht"),
     ausgebucht.text.slice(0, 90));
+  pruefe("… und schickt niemanden mehr zur Bezahlseite", ausgebucht.sitzungId === null);
+  pruefe("… und legt nichts an",
+    (await db.registration.count({ where: { kontaktEmail: "spaet@example.org" } })) === 0);
 
   await db.event.update({ where: { id: event.id }, data: { maxPersonen: event.maxPersonen } });
 
   // ── 16. Bremse gegen Massen-Einsendungen ─────────────────────
   await leeren();
-  const angreifer = "192.0.2.77";
+  /* Eine bei JEDEM Lauf andere Adresse.
+     
+     Seit dem 26.09.2026 zählt die Bremse im Arbeitsspeicher des
+     Servers und nicht mehr in der Datenbank (Entscheidung: kein
+     Datenbankeintrag vor der Zahlung). `leeren.mjs` setzt sie
+     deshalb nicht mehr zurück, und eine feste Adresse trug ihre
+     Zähler aus dem vorigen Lauf mit — beim zweiten Sammellauf
+     wurden dann alle sieben Versuche abgewiesen statt zwei. Der
+     Bereich 198.18.0.0/15 ist für Messungen reserviert und gehört
+     niemandem. */
+  const angreifer =
+    `198.18.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 254) + 1}`;
   let gebremst = 0;
   for (let i = 0; i < 7; i += 1) {
     const r = await absenden(

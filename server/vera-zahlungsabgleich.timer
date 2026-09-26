@@ -1,0 +1,15 @@
+[Unit]
+Description=Startet den Zahlungsabgleich stuendlich
+
+[Timer]
+# Stuendlich, zur halben Stunde. Nicht zur vollen: Dort laufen schon
+# die Ueberwachung und andere Zeitplaene, und ein Lauf, der auf einen
+# ausgelasteten Server trifft, meldet Fehler, die keine sind.
+OnCalendar=*:30:00
+RandomizedDelaySec=300
+# Nachholen, wenn der Server aus war. Eine Zahlung, die gestern
+# einging, ist heute immer noch eingegangen.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

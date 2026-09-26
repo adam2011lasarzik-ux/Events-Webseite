@@ -42,7 +42,7 @@ export function innerhalbFrist(startAt: Date | null, jetzt: Date = new Date()): 
 
 /** Der Ausschnitt einer Buchung, den die Entscheidung braucht. */
 export interface Buchungslage {
-  status: "RESERVIERT" | "BESTAETIGT" | "WARTELISTE" | "STORNIERT";
+  status: "BESTAETIGT" | "WARTELISTE" | "STORNIERT";
   zahlungsStatus: "OFFEN" | "BEZAHLT" | "ERSTATTET" | "TEILWEISE_ERSTATTET";
   gesamtpreisCents: number;
   startAt: Date | null;
@@ -83,7 +83,7 @@ export function stornoEntscheidung(
   }
 
   /* Erstattet wird nur, wo auch bezahlt wurde: Eine unbezahlte
-     Reservierung und ein kostenloses Event werden schlicht storniert.
+     Ein kostenloses Event wird schlicht storniert.
      Der Betrag stammt aus der Datenbank, nie aus dem Browser. */
   return { erlaubt: true, erstatten: lage.zahlungsStatus === "BEZAHLT" && lage.gesamtpreisCents > 0 };
 }

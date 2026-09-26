@@ -56,7 +56,19 @@ export type Fehlbuchungsgrund =
   | "keine-plaetze"
   | "doppelte-adresse"
   | "kein-termin"
-  | "betrag-abweichend";
+  | "betrag-abweichend"
+  /**
+   * Eine bezahlte Bezahlseite ohne verschlüsselte Anmeldung.
+   *
+   * Der fünfte Fall, nachgetragen am 26.09.2026 beim Bauen von
+   * Stufe 2. Er entsteht, wenn beim Ausrollen noch eine Bezahlseite
+   * aus der Zeit davor offen war — oder bei etwas, das niemand
+   * vorhergesehen hat. Wie `betrag-abweichend` wird er NICHT
+   * automatisch erstattet: Bei einem Vorgang, den das Programm nicht
+   * versteht, eigenmächtig Geld zurückzubuchen wäre die falsche
+   * Antwort.
+   */
+  | "ohne-marke";
 
 /**
  * Gründe, bei denen sofort und vollständig erstattet wird.
@@ -72,6 +84,9 @@ export const SOFORT_ERSTATTEN: readonly Fehlbuchungsgrund[] = [
   "doppelte-adresse",
   "kein-termin",
 ];
+
+/** Die Gründe, die von Hand angesehen werden müssen. */
+export const ZUR_KLAERUNG: readonly Fehlbuchungsgrund[] = ["betrag-abweichend", "ohne-marke"];
 
 export type Anlageergebnis =
   /** Die Anmeldung ist neu entstanden. */

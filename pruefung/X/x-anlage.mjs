@@ -94,7 +94,15 @@ pruefe("Die Sitzungskennung steht an der Anmeldung",
 pruefe("Die Zahlungskennung ebenfalls — ohne sie wäre keine Erstattung möglich",
   angelegt.zahlungsAbsicht === "pi_pruef_x_1");
 pruefe("Der Storno-Schlüssel ist gesetzt", (angelegt.stornoSchluessel ?? "").length > 10);
-pruefe("Es gibt keine Zahlfrist mehr an der Anmeldung", angelegt.reserviertBis === null);
+/* Das Feld `reserviertBis` gibt es seit dem 26.09.2026 gar nicht
+   mehr (Migration ohne_reserviert). Geprüft wird deshalb nicht mehr
+   sein Wert, sondern dass es fort ist — und dass niemand es
+   versehentlich wieder einführt. */
+pruefe(
+  "Das Feld für eine Zahlfrist existiert nicht mehr",
+  !("reserviertBis" in angelegt),
+  Object.keys(angelegt).filter((k) => /reserv/i.test(k)).join(", "),
+);
 
 /* ══ X3.2 · Mehrfach aufrufbar ═══════════════════════════════════ */
 console.log("\nX3.2 · Dieselbe Zahlung legt nicht zweimal an");

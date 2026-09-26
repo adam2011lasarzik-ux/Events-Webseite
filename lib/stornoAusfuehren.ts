@@ -210,12 +210,9 @@ async function vollziehen(
     data: {
       status: "STORNIERT",
       storniertAm: jetzt,
-      /* Aus der Platzzählung fällt die Buchung schon durch den
-         Status „STORNIERT" (lib/plaetze.ts → belegtFilter zählt nur
-         „BESTAETIGT"). Die Frist des Zahlungsversuchs wird trotzdem
-         gelöscht: Sonst stünde im Adminbereich weiter, dass eine
-         Zahlung läuft, obwohl storniert ist. */
-      reserviertBis: null,
+      /* Aus der Platzzählung fällt die Buchung durch den Status
+         „STORNIERT" (lib/plaetze.ts → belegtFilter zählt nur
+         „BESTAETIGT"). Dafür braucht es keinen zusätzlichen Code. */
       ...(erstattet ? { zahlungsStatus: "ERSTATTET" as const } : {}),
     },
   });

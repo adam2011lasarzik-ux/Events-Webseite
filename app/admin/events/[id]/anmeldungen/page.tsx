@@ -40,29 +40,20 @@ export default async function AnmeldungenSeite({
   //
   // Belegt sind ausschliesslich bestätigte, also bezahlte Anmeldungen
   // — dieselbe Regel wie auf der öffentlichen Seite (lib/plaetze.ts).
-  // Sonst stünden hier andere freie Plätze als dort.
   //
-  // Offene Zahlungsversuche zählen seit dem 24.09.2026 NICHT mit. Sie
-  // werden weiter angezeigt, weil der Veranstalter sehen soll, dass es
-  // sie gibt — aber als das, was sie sind: Versuche, keine Buchungen.
-  const jetzt = new Date();
-  const laeuftNoch = (a: { status: string; reserviertBis: Date | null }) =>
-    a.status === "RESERVIERT" && a.reserviertBis !== null && a.reserviertBis > jetzt;
-
+  // Seit Stufe 2 (26.09.2026) gibt es gar keine unbezahlte Anmeldung
+  // mehr: Sie entsteht erst mit der bestätigten Zahlung. Die frühere
+  // Unterscheidung zwischen „belegt" und „in offener Zahlung" ist
+  // damit entfallen, weil es nichts mehr zu unterscheiden gibt.
   const teilnehmer = anmeldungen
     .filter((a) => a.status === "BESTAETIGT")
     .reduce((s, a) => s + a.teilnehmer.length, 0);
-  const offenePersonen = anmeldungen
-    .filter((a) => a.status === "RESERVIERT")
-    .reduce((s, a) => s + a.teilnehmer.length, 0);
   const belegt = teilnehmer;
   const frei = event.maxPersonen === null ? null : Math.max(0, event.maxPersonen - belegt);
-  const ueberbucht = event.maxPersonen !== null && belegt > event.maxPersonen;
-  // Verbindlich ist, wer bezahlt hat oder wartet — ein offener Versuch
-  // nicht. Dieselbe Zählweise wie in lib/adminDaten.ts.
   const verbindlich = anmeldungen.filter(
     (a) => a.status === "BESTAETIGT" || a.status === "WARTELISTE",
   ).length;
+  const ueberbucht = event.maxPersonen !== null && belegt > event.maxPersonen;
 
   return (
     <AdminRahmen
@@ -70,10 +61,7 @@ export default async function AnmeldungenSeite({
       titel={`Anmeldungen — ${event.titel}`}
       unterzeile={
         `${verbindlich} Anmeldung${verbindlich === 1 ? "" : "en"} · ` +
-        `${teilnehmer} feste Teilnehmer` +
-        (offenePersonen > 0
-          ? ` · ${offenePersonen} in offener Zahlung (zählen nicht mit)`
-          : "") +
+        `${teilnehmer} Teilnehmer` +
         ` · ${belegt} von ${event.maxPersonen ?? "∞"} Plätzen belegt` +
         (frei === null ? "" : ` · ${frei} frei`)
       }
@@ -152,9 +140,7 @@ export default async function AnmeldungenSeite({
                       <StatusMarker
                         art="anmeldung"
                         wert={
-                          a.status === "RESERVIERT" && !laeuftNoch(a)
-                            ? "RESERVIERT_ABGELAUFEN"
-                            : a.status
+                          a.status
                         }
                       />{" "}
                       <StatusMarker art="zahlung" wert={a.zahlungsStatus} />
@@ -203,14 +189,6 @@ export default async function AnmeldungenSeite({
                         {a.kenntnisAufnahmen ? "ja" : "nein"}
                         <br />
                         Nummer: {a.id}
-                        {a.status === "RESERVIERT" && a.reserviertBis && (
-                          <>
-                            <br />
-                            {laeuftNoch(a)
-                              ? `Zahlung offen, Versuch läuft bis ${alsLesbar(a.reserviertBis)} — kein Platz belegt`
-                              : `Zahlungsversuch beendet am ${alsLesbar(a.reserviertBis)} — nicht bezahlt, kein Platz belegt`}
-                          </>
-                        )}
                         {a.zahlungsReferenz && (
                           <>
                             <br />

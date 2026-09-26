@@ -23,13 +23,28 @@ const pruefe = (name, ok, zusatz = "") => {
 
 const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium" });
 
+/**
+ * Ein Browserfenster mit EIGENER Absenderadresse.
+ *
+ * Die Bremse gegen Massen-Einsendungen zählt je IP-Adresse. Bis zum
+ * 26.09.2026 zählte sie in der Datenbank und liess sich vor jedem
+ * Durchlauf leeren; seitdem zählt sie im Arbeitsspeicher des Servers
+ * (Entscheidung: kein Datenbankeintrag vor der Zahlung) und ist von
+ * aussen nicht mehr zurückzusetzen. Also bekommt jedes Fenster eine
+ * eigene Adresse — dieselbe Lösung wie in den Listen ohne Browser.
+ * Der Bereich 198.18.0.0/15 ist für Messungen reserviert.
+ */
+let fensterZaehler = 0;
+const neuesFenster = (browser, viewport) =>
+  browser.newContext({
+    viewport,
+    extraHTTPHeaders: {
+      "x-forwarded-for": `198.18.${Math.floor(Math.random() * 256)}.${(fensterZaehler += 1) % 250 + 1}`,
+    },
+  });
+
 async function anmeldenImBrowser(page, email) {
-  /* Die Bremse gegen Massen-Einsendungen zählt je IP-Adresse. Der
-     Browser kann sich keine andere vortäuschen, deshalb wird der
-     Zähler vor jedem Durchlauf geleert. Die Bremse selbst ist in der
-     E-Prüfliste eigens geprüft. */
-  await db.anmeldeVersuch.deleteMany({});
-  await page.goto(`${BASIS}/events/padel-falkensee/anmeldung`, { waitUntil: "networkidle" });
+  await page.goto(`${BASIS}/events/padel-falkensee/anmeldung`, { waitUntil: "load" });
   await page.getByRole("radio", { name: /Ich bin Schüler/i }).check();
   await page.locator('input[name="person.0.vorname"]').fill("Test");
   await page.locator('input[name="person.0.nachname"]').fill("Person");
@@ -45,44 +60,59 @@ async function anmeldenImBrowser(page, email) {
   await page.waitForURL(/\/bezahlseite\//, { timeout: 20000 });
 }
 
-// ── Weg 1: abbrechen ───────────────────────────────────────────
+// ── Weg 1: abbrechen — es bleibt NICHTS zurück ────────────────
 {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const ctx = await neuesFenster(browser, { width: 390, height: 844 });
   const page = await ctx.newPage();
-  await anmeldenImBrowser(page, `abbruch-${Date.now()}@example.org`);
+  const email = `abbruch-${Date.now()}@example.org`;
+  await anmeldenImBrowser(page, email);
   pruefe("Nach dem Absenden landet man beim Anbieter",
     page.url().includes("/bezahlseite/"), page.url());
+  pruefe("… und in der Datenbank steht dabei NICHTS",
+    (await db.registration.count({ where: { kontaktEmail: email } })) === 0);
 
   await page.click("#abbrechen");
   await page.waitForURL(/\/anmeldung\/danke/, { timeout: 20000 });
-  await page.waitForLoadState("networkidle");
+  /* „load" statt „networkidle": Die Abschluss-Seite fragt beim
+     Anbieter nach und hält dabei eine Verbindung offen; „networkidle"
+     wartet dann bis zum Zeitablauf, obwohl die Seite längst da ist. */
+  await page.waitForLoadState("load");
   const text = await page.locator("body").innerText();
   pruefe("Abbrechen führt zurück zur Danke-Seite", page.url().includes("/anmeldung/danke"));
-  /* Seit Schritt K heißt der unbezahlte Zustand nicht mehr „Platz
-     reserviert", sondern klar „noch nicht abgeschlossen" — die
-     Reservierung ist seitdem reine Technik und keine Bestätigung. */
-  pruefe("Der Platz bleibt reserviert und es gibt einen zweiten Anlauf",
-    text.includes("noch nicht abgeschlossen") &&
-      (await page.getByRole("button", { name: "Bezahlen", exact: true }).count()) === 1);
-  pruefe("Der Betrag steht als offen da", text.includes("Noch offen"));
+  /* Bis zum 26.09.2026 stand hier „Der Platz bleibt reserviert und es
+     gibt einen zweiten Anlauf" — mit einem Knopf, der zur alten
+     Bezahlseite zurückführte. Beides ist fort: Es gibt keinen Platz,
+     der bliebe, und keinen Vorgang, den ein Knopf fortsetzen könnte.
+     Die Seite sagt jetzt, was wirklich geschehen ist. */
+  pruefe("Die Seite sagt, dass nichts gespeichert und nichts abgebucht wurde",
+    text.includes("nichts abgebucht") && text.includes("nicht gespeichert"),
+    text.split("\n").find((z) => z.includes("abgebucht")) ?? "—");
+  pruefe("… und bietet keinen Bezahlknopf mehr",
+    (await page.getByRole("button", { name: "Bezahlen", exact: true }).count()) === 0);
+  pruefe("… und behauptet nicht, die Anmeldung sei angekommen",
+    !text.includes("Danke — wir haben deine Anmeldung"));
+  pruefe("Und es ist immer noch nichts gespeichert",
+    (await db.registration.count({ where: { kontaktEmail: email } })) === 0);
   await page.screenshot({ path: `${AUS}/danke-abgebrochen-handy.png`, fullPage: true });
 
-  // Zweiter Anlauf über den Knopf
-  await page.getByRole("button", { name: "Bezahlen", exact: true }).click();
-  await page.waitForURL(/\/bezahlseite\//, { timeout: 20000 });
-  pruefe("Der Knopf „Bezahlen“ führt wieder zum Anbieter",
-    page.url().includes("/bezahlseite/"), page.url());
+  // Der Weg zurück führt über das Formular, nicht über einen Knopf.
+  const zurueck = await page.getByRole("link", { name: /Zurück zu den Veranstaltungen/i }).count();
+  pruefe("Es gibt einen Weg zurück zu den Veranstaltungen", zurueck >= 1, `${zurueck} Links`);
   await ctx.close();
 }
 
-// ── Weg 2: bezahlen ────────────────────────────────────────────
+// ── Weg 2: bezahlen ───────────────────────────────────────────
 {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const ctx = await neuesFenster(browser, { width: 390, height: 844 });
   const page = await ctx.newPage();
-  await anmeldenImBrowser(page, `bezahlt-${Date.now()}@example.org`);
+  const email = `bezahlt-${Date.now()}@example.org`;
+  await anmeldenImBrowser(page, email);
   await page.click("#bezahlen");
   await page.waitForURL(/\/anmeldung\/danke/, { timeout: 20000 });
-  await page.waitForLoadState("networkidle");
+  /* „load" statt „networkidle": Die Abschluss-Seite fragt beim
+     Anbieter nach und hält dabei eine Verbindung offen; „networkidle"
+     wartet dann bis zum Zeitablauf, obwohl die Seite längst da ist. */
+  await page.waitForLoadState("load");
   const text = await page.locator("body").innerText();
   pruefe("Nach dem Bezahlen landet man auf der Danke-Seite",
     page.url().includes("/anmeldung/danke"), page.url());
@@ -91,28 +121,46 @@ async function anmeldenImBrowser(page, email) {
     text.split("\n").find((z) => z.includes("Bezahlt")) ?? "—");
   pruefe("Kein Bezahlknopf mehr",
     (await page.getByRole("button", { name: "Bezahlen", exact: true }).count()) === 0);
+  /* Der eigentliche Beweis: Erst jetzt gibt es die Anmeldung. Die
+     Abschluss-Seite hat sie selbst angelegt — sie fragt beim Anbieter
+     nach und ist damit schneller als dessen Rückmeldung. */
+  const angelegt = await db.registration.findFirst({
+    where: { kontaktEmail: email }, include: { teilnehmer: true },
+  });
+  pruefe("Erst jetzt steht die Anmeldung in der Datenbank",
+    angelegt !== null && angelegt.status === "BESTAETIGT" && angelegt.zahlungsStatus === "BEZAHLT",
+    `${angelegt?.status} / ${angelegt?.zahlungsStatus}`);
+  pruefe("… mit dem angemeldeten Teilnehmer", angelegt?.teilnehmer.length === 1);
   await page.screenshot({ path: `${AUS}/danke-bezahlt-handy.png`, fullPage: true });
   await ctx.close();
 }
 
 // ── Weg 3: gefälschte Rückkehr ─────────────────────────────────
 {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const ctx = await neuesFenster(browser, { width: 390, height: 844 });
   const page = await ctx.newPage();
   const email = `faelschung-${Date.now()}@example.org`;
   await anmeldenImBrowser(page, email);
   const sitzungId = new URL(page.url()).pathname.split("/").pop();
-  // Die Rückkehr von Hand in die Adresszeile schreiben, ohne zu
-  // bezahlen — genau das, was jemand tun würde, der sich den Platz
-  // erschleichen will.
-  const sitzungen = await (await fetch("http://127.0.0.1:4242/steuerung/sitzungen")).json();
-  const meine = sitzungen.find((s) => s.id === sitzungId);
-  await page.goto(`${BASIS}/anmeldung/danke?nr=${meine.metadata.anmeldungId}&zahlung=zurueck`,
-    { waitUntil: "networkidle" });
+
+  /* Die Rückkehr von Hand in die Adresszeile schreiben, OHNE zu
+     bezahlen — genau das, was jemand tun würde, der sich den Platz
+     erschleichen will. Die Seite fragt selbst beim Anbieter nach;
+     dem Browser glaubt sie nichts. */
+  await page.goto(`${BASIS}/anmeldung/danke?sitzung=${sitzungId}&zahlung=zurueck`,
+    { waitUntil: "load" });
   const text = await page.locator("body").innerText();
   pruefe("Eine selbst getippte Rückkehr macht NICHT bezahlt",
-    !text.includes("fest gebucht") &&
-      (await page.getByRole("button", { name: "Bezahlen", exact: true }).count()) === 1);
+    !text.includes("fest gebucht"),
+    text.split("\n").find((z) => z.includes("gebucht")) ?? "—");
+  pruefe("… und legt vor allem KEINE Anmeldung an",
+    (await db.registration.count({ where: { kontaktEmail: email } })) === 0);
+
+  // Und auch eine frei erfundene Sitzungskennung ändert daran nichts.
+  await page.goto(`${BASIS}/anmeldung/danke?sitzung=cs_test_frei_erfunden&zahlung=zurueck`,
+    { waitUntil: "load" });
+  pruefe("Eine erfundene Sitzungskennung führt zu keiner Anmeldung",
+    (await db.registration.count({ where: { zahlungsReferenz: "cs_test_frei_erfunden" } })) === 0);
   await ctx.close();
 }
 
@@ -122,12 +170,15 @@ for (const g of [
   { name: "ipad", width: 820, height: 1180 },
   { name: "desktop", width: 1440, height: 900 },
 ]) {
-  const ctx = await browser.newContext({ viewport: { width: g.width, height: g.height } });
+  const ctx = await neuesFenster(browser, { width: g.width, height: g.height });
   const page = await ctx.newPage();
   await anmeldenImBrowser(page, `bild-${g.name}-${Date.now()}@example.org`);
   await page.click("#abbrechen");
   await page.waitForURL(/\/anmeldung\/danke/, { timeout: 20000 });
-  await page.waitForLoadState("networkidle");
+  /* „load" statt „networkidle": Die Abschluss-Seite fragt beim
+     Anbieter nach und hält dabei eine Verbindung offen; „networkidle"
+     wartet dann bis zum Zeitablauf, obwohl die Seite längst da ist. */
+  await page.waitForLoadState("load");
   const breiter = await page.evaluate(() => { window.scrollTo(9999, 0); return window.scrollX; });
   pruefe(`Danke-Seite ${g.name}: schiebt sich nicht seitwärts`, breiter === 0);
   await page.screenshot({ path: `${AUS}/danke-${g.name}.png`, fullPage: true });

@@ -228,10 +228,14 @@ enum Buchungsart {
   FAMILIE
 }
 
+/// Der Zustand einer Anmeldung.
+///
+/// `RESERVIERT` ist am 26.09.2026 ersatzlos entfallen. Seitdem
+/// entsteht eine Anmeldung erst mit der bestätigten Zahlung — eine
+/// unbezahlte gibt es nicht mehr, also auch keinen Zustand dafür.
+/// Vorhandene Zeilen hat die Migration auf `STORNIERT` gesetzt; sie
+/// waren allesamt abgebrochene Bezahlvorgänge.
 enum AnmeldeStatus {
-  /// Angemeldet, Zahlung läuft. Der Platz ist bis `reserviertBis`
-  /// gehalten und zählt bis dahin als belegt.
-  RESERVIERT
   BESTAETIGT
   WARTELISTE
   STORNIERT
@@ -337,16 +341,6 @@ model Registration {
   zahlungsAbsicht      String?
   bezahlterBetragCents Int?
   bezahltAm            DateTime?
-
-  /// Bis wann der Platz gehalten wird, solange die Zahlung läuft.
-  /// null = keine laufende Reservierung.
-  ///
-  /// Läuft die Zeit ab, wird NICHTS gelöscht — die Anmeldung zählt
-  /// einfach nicht mehr als belegter Platz (siehe belegtFilter() in
-  /// lib/plaetze.ts). Dadurch braucht es keinen Aufräumlauf im
-  /// Hintergrund, auf den man sich auf geteiltem Hosting ohnehin
-  /// nicht verlassen könnte.
-  reserviertBis DateTime?
 
   /// Schlüssel für die Selbstbedienungs-Stornierung.
   ///

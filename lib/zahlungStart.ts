@@ -1,18 +1,30 @@
 /* ---------------------------------------------------------------
-   Eine Bezahlung für eine bestehende Anmeldung starten.
+   Eine Bezahlseite für eine noch NICHT gespeicherte Anmeldung
+   erzeugen.
 
-   Diese Datei sitzt bewusst zwischen der Anmelde-Aktion und der
-   Danke-Seite: Beide brauchen denselben Ablauf. Zwei Fassungen liefen
-   früher oder später auseinander — und zwar unbemerkt, weil der eine
-   Weg seltener benutzt wird als der andere.
+   Seit dem Umbau vom 25.09.2026 gibt es hier keine Anmeldenummer
+   mehr: Zwischen dem Absenden des Formulars und der bestätigten
+   Zahlung steht in der VERA-Datenbank nichts. Die Anmeldedaten reisen
+   verschlüsselt in der `metadata` der Bezahlseite mit
+   (lib/anmeldeNutzlast.ts) und kommen mit der Zahlung zurück.
 
-   Drei Dinge passieren hier, bevor irgendetwas beim Anbieter angelegt
-   wird:
+   Was diese Datei vorher prüft — und was diese Prüfungen wert sind:
 
-     1. Darf für diese Anmeldung überhaupt bezahlt werden?
-     2. Sind für die GANZE Gruppe noch genug Plätze frei?
-     3. Gibt es schon eine offene Bezahlseite, die man weiterbenutzen
-        kann?
+     1. Steht der Termin (noch) fest?
+     2. Gibt es für diese Adresse schon eine Buchung?
+     3. Reichen die Plätze?
+
+   Alle drei sind MOMENTAUFNAHMEN, keine Zusagen. Es wird kein Platz
+   gehalten; zwischen dieser Prüfung und dem Eingang der Zahlung kann
+   jemand anders bezahlen. Verbindlich entschieden wird erst in
+   lib/anmeldungAnlegen.ts, wenn das Geld da ist.
+
+   Sie bleiben trotzdem stehen, und zwar aus einem einzigen Grund:
+   Wer auf eine Bezahlseite geschickt wird, obwohl die Veranstaltung
+   schon jetzt sichtbar voll ist, bezahlt für nichts und bekommt das
+   Geld hinterher zurück. Das ist die unangenehmste Erfahrung, die
+   dieser Ablauf zu bieten hat — und die meisten Fälle davon fängt
+   eine schlichte Abfrage hier ab.
 
    Der Betrag kommt IMMER aus der Datenbank. Ein aus dem Browser
    mitgeschickter Betrag wird an keiner Stelle gelesen.
@@ -20,148 +32,92 @@
 
 import { terminSteht } from "@/lib/termin";
 import { db } from "@/lib/db";
-import { belegtFilter, reserviertBis } from "@/lib/plaetze";
-import { darfZahlen, plaetzeReichen, betragPasst, type ZahlungAbgelehnt } from "@/lib/zahlungRegeln";
-import {
-  sitzungErstellen,
-  sitzungPruefen,
-  sitzungSchliessen,
-  ZahlungNichtEingerichtet,
-} from "@/lib/zahlung";
+import { belegtFilter } from "@/lib/plaetze";
+import { plaetzeReichen } from "@/lib/zahlungRegeln";
+import { verschluesseln, type Nutzlast } from "@/lib/anmeldeNutzlast";
+import { schluesselbund, SchluesselFehlt } from "@/lib/anmeldeSchluessel";
+import { sitzungErstellen, ZahlungNichtEingerichtet } from "@/lib/zahlung";
 
-export type StartFehler = ZahlungAbgelehnt | "nicht-eingerichtet" | "anbieter";
+export type StartFehler =
+  | "kein-termin"
+  | "keine-plaetze"
+  | "doppelt"
+  | "nicht-eingerichtet"
+  | "anbieter";
 
 export type StartErgebnis =
   | { url: string }
   /** `frei` ist nur bei „keine-plaetze" gesetzt. */
   | { fehler: StartFehler; frei?: number };
 
-export async function bezahlseiteFuer(
-  anmeldungId: string,
-  jetzt: Date = new Date(),
+/**
+ * Aus einer geprüften Anmeldung eine Bezahlseite machen.
+ *
+ * Erwartet eine Nutzlast OHNE Zeitstempel — den setzt das
+ * Verschlüsseln selbst, damit niemand eine unbegrenzt haltbare Marke
+ * erzeugen kann.
+ */
+export async function bezahlseiteFuerNutzlast(
+  nutzlast: Omit<Nutzlast, "erstelltMs">,
+  eventTitel: string,
 ): Promise<StartErgebnis> {
-  if (!anmeldungId) return { fehler: "unbekannt" };
-
-  const anmeldung = await db.registration.findUnique({
-    where: { id: anmeldungId },
-    include: {
-      event: { select: { id: true, titel: true, maxPersonen: true, startAt: true } },
-      teilnehmer: { select: { id: true } },
-    },
+  const event = await db.event.findUnique({
+    where: { id: nutzlast.eventId },
+    select: { id: true, maxPersonen: true, startAt: true },
   });
+  if (!event) return { fehler: "kein-termin" };
 
-  const abgelehnt = darfZahlen(anmeldung);
-  if (abgelehnt) return { fehler: abgelehnt };
-  if (!anmeldung) return { fehler: "unbekannt" }; // für den Typ; darfZahlen hat das schon
+  /* Dieselbe Regel wie beim Absenden (Entscheidung 2.5). Sie wird
+     hier erneut geprüft, weil zwischen dem Aufbau des Formulars und
+     dem Absenden Zeit vergeht: Wird der Termin im Adminbereich
+     entfernt, darf für diese Veranstaltung kein Geld mehr fließen. */
+  if (!terminSteht(event)) return { fehler: "kein-termin" };
 
-  /* ── Steht der Termin (noch) fest? ───────────────────────────
-     Dieselbe Regel wie beim Anlegen der Anmeldung (Entscheidung 2.5).
-     Sie wird hier erneut geprüft, weil zwischen Anmeldung und Zahlung
-     Zeit vergeht: Wird der Termin im Adminbereich entfernt, darf für
-     diese Veranstaltung kein Geld mehr fließen. */
-  if (!terminSteht(anmeldung.event)) return { fehler: "kein-termin" };
-
-  const personen = anmeldung.teilnehmer.length;
-
-  /* ── Reichen die Plätze noch? ────────────────────────────────
-     Auch beim zweiten Anlauf. Zwischen dem ersten Versuch und jetzt
-     können andere bezahlt haben — und für einen Platz zu bezahlen,
-     den es nicht mehr gibt, ist der unangenehmste Fehler von allen.
-
-     Seit dem 24.09.2026 ist das eine Momentaufnahme und keine Zusage:
-     Weil während der Zahlung kein Platz gehalten wird, kann auch
-     zwischen dieser Prüfung und dem Klick auf „Bezahlen" jemand
-     anders bezahlen. Die Prüfung bleibt trotzdem — sie fängt den
-     häufigen Fall ab, dass längst ausgebucht ist.
-
-     Die eigene Anmeldung wird ausgenommen: Sie wird bezahlt, nicht
-     zusätzlich gebucht. */
-  const belegte = await db.registration.findMany({
+  /* Je Veranstaltung und Adresse genau eine Anmeldung. Verbindlich
+     entschieden wird das erst beim Zahlungseingang — dort greift der
+     eindeutige Index. Hier abzufangen erspart dem häufigen Fall eine
+     Zahlung samt Erstattung. */
+  const vorhanden = await db.registration.findUnique({
     where: {
-      eventId: anmeldung.event.id,
-      ...belegtFilter(),
-      id: { not: anmeldung.id },
+      eventId_kontaktEmail: { eventId: event.id, kontaktEmail: nutzlast.kontaktEmail },
     },
-    select: { _count: { select: { teilnehmer: true } } },
+    select: { status: true },
   });
-  const belegtOhneDiese = belegte.reduce((s, a) => s + a._count.teilnehmer, 0);
+  if (vorhanden && vorhanden.status !== "STORNIERT") return { fehler: "doppelt" };
 
-  const platz = plaetzeReichen(anmeldung.event.maxPersonen, belegtOhneDiese, personen);
-  if (!platz.reicht) return { fehler: "keine-plaetze", frei: platz.frei };
+  const personen = nutzlast.teilnehmer.length;
+  if (event.maxPersonen !== null) {
+    const belegte = await db.registration.findMany({
+      where: { eventId: event.id, ...belegtFilter() },
+      select: { _count: { select: { teilnehmer: true } } },
+    });
+    const belegt = belegte.reduce((s, a) => s + a._count.teilnehmer, 0);
+    const platz = plaetzeReichen(event.maxPersonen, belegt, personen);
+    if (!platz.reicht) return { fehler: "keine-plaetze", frei: platz.frei };
+  }
 
   try {
-    /* ── Gibt es schon eine offene Bezahlseite? ────────────────
-       Wer zweimal tippt, soll nicht zwei bezahlbare Vorgänge
-       bekommen. Eine noch offene Seite mit demselben Betrag wird
-       einfach weiterbenutzt — der Kunde muss auch nichts neu
-       eingeben. */
-    if (anmeldung.zahlungsReferenz) {
-      const stand = await sitzungPruefen(anmeldung.zahlungsReferenz).catch(() => null);
-
-      /* Bereits bezahlt — aber NUR, wenn auch der Betrag stimmt.
-
-         Ohne die zweite Bedingung würde eine Sitzung, bei der der
-         Anbieter einen anderen Betrag meldet, als „bezahlt" gelten,
-         obwohl die Rückmeldung sie aus genau diesem Grund abgelehnt
-         hat. Die Person käme dann nie wieder zu einer Bezahlseite.
-         Beide Stellen müssen dieselbe Regel anwenden. */
-      if (stand?.bezahlt && betragPasst(stand.betragCents, anmeldung.gesamtpreisCents)) {
-        // Die Rückmeldung war nur noch nicht da. Der Abgleich passiert
-        // auf der Danke-Seite; hier reicht die ehrliche Antwort.
-        return { fehler: "bereits-bezahlt" };
-      }
-
-      if (stand?.lage === "open" && stand.url && betragPasst(stand.betragCents, anmeldung.gesamtpreisCents)) {
-        // Frist des Versuchs auffrischen, aber KEINE zweite Sitzung.
-        await db.registration.update({
-          where: { id: anmeldung.id },
-          data:
-            anmeldung.status === "BESTAETIGT"
-              ? {}
-              : { status: "RESERVIERT", reserviertBis: reserviertBis(jetzt) },
-        });
-        return { url: stand.url };
-      }
-
-      /* Sonst entsteht gleich eine neue — die alte muss vorher
-         geschlossen werden, sonst bliebe sie über den Link im
-         Verlauf weiterhin bezahlbar. Das ist der eigentliche Schutz
-         vor einer doppelten Abbuchung. */
-      if (stand?.lage === "open") await sitzungSchliessen(anmeldung.zahlungsReferenz);
-    }
+    const marke = verschluesseln(nutzlast, schluesselbund());
 
     const sitzung = await sitzungErstellen({
-      anmeldungId: anmeldung.id,
-      email: anmeldung.kontaktEmail,
-      eventTitel: anmeldung.event.titel,
+      email: nutzlast.kontaktEmail,
+      eventId: nutzlast.eventId,
+      eventTitel,
       personen,
-      gesamtCents: anmeldung.gesamtpreisCents,
-    });
-
-    /* Erst NACH der erfolgreichen Antwort speichern: Sonst stünde eine
-       Sitzungskennung in der Datenbank, die es beim Anbieter gar nicht
-       gibt.
-
-       Die Frist des Zahlungsversuchs wird dabei aufgefrischt. Wer
-       einen zweiten Anlauf nimmt, soll nicht sofort wieder „nicht
-       abgeschlossen" lesen. Ein Platz hängt daran seit dem 24.09.2026
-       nicht mehr (lib/plaetze.ts). Eine bereits bestätigte Anmeldung
-       behält ihren Status — sie hat ihren Platz sicher. */
-    await db.registration.update({
-      where: { id: anmeldung.id },
-      data: {
-        zahlungsReferenz: sitzung.id,
-        zahlungsWeg: "ONLINE",
-        ...(anmeldung.status === "BESTAETIGT"
-          ? {}
-          : { status: "RESERVIERT" as const, reserviertBis: reserviertBis(jetzt) }),
-      },
+      gesamtCents: nutzlast.gesamtpreisCents,
+      marke,
     });
 
     return { url: sitzung.url };
   } catch (e) {
-    // Besuchern niemals interne Einzelheiten zeigen — aber im
-    // Serverprotokoll festhalten, sonst sucht man später blind.
+    if (e instanceof SchluesselFehlt) {
+      /* Ohne Schlüssel kann keine Anmeldung mehr zustande kommen.
+         Das ist ein Betriebsfehler, kein Kundenfehler — deshalb laut
+         ins Protokoll und für den Besucher dieselbe Antwort wie bei
+         einer fehlenden Zahlungseinrichtung. */
+      console.error("ANMELDUNG_SCHLUESSEL fehlt oder ist unbrauchbar:", e.message);
+      return { fehler: "nicht-eingerichtet" };
+    }
     if (e instanceof ZahlungNichtEingerichtet) {
       console.error("Zahlung nicht eingerichtet:", e.grund);
       return { fehler: "nicht-eingerichtet" };

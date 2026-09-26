@@ -13,19 +13,29 @@
    Bei Karten konnte das nie auffallen: die bestätigen sofort, eine
    späte Meldung gibt es dort nicht. Genau deshalb steht der Fall hier.
 
+   ── Was Stufe 2 daran geändert hat ──────────────────────────────
+
+   Der Schutz sitzt seit dem 26.09.2026 an einer anderen Stelle, und
+   an einer besseren: Die Bezahlseite („cs_…") steht mit einem
+   eindeutigen Index an der Anmeldung. Trifft eine zweite Meldung zu
+   derselben Bezahlseite ein, findet `anmeldungAusZahlung` die Zeile
+   und meldet „schon da" — ganz gleich, in welchem Zustand sie ist.
+   Es braucht keine Aufzählung erlaubter Zustände mehr, die man
+   vergessen könnte; es ist eine Eigenschaft der Datenbank.
+
+   Ein Teil dieser Liste ist dadurch entfallen: „storniert, aber nie
+   bezahlt". Diesen Zustand kann der Zahlweg nicht mehr erzeugen —
+   eine unbezahlte Anmeldung gibt es nicht.
+
    Voraussetzungen: Datenbank, Attrappe auf 4242, Server auf 3213. */
 /* Riegel vor der echten Datenbank — siehe pruefung/schutz.mjs. */
 import "../schutz.mjs";
 
-import Stripe from "stripe";
 import { absenden, personen, BASIS } from "../K/senden.mjs";
+import * as zw from "../zahlweg.mjs";
 import { db } from "../../lib/db.js";
 import { belegtFilter } from "../../lib/plaetze.js";
-import { bezahlseiteFuer } from "../../lib/zahlungStart.js";
 import { stornoDurchAdmin } from "../../lib/stornoAusfuehren.js";
-
-const GEHEIMNIS = "whsec_pruefgeheimnis_nur_lokal";
-const stripe = new Stripe("sk_test_pruefung_ohne_echtes_konto");
 
 let n = 0; const schief = [];
 const pruefe = (name, ok, zusatz = "") => {
@@ -36,85 +46,68 @@ const pruefe = (name, ok, zusatz = "") => {
 let ip = 20;
 const neueIp = () => `203.0.113.${(ip = (ip % 200) + 1)}`;
 
-async function rueckmeldung(ereignis) {
-  const rohtext = JSON.stringify(ereignis);
-  const kopf = stripe.webhooks.generateTestHeaderString({ payload: rohtext, secret: GEHEIMNIS });
-  const antwort = await fetch(`${BASIS}/zahlung/rueckmeldung`, {
-    method: "POST",
-    body: rohtext,
-    headers: { "content-type": "application/json", "stripe-signature": kopf },
-  });
-  return { status: antwort.status, text: await antwort.text() };
-}
-
-/** Eine geglückte Zahlungsmeldung — wahlweise die sofortige oder die
-    verzögerte Fassung. Beide laufen in dieselbe Funktion. */
-const bezahltEreignis = (id, art, s) => ({
-  id, object: "event", type: art,
-  data: { object: { id: s.sitzung, object: "checkout.session",
-    metadata: { anmeldungId: s.anmeldungId }, client_reference_id: s.anmeldungId,
-    payment_status: "paid", status: "complete",
-    amount_total: s.betrag, payment_intent: s.zahlung } },
-});
+const rueckmeldung = (sitzung, art, kennung) => zw.rueckmeldung(BASIS, sitzung, art, kennung);
 
 const belegte = async (eventId) => {
   const treffer = await db.registration.findMany({
-    where: { eventId, ...belegtFilter(new Date()) },
+    where: { eventId, ...belegtFilter() },
     include: { teilnehmer: true },
   });
   return treffer.reduce((s, a) => s + a.teilnehmer.length, 0);
 };
 
-// ── Aufräumen und anmelden ──────────────────────────────────────
-await db.participant.deleteMany({});
-await db.registration.deleteMany({});
-await db.anmeldeVersuch.deleteMany({});
-await db.zahlungsEreignis.deleteMany({});
-
-const event = await db.event.findFirstOrThrow({ where: { slug: "padel-falkensee" } });
-
-await absenden(
-  { eventSlug: "padel-falkensee", weg: "selbst", selbstAls: "adult", webseite: "",
-    ...personen([
-      { vorname: "Nina", nachname: "Spaet", email: "nina.spaet@example.org", telefon: "030222" },
-    ]) },
-  neueIp(),
-);
-const roh = await db.registration.findFirstOrThrow({
-  where: { kontaktEmail: "nina.spaet@example.org" },
+const EMAIL = "nina.spaet@example.org";
+const formular = () => ({
+  eventSlug: "padel-falkensee", weg: "selbst", selbstAls: "adult", webseite: "",
+  ...personen([{ vorname: "Nina", nachname: "Spaet", email: EMAIL, telefon: "030222" }]),
 });
 
-/* ═══ Teil 1: der gewöhnliche Weg muss weiter funktionieren ═══════
-   Der neue Wachposten darf die geglückte Zahlung nicht aussperren. */
-const gut = await rueckmeldung(bezahltEreignis("evt_m_spaet_1", "checkout.session.completed",
-  { sitzung: roh.zahlungsReferenz, anmeldungId: roh.id, betrag: roh.gesamtpreisCents,
-    zahlung: "pi_spaet_pruefung" }));
-const bezahlt = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
-pruefe("Eine offene Reservierung wird weiterhin ganz normal bestätigt",
-  gut.status === 200 && bezahlt.status === "BESTAETIGT" && bezahlt.zahlungsStatus === "BEZAHLT",
+/** Absenden, beim Anbieter bezahlen, Rückmeldung — Sitzung zurück. */
+async function durchbezahlen() {
+  const antwort = await absenden(formular(), neueIp());
+  const sitzungId = zw.sitzungAusZiel(antwort.ziel);
+  if (!sitzungId) throw new Error(`keine Bezahlseite: ${antwort.text?.slice(0, 120)}`);
+  const sitzung = await zw.bezahlen(sitzungId);
+  await rueckmeldung(sitzung);
+  return sitzung;
+}
+
+async function aufraeumen() {
+  await db.participant.deleteMany({});
+  await db.registration.deleteMany({});
+  await db.anmeldeVersuch.deleteMany({});
+  await db.zahlungsEreignis.deleteMany({});
+  await db.fehlbuchung.deleteMany({});
+}
+
+await aufraeumen();
+const event = await db.event.findFirstOrThrow({ where: { slug: "padel-falkensee" } });
+
+/* ═══ Teil 1: der gewöhnliche Weg muss weiter funktionieren ═══════ */
+const ersteSitzung = await durchbezahlen();
+const bezahlt = await db.registration.findFirstOrThrow({ where: { kontaktEmail: EMAIL } });
+pruefe("Die bezahlte Zahlung legt die Anmeldung an und bestätigt sie",
+  bezahlt.status === "BESTAETIGT" && bezahlt.zahlungsStatus === "BEZAHLT",
   `${bezahlt.status} / ${bezahlt.zahlungsStatus}`);
-pruefe("… und die Zahlungskennung wird festgehalten",
-  bezahlt.zahlungsAbsicht === "pi_spaet_pruefung", bezahlt.zahlungsAbsicht ?? "keine");
+pruefe("… die Bezahlseite wird als Kennung festgehalten",
+  bezahlt.zahlungsReferenz === ersteSitzung.id, bezahlt.zahlungsReferenz ?? "keine");
+pruefe("… und die Zahlungskennung ebenfalls",
+  Boolean(bezahlt.zahlungsAbsicht), bezahlt.zahlungsAbsicht ?? "keine");
 
 /* ═══ Teil 2: der eigentliche Fall ════════════════════════════════
    Storniert und erstattet — den Zustand stellen wir unmittelbar her.
    Wie er entsteht, prüfen die Storno-Listen; hier geht es allein um
    die Frage, was eine Nachmeldung damit anstellt. */
 await db.registration.update({
-  where: { id: roh.id },
-  data: {
-    status: "STORNIERT", zahlungsStatus: "ERSTATTET",
-    storniertAm: new Date(), reserviertBis: null,
-  },
+  where: { id: bezahlt.id },
+  data: { status: "STORNIERT", zahlungsStatus: "ERSTATTET", storniertAm: new Date() },
 });
 pruefe("Vorbedingung: die Buchung ist storniert und erstattet, der Platz frei",
   (await belegte(event.id)) === 0, `${await belegte(event.id)} belegt`);
 
-const spaet = await rueckmeldung(bezahltEreignis(
-  "evt_m_spaet_2", "checkout.session.async_payment_succeeded",
-  { sitzung: roh.zahlungsReferenz, anmeldungId: roh.id, betrag: roh.gesamtpreisCents,
-    zahlung: "pi_spaet_pruefung" }));
-const danach = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
+const spaet = await rueckmeldung(
+  ersteSitzung, "checkout.session.async_payment_succeeded", "evt_m_spaet_2");
+const danach = await db.registration.findUniqueOrThrow({ where: { id: bezahlt.id } });
 
 pruefe("Die späte Meldung wird angenommen (kein endloses Wiederholen)",
   spaet.status === 200, `Antwort ${spaet.status}`);
@@ -124,225 +117,111 @@ pruefe("Die Erstattung bleibt bestehen", danach.zahlungsStatus === "ERSTATTET",
 pruefe("Der Storno-Zeitpunkt bleibt stehen", danach.storniertAm !== null);
 pruefe("… und der Platz bleibt frei", (await belegte(event.id)) === 0,
   `${await belegte(event.id)} belegt`);
+pruefe("… und es entsteht KEINE zweite Anmeldung",
+  (await db.registration.count({ where: { kontaktEmail: EMAIL } })) === 1);
 
 /* Auch die sofortige Fassung derselben Meldung darf es nicht. */
-const spaet2 = await rueckmeldung(bezahltEreignis(
-  "evt_m_spaet_3", "checkout.session.completed",
-  { sitzung: roh.zahlungsReferenz, anmeldungId: roh.id, betrag: roh.gesamtpreisCents,
-    zahlung: "pi_spaet_pruefung" }));
-const danach2 = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
+const spaet2 = await rueckmeldung(ersteSitzung, "checkout.session.completed", "evt_m_spaet_3");
+const danach2 = await db.registration.findUniqueOrThrow({ where: { id: bezahlt.id } });
 pruefe("Dasselbe gilt für die sofortige Fassung der Meldung",
   spaet2.status === 200 && danach2.status === "STORNIERT" && danach2.zahlungsStatus === "ERSTATTET",
   `${danach2.status} / ${danach2.zahlungsStatus}`);
 
-/* ═══ Teil 3: storniert, aber NIE bezahlt ═════════════════════════
-   Wer storniert, solange die Zahlung noch läuft, bekommt keine
-   Erstattung — es ist ja noch kein Geld da. Trifft das Geld danach
-   doch ein, darf die Buchung trotzdem nicht auferstehen. Die
-   Zahlungskennungen müssen aber festgehalten werden, sonst liesse
-   sich eine später von Hand ausgelöste Erstattung dieser Buchung
-   nicht mehr zuordnen. */
-await db.registration.update({
-  where: { id: roh.id },
-  data: {
-    status: "STORNIERT", zahlungsStatus: "OFFEN",
-    zahlungsAbsicht: null, bezahlterBetragCents: null, bezahltAm: null,
-  },
-});
-await rueckmeldung(bezahltEreignis("evt_m_spaet_4", "checkout.session.async_payment_succeeded",
-  { sitzung: roh.zahlungsReferenz, anmeldungId: roh.id, betrag: roh.gesamtpreisCents,
-    zahlung: "pi_spaet_nachzuegler" }));
-const nachzuegler = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
-
-pruefe("Eine stornierte, unbezahlte Buchung wird durch spätes Geld NICHT bestätigt",
-  nachzuegler.status === "STORNIERT" && nachzuegler.zahlungsStatus === "OFFEN",
-  `${nachzuegler.status} / ${nachzuegler.zahlungsStatus}`);
-pruefe("… die Zahlungskennung wird aber festgehalten (sonst wäre eine Erstattung nicht zuzuordnen)",
-  nachzuegler.zahlungsAbsicht === "pi_spaet_nachzuegler", nachzuegler.zahlungsAbsicht ?? "keine");
-pruefe("… ebenso der eingegangene Betrag",
-  nachzuegler.bezahlterBetragCents === roh.gesamtpreisCents,
-  String(nachzuegler.bezahlterBetragCents));
-pruefe("… und der Platz bleibt frei", (await belegte(event.id)) === 0,
-  `${await belegte(event.id)} belegt`);
-
-/* ═══ Teil 4: nach Storno und Erstattung erneut anmelden ═════════
+/* ═══ Teil 3: nach Storno und Erstattung erneut anmelden ═════════
    Genau der Weg, den ein Kunde nimmt, der es sich anders überlegt:
-   storniert, Geld zurück, und zwei Wochen später bucht er doch. Der
-   Duplikatsschutz reaktiviert dabei DIESELBE Zeile, statt eine zweite
-   anzulegen. Die Spuren der alten, erstatteten Zahlung müssen dabei
-   verschwinden — sonst verbucht die Rückmeldung die neue Zahlung
-   nicht, und der Kunde hätte bezahlt, ohne bestätigt zu sein. */
+   storniert, Geld zurück, und zwei Wochen später bucht er doch. Weil
+   es je Veranstaltung und Adresse nur eine Zeile geben kann, wird
+   DIESELBE wiederverwendet. Die Spuren der alten, erstatteten Zahlung
+   müssen dabei verschwinden — sonst stünde an einer bezahlten Buchung
+   die Kennung einer längst erstatteten Zahlung, und eine spätere
+   Erstattung träfe die falsche. */
+const zweiteSitzung = await durchbezahlen();
+const erneut = await db.registration.findFirstOrThrow({ where: { kontaktEmail: EMAIL } });
+
+pruefe("Die erneute Anmeldung verwendet dieselbe Zeile",
+  erneut.id === bezahlt.id &&
+    (await db.registration.count({ where: { kontaktEmail: EMAIL } })) === 1);
+pruefe("… sie ist bestätigt und bezahlt",
+  erneut.status === "BESTAETIGT" && erneut.zahlungsStatus === "BEZAHLT",
+  `${erneut.status} / ${erneut.zahlungsStatus}`);
+pruefe("… der Storno-Zeitpunkt ist gelöscht und die Reaktivierung vermerkt",
+  erneut.storniertAm === null && erneut.reaktiviertAm !== null);
+pruefe("… mit der NEUEN Bezahlseite, nicht der alten",
+  erneut.zahlungsReferenz === zweiteSitzung.id && zweiteSitzung.id !== ersteSitzung.id,
+  `${ersteSitzung.id} → ${erneut.zahlungsReferenz}`);
+pruefe("… und der Platz ist wieder belegt", (await belegte(event.id)) === 1);
+
+/* Und die alte Meldung darf auch jetzt nichts mehr bewirken. */
+const ganzSpaet = await rueckmeldung(
+  ersteSitzung, "checkout.session.async_payment_succeeded", "evt_m_spaet_4");
+pruefe("Eine Nachmeldung zur ALTEN Bezahlseite ändert nichts mehr",
+  ganzSpaet.status === 200 &&
+    (await db.registration.count({ where: { kontaktEmail: EMAIL } })) === 1 &&
+    (await belegte(event.id)) === 1);
+
+/* ═══ Teil 4: die Abschluss-Seite als zweite Tür ══════════════════
+   Sie fragt beim Anbieter nach und darf selbst anlegen. Sie ist OHNE
+   Anmeldung erreichbar — wer nach seiner Stornierung den alten Link
+   noch einmal öffnet (Mail, Verlauf, Lesezeichen), hätte seine
+   erstattete Buchung sonst mit einem blossen Seitenaufruf
+   zurückgeholt.
+
+   Die Bezahlseite ist dafür WIRKLICH beim Anbieter angelegt und dort
+   bezahlt. Eine erfundene Kennung liefe in eine Fehlermeldung — die
+   Prüfung bestünde dann aus dem falschen Grund und wäre wertlos.
+   Genau das ist beim ersten Anlauf passiert. */
 await db.registration.update({
-  where: { id: roh.id },
-  data: {
-    status: "STORNIERT", zahlungsStatus: "ERSTATTET",
-    storniertAm: new Date(), reserviertBis: null,
-    zahlungsAbsicht: "pi_alt_erstattet", bezahlterBetragCents: 2500, bezahltAm: new Date(),
-  },
+  where: { id: bezahlt.id },
+  data: { status: "STORNIERT", zahlungsStatus: "ERSTATTET", storniertAm: new Date() },
 });
 
-await absenden(
-  { eventSlug: "padel-falkensee", weg: "selbst", selbstAls: "adult", webseite: "",
-    ...personen([
-      { vorname: "Nina", nachname: "Spaet", email: "nina.spaet@example.org", telefon: "030222" },
-    ]) },
-  neueIp(),
-);
-const erneut = await db.registration.findFirstOrThrow({
-  where: { kontaktEmail: "nina.spaet@example.org" },
-});
-
-pruefe("Die erneute Anmeldung reaktiviert dieselbe Zeile",
-  erneut.id === roh.id && (await db.registration.count({
-    where: { kontaktEmail: "nina.spaet@example.org" } })) === 1);
-pruefe("… als frische Reservierung", erneut.status === "RESERVIERT", erneut.status);
-pruefe("… mit zurückgesetztem Zahlungsstatus", erneut.zahlungsStatus === "OFFEN",
-  erneut.zahlungsStatus);
-pruefe("… ohne die Spuren der alten, erstatteten Zahlung",
-  erneut.zahlungsAbsicht === null && erneut.bezahlterBetragCents === null
-    && erneut.bezahltAm === null,
-  `${erneut.zahlungsAbsicht} / ${erneut.bezahlterBetragCents} / ${erneut.bezahltAm}`);
-
-const neuBezahlt = await rueckmeldung(bezahltEreignis(
-  "evt_m_spaet_5", "checkout.session.completed",
-  { sitzung: erneut.zahlungsReferenz ?? "cs_neu_pruefung", anmeldungId: erneut.id,
-    betrag: erneut.gesamtpreisCents, zahlung: "pi_neu_pruefung" }));
-const bestaetigt = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
-pruefe("Die NEUE Zahlung wird verbucht — der Kunde ist bestätigt",
-  neuBezahlt.status === 200 && bestaetigt.status === "BESTAETIGT"
-    && bestaetigt.zahlungsStatus === "BEZAHLT",
-  `${bestaetigt.status} / ${bestaetigt.zahlungsStatus}`);
-pruefe("… mit der neuen Zahlungskennung, nicht der alten",
-  bestaetigt.zahlungsAbsicht === "pi_neu_pruefung", bestaetigt.zahlungsAbsicht ?? "keine");
-
-/* ═══ Teil 5: die Abschluss-Seite als zweite Tür ══════════════════
-   Sie fragt beim Anbieter nach und darf selbst auf „bezahlt"
-   schreiben. Sie ist OHNE Anmeldung erreichbar — wer nach seiner
-   Stornierung den alten Link noch einmal öffnet (Mail, Verlauf,
-   Lesezeichen), hätte seine erstattete Buchung sonst mit einem
-   blossen Seitenaufruf zurückgeholt.
-
-   Die Bezahlseite wird dafür WIRKLICH beim Anbieter angelegt und dort
-   als bezahlt markiert. Eine erfundene Kennung liefe in eine
-   Fehlermeldung — die Prüfung bestünde dann aus dem falschen Grund
-   und wäre wertlos. Genau das ist beim ersten Anlauf passiert. */
-await db.registration.update({
-  where: { id: roh.id },
-  data: {
-    status: "RESERVIERT", zahlungsStatus: "OFFEN",
-    storniertAm: null, reserviertBis: new Date(Date.now() + 30 * 60 * 1000),
-    zahlungsAbsicht: null, zahlungsReferenz: null, bezahlterBetragCents: null, bezahltAm: null,
-  },
-});
-
-await bezahlseiteFuer(roh.id, new Date());
-const mitSitzung = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
-pruefe("Vorbedingung: eine echte Bezahlseite ist angelegt",
-  Boolean(mitSitzung.zahlungsReferenz), mitSitzung.zahlungsReferenz ?? "keine");
-
-const attrappe =
-  `http://${process.env.ZAHLUNG_TEST_HOST ?? "127.0.0.1"}:${process.env.ZAHLUNG_TEST_PORT ?? 4242}`;
-const markiert = await fetch(
-  `${attrappe}/steuerung/klick-bezahlt/${mitSitzung.zahlungsReferenz}`,
-  { redirect: "manual" },
-);
-pruefe("Vorbedingung: beim Anbieter gilt sie als bezahlt",
-  markiert.status === 302, `Antwort ${markiert.status}`);
-
-/* Jetzt storniert und erstattet — die Rückmeldung des Anbieters wird
-   absichtlich NICHT geschickt, es geht allein um den Seitenaufruf. */
-await db.registration.update({
-  where: { id: roh.id },
-  data: {
-    status: "STORNIERT", zahlungsStatus: "ERSTATTET",
-    storniertAm: new Date(), reserviertBis: null,
-  },
-});
-
-/* Mit `zahlung=zurueck` — nur dann fragt die Seite beim Anbieter nach.
-   Genau diese Adresse steht nach einer Zahlung im Verlauf und in der
-   Adresszeile; sie wird erneut aufgerufen, wenn jemand zurückblättert
-   oder den Tab später wieder öffnet. */
-const seite = await fetch(`${BASIS}/anmeldung/danke?nr=${roh.id}&zahlung=zurueck`);
+const seite = await fetch(`${BASIS}/anmeldung/danke?sitzung=${zweiteSitzung.id}&zahlung=zurueck`);
 await seite.text();
-const nachSeitenaufruf = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
+const nachSeitenaufruf = await db.registration.findUniqueOrThrow({ where: { id: bezahlt.id } });
 
 pruefe("Die Abschluss-Seite ist erreichbar", seite.status === 200, `Antwort ${seite.status}`);
 pruefe("… belebt eine stornierte Buchung aber NICHT wieder",
   nachSeitenaufruf.status === "STORNIERT" && nachSeitenaufruf.zahlungsStatus === "ERSTATTET",
   `${nachSeitenaufruf.status} / ${nachSeitenaufruf.zahlungsStatus}`);
+pruefe("… legt auch keine zweite an",
+  (await db.registration.count({ where: { kontaktEmail: EMAIL } })) === 1);
 pruefe("… und der Platz bleibt frei", (await belegte(event.id)) === 0,
   `${await belegte(event.id)} belegt`);
 
-/* ═══ Teil 6: zweimal buchen, zweimal stornieren ══════════════════
+/* ═══ Teil 5: zweimal buchen, zweimal stornieren ══════════════════
    Der Weg, der im Betrieb scheiterte. Eine Buchungszeile wird bei der
    erneuten Anmeldung wiederverwendet — die zweite Stornierung erstattet
    deshalb eine ANDERE Zahlung als die erste. Der Wiederholungsschlüssel
-   an den Anbieter enthielt frueher nur die Anmeldenummer und war damit
+   an den Anbieter enthielt früher nur die Anmeldenummer und war damit
    beide Male gleich. Der Anbieter wies die zweite Erstattung ab
-   ("idempotency_error"), einen ganzen Tag lang — fuer den Kunden sah
-   es aus, als taete der Storno-Knopf nichts. */
-const anbieter =
-  `http://${process.env.ZAHLUNG_TEST_HOST ?? "127.0.0.1"}:${process.env.ZAHLUNG_TEST_PORT ?? 4242}`;
+   („idempotency_error"), einen ganzen Tag lang — für den Kunden sah
+   es aus, als täte der Storno-Knopf nichts. */
+await aufraeumen();
 
-/** Bezahlseite anlegen, beim Anbieter bezahlen, Rueckmeldung schicken. */
-async function durchbezahlen(lauf) {
-  await bezahlseiteFuer(roh.id, new Date());
-  const a = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
-  await fetch(`${anbieter}/steuerung/klick-bezahlt/${a.zahlungsReferenz}`, { redirect: "manual" });
-  const sitzung = await (
-    await fetch(`${anbieter}/v1/checkout/sessions/${a.zahlungsReferenz}`)
-  ).json();
-  await rueckmeldung(bezahltEreignis(`evt_m_zweimal_${lauf}`, "checkout.session.completed", {
-    sitzung: a.zahlungsReferenz, anmeldungId: roh.id,
-    betrag: a.gesamtpreisCents, zahlung: sitzung.payment_intent,
-  }));
-  return sitzung.payment_intent;
-}
-
-await db.registration.update({
-  where: { id: roh.id },
-  data: {
-    status: "RESERVIERT", zahlungsStatus: "OFFEN",
-    storniertAm: null, reserviertBis: new Date(Date.now() + 30 * 60 * 1000),
-    zahlungsAbsicht: null, zahlungsReferenz: null, bezahlterBetragCents: null, bezahltAm: null,
-  },
-});
-
-const ersteZahlung = await durchbezahlen(1);
-const ersterStorno = await stornoDurchAdmin(roh.id);
+const lauf1 = await durchbezahlen();
+const ersterStorno = await stornoDurchAdmin(
+  (await db.registration.findFirstOrThrow({ where: { kontaktEmail: EMAIL } })).id);
 pruefe("Erste Buchung: Stornierung mit Erstattung",
   ersterStorno.erfolg === true && ersterStorno.erstattet === true,
   JSON.stringify(ersterStorno));
 
-/* Erneut anmelden — dieselbe Zeile, frische Zahlung. */
-await absenden(
-  { eventSlug: "padel-falkensee", weg: "selbst", selbstAls: "adult", webseite: "",
-    ...personen([
-      { vorname: "Nina", nachname: "Spaet", email: "nina.spaet@example.org", telefon: "030222" },
-    ]) },
-  neueIp(),
-);
-const zweiteZahlung = await durchbezahlen(2);
-pruefe("Die zweite Zahlung ist eine andere als die erste",
-  Boolean(zweiteZahlung) && zweiteZahlung !== ersteZahlung,
-  `${ersteZahlung} → ${zweiteZahlung}`);
+const lauf2 = await durchbezahlen();
+pruefe("Die zweite Buchung hat eine eigene Bezahlseite", lauf2.id !== lauf1.id,
+  `${lauf1.id} → ${lauf2.id}`);
 
-const zweiterStorno = await stornoDurchAdmin(roh.id);
+const zweiterStorno = await stornoDurchAdmin(
+  (await db.registration.findFirstOrThrow({ where: { kontaktEmail: EMAIL } })).id);
 pruefe("Zweite Buchung: Stornierung wird NICHT vom Wiederholungsschlüssel blockiert",
   zweiterStorno.erfolg === true && zweiterStorno.erstattet === true,
   JSON.stringify(zweiterStorno));
 
-const nachZweitem = await db.registration.findUniqueOrThrow({ where: { id: roh.id } });
+const nachZweitem = await db.registration.findFirstOrThrow({ where: { kontaktEmail: EMAIL } });
 pruefe("… und die Buchung steht auf storniert und erstattet",
   nachZweitem.status === "STORNIERT" && nachZweitem.zahlungsStatus === "ERSTATTET",
   `${nachZweitem.status} / ${nachZweitem.zahlungsStatus}`);
 
 // ── Aufräumen ───────────────────────────────────────────────────
-await db.participant.deleteMany({});
-await db.registration.deleteMany({});
-await db.zahlungsEreignis.deleteMany({});
-await db.anmeldeVersuch.deleteMany({});
+await aufraeumen();
 
 console.log(`\n${n - schief.length} von ${n} in Ordnung.`);
 if (schief.length) { console.log("Nicht in Ordnung:", schief.join(" · ")); process.exit(1); }

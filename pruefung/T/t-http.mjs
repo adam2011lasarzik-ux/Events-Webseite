@@ -16,7 +16,8 @@
 import "../schutz.mjs";
 
 import { db } from "../../lib/db.js";
-import { bezahlseiteFuer } from "../../lib/zahlungStart.js";
+import { bezahlseiteFuerNutzlast } from "../../lib/zahlungStart.js";
+import { nutzlastFuer } from "../zahlweg.mjs";
 
 const BASIS = "http://127.0.0.1:3213";
 const SLUG_OHNE = "pruef-ohne-termin";
@@ -138,37 +139,28 @@ pruefe("KEINE Anmeldung in der Datenbank angelegt", angelegt === 0, `gefunden: $
 /* ── T8: Auch die Bezahlung ist gesperrt ────────────────────── */
 console.log("\nT8 · Zahlungsstart bei entferntem Termin");
 
-/* Eine Anmeldung auf der buchbaren Veranstaltung anlegen, dann dort
-   den Termin entfernen — der Fall, dass ein Admin den Termin nach der
-   Buchung löscht. */
+/* Seit Stufe 2 (26.09.2026) gibt es zwischen dem Absenden und der
+   bestätigten Zahlung KEINE Anmeldung mehr, an der ein Zahlungsstart
+   hängen könnte. Die Prüfung setzt deshalb direkt an der Nutzlast an
+   — dem, was der Besucher abgeschickt hat. Der geprüfte Fall bleibt
+   derselbe: Der Termin wird entfernt, während jemand im Begriff ist
+   zu bezahlen. */
 const buchbarVoll = mitTermin;
-const testAnmeldung = await db.registration.create({
-  data: {
-    eventId: buchbarVoll.id,
-    kontaktVorname: "Zahl",
-    kontaktNachname: "Test",
-    kontaktEmail: "pruefung-termin-zahlung@example.org",
-    buchungsart: "EINZEL",
-    istVormundBuchung: false,
-    einwilligungVormund: false,
-    agbAkzeptiert: true,
-    kenntnisAufnahmen: true,
-    status: "RESERVIERT",
-    reserviertBis: new Date(Date.now() + 30 * 60 * 1000),
-    gesamtpreisCents: 1400,
-    zahlungsStatus: "OFFEN",
-    teilnehmer: { create: [{ vorname: "Zahl", nachname: "Test", typ: "ERWACHSENER" }] },
-  },
-});
+const nutzlast = nutzlastFuer(buchbarVoll.id, "pruefung-termin-zahlung@example.org");
 
-const vorher = await bezahlseiteFuer(testAnmeldung.id);
+const vorher = await bezahlseiteFuerNutzlast(nutzlast, buchbarVoll.titel);
 pruefe("Mit Termin: Zahlung wird nicht wegen des Termins abgelehnt",
   !("fehler" in vorher) || vorher.fehler !== "kein-termin", JSON.stringify(vorher));
 
 await db.event.update({ where: { id: buchbarVoll.id }, data: { startAt: null } });
-const nachher = await bezahlseiteFuer(testAnmeldung.id);
+const nachher = await bezahlseiteFuerNutzlast(nutzlast, buchbarVoll.titel);
 pruefe("Ohne Termin: Zahlung abgelehnt mit Grund „kein-termin“",
   "fehler" in nachher && nachher.fehler === "kein-termin", JSON.stringify(nachher));
+
+pruefe("… und dabei ist KEINE Anmeldung entstanden",
+  (await db.registration.count({
+    where: { kontaktEmail: "pruefung-termin-zahlung@example.org" },
+  })) === 0);
 
 /* ── Aufräumen ──────────────────────────────────────────────── */
 await db.registration.deleteMany({ where: { event: { slug: { in: testSlugs } } } });

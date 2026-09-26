@@ -9,40 +9,22 @@
    prüfen, ohne dass irgendetwas nach draußen spricht.
    --------------------------------------------------------------- */
 
-/** Was der Server über eine Anmeldung wissen muss, um zu entscheiden. */
-export interface Zahlbar {
-  id: string;
-  status: string;
-  zahlungsStatus: string;
-  gesamtpreisCents: number;
-}
+/* ── Entfallen am 26.09.2026: `Zahlbar`, `ZahlungAbgelehnt`, `darfZahlen`
 
-export type ZahlungAbgelehnt =
-  | "unbekannt"
-  | "storniert"
-  | "bereits-bezahlt"
-  | "kein-betrag"
-  /** Für die ganze Gruppe sind nicht mehr genug Plätze frei. */
-  | "keine-plaetze"
-  /** Die Veranstaltung hat (noch) keinen feststehenden Termin. */
-  | "kein-termin";
+   Diese drei beantworteten die Frage „darf für DIESE gespeicherte
+   Anmeldung eine Bezahlung gestartet werden?" — mit Gründen wie
+   „bereits bezahlt" oder „storniert".
 
-/**
- * Darf für diese Anmeldung eine Bezahlung gestartet werden?
- *
- * Gibt einen Grund zurück, wenn nicht — oder null, wenn alles passt.
- * Der Grund ist bewusst ein fester Wert und kein Text: Die Formulierung
- * gehört ins Wörterbuch, nicht in die Regel.
- */
-export function darfZahlen(anmeldung: Zahlbar | null): ZahlungAbgelehnt | null {
-  if (!anmeldung) return "unbekannt";
-  if (anmeldung.status === "STORNIERT") return "storniert";
-  if (anmeldung.zahlungsStatus === "BEZAHLT") return "bereits-bezahlt";
-  // Ein kostenloses Event braucht keine Bezahlung. Stripe würde einen
-  // Betrag von 0 ohnehin ablehnen.
-  if (anmeldung.gesamtpreisCents <= 0) return "kein-betrag";
-  return null;
-}
+   Seit Stufe 2 gibt es zum Zeitpunkt des Zahlungsstarts keine
+   gespeicherte Anmeldung mehr, über die man das entscheiden könnte.
+   Die Gründe, aus denen eine Bezahlseite verweigert wird, heissen
+   jetzt `StartFehler` und stehen in lib/zahlungStart.ts; die Gründe,
+   aus denen aus einer eingegangenen Zahlung keine Anmeldung wird,
+   heissen `Fehlbuchungsgrund` und stehen in lib/anmeldungAnlegen.ts.
+
+   Die Funktion stehen zu lassen wäre kein harmloser Rest gewesen:
+   Sie beschrieb einen Ablauf, den es nicht mehr gibt, und hätte bei
+   der nächsten Änderung als geltende Regel gelesen werden können. */
 
 /**
  * Stimmt der von Stripe gemeldete Betrag mit dem überein, der bei der

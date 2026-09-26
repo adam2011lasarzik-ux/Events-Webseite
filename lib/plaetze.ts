@@ -74,38 +74,20 @@ export function platzstand(
  * der bewusst in Kauf genommene Preis dafür, dass eine unbezahlte
  * Anmeldung niemandem einen Platz wegnimmt.
  *
- * `reserviertBis` bleibt als Feld bestehen, bedeutet aber seitdem
- * etwas anderes: die Frist des ZAHLUNGSVERSUCHS, nicht die eines
- * Platzes. Sie steuert nur noch, ob die Abschluss-Seite „Zahlung
- * nicht abgeschlossen" zeigt, und ob der Adminbereich einen Versuch
- * als laufend oder als abgebrochen darstellt.
+ * Seit dem 25.09.2026 entsteht eine Anmeldung ohnehin erst MIT der
+ * bestätigten Zahlung (lib/anmeldungAnlegen.ts). Eine unbezahlte
+ * Anmeldung gibt es nicht mehr — die Regel unten ist deshalb nicht
+ * nur die richtige, sondern die einzig mögliche.
  */
 export function belegtFilter() {
   return { status: "BESTAETIGT" as const };
 }
 
-/**
- * Anmeldungen mit einem offenen Zahlungsversuch.
- *
- * Sie bleiben gespeichert — die Person soll die Zahlung fortsetzen
- * können, ohne alles neu einzugeben — zählen aber weder als
- * Teilnehmer noch gegen die Plätze. Der Adminbereich weist sie
- * getrennt aus, damit sichtbar bleibt, dass es sie gibt.
- */
-export function offenerVersuchFilter() {
-  return { status: "RESERVIERT" as const };
-}
+/* Hier standen bis zum 26.09.2026 `offenerVersuchFilter()`,
+   `ZAHLFRIST_MINUTEN` und `reserviertBis()`.
 
-/**
- * Wie lange ein Zahlungsversuch als laufend gilt.
- *
- * Hiess einmal „wie lange ein Platz gehalten wird". Seit dem
- * 24.09.2026 wird kein Platz mehr gehalten (siehe belegtFilter): Die
- * Frist entscheidet nur noch darüber, ob die Abschluss-Seite zum
- * Weiterbezahlen einlädt oder sagt, dass der Versuch beendet ist.
- */
-export const ZAHLFRIST_MINUTEN = 30;
-
-export function reserviertBis(jetzt: Date = new Date()): Date {
-  return new Date(jetzt.getTime() + ZAHLFRIST_MINUTEN * 60 * 1000);
-}
+   Alle drei sind mit Stufe 2 entfallen, und zwar ersatzlos: Es gibt
+   keinen offenen Zahlungsversuch mehr, den man zählen könnte. Vor der
+   bestätigten Zahlung steht in der VERA-Datenbank nichts — keine
+   Anmeldung, kein Teilnehmer, keine Frist. Wer hier etwas
+   Vergleichbares wieder einführt, hebt genau diese Zusage auf. */

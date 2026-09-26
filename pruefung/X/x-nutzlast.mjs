@@ -96,15 +96,44 @@ pruefe("… und beide lassen sich öffnen",
 
 console.log("\nX1.3 · Jede Veränderung scheitert");
 /* Nicht stichprobenartig, sondern JEDE Stelle des Geheimtextes. Eine
-   Verschlüsselung, die nur an den geprüften Stellen hält, hält nicht. */
+   Verschlüsselung, die nur an den geprüften Stellen hält, hält nicht.
+
+   Eine Eigenheit von base64 muss dabei berücksichtigt werden, sonst
+   prüft diese Liste etwas Falsches und schlägt zufällig fehl: Das
+   LETZTE Zeichen einer base64-Zeichenkette trägt je nach Länge
+   ungenutzte Bits. Zwei verschiedene Endzeichen können deshalb
+   dieselben Bytes ergeben. Wird ein solches Zeichen verändert, ändert
+   sich der Geheimtext gar nicht — und dann darf und soll die Marke
+   sich öffnen lassen.
+
+   Geprüft wird also die Eigenschaft, um die es wirklich geht: JEDE
+   Veränderung, die die Bytes verändert, wird abgewiesen. Gemessen
+   wird das an den Bytes, nicht an den Zeichen.
+
+   (Gefunden am 26.09.2026, weil diese Liste bei etwa jedem dritten
+   Lauf an genau dieser einen Stelle rot wurde.) */
 const teile = marke.split(".");
 const geheim = teile[3];
+const geheimBytes = Buffer.from(geheim, "base64url");
+
 let alleGescheitert = true;
 let ersteLuecke = "";
+let wirklichGeprueft = 0;
+let folgenlos = 0;
+
 for (let i = 0; i < geheim.length; i++) {
   const anders = geheim[i] === "A" ? "B" : "A";
-  const verbogen = [teile[0], teile[1], teile[2], geheim.slice(0, i) + anders + geheim.slice(i + 1)].join(".");
-  if (verbogen === marke) continue;
+  const veraendert = geheim.slice(0, i) + anders + geheim.slice(i + 1);
+  if (veraendert === geheim) continue;
+
+  // Ändern sich die BYTES überhaupt? Sonst ist nichts verändert worden.
+  if (Buffer.from(veraendert, "base64url").equals(geheimBytes)) {
+    folgenlos++;
+    continue;
+  }
+
+  wirklichGeprueft++;
+  const verbogen = [teile[0], teile[1], teile[2], veraendert].join(".");
   const grund = grundVon(() => entschluesseln(verbogen, bundA, passend));
   if (grund !== "siegel" && grund !== "inhalt") {
     alleGescheitert = false;
@@ -112,15 +141,26 @@ for (let i = 0; i < geheim.length; i++) {
     break;
   }
 }
-pruefe(`Jedes der ${geheim.length} Zeichen des Geheimtextes, einzeln verändert, wird abgewiesen`,
-  alleGescheitert, ersteLuecke);
+pruefe(
+  `Jede der ${wirklichGeprueft} wirksamen Ein-Zeichen-Änderungen am Geheimtext wird abgewiesen`,
+  alleGescheitert,
+  ersteLuecke,
+);
+pruefe(
+  "Die folgenlosen Änderungen betreffen nur das letzte Zeichen — eine Eigenheit von base64",
+  folgenlos <= 1,
+  `${folgenlos} folgenlose Stellen`,
+);
 
 let zufallGescheitert = true;
 const zufall = teile[2];
+const zufallBytes = Buffer.from(zufall, "base64url");
 for (let i = 0; i < zufall.length; i++) {
   const anders = zufall[i] === "A" ? "B" : "A";
-  const verbogen = [teile[0], teile[1], zufall.slice(0, i) + anders + zufall.slice(i + 1), teile[3]].join(".");
-  if (verbogen === marke) continue;
+  const veraendert = zufall.slice(0, i) + anders + zufall.slice(i + 1);
+  if (veraendert === zufall) continue;
+  if (Buffer.from(veraendert, "base64url").equals(zufallBytes)) continue;
+  const verbogen = [teile[0], teile[1], veraendert, teile[3]].join(".");
   const grund = grundVon(() => entschluesseln(verbogen, bundA, passend));
   if (grund !== "siegel" && grund !== "inhalt") { zufallGescheitert = false; break; }
 }
