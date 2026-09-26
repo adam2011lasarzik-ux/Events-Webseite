@@ -31,7 +31,28 @@ export async function actionFelder() {
  * @param {object} werte  Formularfelder
  * @param {string} ip     vorgetäuschte Absender-Adresse (für die Bremse)
  */
-export async function absenden(werte, ip = "203.0.113.1") {
+/**
+ * Voreinstellung: bei JEDEM Absenden eine andere Adresse.
+ *
+ * Bis zum 26.09.2026 stand hier fest `203.0.113.1`. Das ging, solange
+ * die Bremse gegen Massen-Einsendungen in der Datenbank zählte —
+ * `leeren.mjs` setzte sie vor jeder Liste zurück. Seit sie im
+ * Arbeitsspeicher des Servers zählt (fünf Versuche je Stunde und
+ * Adresse, Entscheidung: kein Datenbankeintrag vor der Zahlung),
+ * erreicht `leeren.mjs` sie nicht mehr.
+ *
+ * Damit schickten im Sammellauf ein Dutzend Listen nacheinander von
+ * derselben Adresse — und irgendwann war der Zähler voll. Welche
+ * Liste dann scheiterte, hing vom Zufall ab: mal eine Zahlungsliste,
+ * mal der Bild-Upload, mal der Adminzugang. Ein Prüfwerkzeug, das bei
+ * jedem Lauf woanders umfällt, kostet mehr Zeit, als es einbringt.
+ *
+ * 198.18.0.0/15 ist für Messungen reserviert und gehört niemandem.
+ */
+const zufaelligeAdresse = () =>
+  `198.18.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 254) + 1}`;
+
+export async function absenden(werte, ip = zufaelligeAdresse()) {
   const felder = await actionFelder();
   const daten = new FormData();
   for (const [k, v] of Object.entries(felder)) daten.append(k, v);

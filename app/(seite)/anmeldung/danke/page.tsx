@@ -45,21 +45,39 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: Promise<{ nr?: string }>;
+  searchParams: Promise<{ nr?: string; sitzung?: string }>;
 }): Promise<Metadata> {
-  const { nr } = await searchParams;
+  const { nr, sitzung } = await searchParams;
   // Die Adresse trägt eine unratbare, aber keine geheime Kennung — der
   // Besucher braucht sie, um ohne Konto zu seiner Zahlung zurückzufinden.
   // Eine unratbare Adresse ist trotzdem kein Zugriffsschutz: Gelangt sie
   // nach außen, darf sie nicht in einer Suchmaschine landen.
   const robots: Metadata["robots"] = { index: false, follow: false };
-  if (!nr) return { title: texte.danke.offenTitel, robots };
-  const anmeldung = await db.registration.findUnique({
-    where: { id: nr },
-    select: { zahlungsStatus: true, gesamtpreisCents: true },
-  });
+
+  /* Auch die Sitzungskennung zählt.
+
+     Bis zum 26.09.2026 sah diese Funktion nur `nr` an. Seit Stufe 2
+     steht dort bei einer bezahlten Anmeldung aber `sitzung`, und `nr`
+     fehlt — der Reiter im Browser trug deshalb „Deine Anmeldung ist
+     nicht zustande gekommen", während die Seite daneben „Zahlung
+     erfolgreich" zeigte. Zwei Aussagen, eine davon falsch, und die
+     falsche stand in der Lesezeichenliste. */
+  const anmeldung = nr
+    ? await db.registration.findUnique({
+        where: { id: nr },
+        select: { zahlungsStatus: true, gesamtpreisCents: true },
+      })
+    : sitzung
+      ? await db.registration.findUnique({
+          where: { zahlungsReferenz: sitzung },
+          select: { zahlungsStatus: true, gesamtpreisCents: true },
+        })
+      : null;
+
+  if (!anmeldung) return { title: texte.danke.offenTitel, robots };
+
   const bezahlt =
-    anmeldung?.zahlungsStatus === "BEZAHLT" || (anmeldung?.gesamtpreisCents ?? 1) <= 0;
+    anmeldung.zahlungsStatus === "BEZAHLT" || anmeldung.gesamtpreisCents <= 0;
   return { title: bezahlt ? texte.danke.bezahltTitel : texte.danke.offenTitel, robots };
 }
 
@@ -77,6 +95,23 @@ export async function generateMetadata({
  */
 async function ausSitzungAnlegen(sitzungId: string): Promise<string | null> {
   try {
+    /* ZUERST in der eigenen Datenbank nachsehen.
+       
+       Zwei Gründe. Der eine spart einen Aufruf nach draussen, wenn
+       die Rückmeldung des Anbieters schon da war — der häufige Fall
+       bei einem zweiten Seitenaufruf.
+
+       Der andere ist seit dem 26.09.2026 der wichtigere: Die
+       verschlüsselte Anmeldung wird beim Anbieter aufgeräumt, sobald
+       sie nicht mehr gebraucht wird. Ohne diese Abfrage sähe jemand,
+       der seinen Link später noch einmal öffnet, dauerhaft „Zahlung
+       wird geprüft" — obwohl seine Buchung längst steht. */
+    const vorhanden = await db.registration.findUnique({
+      where: { zahlungsReferenz: sitzungId },
+      select: { id: true },
+    });
+    if (vorhanden) return vorhanden.id;
+
     const stand = await sitzungPruefen(sitzungId);
     if (!stand.bezahlt) return null;
     if (stand.betragCents === null || !stand.marke) return null;

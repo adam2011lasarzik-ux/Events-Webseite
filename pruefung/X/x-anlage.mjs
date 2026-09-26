@@ -229,13 +229,14 @@ console.log("\nX3.8 · Welcher Grund erstattet von selbst, welcher nicht");
    Fehler oder ein Angriff. Beides gehört angesehen — und solange
    unklar ist, WAS gekauft wurde, wird nichts zurückgebucht.
 
-   Entscheidung vom 26.09.2026: `ohne-marke` dagegen schon. Dort ist
-   nichts unklar: Ohne Anmeldedaten kann daraus niemals eine Anmeldung
-   werden, also hat jemand für nichts bezahlt. */
+   Entscheidung vom 26.09.2026: `ohne-marke` und `marke-abgelaufen`
+   dagegen schon. Dort ist nichts unklar: Die Anmeldedaten sind
+   entweder nie angekommen oder nicht mehr verwertbar — in beiden
+   Fällen hat jemand für nichts bezahlt. */
 pruefe("„betrag-abweichend“ steht nicht in der Sofort-Erstattungsliste",
   !SOFORT_ERSTATTEN.includes("betrag-abweichend"), SOFORT_ERSTATTEN.join(", "));
 pruefe("Die vier anderen Gründe stehen darin",
-  ["keine-plaetze", "doppelte-adresse", "kein-termin", "ohne-marke"]
+  ["keine-plaetze", "doppelte-adresse", "kein-termin", "ohne-marke", "marke-abgelaufen"]
     .every((g) => SOFORT_ERSTATTEN.includes(g)), SOFORT_ERSTATTEN.join(", "));
 pruefe("Genau ein Grund wartet auf einen Menschen",
   ZUR_KLAERUNG.length === 1 && ZUR_KLAERUNG[0] === "betrag-abweichend",

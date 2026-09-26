@@ -57,6 +57,10 @@ export function starte(port = 4242) {
           object: "checkout.session",
           url: `http://127.0.0.1:${port}/bezahlseite/${id}`,
           payment_status: "unpaid",
+          /* Sekunden seit 1970, wie beim echten Anbieter. Der
+             Abgleichlauf filtert danach, und das Aufräumen der Marke
+             rechnet das Alter daraus. */
+          created: Math.floor(Date.now() / 1000),
           // „open" = noch bezahlbar, „complete" = bezahlt,
           // „expired" = geschlossen. Wie beim echten Anbieter.
           status: "open",
@@ -88,6 +92,36 @@ export function starte(port = 4242) {
         return senden(200, sitzung);
       }
 
+      /* Sitzung ändern — seit dem 26.09.2026 gebraucht, um die
+         verschlüsselte Anmeldung wieder zu entfernen.
+
+         Das Verhalten ist am 26.09.2026 gegen die echte
+         Schnittstelle gemessen und hier genau so nachgebaut: Ein
+         LEERER Wert entfernt den Schlüssel vollständig — zurück
+         kommt nicht `""`, sondern gar kein Feld mehr. Und es geht
+         auch bei einer bereits VERFALLENEN Sitzung.
+
+         Eine Attrappe, die stattdessen leere Zeichenketten
+         stehenliesse, würde die Prüfungen bestehen lassen und im
+         Betrieb wäre trotzdem alles anders. */
+      const aendern = anfrage.method === "POST" &&
+        url.pathname.match(/^\/v1\/checkout\/sessions\/([^/]+)$/);
+      if (aendern && !url.pathname.endsWith("/expire")) {
+        const sitzung = sitzungen.get(aendern[1]);
+        if (!sitzung) {
+          return senden(404, {
+            error: { message: "Unbekannte Sitzung.", type: "invalid_request_error" },
+          });
+        }
+        const felder = new URLSearchParams(koerper);
+        const neueDaten = metadatenSammeln(felder);
+        for (const [schluessel, wert] of Object.entries(neueDaten)) {
+          if (wert === "") delete sitzung.metadata[schluessel];
+          else sitzung.metadata[schluessel] = wert;
+        }
+        return senden(200, sitzung);
+      }
+
       // Sitzung schliessen (expire)
       const schliessen = anfrage.method === "POST" &&
         url.pathname.match(/^\/v1\/checkout\/sessions\/([^/]+)\/expire$/);
@@ -105,6 +139,26 @@ export function starte(port = 4242) {
       }
 
       // Sitzung abfragen
+      /* Sitzungen auflisten — was der stündliche Abgleichlauf tut.
+         
+         Nachgereicht am 26.09.2026: Bis dahin brauchte ihn keine
+         Prüfung, und der Abgleichlauf lief in den Prüfungen deshalb
+         nie wirklich gegen die Attrappe. Das war eine Lücke: Ein
+         Lauf, der stündlich Geld bewegt, gehört geprüft.
+
+         `created[gte]` wird ausgewertet, `has_more` bleibt falsch —
+         die Attrappe hält nie genug Sitzungen für eine zweite Seite. */
+      if (anfrage.method === "GET" && url.pathname === "/v1/checkout/sessions") {
+        const ab = Number(url.searchParams.get("created[gte]") ?? "0");
+        const alle = [...sitzungen.values()].filter((z) => (z.created ?? 0) >= ab);
+        return senden(200, {
+          object: "list",
+          url: "/v1/checkout/sessions",
+          has_more: false,
+          data: alle,
+        });
+      }
+
       const treffer = url.pathname.match(/^\/v1\/checkout\/sessions\/([^/]+)$/);
       if (anfrage.method === "GET" && treffer) {
         const sitzung = sitzungen.get(treffer[1]);

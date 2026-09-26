@@ -10,6 +10,7 @@ import "../schutz.mjs";
 import { absenden, personen } from "./senden.mjs";
 import { db } from "../../lib/db.js";
 import { berechnePreis } from "../../lib/preise.js";
+import { neueAbsenderAdresse } from "../zahlweg.mjs";
 
 let nummer = 0;
 const fehlgeschlagen = [];
@@ -23,7 +24,9 @@ function pruefe(name, bedingung, zusatz = "") {
 
 const SLUG = "padel-falkensee";
 let ipZaehler = 0;
-const neueIp = () => `198.51.100.${(ipZaehler += 1)}`;
+/* Jede Adresse nur einmal — siehe pruefung/zahlweg.mjs,
+   `neueAbsenderAdresse`. */
+const neueIp = neueAbsenderAdresse;
 
 async function leeren() {
   await db.participant.deleteMany({});

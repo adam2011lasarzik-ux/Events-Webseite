@@ -97,7 +97,7 @@ console.log("\nX4.1 · Absenden und abbrechen hinterlässt nichts");
 const vorher = await alleZeilen();
 console.log(`     (${Object.keys(vorher).length} Tabellen gezählt)`);
 
-const antwort = await absenden(einzel("keine.spur@pruef-x.example"), "203.0.113.77");
+const antwort = await absenden(einzel("keine.spur@pruef-x.example"));
 
 pruefe(
   "Das Absenden führt zur Bezahlseite des Anbieters",
@@ -163,7 +163,6 @@ const zuViele = await absenden(
     webseite: "ich-bin-ein-bot",
     ...personen([{ vorname: "Bot", nachname: "Falle", email: "bot@pruef-x.example", telefon: "" }]),
   },
-  "203.0.113.90",
 );
 pruefe("Die Bot-Falle greift", !(zuViele.ziel ?? "").includes("/bezahlseite/"));
 pruefe(

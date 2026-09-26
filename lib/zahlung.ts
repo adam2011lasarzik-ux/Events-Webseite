@@ -169,6 +169,61 @@ export function markeZusammensetzen(
 }
 
 /**
+ * Welche `marke_*`-Felder eine Bezahlseite gerade trägt.
+ *
+ * Gelesen statt gerechnet: `marke_teile` könnte bei einem halb
+ * abgeschlossenen Löschlauf fehlen, während einzelne Stücke noch
+ * stehen. Wer dann über `marke_teile` ginge, liesse genau die Reste
+ * liegen, um die es hier geht.
+ */
+export function markeFelder(
+  metadata: Record<string, string> | null | undefined,
+): string[] {
+  if (!metadata) return [];
+  return Object.keys(metadata).filter((k) => k === "marke_teile" || /^marke_\d+$/.test(k));
+}
+
+/**
+ * Die verschlüsselte Anmeldung aus einer Bezahlseite entfernen.
+ *
+ * Entfernt AUSSCHLIESSLICH die `marke_*`-Felder. Alles andere bleibt
+ * unangetastet: die Veranstaltungskennung in `event`, der Betrag, die
+ * E-Mail-Adresse, die Zahlung, die Erstattungen, die Posten. Nichts
+ * davon steht in der Marke, und nichts davon darf durch das
+ * Aufräumen verschwinden.
+ *
+ * Am 26.09.2026 gegen die echte Schnittstelle belegt: Ein leerer Wert
+ * entfernt den Schlüssel vollständig — zurück kommt nicht `""`,
+ * sondern gar kein Feld mehr. Und auch eine VERFALLENE Bezahlseite
+ * lässt sich noch ändern.
+ *
+ * Diese Funktion entscheidet NICHT, ob gelöscht werden darf. Das tut
+ * `markeDarfWeg` in lib/zahlungRegeln.ts, und der Aufrufer fragt sie
+ * vorher. Hier steht nur der Aufruf nach draussen.
+ */
+export async function markeFelderLeeren(
+  sitzungId: string,
+  felder: string[],
+): Promise<void> {
+  if (felder.length === 0) return;
+  const leer: Record<string, string> = {};
+  for (const feld of felder) leer[feld] = "";
+  await stripe().checkout.sessions.update(sitzungId, { metadata: leer });
+}
+
+/**
+ * Eine Bezahlseite frisch beim Anbieter holen.
+ *
+ * Für das Aufräumen gebraucht: Das Objekt in einer Rückmeldung ist
+ * eine Momentaufnahme von damals. Ob eine Bezahlseite inzwischen doch
+ * bezahlt wurde, steht nur in der aktuellen Fassung — und an dieser
+ * Frage hängt, ob die Marke noch gebraucht wird.
+ */
+export async function sitzungHolen(sitzungId: string): Promise<Stripe.Checkout.Session> {
+  return stripe().checkout.sessions.retrieve(sitzungId);
+}
+
+/**
  * Eine Bezahlseite beim Anbieter erzeugen und ihre Adresse liefern.
  *
  * Der Betrag kommt vom Aufrufer aus der DATENBANK, niemals aus dem

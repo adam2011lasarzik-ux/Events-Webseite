@@ -160,3 +160,39 @@ export async function markeAusMetadaten(metadaten) {
   const { markeZusammensetzen } = await import("../lib/zahlung.ts");
   return markeZusammensetzen(metadaten ?? {}) ?? "";
 }
+
+/**
+ * Die Attrappe eine Sitzung verfallen lassen — wie der echte Anbieter
+ * nach Ablauf der Frist.
+ *
+ * Wichtig, seit das Aufräumen der Marke am Zustand der Sitzung hängt:
+ * Eine Rückmeldung „expired" zu schicken, ohne die Sitzung wirklich
+ * verfallen zu lassen, prüft einen Zustand, den es so nicht gibt. Der
+ * Server holt die Sitzung frisch und sähe sie weiterhin als offen —
+ * und räumte zu Recht nicht auf.
+ */
+export async function verfallen(sitzungId) {
+  await fetch(`${ATTRAPPE}/v1/checkout/sessions/${sitzungId}/expire`, { method: "POST" });
+  return holeSitzung(sitzungId);
+}
+
+/**
+ * Eine Absenderadresse, die es in keinem anderen Lauf schon gab.
+ *
+ * Die Bremse gegen Massen-Einsendungen zählt seit dem 26.09.2026 im
+ * Arbeitsspeicher des Servers, fünf Versuche je Stunde und Adresse.
+ * Sie lässt sich von aussen nicht zurücksetzen — `leeren.mjs` erreicht
+ * sie nicht mehr.
+ *
+ * Solange jede Liste ihre eigenen Adressen aus 198.51.100.x nahm, ging
+ * das gut. Im Sammellauf laufen aber ein Dutzend Listen hintereinander
+ * durch denselben Server, und ihre Adressbereiche überschnitten sich:
+ * Irgendwann war ein Zähler voll, das Absenden wurde abgewiesen, und
+ * eine Liste scheiterte an einer Bremse statt an ihrem Gegenstand.
+ *
+ * 198.18.0.0/15 ist für Messungen reserviert und gehört niemandem;
+ * 65.000 Möglichkeiten reichen für jeden Lauf.
+ */
+export function neueAbsenderAdresse() {
+  return `198.18.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 254) + 1}`;
+}

@@ -89,7 +89,11 @@ fuehre_aus () {
     gescheitert=$((gescheitert + 1))
     gescheiterte_listen="${gescheiterte_listen}  · ${name} (Exitcode ${code})"$'\n'
     echo ""
-    echo "✗ FEHLGESCHLAGEN: $name"
+    echo "✗ FEHLGESCHLAGEN: $name — die fehlgeschlagenen Prüfungen:"
+    # Bei einem Fehlschlag zeigt `tail -6` zu wenig: Genau die
+    # Zeilen, die erklaeren WAS schiefging, stehen oft weiter oben.
+    # Deshalb hier zusaetzlich jede Zeile mit einem Kreuz.
+    printf '%s\n' "$ausgabe" | grep -E "^✗|^  ✗|^- " | head -20
   fi
 }
 
@@ -170,6 +174,7 @@ lauf "V · Bestellknopf, AGB-Haken, Aufnahmehinweis" "$P/V/v-checkout.mjs"
 lauf "W · Widerspruch gegen Aufnahmen" "$P/W/w-aufnahmen.mjs"
 lauf "X · Anmeldung erst nach bezahlter Zahlung" "$P/X/x-anlage.mjs"
 lauf "X · Abbruch hinterlaesst keine Spur" "$P/X/x-keine-spur.mjs"
+lauf "X · Verschluesselte Anmeldung wieder entfernen" "$P/X/x-marke-loeschen.mjs"
 
 # Diese beiden laufen gegen den Server OHNE Sonderwerte (Port 3249).
 lauf_rein "N · Rechtsseiten"           node "$P/N/n-seiten.mjs"

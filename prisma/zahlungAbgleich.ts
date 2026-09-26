@@ -38,9 +38,17 @@
    niemand gefahrlos ausprobieren kann.
    --------------------------------------------------------------- */
 
+import type Stripe from "stripe";
 import { db } from "../lib/db";
-import { stripe, erstattungAusloesen, markeZusammensetzen } from "../lib/zahlung";
-import { entschluesseln } from "../lib/anmeldeNutzlast";
+import {
+  stripe,
+  erstattungAusloesen,
+  markeZusammensetzen,
+  markeFelder,
+  markeFelderLeeren,
+} from "../lib/zahlung";
+import { markeDarfWeg } from "../lib/zahlungRegeln";
+import { entschluesseln, MarkeUngueltig } from "../lib/anmeldeNutzlast";
 import { schluesselbund } from "../lib/anmeldeSchluessel";
 import {
   anmeldungAusZahlung,
@@ -60,6 +68,7 @@ const euro = (c: number) => `${(c / 100).toFixed(2)} €`;
 let nachgelegt = 0;
 let nacherstattet = 0;
 let zuKlaeren = 0;
+let aufgeraeumt = 0;
 
 async function sitzungenNacharbeiten(): Promise<void> {
   const seit = Math.floor(Date.now() / 1000) - TAGE * 24 * 60 * 60;
@@ -73,19 +82,72 @@ async function sitzungenNacharbeiten(): Promise<void> {
   });
 
   for await (const sitzung of sitzungen) {
-    if (sitzung.payment_status !== "paid") continue;
+    try {
+      await eineSitzung(sitzung);
+    } catch (e) {
+      /* Dieselbe Überlegung wie bei den Erstattungen: Eine Sitzung,
+         die aus der Reihe tanzt, darf die übrigen nicht mitnehmen. */
+      console.log(`\n✗ ${sitzung.id} liess sich nicht abarbeiten: ${(e as Error).message}`);
+      zuKlaeren++;
+    }
+  }
+}
 
-    const schonDa = await db.registration.findUnique({
+async function eineSitzung(sitzung: Stripe.Checkout.Session): Promise<void> {
+  {
+    /* Was wir über diese Bezahlseite schon wissen — EINMAL abgefragt.
+       Beide Entscheidungen unten hängen daran: ob aufgeräumt werden
+       darf, und ob eine Anmeldung nachzulegen ist. */
+    const anmeldung = await db.registration.findUnique({
       where: { zahlungsReferenz: sitzung.id },
       select: { id: true },
     });
-    if (schonDa) continue;
-
-    const schonGemeldet = await db.fehlbuchung.findUnique({
+    const fehlbuchung = await db.fehlbuchung.findUnique({
       where: { sitzungId: sitzung.id },
       select: { id: true },
     });
-    if (schonGemeldet) continue;
+    const verbucht = anmeldung !== null || fehlbuchung !== null;
+
+    /* ── Aufräumen ────────────────────────────────────────────────
+       
+       Steht VOR dem Nachlegen und vor jedem `continue`. Bis zum
+       26.09.2026 sprang die Schleife für verbuchte Sitzungen sofort
+       weiter — genau die sind es aber, deren Marke entfernt werden
+       muss.
+
+       Das ist zugleich die Nachbereinigung für eine ausgefallene
+       Rückmeldung: Bleibt `checkout.session.expired` aus, räumt kein
+       Webhook auf, und die verschlüsselte Anmeldung läge unbegrenzt
+       beim Anbieter. Dieser Lauf holt es nach — er sieht sich alle
+       Bezahlseiten der letzten Tage an, nicht nur die bezahlten. */
+    const felder = markeFelder(sitzung.metadata);
+    if (
+      markeDarfWeg({
+        hatMarke: felder.length > 0,
+        status: sitzung.status,
+        bezahlt: sitzung.payment_status === "paid",
+        verbucht,
+        alterMs: Date.now() - sitzung.created * 1000,
+      })
+    ) {
+      console.log(`\n🧹 Verschlüsselte Anmeldung entfernen: ${sitzung.id} (${sitzung.status})`);
+      aufgeraeumt++;
+      if (echt) {
+        try {
+          await markeFelderLeeren(sitzung.id, felder);
+        } catch (e) {
+          /* Nicht abbrechen: Ein hakendes Aufräumen darf den
+             Abgleich nicht verhindern — der legt Anmeldungen nach,
+             und das ist die wichtigere Aufgabe. Beim nächsten Lauf
+             in einer Stunde wieder. */
+          console.log(`   Fehlgeschlagen, wird nachgeholt: ${(e as Error).message}`);
+        }
+      }
+    }
+
+    /* ── Nachlegen ───────────────────────────────────────────────── */
+    if (sitzung.payment_status !== "paid") return;
+    if (verbucht) return;
 
     const betrag = sitzung.amount_total;
     const eventId = sitzung.metadata?.event ?? null;
@@ -102,7 +164,7 @@ async function sitzungenNacharbeiten(): Promise<void> {
     if (betrag === null) {
       console.log("   Der Anbieter meldet keinen Betrag — gehört angesehen.");
       zuKlaeren++;
-      continue;
+      return;
     }
 
     /* Bezahlt, aber ohne Anmeldedaten. Daraus kann niemals eine
@@ -113,23 +175,31 @@ async function sitzungenNacharbeiten(): Promise<void> {
       console.log("   Keine verschlüsselte Anmeldung dabei — wird vollständig erstattet.");
       if (echt) await fehlbuchungFesthalten(sitzung.id, betrag, "ohne-marke");
       else nacherstattet++;
-      continue;
+      return;
     }
 
     let nutzlast;
     try {
       nutzlast = entschluesseln(marke, schluesselbund(), { eventId, preisCents: betrag });
-    } catch {
-      console.log("   Die Marke liess sich nicht aufschliessen — gehört angesehen.");
-      zuKlaeren++;
-      if (echt) await fehlbuchungFesthalten(sitzung.id, betrag, "betrag-abweichend");
-      continue;
+    } catch (e) {
+      /* Dieselbe Unterscheidung wie in der Rückmeldung: Eine
+         abgelaufene Marke ist etwas anderes als ein nicht passender
+         Betrag. Beim Alter ist die Lage klar und wird erstattet; bei
+         allem anderen sieht ein Mensch hin. */
+      const grund = e instanceof MarkeUngueltig ? e.grund : "unbekannt";
+      const fehlgrund: Fehlbuchungsgrund =
+        grund === "abgelaufen" ? "marke-abgelaufen" : "betrag-abweichend";
+      console.log(`   Die Marke liess sich nicht aufschliessen (${grund}) — „${fehlgrund}".`);
+      if (grund === "abgelaufen") nacherstattet++;
+      else zuKlaeren++;
+      if (echt) await fehlbuchungFesthalten(sitzung.id, betrag, fehlgrund);
+      return;
     }
 
     if (!echt) {
       console.log(`   Würde angelegt: ${nutzlast.teilnehmer.length} Person(en).`);
       nachgelegt++;
-      continue;
+      return;
     }
 
     const zahlungId =
@@ -175,7 +245,7 @@ async function erstattungenNachholen(): Promise<void> {
     console.log(`\n⚠ Offene Erstattung: ${f.sitzungId} (${euro(f.betragCents)}, ${f.grund})`);
     if (!echt) {
       nacherstattet++;
-      continue;
+      return;
     }
 
     /* Die Zahlungskennung steht nicht in der Fehlbuchung — bewusst
@@ -190,13 +260,27 @@ async function erstattungenNachholen(): Promise<void> {
     if (!zahlungId) {
       console.log("   Keine Zahlungskennung — bitte von Hand im Dashboard erstatten.");
       zuKlaeren++;
-      continue;
+      return;
     }
 
-    const erstattung = await erstattungAusloesen(zahlungId, f.sitzungId);
-    await erstattungVermerken(f.sitzungId, erstattung.id);
-    console.log(`   Erstattet: ${erstattung.id}`);
-    nacherstattet++;
+    /* Jede Erstattung für sich.
+       
+       Bis zum 26.09.2026 stand hier kein try/catch — eine einzige
+       Erstattung, die der Anbieter abweist (etwa weil sie längst
+       gelaufen ist), riss den ganzen Lauf mit sich. Damit wären auch
+       alle noch offenen Anmeldungen liegengeblieben und das
+       Aufräumen der Marken gleich mit. Ein stündlicher Lauf, den ein
+       einzelner Sonderfall lahmlegt, ist keiner. */
+    try {
+      const erstattung = await erstattungAusloesen(zahlungId, f.sitzungId);
+      await erstattungVermerken(f.sitzungId, erstattung.id);
+      console.log(`   Erstattet: ${erstattung.id}`);
+      nacherstattet++;
+    } catch (e) {
+      console.log(`   Erstattung abgewiesen: ${(e as Error).message}`);
+      console.log("   Bleibt offen und wird beim nächsten Lauf erneut versucht.");
+      zuKlaeren++;
+    }
   }
 }
 
@@ -233,7 +317,8 @@ async function hauptlauf(): Promise<void> {
   console.log(`  Anmeldungen ${echt ? "nachgelegt" : "nachzulegen"}: ${nachgelegt}`);
   console.log(`  Erstattungen ${echt ? "nachgeholt" : "nachzuholen"}: ${nacherstattet}`);
   console.log(`  Von Hand anzusehen:                ${zuKlaeren}`);
-  if (!echt && nachgelegt + nacherstattet > 0) {
+  console.log(`  Marken ${echt ? "entfernt" : "zu entfernen"}:              ${aufgeraeumt}`);
+  if (!echt && nachgelegt + nacherstattet + aufgeraeumt > 0) {
     console.log("\n  Wirklich ausführen:  npm run zahlung:abgleich -- --echt");
   }
   console.log("");

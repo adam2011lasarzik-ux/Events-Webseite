@@ -6,6 +6,7 @@ import "../schutz.mjs";
 import { absenden, personen, BASIS } from "./senden.mjs";
 import { alsText } from "./admin-senden.mjs";
 import * as zw from "../zahlweg.mjs";
+import { neueAbsenderAdresse } from "../zahlweg.mjs";
 import { db } from "../../lib/db.js";
 import { belegtFilter } from "../../lib/plaetze.js";
 import { berechnePreis } from "../../lib/preise.js";
@@ -17,8 +18,9 @@ const pruefe = (name, ok, zusatz = "") => {
   console.log(`${ok ? "✓" : "✗"} ${n}. ${name}${zusatz ? "  — " + zusatz : ""}`);
   if (!ok) schief.push(name);
 };
-let ip = 10;
-const neueIp = () => `203.0.113.${(ip = (ip % 240) + 1)}`;
+/* Jede Adresse nur einmal — siehe pruefung/zahlweg.mjs,
+   `neueAbsenderAdresse`. */
+const neueIp = neueAbsenderAdresse;
 
 /* Bezahlen, Rückmeldung und Sitzungskennung liegen seit Stufe 2 in
    pruefung/zahlweg.mjs — acht Listen brauchen denselben Ablauf. */
@@ -196,7 +198,7 @@ await frischeLage();
   pruefe("8 · Vor der Zahlung ist kein Platz belegt", (await belegteJetzt()) === 0);
   pruefe("8 · … und keine Zeile entstanden", (await db.registration.count()) === 0);
 
-  await rueckmeldung(await holeSitzung(a.sitzungId), "checkout.session.expired");
+  await rueckmeldung(await zw.verfallen(a.sitzungId), "checkout.session.expired");
   pruefe("9 · Nach dem Verfall bleibt es dabei: keine Anmeldung",
     (await db.registration.count()) === 0);
   pruefe("9 · … und keine Fehlbuchung — es ist kein Geld geflossen",

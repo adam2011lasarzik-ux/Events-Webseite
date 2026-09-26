@@ -25,6 +25,7 @@ import "../schutz.mjs";
 
 import { absenden, personen, BASIS } from "../K/senden.mjs";
 import * as zw from "../zahlweg.mjs";
+import { neueAbsenderAdresse } from "../zahlweg.mjs";
 import { db } from "../../lib/db.js";
 import { belegtFilter } from "../../lib/plaetze.js";
 
@@ -34,8 +35,9 @@ const pruefe = (name, ok, zusatz = "") => {
   console.log(`${ok ? "✓" : "✗"} ${n}. ${name}${zusatz ? "  — " + zusatz : ""}`);
   if (!ok) schief.push(name);
 };
-let ip = 60;
-const neueIp = () => `198.51.100.${(ip = (ip % 200) + 1)}`;
+/* Jede Adresse nur einmal — siehe pruefung/zahlweg.mjs,
+   `neueAbsenderAdresse`. */
+const neueIp = neueAbsenderAdresse;
 
 const rueckmeldung = (sitzung, art, kennung) => zw.rueckmeldung(BASIS, sitzung, art, kennung);
 

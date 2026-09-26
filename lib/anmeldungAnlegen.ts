@@ -72,7 +72,25 @@ export type Fehlbuchungsgrund =
    * einzige richtige Antwort. Das unterscheidet diesen Fall von
    * `betrag-abweichend`, wo unklar ist, WAS gekauft wurde.
    */
-  | "ohne-marke";
+  | "ohne-marke"
+  /**
+   * Die Anmeldedaten waren da, liessen sich aber nicht mehr
+   * aufschliessen, weil sie zu alt sind (24 Stunden, siehe
+   * `HOECHSTALTER_MINUTEN`).
+   *
+   * Nachgetragen am 26.09.2026. Vorher landete dieser Fall unter
+   * `betrag-abweichend` — zusammen mit jedem anderen
+   * Entschlüsselungsfehler. Das war eine Falschaussage in der
+   * Buchführung: Es steht dann „Betrag passt nicht" an einem Vorgang,
+   * bei dem der Betrag nie das Problem war, und jemand sucht im
+   * Dashboard des Anbieters nach einer Abweichung, die es nicht gibt.
+   *
+   * Er wird erstattet: Das Geld ist da, die Anmeldedaten sind nicht
+   * mehr verwertbar, eine Anmeldung kann daraus nicht mehr entstehen.
+   * Wie bei `ohne-marke` ist nichts unklar — jemand hat für nichts
+   * bezahlt.
+   */
+  | "marke-abgelaufen";
 
 /**
  * Gründe, bei denen sofort und vollständig erstattet wird.
@@ -88,6 +106,7 @@ export const SOFORT_ERSTATTEN: readonly Fehlbuchungsgrund[] = [
   "doppelte-adresse",
   "kein-termin",
   "ohne-marke",
+  "marke-abgelaufen",
 ];
 
 /**

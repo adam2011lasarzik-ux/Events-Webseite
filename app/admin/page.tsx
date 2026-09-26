@@ -33,6 +33,8 @@ function grundKlartext(grund: string): string {
       return "Betrag passt nicht";
     case "ohne-marke":
       return "Anmeldedaten kamen nicht an";
+    case "marke-abgelaufen":
+      return "Anmeldedaten waren zu alt";
     default:
       return grund;
   }
@@ -47,7 +49,9 @@ function grundKlartext(grund: string): string {
  * Bei `betrag-abweichend` ist es umgekehrt: Dort wartet die Zeile
  * wirklich auf einen Menschen.
  */
-const ERSTATTET_VON_SELBST = ["keine-plaetze", "doppelte-adresse", "kein-termin", "ohne-marke"];
+const ERSTATTET_VON_SELBST = [
+  "keine-plaetze", "doppelte-adresse", "kein-termin", "ohne-marke", "marke-abgelaufen",
+];
 
 export default async function AdminUebersicht() {
   const admin = await verlangeAdmin();

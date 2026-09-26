@@ -28,8 +28,12 @@ import {
   rueckmeldungPruefen,
   ZahlungNichtEingerichtet,
   markeZusammensetzen,
+  markeFelder,
+  markeFelderLeeren,
+  sitzungHolen,
   erstattungAusloesen,
 } from "@/lib/zahlung";
+import { markeDarfWeg } from "@/lib/zahlungRegeln";
 import { entschluesseln, MarkeUngueltig } from "@/lib/anmeldeNutzlast";
 import { schluesselbund } from "@/lib/anmeldeSchluessel";
 import {
@@ -100,8 +104,12 @@ export async function POST(anfrage: Request) {
         /* Kein Geld geflossen, also gibt es nichts zu vermerken —
            und ausdrücklich nichts anzulegen. Eine abgebrochene oder
            fehlgeschlagene Zahlung hinterlässt seit dem 25.09.2026
-           KEINE Zeile in der VERA-Datenbank. Die Meldung wird nur
-           quittiert. */
+           KEINE Zeile in der VERA-Datenbank.
+
+           Aber es gibt etwas AUFZURÄUMEN: Die verschlüsselte
+           Anmeldung liegt noch beim Anbieter, und für diesen Vorgang
+           wird sie nie wieder gebraucht. */
+        await markeAufraeumen((ereignis.data.object as Stripe.Checkout.Session).id);
         break;
 
       case "charge.refunded":
@@ -138,6 +146,73 @@ function adresseAusSitzung(sitzung: Stripe.Checkout.Session): string | null {
   return sitzung.customer_details?.email ?? sitzung.customer_email ?? null;
 }
 
+/**
+ * Kennen wir diese Bezahlseite schon?
+ *
+ * Zwei Abfragen auf eindeutige Indizes. Sie stehen VOR jeder
+ * Entscheidung über das Geld, und das ist der Kern der Sache:
+ *
+ * Der Anbieter schickt zu EINER Bezahlseite durchaus mehrere
+ * verschiedene Meldungen — bei PayPal regelmässig
+ * `checkout.session.completed` UND
+ * `checkout.session.async_payment_succeeded`, mit verschiedenen
+ * Kennungen. Die Sperre über `ZahlungsEreignis.id` greift dort nicht,
+ * sie fängt nur dieselbe Meldung zweimal ab.
+ *
+ * Solange die Marke an der Bezahlseite steht, fällt das nicht auf:
+ * Die zweite Meldung entschlüsselt sie erneut und landet bei „schon
+ * da". Sobald die Marke aber aufgeräumt ist, sähe die zweite Meldung
+ * eine bezahlte Sitzung ohne Anmeldedaten — und würde das Geld einer
+ * gültigen Buchung zurückerstatten.
+ */
+async function schonVerbucht(sitzungId: string): Promise<boolean> {
+  const anmeldung = await db.registration.findUnique({
+    where: { zahlungsReferenz: sitzungId },
+    select: { id: true },
+  });
+  if (anmeldung) return true;
+
+  const fehlbuchung = await db.fehlbuchung.findUnique({
+    where: { sitzungId },
+    select: { id: true },
+  });
+  return fehlbuchung !== null;
+}
+
+/**
+ * Die verschlüsselte Anmeldung entfernen, wenn sie nicht mehr
+ * gebraucht wird.
+ *
+ * Holt die Bezahlseite FRISCH: Das Objekt in einer Rückmeldung ist
+ * eine Momentaufnahme von damals, und ob inzwischen doch bezahlt
+ * wurde, steht nur in der aktuellen Fassung.
+ *
+ * Ein Fehlschlag ist hier nie schlimm und wird deshalb auch nicht
+ * weitergereicht: Der stündliche Abgleichlauf holt das Aufräumen
+ * nach. Eine Rückmeldung mit 500 zu beantworten, weil ein
+ * Aufräumschritt hakt, hiesse den Anbieter dieselbe Zahlung erneut
+ * melden zu lassen — für nichts.
+ */
+async function markeAufraeumen(sitzungId: string): Promise<void> {
+  try {
+    const sitzung = await sitzungHolen(sitzungId);
+    const felder = markeFelder(sitzung.metadata);
+    const darf = markeDarfWeg({
+      hatMarke: felder.length > 0,
+      status: sitzung.status,
+      bezahlt: sitzung.payment_status === "paid",
+      verbucht: await schonVerbucht(sitzungId),
+      alterMs: Date.now() - sitzung.created * 1000,
+    });
+    if (!darf) return;
+
+    await markeFelderLeeren(sitzungId, felder);
+    console.info(`Verschlüsselte Anmeldung aus ${sitzungId} entfernt.`);
+  } catch (e) {
+    console.error(`Aufräumen von ${sitzungId} fehlgeschlagen, wird nachgeholt:`, e);
+  }
+}
+
 /** Die Zahlungskennung („pi_…") aus einer Bezahlseite holen. */
 function zahlungsAbsichtVon(sitzung: Stripe.Checkout.Session): string | null {
   return typeof sitzung.payment_intent === "string"
@@ -154,12 +229,25 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
     return;
   }
 
+  /* ZUERST: Kennen wir diese Bezahlseite schon?
+     
+     Das stand bis zum 26.09.2026 weiter unten, und genau darin lag
+     ein Fehler, der Geld gekostet hätte. Eine zweite Meldung zur
+     selben Sitzung — bei PayPal der Normalfall — hätte nach dem
+     Aufräumen der Marke eine gültige Buchung zurückerstattet.
+
+     Jetzt gilt: Was schon verbucht ist, ist fertig. Ganz gleich, ob
+     daraus eine Anmeldung oder eine Fehlbuchung wurde, und ganz
+     gleich, ob die Marke noch dransteht. */
+  if (await schonVerbucht(sitzung.id)) return;
+
   const eventId = sitzung.metadata?.event ?? null;
   const marke = markeZusammensetzen(sitzung.metadata);
 
-  /* Eine bezahlte Sitzung ohne Marke. Das kann nur zweierlei sein:
-     eine Bezahlseite aus der Zeit vor dem Umbau, die beim Ausrollen
-     noch offen war — oder etwas, das niemand vorhergesehen hat.
+  /* Eine bezahlte Sitzung ohne Marke, die wir NICHT kennen. Das kann
+     nur zweierlei sein: eine Bezahlseite aus der Zeit vor dem Umbau,
+     die beim Ausrollen noch offen war — oder etwas, das niemand
+     vorhergesehen hat.
 
      In beiden Fällen ist eines sicher: Ohne Anmeldedaten kann hieraus
      NIEMALS eine Anmeldung werden. Jemand hat für nichts bezahlt.
@@ -169,11 +257,7 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
      Die Adresse für die Hinweismail kommt aus der Sitzung selbst —
      sie ist das Einzige, was wir über diesen Menschen wissen. Fehlt
      sie, wird trotzdem erstattet; eine Erstattung ohne Mail ist
-     besser als eine Mail ohne Erstattung.
-
-     Der Ausrollplan sieht vor, vorher nachzusehen, dass keine
-     Bezahlseite mehr offen ist — damit dieser Fall gar nicht erst
-     eintritt. */
+     besser als eine Mail ohne Erstattung. */
   if (!eventId || !marke) {
     console.error(
       `Bezahlte Sitzung ohne verschlüsselte Anmeldung (${sitzung.id}), ` +
@@ -200,11 +284,34 @@ async function bezahltVermerken(sitzung: Stripe.Checkout.Session): Promise<void>
     nutzlast = entschluesseln(marke, schluesselbund(), { eventId, preisCents: betragCents });
   } catch (e) {
     const grund = e instanceof MarkeUngueltig ? e.grund : "unbekannt";
+
+    /* Eine abgelaufene Marke ist etwas anderes als ein nicht
+       passender Betrag, und sie gehört auch anders behandelt.
+
+       Bis zum 26.09.2026 landete JEDER Entschlüsselungsfehler unter
+       `betrag-abweichend`. An einem Vorgang, bei dem der Betrag nie
+       das Problem war, stand dann „Betrag passt nicht" — und jemand
+       hätte im Dashboard des Anbieters nach einer Abweichung gesucht,
+       die es nicht gibt.
+
+       Beim Alter ist die Lage klar: Das Geld ist da, die Anmeldedaten
+       sind nicht mehr verwertbar, eine Anmeldung kann daraus nicht
+       mehr entstehen. Also vollständig erstatten. Bei allem anderen
+       bleibt es dabei, dass ein Mensch hinsieht. */
+    const fehlgrund: Fehlbuchungsgrund =
+      grund === "abgelaufen" ? "marke-abgelaufen" : "betrag-abweichend";
+
     console.error(
       `Die Marke der Sitzung ${sitzung.id} liess sich nicht aufschliessen (${grund}). ` +
-        "Geld ist eingegangen. NICHT automatisch erstattet — bitte im Adminbereich klären.",
+        `Geld ist eingegangen. Festgehalten als „${fehlgrund}".`,
     );
-    await fehlbuchungFesthalten(sitzung.id, betragCents, "betrag-abweichend");
+    await fehlbuchungAbwickeln(
+      sitzung.id,
+      betragCents,
+      zahlungsAbsichtVon(sitzung),
+      fehlgrund,
+      adresseAusSitzung(sitzung),
+    );
     return;
   }
 

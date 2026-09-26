@@ -1,11 +1,11 @@
 # Die automatischen Prüfungen
 
-Rund 1.360 Prüfungen, die gegen die **echte** Datenbank und den **echten**
+Rund 1.410 Prüfungen, die gegen die **echte** Datenbank und den **echten**
 Server laufen — nicht gegen nachgebaute Logik. Was hier grün ist, ist
 wirklich geprüft.
 
 Die Zahlen unten sind die des Sammellaufs vom 26.09.2026
-(`bash pruefung/alle.sh`, 47 Listen, alle in Ordnung). `L` ist ohne Zahl,
+(`bash pruefung/alle.sh`, 48 Listen, alle in Ordnung). `L` ist ohne Zahl,
 weil die fliessende Messung der Responsivität Tausende von
 Einzelmessungen erzeugt und getrennt gestartet wird.
 
@@ -20,7 +20,7 @@ Wie man sie startet, steht in **[../docs/pruefen.md](../docs/pruefen.md)**.
 | `G`, `H` | Designs, Inhaltsblöcke, Anmeldung je Event | 39 |
 | `H` | Bild-Upload: Formate, Grössen, EXIF/GPS, getarnte Dateien, Pfad-Tricks | 20 |
 | `I` | Gründerbereich, Kontraste, Wortmarke | 29 |
-| `J` | Zahlung: Unterschrift, doppelte Meldungen, Betragsabgleich, Riegel; dass vor der Zahlung nichts gespeichert wird und in der `metadata` des Anbieters kein Klartext steht; eine Zahlung ganz ohne Anmeldedaten samt ihrer automatischen Erstattung; die Fehlbuchungs-Warnung im Adminbereich und der Knopf „Als erledigt markieren" | 95 |
+| `J` | Zahlung: Unterschrift, doppelte Meldungen, Betragsabgleich, Riegel; dass vor der Zahlung nichts gespeichert wird und in der `metadata` des Anbieters kein Klartext steht; eine Zahlung ganz ohne Anmeldedaten samt ihrer automatischen Erstattung; **zwei gleichzeitig eintreffende Meldungen zur selben Bezahlseite**; die Fehlbuchungs-Warnung im Adminbereich und der Knopf „Als erledigt markieren" | 101 |
 | `K` | Anmeldung und Bezahlung als ein Ablauf — die 15 geforderten Fälle, samt beider Seiten der Platzregel: ein Abbruch hinterlässt nichts, und gegen bezahlte Plätze wird kein Platz zweimal verkauft (wer trotzdem zahlt, bekommt sein Geld zurück) | 61 |
 | `L` | Responsivität: fliessende Messung 320–1920 px, Querformat, Pixelvergleich; dazu die Kopfleiste (Menü, Anmelde-Knopf) | 27 + Messung |
 | `M` | Fehlgeschlagene und späte Zahlung | 42 |
@@ -34,7 +34,7 @@ Wie man sie startet, steht in **[../docs/pruefen.md](../docs/pruefen.md)**.
 | `U` | Versionierte Rechtstexte: Prüfsumme, Versionsnummern, welche Fassung wann gilt, Unveränderbarkeit (auch projektweit geprüft), Fassung je Buchung, Volltext in der Bestätigungsmail; der erzeugte Wortlaut in `rechtstexte/` gegen `content/de.ts` (in beide Richtungen) und das Anlegeskript im echten Aufruf | 57 |
 | `V` | Bestellknopf nach § 312j Abs. 3 BGB, AGB-Häkchen (§ 305 Abs. 2 BGB), Kenntnisnahme zu Aufnahmen und der abgesetzte Widerspruchshinweis (Art. 21 Abs. 4 DS-GVO) — jeweils auch serverseitig erzwungen | 40 |
 | `W` | Widerspruch gegen Foto- und Videoaufnahmen (Art. 21 DS-GVO): Speicherung, Rücknahme ohne Löschung, die ereignisbezogene K8-Frist samt „Aufnahmen offline"-Markierung (Datum, Bearbeiter, Prüfvermerk), der Prüfvermerk vor jeder Veröffentlichung, die Sperre bei einem Widerspruch nach der letzten Prüfung, die Empfängerangabe der Veranstaltungsstätte (Art. 13 Abs. 1 Buchst. e DS-GVO), dass VERA ehrlich sagt, noch keinen Instagram-Kanal zu haben (B-12) — und die Veröffentlichungen selbst (B-14): Ort, Verantwortlicher, Zweck, die Löschsperre über offene Veröffentlichungen vor der K8-Offline-Markierung, Entfernen und Wiederherstellen | 144 |
-| `X` | Anmeldung erst nach bezahlter Zahlung: die verschlüsselte Nutzlast (jedes Byte einzeln verbogen, fremde Veranstaltung, fremder Betrag, Schlüsselwechsel, Alter, Größe gegen die gemessene Stripe-Grenze), die flüchtige Bremse ohne Datenbankzeile, die eine Anlagefunktion samt **aller** Fehlbuchungsgründe — die Liste dafür wird aus dem Quelltext gelesen, damit ein neuer Grund nicht stillschweigend durchfällt — und `x-keine-spur`, das nach einem Abbruch **jede** Tabelle der Datenbank vorher/nachher zählt | 112 |
+| `X` | Anmeldung erst nach bezahlter Zahlung: die verschlüsselte Nutzlast (jedes Byte einzeln verbogen, fremde Veranstaltung, fremder Betrag, Schlüsselwechsel, Alter, Größe gegen die gemessene Stripe-Grenze), die flüchtige Bremse ohne Datenbankzeile, die eine Anlagefunktion samt **aller** Fehlbuchungsgründe — die Liste dafür wird aus dem Quelltext gelesen, damit ein neuer Grund nicht stillschweigend durchfällt —, `x-keine-spur`, das nach einem Abbruch **jede** Tabelle der Datenbank vorher/nachher zählt, und `x-marke-loeschen`: wann die verschlüsselte Anmeldung beim Anbieter entfernt werden darf und wann ausdrücklich nicht | 152 |
 
 ## Zu den Schlüsseln in diesen Dateien
 
@@ -75,11 +75,23 @@ Zwei Dinge daran sind Absicht und sollten so bleiben:
   zusammengesetzt**, nicht mit einer nachgebauten. Eine eigene Fassung
   läge bei jeder Änderung an der Aufteilung stillschweigend daneben,
   und die Prüfung bestünde dann aus dem falschen Grund.
-- **Jedes Browserfenster und jeder Bremstest bekommt eine eigene
-  Absenderadresse** aus `198.18.0.0/15`. Die Bremse zählt seit Stufe 2
-  im Arbeitsspeicher des Servers und lässt sich von aussen nicht mehr
-  zurücksetzen; eine feste Adresse trug ihre Zähler in den nächsten
-  Lauf und liess den zweiten Sammellauf scheitern.
+- **Jede Einsendung kommt von einer eigenen Absenderadresse** aus
+  `198.18.0.0/15` — die Voreinstellung in allen `senden.mjs` und in
+  `neueAbsenderAdresse`.
+
+  Das ist nicht Kosmetik, sondern die Lehre aus einem Tag Suche. Die
+  Bremse gegen Massen-Einsendungen zählte bis Stufe 2 in der
+  Datenbank, und `leeren.mjs` setzte sie vor jeder Liste zurück. Seit
+  sie im Arbeitsspeicher des Servers zählt (fünf Versuche je Stunde
+  und Adresse), erreicht `leeren.mjs` sie nicht mehr — und alle
+  `senden.mjs` schickten von derselben festen Adresse `203.0.113.1`.
+
+  Im Sammellauf lief der Zähler damit über, und welche Liste dann
+  umfiel, entschied der Zufall: einmal die Zahlung, einmal der
+  Bild-Upload, einmal der Adminzugang. Drei Läufe, drei verschiedene
+  Fehlschläge, alle drei standen einzeln auf grün. Ein Prüfwerkzeug,
+  das bei jedem Lauf woanders umfällt, kostet mehr Zeit als es
+  einbringt.
 
 ## Warum eine Attrappe statt des echten Anbieters
 

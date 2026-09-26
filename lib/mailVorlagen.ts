@@ -183,6 +183,15 @@ export function erstattungsHinweisMail(grund: string): { betreff: string; text: 
         "Deine Anmeldedaten sind bei uns technisch nicht angekommen — das liegt an uns, " +
         "nicht an dir. Deine Anmeldung ist deshalb nicht zustande gekommen.";
       break;
+    case "marke-abgelaufen":
+      /* Bewusst dieselbe Aussage wie bei `ohne-marke`: Für den
+         Menschen, der bezahlt hat, ist es dieselbe Lage — seine
+         Angaben kamen nicht bei uns an. Dass der Grund bei uns ein
+         anderer ist, hilft ihm nicht und verwirrt nur. */
+      erklaerung =
+        "Deine Anmeldedaten sind bei uns technisch nicht angekommen — das liegt an uns, " +
+        "nicht an dir. Deine Anmeldung ist deshalb nicht zustande gekommen.";
+      break;
     default:
       // Bewusst ohne Grund: lieber vage als falsch.
       erklaerung = "Deine Anmeldung ist leider nicht zustande gekommen.";

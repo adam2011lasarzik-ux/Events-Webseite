@@ -16,6 +16,7 @@ import { absenden, personen, BASIS, ANMELDEPFAD } from "./senden.mjs";
 import { db } from "../../lib/db.js";
 import { istTestschluessel, betragPasst } from "../../lib/zahlungRegeln.js";
 import * as zw from "../zahlweg.mjs";
+import { neueAbsenderAdresse } from "../zahlweg.mjs";
 
 const ATTRAPPE = "http://127.0.0.1:4242";
 const GEHEIMNIS = "whsec_pruefgeheimnis_nur_lokal";
@@ -28,8 +29,9 @@ const pruefe = (name, ok, zusatz = "") => {
   if (!ok) schief.push(name);
 };
 
-let ip = 100;
-const neueIp = () => `198.51.100.${(ip = (ip % 200) + 1)}`;
+/* Jede Adresse nur einmal — siehe pruefung/zahlweg.mjs,
+   `neueAbsenderAdresse`. */
+const neueIp = neueAbsenderAdresse;
 
 /** Eine Rückmeldung mit gültiger Unterschrift schicken. */
 async function rueckmeldung(ereignis, { unterschrift } = {}) {
@@ -249,6 +251,60 @@ pruefe("… und wird NICHT automatisch erstattet", fehl?.erstattetAm === null);
     `${beimAnbieter.length} verzeichnet`);
 }
 
+// ── 7c. Zwei Meldungen gleichzeitig zur selben Sitzung ─────────
+//
+// Der Anbieter schickt zu EINER Bezahlseite mehrere verschiedene
+// Meldungen — bei PayPal regelmässig `checkout.session.completed`
+// UND `checkout.session.async_payment_succeeded`. Sie haben
+// verschiedene Kennungen, die Sperre über `ZahlungsEreignis.id`
+// greift also nicht, und sie können sich überholen.
+//
+// Zwei Dinge dürfen dabei niemals passieren: eine zweite Anmeldung —
+// und, schlimmer, eine Erstattung, weil die zweite Meldung die
+// bereits verarbeitete Sitzung nicht wiedererkennt.
+{
+  const gleich = await anmelden("gleichzeitig@example.org");
+  const bezahlteSitzung = await zw.bezahlen(gleich.sitzungId);
+  const erstattungenVorher =
+    (await (await fetch(`${ATTRAPPE}/steuerung/erstattungen`)).json()).length;
+
+  /* Wirklich gleichzeitig losgeschickt, nicht nacheinander. Genau so
+     treffen sie ein, und genau dann greift eine Prüfung nicht mehr,
+     die sich auf „vorher nachgesehen" verlässt. */
+  const [eins, zwei] = await Promise.all([
+    rueckmeldung(sitzungEreignis(bezahlteSitzung, "checkout.session.completed")),
+    rueckmeldung(sitzungEreignis(bezahlteSitzung, "checkout.session.async_payment_succeeded")),
+  ]);
+  pruefe("Zwei gleichzeitige Meldungen werden beide beantwortet",
+    [200, 500].includes(eins.status) && [200, 500].includes(zwei.status),
+    `${eins.status} / ${zwei.status}`);
+
+  /* Verliert eine von beiden das Rennen um den eindeutigen Index,
+     antwortet sie mit 500 — und der Anbieter wiederholt sie. Auch das
+     gehört geprüft: Der Wiederholungslauf muss sauber landen. */
+  await rueckmeldung(sitzungEreignis(bezahlteSitzung, "checkout.session.completed"));
+  await rueckmeldung(sitzungEreignis(bezahlteSitzung, "checkout.session.async_payment_succeeded"));
+
+  pruefe("Es entsteht genau EINE Anmeldung",
+    (await db.registration.count({ where: { kontaktEmail: "gleichzeitig@example.org" } })) === 1,
+    `${await db.registration.count({ where: { kontaktEmail: "gleichzeitig@example.org" } })}`);
+  pruefe("… mit genau einem Teilnehmer",
+    (await db.participant.count({
+      where: { anmeldung: { kontaktEmail: "gleichzeitig@example.org" } } })) === 1);
+  pruefe("… und KEINER Fehlbuchung",
+    (await db.fehlbuchung.count({ where: { sitzungId: gleich.sitzungId } })) === 0);
+  pruefe("… und vor allem KEINER Erstattung",
+    (await (await fetch(`${ATTRAPPE}/steuerung/erstattungen`)).json()).length
+      === erstattungenVorher,
+    `${erstattungenVorher} vorher`);
+
+  const angelegt = await db.registration.findFirstOrThrow({
+    where: { kontaktEmail: "gleichzeitig@example.org" },
+  });
+  pruefe("… die Anmeldung steht auf bestätigt und bezahlt",
+    angelegt.status === "BESTAETIGT" && angelegt.zahlungsStatus === "BEZAHLT");
+}
+
 // ── 8. Erstattung ──────────────────────────────────────────────
 r = await rueckmeldung({
   id: "evt_pruef_erstattung", object: "event", type: "charge.refunded",
@@ -261,7 +317,7 @@ pruefe("Erstattung wird vermerkt", erstattet.zahlungsStatus === "ERSTATTET",
 
 // ── 9. Eine verfallene Bezahlseite ─────────────────────────────
 const a3 = await anmelden("timo@example.org");
-await rueckmeldung(sitzungEreignis(await zw.holeSitzung(a3.sitzungId), "checkout.session.expired"));
+await rueckmeldung(sitzungEreignis(await zw.verfallen(a3.sitzungId), "checkout.session.expired"));
 pruefe("Eine verfallene Bezahlseite hinterlässt keine Anmeldung",
   (await db.registration.count({ where: { kontaktEmail: "timo@example.org" } })) === 0);
 pruefe("… und keine Fehlbuchung — es floss kein Geld",

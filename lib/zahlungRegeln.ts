@@ -9,6 +9,8 @@
    prüfen, ohne dass irgendetwas nach draußen spricht.
    --------------------------------------------------------------- */
 
+import { HOECHSTALTER_MINUTEN } from "./anmeldeNutzlast";
+
 /* ── Entfallen am 26.09.2026: `Zahlbar`, `ZahlungAbgelehnt`, `darfZahlen`
 
    Diese drei beantworteten die Frage „darf für DIESE gespeicherte
@@ -100,3 +102,72 @@ export function plaetzeReichen(
   const frei = Math.max(0, maxPersonen - belegtOhneDiese);
   return personen <= frei ? { reicht: true } : { reicht: false, frei };
 }
+
+/* ---------------------------------------------------------------
+   Darf die verschlüsselte Anmeldung aus der Bezahlseite entfernt
+   werden?
+
+   Reine Regel, ohne Netz und ohne Datenbank — deshalb steht sie hier
+   und nicht in lib/zahlung.ts. Was sie entscheidet, betrifft Geld und
+   fremde Daten zugleich; eine Regel, die man nur im Zusammenspiel mit
+   Stripe prüfen kann, wäre an dieser Stelle die falsche.
+
+   Am 26.09.2026 gegen die echte Schnittstelle belegt: Ein leerer Wert
+   entfernt den Schlüssel vollständig, und auch eine VERFALLENE
+   Bezahlseite lässt sich noch ändern.
+   --------------------------------------------------------------- */
+
+/** Was über eine Bezahlseite bekannt sein muss, um zu entscheiden. */
+export interface Markenlage {
+  /** Trägt die Bezahlseite überhaupt noch eine Marke? */
+  hatMarke: boolean;
+  /** „open" = noch bezahlbar, „complete" = abgeschlossen, „expired" = verfallen. */
+  status: string | null;
+  /** Meldet der Anbieter Geldeingang? */
+  bezahlt: boolean;
+  /** Gibt es bei VERA eine Anmeldung ODER eine Fehlbuchung dazu? */
+  verbucht: boolean;
+  /** Wie alt die Bezahlseite ist, in Millisekunden. */
+  alterMs: number;
+}
+
+/**
+ * Drei Fälle, und nur einer davon braucht eine Frist.
+ *
+ *   noch offen        → NEIN. Die Marke wird gleich gebraucht.
+ *   bezahlt, offen    → NEIN, solange nicht verbucht: Der Abgleichlauf
+ *     bei VERA           legt die Anmeldung daraus erst noch an. Sie
+ *                        vorher zu entfernen hiesse, Geld ohne jede
+ *                        Zuordnung stehenzulassen.
+ *   bezahlt, verbucht → JA, aber erst nach 24 Stunden. Vorher ist die
+ *                        Marke der einzige Weg, die Buchung nach dem
+ *                        Einspielen einer Sicherung wiederherzustellen.
+ *                        Danach ist sie ohnehin wertlos:
+ *                        `entschluesseln` weist sie als abgelaufen ab.
+ *   nicht bezahlt,    → JA, sofort. Es ist kein Geld geflossen, es gibt
+ *   nicht mehr offen    nichts zu rekonstruieren.
+ */
+export function markeDarfWeg(lage: Markenlage): boolean {
+  if (!lage.hatMarke) return false;
+  // Eine offene Bezahlseite behält ihre Marke — immer.
+  if (lage.status === "open") return false;
+
+  if (lage.bezahlt) {
+    if (!lage.verbucht) return false;
+    return lage.alterMs >= MARKE_SCHONFRIST_MS;
+  }
+
+  return true;
+}
+
+/**
+ * Wie lange die Marke einer bezahlten, verbuchten Bezahlseite stehen
+ * bleibt: genauso lange, wie sie überhaupt brauchbar ist.
+ *
+ * Dieselbe Zahl wie `HOECHSTALTER_MINUTEN` in lib/anmeldeNutzlast.ts,
+ * und das mit Absicht von dort geholt statt abgeschrieben: Würde die
+ * eine Frist verlängert und die andere nicht, entstünde genau
+ * dazwischen ein Fenster, in dem eine noch brauchbare Marke bereits
+ * entfernt wäre.
+ */
+export const MARKE_SCHONFRIST_MS = HOECHSTALTER_MINUTEN * 60_000;
