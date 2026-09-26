@@ -278,7 +278,7 @@ vorgesehen. Dann gilt für eine Abschlussprüfung:
 | 15 | Nginx-Bremse einbauen und neu laden | **ja, Server** |
 | 16 | Abgleichlauf einrichten (systemd-Timer) | **ja, Server** |
 | 17 | Abschlussprüfung **hinter der Sperre** | legt eine Testbuchung an, die danach entfernt wird |
-| 17b | Aufräumen auf einer **bezahlten** Bezahlseite prüfen | leert die Marke dieser einen Testsitzung |
+| 17b | Aufräumen auf einer **bezahlten** Bezahlseite prüfen — Sperre bleibt | leert die Marke dieser einen Testsitzung |
 | 18 | **Öffentliche Freigabe** — eigener letzter Schritt | **ja, Server:** ab hier können Kunden buchen |
 
 Die Befehle dazu stehen in **Abschnitt 4**, in derselben Reihenfolge:
@@ -379,7 +379,28 @@ Stattdessen:
    Aufzählungstyp wieder erweitern; beides steht in Abschnitt 4.18.
    Das ist der Notausgang, nicht der Normalweg.
 
-### 2.4 Woran man merkt, dass es schiefgegangen ist
+### 2.4 Wenn Schritt 17b nicht durchgeht
+
+Das ist kein Rückkehrfall, sondern ein Haltepunkt — und er verdient
+einen eigenen Absatz, weil er der einzige Schritt ist, der das
+Ausrollen für gelungen erklärt und die Freigabe trotzdem verweigern
+kann.
+
+Die Lage nach 17b: Der Umbau läuft, die Migration ist durch, die Seite
+ist erreichbar — aber nur hinter dem Passwort. Alles davor war grün.
+Nur das Aufräumen der verschlüsselten Anmeldung auf einer **bezahlten**
+Bezahlseite hat nicht funktioniert.
+
+| Was 17b meldet | Was gilt |
+|---|---|
+| Zeile 4 `GEHT NICHT` | Ausrollen bleibt gültig, **Freigabe wartet**. Fassung B des Datenschutztextes darf **nicht** gesetzt werden; es gilt Fassung A mit dem einschränkenden Zusatz (Abschnitt 3.7). Erst danach Schritt 18. |
+| Zeile 2 oder 3 `NICHT OK` | **Stopp.** Die verschlüsselte Anmeldung liegt an einem Objekt, das der Plan nicht kennt und das niemand aufräumt. Nicht freigeben, nicht weitermachen, Ausgabe schicken. |
+| Zeile 1 `NICHT OK` | Falsche Sitzungskennung oder die Testzahlung lief nicht durch. Abschnitt 5 wiederholen. |
+
+In allen drei Fällen gilt dasselbe: **Die Sperre bleibt stehen.** Ein
+halb geklärter Zustand ist kein Zustand, in dem Kunden buchen sollen.
+
+### 2.5 Woran man merkt, dass es schiefgegangen ist
 
 - Der Adminbereich zeigt oben Fehlbuchungen, die nicht von der
   Abschlussprüfung stammen.
@@ -1432,64 +1453,111 @@ Einmal von Hand starten und ansehen:
 sudo systemctl start vera-zahlungsabgleich.service && journalctl -u vera-zahlungsabgleich.service -n 30 --no-pager
 ```
 
-### 4.15 Aufräumen auf einer bezahlten Bezahlseite prüfen *(leert die Marke dieser Testsitzung)*
+### 4.15 Schritt 17b — Aufräumen auf einer BEZAHLTEN Bezahlseite *(leert die Marke dieser einen Testsitzung)*
 
-Direkt nach der Testzahlung aus Abschnitt 5, mit deren Sitzungskennung.
-Sie steht in der Adresszeile der Abschluss-Seite (`…?sitzung=cs_…`)
-und im Dashboard des Anbieters.
+Der letzte offene Punkt. `open` und `expired` sind am 26.09.2026
+gegen die echte Schnittstelle belegt; `complete` lässt sich über die
+Schnittstelle allein nicht herstellen, dafür braucht es die
+Testzahlung aus Abschnitt 5.
 
-Der Befehl beantwortet drei Fragen auf einmal, gibt den Schlüssel
-niemals aus und fasst nichts ausser dieser einen Sitzung an:
+**Sieben Bedingungen, alle verbindlich:**
+
+| # | Bedingung |
+|---|---|
+| 1 | Die Website bleibt **passwortgeschützt**. Die Sperre wird für diesen Schritt nicht angefasst. |
+| 2 | Es wird **ausschliesslich eine Stripe-Testzahlung** verwendet — dieselbe aus Abschnitt 5, mit der Testkarte. Kein echtes Geld. |
+| 3 | Es wird geprüft, dass die Sitzung **`complete` / `paid`** ist. |
+| 4 | Es wird geprüft, dass **PaymentIntent und Charge keine** verschlüsselten Anmeldedaten übernommen haben. |
+| 5 | Es wird geprüft, ob sich die **Session-Metadaten auch im Zustand `complete`** entfernen lassen. |
+| 6 | Schlägt etwas davon fehl, wird die Website **nicht öffentlich freigegeben**. |
+| 7 | **Fassung B** des Datenschutztextes darf nur verwendet werden, wenn das Entfernen nachweislich funktioniert. |
+
+Die Sitzungskennung steht in der Adresszeile der Abschluss-Seite
+(`…?sitzung=cs_…`) und im Dashboard des Anbieters. Sie gehört zu der
+Buchung, die du in Abschnitt 5 bezahlt hast — **vor** dem Storno
+ausführen.
+
+Der Befehl bricht von selbst ab, wenn kein Testschlüssel hinterlegt
+ist, und gibt den Schlüssel niemals aus:
 
 ```bash
 cd /var/www/vera && sudo -u vera node --env-file=.env -e '
 const Stripe = require("stripe");
 const k = (process.env.ZAHLUNG_GEHEIMSCHLUESSEL || "").trim();
+if (!/^(sk|rk)_test_/.test(k)) { console.log("KEIN TESTSCHLUESSEL — abgebrochen"); process.exit(1); }
 const id = process.argv[1];
 const s = new Stripe(k);
+const marken = (m) => Object.keys(m || {}).filter((x) => /^marke_/.test(x));
 (async () => {
   const a = await s.checkout.sessions.retrieve(id);
-  const felder = Object.keys(a.metadata || {}).filter((x) => /^marke_/.test(x));
-  console.log("Zustand      :", a.status, "/", a.payment_status);
-  console.log("Marke        :", felder.length ? felder.join(", ") : "schon fort");
-  if (a.payment_intent) {
-    const p = await s.paymentIntents.retrieve(
-      typeof a.payment_intent === "string" ? a.payment_intent : a.payment_intent.id);
-    console.log("Zahlung traegt:", JSON.stringify(p.metadata || {}));
+  console.log("1 ZUSTAND    :", a.status, "/", a.payment_status,
+              a.status === "complete" && a.payment_status === "paid" ? "— OK" : "— NICHT OK");
+
+  const piId = typeof a.payment_intent === "string" ? a.payment_intent : a.payment_intent && a.payment_intent.id;
+  if (!piId) { console.log("2 ZAHLUNG    : keine Zahlung an der Sitzung — NICHT OK"); return; }
+  const p = await s.paymentIntents.retrieve(piId);
+  const pm = marken(p.metadata);
+  console.log("2 ZAHLUNG    :", JSON.stringify(p.metadata || {}),
+              pm.length ? "— NICHT OK, traegt Anmeldedaten" : "— OK, keine Anmeldedaten");
+
+  const chId = typeof p.latest_charge === "string" ? p.latest_charge : p.latest_charge && p.latest_charge.id;
+  if (!chId) console.log("3 BUCHUNG    : keine Charge vorhanden");
+  else {
+    const c = await s.charges.retrieve(chId);
+    const cm = marken(c.metadata);
+    console.log("3 BUCHUNG    :", JSON.stringify(c.metadata || {}),
+                cm.length ? "— NICHT OK, traegt Anmeldedaten" : "— OK, keine Anmeldedaten");
   }
-  if (!felder.length) return console.log("LEEREN       : nichts zu tun");
+
+  const felder = marken(a.metadata);
+  if (!felder.length) return console.log("4 LEEREN     : schon fort — nichts zu tun");
   const leer = {}; for (const f of felder) leer[f] = "";
   try {
     const b = await s.checkout.sessions.update(id, { metadata: leer });
-    console.log("LEEREN       : GEHT —", JSON.stringify(b.metadata));
-  } catch (e) { console.log("LEEREN       : GEHT NICHT —", e.message); }
+    const rest = marken(b.metadata);
+    console.log("4 LEEREN     :", rest.length ? "NICHT OK, Rest: " + rest.join(", ") : "GEHT",
+                "—", JSON.stringify(b.metadata));
+  } catch (e) { console.log("4 LEEREN     : GEHT NICHT —", e.message); }
 })().catch((e) => console.error("FEHLER:", e.message));
 ' cs_HIER_DIE_SITZUNGSKENNUNG
 ```
 
-Erwartet:
+**So muss die Ausgabe aussehen:**
 
-- **`Zustand`** — `complete / paid`.
-- **`Zahlung traegt`** — `{}`. Damit ist belegt, dass die
-  verschlüsselte Anmeldung **nicht** auf die Zahlung übertragen wird
-  und wirklich nur an einem einzigen Objekt liegt.
-- **`LEEREN : GEHT`** — und in der Ausgabe daneben nur noch
-  `{"event":"…"}`.
+```
+1 ZUSTAND    : complete / paid — OK
+2 ZAHLUNG    : {} — OK, keine Anmeldedaten
+3 BUCHUNG    : {} — OK, keine Anmeldedaten
+4 LEEREN     : GEHT — {"event":"…"}
+```
 
-`LEEREN : GEHT NICHT` ist kein Grund zum Abbrechen des Ausrollens —
-der Rest läuft davon unabhängig. Aber dann gilt: **Fassung B des
-Datenschutztextes darf nicht gesetzt werden**, weil dann nur
-abgebrochene und verfallene Bezahlseiten geleert werden, bezahlte
-nicht. Schick mir in dem Fall die Ausgabe, ich passe den Text an.
+**Was bei welchem Ergebnis gilt:**
 
-Trägt `Zahlung traegt` wider Erwarten Felder, ebenfalls melden: Dann
-liegt die Marke an einem zweiten Objekt, und der Plan braucht eine
-Ergänzung.
+- **Alle vier Zeilen OK** → Schritt 18 darf laufen, und Fassung B des
+  Datenschutztextes darf gesetzt werden.
+- **Zeile 4 `GEHT NICHT`** → Die Website wird **nicht** freigegeben,
+  bis geklärt ist warum. Das Ausrollen selbst ist davon unberührt —
+  aber **Fassung B darf nicht gesetzt werden**, weil dann nur
+  abgebrochene und verfallene Bezahlseiten geleert werden. Schick mir
+  die Ausgabe; wir setzen Fassung A mit dem einschränkenden Zusatz
+  (Abschnitt 3.7) und geben erst danach frei.
+- **Zeile 2 oder 3 `NICHT OK`** → **Stopp.** Dann liegt die
+  verschlüsselte Anmeldung an einem zweiten Objekt, das der Plan nicht
+  kennt und das niemand aufräumt. Nicht freigeben, Ausgabe schicken.
+- **Zeile 1 `NICHT OK`** → falsche Sitzungskennung oder die Zahlung
+  ist nicht durchgelaufen. Abschnitt 5 wiederholen.
+
+Danach die Testbuchung wie in Abschnitt 5 Punkt 10 über den
+Storno-Weg im Adminbereich entfernen.
 
 ### 4.16 Öffentliche Freigabe — der letzte Schritt *(**ändert den Server**)*
 
-**Erst ausführen, wenn Abschnitt 5 und Schritt 17b durch sind.** Ab diesem
-Befehl können Kunden buchen.
+**Erst ausführen, wenn Abschnitt 5 vollständig grün ist UND Schritt
+17b (Abschnitt 4.15) in allen vier Zeilen OK gemeldet hat.** Ab
+diesem Befehl können Kunden buchen.
+
+Hat 17b irgendwo `NICHT OK` gemeldet, wird hier **nicht**
+weitergemacht. Die Sperre bleibt stehen, bis geklärt ist warum.
 
 In `/etc/nginx/sites-available/vera` die beiden Zeilen wieder
 entfernen:
