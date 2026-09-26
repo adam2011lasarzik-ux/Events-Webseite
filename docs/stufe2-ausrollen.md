@@ -742,18 +742,57 @@ In Fassung B ändern sich die Absätze 4 bis 7 von 3.4:
 > VERA-Datenbank.
 
 Und im Abschnitt „3. Empfänger und Auftragsverarbeiter" der
-Stripe-Eintrag:
+Stripe-Eintrag — **vollständig**, so wie er auf der Seite stünde:
 
-> Stripe Payments Europe, Limited, … wickelt Zahlungen ab;
-> Einzelheiten stehen im vorherigen Abschnitt. Der verschlüsselte
-> Datensatz mit Ihren Anmeldeangaben wird dort nur bis zum Abschluss
-> des Bezahlvorgangs gespeichert und anschliessend von VERA gelöscht.
-> Die übrigen Angaben zum Bezahlvorgang bewahrt Stripe nach seinen
-> eigenen Regeln auf.  ⟵ **Frist weiterhin offen**
+> Stripe Payments Europe, Limited, One Wilton Park, Wilton Place,
+> Dublin 2, D02 FX04, Irland (bei bestimmten Zahlungsdiensten
+> zusätzlich Stripe Technology Europe, Limited, unter derselben
+> Anschrift), wickelt Zahlungen ab; Einzelheiten stehen im vorherigen
+> Abschnitt. Der verschlüsselte Datensatz mit Ihren Anmeldeangaben
+> wird dort nur so lange gespeichert, wie er für den Bezahlvorgang
+> benötigt wird. Bei einem abgebrochenen oder verfallenen
+> Bezahlvorgang entfernt VERA ihn, sobald Stripe den Abbruch oder
+> Verfall meldet; bleibt diese Meldung aus, beim nächsten
+> regelmäßigen Abgleich. Bei einem erfolgreich bezahlten und bei VERA
+> verbuchten Vorgang entfernt VERA ihn, nachdem seit seiner Erzeugung
+> 24 Stunden vergangen sind, mit dem darauffolgenden stündlichen
+> Bereinigungslauf. Ist die Zahlung eingegangen, die Anmeldung bei
+> VERA aber noch nicht verbucht, bleibt er zunächst erhalten, weil er
+> für die Nachverarbeitung benötigt wird. Die übrigen Angaben zum
+> Bezahlvorgang — insbesondere Betrag, Zeitpunkt sowie Zahlungs- und
+> Erstattungsnummern — bewahrt Stripe nach seinen eigenen Regeln auf.
+> ⟵ **deren Frist weiterhin offen**
+
+**Warum der alte Satz ersetzt wurde.** Er lautete: „wird dort nur bis
+zum Abschluss des Bezahlvorgangs gespeichert und anschliessend von
+VERA gelöscht." Das beschreibt den Ablauf falsch, und zwar in beide
+Richtungen: Bei einem abgeschlossenen Vorgang wird eben NICHT sofort
+danach gelöscht, sondern nach 24 Stunden mit dem nächsten Lauf — und
+bei einem bezahlten, aber noch nicht verbuchten Vorgang bleibt der
+Datensatz absichtlich länger, weil aus ihm die Anmeldung erst noch
+entstehen muss. Ein Satz, der das zusammenfasst, wäre kürzer und
+falsch.
 
 **Ergibt Schritt 17b `GEHT NICHT`**, bleibt Fassung A. Sie ist genau
 für diesen Fall geschrieben: Abbruch und Verfall werden geräumt,
 abgeschlossene Bezahlvorgänge nicht — und sie sagt das auch so.
+
+Dann gilt auch für den Stripe-Eintrag eine andere Fassung, weil der
+mittlere Fall dann nicht zutrifft:
+
+> Stripe Payments Europe, Limited, One Wilton Park, Wilton Place,
+> Dublin 2, D02 FX04, Irland (bei bestimmten Zahlungsdiensten
+> zusätzlich Stripe Technology Europe, Limited, unter derselben
+> Anschrift), wickelt Zahlungen ab; Einzelheiten stehen im vorherigen
+> Abschnitt. Bei einem abgebrochenen oder verfallenen Bezahlvorgang
+> entfernt VERA den verschlüsselten Datensatz mit Ihren
+> Anmeldeangaben, sobald Stripe den Abbruch oder Verfall meldet;
+> bleibt diese Meldung aus, beim nächsten regelmäßigen Abgleich. Bei
+> abgeschlossenen Bezahlvorgängen ist eine Entfernung derzeit
+> technisch nicht möglich. Für diesen Datensatz und für die übrigen
+> Angaben zum Bezahlvorgang — insbesondere Betrag, Zeitpunkt sowie
+> Zahlungs- und Erstattungsnummern — gilt dann die Aufbewahrung nach
+> den eigenen Regeln von Stripe.
 
 ---
 
