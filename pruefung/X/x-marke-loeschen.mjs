@@ -55,7 +55,7 @@ const neueIp = neueAbsenderAdresse;
  * werden soll, was stündlich wirklich läuft — samt seiner Ausgabe,
  * seiner Zählweise und seiner Vorschau-Sperre.
  */
-function abgleichLaufen(echt) {
+function abgleichLaufen(echt, erlaubt = [0, 2]) {
   return new Promise((fertig, schief) => {
     const lauf = spawn(
       "npx",
@@ -68,7 +68,7 @@ function abgleichLaufen(echt) {
     /* Exitcode 2 heisst „etwas liegt zur Klärung" und ist kein
        Fehlschlag des Laufs. Nur ein Absturz (1) ist einer. */
     lauf.on("close", (code) =>
-      code === 0 || code === 2 ? fertig(ausgabe) : schief(new Error(`Exitcode ${code}\n${ausgabe}`)),
+      erlaubt.includes(code) ? fertig(ausgabe) : schief(new Error(`Exitcode ${code}\n${ausgabe}`)),
     );
   });
 }
@@ -331,6 +331,88 @@ await aufraeumen();
   const nochmal = await abgleichLaufen(true);
   pruefe("Ein zweiter Lauf findet nichts mehr",
     /Marken entfernt:\s*0/.test(nochmal), letzteZeilen(nochmal));
+}
+
+/* ══ X4.8 · Das getrennte Räumfenster ═══════════════════════════
+   
+   Nachbuchen sieht zwei Tage zurück, Räumen dreissig. Der Grund ist
+   ein Loch, das beim Formulieren des Datenschutztextes auffiel: Steht
+   der Server länger als einen Tag still, rutscht eine fällige
+   Bezahlseite aus einem Zwei-Tage-Fenster und wird nie wieder
+   angesehen.
+
+   Geprüft wird beides — dass eine alte Sitzung noch geräumt, und
+   dass sie NICHT mehr nachgebucht wird. */
+console.log("\nX4.8 · Räumen sieht weiter zurück als Nachbuchen");
+await aufraeumen();
+{
+  const antwort = await absenden(einzel("alt@example.org"), neueIp());
+  const sitzungId = zw.sitzungAusZiel(antwort.ziel);
+  await zw.verfallen(sitzungId);
+
+  /* Fünf Tage alt: ausserhalb des Nachbuch-Fensters (2 Tage),
+     innerhalb des Räumfensters (30 Tage). */
+  await zw.altern(sitzungId, 5);
+  pruefe("Vorbedingung: die Sitzung ist fünf Tage alt und trägt noch die Marke",
+    markeFelder((await zw.holeSitzung(sitzungId)).metadata).length > 0);
+
+  const lauf = await abgleichLaufen(true);
+  pruefe("Der Lauf räumt sie trotzdem",
+    markeFelder((await zw.holeSitzung(sitzungId)).metadata).length === 0,
+    letzteZeilen(lauf));
+  pruefe("… und bucht nichts nach — dafür ist sie zu alt",
+    (await db.registration.count({ where: { zahlungsReferenz: sitzungId } })) === 0);
+
+  /* Und die Gegenprobe: ausserhalb BEIDER Fenster passiert nichts
+     mehr. Das ist kein Mangel, sondern die Grenze des Verfahrens —
+     sie gehört festgehalten, damit sie niemand später für einen
+     Fehler hält. */
+  const zweite = await absenden(einzel("uralt@example.org"), neueIp());
+  const alteId = zw.sitzungAusZiel(zweite.ziel);
+  await zw.verfallen(alteId);
+  await zw.altern(alteId, 40);
+  await abgleichLaufen(true);
+  pruefe("Jenseits von dreissig Tagen sieht der Lauf sie nicht mehr an",
+    markeFelder((await zw.holeSitzung(alteId)).metadata).length > 0,
+    "Grenze des Verfahrens, kein Fehler");
+}
+
+/* ══ X4.9 · Wenn das Räumen fehlschlägt ═════════════════════════ */
+console.log("\nX4.9 · Ein fehlgeschlagenes Räumen reisst den Lauf nicht ab");
+await aufraeumen();
+{
+  const kaputt = await absenden(einzel("stoerung@example.org"), neueIp());
+  const kaputtId = zw.sitzungAusZiel(kaputt.ziel);
+  await zw.verfallen(kaputtId);
+
+  const heil = await absenden(einzel("danach@example.org"), neueIp());
+  const heilId = zw.sitzungAusZiel(heil.ziel);
+  await zw.verfallen(heilId);
+
+  await zw.updateStoeren(kaputtId, true);
+  const lauf = await abgleichLaufen(true, [0, 2]);
+
+  pruefe("Die gestörte Sitzung behält ihre Marke",
+    markeFelder((await zw.holeSitzung(kaputtId)).metadata).length > 0);
+  pruefe("Der Fehlschlag steht deutlich im Protokoll",
+    /RÄUMEN FEHLGESCHLAGEN/.test(lauf) && lauf.includes(kaputtId),
+    (lauf.split("\n").find((z) => z.includes("FEHLGESCHLAGEN")) ?? "—").slice(0, 60));
+  pruefe("… mit Grund und dem Hinweis, dass es erneut versucht wird",
+    /Grund:/.test(lauf) && /erneut versucht/.test(lauf));
+  pruefe("… und wird in der Bilanz gezählt",
+    /RÄUMEN FEHLGESCHLAGEN:\s*1/.test(lauf),
+    (lauf.split("\n").find((z) => /RÄUMEN FEHLGESCHLAGEN:\s*\d/.test(z)) ?? "—").trim());
+
+  /* Der Kern: Die ANDERE Sitzung wurde trotzdem geräumt. Ein Lauf,
+     den ein einzelner Sonderfall lahmlegt, ist keiner. */
+  pruefe("Die übrigen Sitzungen werden trotzdem geräumt",
+    markeFelder((await zw.holeSitzung(heilId)).metadata).length === 0);
+
+  /* Und beim nächsten Lauf klappt es, sobald die Störung weg ist. */
+  await zw.updateStoeren(kaputtId, false);
+  await abgleichLaufen(true);
+  pruefe("Nach Wegfall der Störung räumt der nächste Lauf sie nach",
+    markeFelder((await zw.holeSitzung(kaputtId)).metadata).length === 0);
 }
 
 await aufraeumen();

@@ -1,6 +1,6 @@
 # Die automatischen Prüfungen
 
-Rund 1.410 Prüfungen, die gegen die **echte** Datenbank und den **echten**
+Rund 1.420 Prüfungen, die gegen die **echte** Datenbank und den **echten**
 Server laufen — nicht gegen nachgebaute Logik. Was hier grün ist, ist
 wirklich geprüft.
 
@@ -34,7 +34,7 @@ Wie man sie startet, steht in **[../docs/pruefen.md](../docs/pruefen.md)**.
 | `U` | Versionierte Rechtstexte: Prüfsumme, Versionsnummern, welche Fassung wann gilt, Unveränderbarkeit (auch projektweit geprüft), Fassung je Buchung, Volltext in der Bestätigungsmail; der erzeugte Wortlaut in `rechtstexte/` gegen `content/de.ts` (in beide Richtungen) und das Anlegeskript im echten Aufruf | 57 |
 | `V` | Bestellknopf nach § 312j Abs. 3 BGB, AGB-Häkchen (§ 305 Abs. 2 BGB), Kenntnisnahme zu Aufnahmen und der abgesetzte Widerspruchshinweis (Art. 21 Abs. 4 DS-GVO) — jeweils auch serverseitig erzwungen | 40 |
 | `W` | Widerspruch gegen Foto- und Videoaufnahmen (Art. 21 DS-GVO): Speicherung, Rücknahme ohne Löschung, die ereignisbezogene K8-Frist samt „Aufnahmen offline"-Markierung (Datum, Bearbeiter, Prüfvermerk), der Prüfvermerk vor jeder Veröffentlichung, die Sperre bei einem Widerspruch nach der letzten Prüfung, die Empfängerangabe der Veranstaltungsstätte (Art. 13 Abs. 1 Buchst. e DS-GVO), dass VERA ehrlich sagt, noch keinen Instagram-Kanal zu haben (B-12) — und die Veröffentlichungen selbst (B-14): Ort, Verantwortlicher, Zweck, die Löschsperre über offene Veröffentlichungen vor der K8-Offline-Markierung, Entfernen und Wiederherstellen | 144 |
-| `X` | Anmeldung erst nach bezahlter Zahlung: die verschlüsselte Nutzlast (jedes Byte einzeln verbogen, fremde Veranstaltung, fremder Betrag, Schlüsselwechsel, Alter, Größe gegen die gemessene Stripe-Grenze), die flüchtige Bremse ohne Datenbankzeile, die eine Anlagefunktion samt **aller** Fehlbuchungsgründe — die Liste dafür wird aus dem Quelltext gelesen, damit ein neuer Grund nicht stillschweigend durchfällt —, `x-keine-spur`, das nach einem Abbruch **jede** Tabelle der Datenbank vorher/nachher zählt, und `x-marke-loeschen`: wann die verschlüsselte Anmeldung beim Anbieter entfernt werden darf und wann ausdrücklich nicht | 152 |
+| `X` | Anmeldung erst nach bezahlter Zahlung: die verschlüsselte Nutzlast (jedes Byte einzeln verbogen, fremde Veranstaltung, fremder Betrag, Schlüsselwechsel, Alter, Größe gegen die gemessene Stripe-Grenze), die flüchtige Bremse ohne Datenbankzeile, die eine Anlagefunktion samt **aller** Fehlbuchungsgründe — die Liste dafür wird aus dem Quelltext gelesen, damit ein neuer Grund nicht stillschweigend durchfällt —, `x-keine-spur`, das nach einem Abbruch **jede** Tabelle der Datenbank vorher/nachher zählt, und `x-marke-loeschen`: wann die verschlüsselte Anmeldung beim Anbieter entfernt werden darf und wann ausdrücklich nicht, das getrennte Räumfenster und der Weg, auf dem das Räumen fehlschlägt | 162 |
 
 ## Zu den Schlüsseln in diesen Dateien
 

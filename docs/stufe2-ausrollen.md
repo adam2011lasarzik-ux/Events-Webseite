@@ -146,34 +146,51 @@ Bezahlseite. Über die Schnittstelle allein lässt er sich nicht
 herstellen; dafür braucht es einen Klick durch die Testkasse. Das ist
 **Schritt 17b**.
 
-### 0.5 Ein offener Punkt vor der Freigabe: das Rückblickfenster
+### 0.5 Zwei getrennte Fenster: nachbuchen und räumen
 
-Der stündliche Abgleichlauf sieht sich die Bezahlseiten der letzten
-**zwei Tage** an (`TAGE = 2` in `prisma/zahlungAbgleich.ts`). Das Räumen
-der Marken läuft in derselben Schleife.
+Der stündliche Lauf hat seit dem 26.09.2026 **zwei getrennte
+Rückblicke** (`prisma/zahlungAbgleich.ts`):
 
-Für den Normalbetrieb reicht das mit Abstand: Eine abgebrochene
-Bezahlseite wird binnen Sekunden geräumt, eine bezahlte nach 24
-Stunden — und bis die zwei Tage um sind, hatte der Lauf zwei Dutzend
-Gelegenheiten.
+| Aufgabe | Fenster | Warum |
+|---|---|---|
+| Anmeldungen **nachbuchen** | `NACHBUCHEN_TAGE = 2` | Eine Zahlung, die drei Tage alt ist und bei der bis heute keine Anmeldung entstanden ist, will niemand mehr stillschweigend nachbuchen. Sie gehört angesehen. |
+| Marken **räumen** | `RAEUMEN_TAGE = 30` | schliesst ein Loch — siehe unten |
 
-**Es gibt aber ein Loch.** Steht der Server länger als etwa einen Tag
-still und ist genau in dieser Zeit eine Bezahlseite fällig geworden,
-rutscht sie aus dem Fenster und wird **nie wieder** angesehen. Ihre
-Marke bliebe dauerhaft beim Anbieter liegen.
+**Das Loch, das damit zu ist.** Bis dahin liefen beide Aufgaben über
+dieselbe Liste der letzten zwei Tage. Im Normalbetrieb reicht das
+weit. Steht der Server aber länger als etwa einen Tag still und wird
+genau in dieser Zeit eine Bezahlseite fällig, rutschte sie aus dem
+Fenster und wurde nie wieder angesehen — ihre Marke bliebe dauerhaft
+beim Anbieter liegen. Der Datenschutztext gibt ein Versprechen ab, und
+ein Versprechen mit einem Loch ist keins.
 
-Das ist unwahrscheinlich, aber der Datenschutztext gibt ein
-Versprechen ab, und ein Versprechen mit einem Loch ist keins.
+Räumen ist billig: Nur eine Sitzung, die überhaupt noch eine Marke
+trägt, erzeugt einen Aufruf nach draussen. Ein längeres Fenster kostet
+also fast nichts.
 
-**Vorschlag:** Für das Räumen ein eigenes, längeres Fenster — etwa 30
-Tage. Das Nachlegen von Anmeldungen bleibt bei zwei Tagen; eine sehr
-alte Zahlung nachträglich zu verbuchen ist ausdrücklich nicht
-gewollt. Räumen dagegen ist billig und wiederholbar: Nur Sitzungen,
-die noch eine Marke tragen, erzeugen überhaupt einen Aufruf.
+**Der Räumlauf im Einzelnen:**
 
-Das ist eine Konstante plus eine Prüfung, etwa eine halbe Stunde
-Arbeit. **Ohne diese Änderung sollte Fassung B nicht gesetzt
-werden** — sie verspricht sonst mehr, als der Mechanismus hält.
+- läuft **stündlich**, im selben Dienst wie der Abgleich
+- ist **wiederholbar** — eine Sitzung ohne `marke_*` erzeugt gar
+  keinen Aufruf, und ein bereits leeres Feld noch einmal zu leeren
+  wäre folgenlos
+- fasst **ausschliesslich** die `marke_*`-Felder an. `event`, Betrag,
+  Adresse, Zahlung, Erstattungen und Posten bleiben unberührt
+- **bricht bei einem Fehlschlag nicht ab.** Die übrigen Sitzungen
+  werden weiter geräumt
+- **protokolliert einen Fehlschlag deutlich**: Sitzungskennung,
+  betroffene Felder, Zustand, Grund und der Hinweis, dass die Daten
+  weiterhin beim Anbieter liegen und es erneut versucht wird
+- zählt Fehlschläge in der Bilanz und endet dann mit **Exitcode 2**.
+  Der Dienst schickt daraufhin eine Mail — und zwar jede Stunde
+  erneut, solange der Fehlschlag besteht. Das ist gewollt: Liegen
+  personenbezogene Daten bei einem Dritten, obwohl sie dort nicht mehr
+  hingehören, soll das nicht nach einer Mail in Vergessenheit geraten.
+
+**Die Grenze des Verfahrens**, damit sie niemand später für einen
+Fehler hält: Jenseits von dreissig Tagen sieht der Lauf eine Sitzung
+nicht mehr an. Dafür müsste der Server einen Monat am Stück
+stillstehen.
 
 ## 1. Der vollständige Ablauf, in der richtigen Reihenfolge
 
@@ -589,7 +606,8 @@ Angabe an genau der Stelle, an der Genauigkeit zählt.
 > der Verschlüsselung selbst.
 >
 > Wird der Bezahlvorgang abgebrochen, entsteht bei VERA keine
-> Anmeldung und kein Datensatz über Sie.
+> Anmeldung und kein vorläufiger Anmeldedatensatz in der
+> VERA-Datenbank.
 >
 > Bezahlt wird ausschließlich auf der gesicherten Seite von Stripe.
 > Kartennummern und Bankdaten erreichen diese Seite zu keinem
@@ -691,7 +709,7 @@ ergibt**, darf der Datenschutztext das auch sagen. Bis dahin gilt
 Fassung A aus 3.4 — sie verspricht kein Löschen und ist damit in jedem
 Fall wahr.
 
-In Fassung B ändert sich **nur der vierte Absatz** von 3.4:
+In Fassung B ändern sich die Absätze 4 bis 7 von 3.4:
 
 > Der Zeitpunkt seiner Erzeugung ist untrennbar mitverschlüsselt und
 > lässt sich nicht nachträglich ändern. Der Bezahlvorgang verfällt
@@ -718,6 +736,10 @@ In Fassung B ändert sich **nur der vierte Absatz** von 3.4:
 > bleibt bei VERA vorhanden — die zeitliche Grenze von 24 Stunden ist
 > eine Regel der Anmeldesysteme und keine Eigenschaft der
 > Verschlüsselung selbst.
+>
+> Wird der Bezahlvorgang abgebrochen, entsteht bei VERA keine
+> Anmeldung und kein vorläufiger Anmeldedatensatz in der
+> VERA-Datenbank.
 
 Und im Abschnitt „3. Empfänger und Auftragsverarbeiter" der
 Stripe-Eintrag:

@@ -14,6 +14,8 @@ const sitzungen = new Map();
 const erstattungen = new Map();
 const erstattungenNachSchluessel = new Map();
 let zaehler = 0;
+/** Sitzungen, deren Aenderung absichtlich fehlschlaegt (nur fuer Pruefungen). */
+const gestoerteSitzungen = new Set();
 
 /**
  * Alle `metadata[...]`-Felder einsammeln, nicht nur ein bekanntes.
@@ -111,6 +113,11 @@ export function starte(port = 4242) {
         if (!sitzung) {
           return senden(404, {
             error: { message: "Unbekannte Sitzung.", type: "invalid_request_error" },
+          });
+        }
+        if (gestoerteSitzungen.has(aendern[1])) {
+          return senden(500, {
+            error: { message: "Absichtlich gestoert (Pruefung).", type: "api_error" },
           });
         }
         const felder = new URLSearchParams(koerper);
@@ -275,6 +282,37 @@ export function starte(port = 4242) {
 
       /* Steuerung für das Prüfskript — die Attrappe läuft als eigener
          Prozess, deshalb braucht es einen Weg von aussen. */
+
+      /* Eine Sitzung künstlich altern lassen.
+         
+         Gebraucht für das getrennte Räumfenster: Der Abgleichlauf
+         bucht zwei Tage zurück nach und räumt dreissig. Ohne diesen
+         Griff liesse sich der Unterschied nur prüfen, indem man drei
+         Tage wartet. */
+      const altern = url.pathname.match(/^\/steuerung\/alter\/([^/]+)$/);
+      if (anfrage.method === "POST" && altern) {
+        const sitzung = sitzungen.get(altern[1]);
+        if (!sitzung) return senden(404, { fehler: "unbekannt" });
+        const tage = Number(url.searchParams.get("tage") ?? "0");
+        sitzung.created = Math.floor(Date.now() / 1000) - Math.round(tage * 24 * 60 * 60);
+        return senden(200, sitzung);
+      }
+
+      /* Das Ändern einer bestimmten Sitzung scheitern lassen.
+         
+         Damit lässt sich prüfen, was der Abgleichlauf tut, wenn das
+         Räumen fehlschlägt: Er muss weiterlaufen, es deutlich
+         protokollieren und beim nächsten Mal erneut versuchen. Ohne
+         diesen Schalter bliebe genau der Fehlerweg ungeprüft — und
+         das ist der Weg, auf den es ankommt. */
+      const stoeren = url.pathname.match(/^\/steuerung\/update-stoeren\/([^/]+)$/);
+      if (anfrage.method === "POST" && stoeren) {
+        const an = url.searchParams.get("aus") === null;
+        if (an) gestoerteSitzungen.add(stoeren[1]);
+        else gestoerteSitzungen.delete(stoeren[1]);
+        return senden(200, { sitzung: stoeren[1], gestoert: an });
+      }
+
       const bezahlt = url.pathname.match(/^\/steuerung\/bezahlt\/([^/]+)$/);
       if (anfrage.method === "POST" && bezahlt) {
         const sitzung = sitzungen.get(bezahlt[1]);

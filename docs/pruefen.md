@@ -1,6 +1,6 @@
 # Die Prüfungen starten
 
-Rund 1.410 automatische Prüfungen laufen gegen die echte Datenbank und den
+Rund 1.420 automatische Prüfungen laufen gegen die echte Datenbank und den
 echten Server. Diese Anleitung sagt, wie man sie in Gang bringt.
 
 > Alles hier passiert **örtlich**. Es wird nichts an einen fremden

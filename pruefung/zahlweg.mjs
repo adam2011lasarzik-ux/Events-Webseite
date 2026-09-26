@@ -196,3 +196,20 @@ export async function verfallen(sitzungId) {
 export function neueAbsenderAdresse() {
   return `198.18.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 254) + 1}`;
 }
+
+/** Eine Sitzung bei der Attrappe künstlich altern lassen. */
+export async function altern(sitzungId, tage) {
+  await fetch(`${ATTRAPPE}/steuerung/alter/${sitzungId}?tage=${tage}`, { method: "POST" });
+  return holeSitzung(sitzungId);
+}
+
+/**
+ * Das Ändern einer Sitzung bei der Attrappe scheitern lassen.
+ *
+ * Nur für Prüfungen: Ohne diesen Schalter bliebe der Fehlerweg des
+ * Räumlaufs ungeprüft — und das ist der Weg, auf den es ankommt.
+ */
+export async function updateStoeren(sitzungId, an) {
+  const zusatz = an ? "" : "?aus=1";
+  await fetch(`${ATTRAPPE}/steuerung/update-stoeren/${sitzungId}${zusatz}`, { method: "POST" });
+}

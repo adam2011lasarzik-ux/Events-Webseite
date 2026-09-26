@@ -59,8 +59,38 @@ import {
   type Fehlbuchungsgrund,
 } from "../lib/anmeldungAnlegen";
 
-/** Wie weit zurück gesehen wird. */
-const TAGE = 2;
+/**
+ * Wie weit zurück Anmeldungen NACHGELEGT werden.
+ *
+ * Zwei Tage, und das ist eine Obergrenze mit Absicht: Eine Zahlung,
+ * die drei Tage alt ist und bei der bis heute keine Anmeldung
+ * entstanden ist, will niemand mehr stillschweigend nachbuchen. Sie
+ * gehört angesehen.
+ */
+const NACHBUCHEN_TAGE = 2;
+
+/**
+ * Wie weit zurück MARKEN GERÄUMT werden.
+ *
+ * Dreissig Tage, also deutlich länger — und das aus einem Grund, der
+ * beim Formulieren des Datenschutztextes aufgefallen ist.
+ *
+ * Bis zum 26.09.2026 liefen beide Aufgaben über dieselbe Liste der
+ * letzten zwei Tage. Im Normalbetrieb reicht das weit: Abgebrochenes
+ * wird in Sekunden geräumt, Bezahltes nach 24 Stunden, und bis die
+ * zwei Tage um sind, hatte dieser Lauf zwei Dutzend Gelegenheiten.
+ *
+ * Steht der Server aber länger als etwa einen Tag still und wird
+ * genau in dieser Zeit eine Bezahlseite fällig, rutscht sie aus dem
+ * Fenster und wird nie wieder angesehen — ihre Marke bliebe dauerhaft
+ * beim Anbieter liegen. Der Datenschutztext gibt ein Versprechen ab,
+ * und ein Versprechen mit einem Loch ist keins.
+ *
+ * Räumen ist billig: Nur eine Sitzung, die überhaupt noch eine Marke
+ * trägt, erzeugt einen Aufruf nach draussen. Ein längeres Fenster
+ * kostet also fast nichts und schliesst das Loch.
+ */
+const RAEUMEN_TAGE = 30;
 
 const echt = process.argv.includes("--echt");
 const euro = (c: number) => `${(c / 100).toFixed(2)} €`;
@@ -69,9 +99,13 @@ let nachgelegt = 0;
 let nacherstattet = 0;
 let zuKlaeren = 0;
 let aufgeraeumt = 0;
+let raeumFehler = 0;
+
+/** Sekunden seit 1970 für „vor so vielen Tagen". */
+const vorTagen = (tage: number) => Math.floor(Date.now() / 1000) - tage * 24 * 60 * 60;
 
 async function sitzungenNacharbeiten(): Promise<void> {
-  const seit = Math.floor(Date.now() / 1000) - TAGE * 24 * 60 * 60;
+  const seit = vorTagen(NACHBUCHEN_TAGE);
 
   /* `autoPagingEach` blättert selbst weiter. Eine feste Obergrenze
      wäre die Stelle, an der nach einem geschäftigen Wochenende genau
@@ -95,9 +129,7 @@ async function sitzungenNacharbeiten(): Promise<void> {
 
 async function eineSitzung(sitzung: Stripe.Checkout.Session): Promise<void> {
   {
-    /* Was wir über diese Bezahlseite schon wissen — EINMAL abgefragt.
-       Beide Entscheidungen unten hängen daran: ob aufgeräumt werden
-       darf, und ob eine Anmeldung nachzulegen ist. */
+    /* Was wir über diese Bezahlseite schon wissen. */
     const anmeldung = await db.registration.findUnique({
       where: { zahlungsReferenz: sitzung.id },
       select: { id: true },
@@ -108,44 +140,6 @@ async function eineSitzung(sitzung: Stripe.Checkout.Session): Promise<void> {
     });
     const verbucht = anmeldung !== null || fehlbuchung !== null;
 
-    /* ── Aufräumen ────────────────────────────────────────────────
-       
-       Steht VOR dem Nachlegen und vor jedem `continue`. Bis zum
-       26.09.2026 sprang die Schleife für verbuchte Sitzungen sofort
-       weiter — genau die sind es aber, deren Marke entfernt werden
-       muss.
-
-       Das ist zugleich die Nachbereinigung für eine ausgefallene
-       Rückmeldung: Bleibt `checkout.session.expired` aus, räumt kein
-       Webhook auf, und die verschlüsselte Anmeldung läge unbegrenzt
-       beim Anbieter. Dieser Lauf holt es nach — er sieht sich alle
-       Bezahlseiten der letzten Tage an, nicht nur die bezahlten. */
-    const felder = markeFelder(sitzung.metadata);
-    if (
-      markeDarfWeg({
-        hatMarke: felder.length > 0,
-        status: sitzung.status,
-        bezahlt: sitzung.payment_status === "paid",
-        verbucht,
-        alterMs: Date.now() - sitzung.created * 1000,
-      })
-    ) {
-      console.log(`\n🧹 Verschlüsselte Anmeldung entfernen: ${sitzung.id} (${sitzung.status})`);
-      aufgeraeumt++;
-      if (echt) {
-        try {
-          await markeFelderLeeren(sitzung.id, felder);
-        } catch (e) {
-          /* Nicht abbrechen: Ein hakendes Aufräumen darf den
-             Abgleich nicht verhindern — der legt Anmeldungen nach,
-             und das ist die wichtigere Aufgabe. Beim nächsten Lauf
-             in einer Stunde wieder. */
-          console.log(`   Fehlgeschlagen, wird nachgeholt: ${(e as Error).message}`);
-        }
-      }
-    }
-
-    /* ── Nachlegen ───────────────────────────────────────────────── */
     if (sitzung.payment_status !== "paid") return;
     if (verbucht) return;
 
@@ -223,6 +217,77 @@ async function eineSitzung(sitzung: Stripe.Checkout.Session): Promise<void> {
     }
   }
 }
+
+/**
+ * Die verschlüsselten Anmeldungen bei Bezahlseiten entfernen, die sie
+ * nicht mehr brauchen.
+ *
+ * EIGENE Liste, eigenes Fenster (`RAEUMEN_TAGE`), getrennt vom
+ * Nachlegen. Die Begründung steht oben bei der Konstante.
+ *
+ * Der Lauf ist wiederholbar: Eine Sitzung ohne `marke_*`-Felder
+ * erzeugt gar keinen Aufruf, und ein bereits leeres Feld noch einmal
+ * zu leeren wäre folgenlos. Er fasst ausschliesslich die
+ * `marke_*`-Felder an — `event`, Betrag, Adresse, Zahlung,
+ * Erstattungen und Posten bleiben unberührt.
+ */
+async function markenRaeumen(): Promise<void> {
+  const sitzungen = stripe().checkout.sessions.list({
+    created: { gte: vorTagen(RAEUMEN_TAGE) },
+    limit: 100,
+  });
+
+  for await (const sitzung of sitzungen) {
+    /* Nur Sitzungen, die überhaupt noch etwas tragen. Alles andere
+       kostet nicht einmal eine Datenbankabfrage. */
+    const felder = markeFelder(sitzung.metadata);
+    if (felder.length === 0) continue;
+
+    try {
+      const anmeldung = await db.registration.findUnique({
+        where: { zahlungsReferenz: sitzung.id },
+        select: { id: true },
+      });
+      const fehlbuchung = await db.fehlbuchung.findUnique({
+        where: { sitzungId: sitzung.id },
+        select: { id: true },
+      });
+
+      const darf = markeDarfWeg({
+        hatMarke: true,
+        status: sitzung.status,
+        bezahlt: sitzung.payment_status === "paid",
+        verbucht: anmeldung !== null || fehlbuchung !== null,
+        alterMs: Date.now() - sitzung.created * 1000,
+      });
+      if (!darf) continue;
+
+      console.log(
+        `\n🧹 Verschlüsselte Anmeldung entfernen: ${sitzung.id} ` +
+          `(${sitzung.status}, ${felder.length} Felder)`,
+      );
+      aufgeraeumt++;
+      if (echt) await markeFelderLeeren(sitzung.id, felder);
+    } catch (e) {
+      /* Deutlich, und mit allem, was zum Nachsehen nötig ist.
+
+         Eine fehlgeschlagene Räumung heisst: Personenbezogene Daten
+         liegen weiter bei einem Dritten, obwohl sie dort nicht mehr
+         hingehören. Das ist kein Schönheitsfehler, und es darf nicht
+         in einer Zeile untergehen. Zugleich reisst es den Lauf nicht
+         ab — die übrigen Sitzungen werden weiter geräumt, und beim
+         nächsten Lauf in einer Stunde wird es erneut versucht. */
+      raeumFehler++;
+      console.log(`\n✗ RÄUMEN FEHLGESCHLAGEN: ${sitzung.id}`);
+      console.log(`   Felder:  ${felder.join(", ")}`);
+      console.log(`   Zustand: ${sitzung.status} / ${sitzung.payment_status}`);
+      console.log(`   Grund:   ${(e as Error).message}`);
+      console.log("   Die verschlüsselte Anmeldung liegt weiterhin beim Anbieter.");
+      console.log("   Wird beim nächsten Lauf erneut versucht.");
+    }
+  }
+}
+
 
 /**
  * Erstattungen, die steckengeblieben sind.
@@ -305,11 +370,16 @@ async function zuKlaerendeMelden(): Promise<void> {
 async function hauptlauf(): Promise<void> {
   console.log(
     echt
-      ? `\n── Abgleich der letzten ${TAGE} Tage — ECHT ──`
-      : `\n── Abgleich der letzten ${TAGE} Tage — nur zeigen (--echt fehlt) ──`,
+      ? `\n── Abgleich: nachbuchen ${NACHBUCHEN_TAGE} Tage, räumen ${RAEUMEN_TAGE} Tage — ECHT ──`
+      : `\n── Abgleich: nachbuchen ${NACHBUCHEN_TAGE} Tage, räumen ${RAEUMEN_TAGE} Tage — ` +
+        "nur zeigen (--echt fehlt) ──",
   );
 
+  /* Erst nachlegen, dann räumen: Eine Sitzung, die in diesem Lauf
+     verbucht wird und schon älter als 24 Stunden ist, lässt sich dann
+     gleich mit räumen, statt eine Stunde zu warten. */
   await sitzungenNacharbeiten();
+  await markenRaeumen();
   await erstattungenNachholen();
   await zuKlaerendeMelden();
 
@@ -318,6 +388,9 @@ async function hauptlauf(): Promise<void> {
   console.log(`  Erstattungen ${echt ? "nachgeholt" : "nachzuholen"}: ${nacherstattet}`);
   console.log(`  Von Hand anzusehen:                ${zuKlaeren}`);
   console.log(`  Marken ${echt ? "entfernt" : "zu entfernen"}:              ${aufgeraeumt}`);
+  if (raeumFehler > 0) {
+    console.log(`  RÄUMEN FEHLGESCHLAGEN:             ${raeumFehler}  ← bitte ansehen`);
+  }
   if (!echt && nachgelegt + nacherstattet + aufgeraeumt > 0) {
     console.log("\n  Wirklich ausführen:  npm run zahlung:abgleich -- --echt");
   }
@@ -326,8 +399,14 @@ async function hauptlauf(): Promise<void> {
   await db.$disconnect();
   /* Exitcode 2, wenn etwas offen ist: Der systemd-Dienst wertet das
      aus und schickt eine Mail. Ein Lauf, der schweigt, obwohl Geld
-     ungeklärt herumliegt, wäre wertlos. */
-  process.exit(zuKlaeren > 0 ? 2 : 0);
+     ungeklärt herumliegt, wäre wertlos.
+     
+     Eine fehlgeschlagene Räumung zählt ausdrücklich dazu. Sie kostet
+     kein Geld, aber sie lässt personenbezogene Daten bei einem
+     Dritten liegen — und bleibt sie bestehen, kommt die Mail jede
+     Stunde wieder. Das ist gewollt: Genau dieser Druck sorgt dafür,
+     dass jemand hinsieht. */
+  process.exit(zuKlaeren > 0 || raeumFehler > 0 ? 2 : 0);
 }
 
 hauptlauf().catch(async (fehler) => {
