@@ -31,7 +31,9 @@ export default function Seite() {
         <h2>{t.recht.datenschutzAllgemeinUeberschrift}</h2>
         <p>{t.recht.datenschutzVerantwortlicher}</p>
         <p>{t.recht.datenschutzText}</p>
-        <p>{t.recht.datenschutzZahlung}</p>
+        {t.recht.datenschutzZahlungAbsaetze.map((absatz) => (
+          <p key={absatz.slice(0, 40)}>{absatz}</p>
+        ))}
         <p>{t.recht.keineCookies}</p>
 
         <h2>{t.recht.datenschutzMinderjaehrigUeberschrift}</h2>

@@ -735,24 +735,120 @@ export const de = {
       "Anbieter zudem die für den technischen Betrieb erforderlichen Server-Protokolldaten " +
       "(unter anderem IP-Adresse, Zeitpunkt, aufgerufene Seite); Rechtsgrundlage ist Art. 6 " +
       "Abs. 1 Buchst. f DSGVO (sicherer Betrieb der Website).",
-    /* Keine Rechtsformulierung, sondern eine Tatsache aus dem eigenen
-       Code (lib/zahlung.ts). Sie steht hier, damit sie beim späteren
-       Ausformulieren nicht vergessen wird — sie ist der einzige Punkt,
-       an dem Daten das Haus verlassen. */
-    /* Vollständig aufgezählt nach lib/zahlung.ts und
-       lib/zahlungRegeln.ts — der Titel der Veranstaltung und die
-       Personenzahl gehen als Beschriftung des Postens mit. */
-    datenschutzZahlung:
+    /* ── Der Bezahlvorgang ────────────────────────────────────────
+       
+       Keine Rechtsformulierung, sondern eine Tatsache aus dem eigenen
+       Code (lib/zahlung.ts) — der einzige Punkt, an dem Daten das
+       Haus verlassen. Vollständig aufgezählt nach lib/zahlung.ts und
+       lib/zahlungRegeln.ts; der Titel der Veranstaltung und die
+       Personenzahl gehen als Beschriftung des Postens mit.
+
+       Aus EINEM Absatz wurden am 26.09.2026 mehrere: Der Vorgang ist
+       nicht mehr in drei Sätzen erklärt, und ein Textblock von
+       fünfzehn Zeilen liest niemand.
+
+       Die alte Aufzählung nannte „die Anmeldenummer". Die gibt es seit
+       Stufe 2 nicht mehr, und es gehen MEHR Daten mit: der
+       verschlüsselte Anmeldedatensatz. Das zu verschweigen wäre eine
+       falsche Angabe an genau der Stelle, an der Genauigkeit zählt.
+
+       PRÜFAUFTRAG an die anwaltliche Prüfung: ob die Verschlüsselung
+       an der Einordnung etwas ändert (Stripe hält Daten, die Stripe
+       nicht lesen kann). Bewusst so formuliert, dass die Übermittlung
+       GENANNT wird, statt sich auf die Verschlüsselung zu berufen. */
+    datenschutzZahlungAbsaetze: [
       "Bezahlt werden kann mit Kredit- oder Debitkarte (auf unterstützten Geräten als " +
-      "Apple Pay oder Google Pay), oder mit PayPal — alle vier Wege laufen technisch über " +
-      "den Zahlungsanbieter Stripe. Beim Bezahlen werden an Stripe übermittelt: der Betrag, " +
-      "die Anmeldenummer, die E-Mail-Adresse sowie der Titel der Veranstaltung und die " +
-      "Anzahl der Personen. Bezahlt wird ausschließlich auf der gesicherten Seite von " +
-      "Stripe. Kartennummern und Bankdaten erreichen diese Seite zu keinem Zeitpunkt — sie " +
-      "werden hier weder entgegengenommen noch gespeichert. Rechtsgrundlage ist Art. 6 " +
-      "Abs. 1 Buchst. b DSGVO. Weitere Einzelheiten zu Stripe und, bei Auswahl dieser " +
-      "Zahlungsart, zu PayPal stehen im nächsten Abschnitt „Empfänger und " +
-      "Auftragsverarbeiter“.",
+        "Apple Pay oder Google Pay), oder mit PayPal — alle vier Wege laufen technisch " +
+        "über den Zahlungsanbieter Stripe.",
+      "Beim Bezahlen werden an Stripe übermittelt: der Betrag, die E-Mail-Adresse, der " +
+        "Titel der Veranstaltung und die Anzahl der Personen sowie ein verschlüsselter " +
+        "Datensatz mit den Angaben aus dem Anmeldeformular (Namen der anmeldenden Person " +
+        "und der Teilnehmenden, E-Mail-Adresse, gegebenenfalls Telefonnummer).",
+      "Dieser Datensatz ist notwendig, weil VERA Ihre Angaben vor dem Zahlungseingang " +
+        "bewusst nicht speichert: Sie reisen verschlüsselt mit dem Bezahlvorgang mit und " +
+        "werden erst bei VERA gespeichert, wenn die Zahlung eingegangen ist. Er ist mit " +
+        "einem Schlüssel verschlüsselt, der ausschließlich VERA vorliegt; Stripe kann ihn " +
+        "nicht lesen. Er wird ausschließlich am Bezahlvorgang selbst gespeichert und nicht " +
+        "auf andere Datensätze bei Stripe übertragen.",
+      "Der Zeitpunkt seiner Erzeugung ist untrennbar mitverschlüsselt und lässt sich nicht " +
+        "nachträglich ändern. Der Bezahlvorgang verfällt nach 30 Minuten, und die " +
+        "Anmeldesysteme von VERA nehmen keinen Datensatz an, der älter als 24 Stunden ist; " +
+        "danach kann aus ihm keine Anmeldung mehr entstehen.",
+      /* FASSUNG A. Sie sagt für abgeschlossene Bezahlvorgänge
+         ausdrücklich, dass nicht entfernt wird — weil Schritt 17b das
+         noch nicht belegt hat. Siehe `datenschutzZahlungFassungB`
+         weiter unten. */
+      "Wird ein Bezahlvorgang abgebrochen oder verfällt er, entfernt VERA den " +
+        "verschlüsselten Datensatz beim Zahlungsdienstleister, sobald dieser den Abbruch " +
+        "oder Verfall meldet. Bleibt diese Meldung aus, geschieht die Entfernung beim " +
+        "nächsten regelmäßigen Abgleich, der stündlich läuft. Bei abgeschlossenen " +
+        "Bezahlvorgängen ist eine Entfernung derzeit technisch nicht möglich; dort richtet " +
+        "sich die Aufbewahrung nach den Regeln des Zahlungsdienstleisters.",
+      "Der Schlüssel bleibt bei VERA vorhanden — die zeitliche Grenze von 24 Stunden ist " +
+        "eine Regel der Anmeldesysteme und keine Eigenschaft der Verschlüsselung selbst.",
+      "Wird der Bezahlvorgang abgebrochen, entsteht bei VERA keine Anmeldung und kein " +
+        "vorläufiger Anmeldedatensatz in der VERA-Datenbank.",
+      "Bezahlt wird ausschließlich auf der gesicherten Seite von Stripe. Kartennummern und " +
+        "Bankdaten erreichen diese Seite zu keinem Zeitpunkt — sie werden hier weder " +
+        "entgegengenommen noch gespeichert. Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. b " +
+        "DSGVO. Weitere Einzelheiten zu Stripe und, bei Auswahl dieser Zahlungsart, zu " +
+        "PayPal stehen im nächsten Abschnitt „Empfänger und Auftragsverarbeiter“.",
+    ],
+
+    /* ── FASSUNG B — VORBEREITET, NICHT AKTIV ─────────────────────
+       
+       Diese beiden Einträge werden von keiner Seite gelesen. Sie
+       liegen hier, damit sie im Moment der Freischaltung nicht neu
+       geschrieben werden müssen.
+
+       AKTIVIEREN ERST, WENN SCHRITT 17B BESTANDEN IST — also wenn auf
+       dem Server belegt ist, dass sich die verschlüsselte Anmeldung
+       auch bei einer BEZAHLTEN Bezahlseite entfernen lässt
+       (docs/stufe2-ausrollen.md, Abschnitt 4.15, Zeile 4 „LEEREN:
+       GEHT"). Vorher wäre es eine Zusage, die die Technik nicht deckt.
+
+       SO WIRD AKTIVIERT — drei Handgriffe, sonst nichts:
+         1. In `datenschutzZahlungAbsaetze` den fünften Eintrag (der
+            mit „Wird ein Bezahlvorgang abgebrochen oder verfällt er")
+            durch die beiden Einträge aus
+            `datenschutzZahlungFassungB` ersetzen.
+         2. Im Eintrag zu Stripe in `datenschutzEmpfaengerAbsaetze`
+            den Wortlaut durch `datenschutzEmpfaengerStripeFassungB`
+            ersetzen.
+         3. `npm run rechtstext:export` und danach auf dem Server
+            `npm run rechtstext` — sonst gilt weiter die alte Fassung.
+
+       Die übrigen Absätze bleiben in beiden Fassungen gleich. */
+    datenschutzZahlungFassungB: [
+      "VERA entfernt den verschlüsselten Datensatz beim Zahlungsdienstleister, sobald er " +
+        "nicht mehr benötigt wird. Ist die Zahlung eingegangen und die Anmeldung bei VERA " +
+        "verbucht, geschieht das, nachdem seit der Erzeugung des Datensatzes 24 Stunden " +
+        "vergangen sind, mit dem darauffolgenden stündlichen Bereinigungslauf. Wird der " +
+        "Bezahlvorgang abgebrochen oder verfällt er, geschieht es, sobald der " +
+        "Zahlungsdienstleister dies meldet; bleibt die Meldung aus, beim nächsten " +
+        "regelmäßigen Abgleich, der ebenfalls stündlich läuft.",
+      "Ist eine Zahlung eingegangen, die Anmeldung bei VERA aber noch nicht verbucht, " +
+        "bleibt der Datensatz erhalten: Er ist dann die einzige Grundlage, aus der die " +
+        "Anmeldung noch entstehen kann.",
+    ],
+
+    /** Fassung B des Stripe-Eintrags — siehe die Anleitung oben. */
+    datenschutzEmpfaengerStripeFassungB:
+      "Stripe Payments Europe, Limited, One Wilton Park, Wilton Place, Dublin 2, D02 FX04, " +
+      "Irland (bei bestimmten Zahlungsdiensten zusätzlich Stripe Technology Europe, " +
+      "Limited, unter derselben Anschrift), wickelt Zahlungen ab; Einzelheiten stehen im " +
+      "vorherigen Abschnitt. Der verschlüsselte Datensatz mit Ihren Anmeldeangaben wird " +
+      "dort nur so lange gespeichert, wie er für den Bezahlvorgang benötigt wird. Bei " +
+      "einem abgebrochenen oder verfallenen Bezahlvorgang entfernt VERA ihn, sobald Stripe " +
+      "den Abbruch oder Verfall meldet; bleibt diese Meldung aus, beim nächsten " +
+      "regelmäßigen Abgleich. Bei einem erfolgreich bezahlten und bei VERA verbuchten " +
+      "Vorgang entfernt VERA ihn, nachdem seit seiner Erzeugung 24 Stunden vergangen sind, " +
+      "mit dem darauffolgenden stündlichen Bereinigungslauf. Ist die Zahlung eingegangen, " +
+      "die Anmeldung bei VERA aber noch nicht verbucht, bleibt er zunächst erhalten, weil " +
+      "er für die Nachverarbeitung benötigt wird. Die übrigen Angaben zum Bezahlvorgang — " +
+      "insbesondere Betrag, Zeitpunkt sowie Zahlungs- und Erstattungsnummern — bewahrt " +
+      "Stripe nach seinen eigenen Regeln auf.",
+
     /* Die frühere Fassung sagte pauschal „diese Seite setzt keine
        Cookies". Das stimmt nicht: lib/adminAuth.ts setzt für die
        Anmeldung am Adminbereich das Cookie `vera_admin`. Besucher
@@ -867,10 +963,25 @@ export const de = {
         "Events Verantwortlicher; der Auftragsverarbeitungsvertrag gilt nach den " +
         "Nutzungsbedingungen von Hostinger durch deren elektronische Annahme als " +
         "abgeschlossen (maßgeblich ist die englische Fassung, Dokumentstand 15.09.2026).",
+      /* FASSUNG A. Der Satz „nur bis zum Abschluss des Bezahlvorgangs
+         gespeichert und anschliessend gelöscht" wäre in beide
+         Richtungen falsch gewesen: Bei einem abgeschlossenen Vorgang
+         wird nicht sofort danach entfernt, und bei einem bezahlten,
+         aber noch nicht verbuchten bleibt der Datensatz absichtlich
+         länger — aus ihm muss die Anmeldung erst noch entstehen.
+         Deshalb stehen die Lagen einzeln da. Fassung B siehe
+         `datenschutzEmpfaengerStripeFassungB`. */
       "Stripe Payments Europe, Limited, One Wilton Park, Wilton Place, Dublin 2, D02 FX04, " +
         "Irland (bei bestimmten Zahlungsdiensten zusätzlich Stripe Technology Europe, " +
         "Limited, unter derselben Anschrift), wickelt Zahlungen ab; Einzelheiten stehen im " +
-        "vorherigen Abschnitt.",
+        "vorherigen Abschnitt. Bei einem abgebrochenen oder verfallenen Bezahlvorgang " +
+        "entfernt VERA den verschlüsselten Datensatz mit Ihren Anmeldeangaben, sobald " +
+        "Stripe den Abbruch oder Verfall meldet; bleibt diese Meldung aus, beim nächsten " +
+        "regelmäßigen Abgleich. Bei abgeschlossenen Bezahlvorgängen ist eine Entfernung " +
+        "derzeit technisch nicht möglich. Für diesen Datensatz und für die übrigen Angaben " +
+        "zum Bezahlvorgang — insbesondere Betrag, Zeitpunkt sowie Zahlungs- und " +
+        "Erstattungsnummern — gilt dann die Aufbewahrung nach den eigenen Regeln von " +
+        "Stripe.",
       "Wird beim Bezahlen PayPal gewählt, verarbeitet PayPal als eigenständig " +
         "Verantwortlicher nach eigener Datenschutzerklärung die dafür erforderlichen " +
         "Zugangs- und Zahlungsdaten — die Zahlung läuft dabei über die Verbindung von " +
@@ -907,6 +1018,11 @@ export const de = {
       "Aufbewahrungspflichten erfordern. Welche Frist gilt, hängt von der Art der Angaben ab; " +
       "die Löschung läuft automatisch.",
     datenschutzLoeschungAbsaetze: [
+      /* Neu am 26.09.2026, und bewusst als ERSTER Absatz: Er rahmt
+         den ganzen Abschnitt. Was gar nicht erst entsteht, muss auch
+         nicht gelöscht werden. */
+      "Angaben aus einem abgebrochenen oder nicht abgeschlossenen Bezahlvorgang werden gar " +
+        "nicht erst gespeichert. Es entsteht kein Datensatz, der gelöscht werden müsste.",
       "Gesundheits- und Notfallangaben auf der Einverständniserklärung werden spätestens " +
         "sieben Tage nach Ende der Veranstaltung vernichtet.",
       "Vollständige Einverständniserklärungen für minderjährige Teilnehmer werden drei Jahre " +
@@ -922,6 +1038,16 @@ export const de = {
         "den steuerlichen Unterlagen gehören. Ein Check-out oder eine Abmeldung beim " +
         "Verlassen der Veranstaltung ist nicht vorgesehen — VERA erhebt und speichert dafür " +
         "keinen Zeitpunkt.",
+      /* Neu am 26.09.2026: die Tabelle `Fehlbuchung`. Sie ist der
+         Grund, warum sich jede automatische Rückbuchung Jahre später
+         noch einem Vorgang zuordnen lässt — und sie enthält bewusst
+         keine Personendaten. */
+      "Geht eine Zahlung ein, ohne dass daraus eine Anmeldung wird, hält VERA den Vorgang " +
+        "zur Buchführung und zum Nachweis der Erstattung fest: die Kennung des " +
+        "Bezahlvorgangs beim Zahlungsdienstleister, den Betrag, den Grund und die " +
+        "Zeitpunkte. Namen, E-Mail-Adressen und Telefonnummern werden dabei nicht " +
+        "gespeichert. Diese Angaben unterliegen den gesetzlichen Aufbewahrungsfristen nach " +
+        "§ 147 der Abgabenordnung.",
       "Veranstaltungs- und Sicherheitschecklisten werden drei Jahre ab dem Ende des " +
         "Kalenderjahres aufbewahrt. Danach werden alle personenbezogenen und mittelbar " +
         "zuordenbaren Angaben — insbesondere Mitarbeiterkürzel und Freitextnotizen — " +
@@ -1122,20 +1248,57 @@ export const de = {
         "des Teilnahmevertrags ab. Der Vertrag kommt zustande, sobald VERA die Anmeldung " +
         "bestätigt. Die Bestätigung erfolgt bei kostenpflichtigen Veranstaltungen nach " +
         "Eingang der Zahlung, bei kostenlosen Veranstaltungen unmittelbar nach dem Absenden.",
-      "3.4 Der Eingang der Anmeldung wird unverzüglich elektronisch bestätigt. Diese " +
-        "Eingangsbestätigung ist noch keine Annahme des Angebots.",
-      "3.5 Der Platz wird ab dem Absenden für 30 Minuten reserviert, damit die Zahlung " +
-        "abgeschlossen werden kann. Wird in dieser Zeit nicht bezahlt, verfällt die " +
-        "Reservierung und der Platz steht wieder zur Verfügung. Die Anmeldung bleibt " +
-        "gespeichert und kann über den Link auf der Abschluss-Seite fortgesetzt werden, " +
-        "solange Plätze frei sind.",
+      /* Umformuliert am 26.09.2026. Vorher: „Der Eingang der Anmeldung
+         wird unverzüglich elektronisch bestätigt. Diese
+         Eingangsbestätigung ist noch keine Annahme des Angebots."
+         Beides traf nach dem Umbau nicht mehr zu: Vor der Zahlung gibt
+         es nichts, dessen Eingang zu bestätigen wäre, und die eine Mail
+         danach IST die Annahme. Zwei Mails, von denen die erste nichts
+         annimmt, gibt es nicht mehr.
+
+         PRÜFAUFTRAG an die anwaltliche Prüfung: § 312i Abs. 1 Satz 1
+         Nr. 3 BGB verlangt, den Zugang einer Bestellung unverzüglich
+         elektronisch zu bestätigen. Einschätzung: gewahrt, weil jede
+         Bestellung, die VERA überhaupt erreicht, auch bestätigt wird —
+         eine abgebrochene Zahlung erreicht VERA nicht. Sicher ist das
+         nicht. */
+      "3.4 Nach Eingang der Zahlung wird die Anmeldung unverzüglich elektronisch " +
+        "bestätigt. Diese Bestätigung ist zugleich die Annahme des Angebots.",
+      /* Vollständig ersetzt am 26.09.2026. Die alte Ziffer beschrieb
+         eine Reservierung von 30 Minuten, einen Verfall und eine
+         gespeicherte Anmeldung, die sich fortsetzen lässt. Nach dem
+         Umbau ist jeder dieser Sätze falsch: Es wird kein Platz
+         gehalten, nichts bleibt gespeichert, und es gibt keinen Link
+         zum Fortsetzen. */
+      "3.5 Mit dem Absenden wird kein Platz reserviert. Die Anmeldung wird erst " +
+        "gespeichert, wenn die Zahlung eingegangen ist; bis dahin werden Ihre Angaben " +
+        "ausschließlich verschlüsselt an den Zahlungsvorgang übergeben und nicht bei VERA " +
+        "gespeichert. Wird der Bezahlvorgang abgebrochen oder nicht innerhalb von 30 " +
+        "Minuten abgeschlossen, entsteht keine Anmeldung und es wird nichts abgebucht; für " +
+        "eine Teilnahme ist das Anmeldeformular dann erneut auszufüllen.",
+      /* Der zweite Absatz ist neu und beschreibt einen Fall, den es
+         vorher nicht gab — den ehrlichen Preis dafür, dass kein Platz
+         mehr gehalten wird. Bewusst NICHT auf die Plätze beschränkt
+         („aus diesem oder einem anderen Grund"): Es gibt mehrere
+         Lagen, in denen Geld eingeht, ohne dass ein Vertrag zustande
+         kommt, und eine Aufzählung im Vertragstext wäre bei der
+         nächsten Änderung am Programm unvollständig.
+
+         PRÜFAUFTRAG: Transparenz nach § 307 Abs. 1 Satz 2 BGB — ist
+         die offene Formulierung klar genug? */
+      "Zwischen dem Absenden und dem Eingang der Zahlung können die letzten freien Plätze " +
+        "anderweitig vergeben werden. Kommt aus diesem oder einem anderen Grund kein " +
+        "Vertrag zustande, obwohl eine Zahlung eingegangen ist, wird der gezahlte Betrag " +
+        "unverzüglich und vollständig auf demselben Weg erstattet, über den gezahlt wurde. " +
+        "Sie müssen dafür nichts veranlassen; VERA teilt Ihnen die Erstattung per E-Mail mit.",
       "3.6 Der Vertragstext wird bei VERA gespeichert. Die Bestätigungsmail enthält die " +
         "Daten der Anmeldung. Diese Teilnahmebedingungen sind jederzeit auf der Website " +
         "abrufbar.",
       "3.7 Der Vertrag wird in deutscher Sprache geschlossen.",
+      /* Der Verweis auf die „Reservierungszeit nach Ziffer 3.5" ist am
+         26.09.2026 entfallen — es gibt sie nicht mehr. */
       "3.8 Eine Anmeldung ist erst mit vollständiger Zahlung verbindlich angenommen. " +
-        "Solange nicht bezahlt ist, besteht kein Anspruch auf einen Platz — auch nicht " +
-        "während der Reservierungszeit nach Ziffer 3.5, wenn diese abgelaufen ist.",
+        "Solange nicht bezahlt ist, besteht kein Anspruch auf einen Platz.",
     ],
 
     agbPreiseUeberschrift: "4. Preise und Zahlung",

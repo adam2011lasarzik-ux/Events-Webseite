@@ -7,7 +7,21 @@ Verantwortlicher für die Datenverarbeitung auf dieser Website ist VERA Events, 
 
 Bei einer Online-Anmeldung erheben wir Vorname, Nachname, E-Mail-Adresse und, wenn angegeben, Telefonnummer der anmeldenden Person sowie Vorname und Nachname jeder teilnehmenden Person. Meldet eine erziehungsberechtigte Person ein minderjähriges Kind an, gelten zusätzlich die Angaben aus Abschnitt 2. Die Verarbeitung dient dem Zustandekommen und der Durchführung der Anmeldung, der Platzverwaltung und, soweit bezahlt wird, der Zuordnung der Zahlung; Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. b DSGVO (Erfüllung des Vertrags). Beim Aufruf der Website verarbeitet der Hosting-Anbieter zudem die für den technischen Betrieb erforderlichen Server-Protokolldaten (unter anderem IP-Adresse, Zeitpunkt, aufgerufene Seite); Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. f DSGVO (sicherer Betrieb der Website).
 
-Bezahlt werden kann mit Kredit- oder Debitkarte (auf unterstützten Geräten als Apple Pay oder Google Pay), oder mit PayPal — alle vier Wege laufen technisch über den Zahlungsanbieter Stripe. Beim Bezahlen werden an Stripe übermittelt: der Betrag, die Anmeldenummer, die E-Mail-Adresse sowie der Titel der Veranstaltung und die Anzahl der Personen. Bezahlt wird ausschließlich auf der gesicherten Seite von Stripe. Kartennummern und Bankdaten erreichen diese Seite zu keinem Zeitpunkt — sie werden hier weder entgegengenommen noch gespeichert. Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. b DSGVO. Weitere Einzelheiten zu Stripe und, bei Auswahl dieser Zahlungsart, zu PayPal stehen im nächsten Abschnitt „Empfänger und Auftragsverarbeiter“.
+Bezahlt werden kann mit Kredit- oder Debitkarte (auf unterstützten Geräten als Apple Pay oder Google Pay), oder mit PayPal — alle vier Wege laufen technisch über den Zahlungsanbieter Stripe.
+
+Beim Bezahlen werden an Stripe übermittelt: der Betrag, die E-Mail-Adresse, der Titel der Veranstaltung und die Anzahl der Personen sowie ein verschlüsselter Datensatz mit den Angaben aus dem Anmeldeformular (Namen der anmeldenden Person und der Teilnehmenden, E-Mail-Adresse, gegebenenfalls Telefonnummer).
+
+Dieser Datensatz ist notwendig, weil VERA Ihre Angaben vor dem Zahlungseingang bewusst nicht speichert: Sie reisen verschlüsselt mit dem Bezahlvorgang mit und werden erst bei VERA gespeichert, wenn die Zahlung eingegangen ist. Er ist mit einem Schlüssel verschlüsselt, der ausschließlich VERA vorliegt; Stripe kann ihn nicht lesen. Er wird ausschließlich am Bezahlvorgang selbst gespeichert und nicht auf andere Datensätze bei Stripe übertragen.
+
+Der Zeitpunkt seiner Erzeugung ist untrennbar mitverschlüsselt und lässt sich nicht nachträglich ändern. Der Bezahlvorgang verfällt nach 30 Minuten, und die Anmeldesysteme von VERA nehmen keinen Datensatz an, der älter als 24 Stunden ist; danach kann aus ihm keine Anmeldung mehr entstehen.
+
+Wird ein Bezahlvorgang abgebrochen oder verfällt er, entfernt VERA den verschlüsselten Datensatz beim Zahlungsdienstleister, sobald dieser den Abbruch oder Verfall meldet. Bleibt diese Meldung aus, geschieht die Entfernung beim nächsten regelmäßigen Abgleich, der stündlich läuft. Bei abgeschlossenen Bezahlvorgängen ist eine Entfernung derzeit technisch nicht möglich; dort richtet sich die Aufbewahrung nach den Regeln des Zahlungsdienstleisters.
+
+Der Schlüssel bleibt bei VERA vorhanden — die zeitliche Grenze von 24 Stunden ist eine Regel der Anmeldesysteme und keine Eigenschaft der Verschlüsselung selbst.
+
+Wird der Bezahlvorgang abgebrochen, entsteht bei VERA keine Anmeldung und kein vorläufiger Anmeldedatensatz in der VERA-Datenbank.
+
+Bezahlt wird ausschließlich auf der gesicherten Seite von Stripe. Kartennummern und Bankdaten erreichen diese Seite zu keinem Zeitpunkt — sie werden hier weder entgegengenommen noch gespeichert. Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. b DSGVO. Weitere Einzelheiten zu Stripe und, bei Auswahl dieser Zahlungsart, zu PayPal stehen im nächsten Abschnitt „Empfänger und Auftragsverarbeiter“.
 
 Diese Seite zählt keine Besucher, verfolgt niemanden über andere Seiten hinweg und lädt keine Inhalte von fremden Servern nach — auch die Schriften liegen auf dieser Domain. Es gibt keine Werbe- oder Statistik-Cookies und deshalb auch kein Zustimmungsfenster. Das einzige Cookie entsteht, wenn sich der Betreiber am Verwaltungsbereich anmeldet; es hält nur diese Anmeldung und ist technisch notwendig.
 
@@ -39,7 +53,7 @@ Wir geben personenbezogene Daten nur an die folgenden Empfänger weiter, soweit 
 
 - Hostinger International Ltd., 61 Lordou Vironos Street, 6023 Larnaca, Zypern, betreibt den Server dieser Website — auch als virtuellen Server (VPS) — und das E-Mail-Postfach, über das automatische Bestätigungsmails versendet werden (Serverstandort Frankreich). Hostinger ist dabei Auftragsverarbeiter, VERA Events Verantwortlicher; der Auftragsverarbeitungsvertrag gilt nach den Nutzungsbedingungen von Hostinger durch deren elektronische Annahme als abgeschlossen (maßgeblich ist die englische Fassung, Dokumentstand 15.09.2026).
 
-- Stripe Payments Europe, Limited, One Wilton Park, Wilton Place, Dublin 2, D02 FX04, Irland (bei bestimmten Zahlungsdiensten zusätzlich Stripe Technology Europe, Limited, unter derselben Anschrift), wickelt Zahlungen ab; Einzelheiten stehen im vorherigen Abschnitt.
+- Stripe Payments Europe, Limited, One Wilton Park, Wilton Place, Dublin 2, D02 FX04, Irland (bei bestimmten Zahlungsdiensten zusätzlich Stripe Technology Europe, Limited, unter derselben Anschrift), wickelt Zahlungen ab; Einzelheiten stehen im vorherigen Abschnitt. Bei einem abgebrochenen oder verfallenen Bezahlvorgang entfernt VERA den verschlüsselten Datensatz mit Ihren Anmeldeangaben, sobald Stripe den Abbruch oder Verfall meldet; bleibt diese Meldung aus, beim nächsten regelmäßigen Abgleich. Bei abgeschlossenen Bezahlvorgängen ist eine Entfernung derzeit technisch nicht möglich. Für diesen Datensatz und für die übrigen Angaben zum Bezahlvorgang — insbesondere Betrag, Zeitpunkt sowie Zahlungs- und Erstattungsnummern — gilt dann die Aufbewahrung nach den eigenen Regeln von Stripe.
 
 - Wird beim Bezahlen PayPal gewählt, verarbeitet PayPal als eigenständig Verantwortlicher nach eigener Datenschutzerklärung die dafür erforderlichen Zugangs- und Zahlungsdaten — die Zahlung läuft dabei über die Verbindung von Stripe zu PayPal, es gibt keine eigene PayPal-Anbindung von VERA.
 
@@ -56,11 +70,15 @@ Wir geben personenbezogene Daten nur an die folgenden Empfänger weiter, soweit 
 
 Daten werden nicht länger gespeichert, als es der jeweilige Zweck und die gesetzlichen Aufbewahrungspflichten erfordern. Welche Frist gilt, hängt von der Art der Angaben ab; die Löschung läuft automatisch.
 
+Angaben aus einem abgebrochenen oder nicht abgeschlossenen Bezahlvorgang werden gar nicht erst gespeichert. Es entsteht kein Datensatz, der gelöscht werden müsste.
+
 Gesundheits- und Notfallangaben auf der Einverständniserklärung werden spätestens sieben Tage nach Ende der Veranstaltung vernichtet.
 
 Vollständige Einverständniserklärungen für minderjährige Teilnehmer werden drei Jahre ab dem Ende des Kalenderjahres der Veranstaltung aufbewahrt und danach vernichtet. Anschließend wird ein reduzierter Nachweis darüber aufbewahrt, dass eine Zustimmung vorlag; er enthält kein Geburtsdatum, keine Mobilnummer und keine Gesundheitsangaben und wird zehn Jahre ab dem Ende des Kalenderjahres der Veranstaltung aufbewahrt und danach gelöscht.
 
 Anmeldedaten (Vor- und Nachname, E-Mail-Adresse, Telefonnummer der anmeldenden Person sowie die Namen der Teilnehmenden) werden drei Jahre ab dem Ende des Kalenderjahres der Veranstaltung aufbewahrt und danach automatisch überschrieben; die Buchung selbst bleibt ohne Personenbezug bestehen, weil Betrag und Datum zu den steuerlichen Unterlagen gehören. Ein Check-out oder eine Abmeldung beim Verlassen der Veranstaltung ist nicht vorgesehen — VERA erhebt und speichert dafür keinen Zeitpunkt.
+
+Geht eine Zahlung ein, ohne dass daraus eine Anmeldung wird, hält VERA den Vorgang zur Buchführung und zum Nachweis der Erstattung fest: die Kennung des Bezahlvorgangs beim Zahlungsdienstleister, den Betrag, den Grund und die Zeitpunkte. Namen, E-Mail-Adressen und Telefonnummern werden dabei nicht gespeichert. Diese Angaben unterliegen den gesetzlichen Aufbewahrungsfristen nach § 147 der Abgabenordnung.
 
 Veranstaltungs- und Sicherheitschecklisten werden drei Jahre ab dem Ende des Kalenderjahres aufbewahrt. Danach werden alle personenbezogenen und mittelbar zuordenbaren Angaben — insbesondere Mitarbeiterkürzel und Freitextnotizen — unwiderruflich entfernt. Nur die dann tatsächlich anonyme Sicherheitsdokumentation bleibt erhalten.
 

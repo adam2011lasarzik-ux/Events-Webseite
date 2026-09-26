@@ -102,7 +102,7 @@ export function datenschutzAbschnitte(): Abschnitt[] {
       absaetze: [
         t.datenschutzVerantwortlicher,
         t.datenschutzText,
-        t.datenschutzZahlung,
+        ...t.datenschutzZahlungAbsaetze,
         t.keineCookies,
       ],
     },

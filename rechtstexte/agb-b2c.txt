@@ -33,15 +33,17 @@ Allgemeine Geschäftsbedingungen
 
 3.3 Mit dem Absenden der Anmeldung geben Sie ein verbindliches Angebot auf Abschluss des Teilnahmevertrags ab. Der Vertrag kommt zustande, sobald VERA die Anmeldung bestätigt. Die Bestätigung erfolgt bei kostenpflichtigen Veranstaltungen nach Eingang der Zahlung, bei kostenlosen Veranstaltungen unmittelbar nach dem Absenden.
 
-3.4 Der Eingang der Anmeldung wird unverzüglich elektronisch bestätigt. Diese Eingangsbestätigung ist noch keine Annahme des Angebots.
+3.4 Nach Eingang der Zahlung wird die Anmeldung unverzüglich elektronisch bestätigt. Diese Bestätigung ist zugleich die Annahme des Angebots.
 
-3.5 Der Platz wird ab dem Absenden für 30 Minuten reserviert, damit die Zahlung abgeschlossen werden kann. Wird in dieser Zeit nicht bezahlt, verfällt die Reservierung und der Platz steht wieder zur Verfügung. Die Anmeldung bleibt gespeichert und kann über den Link auf der Abschluss-Seite fortgesetzt werden, solange Plätze frei sind.
+3.5 Mit dem Absenden wird kein Platz reserviert. Die Anmeldung wird erst gespeichert, wenn die Zahlung eingegangen ist; bis dahin werden Ihre Angaben ausschließlich verschlüsselt an den Zahlungsvorgang übergeben und nicht bei VERA gespeichert. Wird der Bezahlvorgang abgebrochen oder nicht innerhalb von 30 Minuten abgeschlossen, entsteht keine Anmeldung und es wird nichts abgebucht; für eine Teilnahme ist das Anmeldeformular dann erneut auszufüllen.
+
+Zwischen dem Absenden und dem Eingang der Zahlung können die letzten freien Plätze anderweitig vergeben werden. Kommt aus diesem oder einem anderen Grund kein Vertrag zustande, obwohl eine Zahlung eingegangen ist, wird der gezahlte Betrag unverzüglich und vollständig auf demselben Weg erstattet, über den gezahlt wurde. Sie müssen dafür nichts veranlassen; VERA teilt Ihnen die Erstattung per E-Mail mit.
 
 3.6 Der Vertragstext wird bei VERA gespeichert. Die Bestätigungsmail enthält die Daten der Anmeldung. Diese Teilnahmebedingungen sind jederzeit auf der Website abrufbar.
 
 3.7 Der Vertrag wird in deutscher Sprache geschlossen.
 
-3.8 Eine Anmeldung ist erst mit vollständiger Zahlung verbindlich angenommen. Solange nicht bezahlt ist, besteht kein Anspruch auf einen Platz — auch nicht während der Reservierungszeit nach Ziffer 3.5, wenn diese abgelaufen ist.
+3.8 Eine Anmeldung ist erst mit vollständiger Zahlung verbindlich angenommen. Solange nicht bezahlt ist, besteht kein Anspruch auf einen Platz.
 
 
 4. Preise und Zahlung
