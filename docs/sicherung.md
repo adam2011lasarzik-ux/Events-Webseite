@@ -21,7 +21,11 @@ Passwort-Manager des Betreibers.
 
 Dateiname je Sicherung: `vera-JJJJMMTT_HHMMSS.sql.age`
 
-## Die zwei Sorten Schlüssel — nicht verwechseln
+## Die Schlüssel der Sicherung selbst — nicht verwechseln
+
+> Es gibt noch einen dritten, der nicht zur Sicherung gehört, aber
+> gesichert werden muss: `ANMELDUNG_SCHLUESSEL` — siehe den nächsten
+> Abschnitt.
 
 **1. Der Verschlüsselungs-Schlüssel (age).** Ein Paar aus zwei Teilen:
 
@@ -47,6 +51,100 @@ durch nichts zu ersetzen.**
 
 Geprüft mit `vera-b2-pruefung.sh` — beide Richtungen werden
 nachweislich abgewiesen.
+
+## Der Schlüssel für die Anmeldedaten (seit 25.09.2026)
+
+Seit dem Umbau „Anmeldung entsteht erst mit der bestätigten Zahlung"
+gibt es ein drittes Geheimnis, und es hängt nicht am Server, sondern am
+laufenden Geschäft:
+
+| Name | Wo er liegt | Wozu |
+|---|---|---|
+| `ANMELDUNG_SCHLUESSEL` | `/var/www/vera/.env` | die Anmeldedaten aufschliessen, die verschlüsselt beim Zahlungsanbieter liegen |
+
+**Warum er zählt.** Zwischen dem Absenden des Formulars und der
+bestätigten Zahlung wird in der VERA-Datenbank nichts gespeichert. Die
+Anmeldedaten reisen in dieser Zeit ausschliesslich verschlüsselt durch
+den Zahlungsanbieter. Geht der Schlüssel in genau diesem Zeitfenster
+verloren, ist **das Geld da und die Anmeldung unlesbar** — es gibt
+keine zweite Kopie, aus der sie sich rekonstruieren liesse.
+
+**Er gehört an zwei Orte, und das ist kein Übermaß:**
+
+1. **In den Passwort-Manager**, neben den geheimen age-Schlüssel. Das
+   ist der verlässliche Ort — er verfällt nicht.
+2. **In die nächtliche Sicherung.** `vera-sicherung.sh` lädt ihn seit
+   dem 26.09.2026 als eigene Datei `vera-schluessel-<zeitstempel>.age`
+   mit hoch, mit demselben öffentlichen age-Schlüssel verschlüsselt wie
+   die Datenbank.
+
+⚠️ **Warum jede Nacht und nicht einmal:** Der Bucket räumt nach 180
+Tagen auf (siehe unten). Eine einmal hochgeladene Schlüsseldatei wäre
+im siebten Monat verschwunden, während der Schlüssel weiter in Gebrauch
+ist — eine Sicherung, die still verfällt, ist schlimmer als keine.
+Deshalb trägt immer die neueste Nacht auch den aktuellen Schlüssel.
+
+**Warum eine eigene Datei und nicht in dieselbe:** Die Sicherungsdatei
+muss reines SQL bleiben. Sonst scheiterte das Zurückspielen mit
+`age -d … | mariadb` an einer Zeile, die kein SQL ist — und zwar im
+Ernstfall, wenn niemand Zeit zum Suchen hat.
+
+**Warum nur diese eine Zeile und nicht die ganze `.env`:** Das
+Datenbank-Passwort, die Zahlungsschlüssel und das SMTP-Passwort haben
+in einer Datei ausserhalb des Servers nichts zu suchen. Wer den
+geheimen age-Schlüssel hätte, bekäme sonst mit einem Griff alles.
+
+### Den Schlüssel wiederherstellen
+
+Wenn `.env` verloren ist oder der Server neu aufgesetzt wurde:
+
+```bash
+# 1. Welche Schlüsseldateien gibt es? (Lese-Zugang, b2lesen)
+rclone --config /home/vera/.config/rclone/rclone.conf \
+  lsl b2lesen:Vera-sicherungen/ | grep vera-schluessel | tail -5
+
+# 2. Die neueste holen
+rclone --config /home/vera/.config/rclone/rclone.conf \
+  copyto b2lesen:Vera-sicherungen/vera-schluessel-20260926_030000.age /tmp/s.age
+
+# 3. Entschlüsseln — fragt nach dem GEHEIMEN age-Schlüssel aus dem
+#    Passwort-Manager. Die Ausgabe ist genau die Zeile für .env.
+age -d -i /pfad/zum/geheimen-schluessel.txt /tmp/s.age
+
+# 4. Die Zeile in /var/www/vera/.env eintragen, Datei auf 600 lassen,
+#    dann:  sudo systemctl restart vera
+#    Danach:  cd /var/www/vera && npm run zahlung:pruefen
+#    (die Selbstprüfung bestätigt Länge und Brauchbarkeit, ohne den
+#     Wert auszugeben)
+
+# 5. Aufräumen
+shred -u /tmp/s.age
+```
+
+**Wenn der Schlüssel unwiederbringlich weg ist**, ist das kein
+Datenverlust in der Datenbank — dort steht alles, was bezahlt wurde.
+Verloren sind nur die Anmeldungen, die in genau diesem Moment noch
+unterwegs waren. Vorgehen: einen neuen Schlüssel setzen (Abschnitt
+oben), den Dienst neu starten, und im Stripe-Dashboard die bezahlten
+Sitzungen der letzten 24 Stunden durchsehen, zu denen es keine
+Anmeldung gibt — deren E-Mail-Adresse steht dort, die Betroffenen
+lassen sich anschreiben und von Hand erfassen.
+
+### Schlüsselwechsel
+
+Der Schlüssel muss nicht regelmäßig gewechselt werden. Wenn doch (weil
+er womöglich bekannt geworden ist), geht das ohne Ausfall:
+
+```bash
+# bisherigen Wert nach ..._ALT kopieren, neuen setzen, neu starten
+# danach 24 Stunden warten, dann ..._ALT entfernen
+```
+
+Die 24 Stunden sind die längste Lebensdauer einer Bezahlseite beim
+Anbieter. So lange kann eine Marke mit dem alten Schlüssel noch
+unterwegs sein. `ANMELDUNG_SCHLUESSEL_ALT` schliesst nur noch auf und
+verschlüsselt nicht mehr; welche Marke zu welchem Schlüssel gehört,
+steht in der Marke selbst. `npm run zahlung:pruefen` weist beide aus.
 
 ## Schutz gegen Löschen
 
