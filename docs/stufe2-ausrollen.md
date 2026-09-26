@@ -104,7 +104,96 @@ dieser Reihenfolge.
 
 ## 1. Der vollständige Ablauf, in der richtigen Reihenfolge
 
-Die Reihenfolge ist nicht beliebig. Drei Dinge hängen aneinander:
+### 1.1 Was vorher feststehen muss
+
+Zwei Dinge sind **Voraussetzung**, nicht Teil des Ablaufs:
+
+1. **Der Wortlaut von AGB und Datenschutz ist freigegeben** (Abschnitt
+   3). Erst dann trage ich ihn in `content/de.ts` ein, erzeuge die
+   neue Fassung und committe. Ohne das wäre die erste Buchung nach dem
+   Umbau unter einem Text zustande gekommen, der den Ablauf falsch
+   beschreibt.
+2. **Der Zahlungsanbieter läuft im Testmodus.** Das ist heute so und
+   wird in Schritt 2 nachgeprüft — warum das sicher ist und was sich
+   beim späteren Echtbetrieb ändert, steht in Abschnitt 1.3.
+
+### 1.2 Die Seite bleibt die ganze Zeit für Kunden zu
+
+Vom ersten Eingriff bis zur letzten grünen Prüfung darf **niemand**
+buchen. Das ist keine neue Arbeit: Die Sperre dafür gibt es schon
+(`server/vera-sperre.conf`, angelegt am 15.09.2026). Sie legt vor die
+ganze Seite ein Passwort und lässt genau drei Pfade frei:
+
+| Pfad | Warum frei |
+|---|---|
+| `/zahlung/rueckmeldung` | die Rückmeldung des Zahlungsanbieters — sie hat ihre eigene, stärkere Prüfung (Signatur). Wäre sie gesperrt, ginge jede Zahlung verloren. |
+| `/.well-known/` | Let's Encrypt, sonst läuft das Zertifikat ab |
+| `/admin` | eigener Login mit zweitem Faktor, stärker als ein Passwort |
+
+Daraus folgt für den Ablauf:
+
+- **Vor** dem ersten Eingriff wird geprüft, dass die Sperre steht —
+  und wenn nicht, wird sie gesetzt (Schritt 3).
+- Sie bleibt über die Migration, den Neustart und die gesamte
+  Abschlussprüfung hinweg stehen. **Auch nach `systemctl start vera`
+  kann niemand buchen.**
+- Die Abschlussprüfung machst du **hinter** der Sperre: Du gibst das
+  Passwort einmal im Browser ein und gehst den Weg als Besucher. Der
+  Browser reicht das Passwort auch bei der Rückkehr von der
+  Bezahlseite mit; die Seite von Stripe selbst ist davon nicht
+  betroffen.
+- **Die öffentliche Freigabe ist ein eigener, letzter Schritt**
+  (Schritt 18) und geschieht erst, wenn alles davor grün ist.
+
+Geht in der Zwischenzeit etwas schief, bleibt die Sperre ebenfalls
+stehen — auch während der Rückkehr sieht also kein Kunde eine halb
+umgebaute Seite.
+
+### 1.3 Die Testkarte und der Echtbetrieb
+
+**Heute kann auf diesem Server gar keine echte Zahlung entstehen.** In
+`lib/zahlung.ts` sitzt ein Riegel:
+
+```ts
+if (!istTestschluessel(schluessel)) {
+  throw new ZahlungNichtEingerichtet(
+    "Es ist kein Testschlüssel hinterlegt. Echte Zahlungen sind bewusst gesperrt.",
+  );
+}
+```
+
+`istTestschluessel` lässt nur `sk_test_…` und `rk_test_…` durch. Läge
+auf dem Server ein Echtschlüssel, käme **überhaupt keine** Bezahlseite
+zustande — die Anmeldung schlüge mit „nicht eingerichtet" fehl, und
+das wäre sofort sichtbar.
+
+Die Testkarte `4242 4242 4242 4242` kann deshalb nicht versehentlich
+im Echtbetrieb landen: Es gibt heute keinen Echtbetrieb, in dem sie
+landen könnte. Trotzdem wird in **Schritt 2** nachgesehen, statt sich
+darauf zu verlassen — mit einem Befehl, der nur `sk_test` oder
+`sk_live` ausgibt und den Schlüssel selbst niemals zeigt.
+
+**Ergibt Schritt 2 `sk_live`, wird hier abgebrochen.** Dann ist die
+Lage eine andere als angenommen, und der Ablauf unten passt nicht.
+
+**Was beim späteren Echtbetrieb gilt.** Die Freischaltung echter
+Zahlungen ist ein eigenes Vorhaben, kein Teil dieses Umbaus — sie ist
+im Projekt ausdrücklich als *letzter* Schritt vor dem Livegang
+vorgesehen. Dann gilt für eine Abschlussprüfung:
+
+- **Keine Testkarte.** Sie wird im Echtbetrieb abgelehnt, und das
+  Ablehnen selbst ist kein brauchbarer Nachweis.
+- Stattdessen **eine echte Buchung mit einer echten Karte**, über den
+  kleinstmöglichen Betrag — und unmittelbar danach eine **vollständige
+  Erstattung** über den Storno-Weg im Adminbereich. Die Gebühr des
+  Anbieters bleibt dabei in der Regel einbehalten; das sind
+  Centbeträge und der Preis dafür, den Weg wirklich geprüft zu haben.
+- Der Vorgang muss danach in der Rückschau des Anbieters als erstattet
+  stehen, und die Buchung im Adminbereich auf `STORNIERT` /
+  `ERSTATTET`.
+- Auch das geschieht **hinter der Sperre**, bevor freigegeben wird.
+
+### 1.4 Warum die Reihenfolge nicht beliebig ist
 
 - **„Test 2.1" vor der Migration.** Die Migration setzt jede Zeile im
   Zustand `RESERVIERT` auf `STORNIERT`. Danach ist die Testanmeldung
@@ -120,26 +209,56 @@ Die Reihenfolge ist nicht beliebig. Drei Dinge hängen aneinander:
   nicht mehr. Liefe er weiter, scheiterte jede Anmeldung mit einem
   Datenbankfehler. Deshalb: bauen → anhalten → migrieren → starten.
   Die Stillstandszeit beträgt wenige Sekunden.
+- **Die Rechtstexte nach dem Neustart.** `npm run rechtstext` liest die
+  Dateien aus dem neuen Stand und legt die neue Fassung an. Vorher
+  gäbe es die Dateien noch gar nicht.
+
+### 1.5 Die achtzehn Schritte
 
 | # | Schritt | Ändert etwas? |
 |---|---|---|
 | 1 | Zeitpunkt wählen: abends oder früh, wenn niemand bucht | nein |
-| 2 | Sicherung ziehen und prüfen, dass sie angekommen ist | schreibt eine Sicherungsdatei |
-| 3 | „Test 2.1" ansehen — rein lesend | nein |
-| 4 | „Test 2.1" entfernen — nach ausdrücklicher Freigabe | **ja, Live-Daten** |
-| 5 | Offene Bezahlseiten beim Anbieter nachsehen | nein |
-| 6 | Doppelte `zahlungsReferenz` nachsehen (die Migration legt darauf einen eindeutigen Index) | nein |
-| 7 | Neuen Stand holen und bauen | **ja, Server** |
-| 8 | Dienst anhalten | **ja, Server** |
-| 9 | Beide Migrationen ausführen (ein Aufruf) | **ja, Live-Daten** |
-| 10 | Dienst starten | **ja, Server** |
-| 11 | Erste Sichtprüfung: Seite da, Adminbereich da | nein |
-| 12 | Nginx-Bremse einbauen und neu laden | **ja, Server** |
-| 13 | Abgleichlauf einrichten (systemd-Timer) | **ja, Server** |
-| 14 | Stripe-Dashboard: Ereignisarten prüfen | evtl. beim Anbieter |
-| 15 | Abschlussprüfung mit einer echten Testzahlung | legt eine echte Buchung an, die danach entfernt wird |
+| 2 | Betriebsart des Zahlungsanbieters prüfen (`sk_test`?) | nein |
+| 3 | Sperre prüfen — steht sie nicht, jetzt setzen | **ja, Server:** ab hier kann niemand mehr buchen |
+| 4 | Sicherung ziehen und prüfen, dass sie angekommen ist | schreibt eine Sicherungsdatei |
+| 5 | „Test 2.1" ansehen — rein lesend | nein |
+| 6 | „Test 2.1" entfernen — nach ausdrücklicher Freigabe | **ja, Live-Daten** |
+| 7 | Offene Bezahlseiten beim Anbieter nachsehen | nein |
+| 8 | Doppelte `zahlungsReferenz` nachsehen | nein |
+| 9 | Neuen Stand holen und bauen | **ja, Server** |
+| 10 | Dienst anhalten | **ja, Server** |
+| 11 | Beide Migrationen ausführen (ein Aufruf) | **ja, Live-Daten** |
+| 12 | Dienst starten — die Sperre steht weiterhin | **ja, Server** |
+| 13 | Neue Fassung der Rechtstexte anlegen | **ja, Live-Daten** (legt Zeilen an, ändert keine) |
+| 14 | Erste Sichtprüfung: Sperre steht, Dienst läuft sauber | nein |
+| 15 | Nginx-Bremse einbauen und neu laden | **ja, Server** |
+| 16 | Abgleichlauf einrichten (systemd-Timer) | **ja, Server** |
+| 17 | Abschlussprüfung **hinter der Sperre** | legt eine Testbuchung an, die danach entfernt wird |
+| 18 | **Öffentliche Freigabe** — eigener letzter Schritt | **ja, Server:** ab hier können Kunden buchen |
 
-Die Befehle zu allen Schritten stehen in **Abschnitt 4**.
+Die Befehle dazu stehen in **Abschnitt 4**, in derselben Reihenfolge:
+
+| Schritt | Abschnitt |
+|---|---|
+| 2 | 4.1 |
+| 3 | 4.2 (prüfen) und 4.3 (setzen) |
+| 4 | 4.4 |
+| 5 | 4.5 |
+| 6 | 4.6 |
+| 7 | 4.7 |
+| 8 | 4.8 |
+| 9 | 4.9 |
+| 10–12 | 4.10 |
+| 13 | 4.11 |
+| 14 | 4.12 |
+| 15 | 4.13 |
+| 16 | 4.14 |
+| 17 | Abschnitt 5 |
+| 18 | 4.15 |
+
+Die beiden Rückkehrwege stehen in 4.16 (Sicherung einspielen) und
+4.17 (Notausgang altes Schema). Sie gehören zu keinem Schritt — sie
+sind da, wenn einer schiefgeht.
 
 ---
 
@@ -148,13 +267,23 @@ Die Befehle zu allen Schritten stehen in **Abschnitt 4**.
 Der Grundsatz: **Es gibt zu jedem Zeitpunkt einen Weg zurück, und er
 dauert weniger als zehn Minuten.**
 
-### 2.1 Bis Schritt 8 (Dienst läuft noch, Migration ist nicht gelaufen)
+Und davor der wichtigere Satz: **Die Sperre bleibt stehen.** Was immer
+schiefgeht, es geht hinter einem Passwort schief. Kein Kunde sieht
+eine halb umgebaute Seite, niemand bucht in einen kaputten Zustand
+hinein. Die Sperre wird in **keinem** Rückkehrfall angefasst — sie
+fällt ausschliesslich in Schritt 18, und nur, wenn alles grün war.
+
+### 2.1 Bis Schritt 10 (Dienst läuft noch, Migration ist nicht gelaufen)
 
 Nichts zu tun. Die Datenbank ist unberührt, der alte Dienst läuft
-weiter. Einzige Ausnahme: Wurde „Test 2.1" in Schritt 4 schon gelöscht,
-bleibt sie gelöscht — sie kommt aus der Sicherung zurück, wenn nötig.
+weiter. Zwei Ausnahmen:
 
-### 2.2 Nach Schritt 9 (Migration ist gelaufen)
+- Wurde „Test 2.1" in Schritt 6 schon gelöscht, bleibt sie gelöscht —
+  sie kommt aus der Sicherung zurück, wenn nötig.
+- Wurde die Sperre in Schritt 3 neu gesetzt, bleibt sie gesetzt. Das
+  ist gewollt: Erst wieder aufmachen, wenn der Umbau steht.
+
+### 2.2 Nach Schritt 11 (die Migrationen sind gelaufen)
 
 Die **erste** Migration ist nicht von selbst umkehrbar: Sie hat die
 Spalte `reserviertBis` entfernt, und die Werte darin sind fort.
@@ -169,40 +298,40 @@ Die **zweite** Migration fügt nur drei Spalten an `Fehlbuchung` an.
 Sie ist harmlos: Der alte Code kennt diese Spalten nicht und lässt sie
 einfach stehen. Sie muss für eine Rückkehr gar nicht angefasst werden.
 
-**Der schnelle Weg zurück** (Code zurück, Schema vorwärts lassen):
-
-Der neue Code braucht `reserviertBis` nicht. Der alte braucht es. Also:
+**Der Weg zurück:**
 
 ```
-Sicherung einspielen (Abschnitt 4.11) → alter Commit auschecken →
+Sicherung einspielen (Abschnitt 4.16) → alter Commit auschecken →
 bauen → Dienst starten
 ```
 
 Das stellt beides wieder her: Schema und Daten, auf dem Stand der
-Sicherung aus Schritt 2. Alles, was zwischen Sicherung und Rückkehr
-gebucht wurde, ginge dabei verloren — deshalb Schritt 1 (Zeitpunkt,
-an dem niemand bucht) und deshalb die Sicherung **unmittelbar** vor
-dem Umbau.
+Sicherung aus Schritt 4. Alles, was zwischen Sicherung und Rückkehr
+gebucht wurde, ginge dabei verloren — was hier aber kaum etwas sein
+kann, denn seit Schritt 3 steht die Sperre und niemand bucht. Genau
+dafür steht sie so früh im Ablauf.
 
-**Der Zeitraum, in dem das wirklich zählt**, ist kurz: von Schritt 9
-bis Schritt 11 vergehen unter fünf Minuten.
+**Der Zeitraum, in dem das wirklich zählt**, ist kurz: von Schritt 11
+bis Schritt 14 vergehen unter fünf Minuten.
 
-### 2.3 Wenn erst nach Stunden etwas auffällt
+### 2.3 Wenn erst nach Tagen etwas auffällt
 
-Dann ist eine Rückkehr über die Sicherung keine Option mehr — es
-hingen echte Buchungen daran. Stattdessen:
+Also nach Schritt 18, wenn die Seite offen ist und echte Buchungen
+hängen. Dann ist eine Rückkehr über die Sicherung keine Option mehr.
+Stattdessen:
 
-1. Ist eine Zahlung betroffen? → Adminbereich, Warnblock ganz oben.
+1. **Zuerst wieder zumachen**, wenn der Fehler Kunden betrifft:
+   die Sperre erneut setzen (Abschnitt 4.3). Das ist ein Befehl und
+   ein Neuladen — danach ist Ruhe zum Nachdenken.
+2. Ist eine Zahlung betroffen? → Adminbereich, Warnblock ganz oben.
    Jede eingegangene Zahlung ohne Anmeldung steht dort mit Betrag,
-   Grund und Sitzungskennung.
-2. Reicht ein Rücksprung des **Codes** ohne Schema? Der alte Code
+   Grund und Sitzungskennung; vier der fünf Gründe haben das Geld
+   bereits automatisch zurückgebucht.
+3. Reicht ein Rücksprung des **Codes** ohne Schema? Der alte Code
    braucht `reserviertBis` — also nein, nicht ohne weiteres. Die
-   Spalte liesse sich aber in einer Zeile wieder anlegen:
-   `ALTER TABLE Registration ADD COLUMN reserviertBis DATETIME(3) NULL;`
-   und der Aufzählungstyp wieder erweitern. Beides steht in
-   Abschnitt 4.12. Das ist der Notausgang, nicht der Normalweg.
-3. Im Zweifel: Dienst anhalten, Anmeldeformular vom Netz (Nginx zeigt
-   die Wartungsseite, `server/vera-sperre.conf`), dann in Ruhe ansehen.
+   Spalte liesse sich aber in einer Zeile wieder anlegen und der
+   Aufzählungstyp wieder erweitern; beides steht in Abschnitt 4.17.
+   Das ist der Notausgang, nicht der Normalweg.
 
 ### 2.4 Woran man merkt, dass es schiefgegangen ist
 
@@ -213,6 +342,8 @@ hingen echte Buchungen daran. Stattdessen:
 - Eine Anmeldung führt nicht zur Bezahlseite, sondern zu einer
   Fehlermeldung.
 - `npm run zahlung:pruefen` meldet eine Zahlung ohne Buchung.
+- Die Anmeldung meldet „nicht eingerichtet" — dann fehlt ein
+  Schlüssel, oder es liegt ein Echtschlüssel gegen den Riegel an.
 
 ---
 
@@ -342,20 +473,67 @@ Angabe an genau der Stelle, an der Genauigkeit zählt.
 > dem Bezahlvorgang mit und werden erst bei VERA gespeichert, wenn die
 > Zahlung eingegangen ist. Er ist mit einem Schlüssel verschlüsselt,
 > der ausschließlich VERA vorliegt; Stripe kann ihn nicht lesen.
-> Spätestens 24 Stunden nach seiner Erzeugung ist er auch für VERA
-> nicht mehr verwendbar. Wird der Bezahlvorgang abgebrochen, entsteht
-> bei VERA kein Datensatz.
+>
+> Der Zeitpunkt seiner Erzeugung ist untrennbar mitverschlüsselt und
+> lässt sich nicht nachträglich ändern. Der Bezahlvorgang selbst
+> verfällt nach 30 Minuten, und die Anmeldesysteme von VERA nehmen
+> keinen Datensatz an, der älter als 24 Stunden ist; danach kann aus
+> ihm keine Anmeldung mehr entstehen. Der Schlüssel bleibt bei VERA
+> weiterhin vorhanden — die zeitliche Grenze ist eine Regel der
+> Anmeldesysteme und keine Eigenschaft der Verschlüsselung selbst.
+>
+> Wird der Bezahlvorgang abgebrochen, entsteht bei VERA kein
+> Datensatz.
 >
 > Bezahlt wird ausschließlich auf der gesicherten Seite von Stripe.
 > Kartennummern und Bankdaten erreichen diese Seite zu keinem
 > Zeitpunkt — sie werden hier weder entgegengenommen noch gespeichert.
 > Rechtsgrundlage ist Art. 6 Abs. 1 Buchst. b DSGVO.
 
-**Prüfauftrag:** Ob die Verschlüsselung an der Einordnung etwas ändert
-(Stripe hält Daten, die Stripe nicht lesen kann), ist eine Frage für
-die anwaltliche Prüfung. Ich habe sie bewusst so formuliert, dass die
-Übermittlung **genannt** wird, statt sich auf die Verschlüsselung zu
-berufen.
+**Warum der mittlere Absatz am 26.09.2026 umgeschrieben wurde.** Der
+erste Entwurf sagte: „Spätestens 24 Stunden nach seiner Erzeugung ist
+er auch für VERA nicht mehr verwendbar." Das stimmt so **nicht**, und
+die Nachfrage war berechtigt.
+
+Was der Code wirklich tut (`lib/anmeldeNutzlast.ts`):
+
+- Im verschlüsselten Datensatz steht ein Zeitstempel (`erstelltMs`).
+  Er ist Teil des versiegelten Inhalts — wer ihn ändert, zerstört das
+  Siegel, und der Datensatz wird abgewiesen.
+- `entschluesseln()` prüft nach dem Entschlüsseln das Alter gegen
+  `HOECHSTALTER_MINUTEN = 24 * 60` und wirft bei Überschreitung
+  `MarkeUngueltig("abgelaufen")`.
+- Zusätzlich verfällt die Bezahlseite beim Anbieter schon nach
+  **30 Minuten** (`expires_at` in `lib/zahlung.ts`). In der Praxis
+  kommt ein Datensatz also nie 24 Stunden später zurück.
+
+Und was der Code **nicht** tut: Der Schlüssel `ANMELDUNG_SCHLUESSEL`
+bleibt unverändert liegen. Die Altersprüfung läuft **nach** dem
+Entschlüsseln. Wer den Schlüssel hat und ein anderes Programm
+schreibt, kann den Inhalt auch nach Jahren lesen — das kann nur VERA
+selbst, aber es ist möglich. „Nicht mehr verwendbar" wäre damit eine
+Zusage gewesen, die die Technik nicht deckt. Die neue Fassung sagt,
+was gilt: Die 24 Stunden sind eine **Regel der Anmeldesysteme**, keine
+Eigenschaft der Verschlüsselung.
+
+> **Wenn die stärkere Aussage gewünscht ist**, wäre sie machbar: Der
+> Schlüsselbund ist bereits auf Wechsel ausgelegt
+> (`ANMELDUNG_SCHLUESSEL` zum Verschlüsseln,
+> `ANMELDUNG_SCHLUESSEL_ALT` zum Aufschliessen). Bei einem täglichen
+> Wechsel mit anschliessender Vernichtung des übernächsten Schlüssels
+> wäre ein Datensatz nach spätestens 48 Stunden wirklich für niemanden
+> mehr lesbar. Das ist Betriebsaufwand (täglicher Wechsel, Wirkung auf
+> die Sicherungen) und steht heute **nicht** im Plan — es ist eine
+> eigene Entscheidung, keine Nebensache.
+
+**Prüfauftrag:** Ob die Verschlüsselung an der datenschutzrechtlichen
+Einordnung etwas ändert (Stripe hält Daten, die Stripe nicht lesen
+kann), ist eine Frage für die anwaltliche Prüfung. Ich habe bewusst so
+formuliert, dass die Übermittlung **genannt** wird, statt sich auf die
+Verschlüsselung zu berufen. Offen bleibt auch, wie lange Stripe die
+`metadata` einer Bezahlseite aufbewahrt — das richtet sich nach
+Stripes eigener Aufbewahrung und gehört in den Abschnitt „Empfänger
+und Auftragsverarbeiter".
 
 ### 3.5 Datenschutz — Speicherdauer
 
@@ -387,9 +565,15 @@ erzeugen eine **neue Fassung** mit eigener Nummer und Prüfsumme. Alte
 Buchungen behalten die Fassung, unter der sie zustande kamen — das ist
 gebaut und geprüft (Liste `U`).
 
-Reihenfolge: Texte ändern → `npm run rechtstext` → **dann** ausrollen.
-Sonst käme die erste Buchung nach dem Umbau unter der alten Fassung
-zustande, die den Ablauf falsch beschreibt.
+Reihenfolge: Texte ändern und committen → mit ausrollen → **nach dem
+Neustart** `npm run rechtstext` (Abschnitt 4.11). Erst dann steht die
+neue Fassung in der Datenbank, und erst dann darf die Seite wieder
+öffentlich sein. Käme die erste Buchung nach dem Umbau unter der alten
+Fassung zustande, stünde an ihr ein Text, der den Ablauf falsch
+beschreibt — und der bliebe dauerhaft an ihr hängen.
+
+Deshalb liegt die öffentliche Freigabe (Schritt 18) hinter diesem
+Schritt und nicht davor.
 
 ---
 
@@ -400,7 +584,103 @@ Vollständig. Was hier nicht steht, ändert nichts.
 Jeder Block ist einzeln gedacht: **einen ausführen, Ausgabe ansehen,
 dann den nächsten.**
 
-### 4.1 Sicherung ziehen *(schreibt eine Sicherungsdatei)*
+### 4.1 Betriebsart des Zahlungsanbieters prüfen *(ändert nichts)*
+
+Der wichtigste Befehl des ganzen Ablaufs, und der billigste. Er gibt
+`sk_test` oder `sk_live` aus — **den Schlüssel selbst zeigt er
+niemals**, nur seine ersten beiden Silben.
+
+Aus der Datei `.env`:
+
+```bash
+sudo sed -n 's/^ZAHLUNG_GEHEIMSCHLUESSEL="\?\(sk\|rk\)_\(test\|live\)_.*/\1_\2/p' /var/www/vera/.env
+```
+
+Und aus der Umgebung des laufenden Dienstes — falls der Schlüssel dort
+gesetzt ist statt in `.env`:
+
+```bash
+sudo systemctl show vera -p Environment | sed -n 's/.*ZAHLUNG_GEHEIMSCHLUESSEL=\(sk\|rk\)_\(test\|live\)_[^ ]*.*/\1_\2/p'
+```
+
+Erwartet wird **`sk_test`** (aus einem der beiden Befehle; der andere
+bleibt dann leer).
+
+- `sk_test` → weiter. Die Testkarte in Schritt 17 ist richtig.
+- `sk_live` → **hier abbrechen.** Dann ist die Lage eine andere als
+  angenommen: Der Riegel in `lib/zahlung.ts` würde jede Zahlung
+  abweisen, und die Abschlussprüfung nach Abschnitt 5 passt nicht.
+  Schreib mir die Ausgabe, wir planen dann neu.
+- beide leer → es ist gar kein Schlüssel hinterlegt. Auch dann
+  abbrechen: Ohne ihn kommt keine Bezahlseite zustande, und die
+  Abschlussprüfung wäre wertlos.
+
+### 4.2 Sperre prüfen *(ändert nichts)*
+
+Dieser Befehl fragt die Seite von aussen — so, wie ein Kunde sie sähe:
+
+```bash
+for pfad in "" "events" "admin/login" "zahlung/rueckmeldung"; do printf '%-24s ' "/$pfad"; curl -s -o /dev/null -w "%{http_code}\n" "https://veraevents.de/$pfad"; done
+```
+
+So muss es aussehen:
+
+| Pfad | erwartet | Bedeutung |
+|---|---|---|
+| `/` | **401** | gesperrt — richtig |
+| `/events` | **401** | gesperrt — richtig |
+| `/admin/login` | 200 oder 307 | erreichbar — richtig, du brauchst ihn |
+| `/zahlung/rueckmeldung` | 400 oder 405 | erreichbar, weist aber ohne gültige Unterschrift ab — richtig |
+
+**Kommt bei `/` eine 200**, ist die Seite offen. Dann zuerst Abschnitt
+4.3, bevor irgendetwas anderes geschieht.
+
+**Kommt bei `/zahlung/rueckmeldung` eine 401**, ist die Sperre falsch
+eingebaut: Dann käme keine Zahlungsrückmeldung mehr durch, und jede
+Zahlung in Schritt 17 ginge verloren. Ebenfalls anhalten und melden.
+
+### 4.3 Sperre setzen — nur, wenn sie nicht steht *(**ändert den Server**)*
+
+Ab diesem Befehl kann kein Kunde mehr buchen. Das ist gewollt und wird
+in Schritt 18 wieder aufgehoben.
+
+Die Datei `/etc/nginx/conf.d/vera-sperre.conf` liegt bereits im
+Projekt (`server/vera-sperre.conf`) und ist vermutlich schon
+installiert. Falls nicht:
+
+```bash
+sudo install -m 644 /var/www/vera/server/vera-sperre.conf /etc/nginx/conf.d/vera-sperre.conf
+```
+
+Ein Passwort anlegen — **interaktiv**, damit es nicht in der
+Befehlsgeschichte landet:
+
+```bash
+sudo htpasswd -c /etc/nginx/.htpasswd-vera vera
+```
+
+In `/etc/nginx/sites-available/vera` in den `server`-Block diese zwei
+Zeilen ergänzen (falls sie fehlen):
+
+```
+auth_basic            $vera_sperre;
+auth_basic_user_file  /etc/nginx/.htpasswd-vera;
+```
+
+Dann — **erst prüfen, dann laden:**
+
+```bash
+sudo nginx -t
+```
+
+```bash
+sudo systemctl reload nginx
+```
+
+Danach Abschnitt 4.2 wiederholen. Erst wenn dort `/` eine 401 liefert
+und `/zahlung/rueckmeldung` nicht, geht es weiter.
+
+### 4.4 Sicherung ziehen *(schreibt eine Sicherungsdatei)*
 
 ```bash
 sudo systemctl start vera-sicherung.service
@@ -415,7 +695,7 @@ journalctl -u vera-sicherung.service -n 20 --no-pager
 Es muss eine Zeile mit `OK` und dem heutigen Datum kommen. Kommt sie
 nicht, hier abbrechen.
 
-### 4.2 „Test 2.1" ansehen *(ändert nichts)*
+### 4.5 „Test 2.1" ansehen *(ändert nichts)*
 
 Vorab einmal prüfen, dass `tsx` auf dem Server vorhanden ist — die
 beiden Skripte brauchen es. **Ändert nichts:**
@@ -427,7 +707,7 @@ cd /var/www/vera && sudo -u vera npx tsx --version
 Kommt eine Versionsnummer, ist alles da. Kommt eine Fehlermeldung,
 fehlen die Entwicklungs-Pakete; dann zuerst
 `sudo -u vera env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm ci` — das
-ändert den Server und ist derselbe Befehl wie in Schritt 4.6.
+ändert den Server und ist derselbe Befehl wie in Abschnitt 4.9.
 
 Dann das Prüfskript anlegen. Es ist eine **neue** Datei, ändert keine
 vorhandene und wird am Ende wieder entfernt. Den ganzen Block in einem
@@ -627,7 +907,7 @@ Die Ausgabe endet mit einem Urteil:
 
 Die Anmeldenummer aus der Ausgabe wird im nächsten Schritt gebraucht.
 
-### 4.3 „Test 2.1" entfernen *(**ändert Live-Daten**)*
+### 4.6 „Test 2.1" entfernen *(**ändert Live-Daten**)*
 
 Erst das Löschskript anlegen:
 
@@ -832,7 +1112,7 @@ Danach beide Skripte wieder entfernen:
 sudo rm -f /var/www/vera/test-2-1-pruefen.mts /var/www/vera/test-2-1-loeschen.mts
 ```
 
-### 4.4 Offene Bezahlseiten nachsehen *(ändert nichts)*
+### 4.7 Offene Bezahlseiten nachsehen *(ändert nichts)*
 
 ```bash
 cd /var/www/vera && sudo -u vera npm run --silent zahlung:pruefen
@@ -845,7 +1125,7 @@ Steht dort eine offene Bezahlseite, sind zwei Wege möglich:
    im Zweifel jemanden, der gerade bezahlt. Nur bei einer Seite tun,
    von der sicher ist, dass sie niemand mehr benutzt.
 
-### 4.5 Doppelte Zahlungsreferenzen nachsehen *(ändert nichts)*
+### 4.8 Doppelte Zahlungsreferenzen nachsehen *(ändert nichts)*
 
 Die Migration legt einen eindeutigen Index auf `zahlungsReferenz`.
 Gäbe es Dubletten, schlüge sie fehl — mitten im Umbau.
@@ -862,7 +1142,7 @@ SQL
 > wiederholen — seitdem ist Zeit vergangen, und der Befehl kostet
 > nichts.
 
-### 4.6 Neuen Stand holen und bauen *(**ändert den Server**)*
+### 4.9 Neuen Stand holen und bauen *(**ändert den Server**)*
 
 ```bash
 cd /var/www/vera && sudo -u vera git fetch origin && sudo -u vera git log --oneline -1 origin/claude/frontend-design-skill-folder-luremb
@@ -884,7 +1164,7 @@ cd /var/www/vera && sudo -u vera env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm ci
 cd /var/www/vera && sudo -u vera npm run build
 ```
 
-### 4.7 Dienst anhalten, beide Migrationen ausführen, starten *(**ändert Server und Live-Daten**)*
+### 4.10 Dienst anhalten, beide Migrationen ausführen, starten *(**ändert Server und Live-Daten**)*
 
 Die drei Befehle gehören unmittelbar hintereinander. Dazwischen ist
 die Seite nicht erreichbar.
@@ -905,17 +1185,53 @@ Es müssen **zwei** Migrationen als angewendet gemeldet werden:
 sudo systemctl start vera
 ```
 
-### 4.8 Erste Sichtprüfung *(ändert nichts)*
+### 4.11 Neue Fassung der Rechtstexte anlegen *(**ändert Live-Daten**)*
+
+Erst jetzt, nach dem Neustart: Der Befehl liest die Dateien aus dem
+neuen Stand, die es vorher auf dem Server noch gar nicht gab.
+
+Er **legt an und ändert nichts**: Jede Fassung bekommt eine eigene
+Nummer und Prüfsumme, alte Fassungen bleiben unberührt, und
+bestehende Buchungen behalten die Fassung, unter der sie zustande
+kamen.
 
 ```bash
-curl -s -o /dev/null -w "%{http_code}\n" https://veraevents.de/ && curl -s -o /dev/null -w "%{http_code}\n" https://veraevents.de/admin/login
+cd /var/www/vera && sudo -u vera npm run rechtstext
 ```
+
+Danach nachsehen, welche Fassung jetzt gilt — **ändert nichts:**
+
+```bash
+cd /var/www/vera && sudo -u vera npx prisma db execute --stdin <<'SQL'
+SELECT art, version, gueltigAb FROM Rechtstext ORDER BY art, version;
+SQL
+```
+
+### 4.12 Erste Sichtprüfung *(ändert nichts)*
+
+Derselbe Befehl wie in Abschnitt 4.2 — die Sperre steht ja noch, und
+genau das soll er bestätigen:
+
+```bash
+for pfad in "" "events" "admin/login" "zahlung/rueckmeldung"; do printf '%-24s ' "/$pfad"; curl -s -o /dev/null -w "%{http_code}\n" "https://veraevents.de/$pfad"; done
+```
+
+Erwartet: `/` und `/events` **401**, `/admin/login` 200 oder 307,
+`/zahlung/rueckmeldung` 400 oder 405.
+
+Liefert `/` jetzt eine **200**, ist die Sperre beim Umbau
+verlorengegangen — dann sofort Abschnitt 4.3, bevor es weitergeht.
+
+Und das Journal des Dienstes:
 
 ```bash
 journalctl -u vera -n 40 --no-pager
 ```
 
-### 4.9 Nginx-Bremse einbauen *(**ändert den Server**)*
+Es darf keine Fehlermeldung zum Start enthalten. Eine Zeile
+`✓ Ready in …` gehört dazu.
+
+### 4.13 Nginx-Bremse einbauen *(**ändert den Server**)*
 
 Die Datei anlegen:
 
@@ -1006,7 +1322,7 @@ sudo systemctl reload nginx
 > Zusätzlich zählt der Dienst selbst im Arbeitsspeicher mit
 > (`lib/bremseFluechtig.ts`), fünf Versuche je Stunde und Adresse.
 
-### 4.10 Abgleichlauf einrichten *(**ändert den Server**)*
+### 4.14 Abgleichlauf einrichten *(**ändert den Server**)*
 
 Er holt Zahlungen nach, deren Rückmeldung ausgeblieben ist — die
 einzige Stelle, an der eine eingegangene Zahlung ohne ihn liegenbliebe.
@@ -1030,7 +1346,50 @@ Einmal von Hand starten und ansehen:
 sudo systemctl start vera-zahlungsabgleich.service && journalctl -u vera-zahlungsabgleich.service -n 30 --no-pager
 ```
 
-### 4.11 Sicherung einspielen — nur im Rückkehrfall *(**ändert Live-Daten**)*
+### 4.15 Öffentliche Freigabe — der letzte Schritt *(**ändert den Server**)*
+
+**Erst ausführen, wenn Abschnitt 5 vollständig grün ist.** Ab diesem
+Befehl können Kunden buchen.
+
+In `/etc/nginx/sites-available/vera` die beiden Zeilen wieder
+entfernen:
+
+```
+auth_basic            $vera_sperre;
+auth_basic_user_file  /etc/nginx/.htpasswd-vera;
+```
+
+Dann — **erst prüfen, dann laden:**
+
+```bash
+sudo nginx -t
+```
+
+```bash
+sudo systemctl reload nginx
+```
+
+Und nachsehen, dass wirklich offen ist — **ändert nichts:**
+
+```bash
+for pfad in "" "events"; do printf '%-12s ' "/$pfad"; curl -s -o /dev/null -w "%{http_code}\n" "https://veraevents.de/$pfad"; done
+```
+
+Beide müssen jetzt **200** liefern.
+
+Aufräumen, wenn die Sperre dauerhaft fallen soll:
+
+```bash
+sudo rm -f /etc/nginx/conf.d/vera-sperre.conf /etc/nginx/.htpasswd-vera && sudo nginx -t && sudo systemctl reload nginx
+```
+
+> Das Aufräumen ist **freiwillig**. Solange beide Dateien liegen
+> bleiben und nur die zwei Zeilen im `server`-Block fehlen, lässt sich
+> die Sperre jederzeit in zwei Minuten wieder setzen — genau das
+> verlangt Abschnitt 2.3, wenn nach Tagen etwas auffällt. Ich würde
+> sie liegen lassen, bis das erste Event durch ist.
+
+### 4.16 Sicherung einspielen — nur im Rückkehrfall *(**ändert Live-Daten**)*
 
 ```bash
 sudo /usr/local/bin/vera-nach-wiederherstellung.sh
@@ -1040,7 +1399,7 @@ Der genaue Weg samt Entschlüsselung steht in
 [sicherung.md](sicherung.md). **Er überschreibt die Datenbank
 vollständig.**
 
-### 4.12 Notausgang: das alte Schema wiederherstellen *(**ändert Live-Daten**)*
+### 4.17 Notausgang: das alte Schema wiederherstellen *(**ändert Live-Daten**)*
 
 Nur, wenn erst nach Stunden etwas auffällt und die Sicherung deshalb
 keine Option mehr ist:
@@ -1065,28 +1424,67 @@ und wer sie entfernte, verlöre die Vermerke darin.
 
 ---
 
-## 5. Die Abschlussprüfung
+## 5. Die Abschlussprüfung — hinter der Sperre
 
-Nach Schritt 10 einmal den ganzen Weg gehen — mit einer echten
-Testzahlung, im Stripe-**Testmodus**.
+Sie gehört zwischen Schritt 16 und die öffentliche Freigabe. Die Seite
+ist dabei **noch gesperrt**: Du gibst das Passwort einmal im Browser
+ein und gehst dann den Weg als Besucher. Kein Kunde kann das
+gleichzeitig tun.
 
-1. Auf `veraevents.de` eine Anmeldung absenden.
-2. **Abbrechen.** Dann im Adminbereich nachsehen: Es darf **nichts**
+### 5.1 Warum die Testkarte hier richtig ist
+
+Weil der Server im **Testmodus** läuft — in Schritt 2 nachgeprüft, und
+vom Riegel in `lib/zahlung.ts` erzwungen: Ein Echtschlüssel käme nicht
+einmal bis zur Bezahlseite. Die Testkarte kann hier also nicht
+versehentlich echtes Geld bewegen, weil es nichts gibt, das echtes
+Geld bewegen könnte.
+
+Hat Schritt 2 `sk_live` ergeben, ist dieser Abschnitt **nicht**
+anwendbar. Dann gilt Abschnitt 5.3.
+
+### 5.2 Der Durchgang
+
+1. Auf `veraevents.de` das Sperr-Passwort eingeben.
+2. Eine Anmeldung absenden.
+3. **Abbrechen.** Dann im Adminbereich nachsehen: Es darf **nichts**
    stehen — keine Anmeldung, kein belegter Platz, nirgends der Name.
-3. Erneut anmelden, diesmal **bezahlen** (Testkarte `4242 4242 4242
-   4242`, beliebiges künftiges Datum, beliebige Prüfziffer).
-4. Die Abschluss-Seite muss „Zahlung erfolgreich" zeigen.
-5. Die Bestätigungsmail muss ankommen.
-6. Im Adminbereich muss die Buchung stehen, mit belegtem Platz.
-7. Oben im Adminbereich darf **keine** Fehlbuchungs-Warnung stehen.
-8. Die Testbuchung wieder entfernen — über den Storno-Weg im
-   Adminbereich, nicht über die Datenbank.
-9. Nach dem Storno muss die Buchung in der Rückschau des Anbieters als
-   erstattet erscheinen.
+4. Die Abschluss-Seite muss sagen, dass nichts gespeichert und nichts
+   abgebucht wurde — und **keinen** Bezahlknopf zeigen.
+5. Erneut anmelden, diesmal **bezahlen** (Testkarte
+   `4242 4242 4242 4242`, beliebiges künftiges Datum, beliebige
+   Prüfziffer).
+6. Die Abschluss-Seite muss „Zahlung erfolgreich" zeigen.
+7. Die Bestätigungsmail muss ankommen.
+8. Im Adminbereich muss die Buchung stehen, mit belegtem Platz.
+9. Oben im Adminbereich darf **keine** Fehlbuchungs-Warnung stehen.
+10. Die Testbuchung wieder entfernen — über den Storno-Weg im
+    Adminbereich, nicht über die Datenbank.
+11. Danach muss sie im Adminbereich auf `STORNIERT` / `ERSTATTET`
+    stehen und in der Rückschau des Anbieters als erstattet
+    erscheinen.
+12. `journalctl -u vera -n 60 --no-pager` darf keine Fehler zeigen.
 
-Schlägt einer der Punkte 2 bis 7 fehl: Abschnitt 2, Rückkehrplan.
+Schlägt einer der Punkte 3 bis 11 fehl: Abschnitt 2, Rückkehrplan. Die
+Sperre bleibt dabei stehen.
 
-### Der neue Knopf, einmal ausprobiert
+### 5.3 Später, wenn echte Zahlungen freigeschaltet sind
+
+Das ist ein eigenes Vorhaben und nicht Teil dieses Umbaus. Wenn es so
+weit ist, gilt für die Abschlussprüfung:
+
+- **Keine Testkarte.** Im Echtbetrieb wird sie abgelehnt, und eine
+  Ablehnung ist kein Nachweis, dass der Weg funktioniert.
+- Stattdessen **eine echte Buchung mit einer echten Karte** über den
+  kleinstmöglichen Betrag, unmittelbar gefolgt von einer
+  **vollständigen Erstattung** über den Storno-Weg im Adminbereich.
+- Die Gebühr des Anbieters bleibt dabei in aller Regel einbehalten.
+  Das sind Centbeträge und der Preis dafür, den Weg wirklich geprüft
+  zu haben — eine Zahlung, die man sich nur vorstellt, ist keine
+  geprüfte Zahlung.
+- Dasselbe gilt auch dort: **hinter der Sperre**, und erst danach
+  freigeben.
+
+### 5.4 Der neue Knopf
 
 Der Knopf „Als erledigt markieren" erscheint nur, wenn es wirklich
 eine Fehlbuchung gibt — und die entsteht nur, wenn etwas schiefgeht.
@@ -1133,3 +1531,12 @@ Und für dich im Adminbereich:
   was erstattet wurde, wann, und unter welcher Kennung.
 - In der Warnung ein Feld für einen Vermerk und der Knopf „Als
   erledigt markieren". Er löscht nichts.
+
+Und beim Ausrollen selbst:
+
+- Zwischen Schritt 3 und Schritt 18 sieht ein Kunde die Seite gar
+  nicht — er bekommt die Passwortabfrage. Das ist beabsichtigt und
+  dauert so lange, wie die Prüfungen dauern. Wer in dieser Zeit
+  gebucht hätte, bucht eben eine halbe Stunde später; wer in eine halb
+  umgebaute Seite hineingebucht hätte, hätte ein Problem, das niemand
+  mehr sauber aufräumen kann.
