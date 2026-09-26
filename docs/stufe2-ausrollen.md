@@ -868,7 +868,9 @@ SQL
 cd /var/www/vera && sudo -u vera git fetch origin && sudo -u vera git log --oneline -1 origin/claude/frontend-design-skill-folder-luremb
 ```
 
-Es muss `2b8f1c3` erscheinen (oder neuer, falls noch etwas dazukommt).
+Es muss `99fe92b` erscheinen — oder neuer, falls bis dahin noch
+etwas dazukommt. Steht dort etwas Älteres, ist der Push nicht
+angekommen; dann hier abbrechen.
 
 ```bash
 cd /var/www/vera && sudo -u vera git checkout claude/frontend-design-skill-folder-luremb && sudo -u vera git pull --ff-only
