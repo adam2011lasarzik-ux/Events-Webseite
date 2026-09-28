@@ -344,6 +344,20 @@ export function PreisRechner({
               Die Information geht dabei nicht verloren — sie steht
               unmittelbar darüber. Der Betrag ist eine Vorschau;
               verbindlich rechnet der Server erneut. */}
+          {/* Der Ausschluss des Widerrufsrechts gehört VOR die
+              Bestellung, nicht nur auf die Unterseite: Art. 246a § 1
+              Abs. 3 Nr. 1 EGBGB. Er steht nur bei kostenpflichtigen
+              Buchungen — ohne Entgelt gibt es keinen Fernabsatzvertrag
+              über eine entgeltliche Leistung, auf den er passte. */}
+          {ergebnis.gesamtCents > 0 && (
+            <p className={stil.merkerText} style={{ color: "rgba(234,241,248,0.75)" }}>
+              {t.anmeldung.formular.widerrufHinweis}{" "}
+              <a href="/widerruf" target="_blank" rel="noreferrer">
+                {t.anmeldung.formular.widerrufLinktext}
+              </a>
+              {t.anmeldung.formular.widerrufHinweisEnde}
+            </p>
+          )}
           {ergebnis.gesamtCents > 0 && (
             <p className={stil.merkerText} style={{ color: "rgba(234,241,248,0.9)" }}>
               {fuelle(t.anmeldung.formular.absendenBetrag, {

@@ -358,6 +358,18 @@ export const de = {
          eine nützliche Information, aber jedes zusätzliche Wort auf
          der Schaltfläche schwächt die gesetzlich geforderte
          Eindeutigkeit. */
+      /* Art. 246a § 1 Abs. 3 Nr. 1 EGBGB: Besteht kein Widerrufsrecht,
+         muss der Unternehmer DARÜBER informieren — vor Abgabe der
+         Bestellung, nicht erst auf einer Unterseite. Deshalb steht der
+         Satz hier und nicht nur unter „Widerruf und Stornierung".
+         Kurz gehalten: Neben dem Bestellknopf zählt jede Zeile, und
+         die Begründung (§ 312g Abs. 2 Nr. 9 BGB) steht verlinkt. */
+      widerrufHinweis:
+        "Für Veranstaltungen mit festem Termin besteht kein gesetzliches Widerrufsrecht " +
+        "(§ 312g Abs. 2 Nr. 9 BGB). Kostenlos stornieren können Sie trotzdem bis 24 Stunden " +
+        "vor Beginn — Einzelheiten unter",
+      widerrufLinktext: "Widerruf und Stornierung",
+      widerrufHinweisEnde: ".",
       absenden: "Zahlungspflichtig bestellen",
       absendenBetrag: "Gesamtbetrag: {betrag}",
       absendenKostenlos: "Jetzt verbindlich anmelden",
@@ -519,9 +531,18 @@ export const de = {
       "nichts abgebucht. Schreib uns unter kontakt@veraevents.de, wir melden uns.",
     zahlungWege: "Karte, Apple Pay, Google Pay oder PayPal",
     emailTitel: "Bestätigung per E-Mail",
+    /* Korrigiert am 28.09.2026. Der frühere Satz „Eine automatische
+       Bestätigungsmail gibt es noch nicht" stammte aus der Zeit vor
+       lib/mail.ts. Sie wird längst verschickt — `bestaetigungVer-
+       schicken()` in app/zahlung/rueckmeldung/route.ts —, und die
+       Teilnahmebedingungen (Ziffer 3.6) wie auch die Stornoseite
+       verweisen ausdrücklich auf sie. Ein Satz, der sie leugnet,
+       widersprach beiden an der Stelle, an der der Besucher gerade
+       auf sie wartet. */
     emailText:
-      "Eine automatische Bestätigungsmail gibt es noch nicht. Bitte notiere dir bis dahin " +
-      "deine Anmeldenummer.",
+      "Die Bestätigung mit allen Angaben und dem Stornolink ist unterwegs an die " +
+      "angegebene Adresse. Sie kommt meist innerhalb weniger Minuten; schaue " +
+      "gegebenenfalls im Spam-Ordner nach. Notiere dir bis dahin deine Anmeldenummer.",
     nichtGefunden: "Diese Anmeldung konnten wir nicht finden.",
     /* Neu am 26.09.2026: Nach dem Abbruch gibt es keinen Datensatz
        mehr, auf den diese Seite zeigen könnte. Statt „nicht gefunden"
@@ -1626,13 +1647,25 @@ export const de = {
         "Haftung von VERA nach Ziffer 11 nicht.",
     ],
 
+    /* Angeglichen am 28.09.2026. „Hängt von der jeweiligen
+       Veranstaltung ab" beschrieb einen Ticketverkauf, den es nicht
+       mehr gibt: Buchbar sind ausschliesslich Veranstaltungen mit
+       feststehendem Termin. Zwei Texte, die dieselbe Frage
+       unterschiedlich beantworten, sind schlimmer als einer, der sie
+       falsch beantwortet — der Widerspruch fällt dem Leser zuerst auf.
+       Derselbe PRÜFAUFTRAG wie bei `widerrufUeberschrift`. */
     agbWiderrufsrechtUeberschrift: "13. Widerrufsrecht",
     agbWiderrufsrechtAbsaetze: [
-      "13.1 Ob Ihnen ein gesetzliches Widerrufsrecht zusteht, hängt von der jeweiligen " +
-        "Veranstaltung ab. Die Einzelheiten stehen in der gesonderten Information „Widerruf " +
-        "und Stornierung“.",
-      "13.2 Das freiwillige Stornierungsrecht nach Ziffer 7 besteht unabhängig davon und " +
-        "wird durch ein etwaiges Widerrufsrecht nicht berührt.",
+      "13.1 Für die über die Website buchbaren Veranstaltungen besteht kein gesetzliches " +
+        "Widerrufsrecht: Es handelt sich um Dienstleistungen im Zusammenhang mit " +
+        "Freizeitbetätigungen, für die ein bestimmter Termin vorgesehen ist (§ 312g " +
+        "Absatz 2 Nummer 9 BGB). VERA verkauft Tickets ausschließlich für Veranstaltungen " +
+        "mit feststehendem Termin. Auf den Ausschluss wird vor Abgabe der Bestellung " +
+        "hingewiesen; die Einzelheiten stehen in der gesonderten Information „Widerruf und " +
+        "Stornierung“.",
+      "13.2 Das freiwillige Stornierungsrecht nach Ziffer 7 besteht unabhängig davon. Es " +
+        "geht der Sache nach weiter als ein Widerrufsrecht: Bis 24 Stunden vor Beginn wird " +
+        "der volle Betrag ohne Abzug erstattet.",
     ],
 
     agbVertragsdauerUeberschrift: "14. Vertragsdauer",
@@ -1694,24 +1727,56 @@ export const de = {
     widerrufEinleitung:
       "Zwei Dinge, die oft verwechselt werden — sie haben nichts miteinander zu tun und " +
       "werden hier deshalb getrennt behandelt.",
-    widerrufUeberschrift: "1. Das gesetzliche Widerrufsrecht",
-    widerrufText:
-      "Ob für diese Veranstaltungen ein gesetzliches Widerrufsrecht besteht, ist noch nicht " +
-      "geklärt. Deshalb steht hier bewusst KEINE Widerrufsbelehrung: Eine Belehrung über " +
-      "ein Recht, das es womöglich gar nicht gibt, wäre irreführend — eine fehlende " +
-      "Belehrung über ein Recht, das besteht, wäre ein Fehler mit Folgen.",
-    widerrufHinweis:
-      "Der Grund für die offene Frage: Bei Verträgen über Dienstleistungen im Zusammenhang " +
-      "mit Freizeitbetätigungen, für die ein bestimmter Termin vorgesehen ist, kann das " +
-      "Widerrufsrecht nach § 312g Absatz 2 Nummer 9 BGB ausgeschlossen sein. Ein Padel-" +
-      "Nachmittag an einem festen Datum fällt möglicherweise darunter. Ob das hier zutrifft " +
-      "und wie die Information dann lauten muss, ist eine Rechtsfrage und keine " +
-      "Programmierfrage.",
-    widerrufTerminHinweis:
-      "Tickets über den Ticketshop verkauft VERA ausschließlich für Veranstaltungen mit " +
-      "bereits feststehendem Termin; ohne Termin ist keine Buchung möglich. Bei individuell " +
-      "beauftragten Firmenveranstaltungen wird der Termin im jeweiligen Angebot vereinbart, " +
-      "bevor der Vertrag zustande kommt (siehe „Für Unternehmen“).",
+    /* ── Abschnitt 1: ein Ausschluss, keine offene Frage ──────────
+       Bis zum 28.09.2026 stand hier ein sichtbar markierter
+       Platzhalter und der Satz „Ob für diese Veranstaltungen ein
+       gesetzliches Widerrufsrecht besteht, ist noch nicht geklärt."
+       Das war ehrlich, solange der Ticketverkauf auch Veranstaltungen
+       ohne feststehenden Termin kannte. Seit Entscheidung 2.5 kennt er
+       sie nicht mehr: Ohne Datum UND Uhrzeit wird die Bezahlseite gar
+       nicht erst erzeugt — geprüft in Liste T. Damit liegt der
+       Tatbestand des § 312g Abs. 2 Nr. 9 BGB bei JEDER buchbaren
+       Veranstaltung vor, und eine Seite, die die Frage weiter offen
+       lässt, verschweigt eine Pflichtangabe.
+
+       Denn der Ausschluss will mitgeteilt werden: Art. 246a § 1
+       Abs. 3 Nr. 1 EGBGB verlangt die Information, DASS kein
+       Widerrufsrecht besteht — und zwar vor Abgabe der Bestellung.
+       Deshalb steht derselbe Hinweis zusätzlich unmittelbar über dem
+       Bestellknopf (`anmeldung.formular.widerrufHinweis`).
+
+       PRÜFAUFTRAG an die anwaltliche Prüfung: die Einordnung selbst.
+       Ein Padel-Nachmittag an einem festen Datum ist nach meiner
+       Einschätzung eine „Dienstleistung im Zusammenhang mit
+       Freizeitbetätigungen" mit „spezifischem Termin" — das ist der
+       Regelfall, für den die Vorschrift geschrieben ist (wie bei
+       Konzert- und Sportveranstaltungstickets). Sicher bin ich mir
+       nicht, und die Rechtsfolge eines Irrtums ist erheblich: Bestünde
+       das Widerrufsrecht doch, begänne mangels Belehrung die Frist
+       nach § 356 Abs. 3 BGB nicht zu laufen. Genau deshalb steht das
+       freiwillige Stornorecht daneben — es federt den Irrtum in der
+       Sache ab, auch wenn es ihn rechtlich nicht heilt. */
+    widerrufUeberschrift: "1. Kein gesetzliches Widerrufsrecht",
+    widerrufAusschlussAbsaetze: [
+      "Für die über diese Website buchbaren Veranstaltungen besteht kein gesetzliches " +
+        "Widerrufsrecht. Es handelt sich um Dienstleistungen im Zusammenhang mit " +
+        "Freizeitbetätigungen, für die ein bestimmter Termin vorgesehen ist. Bei solchen " +
+        "Verträgen ist das Widerrufsrecht nach § 312g Absatz 2 Nummer 9 des Bürgerlichen " +
+        "Gesetzbuchs ausgeschlossen.",
+      "VERA verkauft Tickets ausschließlich für Veranstaltungen, deren Datum und Uhrzeit " +
+        "bereits feststehen; ohne feststehenden Termin ist eine Buchung technisch nicht " +
+        "möglich. Der Termin, für den Sie buchen, steht auf der Veranstaltungsseite und in " +
+        "der Zusammenfassung über dem Bestellknopf. Auf den Ausschluss wird dort noch " +
+        "einmal hingewiesen, bevor Sie die Bestellung absenden.",
+      "Bei individuell beauftragten Firmenveranstaltungen wird der Termin im jeweiligen " +
+        "Angebot vereinbart, bevor der Vertrag zustande kommt (siehe „Für Unternehmen“). " +
+        "Ein Widerrufsrecht steht ohnehin nur Verbraucherinnen und Verbrauchern zu.",
+      "Unabhängig vom Gesetz räumt VERA Ihnen freiwillig ein Stornierungsrecht ein, das in " +
+        "der Sache weiter reicht als ein Widerrufsrecht: Bis 24 Stunden vor Beginn können " +
+        "Sie kostenlos stornieren und erhalten den vollen Betrag zurück. Die Einzelheiten " +
+        "stehen in Abschnitt 2.",
+    ],
+
     /* Ab hier KEIN Platzhalter mehr: Das sind die vom Betreiber
        festgelegten Bedingungen, und sie beschreiben genau das, was die
        Seite tatsächlich tut. Ändert sich der Ablauf, ändert sich
@@ -1760,14 +1825,14 @@ export const de = {
       "Betrag erstattet — ohne dass dafür etwas beantragt werden muss. Die Absage wird so " +
       "früh wie möglich per E-Mail mitgeteilt.",
 
-    /* Die Markierung gilt jetzt nur noch für Abschnitt 1. Sie über die
-       ganze Seite zu setzen wäre falsch geworden: Abschnitt 2 und 3
-       sind verbindliche Bedingungen, keine Platzhalter. */
-    widerrufOffenMarke: "Dieser Abschnitt ist noch nicht ausgefüllt",
-    widerrufPruefung:
-      "Abschnitt 1 sollte vor der Veröffentlichung von einer fachkundigen Person geprüft " +
-      "werden. Die Stornobedingungen in Abschnitt 2 und 3 legt VERA selbst fest; sie gelten " +
-      "so, wie sie hier stehen.",
+    /* `widerrufOffenMarke` und `widerrufPruefung` sind am 28.09.2026
+       entfallen. Sie standen als sichtbarer Text auf der Seite
+       („Dieser Abschnitt ist noch nicht ausgefüllt", „sollte vor der
+       Veröffentlichung von einer fachkundigen Person geprüft werden")
+       — ein interner Arbeitsvermerk, der auf einer Rechtstextseite
+       nichts zu suchen hat: Er entwertet die Angabe, die daneben
+       steht, und gibt dem Leser nichts. Der Prüfauftrag steht
+       weiterhin im Quelltext, oben bei Abschnitt 1. */
   },
 
   /**

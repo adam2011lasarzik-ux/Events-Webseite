@@ -102,30 +102,61 @@ for (const [name, pfad, ueberschrift] of [
   );
   pruefe(`${name}: Seitentitel gesetzt`, (await page.title()).includes(ueberschrift), await page.title());
 }
-/* Die Marke wird per CSS in Grossbuchstaben gesetzt (text-transform),
+/* ── Keine Arbeitsvermerke auf den Rechtstextseiten ─────────────
+   Die Marke wird per CSS in Grossbuchstaben gesetzt (text-transform),
    und innerText gibt den GERENDERTEN Text zurück — deshalb ohne
    Rücksicht auf Gross- und Kleinschreibung vergleichen.
 
-   Seit 21.09.2026 gilt das nur noch für Widerruf: Dort ist Abschnitt 1
-   (das gesetzliche Widerrufsrecht) weiterhin offen — die Frage nach
-   § 312g Abs. 2 Nr. 9 BGB ist ungeklärt. Die AGB sind seitdem
-   VOLLSTÄNDIG ausgefüllt (Doc03) und tragen deshalb KEINE
-   Platzhalter-Markierung mehr — eine Seite, die geltende Bedingungen
-   enthält und sich zugleich als „noch nicht ausgefüllt" bezeichnet,
-   wäre in beide Richtungen irreführend. */
+   Diese Prüfung stand bis zum 28.09.2026 auf dem Kopf: Sie VERLANGTE
+   auf /widerruf eine Platzhalter-Markierung, weil Abschnitt 1 offen
+   war. Er ist es nicht mehr — er teilt den Ausschluss nach § 312g
+   Abs. 2 Nr. 9 BGB mit. Damit gilt für alle fünf Rechtstextseiten
+   dasselbe: Sie tragen den Text, der gilt, und sonst nichts. Ein
+   sichtbarer Arbeitsvermerk („Platzhalter", „noch nicht ausgefüllt",
+   „anwaltlich zu prüfen", „muss noch geprüft werden") entwertet die
+   Angabe daneben und gehört in den Quelltext, nicht auf die Seite.
+
+   Die Prüfung läuft über ALLE fünf Seiten statt über eine: Eine
+   Liste, die nur die Seite prüft, an der zuletzt gearbeitet wurde,
+   übersieht die nächste. */
+const ARBEITSVERMERKE = [
+  /platzhalter/i,
+  /noch nicht ausgefüllt/i,
+  /anwaltlich (zu )?(ge)?prüf/i,
+  /rechtlich (noch )?(zu )?(ge)?prüf/i,
+  /von einer fachkundigen Person geprüft/i,
+  /noch nicht geklärt/i,
+  /PRÜFAUFTRAG/i,
+  /\bTODO\b/,
+];
+for (const pfad of ["/impressum", "/datenschutz", "/agb", "/widerruf", "/aufnahmen"]) {
+  await page.goto(BASIS + pfad, { waitUntil: "networkidle" });
+  const seitenText = await page.locator("body").innerText();
+  const gefunden = ARBEITSVERMERKE.filter((r) => r.test(seitenText)).map(String);
+  pruefe(
+    `${pfad}: trägt keinen sichtbaren Arbeitsvermerk`,
+    gefunden.length === 0,
+    gefunden.join(" · "),
+  );
+}
+
+/* Und die Gegenprobe zum Ausschluss: Dass nichts Falsches dasteht,
+   genügt nicht — das Richtige muss auch dastehen. Art. 246a § 1
+   Abs. 3 Nr. 1 EGBGB verlangt die Information, DASS kein
+   Widerrufsrecht besteht. */
 await page.goto(BASIS + "/widerruf", { waitUntil: "networkidle" });
 const widerrufOffenText = await page.locator("body").innerText();
 pruefe(
-  "Widerruf: markiert den offenen Abschnitt 1 sichtbar als Platzhalter",
-  /platzhalter/i.test(widerrufOffenText) &&
-    widerrufOffenText.includes("Dieser Abschnitt ist noch nicht ausgefüllt"),
+  "Widerruf: teilt den Ausschluss des Widerrufsrechts ausdrücklich mit",
+  widerrufOffenText.includes("besteht kein gesetzliches Widerrufsrecht"),
 );
-await page.goto(BASIS + "/agb", { waitUntil: "networkidle" });
-const agbKeinPlatzhalterText = await page.locator("body").innerText();
 pruefe(
-  "AGB: enthält KEINE Platzhalter-Markierung mehr — vollständig ausgefüllt",
-  !/platzhalter/i.test(agbKeinPlatzhalterText) &&
-    !agbKeinPlatzhalterText.includes("Dieser Abschnitt ist noch nicht ausgefüllt"),
+  "Widerruf: nennt die Vorschrift, auf der der Ausschluss beruht",
+  /312g\s*Absatz\s*2\s*Nummer\s*9|312g\s*Abs\.?\s*2\s*Nr\.?\s*9/.test(widerrufOffenText),
+);
+pruefe(
+  "Widerruf: stellt das freiwillige Stornorecht daneben",
+  widerrufOffenText.includes("24 Stunden vor Beginn"),
 );
 
 /* Der Punkt, der leicht übersehen wird — und der Grund, warum die
@@ -198,15 +229,15 @@ pruefe(
   wText.includes("Absage durch VERA"),
 );
 
-/* Die Platzhalter-Markierung darf NICHT mehr für die ganze Seite
-   gelten: Abschnitt 2 und 3 sind geltende Bedingungen. */
+/* Seit 28.09.2026 ist die ganze Seite verbindlich — kein Abschnitt
+   trägt mehr eine Markierung. */
 pruefe(
   "Widerruf: bezeichnet sich nicht mehr pauschal als unausgefüllt",
   !wText.includes("Diese Seite ist noch nicht ausgefüllt"),
 );
 pruefe(
-  "Widerruf: markiert aber weiterhin den offenen Abschnitt 1",
-  wText.includes("Dieser Abschnitt ist noch nicht ausgefüllt"),
+  "Widerruf: und auch Abschnitt 1 ist nicht mehr als offen markiert",
+  !wText.includes("Dieser Abschnitt ist noch nicht ausgefüllt"),
 );
 
 await page.goto(BASIS + "/agb", { waitUntil: "networkidle" });
@@ -329,9 +360,22 @@ pruefe(
   "AGB: legen den Geltungsbereich fest (Verbraucher/Unternehmer)",
   /Verbraucher ist, wer den Vertrag zu Zwecken abschließt/i.test(agbText),
 );
+/* Bis zum 28.09.2026 suchte diese Prüfung den Satz „wird durch ein
+   etwaiges Widerrufsrecht nicht berührt". Das „etwaig" ist mit der
+   Ziffer 13 entfallen: Es gibt kein etwaiges Widerrufsrecht mehr,
+   sondern einen benannten Ausschluss. Geprüft wird jetzt beides —
+   dass die AGB den Ausschluss nennen UND dass sie das freiwillige
+   Stornorecht davon trennen. Gerade weil die beiden regelmässig
+   verwechselt werden, darf der eine Satz den anderen nicht
+   verschlucken. */
+pruefe(
+  "AGB: nennen den Ausschluss des Widerrufsrechts mit seiner Vorschrift",
+  /kein gesetzliches Widerrufsrecht/i.test(agbText) &&
+    /312g\s*Absatz\s*2\s*Nummer\s*9/.test(agbText),
+);
 pruefe(
   "AGB: unterscheiden Stornierung vom gesetzlichen Widerrufsrecht",
-  /wird durch ein etwaiges Widerrufsrecht nicht berührt/i.test(agbText),
+  /freiwillige Stornierungsrecht nach Ziffer 7 besteht unabhängig davon/i.test(agbText),
 );
 
 /* ── Ziffer 9.4 bis 9.6, ergänzt am 22.09.2026 ───────────────────
@@ -489,6 +533,12 @@ for (const [beschriftung, ziel] of [
   ["Datenschutz", "/datenschutz"],
   ["AGB", "/agb"],
   ["Widerruf", "/widerruf"],
+  /* Ergänzt am 28.09.2026. Liste V prüfte diesen Link, indem sie
+     components/Footer.tsx nach der Zeichenkette durchsuchte — das
+     sagt, dass der Link im Quelltext steht, nicht dass er im
+     gerenderten Fussbereich ankommt. Hier wird er wie die vier
+     anderen am laufenden Browser geprüft. */
+  ["Hinweise zu Aufnahmen", "/aufnahmen"],
 ]) {
   const treffer = page.locator(`footer a[href="${ziel}"]`);
   pruefe(`Fußbereich verlinkt „${beschriftung}“`, (await treffer.count()) === 1);
@@ -610,14 +660,27 @@ pruefe(
   arbeitsnotiz.join(" · "),
 );
 
-/* Gegenprobe: Die Widerrufsseite behaelt ihren eigenen, inhaltlichen
-   Hinweis. Ohne diese Zeile koennte ihn jemand beim naechsten
-   Aufraeumen versehentlich mitloeschen. */
+/* Diese Gegenprobe stand bis zum 28.09.2026 andersherum: Sie
+   VERLANGTE auf der Widerrufsseite den Satz „Abschnitt 1 sollte vor
+   der Veröffentlichung von einer fachkundigen Person geprüft werden".
+   Solange Abschnitt 1 offen war, war das eine Aussage für Besucher.
+   Jetzt ist er es nicht mehr, und derselbe Satz wäre das, was die
+   Prüfung darüber auf allen Seiten verbietet: ein Arbeitsvermerk.
+
+   Geprüft wird stattdessen, was er transportieren sollte — dass die
+   Seite die beiden Dinge auseinanderhält, die sie auseinanderhalten
+   soll. */
 await page.goto(BASIS + "/widerruf", { waitUntil: "networkidle" });
 const widText = await page.locator("body").innerText();
 pruefe(
-  "Widerruf: eigener Hinweis zu Abschnitt 1 bleibt bestehen",
-  widText.includes("Abschnitt 1") && widText.includes("fachkundigen Person"),
+  "Widerruf: kein Verweis mehr auf eine ausstehende fachkundige Prüfung",
+  !widText.includes("fachkundigen Person"),
+);
+pruefe(
+  "Widerruf: trennt gesetzliches Widerrufsrecht und freiwillige Stornierung",
+  widText.includes("Kein gesetzliches Widerrufsrecht") &&
+    widText.includes("Stornierung durch Teilnehmende") &&
+    /Unabhängig vom Gesetz räumt VERA Ihnen freiwillig/i.test(widText),
 );
 
 await page.goto(BASIS + "/impressum", { waitUntil: "networkidle" });

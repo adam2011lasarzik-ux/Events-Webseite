@@ -195,8 +195,8 @@ geprüft.
 | Seite vorhanden, erreichbar, verlinkt | 🟩 |
 | **Widerrufsrecht und Stornierung getrennt dargestellt** | 🟩 |
 | **Keine 14-Tage-Belehrung eingebaut** | 🟩 (bewusst) |
-| Klärung, ob § 312g Abs. 2 Nr. 9 BGB greift | 🟨 🟥 |
-| Je nach Ergebnis: Belehrung **oder** Hinweis auf den Ausschluss | 🟨 🟥 |
+| Klärung, ob § 312g Abs. 2 Nr. 9 BGB greift | 🟨 (eingebaut, anwaltlich offen) |
+| Je nach Ergebnis: Belehrung **oder** Hinweis auf den Ausschluss | 🟩 (Hinweis auf den Ausschluss) |
 | **Stornobedingungen festgelegt und auf der Seite** | 🟩 |
 | **Absage durch VERA geregelt** (eigener Abschnitt 3) | 🟩 |
 
@@ -207,22 +207,37 @@ Absage durch VERA automatische Erstattung. Sie beschreiben genau, was
 die Seite tut: Die Selbstbedienungs-Stornierung ist gebaut und läuft
 über den Link in der Bestätigungsmail.
 
-**Deshalb gilt die Platzhalter-Markierung dort nur noch für Abschnitt
-1.** Eine Seite, die geltende Bedingungen enthält und sich zugleich als
-„noch nicht ausgefüllt" bezeichnet, wäre in beide Richtungen
-irreführend.
+**Seit dem 28.09.2026 trägt die Seite gar keine Markierung mehr.**
+Abschnitt 1 teilt jetzt den Ausschluss nach § 312g Abs. 2 Nr. 9 BGB
+mit — Fassung A aus Entwurf 07. Ausschlaggebend war nicht eine neue
+Rechtsauskunft, sondern der eigene Ticketverkauf: Seit Entscheidung
+2.5 wird die Bezahlseite ohne feststehenden Termin gar nicht erst
+erzeugt (geprüft in Liste T). Damit liegt der Tatbestand bei JEDER
+buchbaren Veranstaltung vor, und die Frage „greift die Ausnahme?" ist
+keine Frage des Einzelfalls mehr.
 
-**Korrigiert:** Die Seite hiess „Widerrufsbelehrung". Dieser Titel
-setzt voraus, dass ein Widerrufsrecht besteht — und genau das ist
-offen. Bei Dienstleistungen im Zusammenhang mit Freizeitbetätigungen
-zu einem bestimmten Termin kann es nach § 312g Abs. 2 Nr. 9 BGB
-ausgeschlossen sein. Ein Padel-Nachmittag an einem festen Datum fällt
-möglicherweise darunter.
+Der Ausschluss will mitgeteilt werden: Art. 246a § 1 Abs. 3 Nr. 1
+EGBGB verlangt die Information vor Abgabe der Bestellung. Sie steht
+deshalb an zwei Stellen — auf `/widerruf` und unmittelbar über dem
+Bestellknopf.
 
-Deshalb steht dort **bewusst keine** Standard-Belehrung: Über ein
-Recht zu belehren, das es womöglich nicht gibt, wäre irreführend —
-über ein bestehendes Recht nicht zu belehren, hätte Folgen. Die Frage
-gehört beantwortet, bevor Tickets verkauft werden.
+**Anwaltlich offen bleibt die Einordnung selbst.** Ein Padel-Nachmittag
+an festem Datum ist nach hiesiger Einschätzung der Regelfall der
+Vorschrift (wie ein Konzert- oder Sportveranstaltungsticket). Bestünde
+das Widerrufsrecht doch, begänne mangels Belehrung die Frist nach
+§ 356 Abs. 3 BGB nicht zu laufen. Das freiwillige Stornorecht federt
+das in der Sache ab, heilt es rechtlich aber nicht.
+
+**Korrigiert:** Die Seite hiess „Widerrufsbelehrung". Der Titel bleibt
+„Widerruf und Stornierung": Eine Belehrung über ein Recht, das nach
+der eingebauten Fassung nicht besteht, wäre eine falsche Überschrift.
+
+Dort steht **bewusst keine** 14-Tage-Belehrung. Sollte die anwaltliche
+Prüfung die Einordnung kippen, ist die Ersatzfassung vorbereitet:
+Entwurf 07, Fassung B — und zwar ausdrücklich mit dem gesetzlichen
+Muster aus Anlage 1 zu Art. 246a § 1 Abs. 2 Satz 2 EGBGB, nicht frei
+formuliert. Eine selbst geschriebene Belehrung verliert den Schutz der
+Musterbelehrung.
 
 **Stornierung ist etwas anderes** und wird auf der Seite getrennt
 behandelt: Sie ist eine vertragliche Regelung, die VERA selbst
