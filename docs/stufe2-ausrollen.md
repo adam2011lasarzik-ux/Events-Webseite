@@ -1407,7 +1407,7 @@ SQL
 cd /var/www/vera && sudo -u vera git fetch origin && sudo -u vera git log --oneline -1 origin/claude/frontend-design-skill-folder-luremb
 ```
 
-Es muss `7bbd1d7` erscheinen — oder neuer, falls bis dahin noch
+Es muss `6155796` erscheinen — oder neuer, falls bis dahin noch
 etwas dazukommt. Steht dort etwas Älteres, ist der Push nicht
 angekommen; dann hier abbrechen.
 
