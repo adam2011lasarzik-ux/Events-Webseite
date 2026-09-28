@@ -1438,32 +1438,52 @@ Danach beide Skripte wieder entfernen:
 sudo rm -f /var/www/vera/test-2-1-pruefen.mts /var/www/vera/test-2-1-loeschen.mts
 ```
 
-### 4.7 Offene Bezahlseiten nachsehen *(ändert nichts)*
+### 4.7 Zahlungseinrichtung prüfen *(ändert nichts)*
 
 ```bash
 cd /var/www/vera && sudo -u vera npm run --silent zahlung:pruefen
 ```
 
-Steht dort eine offene Bezahlseite, sind zwei Wege möglich:
+Erwartet wird `Es ist ein TESTschlüssel, kein echter` und am Ende
+`Alles vollständig. Die Zahlung ist eingerichtet — im Testbetrieb.`
 
-1. **Warten**, bis sie verfällt (die alten Seiten laufen 24 Stunden).
-2. Sie beim Anbieter **schliessen** — das ist ein Eingriff und trifft
-   im Zweifel jemanden, der gerade bezahlt. Nur bei einer Seite tun,
-   von der sicher ist, dass sie niemand mehr benutzt.
+> **Korrigiert am 28.09.2026.** Dieser Schritt hiess „Offene
+> Bezahlseiten nachsehen", und das konnte der Befehl nie: `zahlung:pruefen`
+> ist eine Einrichtungs-Selbstprüfung und listet keine Sitzungen beim
+> Anbieter auf. Die Überschrift versprach eine Auskunft, die die
+> Ausgabe nicht enthielt.
+>
+> Die Frage dahinter ist auf anderem Weg beantwortet, und zwar besser:
+> Hinter der Sperre (Abschnitt 4.2, `/` und `/events` liefern 401)
+> erreicht niemand das Anmeldeformular, es kann also keine neue
+> Bezahlseite entstehen. Und sollte doch eine alte offenstehen und
+> später bezahlt werden, greift der neue Ablauf: Eine Sitzung ohne
+> `marke_*`-Metadaten wird als Fehlbuchung mit dem Grund `ohne-marke`
+> erkannt und **automatisch vollständig erstattet**. Der Fall ist
+> abgedeckt, nicht bloss unwahrscheinlich.
 
 ### 4.8 Doppelte Zahlungsreferenzen nachsehen *(ändert nichts)*
 
 Die Migration legt einen eindeutigen Index auf `zahlungsReferenz`.
 Gäbe es Dubletten, schlüge sie fehl — mitten im Umbau.
 
+Das Prüfskript holen und laufen lassen:
+
 ```bash
-cd /var/www/vera && sudo -u vera npx prisma db execute --stdin <<'SQL'
-SELECT zahlungsReferenz, COUNT(*) AS anzahl FROM Registration
- WHERE zahlungsReferenz IS NOT NULL
- GROUP BY zahlungsReferenz HAVING anzahl > 1;
-SQL
+cd /var/www/vera && sudo -u vera git fetch origin && sudo -u vera git show origin/claude/frontend-design-skill-folder-luremb:server/dubletten-pruefen.mts | sudo -u vera tee dubletten-pruefen.mts > /dev/null && sudo -u vera npx tsx --env-file=.env ./dubletten-pruefen.mts
 ```
 
+Erwartet: `KEINE DUBLETTEN — der eindeutige Index der Migration kann
+angelegt werden.`
+
+> **Korrigiert am 28.09.2026.** Hier stand bis dahin dieselbe Abfrage
+> über `npx prisma db execute --stdin`. Das war eine Prüfung, die
+> nicht prüfen konnte: `db execute` führt SQL aus, gibt aber **keine
+> Ergebniszeilen zurück**. Die Ausgabe wäre bei Dubletten genauso
+> leer gewesen wie ohne — und eine leere Ausgabe hätten wir als
+> „nichts gefunden" gelesen. `$queryRaw` im Skript gibt die Zeilen
+> zurück.
+>
 > Am 25.09.2026 schon einmal gelaufen: keine Dubletten. Trotzdem
 > wiederholen — seitdem ist Zeit vergangen, und der Befehl kostet
 > nichts.
