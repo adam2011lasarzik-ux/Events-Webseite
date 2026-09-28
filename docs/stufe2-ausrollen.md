@@ -664,9 +664,27 @@ und Auftragsverarbeiter".
 Zwei neue Absätze in Abschnitt 4 („Speicherdauer und Löschung"). Der
 erste gehört an den Anfang, direkt unter die Einleitung:
 
-> Angaben aus einem abgebrochenen oder nicht abgeschlossenen
-> Bezahlvorgang werden gar nicht erst gespeichert. Es entsteht kein
-> Datensatz, der gelöscht werden müsste.
+> Bei einem abgebrochenen oder nicht abgeschlossenen Bezahlvorgang
+> entsteht in der VERA-Datenbank keine Anmeldung und kein vorläufiger
+> Anmeldedatensatz. Der beim Zahlungsdienstleister vorübergehend
+> gespeicherte verschlüsselte Datensatz wird nach dessen Meldung über
+> den Abbruch oder Verfall entfernt; bleibt die Meldung aus, erfolgt
+> die Entfernung beim nächsten regelmäßigen Abgleich.
+
+**Korrigiert am 28.09.2026.** Die erste Fassung dieses Absatzes lautete
+„Angaben aus einem abgebrochenen oder nicht abgeschlossenen
+Bezahlvorgang werden gar nicht erst gespeichert. Es entsteht kein
+Datensatz, der gelöscht werden müsste." Der zweite Satz widersprach dem
+eigenen Code: Beim Zahlungsdienstleister liegt für die Dauer des
+Bezahlvorgangs sehr wohl ein Datensatz — der verschlüsselte
+Anmeldedatensatz in den Metadaten der Bezahlseite. Er muss entfernt
+werden, und genau dafür gibt es `markeAufraeumen()` und den Räumlauf
+aus Abschnitt 4.9. Ein Datenschutztext, der behauptet, es gäbe nichts
+zu löschen, während stündlich ein Lauf genau das löscht, ist keine
+Vereinfachung, sondern eine falsche Angabe. Der neue Wortlaut
+unterscheidet deshalb ausdrücklich zwischen der **VERA-Datenbank** (dort
+entsteht nichts) und dem **Zahlungsdienstleister** (dort entsteht etwas,
+und es wird entfernt).
 
 Der zweite gehört in die Aufzählung der Fristen:
 
@@ -674,13 +692,35 @@ Der zweite gehört in die Aufzählung der Fristen:
 > VERA den Vorgang zur Buchführung und zum Nachweis der Erstattung
 > fest: die Kennung des Bezahlvorgangs beim Zahlungsdienstleister, den
 > Betrag, den Grund und die Zeitpunkte. Namen, E-Mail-Adressen und
-> Telefonnummern werden dabei nicht gespeichert. Diese Angaben
-> unterliegen den gesetzlichen Aufbewahrungsfristen nach § 147 der
-> Abgabenordnung.
+> Telefonnummern werden dabei nicht gespeichert. VERA behandelt diese
+> Angaben als Buchungsbeleg und bewahrt sie entsprechend den
+> steuerlichen Aufbewahrungspflichten auf (§ 147 der Abgabenordnung);
+> eine kürzere Frist ist nicht vorgesehen, solange der Vorgang zum
+> Nachweis der Erstattung benötigt wird.
 
 Das beschreibt die Tabelle `Fehlbuchung`. Sie ist der Grund, warum
 sich jede automatische Rückbuchung Jahre später noch einem Vorgang
 zuordnen lässt — und sie enthält bewusst keine Personendaten.
+
+**Prüfauftrag an die anwaltliche Prüfung — die Aufbewahrungsdauer
+dieser Zeilen.** Auch hier sagte die erste Fassung zu viel: „Diese
+Angaben unterliegen den gesetzlichen Aufbewahrungsfristen nach § 147
+der Abgabenordnung" stellt eine Einordnung als geklärt dar, die es
+nicht ist. Offen sind mindestens drei Fragen:
+
+1. Ist eine eingegangene und **vollständig erstattete** Zahlung, aus
+   der nie ein Vertrag wurde, ein aufbewahrungspflichtiger
+   Buchungsbeleg nach § 147 Abs. 1 Nr. 4 AO?
+2. Wenn ja: sechs oder zehn Jahre (§ 147 Abs. 3 AO)?
+3. Wenn nein: Wie lange rechtfertigt Art. 6 Abs. 1 Buchst. f DSGVO die
+   Aufbewahrung zum Nachweis der Erstattung — und braucht es dann
+   überhaupt eine Frist in Jahren?
+
+Der Wortlaut sagt deshalb jetzt, was VERA **tut**, und nicht, was das
+Gesetz verlangt. Sobald die Prüfung vorliegt, gehört an diese Stelle
+eine konkrete Frist. Der Prüfauftrag steht auch als Kommentar neben
+dem Absatz in `content/de.ts`, damit er beim Bearbeiten nicht
+untergeht.
 
 ### 3.6 Neue Fassung, nicht stille Änderung
 

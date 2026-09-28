@@ -1018,11 +1018,28 @@ export const de = {
       "Aufbewahrungspflichten erfordern. Welche Frist gilt, hängt von der Art der Angaben ab; " +
       "die Löschung läuft automatisch.",
     datenschutzLoeschungAbsaetze: [
-      /* Neu am 26.09.2026, und bewusst als ERSTER Absatz: Er rahmt
-         den ganzen Abschnitt. Was gar nicht erst entsteht, muss auch
-         nicht gelöscht werden. */
-      "Angaben aus einem abgebrochenen oder nicht abgeschlossenen Bezahlvorgang werden gar " +
-        "nicht erst gespeichert. Es entsteht kein Datensatz, der gelöscht werden müsste.",
+      /* Neu am 26.09.2026, korrigiert am 28.09.2026, und bewusst als
+         ERSTER Absatz: Er rahmt den ganzen Abschnitt.
+
+         Die erste Fassung sagte „werden gar nicht erst gespeichert.
+         Es entsteht kein Datensatz, der gelöscht werden müsste." Das
+         war zu weit gegriffen und im zweiten Satz schlicht falsch:
+         Beim Zahlungsdienstleister liegt für die Dauer des
+         Bezahlvorgangs sehr wohl ein Datensatz — der verschlüsselte
+         Anmeldedatensatz in den Metadaten der Bezahlseite. Er muss
+         entfernt werden, und genau dafür gibt es `markeAufraeumen()`
+         und den Räumlauf in prisma/zahlungAbgleich.ts. Ein Satz, der
+         behauptet, es gäbe nichts zu löschen, widerspricht dem Code,
+         der löscht.
+
+         „Keine Anmeldung und kein vorläufiger Anmeldedatensatz in der
+         VERA-DATENBANK" ist die Aussage, die stimmt — sie sagt, wo
+         nichts entsteht, statt es pauschal zu behaupten. */
+      "Bei einem abgebrochenen oder nicht abgeschlossenen Bezahlvorgang entsteht in der " +
+        "VERA-Datenbank keine Anmeldung und kein vorläufiger Anmeldedatensatz. Der beim " +
+        "Zahlungsdienstleister vorübergehend gespeicherte verschlüsselte Datensatz wird " +
+        "nach dessen Meldung über den Abbruch oder Verfall entfernt; bleibt die Meldung " +
+        "aus, erfolgt die Entfernung beim nächsten regelmäßigen Abgleich.",
       "Gesundheits- und Notfallangaben auf der Einverständniserklärung werden spätestens " +
         "sieben Tage nach Ende der Veranstaltung vernichtet.",
       "Vollständige Einverständniserklärungen für minderjährige Teilnehmer werden drei Jahre " +
@@ -1041,13 +1058,34 @@ export const de = {
       /* Neu am 26.09.2026: die Tabelle `Fehlbuchung`. Sie ist der
          Grund, warum sich jede automatische Rückbuchung Jahre später
          noch einem Vorgang zuordnen lässt — und sie enthält bewusst
-         keine Personendaten. */
+         keine Personendaten.
+
+         PRÜFAUFTRAG an die anwaltliche Prüfung (offen, Stand
+         28.09.2026): die Aufbewahrungsdauer dieser Zeilen. Die erste
+         Fassung stellte die Einordnung unter § 147 AO als geklärt dar
+         („unterliegen den gesetzlichen Aufbewahrungsfristen nach
+         § 147 der Abgabenordnung"). Das ist sie nicht. Offen sind
+         mindestens drei Fragen:
+           1. Ist eine eingegangene und vollständig erstattete Zahlung,
+              aus der nie ein Vertrag wurde, ein aufbewahrungs-
+              pflichtiger Buchungsbeleg nach § 147 Abs. 1 Nr. 4 AO?
+           2. Wenn ja: sechs oder zehn Jahre (§ 147 Abs. 3 AO)?
+           3. Wenn nein: Wie lange rechtfertigt Art. 6 Abs. 1 Buchst. f
+              DSGVO die Aufbewahrung zum Nachweis der Erstattung — und
+              braucht es dann überhaupt eine Frist in Jahren?
+         Der Wortlaut sagt deshalb jetzt, was VERA TUT, und nicht, was
+         das Gesetz verlangt. Das ist keine Notlösung: Es ist die
+         einzige Aussage, für die es hier bereits eine Grundlage gibt.
+         Sobald die Prüfung vorliegt, gehört hier eine konkrete Frist
+         hin — und dieser Absatz in docs/rechtliches.md abgehakt. */
       "Geht eine Zahlung ein, ohne dass daraus eine Anmeldung wird, hält VERA den Vorgang " +
         "zur Buchführung und zum Nachweis der Erstattung fest: die Kennung des " +
         "Bezahlvorgangs beim Zahlungsdienstleister, den Betrag, den Grund und die " +
         "Zeitpunkte. Namen, E-Mail-Adressen und Telefonnummern werden dabei nicht " +
-        "gespeichert. Diese Angaben unterliegen den gesetzlichen Aufbewahrungsfristen nach " +
-        "§ 147 der Abgabenordnung.",
+        "gespeichert. VERA behandelt diese Angaben als Buchungsbeleg und bewahrt sie " +
+        "entsprechend den steuerlichen Aufbewahrungspflichten auf (§ 147 der " +
+        "Abgabenordnung); eine kürzere Frist ist nicht vorgesehen, solange der Vorgang zum " +
+        "Nachweis der Erstattung benötigt wird.",
       "Veranstaltungs- und Sicherheitschecklisten werden drei Jahre ab dem Ende des " +
         "Kalenderjahres aufbewahrt. Danach werden alle personenbezogenen und mittelbar " +
         "zuordenbaren Angaben — insbesondere Mitarbeiterkürzel und Freitextnotizen — " +

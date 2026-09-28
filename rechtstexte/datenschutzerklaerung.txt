@@ -70,7 +70,7 @@ Wir geben personenbezogene Daten nur an die folgenden Empfänger weiter, soweit 
 
 Daten werden nicht länger gespeichert, als es der jeweilige Zweck und die gesetzlichen Aufbewahrungspflichten erfordern. Welche Frist gilt, hängt von der Art der Angaben ab; die Löschung läuft automatisch.
 
-Angaben aus einem abgebrochenen oder nicht abgeschlossenen Bezahlvorgang werden gar nicht erst gespeichert. Es entsteht kein Datensatz, der gelöscht werden müsste.
+Bei einem abgebrochenen oder nicht abgeschlossenen Bezahlvorgang entsteht in der VERA-Datenbank keine Anmeldung und kein vorläufiger Anmeldedatensatz. Der beim Zahlungsdienstleister vorübergehend gespeicherte verschlüsselte Datensatz wird nach dessen Meldung über den Abbruch oder Verfall entfernt; bleibt die Meldung aus, erfolgt die Entfernung beim nächsten regelmäßigen Abgleich.
 
 Gesundheits- und Notfallangaben auf der Einverständniserklärung werden spätestens sieben Tage nach Ende der Veranstaltung vernichtet.
 
@@ -78,7 +78,7 @@ Vollständige Einverständniserklärungen für minderjährige Teilnehmer werden 
 
 Anmeldedaten (Vor- und Nachname, E-Mail-Adresse, Telefonnummer der anmeldenden Person sowie die Namen der Teilnehmenden) werden drei Jahre ab dem Ende des Kalenderjahres der Veranstaltung aufbewahrt und danach automatisch überschrieben; die Buchung selbst bleibt ohne Personenbezug bestehen, weil Betrag und Datum zu den steuerlichen Unterlagen gehören. Ein Check-out oder eine Abmeldung beim Verlassen der Veranstaltung ist nicht vorgesehen — VERA erhebt und speichert dafür keinen Zeitpunkt.
 
-Geht eine Zahlung ein, ohne dass daraus eine Anmeldung wird, hält VERA den Vorgang zur Buchführung und zum Nachweis der Erstattung fest: die Kennung des Bezahlvorgangs beim Zahlungsdienstleister, den Betrag, den Grund und die Zeitpunkte. Namen, E-Mail-Adressen und Telefonnummern werden dabei nicht gespeichert. Diese Angaben unterliegen den gesetzlichen Aufbewahrungsfristen nach § 147 der Abgabenordnung.
+Geht eine Zahlung ein, ohne dass daraus eine Anmeldung wird, hält VERA den Vorgang zur Buchführung und zum Nachweis der Erstattung fest: die Kennung des Bezahlvorgangs beim Zahlungsdienstleister, den Betrag, den Grund und die Zeitpunkte. Namen, E-Mail-Adressen und Telefonnummern werden dabei nicht gespeichert. VERA behandelt diese Angaben als Buchungsbeleg und bewahrt sie entsprechend den steuerlichen Aufbewahrungspflichten auf (§ 147 der Abgabenordnung); eine kürzere Frist ist nicht vorgesehen, solange der Vorgang zum Nachweis der Erstattung benötigt wird.
 
 Veranstaltungs- und Sicherheitschecklisten werden drei Jahre ab dem Ende des Kalenderjahres aufbewahrt. Danach werden alle personenbezogenen und mittelbar zuordenbaren Angaben — insbesondere Mitarbeiterkürzel und Freitextnotizen — unwiderruflich entfernt. Nur die dann tatsächlich anonyme Sicherheitsdokumentation bleibt erhalten.
 
