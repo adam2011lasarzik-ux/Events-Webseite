@@ -968,9 +968,40 @@ fehlen die Entwicklungs-Pakete; dann zuerst
 `sudo -u vera env PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm ci` — das
 ändert den Server und ist derselbe Befehl wie in Abschnitt 4.9.
 
-Dann das Prüfskript anlegen. Es ist eine **neue** Datei, ändert keine
-vorhandene und wird am Ende wieder entfernt. Den ganzen Block in einem
-Stück einfügen:
+Dann das Prüfskript aus dem Repository holen. Es ist eine **neue**
+Datei, ändert keine vorhandene und wird am Ende wieder entfernt:
+
+```bash
+cd /var/www/vera && sudo -u vera git fetch origin && sudo -u vera git show origin/claude/frontend-design-skill-folder-luremb:server/test-2-1-pruefen.mts | sudo -u vera tee /var/www/vera/test-2-1-pruefen.mts > /dev/null
+```
+
+Nachweisen, dass die Datei vollständig und unverändert angekommen ist —
+**ändert nichts:**
+
+```bash
+wc -l /var/www/vera/test-2-1-pruefen.mts && sudo -u vera git show origin/claude/frontend-design-skill-folder-luremb:server/test-2-1-pruefen.mts | diff - /var/www/vera/test-2-1-pruefen.mts && echo 'IDENTISCH'
+```
+
+Erwartet: die Zeilenzahl und danach `IDENTISCH`. Meldet `diff`
+Unterschiede, ist die Datei nicht brauchbar — dann nicht weitermachen.
+
+> **Warum per `git`, nicht per Zwischenablage.** Am 28.09.2026 ist
+> genau das schiefgegangen: Der Block wurde auf dem iPad aus einem
+> Safari-Tab kopiert, in dem die Seitenübersetzung lief. In der
+> Zwischenablage landete übersetzter Text — aus „Dieses Skript ändert
+> nichts" wurde „Dieses Skript ändert sich nichts", und die
+> Abschlusszeile `SKRIPTENDE` verschmolz mit dem Code davor. Eine
+> unbrauchbare Datei, die ein Mensch am Bildschirm nicht sicher von
+> einer brauchbaren unterscheidet.
+>
+> Die Datei liegt im Repository. Sie von dort zu holen, kostet einen
+> kurzen Befehl, umgeht die Zwischenablage vollständig und liefert
+> nachweislich denselben Inhalt, der geprüft wurde. Der Block steht
+> unten weiterhin — als Beleg, was in der Datei steht, nicht als
+> Anleitung zum Abtippen.
+
+<details>
+<summary>Inhalt der Datei (nur zum Nachlesen, nicht zum Abtippen)</summary>
 
 ```bash
 sudo -u vera tee /var/www/vera/test-2-1-pruefen.mts > /dev/null <<'SKRIPTENDE'
@@ -1151,6 +1182,8 @@ hauptlauf()
 SKRIPTENDE
 ```
 
+</details>
+
 Dann ansehen:
 
 ```bash
@@ -1168,7 +1201,39 @@ Die Anmeldenummer aus der Ausgabe wird im nächsten Schritt gebraucht.
 
 ### 4.6 „Test 2.1" entfernen *(**ändert Live-Daten**)*
 
-Erst das Löschskript anlegen:
+Erst das Löschskript aus dem Repository holen:
+
+```bash
+cd /var/www/vera && sudo -u vera git fetch origin && sudo -u vera git show origin/claude/frontend-design-skill-folder-luremb:server/test-2-1-loeschen.mts | sudo -u vera tee /var/www/vera/test-2-1-loeschen.mts > /dev/null
+```
+
+Nachweisen, dass die Datei vollständig und unverändert angekommen ist —
+**ändert nichts:**
+
+```bash
+wc -l /var/www/vera/test-2-1-loeschen.mts && sudo -u vera git show origin/claude/frontend-design-skill-folder-luremb:server/test-2-1-loeschen.mts | diff - /var/www/vera/test-2-1-loeschen.mts && echo 'IDENTISCH'
+```
+
+Erwartet: die Zeilenzahl und danach `IDENTISCH`. Meldet `diff`
+Unterschiede, ist die Datei nicht brauchbar — dann nicht weitermachen.
+
+> **Warum per `git`, nicht per Zwischenablage.** Am 28.09.2026 ist
+> genau das schiefgegangen: Der Block wurde auf dem iPad aus einem
+> Safari-Tab kopiert, in dem die Seitenübersetzung lief. In der
+> Zwischenablage landete übersetzter Text — aus „Dieses Skript ändert
+> nichts" wurde „Dieses Skript ändert sich nichts", und die
+> Abschlusszeile `SKRIPTENDE` verschmolz mit dem Code davor. Eine
+> unbrauchbare Datei, die ein Mensch am Bildschirm nicht sicher von
+> einer brauchbaren unterscheidet.
+>
+> Die Datei liegt im Repository. Sie von dort zu holen, kostet einen
+> kurzen Befehl, umgeht die Zwischenablage vollständig und liefert
+> nachweislich denselben Inhalt, der geprüft wurde. Der Block steht
+> unten weiterhin — als Beleg, was in der Datei steht, nicht als
+> Anleitung zum Abtippen.
+
+<details>
+<summary>Inhalt der Datei (nur zum Nachlesen, nicht zum Abtippen)</summary>
 
 ```bash
 sudo -u vera tee /var/www/vera/test-2-1-loeschen.mts > /dev/null <<'SKRIPTENDE'
@@ -1349,6 +1414,8 @@ hauptlauf()
 SKRIPTENDE
 ```
 
+</details>
+
 Dann die **Vorschau** — sie löscht nichts:
 
 ```bash
@@ -1492,7 +1559,39 @@ Es darf keine Fehlermeldung zum Start enthalten. Eine Zeile
 
 ### 4.13 Nginx-Bremse einbauen *(**ändert den Server**)*
 
-Die Datei anlegen:
+Die Datei aus dem Repository holen:
+
+```bash
+cd /var/www/vera && sudo -u vera git fetch origin && sudo -u vera git show origin/claude/frontend-design-skill-folder-luremb:server/vera-bremse.conf | sudo tee /etc/nginx/conf.d/vera-bremse.conf > /dev/null
+```
+
+Nachweisen, dass die Datei vollständig und unverändert angekommen ist —
+**ändert nichts:**
+
+```bash
+wc -l /etc/nginx/conf.d/vera-bremse.conf && sudo -u vera git show origin/claude/frontend-design-skill-folder-luremb:server/vera-bremse.conf | diff - /etc/nginx/conf.d/vera-bremse.conf && echo 'IDENTISCH'
+```
+
+Erwartet: die Zeilenzahl und danach `IDENTISCH`. Meldet `diff`
+Unterschiede, ist die Datei nicht brauchbar — dann nicht weitermachen.
+
+> **Warum per `git`, nicht per Zwischenablage.** Am 28.09.2026 ist
+> genau das schiefgegangen: Der Block wurde auf dem iPad aus einem
+> Safari-Tab kopiert, in dem die Seitenübersetzung lief. In der
+> Zwischenablage landete übersetzter Text — aus „Dieses Skript ändert
+> nichts" wurde „Dieses Skript ändert sich nichts", und die
+> Abschlusszeile `SKRIPTENDE` verschmolz mit dem Code davor. Eine
+> unbrauchbare Datei, die ein Mensch am Bildschirm nicht sicher von
+> einer brauchbaren unterscheidet.
+>
+> Die Datei liegt im Repository. Sie von dort zu holen, kostet einen
+> kurzen Befehl, umgeht die Zwischenablage vollständig und liefert
+> nachweislich denselben Inhalt, der geprüft wurde. Der Block steht
+> unten weiterhin — als Beleg, was in der Datei steht, nicht als
+> Anleitung zum Abtippen.
+
+<details>
+<summary>Inhalt der Datei (nur zum Nachlesen, nicht zum Abtippen)</summary>
 
 ```bash
 sudo tee /etc/nginx/conf.d/vera-bremse.conf > /dev/null <<'CONFENDE'
@@ -1558,6 +1657,8 @@ limit_req_status 429;
 # Danach:  nginx -t && systemctl reload nginx
 CONFENDE
 ```
+
+</details>
 
 In `/etc/nginx/sites-available/vera` in den `location`-Block, der an
 die Anwendung weiterreicht, diese eine Zeile ergänzen:
