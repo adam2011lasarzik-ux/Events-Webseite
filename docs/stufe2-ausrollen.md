@@ -1523,9 +1523,24 @@ sudo systemctl stop vera
 cd /var/www/vera && sudo -u vera npm run db:deploy
 ```
 
-Es müssen **zwei** Migrationen als angewendet gemeldet werden:
+Es müssen **drei** Migrationen als angewendet gemeldet werden:
+`20260925180000_zahlung_erst_dann_anmeldung`,
 `20260926120000_ohne_reserviert` und
 `20260926150000_fehlbuchung_erledigt`.
+
+> **Korrigiert am 30.09.2026.** Hier standen zwei. Die erste — sie
+> legt die Tabelle `Fehlbuchung` an und macht `zahlungsReferenz`
+> eindeutig — war beim Schreiben des Plans als bereits ausgerollt
+> angenommen. Sie war es nicht: Sie kam erst mit dem `git pull` in
+> Schritt 4.9 als neue Datei auf den Server. Wer die Zahl wörtlich
+> nimmt, bricht bei einer korrekten Ausgabe ab.
+>
+> Verlass dich nicht auf die Zahl, sondern frag nach — das ändert
+> nichts und ist eindeutig:
+>
+> ```bash
+> cd /var/www/vera && sudo -u vera npx prisma migrate status
+> ```
 
 ```bash
 sudo systemctl start vera
@@ -1750,50 +1765,25 @@ Die Sitzungskennung steht in der Adresszeile der Abschluss-Seite
 Buchung, die du in Abschnitt 5 bezahlt hast — **vor** dem Storno
 ausführen.
 
-Der Befehl bricht von selbst ab, wenn kein Testschlüssel hinterlegt
-ist, und gibt den Schlüssel niemals aus:
+Der Prüfbefehl liegt als Skript im Repository und wird per `git`
+geholt — nicht über die Zwischenablage. Er bricht von selbst ab, wenn
+kein Testschlüssel hinterlegt ist, und gibt den Schlüssel niemals aus:
 
 ```bash
-cd /var/www/vera && sudo -u vera node --env-file=.env -e '
-const Stripe = require("stripe");
-const k = (process.env.ZAHLUNG_GEHEIMSCHLUESSEL || "").trim();
-if (!/^(sk|rk)_test_/.test(k)) { console.log("KEIN TESTSCHLUESSEL — abgebrochen"); process.exit(1); }
-const id = process.argv[1];
-const s = new Stripe(k);
-const marken = (m) => Object.keys(m || {}).filter((x) => /^marke_/.test(x));
-(async () => {
-  const a = await s.checkout.sessions.retrieve(id);
-  console.log("1 ZUSTAND    :", a.status, "/", a.payment_status,
-              a.status === "complete" && a.payment_status === "paid" ? "— OK" : "— NICHT OK");
-
-  const piId = typeof a.payment_intent === "string" ? a.payment_intent : a.payment_intent && a.payment_intent.id;
-  if (!piId) { console.log("2 ZAHLUNG    : keine Zahlung an der Sitzung — NICHT OK"); return; }
-  const p = await s.paymentIntents.retrieve(piId);
-  const pm = marken(p.metadata);
-  console.log("2 ZAHLUNG    :", JSON.stringify(p.metadata || {}),
-              pm.length ? "— NICHT OK, traegt Anmeldedaten" : "— OK, keine Anmeldedaten");
-
-  const chId = typeof p.latest_charge === "string" ? p.latest_charge : p.latest_charge && p.latest_charge.id;
-  if (!chId) console.log("3 BUCHUNG    : keine Charge vorhanden");
-  else {
-    const c = await s.charges.retrieve(chId);
-    const cm = marken(c.metadata);
-    console.log("3 BUCHUNG    :", JSON.stringify(c.metadata || {}),
-                cm.length ? "— NICHT OK, traegt Anmeldedaten" : "— OK, keine Anmeldedaten");
-  }
-
-  const felder = marken(a.metadata);
-  if (!felder.length) return console.log("4 LEEREN     : schon fort — nichts zu tun");
-  const leer = {}; for (const f of felder) leer[f] = "";
-  try {
-    const b = await s.checkout.sessions.update(id, { metadata: leer });
-    const rest = marken(b.metadata);
-    console.log("4 LEEREN     :", rest.length ? "NICHT OK, Rest: " + rest.join(", ") : "GEHT",
-                "—", JSON.stringify(b.metadata));
-  } catch (e) { console.log("4 LEEREN     : GEHT NICHT —", e.message); }
-})().catch((e) => console.error("FEHLER:", e.message));
-' cs_HIER_DIE_SITZUNGSKENNUNG
+cd /var/www/vera && sudo -u vera git fetch origin && sudo -u vera git show origin/claude/frontend-design-skill-folder-luremb:server/schritt-17b.cjs | sudo -u vera tee schritt-17b.cjs > /dev/null && sudo -u vera node --env-file=.env ./schritt-17b.cjs cs_HIER_DIE_SITZUNGSKENNUNG
 ```
+
+> **Warum `.cjs` und nicht `.mjs`.** Das Projekt hat kein
+> `"type": "module"` in der package.json, ist also CommonJS. Eine
+> Datei mit der Endung `.mjs` wäre ein ES-Modul, und dort gibt es
+> kein `require` — das Skript bräche beim Laden ab. `node --check`
+> merkt das nicht: Es prüft die Syntax, nicht die Modulart.
+>
+> Bis zum 30.09.2026 stand hier stattdessen derselbe Code als langer
+> `node -e '…'`-Block zum Einfügen. Am selben Tag war das Einfügen
+> eines langen Blocks schon einmal schiefgegangen (siehe Abschnitt
+> 4.5): Safari hatte den Text auf dem Weg in die Zwischenablage
+> übersetzt.
 
 **So muss die Ausgabe aussehen:**
 
