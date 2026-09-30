@@ -795,16 +795,33 @@ export const de = {
         "nachträglich ändern. Der Bezahlvorgang verfällt nach 30 Minuten, und die " +
         "Anmeldesysteme von VERA nehmen keinen Datensatz an, der älter als 24 Stunden ist; " +
         "danach kann aus ihm keine Anmeldung mehr entstehen.",
-      /* FASSUNG A. Sie sagt für abgeschlossene Bezahlvorgänge
-         ausdrücklich, dass nicht entfernt wird — weil Schritt 17b das
-         noch nicht belegt hat. Siehe `datenschutzZahlungFassungB`
-         weiter unten. */
-      "Wird ein Bezahlvorgang abgebrochen oder verfällt er, entfernt VERA den " +
-        "verschlüsselten Datensatz beim Zahlungsdienstleister, sobald dieser den Abbruch " +
-        "oder Verfall meldet. Bleibt diese Meldung aus, geschieht die Entfernung beim " +
-        "nächsten regelmäßigen Abgleich, der stündlich läuft. Bei abgeschlossenen " +
-        "Bezahlvorgängen ist eine Entfernung derzeit technisch nicht möglich; dort richtet " +
-        "sich die Aufbewahrung nach den Regeln des Zahlungsdienstleisters.",
+      /* FASSUNG B, aktiv seit dem 30.09.2026.
+
+         Bis dahin stand hier Fassung A, die für abgeschlossene
+         Bezahlvorgänge ausdrücklich sagte, dass NICHT entfernt wird —
+         weil Schritt 17b es noch nicht belegt hatte. Er ist am
+         30.09.2026 auf dem Server durchgeführt worden, an einer
+         echten, vollständig bezahlten Test-Sitzung:
+
+           1 ZUSTAND : complete / paid — OK
+           2 ZAHLUNG : {} — OK, keine Anmeldedaten
+           3 BUCHUNG : {} — OK, keine Anmeldedaten
+           4 LEEREN  : GEHT — nur die Veranstaltungskennung blieb
+
+         Zeile 4 ist die Grundlage dieses Absatzes: Die marke_*-Felder
+         liessen sich auch im Zustand `complete` entfernen. Die Zeilen
+         2 und 3 schliessen aus, dass die Daten anderswo weiterleben —
+         weder PaymentIntent noch Charge hatten sie übernommen. */
+      "VERA entfernt den verschlüsselten Datensatz beim Zahlungsdienstleister, sobald er " +
+        "nicht mehr benötigt wird. Ist die Zahlung eingegangen und die Anmeldung bei VERA " +
+        "verbucht, geschieht das, nachdem seit der Erzeugung des Datensatzes 24 Stunden " +
+        "vergangen sind, mit dem darauffolgenden stündlichen Bereinigungslauf. Wird der " +
+        "Bezahlvorgang abgebrochen oder verfällt er, geschieht es, sobald der " +
+        "Zahlungsdienstleister dies meldet; bleibt die Meldung aus, beim nächsten " +
+        "regelmäßigen Abgleich, der ebenfalls stündlich läuft.",
+      "Ist eine Zahlung eingegangen, die Anmeldung bei VERA aber noch nicht verbucht, " +
+        "bleibt der Datensatz erhalten: Er ist dann die einzige Grundlage, aus der die " +
+        "Anmeldung noch entstehen kann.",
       "Der Schlüssel bleibt bei VERA vorhanden — die zeitliche Grenze von 24 Stunden ist " +
         "eine Regel der Anmeldesysteme und keine Eigenschaft der Verschlüsselung selbst.",
       "Wird der Bezahlvorgang abgebrochen, entsteht bei VERA keine Anmeldung und kein " +
@@ -816,59 +833,24 @@ export const de = {
         "PayPal stehen im nächsten Abschnitt „Empfänger und Auftragsverarbeiter“.",
     ],
 
-    /* ── FASSUNG B — VORBEREITET, NICHT AKTIV ─────────────────────
-       
-       Diese beiden Einträge werden von keiner Seite gelesen. Sie
-       liegen hier, damit sie im Moment der Freischaltung nicht neu
-       geschrieben werden müssen.
+    /* ── FASSUNG B IST SEIT DEM 30.09.2026 AKTIV ──────────────────
 
-       AKTIVIEREN ERST, WENN SCHRITT 17B BESTANDEN IST — also wenn auf
-       dem Server belegt ist, dass sich die verschlüsselte Anmeldung
-       auch bei einer BEZAHLTEN Bezahlseite entfernen lässt
-       (docs/stufe2-ausrollen.md, Abschnitt 4.15, Zeile 4 „LEEREN:
-       GEHT"). Vorher wäre es eine Zusage, die die Technik nicht deckt.
+       Hier lagen bis dahin zwei vorbereitete Einträge
+       (`datenschutzZahlungFassungB` und
+       `datenschutzEmpfaengerStripeFassungB`), die von keiner Seite
+       gelesen wurden. Sie durften erst verwendet werden, wenn auf dem
+       Server belegt war, dass sich der verschlüsselte Datensatz auch
+       bei einer BEZAHLTEN Bezahlseite entfernen lässt.
 
-       SO WIRD AKTIVIERT — drei Handgriffe, sonst nichts:
-         1. In `datenschutzZahlungAbsaetze` den fünften Eintrag (der
-            mit „Wird ein Bezahlvorgang abgebrochen oder verfällt er")
-            durch die beiden Einträge aus
-            `datenschutzZahlungFassungB` ersetzen.
-         2. Im Eintrag zu Stripe in `datenschutzEmpfaengerAbsaetze`
-            den Wortlaut durch `datenschutzEmpfaengerStripeFassungB`
-            ersetzen.
-         3. `npm run rechtstext:export` und danach auf dem Server
-            `npm run rechtstext` — sonst gilt weiter die alte Fassung.
+       Dieser Nachweis liegt vor: Schritt 17b, durchgeführt am
+       30.09.2026 an einer vollständig bezahlten Test-Sitzung, meldete
+       `4 LEEREN: GEHT`. Die beiden Einträge sind daraufhin an ihre
+       richtigen Stellen gewandert — in `datenschutzZahlungAbsaetze`
+       und in den Stripe-Eintrag von `datenschutzEmpfaengerAbsaetze` —
+       und die Kopien hier entfernt.
 
-       Die übrigen Absätze bleiben in beiden Fassungen gleich. */
-    datenschutzZahlungFassungB: [
-      "VERA entfernt den verschlüsselten Datensatz beim Zahlungsdienstleister, sobald er " +
-        "nicht mehr benötigt wird. Ist die Zahlung eingegangen und die Anmeldung bei VERA " +
-        "verbucht, geschieht das, nachdem seit der Erzeugung des Datensatzes 24 Stunden " +
-        "vergangen sind, mit dem darauffolgenden stündlichen Bereinigungslauf. Wird der " +
-        "Bezahlvorgang abgebrochen oder verfällt er, geschieht es, sobald der " +
-        "Zahlungsdienstleister dies meldet; bleibt die Meldung aus, beim nächsten " +
-        "regelmäßigen Abgleich, der ebenfalls stündlich läuft.",
-      "Ist eine Zahlung eingegangen, die Anmeldung bei VERA aber noch nicht verbucht, " +
-        "bleibt der Datensatz erhalten: Er ist dann die einzige Grundlage, aus der die " +
-        "Anmeldung noch entstehen kann.",
-    ],
-
-    /** Fassung B des Stripe-Eintrags — siehe die Anleitung oben. */
-    datenschutzEmpfaengerStripeFassungB:
-      "Stripe Payments Europe, Limited, One Wilton Park, Wilton Place, Dublin 2, D02 FX04, " +
-      "Irland (bei bestimmten Zahlungsdiensten zusätzlich Stripe Technology Europe, " +
-      "Limited, unter derselben Anschrift), wickelt Zahlungen ab; Einzelheiten stehen im " +
-      "vorherigen Abschnitt. Der verschlüsselte Datensatz mit Ihren Anmeldeangaben wird " +
-      "dort nur so lange gespeichert, wie er für den Bezahlvorgang benötigt wird. Bei " +
-      "einem abgebrochenen oder verfallenen Bezahlvorgang entfernt VERA ihn, sobald Stripe " +
-      "den Abbruch oder Verfall meldet; bleibt diese Meldung aus, beim nächsten " +
-      "regelmäßigen Abgleich. Bei einem erfolgreich bezahlten und bei VERA verbuchten " +
-      "Vorgang entfernt VERA ihn, nachdem seit seiner Erzeugung 24 Stunden vergangen sind, " +
-      "mit dem darauffolgenden stündlichen Bereinigungslauf. Ist die Zahlung eingegangen, " +
-      "die Anmeldung bei VERA aber noch nicht verbucht, bleibt er zunächst erhalten, weil " +
-      "er für die Nachverarbeitung benötigt wird. Die übrigen Angaben zum Bezahlvorgang — " +
-      "insbesondere Betrag, Zeitpunkt sowie Zahlungs- und Erstattungsnummern — bewahrt " +
-      "Stripe nach seinen eigenen Regeln auf.",
+       Zwei Fassungen desselben Satzes nebeneinander stehen zu lassen
+       wäre der sicherste Weg, dass später die falsche gepflegt wird. */
 
     /* Die frühere Fassung sagte pauschal „diese Seite setzt keine
        Cookies". Das stimmt nicht: lib/adminAuth.ts setzt für die
@@ -984,25 +966,31 @@ export const de = {
         "Events Verantwortlicher; der Auftragsverarbeitungsvertrag gilt nach den " +
         "Nutzungsbedingungen von Hostinger durch deren elektronische Annahme als " +
         "abgeschlossen (maßgeblich ist die englische Fassung, Dokumentstand 15.09.2026).",
-      /* FASSUNG A. Der Satz „nur bis zum Abschluss des Bezahlvorgangs
-         gespeichert und anschliessend gelöscht" wäre in beide
-         Richtungen falsch gewesen: Bei einem abgeschlossenen Vorgang
-         wird nicht sofort danach entfernt, und bei einem bezahlten,
-         aber noch nicht verbuchten bleibt der Datensatz absichtlich
-         länger — aus ihm muss die Anmeldung erst noch entstehen.
-         Deshalb stehen die Lagen einzeln da. Fassung B siehe
-         `datenschutzEmpfaengerStripeFassungB`. */
+      /* FASSUNG B, aktiv seit dem 30.09.2026 — siehe den Vermerk bei
+         `datenschutzZahlungAbsaetze`.
+
+         Die Lagen stehen weiterhin einzeln da, und das bleibt richtig:
+         Der Satz „nur bis zum Abschluss des Bezahlvorgangs gespeichert
+         und anschliessend gelöscht" wäre auch jetzt falsch. Bei einem
+         abgeschlossenen Vorgang wird nicht sofort danach entfernt,
+         sondern nach 24 Stunden mit dem nächsten Bereinigungslauf —
+         und bei einem bezahlten, aber noch nicht verbuchten bleibt der
+         Datensatz absichtlich länger, weil die Anmeldung aus ihm erst
+         noch entstehen muss. */
       "Stripe Payments Europe, Limited, One Wilton Park, Wilton Place, Dublin 2, D02 FX04, " +
         "Irland (bei bestimmten Zahlungsdiensten zusätzlich Stripe Technology Europe, " +
         "Limited, unter derselben Anschrift), wickelt Zahlungen ab; Einzelheiten stehen im " +
-        "vorherigen Abschnitt. Bei einem abgebrochenen oder verfallenen Bezahlvorgang " +
-        "entfernt VERA den verschlüsselten Datensatz mit Ihren Anmeldeangaben, sobald " +
+        "vorherigen Abschnitt. Der verschlüsselte Datensatz mit Ihren Anmeldeangaben wird " +
+        "dort nur so lange gespeichert, wie er für den Bezahlvorgang benötigt wird. Bei " +
+        "einem abgebrochenen oder verfallenen Bezahlvorgang entfernt VERA ihn, sobald " +
         "Stripe den Abbruch oder Verfall meldet; bleibt diese Meldung aus, beim nächsten " +
-        "regelmäßigen Abgleich. Bei abgeschlossenen Bezahlvorgängen ist eine Entfernung " +
-        "derzeit technisch nicht möglich. Für diesen Datensatz und für die übrigen Angaben " +
-        "zum Bezahlvorgang — insbesondere Betrag, Zeitpunkt sowie Zahlungs- und " +
-        "Erstattungsnummern — gilt dann die Aufbewahrung nach den eigenen Regeln von " +
-        "Stripe.",
+        "regelmäßigen Abgleich. Bei einem erfolgreich bezahlten und bei VERA verbuchten " +
+        "Vorgang entfernt VERA ihn, nachdem seit seiner Erzeugung 24 Stunden vergangen " +
+        "sind, mit dem darauffolgenden stündlichen Bereinigungslauf. Ist die Zahlung " +
+        "eingegangen, die Anmeldung bei VERA aber noch nicht verbucht, bleibt er zunächst " +
+        "erhalten, weil er für die Nachverarbeitung benötigt wird. Die übrigen Angaben zum " +
+        "Bezahlvorgang — insbesondere Betrag, Zeitpunkt sowie Zahlungs- und " +
+        "Erstattungsnummern — bewahrt Stripe nach seinen eigenen Regeln auf.",
       "Wird beim Bezahlen PayPal gewählt, verarbeitet PayPal als eigenständig " +
         "Verantwortlicher nach eigener Datenschutzerklärung die dafür erforderlichen " +
         "Zugangs- und Zahlungsdaten — die Zahlung läuft dabei über die Verbindung von " +

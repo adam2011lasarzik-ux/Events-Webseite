@@ -183,60 +183,49 @@ pruefe(
    die Felder, die aus der Reihe fallen. */
 const NUR_MENUE = new Set(["agb", "datenschutz"]);
 
-/* Zweite Ausnahme, seit dem 26.09.2026: die vorbereitete Fassung B
-   des Datenschutztextes. Sie steht bewusst in content/de.ts, wird
-   aber von keiner Seite gelesen und darf deshalb auch nicht in der
-   Datei stehen — sie beschreibt ein Entfernen, das Schritt 17b des
-   Ausrollplans erst noch belegen muss.
-
-   Die Ausnahme ist absichtlich nicht als Namensmuster geschrieben,
-   sondern als Liste: Ein Muster wie /FassungB$/ würde jeden künftigen
-   Text stillschweigend mit durchlassen. Wer hier etwas einträgt, tut
-   es sichtbar. Und geprüft wird beides — dass die Namen wirklich zu
-   einer vorbereiteten Fassung gehören, und dass ihr Wortlaut in der
-   Datei NICHT auftaucht. */
-const VORBEREITET = new Set([
-  "datenschutzZahlungFassungB",
-  "datenschutzEmpfaengerStripeFassungB",
-]);
 const felder = [
-  ...Object.keys(texte.recht).filter(
-    (k) => /^(agb|datenschutz)/.test(k) && !NUR_MENUE.has(k) && !VORBEREITET.has(k),
-  ),
+  ...Object.keys(texte.recht).filter((k) => /^(agb|datenschutz)/.test(k) && !NUR_MENUE.has(k)),
   "keineCookies",
 ];
 
-pruefe(
-  "Jede Ausnahme der Liste VORBEREITET gibt es auch und heisst nach ihrer Fassung",
-  [...VORBEREITET].every((k) => k.endsWith("FassungB") && texte.recht[k] !== undefined),
-  [...VORBEREITET].filter((k) => !k.endsWith("FassungB") || texte.recht[k] === undefined).join(", "),
-);
+/* ── Fassung B, seit dem 30.09.2026 aktiv ───────────────────────────
 
-/* Die Gegenprobe zur Ausnahme: Fassung B darf nirgends veröffentlicht
-   sein. Fiele sie weg, wäre die Ausnahme oben eine stille Lücke. */
-const veroeffentlicht = [];
-for (const k of VORBEREITET) {
-  const wert = texte.recht[k];
-  for (const stueck of Array.isArray(wert) ? wert : [wert]) {
-    if (dsDatei.includes(ohneTrennstellen(stueck))) veroeffentlicht.push(`${k}: ${stueck.slice(0, 50)}…`);
-  }
-}
-pruefe(
-  "Die vorbereitete Fassung B steht NICHT in der Datenschutz-Datei",
-  veroeffentlicht.length === 0,
-  veroeffentlicht.join(" | "),
-);
+   Vom 26. bis zum 30.09.2026 stand hier eine Ausnahmeliste
+   `VORBEREITET` mit zwei Schlüsseln, deren Wortlaut in content/de.ts
+   lag, aber NICHT in der veröffentlichten Datei stehen durfte: Sie
+   sagten ein Entfernen zu, das Schritt 17b erst noch belegen musste.
 
-/* Und die Aussage, die Fassung A von Fassung B unterscheidet: Solange
-   Schritt 17b nicht bestanden ist, muss die veröffentlichte Fassung
-   für abgeschlossene Bezahlvorgänge sagen, dass NICHT entfernt wird.
-   Diese Prüfung fällt um, sobald jemand auf Fassung B umstellt — das
-   ist Absicht: Dann ist sie zusammen mit der Liste oben anzupassen,
-   und beides geschieht sichtbar in einem Änderungssatz. */
+   Er hat es belegt — am 30.09.2026 auf dem Server, an einer
+   vollständig bezahlten Test-Sitzung: `4 LEEREN: GEHT`. Die beiden
+   Einträge sind daraufhin an ihre richtigen Stellen gewandert, und die
+   Ausnahmeliste ist entfallen. Jeder `datenschutz*`-Schlüssel muss
+   jetzt wieder wörtlich in der Datei stehen — keine Sonderfälle mehr.
+
+   Was bleibt, ist die Gegenprobe in die andere Richtung: Der Satz aus
+   Fassung A darf NICHT mehr dastehen. Stünden beide Fassungen
+   gleichzeitig in der Datei, widerspräche sich die
+   Datenschutzerklärung in derselben Frage — und zwar an der Stelle,
+   an der es um die Aufbewahrung personenbezogener Daten geht. */
 pruefe(
-  "Fassung A ist aktiv: Für abgeschlossene Bezahlvorgänge wird kein Entfernen zugesagt",
-  dsDatei.includes(ohneTrennstellen("Bei abgeschlossenen Bezahlvorgängen ist eine Entfernung derzeit technisch nicht möglich")),
-  "Fassung B bereits aktiv? Dann auch VORBEREITET und diese Prüfung anpassen.",
+  "Fassung B ist aktiv: Für abgeschlossene Bezahlvorgänge wird die Entfernung zugesagt",
+  dsDatei.includes(
+    ohneTrennstellen(
+      "nachdem seit der Erzeugung des Datensatzes 24 Stunden vergangen sind, mit dem " +
+        "darauffolgenden stündlichen Bereinigungslauf",
+    ),
+  ),
+);
+pruefe(
+  "… und der widersprechende Satz aus Fassung A ist fort",
+  !dsDatei.includes(
+    ohneTrennstellen("Bei abgeschlossenen Bezahlvorgängen ist eine Entfernung derzeit technisch nicht möglich"),
+  ),
+  "beide Fassungen gleichzeitig — die Erklärung widerspricht sich selbst",
+);
+pruefe(
+  "Es gibt keine unveröffentlichte Fassung mehr in content/de.ts",
+  Object.keys(texte.recht).filter((k) => /FassungB$/.test(k)).length === 0,
+  Object.keys(texte.recht).filter((k) => /FassungB$/.test(k)).join(", "),
 );
 const fehlende = [];
 for (const k of felder) {
