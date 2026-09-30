@@ -109,12 +109,35 @@ if (loeschlauf) {
   pruefe("vera-bremse.conf ist vorhanden", bremse.length > 0);
   pruefe(
     "vera-bremse.conf: der Weg des Zahlungsanbieters ist ausgenommen",
-    /POST\/zahlung\/rueckmeldung\s+""/.test(bremse),
+    /~\^POST\/zahlung\/rueckmeldung[^\n]*\s""/.test(bremse),
     "eine gebremste Rückmeldung wäre eine verlorene Zahlung",
   );
   pruefe(
     "vera-bremse.conf: gezählt wird nur POST",
     /~\^POST\s+\$binary_remote_addr/.test(bremse),
+  );
+
+  /* ── Die Reihenfolge, nicht nur das Vorhandensein ───────────────
+     Bis zum 30.09.2026 prüfte diese Liste nur, DASS beide Zeilen da
+     sind. Sie waren es — in der falschen Reihenfolge. Nginx nimmt
+     bei einer `map` den ERSTEN passenden regulären Ausdruck, und
+     `~^POST` passt auch auf `POST/zahlung/rueckmeldung`. Die
+     Ausnahme stand darunter und wurde nie erreicht.
+
+     Aufgefallen ist das erst auf dem Server: Zwölf Testanfragen an
+     den Webhook bekamen zwölfmal 429 — jede davon wäre im Betrieb
+     eine verlorene Zahlungsrückmeldung gewesen. Die Datei sah dabei
+     richtig aus, und diese Liste war grün.
+
+     Deshalb jetzt der Abstand zwischen beiden Zeilen, und zwar mit
+     Vorzeichen. */
+  const posAusnahme = bremse.search(/~\^POST\/zahlung\/rueckmeldung/);
+  const posAllgemein = bremse.search(/~\^POST\s+\$binary_remote_addr/);
+  pruefe(
+    "vera-bremse.conf: die Ausnahme steht VOR der allgemeinen POST-Zeile",
+    posAusnahme >= 0 && posAllgemein >= 0 && posAusnahme < posAllgemein,
+    `Ausnahme bei ${posAusnahme}, allgemeine Zeile bei ${posAllgemein} — ` +
+      "steht die Ausnahme dahinter, greift sie nie",
   );
   pruefe(
     "vera-bremse.conf: legt eine Zone mit Begrenzung an",
