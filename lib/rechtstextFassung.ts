@@ -127,6 +127,7 @@ export function datenschutzAbschnitte(): Abschnitt[] {
         t.datenschutzRechteKontakt,
         t.datenschutzRechteBeschwerde,
         t.datenschutzRechteAutomatisiert,
+        t.datenschutzStand,
       ],
     },
   ];

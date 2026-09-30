@@ -1180,9 +1180,25 @@ export const de = {
     datenschutzRechteAutomatisiert:
       "Es findet keine automatisierte Entscheidungsfindung im Sinne von Art. 22 DSGVO statt.",
 
-    /* ── AGB — vollständige Teilnahmebedingungen (Stand 22.09.2026) ──
+    /* Neu am 30.09.2026. Die Datenschutzerklärung trug bis dahin
+       KEIN eigenes Datum — anders als die AGB, die es in Ziffer 17.3
+       nennen. In der Datenbank bekommt jede Fassung eines
+       Rechtstexts ohnehin ein Stand-Datum (prisma/rechtstextAnlegen.ts);
+       ohne dieselbe Angabe im sichtbaren Text liesse sich von aussen
+       nicht feststellen, welche Fassung man gerade liest. Bei jeder
+       inhaltlichen Änderung mitziehen — wie bei AGB 17.3. */
+    datenschutzStand: "Stand dieser Datenschutzerklärung: 30. September 2026.",
+
+    /* ── AGB — vollständige Teilnahmebedingungen (Stand 30.09.2026) ──
        Erstfassung 21.09.2026; am 22.09.2026 um Ziffer 9.4 bis 9.6
-       erweitert, Stand-Datum in Ziffer 17.3 entsprechend nachgezogen.
+       erweitert; am 28.09.2026 die Ziffern 3.4, 3.5, 3.8 und 13 auf
+       den bezahlten Ablauf und den Widerrufsausschluss umgestellt.
+       Das Stand-Datum in Ziffer 17.3 wird bei JEDER inhaltlichen
+       Änderung nachgezogen — es stand am 30.09.2026 noch auf dem
+       22.09. und war damit zwei Änderungsrunden zu alt. Ein
+       Vertragstext, der ein falsches eigenes Datum nennt, ist an der
+       Stelle unbrauchbar, an der es zählt: beim Nachweis, welche
+       Fassung eine Buchung einbezogen hat.
        KEIN Platzhalter mehr. Textgrundlage: die mit Adam abgestimmten
        und mit den AGB-Prüf-Skills (haftungsbegrenzung-pruefen-und-
        formulieren, klauselinhalt-und-verbote-pruefen,
@@ -1701,7 +1717,7 @@ export const de = {
       "17.2 Änderungen dieser Teilnahmebedingungen gelten nur für Anmeldungen, die nach " +
         "ihrem Inkrafttreten abgegeben werden. Für bereits geschlossene Verträge gilt die " +
         "bei der Anmeldung einbezogene Fassung.",
-      "17.3 Stand dieser Bedingungen: 22. September 2026.",
+      "17.3 Stand dieser Bedingungen: 30. September 2026.",
     ],
 
     /* ── Foto- und Videoaufnahmen — nur ein kurzer Verweis ───────────

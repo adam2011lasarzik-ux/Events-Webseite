@@ -66,6 +66,8 @@ export default function Seite() {
         <p>{t.recht.datenschutzRechteKontakt}</p>
         <p>{t.recht.datenschutzRechteBeschwerde}</p>
         <p>{t.recht.datenschutzRechteAutomatisiert}</p>
+
+        <p>{t.recht.datenschutzStand}</p>
       </div>
     </Abschnitt>
   );
