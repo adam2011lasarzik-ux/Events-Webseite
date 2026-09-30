@@ -191,8 +191,28 @@ export default async function AbschlussSeite({
           haupt
           einleitung={wartetNoch ? t.danke.zahlungLaeuftText : t.danke.nichtsGespeichertText}
         />
+        {/* Ziel ist „/", nicht „/events".
+
+            Unter app/(seite)/events/ liegt ausschliesslich [slug] —
+            eine Übersichtsseite unter /events gibt es nicht, die
+            Eventliste IST die Startseite. So verlinkt es auch der
+            Fussbereich.
+
+            Bis zum 30.09.2026 stand hier „/events". Der Knopf führte
+            also ins Leere, und zwar an der unangenehmsten Stelle:
+            direkt nach einem abgebrochenen Bezahlvorgang, wenn jemand
+            es noch einmal versuchen will. Aufgefallen ist es beim
+            Ausrollen im Zugriffsprotokoll von Nginx (viermal 404 auf
+            /events, dazu zwei Vorabladungen mit ?_rsc=).
+
+            Warum keine Prüfung es fand: Liste O verfolgt Links von der
+            STARTSEITE aus. Diese Seite entsteht erst durch die
+            Rückleitung vom Zahlungsanbieter und lag damit ausserhalb
+            dessen, was der Prüflauf je zu sehen bekam. Seit demselben
+            Tag nimmt Liste O die beiden Abschluss-Seiten zusätzlich
+            als Startpunkte. */}
         <div style={{ marginTop: "2rem" }}>
-          <Knopf href="/events" art="haupt" pfeil>
+          <Knopf href="/" art="haupt" pfeil>
             {t.danke.zurueckZurAnmeldung}
           </Knopf>
         </div>

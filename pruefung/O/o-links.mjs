@@ -29,16 +29,65 @@ const browser = await chromium.launch({ executablePath: "/opt/pw-browsers/chromi
 const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 const page = await ctx.newPage();
 
-const gesehen = new Set(["/"]);
-const warteschlange = ["/"];
+/* ── Die Startpunkte ────────────────────────────────────────────────
+
+   Lange war das nur „/". Das reicht nicht: Die Abschluss-Seite nach
+   einem Bezahlvorgang ist von der Startseite aus NICHT erreichbar —
+   sie entsteht erst durch die Rückleitung vom Zahlungsanbieter. Ihre
+   Links lagen damit ausserhalb dessen, was dieser Lauf je zu sehen
+   bekam.
+
+   Am 30.09.2026 ist genau dort ein toter Knopf aufgefallen, und zwar
+   erst im Zugriffsprotokoll des laufenden Servers: „Zurück zur
+   Anmeldung" zeigte auf /events, eine Seite, die es nicht gibt (unter
+   app/(seite)/events/ liegt nur [slug]). Der schlechteste denkbare
+   Ort dafür — direkt nach einem abgebrochenen Bezahlvorgang, wenn
+   jemand es noch einmal versuchen will.
+
+   Beide Zustände der Seite kommen deshalb als eigene Startpunkte
+   dazu: der Abbruch und die Rückkehr ohne gültige Sitzung. Der
+   bezahlte Zustand lässt sich hier nicht herstellen — dafür bräuchte
+   es eine echte Sitzung beim Anbieter; er ist in Liste T abgedeckt. */
+const STARTPUNKTE = [
+  "/",
+  "/anmeldung/danke?zahlung=abgebrochen",
+  "/anmeldung/danke?zahlung=zurueck",
+];
+
+const gesehen = new Set(STARTPUNKTE);
+const warteschlange = [...STARTPUNKTE];
 const seiten = [];
 const externe = new Set();
 const geraeteZiele = new Set();
 const knopfProbleme = [];
+const haengen = [];
 
 while (warteschlange.length) {
   const pfad = warteschlange.shift();
-  const antwort = await page.goto(BASIS + pfad, { waitUntil: "networkidle" });
+
+  /* ── Warum hier ein try steht ──────────────────────────────────
+     `networkidle` wartet darauf, dass keine Anfrage mehr offen ist.
+     Genau das passiert NICHT, wenn auf der Seite ein Link auf eine
+     Route zeigt, die es nicht gibt: Next.js lädt Ziele vorab
+     (`?_rsc=…`), und diese Vorabladung kommt nie zum Abschluss.
+
+     Am 30.09.2026 war das der Fall — der Knopf „Zurück zur
+     Anmeldung" zeigte auf /events. Ohne dieses try brach der ganze
+     Lauf mit einem Stapelabzug ab, und es sah nach einem Fehler der
+     Prüfung aus statt nach einem Fehler der Seite.
+
+     Die offene Vorabladung ist übrigens die schlimmere Hälfte des
+     Befundes: Ein toter Link gibt eine 404 und gut; eine nie
+     endende Vorabladung lässt im Browser des Besuchers eine
+     Verbindung stehen. */
+  let antwort = null;
+  try {
+    antwort = await page.goto(BASIS + pfad, { waitUntil: "networkidle" });
+  } catch (e) {
+    haengen.push(`${pfad} — ${(e.message || "").split("\n")[0]}`);
+    continue;
+  }
+
   const status = antwort ? antwort.status() : 0;
   seiten.push({ pfad, status });
 
@@ -106,6 +155,12 @@ for (const s of seiten.sort((a, b) => a.pfad.localeCompare(b.pfad))) {
   console.log(`   ${String(s.status).padStart(3)}  ${s.pfad}`);
 }
 console.log("");
+
+pruefe(
+  "Keine Seite lässt eine Anfrage offen stehen",
+  haengen.length === 0,
+  haengen.join(" · ") || `${seiten.length} Adressen geladen`,
+);
 
 const kaputt = seiten.filter((s) => s.status !== 200);
 pruefe(
