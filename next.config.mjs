@@ -93,12 +93,16 @@ const nextConfig = {
               source: "/:pfad*",
               headers: [
                 // HSTS: der Browser spricht die Seite künftig nur noch über HTTPS
-                // an. Ohne "preload" — das ist ein eigener, kaum umkehrbarer
-                // Schritt (Eintrag in die Browser-Listen) und wird nur nach
-                // ausdrücklicher Entscheidung gesetzt, nicht nebenbei.
+                // an. Ein Jahr (31536000) ist der von Browsern und der
+                // HSTS-Preload-Liste erwartete Mindestwert; der frühere Wert
+                // von 180 Tagen lag darunter. Weiterhin OHNE "preload" — das
+                // ist ein eigener, kaum umkehrbarer Schritt (Eintrag in die
+                // fest in die Browser eingebackenen Listen) und wird nur nach
+                // ausdrücklicher Entscheidung und dokumentierten
+                // Voraussetzungen gesetzt, nicht nebenbei.
                 {
                   key: "Strict-Transport-Security",
-                  value: "max-age=15552000; includeSubDomains",
+                  value: "max-age=31536000; includeSubDomains",
                 },
                 { key: "Content-Security-Policy", value: csp },
                 { key: "X-Content-Type-Options", value: "nosniff" },
@@ -109,6 +113,21 @@ const nextConfig = {
                   value:
                     "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()",
                 },
+                // Cross-Origin-Isolation, soweit sie hier ohne Nebenwirkung
+                // nützt:
+                //   COOP same-origin kappt die window.opener-Beziehung zu
+                //     fremden Fenstern. Die Stripe-Zahlung läuft als
+                //     Vollseiten-Weiterleitung (kein Pop-up mit opener), wird
+                //     davon also nicht berührt.
+                //   CORP same-origin erlaubt das Einbinden eigener Antworten
+                //     (Bilder, Schriften) nur von der eigenen Herkunft — hier
+                //     liegt ohnehin alles auf veraevents.de.
+                // COEP (require-corp) wird BEWUSST NICHT gesetzt: Es brächte
+                // hier keinen Gewinn, würde aber eine spätere Einbindung
+                // fremder Inhalte (z. B. ein Buchungs-Widget) ohne Not
+                // blockieren. Entscheidung dokumentiert, nicht vergessen.
+                { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+                { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
               ],
             },
           ];

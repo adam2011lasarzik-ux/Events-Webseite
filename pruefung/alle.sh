@@ -176,9 +176,10 @@ lauf "X · Anmeldung erst nach bezahlter Zahlung" "$P/X/x-anlage.mjs"
 lauf "X · Abbruch hinterlaesst keine Spur" "$P/X/x-keine-spur.mjs"
 lauf "X · Verschluesselte Anmeldung wieder entfernen" "$P/X/x-marke-loeschen.mjs"
 
-# Diese beiden laufen gegen den Server OHNE Sonderwerte (Port 3249).
+# Diese laufen gegen den Server OHNE Sonderwerte (Port 3249).
 lauf_rein "N · Rechtsseiten"           node "$P/N/n-seiten.mjs"
 lauf_rein "O · Links und Knöpfe"        node "$P/O/o-links.mjs"
+lauf_rein "Y · Sicherheits-Kopfzeilen"  node "$P/Y/y-header.mjs"
 
 # Reine Regeln, brauchen weder Datenbank noch Browser.
 lauf_rein "L · Kopfleiste: Menü und Anmelden" npx tsx "$P/L/l-schulen.mjs"
