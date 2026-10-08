@@ -134,3 +134,36 @@ export const ZWEITER_FAKTOR_MAX = 8;
 export function zweiterFaktorVersuchErlaubt(pruefungId: string): Promise<boolean> {
   return versuchErlaubt(`2fa:${pruefungId}`, ZWEITER_FAKTOR_MAX, LOGIN_FENSTER_MINUTEN);
 }
+
+/**
+ * Zweite, DAUERHAFTE Bremse für den zweiten Faktor — je KONTO statt je
+ * Zwischenschritt.
+ *
+ * Die Bremse darüber zählt je Zwischenschritt (`pruefungId`). Das hat
+ * eine Lücke: Jeder neue Passwort-Login erzeugt einen neuen
+ * Zwischenschritt mit neuer ID (siehe lib/adminAuth.ts) — und damit
+ * ein frisches Kontingent von acht Code-Versuchen. Wer das Passwort
+ * bereits kennt, könnte die Code-Bremse also durch wiederholtes
+ * Anmelden immer wieder zurücksetzen; gebremst würde nur noch durch
+ * die Passwort-Bremse je Konto (LOGIN_KONTO_MAX = 20 je 15 Minuten),
+ * was rund 160 Code-Versuche je Viertelstunde zuliesse.
+ *
+ * Diese Bremse schließt die Lücke: Sie zählt die Code-Versuche je
+ * KONTO über alle Zwischenschritte hinweg und deckelt sie unabhängig
+ * davon, wie viele neue Zwischenschritte jemand erzeugt. Fünfzehn
+ * Versuche in fünfzehn Minuten sind großzügig für einen Menschen, der
+ * sich vertippt oder die App neu öffnen muss, und beenden das
+ * Durchprobieren lange vor jeder realistischen Trefferchance.
+ *
+ * Die Kennung ist die interne Konto-ID — kein Personenbezug, muss also
+ * nicht gehasht werden (wie bei der Zwischenschritt-Bremse oben).
+ */
+export const ZWEITER_FAKTOR_KONTO_MAX = 15;
+
+export function zweiterFaktorKontoVersuchErlaubt(adminId: string): Promise<boolean> {
+  return versuchErlaubt(
+    `2fa-konto:${adminId}`,
+    ZWEITER_FAKTOR_KONTO_MAX,
+    LOGIN_FENSTER_MINUTEN,
+  );
+}

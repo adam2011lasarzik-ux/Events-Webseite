@@ -9,6 +9,10 @@ import * as OTPAuth from "otpauth";
 import { anmelden, hole, sende, actionFelder } from "./admin-senden.mjs";
 import { db } from "../../lib/db.js";
 import { hashen } from "../../lib/passwort.js";
+import {
+  zweiterFaktorKontoVersuchErlaubt,
+  ZWEITER_FAKTOR_KONTO_MAX,
+} from "../../lib/ratelimit.js";
 
 let n = 0;
 const schief = [];
@@ -181,6 +185,26 @@ for (let i = 0; i < 11; i += 1) {
    die Bremse — bei 11 Versuchen also genau 3 abgewiesene. */
 pruefe("Nach 8 Fehlversuchen greift eine eigene Bremse für den zweiten Faktor",
   bremseGegriffen === 3, `${bremseGegriffen} von 11 abgewiesen`);
+
+/* ── 9b. Konto-Bremse: hält über NEUE Zwischenschritte hinweg ──────
+   Die Bremse oben zählt je Zwischenschritt. Ein neuer Passwort-Login
+   erzeugt aber einen neuen Zwischenschritt mit frischem Kontingent —
+   die Lücke aus SEC-002. Die Konto-Bremse (lib/ratelimit.ts) deckelt
+   die Code-Versuche je Konto, unabhängig davon. Hier direkt und
+   deterministisch geprüft: nach ZWEITER_FAKTOR_KONTO_MAX erlaubten
+   Aufrufen für dieselbe Konto-ID wird abgewiesen — ganz ohne neue
+   Zwischenschritte, also auch dann, wenn jemand sie immer wieder neu
+   erzeugt. */
+const kontoBremseId = "konto-bremse-test";
+await db.anmeldeVersuch.deleteMany({ where: { kennung: `2fa-konto:${kontoBremseId}` } });
+let kontoErlaubt = 0;
+for (let i = 0; i < ZWEITER_FAKTOR_KONTO_MAX + 3; i += 1) {
+  if (await zweiterFaktorKontoVersuchErlaubt(kontoBremseId)) kontoErlaubt += 1;
+}
+pruefe("Konto-Bremse für den zweiten Faktor greift nach dem Kontingent, über Zwischenschritte hinweg",
+  kontoErlaubt === ZWEITER_FAKTOR_KONTO_MAX,
+  `${kontoErlaubt} erlaubt, erwartet ${ZWEITER_FAKTOR_KONTO_MAX}`);
+await db.anmeldeVersuch.deleteMany({ where: { kennung: `2fa-konto:${kontoBremseId}` } });
 
 // ── 10. Deaktivieren verlangt selbst einen gültigen Code ───────────
 await db.anmeldeVersuch.deleteMany({});

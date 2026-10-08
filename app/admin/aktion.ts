@@ -24,6 +24,7 @@ import {
   loginKontoVersuchErlaubt,
   loginVersuchErlaubt,
   zweiterFaktorVersuchErlaubt,
+  zweiterFaktorKontoVersuchErlaubt,
 } from "@/lib/ratelimit";
 import { totpCodeStimmt, backupCodeStimmt } from "@/lib/zweiterFaktor";
 
@@ -140,6 +141,14 @@ async function zweitenFaktorPruefen(
   formular: FormData,
 ): Promise<LoginErgebnis> {
   if (!(await zweiterFaktorVersuchErlaubt(pruefung.id))) {
+    return { meldung: ZU_VIELE, zweiterFaktorNoetig: true };
+  }
+  /* Zweite Bremse, je Konto statt je Zwischenschritt. Sie fängt den
+     Fall, den die erste nicht sieht: Wer nach acht Fehlversuchen einen
+     NEUEN Zwischenschritt erzeugt (neuer Passwort-Login), bekäme sonst
+     ein frisches Kontingent. Diese zählt über alle Zwischenschritte
+     eines Kontos hinweg. Siehe lib/ratelimit.ts. */
+  if (!(await zweiterFaktorKontoVersuchErlaubt(pruefung.adminId))) {
     return { meldung: ZU_VIELE, zweiterFaktorNoetig: true };
   }
 
