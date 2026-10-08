@@ -80,3 +80,7 @@ Entfernen verliert keine Teilnehmer- oder Zahlungsdaten.
 4. **Preis-Übersicht** mit mehreren Events gegenlesen; „zuletzt geändert"
    erscheint erst nach der ersten Preisänderung bzw. Neuanlage nach dem
    Ausrollen (Altzeilen haben noch keinen Protokolleintrag).
+
+## Nachtrag 08.10.2026: harte Grenze 6 Personen je Buchung
+
+Pro Buchung insgesamt höchstens 6 Personen, über alle Ticketarten. Familienpaket: mindestens 4 Kinder und zusammen mit den enthaltenen Erwachsenen höchstens 6 — mit 2 Erwachsenen also genau 4 Kinder. maxErwachsene ist auf 1..6 begrenzt. Manipulierte Über-Anfragen werden serverseitig abgelehnt, nicht still gekappt. Keine Schemaänderung; dieselben Ausroll- und Rückkehrschritte wie oben.
