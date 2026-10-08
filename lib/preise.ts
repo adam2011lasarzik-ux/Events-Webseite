@@ -37,6 +37,11 @@ export interface Preisregeln {
   schuelerCents: number;
   erwachsenerCents: number;
   familie: Familienpaket | null;
+  /** Höchstzahl Erwachsener je Einzelbuchung (Ticketart „Erwachsene").
+   *  Kommt aus Event.maxErwachsene, Standard 4. Serverseitig in
+   *  begrenzeAuswahl() durchgesetzt — der Browser kann sie nicht
+   *  aushebeln. */
+  maxErwachsene: number;
 }
 
 export interface Auswahl {
@@ -78,10 +83,16 @@ export function begrenzeAuswahl(regeln: Preisregeln, auswahl: Auswahl): Auswahl 
       schueler: ganzZahl(auswahl.schueler, f.enthalteneSchueler, f.maxSchueler),
     };
   }
+  // Erwachsene: höchstens so viele, wie das Event erlaubt (Standard 4).
+  // Ein unsinniger oder fehlender Wert fällt auf 4 zurück, damit eine
+  // kaputte Konfiguration die Obergrenze nicht versehentlich aufhebt.
+  const maxErw = Number.isFinite(regeln.maxErwachsene) && regeln.maxErwachsene > 0
+    ? Math.trunc(regeln.maxErwachsene)
+    : 4;
   return {
     art: "single",
     schueler: ganzZahl(auswahl.schueler, 0, 10),
-    erwachsene: ganzZahl(auswahl.erwachsene, 0, 10),
+    erwachsene: ganzZahl(auswahl.erwachsene, 0, maxErw),
   };
 }
 

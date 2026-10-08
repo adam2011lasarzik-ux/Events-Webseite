@@ -169,6 +169,7 @@ function alsAnzeigeEvent(e: DbEvent, belegt: number): VeraEvent {
       // Wert gar nicht erst an (siehe preise.schuelerAktiv).
       schuelerCents: e.preisSchuelerCents ?? 0,
       erwachsenerCents: e.preisErwachsenerCents,
+      maxErwachsene: e.maxErwachsene,
       familie:
         e.familieAktiv &&
         e.familieBasisCents !== null &&

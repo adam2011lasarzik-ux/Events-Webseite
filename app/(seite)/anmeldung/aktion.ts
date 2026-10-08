@@ -115,6 +115,7 @@ export async function anmeldungAbsenden(
     schuelerAktiv: event.schuelerAktiv,
     schuelerCents: event.preisSchuelerCents ?? 0,
     erwachsenerCents: event.preisErwachsenerCents,
+    maxErwachsene: event.maxErwachsene,
     familie:
       event.familieAktiv &&
       event.familieBasisCents !== null &&

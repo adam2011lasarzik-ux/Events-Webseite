@@ -15,7 +15,7 @@
 
 import type { Auswahl } from "./preise";
 
-export type Anmeldeweg = "selbst" | "kind" | "familie";
+export type Anmeldeweg = "selbst" | "erwachsene" | "kind" | "familie";
 
 export type Vorschaurolle =
   /** Einzelanmeldung: eine Person, die sich selbst anmeldet. */
@@ -38,6 +38,17 @@ export function brauchtKontaktdaten(rolle: Vorschaurolle): boolean {
 export function vorschauRollen(weg: Anmeldeweg, auswahl: Auswahl): Vorschaurolle[] {
   if (weg === "selbst") {
     return [{ rolle: "selbst" }];
+  }
+
+  // Ticketart „Erwachsene": ein bis vier Erwachsene ohne Kinder. Der
+  // erste ist zugleich die Kontaktperson (schließt den Vertrag und
+  // bekommt die Bestätigung), alle weiteren brauchen nur ihren Namen.
+  // Dieselbe Rollen-Form wie beim Familienpaket, nur ohne Schüler.
+  if (weg === "erwachsene") {
+    return Array.from(
+      { length: Math.max(1, auswahl.erwachsene) },
+      (_, i) => ({ rolle: "erwachsener", nummer: i + 1, kontakt: i === 0 }),
+    );
   }
 
   const schueler: Vorschaurolle[] = Array.from(

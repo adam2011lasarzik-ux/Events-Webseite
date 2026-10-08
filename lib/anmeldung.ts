@@ -119,6 +119,10 @@ export function alsAuswahl(eingabe: AnmeldeEingabe): Auswahl {
   if (eingabe.weg === "kind") {
     return { art: "single", schueler: eingabe.schueler, erwachsene: eingabe.erwachsene };
   }
+  if (eingabe.weg === "erwachsene") {
+    // Ticketart „Erwachsene": nur Erwachsene, keine Schüler.
+    return { art: "single", schueler: 0, erwachsene: eingabe.erwachsene };
+  }
   return {
     art: "single",
     schueler: eingabe.selbstAls === "student" ? 1 : 0,
@@ -154,6 +158,23 @@ export function pruefeUndBaue(
   // Der Server bestimmt die Struktur, nicht das Formular.
   const auswahl = begrenzeAuswahl(regeln, alsAuswahl(eingabe));
   const rollen = vorschauRollen(eingabe.weg, auswahl);
+
+  /* Ticketart „Erwachsene": höchstens maxErwachsene (Standard 4), und
+     mindestens eine Person. begrenzeAuswahl() oben kappt bereits still
+     auf die Obergrenze — hier wird daraus eine KLARE Ablehnung mit
+     Meldung, damit ein manipulierter Aufruf mit 9 Erwachsenen nicht
+     stillschweigend als 4 durchläuft, sondern erkennbar scheitert. */
+  if (eingabe.weg === "erwachsene") {
+    const gewuenscht = Math.trunc(Number(eingabe.erwachsene));
+    if (!Number.isFinite(gewuenscht) || gewuenscht < 1) {
+      fehler.push({ feld: "auswahl", text: "Bitte mindestens eine erwachsene Person angeben." });
+    } else if (gewuenscht > regeln.maxErwachsene) {
+      fehler.push({
+        feld: "auswahl",
+        text: `Je Buchung sind höchstens ${regeln.maxErwachsene} erwachsene Personen möglich.`,
+      });
+    }
+  }
 
   const teilnehmer: FertigeAnmeldung["teilnehmer"] = [];
   let kontakt: FertigeAnmeldung["kontakt"] | null = null;
