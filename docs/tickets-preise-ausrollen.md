@@ -25,8 +25,8 @@ Stand: 08.10.2026. Entwickelt auf `claude/frontend-design-skill-folder-luremb`.
 Zwei Migrationen, beide additiv — `prisma migrate deploy` wendet beide
 nacheinander an:
 - `20261008174530_tickets_preisverwaltung`:
-  `Event.maxErwachsene INT NOT NULL DEFAULT …` und neue Tabelle
-  `PreisAenderung`.
+  `Event.maxErwachsene INT NOT NULL DEFAULT 4` (von der zweiten Migration
+  auf 6 gehoben) und neue Tabelle `PreisAenderung`.
 - `20261008194439_maxerwachsene_sechs`: Default auf **6** und bestehende
   Events von 4 auf 6 gehoben (`UPDATE Event SET maxErwachsene = 6
   WHERE maxErwachsene = 4`).
@@ -35,6 +35,13 @@ Die 6-Personen-Grenze ist **keine** Schemaänderung — sie steht als
 Konstante im Code (`lib/preise.ts`). Kein Datenverlust, keine bestehende
 Spalte verändert. Bezahlte Buchungen behalten ihren eingefrorenen
 `gesamtpreisCents`.
+
+**Nicht geändert — Eventkapazität:** `Event.maxPersonen` (100 beim
+Padel-Event) bleibt die feste Obergrenze. Eine Buchung darf die noch
+freien Plätze nicht überschreiten; das prüft `lib/anmeldungAnlegen.ts`
+unter einer `SELECT … FOR UPDATE`-Sperre (`belegt + neue Teilnehmer >
+maxPersonen` → Ablehnung „keine-plaetze", automatische Erstattung). Diese
+Logik ist von den Ticket-/Preisänderungen unberührt.
 
 ## Ausrollen (erst nach ausdrücklicher Freigabe)
 
@@ -67,16 +74,29 @@ Je nach Tiefe:
 Die 6-Personen-Grenze wird allein durch `git revert` zurückgenommen
 (keine Schema- oder Datenänderung).
 
-**Migration-Rückkehr-SQL** (nur falls nötig; entfernt nur das Neue):
+**Migration-Rückkehr-SQL** (nur falls nötig; entfernt nur das Neue).
+Dieser eine Block nimmt **beide** Migrationen zurück: Das Löschen der
+Spalte `maxErwachsene` entfernt zugleich den Default und die Wirkung des
+`UPDATE …`-Schritts der zweiten Migration; das Löschen der Tabelle
+`PreisAenderung` nimmt die erste zurück.
 
 ```sql
 DROP TABLE `PreisAenderung`;
 ALTER TABLE `Event` DROP COLUMN `maxErwachsene`;
 ```
 
-Danach `npx prisma generate` mit dem alten Schema. Die Tabelle
-`PreisAenderung` enthält nur Protokolldaten (keine Buchungen); ihr
-Entfernen verliert keine Teilnehmer- oder Zahlungsdaten.
+Danach die beiden Migrationsvermerke als zurückgenommen markieren, damit
+`migrate status` sauber bleibt:
+
+```bash
+npx prisma migrate resolve --rolled-back 20261008194439_maxerwachsene_sechs
+npx prisma migrate resolve --rolled-back 20261008174530_tickets_preisverwaltung
+npx prisma generate
+```
+
+Die Tabelle `PreisAenderung` enthält nur Protokolldaten (keine
+Buchungen); ihr Entfernen verliert keine Teilnehmer- oder
+Zahlungsdaten.
 
 ---
 
