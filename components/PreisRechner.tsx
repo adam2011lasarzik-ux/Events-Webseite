@@ -42,6 +42,10 @@ export function PreisRechner({
   const familie = event.preise.familie;
   const minFamilie = familie?.enthalteneSchueler ?? 1;
   const maxFamilie = familie?.maxSchueler ?? 6;
+  // Höchstzahl Erwachsener je Buchung (Ticketart „Erwachsene"), aus dem
+  // Event. Der Server erzwingt dieselbe Grenze in lib/preise.ts; hier
+  // begrenzt sie nur den Zähler in der Anzeige.
+  const maxErwachsene = event.preise.maxErwachsene || 4;
   // Ohne Schüler-Kategorie gibt es nur einen Preis: keine Wegewahl,
   // kein "Mein Kind", kein Familienpaket, keine Schüler/Erwachsener-
   // Unterscheidung. Serverseitig wird das unabhängig davon in
@@ -53,10 +57,14 @@ export function PreisRechner({
   const [kinder, setzeKinder] = useState(1);
   const [kommeMit, setzeKommeMit] = useState(false);
   const [familienKinder, setzeFamilienKinder] = useState(minFamilie);
+  const [erwachsene, setzeErwachsene] = useState(1);
 
   const auswahl: Auswahl = useMemo(() => {
     if (fuerWen === "familie") {
       return { art: "family", schueler: familienKinder, erwachsene: 2 };
+    }
+    if (fuerWen === "erwachsene") {
+      return { art: "single", schueler: 0, erwachsene };
     }
     if (fuerWen === "kind") {
       return { art: "single", schueler: kinder, erwachsene: kommeMit ? 1 : 0 };
@@ -66,7 +74,7 @@ export function PreisRechner({
       schueler: selbstAls === "student" ? 1 : 0,
       erwachsene: selbstAls === "adult" ? 1 : 0,
     };
-  }, [fuerWen, selbstAls, kinder, kommeMit, familienKinder]);
+  }, [fuerWen, selbstAls, kinder, kommeMit, familienKinder, erwachsene]);
 
   const ergebnis = useMemo(() => berechnePreis(event.preise, auswahl), [event.preise, auswahl]);
 
@@ -179,6 +187,17 @@ export function PreisRechner({
               <span className={stil.wahlHinweis}>{t.anmeldung.wahlKindHinweis}</span>
             </label>
 
+            <label className={stil.wahlKarte}>
+              <input
+                type="radio"
+                name="wahlFuerWen"
+                checked={fuerWen === "erwachsene"}
+                onChange={() => setzeFuerWen("erwachsene")}
+              />
+              <span className={stil.wahlName}>{t.anmeldung.wahlErwachsene}</span>
+              <span className={stil.wahlHinweis}>{t.anmeldung.wahlErwachseneHinweis}</span>
+            </label>
+
             {familie && (
               <label className={stil.wahlKarte}>
                 <input
@@ -249,6 +268,20 @@ export function PreisRechner({
                   + {alsEuro(event.preise.erwachsenerCents)}
                 </span>
               </label>
+            </div>
+          )}
+
+          {fuerWen === "erwachsene" && (
+            <div>
+              <p className={stil.frage}>{t.anmeldung.erwachseneFrage}</p>
+              <Zaehler
+                wert={erwachsene}
+                min={1}
+                max={maxErwachsene}
+                setzeWert={setzeErwachsene}
+                t={t}
+                text={`× ${alsEuro(event.preise.erwachsenerCents)}`}
+              />
             </div>
           )}
 

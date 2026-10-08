@@ -261,12 +261,16 @@ export const de = {
     wahlSelbstHinweis: "Ab 18 Jahren",
     wahlKind: "Mein Kind",
     wahlKindHinweis: "Als Erziehungsberechtigte:r",
+    wahlErwachsene: "Mehrere Erwachsene",
+    wahlErwachseneHinweis: "Bis zu vier Personen",
     wahlFamilie: "Familienpaket",
     wahlFamilieHinweis: "2 Erwachsene + Schüler",
 
     selbstFrage: "Was trifft auf dich zu?",
     selbstSchueler: "Ich bin Schüler",
     selbstErwachsener: "Ich bin erwachsen",
+
+    erwachseneFrage: "Wie viele Erwachsene meldest du an?",
 
     kindFrage: "Wie viele Schüler unter 18 meldest du an?",
     kindMitkommen: "Ich komme selbst mit",
