@@ -13,6 +13,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { verlangeAdmin } from "@/lib/adminAuth";
 import { protokolliere, PROTOKOLL_AKTIONEN } from "@/lib/adminProtokoll";
+import { alsPreisStand, preisAenderungen, type PreisStand } from "@/lib/preisProtokoll";
 import { pruefeEvent, type EventErgebnis } from "@/lib/eventFormular";
 import { bildAblegen, bildLoeschen } from "@/lib/bilder";
 
@@ -194,58 +195,4 @@ export async function eventEntfernen(formular: FormData): Promise<void> {
   });
 
   redirect("/admin");
-}
-
-/* ---------------------------------------------------------------
-   Preis-Änderungsprotokoll: Hilfsfunktionen.
-
-   An einer Stelle gebündelt, damit „welche Ticketarten gibt es" nur
-   hier steht. Die Schlüssel entsprechen den Posten-Bezeichnungen aus
-   lib/preise.ts (schueler, erwachsener, familieBasis,
-   familieWeitererSchueler).
-   --------------------------------------------------------------- */
-
-interface PreisStand {
-  schueler: number | null;
-  erwachsener: number | null;
-  familieBasis: number | null;
-  familieWeitererSchueler: number | null;
-}
-
-/** Zieht aus einem Event(-Datensatz) die vier Ticketpreise. */
-function alsPreisStand(e: {
-  preisSchuelerCents: number | null;
-  preisErwachsenerCents: number;
-  familieBasisCents: number | null;
-  familieWeitererSchuelerCents: number | null;
-}): PreisStand {
-  return {
-    schueler: e.preisSchuelerCents,
-    erwachsener: e.preisErwachsenerCents,
-    familieBasis: e.familieBasisCents,
-    familieWeitererSchueler: e.familieWeitererSchuelerCents,
-  };
-}
-
-/** Liefert je geänderter Ticketart einen Protokolleintrag (alt→neu). */
-function preisAenderungen(
-  alt: PreisStand | null,
-  neu: PreisStand,
-): { ticketart: string; altCents: number | null; neuCents: number | null }[] {
-  const arten: (keyof PreisStand)[] = [
-    "schueler",
-    "erwachsener",
-    "familieBasis",
-    "familieWeitererSchueler",
-  ];
-  const liste: { ticketart: string; altCents: number | null; neuCents: number | null }[] = [];
-  for (const art of arten) {
-    const a = alt ? alt[art] : null;
-    const n = neu[art];
-    // Nur echte Änderungen festhalten. Ein unverändertes Feld erzeugt
-    // keinen Eintrag — sonst stünde bei jedem Textedit die ganze
-    // Preisliste erneut im Protokoll.
-    if (a !== n) liste.push({ ticketart: art, altCents: a, neuCents: n });
-  }
-  return liste;
 }

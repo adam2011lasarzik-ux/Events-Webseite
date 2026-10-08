@@ -190,6 +190,8 @@ lauf_rein "X · Verschluesselte Nutzlast (reine Regeln)" npx tsx "$P/X/x-nutzlas
 lauf_rein "X · Fluechtige Bremse (reine Regeln)" npx tsx "$P/X/x-bremse.mjs"
 lauf_rein "S · Server-Skripte (grep-Falle)" node "$P/S/s-skripte.mjs"
 lauf_rein "T · Termin-Pflicht: Regel und Verdrahtung" npx tsx "$P/T/t-regel.mjs"
+lauf_rein "Z · Ticketarten und Preisregeln (reine Regeln)" npx tsx "$P/Z/z-tickets.mjs"
+lauf_rein "Z · Preis-Protokoll und eingefrorener Preis (DB)" npx tsx --env-file=.env "$P/Z/z-preis-db.mjs"
 
 # ── Bilanz ───────────────────────────────────────────────────────
 echo ""
