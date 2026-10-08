@@ -159,7 +159,19 @@ model Event {
   preisSchuelerCents    Int?
   preisErwachsenerCents Int
 
+  // Wie viele Erwachsene höchstens in EINER Erwachsenenbuchung
+  // angemeldet werden dürfen. Standard 4 (Anforderung „bis zu 4
+  // erwachsene Personen"). Pro Event einstellbar, damit künftige
+  // Veranstaltungen ohne Codeänderung abweichen können. Die
+  // Durchsetzung passiert serverseitig in lib/preise.ts →
+  // begrenzeAuswahl() und in lib/anmeldung.ts, nicht im Browser.
+  maxErwachsene         Int @default(4)
+
   // Familienpaket
+  // Hinweis: familieMaxSchueler muss mindestens 4 sein, sobald das
+  // Paket aktiv ist (Anforderung „mindestens 4 Kinder möglich"). Das
+  // wird in lib/eventFormular.ts geprüft, nicht als DB-Regel — so
+  // bleiben bestehende Zeilen unangetastet.
   familieAktiv                 Boolean @default(false)
   familieBasisCents            Int?
   familieEnthaltenErwachsene   Int?
@@ -197,6 +209,7 @@ model Event {
   aufnahmewidersprueche        Aufnahmewiderspruch[]
   veroeffentlichungspruefungen Veroeffentlichungspruefung[]
   veroeffentlichungen          Veroeffentlichung[]
+  preisAenderungen             PreisAenderung[]
 
   @@index([status, startAt])
 }
@@ -1175,4 +1188,38 @@ model Veroeffentlichung {
   erfasstAm  DateTime @default(now())
 
   @@index([eventId, entferntAm])
+}
+
+/// Nachvollziehbares Änderungsprotokoll der Ticketpreise.
+///
+/// Zusätzlich zum allgemeinen AdminProtokoll: Hier steht je Ticketart
+/// der genaue Übergang alt → neu in Cent, wer ihn vorgenommen hat und
+/// wann. Daraus speist sich die Preis-Übersicht im Adminbereich
+/// (aktueller Preis, Ticketart, Event, Zeitpunkt der letzten Änderung).
+///
+/// Nur Anlegen, nie Ändern oder Löschen im Betrieb — ein Protokoll,
+/// das sich überschreiben lässt, ist keins. Bestehende Buchungen
+/// werden hiervon nicht berührt; ihr Preis ist in Registration
+/// eingefroren.
+model PreisAenderung {
+  id      String @id @default(cuid())
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  /// Welche Ticketart: "schueler", "erwachsener", "familieBasis",
+  /// "familieWeitererSchueler". Freitext-Schlüssel statt Enum, damit
+  /// später weitere Arten ohne Migration dazukommen können.
+  ticketart String
+
+  /// Preis vorher in Cent. null = die Art hatte vorher keinen Preis
+  /// (z. B. Familienpaket neu aktiviert).
+  altCents Int?
+  /// Preis nachher in Cent. null = die Art wurde deaktiviert.
+  neuCents Int?
+
+  /// Wer die Änderung vorgenommen hat (AdminUser-Kennung).
+  adminId     String
+  geaendertAm DateTime @default(now())
+
+  @@index([eventId, ticketart, geaendertAm])
 }
