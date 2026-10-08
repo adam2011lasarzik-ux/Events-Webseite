@@ -12,7 +12,13 @@
    Preisanzeige und gespeicherte Teilnehmer nicht auseinanderlaufen.
    --------------------------------------------------------------- */
 
-import { begrenzeAuswahl, type Auswahl, type Preisregeln } from "./preise";
+import {
+  begrenzeAuswahl,
+  MAX_PERSONEN_PRO_BUCHUNG,
+  MIN_FAMILIE_KINDER,
+  type Auswahl,
+  type Preisregeln,
+} from "./preise";
 import { brauchtKontaktdaten, vorschauRollen, type Anmeldeweg } from "./vorschau";
 
 export type { Anmeldeweg };
@@ -159,19 +165,52 @@ export function pruefeUndBaue(
   const auswahl = begrenzeAuswahl(regeln, alsAuswahl(eingabe));
   const rollen = vorschauRollen(eingabe.weg, auswahl);
 
-  /* Ticketart „Erwachsene": höchstens maxErwachsene (Standard 4), und
-     mindestens eine Person. begrenzeAuswahl() oben kappt bereits still
-     auf die Obergrenze — hier wird daraus eine KLARE Ablehnung mit
-     Meldung, damit ein manipulierter Aufruf mit 9 Erwachsenen nicht
-     stillschweigend als 4 durchläuft, sondern erkennbar scheitert. */
+  /* ── Harte Grenzen je Buchung ──────────────────────────────────
+     begrenzeAuswahl() oben kappt bereits still auf das Erlaubte. Hier
+     wird daraus eine KLARE Ablehnung mit Meldung, damit ein
+     manipulierter Aufruf (etwa 9 Erwachsene oder 2 Kinder im
+     Familienpaket) nicht stillschweigend zurechtgebogen durchläuft,
+     sondern erkennbar scheitert. Gerechnet wird mit den ROH
+     angeforderten Zahlen, nicht mit der bereits gekappten Auswahl. */
+  const g = (w: number) => Math.trunc(Number(w));
+  const erwRoh = g(eingabe.erwachsene);
+  const schuelerRoh = g(eingabe.schueler);
+
   if (eingabe.weg === "erwachsene") {
-    const gewuenscht = Math.trunc(Number(eingabe.erwachsene));
-    if (!Number.isFinite(gewuenscht) || gewuenscht < 1) {
+    const maxErw = Math.min(regeln.maxErwachsene, MAX_PERSONEN_PRO_BUCHUNG);
+    if (!Number.isFinite(erwRoh) || erwRoh < 1) {
       fehler.push({ feld: "auswahl", text: "Bitte mindestens eine erwachsene Person angeben." });
-    } else if (gewuenscht > regeln.maxErwachsene) {
+    } else if (erwRoh > maxErw) {
       fehler.push({
         feld: "auswahl",
-        text: `Je Buchung sind höchstens ${regeln.maxErwachsene} erwachsene Personen möglich.`,
+        text: `Je Buchung sind höchstens ${maxErw} erwachsene Personen möglich.`,
+      });
+    }
+  }
+
+  if (eingabe.weg === "familie" && regeln.familie) {
+    if (!Number.isFinite(schuelerRoh) || schuelerRoh < MIN_FAMILIE_KINDER) {
+      fehler.push({
+        feld: "auswahl",
+        text: `Im Familienpaket müssen mindestens ${MIN_FAMILIE_KINDER} Kinder angemeldet werden.`,
+      });
+    }
+    const gesamtFamilie = regeln.familie.enthalteneErwachsene + Math.max(0, schuelerRoh);
+    if (gesamtFamilie > MAX_PERSONEN_PRO_BUCHUNG) {
+      fehler.push({
+        feld: "auswahl",
+        text: `Je Buchung sind insgesamt höchstens ${MAX_PERSONEN_PRO_BUCHUNG} Personen möglich.`,
+      });
+    }
+  }
+
+  if (eingabe.weg === "kind") {
+    // Kinder plus eventuell ein mitkommender Elternteil.
+    const gesamtKind = Math.max(0, schuelerRoh) + (erwRoh > 0 ? 1 : 0);
+    if (gesamtKind > MAX_PERSONEN_PRO_BUCHUNG) {
+      fehler.push({
+        feld: "auswahl",
+        text: `Je Buchung sind insgesamt höchstens ${MAX_PERSONEN_PRO_BUCHUNG} Personen möglich.`,
       });
     }
   }

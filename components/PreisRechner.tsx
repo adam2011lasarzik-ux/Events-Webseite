@@ -6,7 +6,13 @@ import { useFormStatus } from "react-dom";
 import { AnmeldeFelder, type FeldGruppe } from "./AnmeldeFelder";
 import { anmeldungAbsenden } from "@/app/(seite)/anmeldung/aktion";
 import { brauchtVormundEinwilligung, ANMELDE_STARTZUSTAND } from "@/lib/anmeldung";
-import { alsEuro, berechnePreis, type Auswahl } from "@/lib/preise";
+import {
+  alsEuro,
+  berechnePreis,
+  MAX_PERSONEN_PRO_BUCHUNG,
+  MIN_FAMILIE_KINDER,
+  type Auswahl,
+} from "@/lib/preise";
 import { brauchtKontaktdaten, vorschauRollen, type Anmeldeweg } from "@/lib/vorschau";
 import { fuelle } from "@/lib/formate";
 import { oeffentlich } from "@/lib/pfade";
@@ -40,12 +46,18 @@ export function PreisRechner({
   event: VeraEvent;
 }) {
   const familie = event.preise.familie;
-  const minFamilie = familie?.enthalteneSchueler ?? 1;
-  const maxFamilie = familie?.maxSchueler ?? 6;
+  const familieErwachsene = familie?.enthalteneErwachsene ?? 2;
+  // Familienpaket: mindestens 4 Kinder, und zusammen mit den
+  // enthaltenen Erwachsenen nie mehr als 6 Personen.
+  const minFamilie = Math.max(familie?.enthalteneSchueler ?? 1, MIN_FAMILIE_KINDER);
+  const maxFamilie = Math.min(
+    familie?.maxSchueler ?? MIN_FAMILIE_KINDER,
+    MAX_PERSONEN_PRO_BUCHUNG - familieErwachsene,
+  );
   // Höchstzahl Erwachsener je Buchung (Ticketart „Erwachsene"), aus dem
-  // Event. Der Server erzwingt dieselbe Grenze in lib/preise.ts; hier
-  // begrenzt sie nur den Zähler in der Anzeige.
-  const maxErwachsene = event.preise.maxErwachsene || 4;
+  // Event, aber nie mehr als die harte Grenze von 6. Der Server
+  // erzwingt dasselbe in lib/preise.ts; hier begrenzt es den Zähler.
+  const maxErwachsene = Math.min(event.preise.maxErwachsene || 4, MAX_PERSONEN_PRO_BUCHUNG);
   // Ohne Schüler-Kategorie gibt es nur einen Preis: keine Wegewahl,
   // kein "Mein Kind", kein Familienpaket, keine Schüler/Erwachsener-
   // Unterscheidung. Serverseitig wird das unabhängig davon in
@@ -252,7 +264,7 @@ export function PreisRechner({
               <Zaehler
                 wert={kinder}
                 min={1}
-                max={6}
+                max={MAX_PERSONEN_PRO_BUCHUNG - (kommeMit ? 1 : 0)}
                 setzeWert={setzeKinder}
                 t={t}
                 text={`× ${alsEuro(event.preise.schuelerCents)}`}
@@ -261,7 +273,16 @@ export function PreisRechner({
                 <input
                   type="checkbox"
                   checked={kommeMit}
-                  onChange={(e) => setzeKommeMit(e.target.checked)}
+                  onChange={(e) => {
+                    const an = e.target.checked;
+                    setzeKommeMit(an);
+                    // Kommt der Elternteil mit, zählt er als Person. Damit
+                    // zusammen nie mehr als 6 herauskommen, die Kinderzahl
+                    // nötigenfalls um eins senken.
+                    if (an && kinder > MAX_PERSONEN_PRO_BUCHUNG - 1) {
+                      setzeKinder(MAX_PERSONEN_PRO_BUCHUNG - 1);
+                    }
+                  }}
                 />
                 <span className={stil.optionName}>{t.anmeldung.kindMitkommen}</span>
                 <span className={stil.optionPreis}>

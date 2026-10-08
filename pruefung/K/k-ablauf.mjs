@@ -83,14 +83,16 @@ const einzel = (email) => ({
   weg: "selbst", selbstAls: "student", schueler: 1, erwachsene: 0,
   ...personen([{ vorname: "Ein", nachname: "Zeln", email, telefon: "" }]),
 });
-/** Familienpaket: 2 Erwachsene + 2 Schüler = 4 Personen. */
+/** Familienpaket: 2 Erwachsene + 4 Kinder = 6 Personen (harte Grenze). */
 const familie = (email) => ({
-  weg: "familie", selbstAls: "adult", schueler: 2, erwachsene: 2,
+  weg: "familie", selbstAls: "adult", schueler: 4, erwachsene: 2,
   ...personen([
     { vorname: "Mama", nachname: "Muster", email, telefon: "030111" },
     { vorname: "Papa", nachname: "Muster" },
     { vorname: "Kind", nachname: "Eins" },
     { vorname: "Kind", nachname: "Zwei" },
+    { vorname: "Kind", nachname: "Drei" },
+    { vorname: "Kind", nachname: "Vier" },
   ]),
   einwilligungVormund: "an",
 });
@@ -133,7 +135,7 @@ await frischeLage();
     },
   };
   // „family", nicht „familie" — so heisst der Wert in lib/preise.ts.
-  const erwartet = berechnePreis(regeln, { art: "family", schueler: 2, erwachsene: 2 });
+  const erwartet = berechnePreis(regeln, { art: "family", schueler: 4, erwachsene: 2 });
   const sitzung = await holeSitzung(a.sitzungId);
   pruefe("4 · Preis serverseitig berechnet und so an den Anbieter gegeben",
     sitzung.amount_total === erwartet.gesamtCents,
@@ -145,8 +147,8 @@ await frischeLage();
   });
   pruefe("2 · Familienpaket ist danach bestätigt und bezahlt",
     nach.status === "BESTAETIGT" && nach.zahlungsStatus === "BEZAHLT");
-  pruefe("3 · … mit allen vier Teilnehmern", nach.teilnehmer.length === 4);
-  pruefe("3 · … und belegt ERST JETZT genau vier Plätze", (await belegteJetzt()) === 4);
+  pruefe("3 · … mit allen sechs Teilnehmern", nach.teilnehmer.length === 6);
+  pruefe("3 · … und belegt ERST JETZT genau sechs Plätze", (await belegteJetzt()) === 6);
   pruefe("4 · … zum eingefrorenen Preis", nach.gesamtpreisCents === erwartet.gesamtCents);
 
   /* Sicherheitsfund E aus der Prüfung des Adminbereichs: Die
@@ -154,9 +156,9 @@ await frischeLage();
      Anmeldenummer erreichbar. Sie darf deshalb nur die Personenzahl
      zeigen, keine Namen. */
   const bestaetigung = alsText(await (await fetch(`${BASIS}/anmeldung/danke?nr=${nach.id}`)).text());
-  pruefe("Sicherheit · Bestätigungsseite zeigt die Personenzahl", bestaetigung.includes("4"));
+  pruefe("Sicherheit · Bestätigungsseite zeigt die Personenzahl", bestaetigung.includes("6"));
   pruefe("Sicherheit · … aber KEINE Teilnehmernamen",
-    !["Mama", "Papa", "Muster", "Eins", "Zwei"].some((name) => bestaetigung.includes(name)));
+    !["Mama", "Papa", "Muster", "Eins", "Zwei", "Drei", "Vier"].some((name) => bestaetigung.includes(name)));
 }
 
 // ── 5.–7. Abbruch: es bleibt NICHTS zurück ─────────────────────
@@ -303,7 +305,7 @@ await frischeLage();
     where: { kontaktEmail: "mehrfach@example.org" }, include: { teilnehmer: true },
   });
   pruefe("13 · Mehrfache Rückmeldung zählt Teilnehmer nicht doppelt",
-    nach.teilnehmer.length === 4 && (await belegteJetzt()) === 4,
+    nach.teilnehmer.length === 6 && (await belegteJetzt()) === 6,
     `${nach.teilnehmer.length} Teilnehmer, ${await belegteJetzt()} belegt`);
   pruefe("13 · … und es gibt genau eine Anmeldung",
     (await db.registration.count({ where: { kontaktEmail: "mehrfach@example.org" } })) === 1);

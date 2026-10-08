@@ -204,14 +204,14 @@ export function pruefeEvent(
     fehler.push({ feld: "preisErwachsener", text: "Bitte einen Betrag angeben, z. B. 14,00." });
 
   // Höchstzahl Erwachsener je Buchung. Leer = Standard 4. Muss eine
-  // ganze Zahl von mindestens 1 sein; eine sinnvolle Obergrenze von 20
-  // verhindert versehentliche Riesenwerte.
+  // ganze Zahl von 1 bis 6 sein — je Buchung sind insgesamt höchstens
+  // sechs Personen erlaubt (harte Grenze, siehe lib/preise.ts).
   const maxErwText = sauber(roh.maxErwachsene);
   let maxErwachsene = 4;
   if (maxErwText !== "") {
     const z = ganzeZahl(maxErwText);
-    if (z === null || z < 1 || z > 20)
-      fehler.push({ feld: "maxErwachsene", text: "Bitte eine ganze Zahl von 1 bis 20 angeben." });
+    if (z === null || z < 1 || z > 6)
+      fehler.push({ feld: "maxErwachsene", text: "Bitte eine ganze Zahl von 1 bis 6 angeben." });
     else maxErwachsene = z;
   }
 
@@ -267,6 +267,21 @@ export function pruefeEvent(
       fehler.push({
         feld: "familieMaxSchueler",
         text: "Das Familienpaket muss mindestens 4 Kinder zulassen.",
+      });
+    }
+
+    // Harte Grenze: insgesamt höchstens sechs Personen je Buchung. Das
+    // Familienpaket braucht Platz für mindestens vier Kinder, also
+    // dürfen die enthaltenen Erwachsenen 6 − 4 = 2 nicht übersteigen.
+    // Sonst gäbe es eine Konfiguration, in der „mindestens 4 Kinder"
+    // und „höchstens 6 Personen" nicht beide erfüllbar sind.
+    if (
+      familieEnthaltenErwachsene !== null &&
+      familieEnthaltenErwachsene + 4 > 6
+    ) {
+      fehler.push({
+        feld: "familieEnthaltenErwachsene",
+        text: "Mit mindestens 4 Kindern und höchstens 6 Personen je Buchung dürfen es höchstens 2 enthaltene Erwachsene sein.",
       });
     }
   }

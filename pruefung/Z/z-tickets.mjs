@@ -33,11 +33,15 @@ const regeln = (max = 4) => ({
   },
 });
 
+// Jede Person bekommt Kontaktdaten: Welche Rolle die Kontaktperson ist,
+// hängt vom Weg ab (beim Familien-/Erwachsenen-Weg der erste, beim
+// Kind-Weg der Elternteil am Ende). Großzügig für alle zu füllen hält
+// den Test von dieser Reihenfolge unabhängig.
 const personen = (n) =>
   Array.from({ length: n }, (_, i) => ({
     vorname: `V${i}`,
     nachname: `N${i}`,
-    email: i === 0 ? "kontakt@beispiel.de" : "",
+    email: "kontakt@beispiel.de",
     telefon: "",
   }));
 
@@ -97,16 +101,80 @@ for (const anzahl of [1, 2, 3, 4]) {
   pruefe("Bei maxErwachsene=6 sind 6 erlaubt und 7 abgelehnt", ok6 && abgelehnt7);
 }
 
-// ── Familienpaket: mindestens 4 Kinder möglich ─────────────────────
-for (const kinder of [4, 5, 6]) {
+// ── Familienpaket: genau 4 Kinder (mind. 4, zusammen ≤ 6) ──────────
+// Mit 2 enthaltenen Erwachsenen lässt die Sechser-Grenze genau 4
+// Kinder zu. begrenzeAuswahl kappt jede Übermenge auf 4.
+for (const kinder of [4, 5, 6, 99]) {
   const b = begrenzeAuswahl(regeln(), { art: "family", schueler: kinder, erwachsene: 2 });
-  pruefe(`Familienpaket erlaubt ${kinder} Kinder`, b.schueler === kinder, `schueler=${b.schueler}`);
+  pruefe(`Familienpaket: Wunsch ${kinder} Kinder wird auf 4 begrenzt`, b.schueler === 4,
+    `schueler=${b.schueler}`);
 }
-// Grundpreis (1 Kind enthalten) + 3 weitere × 6,00 € bei 4 Kindern.
+// Familienpaket mit 4 Kindern wird angenommen und kostet 48,00 €.
 {
+  const erg = pruefeUndBaue(regeln(), {
+    weg: "familie", schueler: 4, erwachsene: 2, personen: personen(6),
+    einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true,
+  });
   const p = berechnePreis(regeln(), { art: "family", schueler: 4, erwachsene: 2 });
-  pruefe("Familienpaket mit 4 Kindern: 30,00 € + 3 × 6,00 € = 48,00 €",
-    p.gesamtCents === 4800 && p.personen === 6, `${p.gesamtCents} Cent, ${p.personen} Personen`);
+  pruefe("Familienpaket mit 4 Kindern: angenommen, 6 Personen, 48,00 €",
+    !erg.fehler && erg.anmeldung.teilnehmer.length === 6 && p.gesamtCents === 4800,
+    erg.fehler ? erg.fehler[0].text : `${p.gesamtCents} Cent`);
+}
+// Weniger als 4 Kinder im Familienpaket wird abgelehnt.
+{
+  const erg = pruefeUndBaue(regeln(), {
+    weg: "familie", schueler: 3, erwachsene: 2, personen: personen(5),
+    einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true,
+  });
+  pruefe("Familienpaket mit 3 Kindern wird abgelehnt (mindestens 4)",
+    Boolean(erg.fehler) && erg.fehler.some((f) => /mindestens 4 Kinder/i.test(f.text)));
+}
+// Mehr als 6 Personen über das Familienpaket wird abgelehnt (2 + 5 = 7).
+{
+  const erg = pruefeUndBaue(regeln(), {
+    weg: "familie", schueler: 5, erwachsene: 2, personen: personen(7),
+    einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true,
+  });
+  pruefe("Familienpaket mit 5 Kindern (7 Personen) wird abgelehnt",
+    Boolean(erg.fehler) && erg.fehler.some((f) => /höchstens 6 Personen/i.test(f.text)));
+}
+
+// ── Harte Gesamtgrenze: 6 Personen je Buchung, alle Wege ───────────
+// Schul-/Kind-Weg: 6 Kinder angenommen, 7 abgelehnt.
+{
+  const ja = pruefeUndBaue(regeln(), {
+    weg: "kind", schueler: 6, erwachsene: 0, personen: personen(8),
+    einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true,
+  });
+  pruefe("Schul-/Kind-Weg: 6 Kinder werden angenommen",
+    !ja.fehler && ja.anmeldung.teilnehmer.length === 6, ja.fehler ? ja.fehler[0].text : "ok");
+  const nein = pruefeUndBaue(regeln(), {
+    weg: "kind", schueler: 7, erwachsene: 0, personen: personen(7),
+    einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true,
+  });
+  pruefe("Schul-/Kind-Weg: 7 Kinder werden abgelehnt",
+    Boolean(nein.fehler) && nein.fehler.some((f) => /höchstens 6 Personen/i.test(f.text)));
+}
+// Kind-Weg mit mitkommendem Elternteil: 5 Kinder + 1 Elternteil = 6 ok,
+// 6 Kinder + 1 Elternteil = 7 abgelehnt.
+{
+  const ja = pruefeUndBaue(regeln(), {
+    weg: "kind", schueler: 5, erwachsene: 1, personen: personen(8),
+    einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true,
+  });
+  pruefe("Kind-Weg: 5 Kinder + Elternteil (6 Personen) angenommen",
+    !ja.fehler && ja.anmeldung.teilnehmer.length === 6, ja.fehler ? ja.fehler[0].text : "ok");
+  const nein = pruefeUndBaue(regeln(), {
+    weg: "kind", schueler: 6, erwachsene: 1, personen: personen(7),
+    einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true,
+  });
+  pruefe("Kind-Weg: 6 Kinder + Elternteil (7 Personen) abgelehnt",
+    Boolean(nein.fehler) && nein.fehler.some((f) => /höchstens 6 Personen/i.test(f.text)));
+}
+// Manipulierte Einzel-Übermenge wird auf 6 gekappt (99 Schüler → 6).
+{
+  const b = begrenzeAuswahl(regeln(), { art: "single", schueler: 99, erwachsene: 0 });
+  pruefe("Manipulierte 99 Schüler werden auf 6 gekappt", b.schueler === 6, `schueler=${b.schueler}`);
 }
 
 // ── Der Preis hängt NICHT an mitgeschickten Werten ─────────────────
@@ -132,7 +200,9 @@ const basisFormular = {
   pruefe("Formular akzeptiert maxErwachsene=4", !ok.fehler && ok.daten.maxErwachsene === 4);
   const leer = pruefeEvent({ ...basisFormular, maxErwachsene: "" });
   pruefe("Formular: leeres maxErwachsene → Standard 4", !leer.fehler && leer.daten.maxErwachsene === 4);
-  for (const wert of ["0", "21", "abc", "-3"]) {
+  const sechs = pruefeEvent({ ...basisFormular, maxErwachsene: "6" });
+  pruefe("Formular akzeptiert maxErwachsene=6 (harte Grenze)", !sechs.fehler && sechs.daten.maxErwachsene === 6);
+  for (const wert of ["0", "7", "21", "abc", "-3"]) {
     const r = pruefeEvent({ ...basisFormular, maxErwachsene: wert });
     pruefe(`Formular lehnt maxErwachsene="${wert}" ab`,
       Boolean(r.fehler) && r.fehler.some((f) => f.feld === "maxErwachsene"));
@@ -151,6 +221,15 @@ const basisFormular = {
     Boolean(zuWenig.fehler) && zuWenig.fehler.some((f) => f.feld === "familieMaxSchueler"));
   const genug = pruefeEvent(fam(4));
   pruefe("Familienpaket mit Höchstzahl 4 wird angenommen", !genug.fehler);
+  // Mehr als 2 enthaltene Erwachsene ließe keine 4 Kinder mehr zu,
+  // ohne die 6-Personen-Grenze zu sprengen → abgelehnt.
+  const zuVieleErw = pruefeEvent({
+    ...basisFormular, familieAktiv: "an", familieBasis: "30,00",
+    familieWeitererSchueler: "6,00", familieEnthaltenErwachsene: "3",
+    familieEnthaltenSchueler: "1", familieMaxSchueler: "4",
+  });
+  pruefe("Familienpaket mit 3 enthaltenen Erwachsenen wird abgelehnt (kein Platz für 4 Kinder)",
+    Boolean(zuVieleErw.fehler) && zuVieleErw.fehler.some((f) => f.feld === "familieEnthaltenErwachsene"));
 }
 
 // ── Formular: keine negativen/ungültigen Preise ────────────────────

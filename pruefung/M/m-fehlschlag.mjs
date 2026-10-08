@@ -52,12 +52,14 @@ const belegte = async (eventId) => {
 const EMAIL = "mia.fehl@example.org";
 const familie = () => ({
   eventSlug: "padel-falkensee", weg: "familie", selbstAls: "adult",
-  schueler: 2, erwachsene: 2, webseite: "",
+  schueler: 4, erwachsene: 2, webseite: "",
   ...personen([
     { vorname: "Mia", nachname: "Fehl", email: EMAIL, telefon: "030111" },
     { vorname: "Tom", nachname: "Fehl" },
     { vorname: "Kim", nachname: "Fehl" },
     { vorname: "Lu", nachname: "Fehl" },
+    { vorname: "Jo", nachname: "Fehl" },
+    { vorname: "Ben", nachname: "Fehl" },
   ]),
   einwilligungVormund: "an",
 });
@@ -113,8 +115,8 @@ const a = await db.registration.findFirstOrThrow({
 });
 pruefe("Erst die bezahlte Zahlung legt die Anmeldung an",
   a.status === "BESTAETIGT" && a.zahlungsStatus === "BEZAHLT", `${a.status} / ${a.zahlungsStatus}`);
-pruefe("… mit allen vier Personen und vier belegten Plätzen",
-  a.teilnehmer.length === 4 && (await belegte(event.id)) === 4);
+pruefe("… mit allen sechs Personen und sechs belegten Plätzen",
+  a.teilnehmer.length === 6 && (await belegte(event.id)) === 6);
 pruefe("… und genau einmal", (await db.registration.count({ where: { kontaktEmail: EMAIL } })) === 1);
 
 // ── Eine Fehlermeldung NACH erfolgreicher Zahlung ───────────────
@@ -127,7 +129,7 @@ const danach = await db.registration.findUniqueOrThrow({ where: { id: a.id } });
 pruefe("Eine späte Fehlermeldung reisst eine bezahlte Anmeldung NICHT auf",
   spaet.status === 200 && danach.status === "BESTAETIGT" && danach.zahlungsStatus === "BEZAHLT",
   `${danach.status} / ${danach.zahlungsStatus}`);
-pruefe("… und der Platz bleibt belegt", (await belegte(event.id)) === 4);
+pruefe("… und der Platz bleibt belegt", (await belegte(event.id)) === 6);
 
 // ── Aufräumen ───────────────────────────────────────────────────
 await aufraeumen();

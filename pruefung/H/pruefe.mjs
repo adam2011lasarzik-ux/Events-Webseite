@@ -100,44 +100,47 @@ async function main() {
   pruefe("Einzelbuchung Erwachsener kostet 14,00 €", a?.gesamtpreisCents === 1400, `${a?.gesamtpreisCents} Cent`);
   pruefe("… Teilnehmertyp ist ERWACHSENER", a?.teilnehmer[0]?.typ === "ERWACHSENER");
 
-  // ── 3. Familie mit Mindestzahl ───────────────────────────────
+  // ── 3. Familienpaket: genau 4 Kinder (mind. 4, zusammen ≤ 6) ──
+  // Seit dem 08.10.2026: mindestens 4 Kinder, und mit den 2 enthaltenen
+  // Erwachsenen zusammen höchstens 6 Personen — also genau 4 Kinder.
   await absenden(
-    { eventSlug: SLUG, weg: "familie", schueler: 1, erwachsene: 2, webseite: "",
+    { eventSlug: SLUG, weg: "familie", schueler: 4, erwachsene: 2, webseite: "",
       einwilligungVormund: "an",
       ...personen([
         { vorname: "Anna", nachname: "Klein", email: "anna@example.org", telefon: "030222" },
         { vorname: "Bernd", nachname: "Klein" },
-        { vorname: "Cara", nachname: "Klein" },
+        ...["Cara", "Dirk", "Elli", "Finn"].map((n) => ({ vorname: n, nachname: "Klein" })),
       ]) },
     neueIp(),
   );
   a = await letzte();
-  pruefe("Familienpaket Mindestzahl kostet 30,00 €", a?.gesamtpreisCents === 3000, `${a?.gesamtpreisCents} Cent`);
-  pruefe("… 3 Teilnehmer, Buchungsart FAMILIE",
-    a?.teilnehmer.length === 3 && a.buchungsart === "FAMILIE");
+  // Grundpreis 30,00 € deckt 1 Kind, 3 weitere × 6,00 € = 48,00 €.
+  pruefe("Familienpaket (4 Kinder) kostet 48,00 €", a?.gesamtpreisCents === 4800, `${a?.gesamtpreisCents} Cent`);
+  pruefe("… 6 Teilnehmer, Buchungsart FAMILIE",
+    a?.teilnehmer.length === 6 && a.buchungsart === "FAMILIE");
 
-  // ── 4. Familie mit Höchstzahl ────────────────────────────────
-  await absenden(
-    { eventSlug: SLUG, weg: "familie", schueler: 6, erwachsene: 2, webseite: "",
-      einwilligungVormund: "an",
-      ...personen([
-        { vorname: "Dana", nachname: "Groß", email: "dana@example.org", telefon: "" },
-        { vorname: "Emil", nachname: "Groß" },
-        ...["F", "G", "H", "I", "J", "K"].map((n) => ({ vorname: n, nachname: "Groß" })),
-      ]) },
-    neueIp(),
-  );
-  a = await letzte();
-  pruefe("Familienpaket Höchstzahl kostet 60,00 €", a?.gesamtpreisCents === 6000, `${a?.gesamtpreisCents} Cent`);
-
-  // ── 5. Angezeigter Preis = serverseitig berechneter Preis ─────
-  const angezeigt = berechnePreis(regeln, { art: "family", schueler: 6, erwachsene: 2 });
+  // ── 4. Angezeigter Preis = serverseitig berechneter Preis ─────
+  const angezeigt = berechnePreis(regeln, { art: "family", schueler: 4, erwachsene: 2 });
   pruefe("Angezeigter und gespeicherter Preis sind identisch",
     angezeigt.gesamtCents === a?.gesamtpreisCents,
     `Anzeige ${angezeigt.gesamtCents}, Datenbank ${a?.gesamtpreisCents}`);
 
-  pruefe("Familienpaket Höchstzahl belegt 8 Plätze (2 Erwachsene + 6 Schüler)",
-    a?.teilnehmer.length === 8, `${a?.teilnehmer.length} Teilnehmer`);
+  pruefe("Familienpaket belegt 6 Plätze (2 Erwachsene + 4 Kinder)",
+    a?.teilnehmer.length === 6, `${a?.teilnehmer.length} Teilnehmer`);
+
+  // ── 5. Mehr als 6 Personen über das Familienpaket wird abgelehnt ──
+  const zuViele = await absenden(
+    { eventSlug: SLUG, weg: "familie", schueler: 5, erwachsene: 2, webseite: "",
+      einwilligungVormund: "an",
+      ...personen([
+        { vorname: "Gina", nachname: "Viel", email: "gina@example.org", telefon: "" },
+        { vorname: "Hans", nachname: "Viel" },
+        ...["I", "J", "K", "L", "M"].map((n) => ({ vorname: n, nachname: "Viel" })),
+      ]) },
+    neueIp(),
+  );
+  pruefe("Familienpaket mit 5 Kindern (7 Personen) wird nicht gebucht",
+    !zuViele.sitzungId, zuViele.sitzungId ? "fälschlich zur Bezahlseite" : "abgelehnt, keine Bezahlsitzung");
 
   // ── 6. Gruppe von 6 belegt 6 Plätze ──────────────────────────
   // Weg „Mein Kind": 5 Kinder plus mitkommender Elternteil.
@@ -158,23 +161,26 @@ async function main() {
   pruefe("… und kostet 49,00 € (5 × 7 € + 14 €)", a?.gesamtpreisCents === 4900,
     `${a?.gesamtpreisCents} Cent`);
 
-  // ── 7. Manipulierte Teilnehmerzahl wird begrenzt ─────────────
-  // 10 Schüler ist die Obergrenze aus begrenzeAuswahl(); danach folgt
-  // der Elternteil als 11. Feldgruppe.
-  await absenden(
+  // ── 7. Manipulierte Teilnehmerzahl wird abgelehnt ────────────
+  // Seit dem 08.10.2026 ist die harte Obergrenze 6 Personen je Buchung.
+  // Ein manipulierter Aufruf mit 5000 Schülern wird nicht still auf 6
+  // gekappt, sondern sichtbar abgelehnt — es entsteht keine
+  // Bezahlsitzung und keine Anmeldung.
+  const vorManipulation = await db.registration.count();
+  const manip = await absenden(
     { eventSlug: SLUG, weg: "kind", schueler: 5000, erwachsene: 0, webseite: "",
       einwilligungVormund: "an",
       ...personen([
-        ...Array.from({ length: 10 }, (_, i) => ({ vorname: `K${i}`, nachname: "Viel" })),
+        ...Array.from({ length: 6 }, (_, i) => ({ vorname: `K${i}`, nachname: "Viel" })),
         { vorname: "Eltern", nachname: "Viel", email: "viel@example.org", telefon: "" },
       ]) },
     neueIp(),
   );
-  a = await letzte();
-  pruefe("5000 Schüler werden auf 10 begrenzt", a?.teilnehmer.length === 10,
-    `gespeichert: ${a?.teilnehmer.length}`);
-  pruefe("… und der Preis passt zur begrenzten Zahl (70,00 €)", a?.gesamtpreisCents === 7000,
-    `${a?.gesamtpreisCents} Cent`);
+  pruefe("5000 Schüler werden abgelehnt (keine Bezahlsitzung)", !manip.sitzungId,
+    manip.sitzungId ? "fälschlich zur Bezahlseite" : "abgelehnt");
+  pruefe("… und es entsteht keine Anmeldung",
+    (await db.registration.count()) === vorManipulation,
+    `vorher ${vorManipulation}, nachher ${await db.registration.count()}`);
 
   // ── 8. Manipulierter Preis wird ignoriert ────────────────────
   await absenden(

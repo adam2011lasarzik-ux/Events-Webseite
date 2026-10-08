@@ -20,8 +20,10 @@ const faelle = [
   { name: "Kind, 3 Kinder, ohne Eltern",weg: "kind", schueler: 3, erwachsene: 0 },
   { name: "Kind, 1 Kind, Eltern dabei", weg: "kind", schueler: 1, erwachsene: 1 },
   { name: "Kind, 5 Kinder, Eltern dabei",weg: "kind", schueler: 5, erwachsene: 1 },
-  { name: "Familie, 1 Schüler",         weg: "familie", schueler: 1, erwachsene: 2 },
-  { name: "Familie, 6 Schüler",         weg: "familie", schueler: 6, erwachsene: 2 },
+  // Seit dem 08.10.2026: Familienpaket = mindestens 4 Kinder und
+  // insgesamt höchstens 6 Personen. Mit 2 enthaltenen Erwachsenen
+  // sind das genau 4 Kinder (6 Personen).
+  { name: "Familie, 4 Kinder (= 6 Personen)", weg: "familie", schueler: 4, erwachsene: 2 },
 ];
 
 let schief = 0;

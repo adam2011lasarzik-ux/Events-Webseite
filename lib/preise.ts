@@ -63,6 +63,17 @@ export interface Preisergebnis {
   posten: Posten[];
 }
 
+/**
+ * Harte Obergrenze: insgesamt höchstens sechs Personen je Buchung —
+ * unabhängig von der Ticketart (Erwachsene, Schüler, Familie). Vorgabe
+ * vom 08.10.2026. Serverseitig in begrenzeAuswahl() und in
+ * lib/anmeldung.ts durchgesetzt; die Oberfläche begrenzt zusätzlich.
+ */
+export const MAX_PERSONEN_PRO_BUCHUNG = 6;
+
+/** Mindestzahl Kinder im Familienpaket (Vorgabe „mindestens 4 Kinder"). */
+export const MIN_FAMILIE_KINDER = 4;
+
 const ganzZahl = (wert: number, min: number, max: number): number =>
   Math.min(max, Math.max(min, Math.trunc(Number.isFinite(wert) ? wert : min)));
 
@@ -76,24 +87,37 @@ const ganzZahl = (wert: number, min: number, max: number): number =>
 export function begrenzeAuswahl(regeln: Preisregeln, auswahl: Auswahl): Auswahl {
   if (auswahl.art === "family" && regeln.familie) {
     const f = regeln.familie;
-    return {
-      art: "family",
-      // Im Familienpaket ist die Zahl der Erwachsenen fest.
-      erwachsene: f.enthalteneErwachsene,
-      schueler: ganzZahl(auswahl.schueler, f.enthalteneSchueler, f.maxSchueler),
-    };
+    const erwachsene = f.enthalteneErwachsene;
+    // Kinder: mindestens vier (oder die enthaltene Zahl, falls höher)
+    // und nie so viele, dass Erwachsene und Kinder zusammen die harte
+    // Grenze von sechs Personen überschreiten; zusätzlich höchstens die
+    // am Event konfigurierte Obergrenze.
+    const untergrenze = Math.max(f.enthalteneSchueler, MIN_FAMILIE_KINDER);
+    const obergrenze = Math.min(f.maxSchueler, MAX_PERSONEN_PRO_BUCHUNG - erwachsene);
+    // Bei einer widersprüchlichen Konfiguration (zu viele enthaltene
+    // Erwachsene) gewinnt die harte Sechser-Grenze: lieber weniger
+    // Kinder als mehr als sechs Personen.
+    const schueler =
+      obergrenze < untergrenze ? obergrenze : ganzZahl(auswahl.schueler, untergrenze, obergrenze);
+    return { art: "family", erwachsene, schueler };
   }
-  // Erwachsene: höchstens so viele, wie das Event erlaubt (Standard 4).
-  // Ein unsinniger oder fehlender Wert fällt auf 4 zurück, damit eine
-  // kaputte Konfiguration die Obergrenze nicht versehentlich aufhebt.
-  const maxErw = Number.isFinite(regeln.maxErwachsene) && regeln.maxErwachsene > 0
-    ? Math.trunc(regeln.maxErwachsene)
-    : 4;
-  return {
-    art: "single",
-    schueler: ganzZahl(auswahl.schueler, 0, 10),
-    erwachsene: ganzZahl(auswahl.erwachsene, 0, maxErw),
-  };
+  // Erwachsene: höchstens so viele, wie das Event erlaubt (Standard 4),
+  // aber nie mehr als die harte Grenze von sechs. Ein unsinniger oder
+  // fehlender Wert fällt auf 4 zurück.
+  const maxErw =
+    Number.isFinite(regeln.maxErwachsene) && regeln.maxErwachsene > 0
+      ? Math.min(Math.trunc(regeln.maxErwachsene), MAX_PERSONEN_PRO_BUCHUNG)
+      : 4;
+  let schueler = ganzZahl(auswahl.schueler, 0, MAX_PERSONEN_PRO_BUCHUNG);
+  let erwachsene = ganzZahl(auswahl.erwachsene, 0, maxErw);
+  // Harte Gesamtgrenze: nie mehr als sechs Personen je Buchung. Eine
+  // Übermenge wird zuerst bei den Schülern abgeschnitten (defensiver
+  // Rückfall — die Oberfläche lässt es gar nicht erst zu, und
+  // pruefeUndBaue() lehnt einen manipulierten Aufruf sichtbar ab).
+  if (schueler + erwachsene > MAX_PERSONEN_PRO_BUCHUNG) {
+    schueler = Math.max(0, MAX_PERSONEN_PRO_BUCHUNG - erwachsene);
+  }
+  return { art: "single", schueler, erwachsene };
 }
 
 /** Berechnet Gesamtpreis, Personenzahl und die einzelnen Posten. */
