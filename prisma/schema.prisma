@@ -165,7 +165,7 @@ model Event {
   // Veranstaltungen ohne Codeänderung abweichen können. Die
   // Durchsetzung passiert serverseitig in lib/preise.ts →
   // begrenzeAuswahl() und in lib/anmeldung.ts, nicht im Browser.
-  maxErwachsene         Int @default(4)
+  maxErwachsene         Int @default(6)
 
   // Familienpaket
   // Hinweis: familieMaxSchueler muss mindestens 4 sein, sobald das

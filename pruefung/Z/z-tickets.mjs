@@ -19,7 +19,7 @@ const pruefe = (name, ok, zusatz = "") => {
   if (!ok) schief.push(name);
 };
 
-const regeln = (max = 4) => ({
+const regeln = (max = 6) => ({
   schuelerAktiv: true,
   schuelerCents: 700,
   erwachsenerCents: 1400,
@@ -45,7 +45,7 @@ const personen = (n) =>
     telefon: "",
   }));
 
-const eingabeErwachsene = (anzahl, max = 4) => ({
+const eingabeErwachsene = (anzahl, max = 6) => ({
   regeln: regeln(max),
   eingabe: {
     weg: "erwachsene",
@@ -58,8 +58,8 @@ const eingabeErwachsene = (anzahl, max = 4) => ({
   },
 });
 
-// ── 1 bis 4 Erwachsene werden angenommen ───────────────────────────
-for (const anzahl of [1, 2, 3, 4]) {
+// ── 1 bis 6 Erwachsene werden angenommen ───────────────────────────
+for (const anzahl of [1, 2, 3, 4, 5, 6]) {
   const { regeln: r, eingabe } = eingabeErwachsene(anzahl);
   const erg = pruefeUndBaue(r, eingabe);
   const ok =
@@ -70,11 +70,11 @@ for (const anzahl of [1, 2, 3, 4]) {
     erg.fehler ? erg.fehler[0].text : `${erg.anmeldung.teilnehmer.length} Teilnehmer`);
 }
 
-// ── Mehr als 4 Erwachsene werden abgelehnt ─────────────────────────
+// ── Mehr als 6 Erwachsene werden abgelehnt ─────────────────────────
 {
-  const { regeln: r, eingabe } = eingabeErwachsene(5);
+  const { regeln: r, eingabe } = eingabeErwachsene(7);
   const erg = pruefeUndBaue(r, eingabe);
-  pruefe("5 Erwachsene werden abgelehnt (Standardgrenze 4)",
+  pruefe("7 Erwachsene werden abgelehnt (Standardgrenze 6)",
     Boolean(erg.fehler) && erg.fehler.some((f) => /höchstens/i.test(f.text)),
     erg.fehler ? erg.fehler.map((f) => f.text).join(" · ") : "faelschlich angenommen");
 }
@@ -88,8 +88,8 @@ for (const anzahl of [1, 2, 3, 4]) {
 
 // ── begrenzeAuswahl kappt eine manipulierte Übermenge ──────────────
 {
-  const b = begrenzeAuswahl(regeln(4), { art: "single", schueler: 0, erwachsene: 99 });
-  pruefe("Manipulierte 99 Erwachsene werden auf 4 gekappt", b.erwachsene === 4, `erwachsene=${b.erwachsene}`);
+  const b = begrenzeAuswahl(regeln(6), { art: "single", schueler: 0, erwachsene: 99 });
+  pruefe("Manipulierte 99 Erwachsene werden auf 6 gekappt", b.erwachsene === 6, `erwachsene=${b.erwachsene}`);
 }
 
 // ── maxErwachsene ist pro Event einstellbar ────────────────────────
@@ -199,7 +199,7 @@ const basisFormular = {
   const ok = pruefeEvent({ ...basisFormular, maxErwachsene: "4" });
   pruefe("Formular akzeptiert maxErwachsene=4", !ok.fehler && ok.daten.maxErwachsene === 4);
   const leer = pruefeEvent({ ...basisFormular, maxErwachsene: "" });
-  pruefe("Formular: leeres maxErwachsene → Standard 4", !leer.fehler && leer.daten.maxErwachsene === 4);
+  pruefe("Formular: leeres maxErwachsene → Standard 6", !leer.fehler && leer.daten.maxErwachsene === 6);
   const sechs = pruefeEvent({ ...basisFormular, maxErwachsene: "6" });
   pruefe("Formular akzeptiert maxErwachsene=6 (harte Grenze)", !sechs.fehler && sechs.daten.maxErwachsene === 6);
   for (const wert of ["0", "7", "21", "abc", "-3"]) {

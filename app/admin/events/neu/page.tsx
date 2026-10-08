@@ -48,7 +48,7 @@ export const LEERES_EVENT: EventVorbelegung = {
   schuelerAktiv: true,
   preisSchueler: "",
   preisErwachsener: "",
-  maxErwachsene: "4",
+  maxErwachsene: "6",
   familieAktiv: false,
   familieBasis: "",
   familieEnthaltenErwachsene: "2",

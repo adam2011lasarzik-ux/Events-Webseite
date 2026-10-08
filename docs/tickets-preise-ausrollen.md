@@ -5,10 +5,11 @@ Stand: 08.10.2026. Entwickelt auf `claude/frontend-design-skill-folder-luremb`.
 
 ## Was neu ist
 
-1. Buchungsweg „Mehrere Erwachsene" (1 bis `maxErwachsene`, Standard 4),
-   serverseitig erzwungen.
-2. Event-Feld `maxErwachsene` (Standard 4, einstellbar **1 bis 6**), im
-   Admin-Eventformular.
+1. Buchungsweg „Mehrere Erwachsene" (1 bis `maxErwachsene`, Standard 6),
+   serverseitig erzwungen. Der Plus-Button stoppt bei 6.
+2. Event-Feld `maxErwachsene` (Standard **6**, einstellbar **1 bis 6**),
+   im Admin-Eventformular. Bestehende Events werden beim Ausrollen
+   einheitlich auf 6 gehoben (Migration unten).
 3. **Harte Obergrenze: 6 Personen je Buchung** — über alle Ticketarten
    (Erwachsene, Schüler, Familie). Serverseitig erzwungen; eine
    manipulierte Über-Anfrage wird **abgelehnt**, nicht still gekappt.
@@ -21,9 +22,14 @@ Stand: 08.10.2026. Entwickelt auf `claude/frontend-design-skill-folder-luremb`.
 
 ## Datenbankänderung
 
-Migration `20261008174530_tickets_preisverwaltung`, rein additiv:
-- `Event.maxErwachsene INT NOT NULL DEFAULT 4` (Altzeilen bekommen 4).
-- neue Tabelle `PreisAenderung`.
+Zwei Migrationen, beide additiv — `prisma migrate deploy` wendet beide
+nacheinander an:
+- `20261008174530_tickets_preisverwaltung`:
+  `Event.maxErwachsene INT NOT NULL DEFAULT …` und neue Tabelle
+  `PreisAenderung`.
+- `20261008194439_maxerwachsene_sechs`: Default auf **6** und bestehende
+  Events von 4 auf 6 gehoben (`UPDATE Event SET maxErwachsene = 6
+  WHERE maxErwachsene = 4`).
 
 Die 6-Personen-Grenze ist **keine** Schemaänderung — sie steht als
 Konstante im Code (`lib/preise.ts`). Kein Datenverlust, keine bestehende
@@ -86,9 +92,10 @@ Zahlungen.
 Anmeldeseite eines Events mit Schüler-Kategorie öffnen und je Ticketart
 durchklicken:
 
-- [ ] **Mehrere Erwachsene:** Zähler geht 1 bis 4 (bzw. bis zum am Event
-      gesetzten Wert, höchstens 6); je Person ein Namensfeld, die erste
-      Person hat Kontaktfelder (E-Mail/Telefon).
+- [ ] **Mehrere Erwachsene:** Zähler geht 1 bis 6; der Plus-Button
+      stoppt bei 6 (bzw. beim am Event gesetzten Wert, falls kleiner).
+      Je Person ein Namensfeld, die erste Person hat Kontaktfelder
+      (E-Mail/Telefon).
 - [ ] **Familienpaket:** steht fest auf 4 Kinder; 2 Erwachsene + 4 Kinder
       = 6 Personen; Preis stimmt mit der Zusammenfassung überein.
 - [ ] **Mein Kind / Schule:** Zähler bis 6 Kinder; mit Haken „Ich komme

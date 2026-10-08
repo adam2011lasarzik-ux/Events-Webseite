@@ -57,7 +57,7 @@ export function PreisRechner({
   // Höchstzahl Erwachsener je Buchung (Ticketart „Erwachsene"), aus dem
   // Event, aber nie mehr als die harte Grenze von 6. Der Server
   // erzwingt dasselbe in lib/preise.ts; hier begrenzt es den Zähler.
-  const maxErwachsene = Math.min(event.preise.maxErwachsene || 4, MAX_PERSONEN_PRO_BUCHUNG);
+  const maxErwachsene = Math.min(event.preise.maxErwachsene || 6, MAX_PERSONEN_PRO_BUCHUNG);
   // Ohne Schüler-Kategorie gibt es nur einen Preis: keine Wegewahl,
   // kein "Mein Kind", kein Familienpaket, keine Schüler/Erwachsener-
   // Unterscheidung. Serverseitig wird das unabhängig davon in

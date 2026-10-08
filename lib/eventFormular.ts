@@ -126,7 +126,7 @@ export interface EventDaten {
   schuelerAktiv: boolean;
   preisSchuelerCents: number | null;
   preisErwachsenerCents: number;
-  /** Höchstzahl Erwachsener je Erwachsenenbuchung, Standard 4. */
+  /** Höchstzahl Erwachsener je Erwachsenenbuchung, Standard 6. */
   maxErwachsene: number;
   familieAktiv: boolean;
   familieBasisCents: number | null;
@@ -203,11 +203,11 @@ export function pruefeEvent(
   if (preisErwachsenerCents === null)
     fehler.push({ feld: "preisErwachsener", text: "Bitte einen Betrag angeben, z. B. 14,00." });
 
-  // Höchstzahl Erwachsener je Buchung. Leer = Standard 4. Muss eine
+  // Höchstzahl Erwachsener je Buchung. Leer = Standard 6. Muss eine
   // ganze Zahl von 1 bis 6 sein — je Buchung sind insgesamt höchstens
   // sechs Personen erlaubt (harte Grenze, siehe lib/preise.ts).
   const maxErwText = sauber(roh.maxErwachsene);
-  let maxErwachsene = 4;
+  let maxErwachsene = 6;
   if (maxErwText !== "") {
     const z = ganzeZahl(maxErwText);
     if (z === null || z < 1 || z > 6)
