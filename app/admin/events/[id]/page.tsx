@@ -75,6 +75,7 @@ export default async function EventBearbeiten({
     schuelerAktiv: e.schuelerAktiv,
     preisSchueler: centsAlsEingabe(e.preisSchuelerCents),
     preisErwachsener: centsAlsEingabe(e.preisErwachsenerCents),
+    maxErwachsene: String(e.maxErwachsene),
     familieAktiv: e.familieAktiv,
     familieBasis: centsAlsEingabe(e.familieBasisCents),
     familieEnthaltenErwachsene: zahl(e.familieEnthaltenErwachsene),

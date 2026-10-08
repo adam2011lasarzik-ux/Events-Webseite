@@ -87,15 +87,31 @@ export async function eventSpeichern(
   }
 
   let eventId = id;
+  // Preise vor dem Schreiben festhalten, um danach die Änderungen je
+  // Ticketart ins Preis-Protokoll zu schreiben. Bei einem neuen Event
+  // gibt es keinen Vorzustand — dann gilt alt = null.
+  let altePreise: PreisStand | null = null;
 
   try {
     if (id) {
       const vorhanden = await db.event.findUnique({ where: { id } });
       if (!vorhanden) return { fehler: [], meldung: "Diese Veranstaltung gibt es nicht (mehr)." };
+      altePreise = alsPreisStand(vorhanden);
       await db.event.update({ where: { id }, data: daten });
     } else {
       const neu = await db.event.create({ data: daten });
       eventId = neu.id;
+    }
+
+    // Preis-Änderungsprotokoll: nur geänderte Ticketarten, mit alt→neu,
+    // handelndem Admin und Zeitpunkt (geaendertAm per Default). Bei
+    // einem neuen Event werden die Anfangspreise als alt=null erfasst,
+    // damit die Preis-Übersicht sofort ein „geändert am" zeigt.
+    const aenderungen = preisAenderungen(altePreise, alsPreisStand(daten));
+    if (aenderungen.length > 0) {
+      await db.preisAenderung.createMany({
+        data: aenderungen.map((a) => ({ ...a, eventId, adminId: admin.id })),
+      });
     }
 
     // Alle Inhaltsblöcke ersetzen statt ändern: So bleibt kein alter
@@ -178,4 +194,58 @@ export async function eventEntfernen(formular: FormData): Promise<void> {
   });
 
   redirect("/admin");
+}
+
+/* ---------------------------------------------------------------
+   Preis-Änderungsprotokoll: Hilfsfunktionen.
+
+   An einer Stelle gebündelt, damit „welche Ticketarten gibt es" nur
+   hier steht. Die Schlüssel entsprechen den Posten-Bezeichnungen aus
+   lib/preise.ts (schueler, erwachsener, familieBasis,
+   familieWeitererSchueler).
+   --------------------------------------------------------------- */
+
+interface PreisStand {
+  schueler: number | null;
+  erwachsener: number | null;
+  familieBasis: number | null;
+  familieWeitererSchueler: number | null;
+}
+
+/** Zieht aus einem Event(-Datensatz) die vier Ticketpreise. */
+function alsPreisStand(e: {
+  preisSchuelerCents: number | null;
+  preisErwachsenerCents: number;
+  familieBasisCents: number | null;
+  familieWeitererSchuelerCents: number | null;
+}): PreisStand {
+  return {
+    schueler: e.preisSchuelerCents,
+    erwachsener: e.preisErwachsenerCents,
+    familieBasis: e.familieBasisCents,
+    familieWeitererSchueler: e.familieWeitererSchuelerCents,
+  };
+}
+
+/** Liefert je geänderter Ticketart einen Protokolleintrag (alt→neu). */
+function preisAenderungen(
+  alt: PreisStand | null,
+  neu: PreisStand,
+): { ticketart: string; altCents: number | null; neuCents: number | null }[] {
+  const arten: (keyof PreisStand)[] = [
+    "schueler",
+    "erwachsener",
+    "familieBasis",
+    "familieWeitererSchueler",
+  ];
+  const liste: { ticketart: string; altCents: number | null; neuCents: number | null }[] = [];
+  for (const art of arten) {
+    const a = alt ? alt[art] : null;
+    const n = neu[art];
+    // Nur echte Änderungen festhalten. Ein unverändertes Feld erzeugt
+    // keinen Eintrag — sonst stünde bei jedem Textedit die ganze
+    // Preisliste erneut im Protokoll.
+    if (a !== n) liste.push({ ticketart: art, altCents: a, neuCents: n });
+  }
+  return liste;
 }

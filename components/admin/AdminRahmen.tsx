@@ -34,6 +34,7 @@ export function AdminRahmen({
           <nav className={stil.navi}>
             <Link href="/admin">Übersicht</Link>
             <Link href="/admin/events/neu">Neues Event</Link>
+            <Link href="/admin/preise">Preise</Link>
             <Link href="/admin/einstellungen">Gründerbereich</Link>
             <Link href="/admin/vorfaelle">Vorfälle</Link>
             <Link href="/admin/zustimmungsnachweise">Zustimmungsnachweise</Link>

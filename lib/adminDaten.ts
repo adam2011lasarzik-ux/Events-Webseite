@@ -155,3 +155,86 @@ export function anmeldungenZuEvent(eventId: string) {
     include: { teilnehmer: { orderBy: { id: "asc" } } },
   });
 }
+
+/* ---------------------------------------------------------------
+   Preis-Übersicht: je Event und Ticketart der aktuelle Preis und der
+   Zeitpunkt der letzten Änderung (aus dem Preis-Änderungsprotokoll).
+   --------------------------------------------------------------- */
+
+export interface PreisZeile {
+  eventId: string;
+  eventTitel: string;
+  eventSlug: string;
+  /** Technischer Schlüssel: schueler | erwachsener | familieBasis | familieWeitererSchueler */
+  ticketart: string;
+  /** Lesbare Bezeichnung für die Anzeige. */
+  bezeichnung: string;
+  aktuellCents: number;
+  geaendertAm: Date | null;
+}
+
+/**
+ * Baut die Zeilen der Preis-Übersicht.
+ *
+ * Der aktuelle Preis kommt aus dem Event selbst, der Zeitpunkt der
+ * letzten Änderung aus der jüngsten PreisAenderung-Zeile je Event und
+ * Ticketart. Bereits bezahlte Buchungen sind davon unberührt — deren
+ * Preis ist in Registration eingefroren.
+ */
+export async function preisUebersicht(): Promise<PreisZeile[]> {
+  const events = await db.event.findMany({
+    orderBy: [{ startAt: "asc" }, { titel: "asc" }],
+    select: {
+      id: true,
+      titel: true,
+      slug: true,
+      schuelerAktiv: true,
+      preisSchuelerCents: true,
+      preisErwachsenerCents: true,
+      familieAktiv: true,
+      familieBasisCents: true,
+      familieWeitererSchuelerCents: true,
+    },
+  });
+
+  // Jüngste Änderung je Event+Ticketart. Absteigend geladen, der erste
+  // Treffer je Schlüssel ist damit der neueste.
+  const protokoll = await db.preisAenderung.findMany({
+    orderBy: { geaendertAm: "desc" },
+    select: { eventId: true, ticketart: true, geaendertAm: true },
+  });
+  const letzte = new Map<string, Date>();
+  for (const p of protokoll) {
+    const schluessel = `${p.eventId}:${p.ticketart}`;
+    if (!letzte.has(schluessel)) letzte.set(schluessel, p.geaendertAm);
+  }
+
+  const zeilen: PreisZeile[] = [];
+  const hinzu = (
+    e: { id: string; titel: string; slug: string },
+    ticketart: string,
+    bezeichnung: string,
+    cents: number | null,
+  ) => {
+    if (cents === null) return;
+    zeilen.push({
+      eventId: e.id,
+      eventTitel: e.titel,
+      eventSlug: e.slug,
+      ticketart,
+      bezeichnung,
+      aktuellCents: cents,
+      geaendertAm: letzte.get(`${e.id}:${ticketart}`) ?? null,
+    });
+  };
+
+  for (const e of events) {
+    hinzu(e, "erwachsener", "Erwachsene", e.preisErwachsenerCents);
+    if (e.schuelerAktiv) hinzu(e, "schueler", "Schüler", e.preisSchuelerCents);
+    if (e.familieAktiv) {
+      hinzu(e, "familieBasis", "Familienpaket (Grundpreis)", e.familieBasisCents);
+      hinzu(e, "familieWeitererSchueler", "Familienpaket (weiteres Kind)", e.familieWeitererSchuelerCents);
+    }
+  }
+  return zeilen;
+}

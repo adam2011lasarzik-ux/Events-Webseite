@@ -52,6 +52,7 @@ export interface EventVorbelegung {
   schuelerAktiv: boolean;
   preisSchueler: string;
   preisErwachsener: string;
+  maxErwachsene: string;
   familieAktiv: boolean;
   familieBasis: string;
   familieEnthaltenErwachsene: string;
@@ -325,6 +326,9 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
           {feld("preisErwachsener", schuelerAktiv ? "Erwachsener" : "Preis", {
             pflicht: true,
             hilfe: "In Euro, z. B. 14,00",
+          })}
+          {feld("maxErwachsene", "Höchstzahl Erwachsene je Buchung", {
+            hilfe: "Leer = 4",
           })}
 
           {schuelerAktiv && (

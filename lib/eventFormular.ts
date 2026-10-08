@@ -126,6 +126,8 @@ export interface EventDaten {
   schuelerAktiv: boolean;
   preisSchuelerCents: number | null;
   preisErwachsenerCents: number;
+  /** Höchstzahl Erwachsener je Erwachsenenbuchung, Standard 4. */
+  maxErwachsene: number;
   familieAktiv: boolean;
   familieBasisCents: number | null;
   familieEnthaltenErwachsene: number | null;
@@ -201,6 +203,18 @@ export function pruefeEvent(
   if (preisErwachsenerCents === null)
     fehler.push({ feld: "preisErwachsener", text: "Bitte einen Betrag angeben, z. B. 14,00." });
 
+  // Höchstzahl Erwachsener je Buchung. Leer = Standard 4. Muss eine
+  // ganze Zahl von mindestens 1 sein; eine sinnvolle Obergrenze von 20
+  // verhindert versehentliche Riesenwerte.
+  const maxErwText = sauber(roh.maxErwachsene);
+  let maxErwachsene = 4;
+  if (maxErwText !== "") {
+    const z = ganzeZahl(maxErwText);
+    if (z === null || z < 1 || z > 20)
+      fehler.push({ feld: "maxErwachsene", text: "Bitte eine ganze Zahl von 1 bis 20 angeben." });
+    else maxErwachsene = z;
+  }
+
   // ── Familienpaket ────────────────────────────────────────────
   // Ein Familienpaket enthält immer Schüler — ohne Schüler-Kategorie
   // ergäbe es keinen Sinn. Serverseitig erzwungen, unabhängig davon,
@@ -242,6 +256,17 @@ export function pruefeEvent(
       fehler.push({
         feld: "familieMaxSchueler",
         text: "Die Höchstzahl darf nicht kleiner sein als die enthaltene Zahl.",
+      });
+    }
+
+    // Anforderung: Ein Familienpaket muss mindestens vier Kinder
+    // zulassen. Das wird hier geprüft (nicht als DB-Regel), damit
+    // bestehende Zeilen unberührt bleiben und der Bediener eine
+    // verständliche Meldung bekommt, falls er darunter konfiguriert.
+    if (familieMaxSchueler !== null && familieMaxSchueler < 4) {
+      fehler.push({
+        feld: "familieMaxSchueler",
+        text: "Das Familienpaket muss mindestens 4 Kinder zulassen.",
       });
     }
   }
@@ -314,6 +339,7 @@ export function pruefeEvent(
       schuelerAktiv,
       preisSchuelerCents,
       preisErwachsenerCents: preisErwachsenerCents!,
+      maxErwachsene,
       familieAktiv,
       familieBasisCents,
       familieEnthaltenErwachsene,
