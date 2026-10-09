@@ -262,7 +262,7 @@ export const de = {
     wahlKind: "Mein Kind",
     wahlKindHinweis: "Als Erziehungsberechtigte:r",
     wahlErwachsene: "Mehrere Erwachsene",
-    wahlErwachseneHinweis: "Bis zu vier Personen",
+    wahlErwachseneHinweis: "Bis zu sechs Personen",
     wahlFamilie: "Familienpaket",
     wahlFamilieHinweis: "2 Erwachsene + Schüler",
 
