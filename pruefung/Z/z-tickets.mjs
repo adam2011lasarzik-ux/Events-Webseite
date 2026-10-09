@@ -1,10 +1,11 @@
 /* Ticketarten und Preisregeln — reine Funktionen, kein Server.
 
    Deckt die neuen Regeln ab: Ticketart „Erwachsene" (1 bis
-   maxErwachsene), Ablehnung darüber hinaus, Familienpaket mit
-   mindestens 4 möglichen Kindern, serverseitige Preisberechnung,
+   maxErwachsene), Ablehnung darüber hinaus, Familienpaket von der
+   enthaltenen Kinderzahl bis zur Höchstzahl Kinder (von der
+   6-Personen-Grenze ausgenommen), serverseitige Preisberechnung,
    Wirkungslosigkeit manipulierter Werte und die Formularvalidierung
-   (maxErwachsene, Familien-Untergrenze, keine negativen Preise). */
+   (maxErwachsene, Familien-Höchstzahl, keine negativen Preise). */
 
 import { berechnePreis, begrenzeAuswahl } from "../../lib/preise.js";
 import { pruefeUndBaue } from "../../lib/anmeldung.js";
@@ -121,10 +122,11 @@ for (const anzahl of [1, 2, 3, 4, 5, 6]) {
   pruefe("Bei maxErwachsene=6 sind 6 erlaubt und 7 abgelehnt", ok6 && abgelehnt7);
 }
 
-// ── Familienpaket: 4 bis Höchstzahl Kinder (von der 6-Grenze ausgenommen) ─
-// Die Kinderzahl bleibt in [4, maxSchueler]; regeln() hat maxSchueler=6.
-// Unter 4 wird auf 4 angehoben, über 6 auf 6 gekappt.
-for (const [wunsch, erwartet] of [[3, 4], [4, 4], [5, 5], [6, 6], [99, 6]]) {
+// ── Familienpaket: enthaltene Kinderzahl bis Höchstzahl (von der 6-Grenze
+//    ausgenommen) ─ regeln() hat enthalteneSchueler=1, maxSchueler=6, also
+//    bleibt die Kinderzahl in [1, 6]. Unter 1 wird auf 1 angehoben, über 6
+//    auf 6 gekappt.
+for (const [wunsch, erwartet] of [[0, 1], [1, 1], [4, 4], [6, 6], [99, 6]]) {
   const b = begrenzeAuswahl(regeln(), { art: "family", schueler: wunsch, erwachsene: 2 });
   pruefe(`Familienpaket: Wunsch ${wunsch} Kinder → ${erwartet}`, b.schueler === erwartet,
     `schueler=${b.schueler}`);
@@ -140,14 +142,21 @@ for (const [wunsch, erwartet] of [[3, 4], [4, 4], [5, 5], [6, 6], [99, 6]]) {
     !erg.fehler && erg.anmeldung.teilnehmer.length === 6 && p.gesamtCents === 4800,
     erg.fehler ? erg.fehler[0].text : `${p.gesamtCents} Cent`);
 }
-// Weniger als 4 Kinder im Familienpaket wird abgelehnt.
+// Familie ab der enthaltenen Kinderzahl buchbar (keine feste Vier mehr):
+// 1 Kind (= enthaltene Zahl) wird angenommen, 0 Kinder abgelehnt.
 {
-  const erg = pruefeUndBaue(regeln(), {
-    weg: "familie", schueler: 3, erwachsene: 2, personen: personen(5),
+  const ja = pruefeUndBaue(regeln(), {
+    weg: "familie", schueler: 1, erwachsene: 2, personen: personen(3),
     einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true,
   });
-  pruefe("Familienpaket mit 3 Kindern wird abgelehnt (mindestens 4)",
-    Boolean(erg.fehler) && erg.fehler.some((f) => /mindestens 4 Kinder/i.test(f.text)));
+  pruefe("Familienpaket mit 1 Kind (= enthaltene Zahl) wird angenommen",
+    !ja.fehler && ja.anmeldung.teilnehmer.length === 3, ja.fehler ? ja.fehler[0].text : "ok");
+  const nein = pruefeUndBaue(regeln(), {
+    weg: "familie", schueler: 0, erwachsene: 2, personen: personen(2),
+    einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true,
+  });
+  pruefe("Familienpaket mit 0 Kindern wird abgelehnt (unter enthaltener Zahl)",
+    Boolean(nein.fehler) && nein.fehler.some((f) => /mindestens 1 Kind/i.test(f.text)));
 }
 // Familienpaket ist von der 6-Personen-Grenze ausgenommen: 5 Kinder
 // (7 Personen) werden angenommen; mehr als die Höchstzahl Kinder (6)
@@ -237,18 +246,24 @@ const basisFormular = {
   }
 }
 
-// ── Formular: Familienpaket muss mindestens 4 Kinder zulassen ──────
+// ── Formular: Familienpaket-Höchstzahl (keine feste Mindestzahl mehr) ──
 {
   const fam = (max) => ({
     ...basisFormular, familieAktiv: "an", familieBasis: "30,00",
     familieWeitererSchueler: "6,00", familieEnthaltenErwachsene: "2",
     familieEnthaltenSchueler: "1", familieMaxSchueler: String(max),
   });
-  const zuWenig = pruefeEvent(fam(3));
-  pruefe("Familienpaket mit Höchstzahl 3 wird abgelehnt (mind. 4)",
-    Boolean(zuWenig.fehler) && zuWenig.fehler.some((f) => f.feld === "familieMaxSchueler"));
+  // Keine feste Mindestzahl 4 mehr: auch Höchstzahl 2 ist zulässig,
+  // solange sie nicht kleiner als die enthaltene Kinderzahl (1) ist.
+  const klein = pruefeEvent(fam(2));
+  pruefe("Familienpaket mit Höchstzahl 2 wird angenommen (keine feste Vier)",
+    !klein.fehler, klein.fehler ? klein.fehler.map((f) => f.text).join(" · ") : "ok");
   const genug = pruefeEvent(fam(4));
   pruefe("Familienpaket mit Höchstzahl 4 wird angenommen", !genug.fehler);
+  // Höchstzahl kleiner als die enthaltene Kinderzahl bleibt unzulässig.
+  const zuKlein = pruefeEvent({ ...fam(1), familieEnthaltenSchueler: "3" });
+  pruefe("Familienpaket: Höchstzahl < enthaltene Kinderzahl wird abgelehnt",
+    Boolean(zuKlein.fehler) && zuKlein.fehler.some((f) => f.feld === "familieMaxSchueler"));
   // Das Familienpaket ist von der 6-Personen-Grenze ausgenommen, daher
   // sind auch 3 enthaltene Erwachsene zulässig.
   const dreiErw = pruefeEvent({

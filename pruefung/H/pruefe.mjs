@@ -100,9 +100,9 @@ async function main() {
   pruefe("Einzelbuchung Erwachsener kostet 14,00 €", a?.gesamtpreisCents === 1400, `${a?.gesamtpreisCents} Cent`);
   pruefe("… Teilnehmertyp ist ERWACHSENER", a?.teilnehmer[0]?.typ === "ERWACHSENER");
 
-  // ── 3. Familienpaket: genau 4 Kinder (mind. 4, zusammen ≤ 6) ──
-  // Seit dem 08.10.2026: mindestens 4 Kinder, und mit den 2 enthaltenen
-  // Erwachsenen zusammen höchstens 6 Personen — also genau 4 Kinder.
+  // ── 3. Familienpaket: Beispielbuchung mit 4 Kindern ──
+  // Die Familie darf ab der enthaltenen Kinderzahl (1) bis zur Höchstzahl
+  // Kinder (6) gebucht werden; hier als Beispiel 4 Kinder.
   await absenden(
     { eventSlug: SLUG, weg: "familie", schueler: 4, erwachsene: 2, webseite: "",
       einwilligungVormund: "an",
@@ -128,18 +128,21 @@ async function main() {
   pruefe("Familienpaket belegt 6 Plätze (2 Erwachsene + 4 Kinder)",
     a?.teilnehmer.length === 6, `${a?.teilnehmer.length} Teilnehmer`);
 
-  // ── 5. Mehr als 6 Personen über das Familienpaket wird abgelehnt ──
+  // ── 5. Familienpaket über die Höchstzahl Kinder (6) wird abgelehnt ──
+  // Die Familie ist von der 6-Personen-Grenze ausgenommen; einzige
+  // Schranke ist die am Event gesetzte Höchstzahl Kinder (6). 7 Kinder
+  // liegen darüber → keine Buchung.
   const zuViele = await absenden(
-    { eventSlug: SLUG, weg: "familie", schueler: 5, erwachsene: 2, webseite: "",
+    { eventSlug: SLUG, weg: "familie", schueler: 7, erwachsene: 2, webseite: "",
       einwilligungVormund: "an",
       ...personen([
         { vorname: "Gina", nachname: "Viel", email: "gina@example.org", telefon: "" },
         { vorname: "Hans", nachname: "Viel" },
-        ...["I", "J", "K", "L", "M"].map((n) => ({ vorname: n, nachname: "Viel" })),
+        ...["I", "J", "K", "L", "M", "N", "O"].map((n) => ({ vorname: n, nachname: "Viel" })),
       ]) },
     neueIp(),
   );
-  pruefe("Familienpaket mit 5 Kindern (7 Personen) wird nicht gebucht",
+  pruefe("Familienpaket mit 7 Kindern (über Höchstzahl 6) wird nicht gebucht",
     !zuViele.sitzungId, zuViele.sitzungId ? "fälschlich zur Bezahlseite" : "abgelehnt, keine Bezahlsitzung");
 
   // ── 6. Gruppe von 6 belegt 6 Plätze ──────────────────────────

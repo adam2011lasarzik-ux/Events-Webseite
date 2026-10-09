@@ -15,7 +15,6 @@
 import {
   begrenzeAuswahl,
   MAX_PERSONEN_PRO_BUCHUNG,
-  MIN_FAMILIE_KINDER,
   type Auswahl,
   type Preisregeln,
 } from "./preise";
@@ -210,12 +209,14 @@ export function pruefeUndBaue(
 
   if (eingabe.weg === "familie" && regeln.familie) {
     // Das Familienpaket ist von der 6-Personen-Grenze ausgenommen: die
-    // Kinderzahl reicht von mindestens vier bis zur am Event gesetzten
-    // Höchstzahl Kinder. Mehr wird klar abgelehnt (Manipulationsschutz).
-    if (!Number.isFinite(schuelerRoh) || schuelerRoh < MIN_FAMILIE_KINDER) {
+    // Kinderzahl reicht von den im Grundpreis enthaltenen Kindern bis zur
+    // am Event gesetzten Höchstzahl Kinder. Außerhalb wird klar abgelehnt
+    // (Manipulationsschutz).
+    const minKinder = Math.max(0, regeln.familie.enthalteneSchueler);
+    if (!Number.isFinite(schuelerRoh) || schuelerRoh < minKinder) {
       fehler.push({
         feld: "auswahl",
-        text: `Im Familienpaket müssen mindestens ${MIN_FAMILIE_KINDER} Kinder angemeldet werden.`,
+        text: `Im Familienpaket müssen mindestens ${minKinder} ${minKinder === 1 ? "Kind" : "Kinder"} angemeldet werden.`,
       });
     } else if (schuelerRoh > regeln.familie.maxSchueler) {
       fehler.push({

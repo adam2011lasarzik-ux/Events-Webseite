@@ -260,21 +260,16 @@ export function pruefeEvent(
       });
     }
 
-    // Anforderung: Ein Familienpaket muss mindestens vier Kinder
-    // zulassen. Das wird hier geprüft (nicht als DB-Regel), damit
-    // bestehende Zeilen unberührt bleiben und der Bediener eine
-    // verständliche Meldung bekommt, falls er darunter konfiguriert.
-    if (familieMaxSchueler !== null && familieMaxSchueler < 4) {
-      fehler.push({
-        feld: "familieMaxSchueler",
-        text: "Das Familienpaket muss mindestens 4 Kinder zulassen.",
-      });
-    }
+    // Keine feste Mindestzahl Kinder mehr: Eine Familie darf ab der im
+    // Grundpreis enthaltenen Kinderzahl gebucht werden (siehe
+    // lib/preise.ts und lib/anmeldung.ts). Einzige Schranke hier ist, dass
+    // die Höchstzahl nicht kleiner als die enthaltene Zahl sein darf
+    // (oben geprüft).
 
     // Das Familienpaket ist von der 6-Personen-Grenze ausgenommen, daher
     // gibt es hier keine Obergrenze für die enthaltenen Erwachsenen mehr.
-    // Die Kinderzahl reicht beim Buchen von mindestens 4 bis zur oben
-    // gesetzten Höchstzahl Kinder.
+    // Die Kinderzahl reicht beim Buchen von der enthaltenen Zahl bis zur
+    // oben gesetzten Höchstzahl Kinder.
   }
 
   // ── Plätze ───────────────────────────────────────────────────

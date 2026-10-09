@@ -168,10 +168,11 @@ model Event {
   maxErwachsene         Int @default(6)
 
   // Familienpaket
-  // Hinweis: familieMaxSchueler muss mindestens 4 sein, sobald das
-  // Paket aktiv ist (Anforderung „mindestens 4 Kinder möglich"). Das
-  // wird in lib/eventFormular.ts geprüft, nicht als DB-Regel — so
-  // bleiben bestehende Zeilen unangetastet.
+  // Hinweis: familieMaxSchueler darf nicht kleiner sein als
+  // familieEnthaltenSchueler (die im Grundpreis enthaltenen Kinder).
+  // Das wird in lib/eventFormular.ts geprüft, nicht als DB-Regel — so
+  // bleiben bestehende Zeilen unangetastet. Das Familienpaket ist von
+  // der 6-Personen-Grenze je Buchung ausgenommen.
   familieAktiv                 Boolean @default(false)
   familieBasisCents            Int?
   familieEnthaltenErwachsene   Int?

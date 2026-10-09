@@ -74,8 +74,6 @@ export interface Preisergebnis {
  */
 export const MAX_PERSONEN_PRO_BUCHUNG = 6;
 
-/** Mindestzahl Kinder im Familienpaket (Vorgabe „mindestens 4 Kinder"). */
-export const MIN_FAMILIE_KINDER = 4;
 
 const ganzZahl = (wert: number, min: number, max: number): number =>
   Math.min(max, Math.max(min, Math.trunc(Number.isFinite(wert) ? wert : min)));
@@ -91,11 +89,12 @@ export function begrenzeAuswahl(regeln: Preisregeln, auswahl: Auswahl): Auswahl 
   if (auswahl.art === "family" && regeln.familie) {
     const f = regeln.familie;
     const erwachsene = f.enthalteneErwachsene;
-    // Kinder im Familienpaket: mindestens vier (oder die enthaltene Zahl,
-    // falls höher) bis zur am Event gesetzten Höchstzahl Kinder. Das
-    // Familienpaket ist bewusst von der 6-Personen-Grenze je Buchung
+    // Kinder im Familienpaket: von den im Grundpreis enthaltenen Kindern
+    // bis zur am Event gesetzten Höchstzahl Kinder. Weniger als die
+    // enthaltene Zahl kann niemand buchen (der Grundpreis deckt sie schon).
+    // Das Familienpaket ist bewusst von der 6-Personen-Grenze je Buchung
     // ausgenommen — eine Familie darf mehr als sechs Personen sein.
-    const untergrenze = Math.max(f.enthalteneSchueler, MIN_FAMILIE_KINDER);
+    const untergrenze = Math.max(0, f.enthalteneSchueler);
     const obergrenze = Math.max(untergrenze, f.maxSchueler);
     const schueler = ganzZahl(auswahl.schueler, untergrenze, obergrenze);
     return { art: "family", erwachsene, schueler };
