@@ -382,6 +382,14 @@ export const de = {
       zahlungHinweis:
         "Es geht weiter zur gesicherten Bezahlseite. Kartendaten kommen nie bei uns an. " +
         "Erst nach erfolgreicher Zahlung ist die Anmeldung bestätigt.",
+      /* Meldungen der clientseitigen Vorprüfung: Fehlt eine
+         Pflichtangabe, zeigt das Formular diese Texte direkt an und
+         springt zum ersten fehlenden Feld — ohne Serveranfrage, damit
+         mehrfaches Tippen keine Bremse auslöst. Der Server prüft
+         danach unverändert nochmals. */
+      pflichtfeld: "Bitte ausfüllen.",
+      pflichtHaken: "Bitte bestätigen, um fortzufahren.",
+      bitteVervollstaendigen: "Bitte fülle die rot markierten Pflichtfelder aus.",
     },
 
     vorschau: {

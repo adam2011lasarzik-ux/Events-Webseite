@@ -1,11 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { AnmeldeFelder, type FeldGruppe } from "./AnmeldeFelder";
 import { anmeldungAbsenden } from "@/app/(seite)/anmeldung/aktion";
-import { brauchtVormundEinwilligung, ANMELDE_STARTZUSTAND } from "@/lib/anmeldung";
+import {
+  brauchtVormundEinwilligung,
+  fehlendePflichtfelder,
+  ANMELDE_STARTZUSTAND,
+  type AnmeldeErgebnis,
+} from "@/lib/anmeldung";
 import {
   alsEuro,
   berechnePreis,
@@ -124,8 +129,6 @@ export function PreisRechner({
     }));
   }, [fuerWen, auswahl, t]);
 
-  const [ergebnisAktion, formAktion] = useActionState(anmeldungAbsenden, ANMELDE_STARTZUSTAND);
-
   /**
    * Die eingetippten Werte liegen hier, nicht im Browser.
    *
@@ -150,6 +153,52 @@ export function PreisRechner({
 
   const vormundNoetig = brauchtVormundEinwilligung(fuerWen);
 
+  // Das Formular selbst — zum Suchen des ersten beanstandeten Feldes.
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const [ergebnisAktion, formAktion] = useActionState(
+    async (vorher: AnmeldeErgebnis, formData: FormData): Promise<AnmeldeErgebnis> => {
+      // Clientseitige Vorprüfung: Fehlt eine Pflichtangabe, zeigt das
+      // Formular das sofort an und schickt NICHTS an den Server — so löst
+      // mehrfaches Tippen auf „Buchen" keine Bremse aus. Der Server prüft
+      // dieselben Pflichten danach unverändert erneut.
+      const luecken = fehlendePflichtfelder(gruppen, werte, haken, vormundNoetig);
+      if (luecken.length > 0) {
+        const istHaken = (n: string) =>
+          n === "einwilligungVormund" || n === "agbAkzeptiert" || n === "kenntnisAufnahmen";
+        return {
+          meldung: t.anmeldung.formular.bitteVervollstaendigen,
+          fehler: luecken.map((feld) => ({
+            feld,
+            text: istHaken(feld)
+              ? t.anmeldung.formular.pflichtHaken
+              : t.anmeldung.formular.pflichtfeld,
+          })),
+        };
+      }
+      return anmeldungAbsenden(vorher, formData);
+    },
+    ANMELDE_STARTZUSTAND,
+  );
+
+  // Nach einem abgelehnten Versuch zum ersten beanstandeten Feld springen
+  // und es fokussieren — auf Handy und Rechner, bei client- wie
+  // serverseitigen Fehlern (z. B. ungültige E-Mail).
+  useEffect(() => {
+    const erstes = ergebnisAktion.fehler[0]?.feld;
+    if (!erstes || !formRef.current) return;
+    const el = formRef.current.querySelector<HTMLElement>(`[name="${erstes}"]`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.focus({ preventScroll: true });
+  }, [ergebnisAktion]);
+
+  // Auch wenn der Server nur Feldfehler ohne eigene Meldung liefert, soll
+  // oben eine klare Sammelmeldung stehen.
+  const anzeigeMeldung =
+    ergebnisAktion.meldung ||
+    (ergebnisAktion.fehler.length > 0 ? t.anmeldung.formular.bitteVervollstaendigen : "");
+
   return (
     /* onReset: React setzt ein Formular nach jedem Absendeversuch
        zurueck — auch nach einem abgelehnten. Fuer die Auswahlknoepfe
@@ -157,7 +206,7 @@ export function PreisRechner({
        in Wahrheit weiter das Familienpaket gebucht wird. Hier steuert
        React jedes Feld selbst, ein Zuruecksetzen ist also nie
        erwuenscht — deshalb wird es unterbunden. */
-    <form action={formAktion} onReset={(e) => e.preventDefault()} className={stil.rechner}>
+    <form ref={formRef} action={formAktion} onReset={(e) => e.preventDefault()} className={stil.rechner}>
       {/* Der Server liest ausschliesslich diese Werte — der angezeigte
           Preis wird bewusst NICHT mitgeschickt, sondern dort neu
           berechnet. Ein manipulierter Betrag hat damit keine Wirkung.
@@ -397,9 +446,9 @@ export function PreisRechner({
         </div>
 
         <div className={feldStil.absendeBereich}>
-          {ergebnisAktion.meldung && (
+          {anzeigeMeldung && (
             <p className={feldStil.meldung} role="alert">
-              {ergebnisAktion.meldung}
+              {anzeigeMeldung}
             </p>
           )}
           {/* ── Der Betrag steht NEBEN dem Knopf, nicht darin ───────

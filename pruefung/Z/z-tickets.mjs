@@ -8,7 +8,7 @@
    (maxErwachsene, Familien-Höchstzahl, keine negativen Preise). */
 
 import { berechnePreis, begrenzeAuswahl } from "../../lib/preise.js";
-import { pruefeUndBaue } from "../../lib/anmeldung.js";
+import { pruefeUndBaue, fehlendePflichtfelder } from "../../lib/anmeldung.js";
 import { pruefeEvent, alsCents } from "../../lib/eventFormular.js";
 import { preisAenderungen } from "../../lib/preisProtokoll.js";
 
@@ -355,6 +355,55 @@ const basisFormular = {
     ohneSchueler.daten.schuelerAktiv === false &&
     ohneSchueler.daten.preisSchuelerCents === null,
     ohneSchueler.fehler ? ohneSchueler.fehler.map((f) => f.text).join(" · ") : "ok");
+}
+
+// ── Formular-Vorprüfung: fehlende Pflichtangaben (Client) ──────────
+{
+  const einKontakt = [{ mitKontakt: true }];
+  const voll = {
+    "person.0.vorname": "Ada", "person.0.nachname": "Lovelace", "person.0.email": "a@b.de",
+  };
+  const alleHaken = { agbAkzeptiert: true, kenntnisAufnahmen: true };
+
+  pruefe("Vorprüfung: vollständig → keine Lücke",
+    fehlendePflichtfelder(einKontakt, voll, alleHaken, false).length === 0);
+
+  pruefe("Vorprüfung: fehlender Vorname wird erkannt",
+    fehlendePflichtfelder(einKontakt, { ...voll, "person.0.vorname": "" }, alleHaken, false)[0]
+      === "person.0.vorname");
+
+  pruefe("Vorprüfung: fehlende Kontakt-E-Mail wird erkannt",
+    fehlendePflichtfelder(einKontakt, { ...voll, "person.0.email": "" }, alleHaken, false)
+      .includes("person.0.email"));
+
+  pruefe("Vorprüfung: fehlendes Telefon blockiert NICHT (freiwillig)",
+    fehlendePflichtfelder(einKontakt, voll, alleHaken, false).length === 0);
+
+  pruefe("Vorprüfung: fehlender AGB-Haken wird erkannt",
+    fehlendePflichtfelder(einKontakt, voll, { kenntnisAufnahmen: true }, false)
+      .includes("agbAkzeptiert"));
+
+  pruefe("Vorprüfung: fehlender Aufnahmen-Haken wird erkannt",
+    fehlendePflichtfelder(einKontakt, voll, { agbAkzeptiert: true }, false)
+      .includes("kenntnisAufnahmen"));
+
+  // Reihenfolge: Personenfelder vor den Haken; Vormund-Haken vor AGB.
+  const nix = fehlendePflichtfelder(einKontakt, {}, {}, true);
+  pruefe("Vorprüfung: erstes fehlendes Feld ist der Vorname",
+    nix[0] === "person.0.vorname");
+  pruefe("Vorprüfung: Vormund-Haken vor AGB-Haken",
+    nix.indexOf("einwilligungVormund") < nix.indexOf("agbAkzeptiert"));
+
+  pruefe("Vorprüfung: Vormund-Haken nur bei Bedarf",
+    !fehlendePflichtfelder(einKontakt, voll, alleHaken, false).includes("einwilligungVormund") &&
+    fehlendePflichtfelder(einKontakt, voll, alleHaken, true).includes("einwilligungVormund"));
+
+  // Zweite Person ohne Kontakt: nur Namen Pflicht, keine E-Mail.
+  const zwei = [{ mitKontakt: true }, { mitKontakt: false }];
+  const fehlt2 = fehlendePflichtfelder(zwei, voll, alleHaken, false);
+  pruefe("Vorprüfung: zweite Person braucht Namen, aber keine E-Mail",
+    fehlt2.includes("person.1.vorname") && fehlt2.includes("person.1.nachname") &&
+    !fehlt2.includes("person.1.email"));
 }
 
 // ── Preis-Änderungsprotokoll: welche Einträge entstehen? ───────────

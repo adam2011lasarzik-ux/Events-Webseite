@@ -135,6 +135,46 @@ export function alsAuswahl(eingabe: AnmeldeEingabe): Auswahl {
   };
 }
 
+/** Eine Personengruppe, wie sie das Formular anzeigt. */
+export interface PflichtGruppe {
+  /** Zeigt diese Gruppe zusätzlich die Kontaktfelder (E-Mail)? */
+  mitKontakt: boolean;
+}
+
+/**
+ * Welche Pflichtangaben fehlen noch? Reine Funktion für die
+ * clientseitige Vorprüfung des Formulars.
+ *
+ * Liefert die Feldnamen in Anzeigereihenfolge (Personen von oben nach
+ * unten, dann die Pflichthaken) — der erste Eintrag ist das Feld, zu
+ * dem gesprungen wird. Freiwillige Angaben (Telefon) und freiwillige
+ * Einwilligungen tauchen hier NICHT auf und blockieren die Buchung
+ * nicht. Der Server prüft dieselben Pflichten anschließend erneut;
+ * diese Funktion ersetzt das nicht, sie macht die Lücke nur sofort
+ * sichtbar, ohne Serveranfrage.
+ */
+export function fehlendePflichtfelder(
+  gruppen: PflichtGruppe[],
+  werte: Record<string, string>,
+  haken: Record<string, boolean>,
+  vormundNoetig: boolean,
+): string[] {
+  const fehlt: string[] = [];
+  const leer = (name: string) => (werte[name] ?? "").trim() === "";
+
+  gruppen.forEach((gruppe, i) => {
+    if (leer(`person.${i}.vorname`)) fehlt.push(`person.${i}.vorname`);
+    if (leer(`person.${i}.nachname`)) fehlt.push(`person.${i}.nachname`);
+    if (gruppe.mitKontakt && leer(`person.${i}.email`)) fehlt.push(`person.${i}.email`);
+  });
+
+  if (vormundNoetig && !haken.einwilligungVormund) fehlt.push("einwilligungVormund");
+  if (!haken.agbAkzeptiert) fehlt.push("agbAkzeptiert");
+  if (!haken.kenntnisAufnahmen) fehlt.push("kenntnisAufnahmen");
+
+  return fehlt;
+}
+
 /**
  * Prüft die Eingaben und baut daraus die fertige Anmeldung.
  *
