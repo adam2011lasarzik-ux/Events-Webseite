@@ -135,7 +135,7 @@ export async function anmeldungAbsenden(
 
   // ── Eingaben einsammeln ────────────────────────────────────────
   const weg = text(formular.get("weg")) as Anmeldeweg;
-  if (!["selbst", "kind", "familie"].includes(weg)) {
+  if (!["selbst", "erwachsene", "kind", "familie"].includes(weg)) {
     return { fehler: [], meldung: "Die Anmeldung konnte nicht verarbeitet werden." };
   }
 

@@ -100,6 +100,24 @@ async function main() {
   pruefe("Einzelbuchung Erwachsener kostet 14,00 €", a?.gesamtpreisCents === 1400, `${a?.gesamtpreisCents} Cent`);
   pruefe("… Teilnehmertyp ist ERWACHSENER", a?.teilnehmer[0]?.typ === "ERWACHSENER");
 
+  // ── 2b. Mehrere Erwachsene (Weg „erwachsene") ────────────────
+  // Regressionsschutz: Der Weg „erwachsene" muss die Eingangsprüfung
+  // der Serveraktion passieren (war früher nicht in der Positivliste).
+  await absenden(
+    { eventSlug: SLUG, weg: "erwachsene", schueler: 0, erwachsene: 3, webseite: "",
+      ...personen([
+        { vorname: "Ewald", nachname: "Drei", email: "ewald@example.org", telefon: "" },
+        { vorname: "Franz", nachname: "Drei" },
+        { vorname: "Gustav", nachname: "Drei" },
+      ]) },
+    neueIp(),
+  );
+  a = await letzte();
+  pruefe("Mehrere Erwachsene (3) werden angenommen, 42,00 €",
+    a?.gesamtpreisCents === 4200 && a?.teilnehmer.length === 3 &&
+    a.teilnehmer.every((t) => t.typ === "ERWACHSENER"),
+    a?.fehler ? "abgelehnt" : `${a?.gesamtpreisCents} Cent, ${a?.teilnehmer.length} Teilnehmer`);
+
   // ── 3. Familienpaket: Beispielbuchung mit 4 Kindern ──
   // Die Familie darf ab der enthaltenen Kinderzahl (1) bis zur Höchstzahl
   // Kinder (6) gebucht werden; hier als Beispiel 4 Kinder.
