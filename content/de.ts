@@ -90,11 +90,12 @@ export const de = {
       "vor Ort separat erworben werden.",
     schueler: "Schüler",
     schuelerHinweis: "Kinder und Jugendliche",
+    kinder: "Kinder",
     erwachsener: "Erwachsene",
     erwachsenerHinweis: "Eltern und Begleitung",
     familie: "Familie",
-    familieHinweis: "2 Erwachsene + 1 Schüler",
-    familieZusatz: "jeder weitere Schüler {betrag}",
+    familieHinweis: "2 Erwachsene + 1 Kind",
+    familieZusatz: "jedes weitere Kind {betrag}",
     ab: "ab",
     proPerson: "pro Person",
   },
@@ -264,7 +265,7 @@ export const de = {
     wahlErwachsene: "Mehrere Erwachsene",
     wahlErwachseneHinweis: "Bis zu sechs Personen",
     wahlFamilie: "Familienpaket",
-    wahlFamilieHinweis: "2 Erwachsene + Schüler",
+    wahlFamilieHinweis: "2 Erwachsene + Kinder",
 
     selbstFrage: "Was trifft auf dich zu?",
     selbstSchueler: "Ich bin Schüler",
@@ -275,7 +276,7 @@ export const de = {
     kindFrage: "Wie viele Schüler unter 18 meldest du an?",
     kindMitkommen: "Ich komme selbst mit",
 
-    familieFrage: "Wie viele Schüler kommen mit?",
+    familieFrage: "Wie viele Kinder kommen mit?",
     familieEnthalten: "2 Erwachsene sind im Paket enthalten",
 
     anzahlErhoehen: "Einen mehr",
@@ -396,6 +397,7 @@ export const de = {
       gruppeEltern: "Angaben des Elternteils / Erziehungsberechtigten",
       gruppeErwachsenerN: "Erwachsener {n}",
       gruppeSchuelerN: "Schüler {n}",
+      gruppeKindN: "Kind {n}",
     },
   },
 

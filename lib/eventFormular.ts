@@ -235,7 +235,7 @@ export function pruefeEvent(
 
     familieWeitererSchuelerCents = alsCents(sauber(roh.familieWeitererSchueler));
     if (familieWeitererSchuelerCents === null)
-      fehler.push({ feld: "familieWeitererSchueler", text: "Bitte den Preis je weiterem Schüler angeben." });
+      fehler.push({ feld: "familieWeitererSchueler", text: "Bitte den Preis je weiterem Kind angeben." });
 
     familieEnthaltenErwachsene = ganzeZahl(sauber(roh.familieEnthaltenErwachsene));
     if (familieEnthaltenErwachsene === null)

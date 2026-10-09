@@ -120,7 +120,9 @@ export function PreisRechner({
             ? v.gruppeEltern
             : rolle.rolle === "erwachsener"
               ? fuelle(v.gruppeErwachsenerN, { n: rolle.nummer })
-              : fuelle(v.gruppeSchuelerN, { n: rolle.nummer }),
+              : fuerWen === "familie"
+                ? fuelle(v.gruppeKindN, { n: rolle.nummer })
+                : fuelle(v.gruppeSchuelerN, { n: rolle.nummer }),
       mitKontakt: brauchtKontaktdaten(rolle),
     }));
   }, [fuerWen, auswahl, t]);
@@ -334,7 +336,7 @@ export function PreisRechner({
                 max={maxFamilie}
                 setzeWert={setzeFamilienKinder}
                 t={t}
-                text={`${t.preise.schueler} (max. ${maxFamilie})`}
+                text={`${t.preise.kinder} (max. ${maxFamilie})`}
               />
               <p className={stil.enthalten}>{t.anmeldung.familieEnthalten}</p>
             </div>

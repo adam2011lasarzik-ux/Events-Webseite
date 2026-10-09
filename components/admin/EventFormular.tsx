@@ -342,10 +342,10 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
           {familieAktiv && (
             <>
               {feld("familieBasis", "Grundpreis Familienpaket", { hilfe: "z. B. 30,00" })}
-              {feld("familieWeitererSchueler", "Preis je weiterem Schüler", { hilfe: "z. B. 6,00" })}
+              {feld("familieWeitererSchueler", "Preis je weiterem Kind", { hilfe: "z. B. 6,00" })}
               {feld("familieEnthaltenErwachsene", "Enthaltene Erwachsene", { hilfe: "z. B. 2" })}
-              {feld("familieEnthaltenSchueler", "Enthaltene Schüler", { hilfe: "z. B. 1" })}
-              {feld("familieMaxSchueler", "Höchstzahl Schüler", { hilfe: "z. B. 6" })}
+              {feld("familieEnthaltenSchueler", "Enthaltene Kinder", { hilfe: "z. B. 1" })}
+              {feld("familieMaxSchueler", "Höchstzahl Kinder", { hilfe: "z. B. 6" })}
             </>
           )}
         </div>
