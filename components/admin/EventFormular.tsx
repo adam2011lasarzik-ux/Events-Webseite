@@ -304,20 +304,15 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
                 name="schuelerAktiv"
                 value="an"
                 checked={schuelerAktiv}
-                onChange={(e) => {
-                  setzeSchuelerAktiv(e.target.checked);
-                  // Ohne Schüler-Kategorie ergäbe ein Familienpaket
-                  // (das immer Schüler enthält) keinen Sinn mehr —
-                  // wird beim Ausschalten mit zurückgesetzt.
-                  if (!e.target.checked) setzeFamilieAktiv(false);
-                }}
+                onChange={(e) => setzeSchuelerAktiv(e.target.checked)}
               />
               <span>Schüler-Preis anbieten</span>
             </label>
             <p className={stil.feldHilfe} style={{ marginTop: "0.5rem" }}>
               Aus, wenn dieses Event keine eigene Schüler-Zielgruppe hat (z. B. ein
-              Business-Event) — dann gibt es nur einen Preis, und im Anmeldebereich entfallen
-              „Mein Kind" und das Familienpaket.
+              Business-Event) — dann gibt es keinen eigenen Schülerpreis, und im
+              Anmeldebereich entfällt „Mein Kind". Das Familienpaket und mehrere
+              Erwachsene je Buchung kannst du trotzdem anbieten (eigene Preise).
             </p>
           </div>
 
@@ -331,22 +326,20 @@ export function EventFormular({ vorbelegung }: { vorbelegung: EventVorbelegung }
             hilfe: "Leer = 4",
           })}
 
-          {schuelerAktiv && (
-            <div className={stil.breit}>
-              <label className={stil.haken}>
-                <input
-                  type="checkbox"
-                  name="familieAktiv"
-                  value="an"
-                  checked={familieAktiv}
-                  onChange={(e) => setzeFamilieAktiv(e.target.checked)}
-                />
-                <span>Familienpaket anbieten</span>
-              </label>
-            </div>
-          )}
+          <div className={stil.breit}>
+            <label className={stil.haken}>
+              <input
+                type="checkbox"
+                name="familieAktiv"
+                value="an"
+                checked={familieAktiv}
+                onChange={(e) => setzeFamilieAktiv(e.target.checked)}
+              />
+              <span>Familienpaket anbieten</span>
+            </label>
+          </div>
 
-          {schuelerAktiv && familieAktiv && (
+          {familieAktiv && (
             <>
               {feld("familieBasis", "Grundpreis Familienpaket", { hilfe: "z. B. 30,00" })}
               {feld("familieWeitererSchueler", "Preis je weiterem Schüler", { hilfe: "z. B. 6,00" })}

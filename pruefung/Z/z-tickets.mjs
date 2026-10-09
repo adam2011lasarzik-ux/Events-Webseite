@@ -33,6 +33,26 @@ const regeln = (max = 6) => ({
   },
 });
 
+// Festpreis-Event OHNE Schüler-Einzelpreis, aber mit eigenem
+// Familienpaket (eigene Preise). Dient dem Nachweis, dass Familienticket
+// und Mehrfachbuchung vom Schülerpreis getrennt sind.
+const regelnFlach = (opts = {}) => ({
+  schuelerAktiv: false,
+  schuelerCents: 0,
+  erwachsenerCents: 2500,
+  maxErwachsene: opts.maxErwachsene ?? 6,
+  familie:
+    opts.familie === undefined
+      ? {
+          basisCents: 3000,
+          enthalteneErwachsene: 2,
+          enthalteneSchueler: 1,
+          weitererSchuelerCents: 600,
+          maxSchueler: 6,
+        }
+      : opts.familie,
+});
+
 // Jede Person bekommt Kontaktdaten: Welche Rolle die Kontaktperson ist,
 // hängt vom Weg ab (beim Familien-/Erwachsenen-Weg der erste, beim
 // Kind-Weg der Elternteil am Ende). Großzügig für alle zu füllen hält
@@ -240,6 +260,78 @@ const basisFormular = {
   const neg = pruefeEvent({ ...basisFormular, preisErwachsener: "-5,00" });
   pruefe("Formular lehnt negativen Erwachsenenpreis ab",
     Boolean(neg.fehler) && neg.fehler.some((f) => f.feld === "preisErwachsener"));
+}
+
+// ── Trennung: Familienticket & Mehrfachbuchung ohne Schülerpreis ───
+// Ein Event ohne Schüler-Einzelpreis darf trotzdem ein Familienticket
+// und Mehrfachbuchung anbieten (eigene Preise). „Mein Kind" (einzelne
+// Schüler) braucht den Schülerpreis und fällt serverseitig zurück.
+{
+  // Familienticket ohne Schülerpreis: angenommen, bleibt Familie.
+  const fam = pruefeUndBaue(regelnFlach(), {
+    weg: "familie", schueler: 4, erwachsene: 2, personen: personen(6),
+    einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true,
+  });
+  pruefe("Ohne Schülerpreis: Familienticket bleibt buchbar",
+    !fam.fehler && fam.anmeldung.buchungsart === "FAMILIE" &&
+    fam.anmeldung.teilnehmer.length === 6,
+    fam.fehler ? fam.fehler[0].text : "ok");
+
+  // Familienpreis ohne Schülerpreis: Grundpreis 30,00 + 3 weitere
+  // Kinder à 6,00 = 48,00 € (unabhängig vom Schülerpreis gerechnet).
+  const pFam = berechnePreis(regelnFlach(), { art: "family", schueler: 4, erwachsene: 2 });
+  pruefe("Ohne Schülerpreis: Familienpreis = 48,00 €", pFam.gesamtCents === 4800, `${pFam.gesamtCents} Cent`);
+
+  // Mehrere Erwachsene ohne Schülerpreis: angenommen.
+  const erw = pruefeUndBaue(regelnFlach(), {
+    weg: "erwachsene", schueler: 0, erwachsene: 3, personen: personen(3),
+    einwilligungVormund: false, agbAkzeptiert: true, kenntnisAufnahmen: true,
+  });
+  pruefe("Ohne Schülerpreis: mehrere Erwachsene bleiben buchbar",
+    !erw.fehler && erw.anmeldung.teilnehmer.length === 3 &&
+    erw.anmeldung.teilnehmer.every((t) => t.typ === "ERWACHSENER"),
+    erw.fehler ? erw.fehler[0].text : "ok");
+
+  // „Mein Kind" ohne Schülerpreis fällt auf Einzel-Erwachsener zurück.
+  const kind = pruefeUndBaue(regelnFlach(), {
+    weg: "kind", schueler: 3, erwachsene: 0, personen: personen(1),
+    einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true,
+  });
+  pruefe("Ohne Schülerpreis: manipulierter Kind-Weg → Einzel-Erwachsener",
+    !kind.fehler && kind.anmeldung.buchungsart === "EINZEL" &&
+    kind.anmeldung.teilnehmer.length === 1 &&
+    kind.anmeldung.teilnehmer[0].typ === "ERWACHSENER",
+    kind.fehler ? kind.fehler[0].text : "ok");
+
+  // Reines Festpreis-Event (kein Familienticket, maxErwachsene=1):
+  // manipulierter Familien-Weg fällt auf Einzel-Erwachsener zurück.
+  const flachOhne = regelnFlach({ maxErwachsene: 1, familie: null });
+  const manip = pruefeUndBaue(flachOhne, {
+    weg: "familie", schueler: 4, erwachsene: 2, personen: personen(1),
+    einwilligungVormund: true, agbAkzeptiert: true, kenntnisAufnahmen: true,
+  });
+  pruefe("Festpreis ohne Familienticket: manipulierter Familien-Weg → Einzel-Erwachsener",
+    !manip.fehler && manip.anmeldung.buchungsart === "EINZEL" &&
+    manip.anmeldung.teilnehmer.length === 1 &&
+    manip.anmeldung.teilnehmer[0].typ === "ERWACHSENER",
+    manip.fehler ? manip.fehler[0].text : "ok");
+}
+
+// ── Formular: Familienticket ohne Schülerpreis ist konfigurierbar ──
+{
+  const ohneSchueler = pruefeEvent({
+    titel: "Flachevent", stadt: "Teststadt", karteTitel: "T", karteKurz: "K",
+    kurz: "Kurz", beschreibung: "Beschreibung", preisErwachsener: "25,00",
+    maxErwachsene: "6",
+    familieAktiv: "an", familieBasis: "30,00", familieWeitererSchueler: "6,00",
+    familieEnthaltenErwachsene: "2", familieEnthaltenSchueler: "1",
+    familieMaxSchueler: "4",
+  });
+  pruefe("Formular: Familienticket ohne Schülerpreis wird angenommen und ist aktiv",
+    !ohneSchueler.fehler && ohneSchueler.daten.familieAktiv === true &&
+    ohneSchueler.daten.schuelerAktiv === false &&
+    ohneSchueler.daten.preisSchuelerCents === null,
+    ohneSchueler.fehler ? ohneSchueler.fehler.map((f) => f.text).join(" · ") : "ok");
 }
 
 // ── Preis-Änderungsprotokoll: welche Einträge entstehen? ───────────

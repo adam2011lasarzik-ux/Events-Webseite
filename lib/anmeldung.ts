@@ -147,17 +147,37 @@ export function pruefeUndBaue(
   regeln: Preisregeln,
   eingabeRoh: AnmeldeEingabe,
 ): { fehler: Feldfehler[] } | { fehler: null; anmeldung: FertigeAnmeldung } {
-  // Bietet dieses Event gar keine Schüler-Preiskategorie an, bestimmt
-  // ausschließlich der Server den Weg — nicht das, was im POST steht.
-  // Ein manipulierter Aufruf mit weg=kind/familie oder
-  // selbstAls=student würde sonst über die Schüler-Preisstufe (bei
-  // so einem Event: kein Preis vorhanden) eine falsche oder kostenlose
-  // Buchung erzeugen. Ab hier wird ausschließlich diese korrigierte
-  // Fassung verwendet, nie mehr eingabeRoh direkt — "Der Server
-  // bestimmt die Struktur, nicht das Formular."
-  const eingabe: AnmeldeEingabe = regeln.schuelerAktiv
-    ? eingabeRoh
-    : { ...eingabeRoh, weg: "selbst", selbstAls: "adult" };
+  // Welche Wege dieses Event erlaubt, bestimmt der Server — nicht das,
+  // was im POST steht. Jeder Weg hängt an genau der Konfiguration, die
+  // ihn preislich trägt:
+  //   • "kind"       → nur mit Schüler-Einzelpreis (schuelerAktiv)
+  //   • "erwachsene" → nur, wenn mehrere Erwachsene erlaubt sind
+  //   • "familie"    → nur, wenn ein Familienpaket konfiguriert ist
+  //                    (eigene Preise, unabhängig vom Schüler-Einzelpreis)
+  //   • "selbst"     → immer; ohne Schülerpreis stets als Erwachsener
+  // Familienticket und Mehrfachbuchung sind damit vom Schülerpreis
+  // getrennt. Ein manipulierter Aufruf mit einem nicht erlaubten Weg
+  // würde sonst über eine fehlende Preisstufe eine falsche oder
+  // kostenlose Buchung erzeugen — ein unerlaubter Weg fällt deshalb auf
+  // "selbst" zurück. Ab hier wird ausschließlich diese korrigierte
+  // Fassung verwendet, nie mehr eingabeRoh direkt — "Der Server bestimmt
+  // die Struktur, nicht das Formular."
+  const mehrErwachseneErlaubt =
+    Math.min(regeln.maxErwachsene, MAX_PERSONEN_PRO_BUCHUNG) > 1;
+  const wegErlaubt =
+    eingabeRoh.weg === "kind"
+      ? regeln.schuelerAktiv
+      : eingabeRoh.weg === "erwachsene"
+        ? mehrErwachseneErlaubt
+        : eingabeRoh.weg === "familie"
+          ? Boolean(regeln.familie)
+          : true;
+  const weg: Anmeldeweg = wegErlaubt ? eingabeRoh.weg : "selbst";
+  // Ohne Schüler-Einzelpreis gibt es kein Schüler-Ticket: "selbst" ist
+  // dann immer erwachsen.
+  const selbstAls: "student" | "adult" =
+    weg === "selbst" && !regeln.schuelerAktiv ? "adult" : eingabeRoh.selbstAls ?? "adult";
+  const eingabe: AnmeldeEingabe = { ...eingabeRoh, weg, selbstAls };
 
   const fehler: Feldfehler[] = [];
 

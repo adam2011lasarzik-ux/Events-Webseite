@@ -216,11 +216,12 @@ export function pruefeEvent(
   }
 
   // ── Familienpaket ────────────────────────────────────────────
-  // Ein Familienpaket enthält immer Schüler — ohne Schüler-Kategorie
-  // ergäbe es keinen Sinn. Serverseitig erzwungen, unabhängig davon,
-  // was im Formular übermittelt wurde (ein manipulierter Aufruf soll
-  // kein inkonsistentes Event erzeugen können).
-  const familieAktiv = schuelerAktiv && roh.familieAktiv === "an";
+  // Das Familienpaket hat eigene Preise (Grundpreis + Preis je weiterem
+  // Kind) und ist deshalb unabhängig vom Schüler-Einzelpreis buchbar:
+  // ein Event ohne eigene Schüler-Preiskategorie darf trotzdem ein
+  // Familienticket anbieten. Die enthaltenen Kinder zählen als
+  // Teilnehmer vom Typ Schüler, brauchen aber keinen Schüler-Einzelpreis.
+  const familieAktiv = roh.familieAktiv === "an";
   let familieBasisCents: number | null = null;
   let familieEnthaltenErwachsene: number | null = null;
   let familieEnthaltenSchueler: number | null = null;

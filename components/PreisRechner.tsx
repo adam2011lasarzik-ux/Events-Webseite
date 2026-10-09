@@ -64,6 +64,18 @@ export function PreisRechner({
   // lib/anmeldung.ts → pruefeUndBaue() nochmal erzwungen.
   const schuelerAktiv = event.preise.schuelerAktiv;
 
+  // Welche Wege dieses Event anbietet. Familienpaket und „Mehrere
+  // Erwachsene" haben eigene Preise und sind deshalb unabhängig vom
+  // Schüler-Einzelpreis. „Mein Kind" (einzelne Schüler) braucht dagegen
+  // den Schülerpreis. Dieselbe Trennung erzwingt der Server in
+  // lib/anmeldung.ts → pruefeUndBaue().
+  const wegErwachsene = maxErwachsene > 1;
+  const wegFamilie = Boolean(familie);
+  // Die Wegewahl erscheint nur, wenn es mehr als einen Weg gibt — sonst
+  // bleibt die Anmeldung wie bei einem reinen Festpreis-Event bei einer
+  // Person.
+  const zeigeWege = schuelerAktiv || wegErwachsene || wegFamilie;
+
   const [fuerWen, setzeFuerWen] = useState<FuerWen>("selbst");
   const [selbstAls, setzeSelbstAls] = useState<SelbstAls>(schuelerAktiv ? "student" : "adult");
   const [kinder, setzeKinder] = useState(1);
@@ -168,11 +180,12 @@ export function PreisRechner({
           <input type="text" name="webseite" tabIndex={-1} autoComplete="off" />
         </label>
       </div>
-      {/* Ohne Schüler-Kategorie gibt es nur einen Weg ("Mich selbst") —
-          eine Auswahl mit einer einzigen Option wäre sinnlos, also
-          entfällt die ganze Wegewahl. fuerWen bleibt dadurch immer auf
-          seinem Startwert "selbst" stehen. */}
-      {schuelerAktiv && (
+      {/* Gibt es nur einen Weg ("Mich selbst"), wäre eine Auswahl mit
+          einer einzigen Option sinnlos — dann entfällt die ganze
+          Wegewahl und fuerWen bleibt auf seinem Startwert "selbst".
+          Familienpaket und "Mehrere Erwachsene" bringen auch ohne
+          Schülerpreis eigene Wege mit. */}
+      {zeigeWege && (
         <div className={stil.oben}>
           <fieldset className={stil.wahlRaster}>
             <legend className={stil.frage}>{t.anmeldung.frageWen}</legend>
@@ -188,27 +201,33 @@ export function PreisRechner({
               <span className={stil.wahlHinweis}>{t.anmeldung.wahlSelbstHinweis}</span>
             </label>
 
-            <label className={stil.wahlKarte}>
-              <input
-                type="radio"
-                name="wahlFuerWen"
-                checked={fuerWen === "kind"}
-                onChange={() => setzeFuerWen("kind")}
-              />
-              <span className={stil.wahlName}>{t.anmeldung.wahlKind}</span>
-              <span className={stil.wahlHinweis}>{t.anmeldung.wahlKindHinweis}</span>
-            </label>
+            {/* „Mein Kind" (einzelne Schüler) braucht den Schüler-
+                Einzelpreis — nur dann anbieten. */}
+            {schuelerAktiv && (
+              <label className={stil.wahlKarte}>
+                <input
+                  type="radio"
+                  name="wahlFuerWen"
+                  checked={fuerWen === "kind"}
+                  onChange={() => setzeFuerWen("kind")}
+                />
+                <span className={stil.wahlName}>{t.anmeldung.wahlKind}</span>
+                <span className={stil.wahlHinweis}>{t.anmeldung.wahlKindHinweis}</span>
+              </label>
+            )}
 
-            <label className={stil.wahlKarte}>
-              <input
-                type="radio"
-                name="wahlFuerWen"
-                checked={fuerWen === "erwachsene"}
-                onChange={() => setzeFuerWen("erwachsene")}
-              />
-              <span className={stil.wahlName}>{t.anmeldung.wahlErwachsene}</span>
-              <span className={stil.wahlHinweis}>{t.anmeldung.wahlErwachseneHinweis}</span>
-            </label>
+            {wegErwachsene && (
+              <label className={stil.wahlKarte}>
+                <input
+                  type="radio"
+                  name="wahlFuerWen"
+                  checked={fuerWen === "erwachsene"}
+                  onChange={() => setzeFuerWen("erwachsene")}
+                />
+                <span className={stil.wahlName}>{t.anmeldung.wahlErwachsene}</span>
+                <span className={stil.wahlHinweis}>{t.anmeldung.wahlErwachseneHinweis}</span>
+              </label>
+            )}
 
             {familie && (
               <label className={stil.wahlKarte}>
