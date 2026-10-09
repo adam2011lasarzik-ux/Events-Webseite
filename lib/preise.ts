@@ -64,10 +64,13 @@ export interface Preisergebnis {
 }
 
 /**
- * Harte Obergrenze: insgesamt höchstens sechs Personen je Buchung —
- * unabhängig von der Ticketart (Erwachsene, Schüler, Familie). Vorgabe
- * vom 08.10.2026. Serverseitig in begrenzeAuswahl() und in
- * lib/anmeldung.ts durchgesetzt; die Oberfläche begrenzt zusätzlich.
+ * Harte Obergrenze: höchstens sechs Personen je Buchung bei den
+ * Einzel-Wegen (Mich selbst, Mein Kind, Mehrere Erwachsene). Das
+ * Familienpaket ist hiervon AUSGENOMMEN und reicht bis zur am Event
+ * gesetzten Höchstzahl Kinder (siehe begrenzeAuswahl). Vorgabe vom
+ * 08.10.2026, Familien-Ausnahme vom 09.10.2026. Serverseitig in
+ * begrenzeAuswahl() und lib/anmeldung.ts durchgesetzt; die Oberfläche
+ * begrenzt zusätzlich.
  */
 export const MAX_PERSONEN_PRO_BUCHUNG = 6;
 
@@ -88,17 +91,13 @@ export function begrenzeAuswahl(regeln: Preisregeln, auswahl: Auswahl): Auswahl 
   if (auswahl.art === "family" && regeln.familie) {
     const f = regeln.familie;
     const erwachsene = f.enthalteneErwachsene;
-    // Kinder: mindestens vier (oder die enthaltene Zahl, falls höher)
-    // und nie so viele, dass Erwachsene und Kinder zusammen die harte
-    // Grenze von sechs Personen überschreiten; zusätzlich höchstens die
-    // am Event konfigurierte Obergrenze.
+    // Kinder im Familienpaket: mindestens vier (oder die enthaltene Zahl,
+    // falls höher) bis zur am Event gesetzten Höchstzahl Kinder. Das
+    // Familienpaket ist bewusst von der 6-Personen-Grenze je Buchung
+    // ausgenommen — eine Familie darf mehr als sechs Personen sein.
     const untergrenze = Math.max(f.enthalteneSchueler, MIN_FAMILIE_KINDER);
-    const obergrenze = Math.min(f.maxSchueler, MAX_PERSONEN_PRO_BUCHUNG - erwachsene);
-    // Bei einer widersprüchlichen Konfiguration (zu viele enthaltene
-    // Erwachsene) gewinnt die harte Sechser-Grenze: lieber weniger
-    // Kinder als mehr als sechs Personen.
-    const schueler =
-      obergrenze < untergrenze ? obergrenze : ganzZahl(auswahl.schueler, untergrenze, obergrenze);
+    const obergrenze = Math.max(untergrenze, f.maxSchueler);
+    const schueler = ganzZahl(auswahl.schueler, untergrenze, obergrenze);
     return { art: "family", erwachsene, schueler };
   }
   // Erwachsene: höchstens so viele, wie das Event erlaubt (Standard 6),

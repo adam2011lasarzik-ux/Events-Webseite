@@ -50,10 +50,9 @@ export function PreisRechner({
   // Familienpaket: mindestens 4 Kinder, und zusammen mit den
   // enthaltenen Erwachsenen nie mehr als 6 Personen.
   const minFamilie = Math.max(familie?.enthalteneSchueler ?? 1, MIN_FAMILIE_KINDER);
-  const maxFamilie = Math.min(
-    familie?.maxSchueler ?? MIN_FAMILIE_KINDER,
-    MAX_PERSONEN_PRO_BUCHUNG - familieErwachsene,
-  );
+  // Das Familienpaket ist von der 6-Personen-Grenze ausgenommen: die
+  // Kinderzahl reicht bis zur am Event gesetzten Höchstzahl Kinder.
+  const maxFamilie = Math.max(minFamilie, familie?.maxSchueler ?? MIN_FAMILIE_KINDER);
   // Höchstzahl Erwachsener je Buchung (Ticketart „Erwachsene"), aus dem
   // Event, aber nie mehr als die harte Grenze von 6. Der Server
   // erzwingt dasselbe in lib/preise.ts; hier begrenzt es den Zähler.
@@ -85,7 +84,7 @@ export function PreisRechner({
 
   const auswahl: Auswahl = useMemo(() => {
     if (fuerWen === "familie") {
-      return { art: "family", schueler: familienKinder, erwachsene: 2 };
+      return { art: "family", schueler: familienKinder, erwachsene: familieErwachsene };
     }
     if (fuerWen === "erwachsene") {
       return { art: "single", schueler: 0, erwachsene };

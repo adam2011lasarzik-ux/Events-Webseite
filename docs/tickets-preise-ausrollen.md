@@ -13,10 +13,13 @@ Stand: 08.10.2026. Entwickelt auf `claude/frontend-design-skill-folder-luremb`.
 3. **Harte Obergrenze: 6 Personen je Buchung** — über alle Ticketarten
    (Erwachsene, Schüler, Familie). Serverseitig erzwungen; eine
    manipulierte Über-Anfrage wird **abgelehnt**, nicht still gekappt.
-4. Familienpaket: **mindestens 4 Kinder** und zusammen mit den
-   enthaltenen Erwachsenen höchstens 6 Personen. Mit den üblichen 2
-   enthaltenen Erwachsenen sind das **genau 4 Kinder** (= 6 Personen).
-   Ein Familienpaket darf höchstens 2 enthaltene Erwachsene haben.
+4. Familienpaket: **mindestens 4 Kinder** bis zur im Admin gesetzten
+   **Höchstzahl Kinder**. Das Familienpaket ist **von der
+   6-Personen-Grenze ausgenommen** (Stand 09.10.2026) — eine Familie
+   darf mehr als 6 Personen sein; die Obergrenze ist allein die
+   Höchstzahl Kinder plus die enthaltenen Erwachsenen. Die
+   6-Personen-Grenze gilt weiter für die Einzel-Wege (Mich selbst,
+   Mein Kind, Mehrere Erwachsene).
 5. Preis-Änderungsprotokoll (Tabelle `PreisAenderung`) und Preis-Übersicht
    im Adminbereich (aktueller Preis, Ticketart, Event, zuletzt geändert).
 

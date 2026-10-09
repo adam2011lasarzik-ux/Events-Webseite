@@ -271,20 +271,10 @@ export function pruefeEvent(
       });
     }
 
-    // Harte Grenze: insgesamt höchstens sechs Personen je Buchung. Das
-    // Familienpaket braucht Platz für mindestens vier Kinder, also
-    // dürfen die enthaltenen Erwachsenen 6 − 4 = 2 nicht übersteigen.
-    // Sonst gäbe es eine Konfiguration, in der „mindestens 4 Kinder"
-    // und „höchstens 6 Personen" nicht beide erfüllbar sind.
-    if (
-      familieEnthaltenErwachsene !== null &&
-      familieEnthaltenErwachsene + 4 > 6
-    ) {
-      fehler.push({
-        feld: "familieEnthaltenErwachsene",
-        text: "Mit mindestens 4 Kindern und höchstens 6 Personen je Buchung dürfen es höchstens 2 enthaltene Erwachsene sein.",
-      });
-    }
+    // Das Familienpaket ist von der 6-Personen-Grenze ausgenommen, daher
+    // gibt es hier keine Obergrenze für die enthaltenen Erwachsenen mehr.
+    // Die Kinderzahl reicht beim Buchen von mindestens 4 bis zur oben
+    // gesetzten Höchstzahl Kinder.
   }
 
   // ── Plätze ───────────────────────────────────────────────────

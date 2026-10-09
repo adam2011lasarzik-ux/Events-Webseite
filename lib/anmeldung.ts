@@ -209,17 +209,18 @@ export function pruefeUndBaue(
   }
 
   if (eingabe.weg === "familie" && regeln.familie) {
+    // Das Familienpaket ist von der 6-Personen-Grenze ausgenommen: die
+    // Kinderzahl reicht von mindestens vier bis zur am Event gesetzten
+    // Höchstzahl Kinder. Mehr wird klar abgelehnt (Manipulationsschutz).
     if (!Number.isFinite(schuelerRoh) || schuelerRoh < MIN_FAMILIE_KINDER) {
       fehler.push({
         feld: "auswahl",
         text: `Im Familienpaket müssen mindestens ${MIN_FAMILIE_KINDER} Kinder angemeldet werden.`,
       });
-    }
-    const gesamtFamilie = regeln.familie.enthalteneErwachsene + Math.max(0, schuelerRoh);
-    if (gesamtFamilie > MAX_PERSONEN_PRO_BUCHUNG) {
+    } else if (schuelerRoh > regeln.familie.maxSchueler) {
       fehler.push({
         feld: "auswahl",
-        text: `Je Buchung sind insgesamt höchstens ${MAX_PERSONEN_PRO_BUCHUNG} Personen möglich.`,
+        text: `Im Familienpaket sind höchstens ${regeln.familie.maxSchueler} Kinder möglich.`,
       });
     }
   }
