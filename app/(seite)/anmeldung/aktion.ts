@@ -30,7 +30,7 @@
    --------------------------------------------------------------- */
 
 import { redirect } from "next/navigation";
-import { terminSteht } from "@/lib/termin";
+import { anmeldeStatus } from "@/lib/termin";
 import { geltendeFassungJetzt, fassungenZurBuchung } from "@/lib/rechtstexte";
 import { headers } from "next/headers";
 import { db } from "@/lib/db";
@@ -94,18 +94,29 @@ export async function anmeldungAbsenden(
     return { fehler: [], meldung: "Diese Veranstaltung gibt es nicht (mehr)." };
   }
 
-  /* ── Steht der Termin fest? ──────────────────────────────────
-     Ohne Datum und Uhrzeit darf nicht gebucht werden (Entscheidung
-     2.5). Die Prüfung steht hier und nicht nur im Formular: Eine
-     Serveraktion ist über HTTP direkt aufrufbar, und ein
+  /* ── Ist das Anmeldefenster offen? ───────────────────────────
+     Gebucht werden darf nur bei feststehendem Termin, innerhalb des
+     Anmeldezeitraums und solange die Veranstaltung nicht vorbei ist
+     (lib/termin.ts). Die Prüfung steht hier und nicht nur im Formular:
+     Eine Serveraktion ist über HTTP direkt aufrufbar, und ein
      ausgeblendeter Knopf hält niemanden auf. */
-  if (!terminSteht(event)) {
-    return {
-      fehler: [],
-      meldung:
+  const fenster = anmeldeStatus(event);
+  if (fenster !== "offen") {
+    const meldung = {
+      "kein-termin":
         "Für diese Veranstaltung steht noch kein Termin fest. " +
         "Eine Anmeldung ist erst möglich, wenn Datum und Uhrzeit feststehen.",
-    };
+      "noch-nicht-offen":
+        "Die Anmeldung für diese Veranstaltung ist noch nicht geöffnet. " +
+        "Bitte schau etwas später noch einmal vorbei.",
+      anmeldeschluss:
+        "Der Anmeldeschluss für diese Veranstaltung ist vorbei. " +
+        "Eine Anmeldung ist deshalb nicht mehr möglich.",
+      vorbei:
+        "Diese Veranstaltung ist bereits vorbei. " +
+        "Eine Anmeldung ist deshalb nicht mehr möglich.",
+    }[fenster];
+    return { fehler: [], meldung };
   }
 
   const regeln = {
@@ -232,6 +243,13 @@ export async function anmeldungAbsenden(
           meldung:
             "Für diese Veranstaltung steht kein Termin mehr fest. " +
             "Eine Anmeldung ist deshalb gerade nicht möglich.",
+        };
+      case "anmeldung-zu":
+        return {
+          fehler: [],
+          meldung:
+            "Die Anmeldung für diese Veranstaltung ist nicht mehr möglich — " +
+            "der Termin ist vorbei oder der Anmeldeschluss überschritten.",
         };
       case "keine-plaetze":
         return {

@@ -4,7 +4,6 @@ import { Abschnitt, AbschnittKopf } from "@/components/Abschnitt";
 import { ThemeRahmen } from "@/components/ThemeRahmen";
 import { PreisRechner } from "@/components/PreisRechner";
 import { findeEvent } from "@/lib/events";
-import { terminStehtAnzeige } from "@/lib/termin";
 import { texte } from "@/content";
 
 export const dynamic = "force-dynamic";
@@ -41,20 +40,39 @@ export default async function EventAnmeldung({
   const event = await findeEvent(slug);
   if (!event) notFound();
 
-  /* Ohne feststehenden Termin gibt es kein Formular (Entscheidung 2.5).
-     Die Seite bleibt erreichbar — ein 404 wäre für jemanden, der einem
-     alten Link folgt, verwirrender als eine Erklärung. Gebucht werden
-     kann hier nichts; die Serveraktion lehnt eine direkte Anfrage
-     ohnehin ab (lib/termin.ts). */
-  if (!terminStehtAnzeige(event)) {
+  /* Gebucht werden kann nur im offenen Anmeldefenster: kein Termin, zu
+     früh, Anmeldeschluss vorbei oder Veranstaltung vorbei → kein
+     Formular, sondern eine Erklärung. Die Seite bleibt erreichbar (ein
+     404 wäre für jemanden mit altem Link verwirrender). Die Serveraktion
+     lehnt eine direkte Anfrage ohnehin ab (lib/termin.ts). */
+  const status = event.anmeldeStatus;
+  if (status !== "offen") {
+    const meldung = {
+      "kein-termin": {
+        titel: texte.anmeldung.keinTerminTitel,
+        text: texte.anmeldung.keinTerminText,
+      },
+      "noch-nicht-offen": {
+        titel: texte.anmeldung.nochNichtTitel,
+        text: texte.anmeldung.nochNichtText,
+      },
+      anmeldeschluss: {
+        titel: texte.anmeldung.anmeldeschlussTitel,
+        text: texte.anmeldung.anmeldeschlussText,
+      },
+      vorbei: {
+        titel: texte.anmeldung.vorbeiTitel,
+        text: texte.anmeldung.vorbeiText,
+      },
+    }[status];
     return (
       <ThemeRahmen theme={event.theme}>
         <Abschnitt>
           <AbschnittKopf
             augenbraue={event.texte.titel}
-            titel={texte.anmeldung.keinTerminTitel}
+            titel={meldung.titel}
             haupt
-            einleitung={texte.anmeldung.keinTerminText}
+            einleitung={meldung.text}
           />
         </Abschnitt>
       </ThemeRahmen>

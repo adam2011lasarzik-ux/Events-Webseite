@@ -9,6 +9,7 @@ import { CtaBand } from "@/components/CtaBand";
 import { ThemeRahmen } from "@/components/ThemeRahmen";
 import { Knopf } from "@/components/Knopf";
 import { findeEvent } from "@/lib/events";
+import { anmeldungOffenAnzeige } from "@/lib/termin";
 import { texte } from "@/content";
 import { alsDatum, fuelle } from "@/lib/formate";
 import stil from "./event.module.css";
@@ -64,9 +65,15 @@ export default async function EventDetailSeite({
             <AbschnittKopf augenbraue={t.event.naechstesEvent} titel={text.titel} haupt />
             <p className={stil.untertitel}>{text.untertitel}</p>
             <div className={stil.knoepfe}>
-              <Knopf href={`/events/${event.slug}/anmeldung`} pfeil>
-                {t.aktion.anmelden}
-              </Knopf>
+              {/* Nur im offenen Anmeldefenster ein Anmeldeknopf. Ist das
+                  Event vorbei oder der Anmeldeschluss überschritten, wäre
+                  ein Knopf, der ins Leere führt, irreführend (vgl.
+                  anmeldungOffenAnzeige in lib/termin.ts). */}
+              {anmeldungOffenAnzeige(event) && (
+                <Knopf href={`/events/${event.slug}/anmeldung`} pfeil>
+                  {t.aktion.anmelden}
+                </Knopf>
+              )}
               <PlatzHinweis event={event} t={t} />
             </div>
           </div>

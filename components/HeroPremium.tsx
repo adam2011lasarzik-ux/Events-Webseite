@@ -1,4 +1,4 @@
-import { terminStehtAnzeige } from "@/lib/termin";
+import { anmeldungOffenAnzeige } from "@/lib/termin";
 import { HeroVideo } from "./HeroVideo";
 import { Knopf } from "./Knopf";
 import { PlatzHinweis } from "./PlatzHinweis";
@@ -93,7 +93,7 @@ export function HeroPremium({ t, event }: { t: Woerterbuch; event: VeraEvent }) 
 
           <div className={stil.knoepfe}>
             {/* Siehe Hero.tsx: kein Termin, kein Kaufknopf. */}
-            {terminStehtAnzeige(event) && (
+            {anmeldungOffenAnzeige(event) && (
               <Knopf href={`/events/${event.slug}/anmeldung`} pfeil>
                 {t.aktion.anmelden}
               </Knopf>

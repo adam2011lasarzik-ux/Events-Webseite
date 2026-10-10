@@ -16,6 +16,7 @@
 import { db } from "@/lib/db";
 import { belegtFilter } from "@/lib/plaetze";
 import type { Preisregeln } from "@/lib/preise";
+import { anmeldeStatus as ermittleAnmeldeStatus, type AnmeldeStatus } from "@/lib/termin";
 // Datum und Uhrzeit kommen aus lib/zeit.ts, damit sie in DEUTSCHER
 // Zeit erscheinen. Der Server läuft in UTC — ohne Umrechnung stünde
 // bei einem Event um 14:00 auf der Seite 12:00.
@@ -72,6 +73,9 @@ export interface VeraEvent {
   datum: string | null;
   zeitVon: string | null;
   zeitBis: string | null;
+  /** Ob (und warum nicht) jetzt gebucht werden kann — aus Termin und
+   *  Anmeldefenster. Serverseitig in lib/termin.ts erneut geprüft. */
+  anmeldeStatus: AnmeldeStatus;
   ort: EventOrt;
   /** Obergrenze in PERSONEN, nicht in Anmeldungen. null = unbegrenzt. */
   maxPersonen: number | null;
@@ -148,6 +152,7 @@ function alsAnzeigeEvent(e: DbEvent, belegt: number): VeraEvent {
     datum: alsIsoDatum(e.startAt),
     zeitVon: alsUhrzeit(e.startAt),
     zeitBis: alsUhrzeit(e.endAt),
+    anmeldeStatus: ermittleAnmeldeStatus(e),
     ort: {
       name: e.ortName,
       strasse: e.strasse,

@@ -1,4 +1,4 @@
-import { terminStehtAnzeige } from "@/lib/termin";
+import { anmeldungOffenAnzeige } from "@/lib/termin";
 import { CourtLinien } from "./CourtGrafik";
 import { Knopf } from "./Knopf";
 import type { VeraEvent } from "@/lib/events";
@@ -26,7 +26,7 @@ export function CtaBand({ t, event }: { t: Woerterbuch; event?: VeraEvent }) {
       <div className={stil.knoepfe}>
         {/* Siehe Hero.tsx: kein Termin, kein Kaufknopf. Ohne Event
             (allgemeines Band) bleibt der Knopf wie bisher. */}
-        {(!event || terminStehtAnzeige(event)) && (
+        {(!event || anmeldungOffenAnzeige(event)) && (
           <Knopf href={event ? `/events/${event.slug}/anmeldung` : "/anmeldung"} pfeil>
             {t.aktion.anmelden}
           </Knopf>

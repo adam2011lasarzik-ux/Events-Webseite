@@ -254,6 +254,18 @@ export const de = {
       "Für diese Veranstaltung stehen Datum und Uhrzeit noch nicht fest. " +
       "Eine Anmeldung ist erst möglich, sobald der Termin veröffentlicht ist — " +
       "schau einfach später noch einmal vorbei.",
+    vorbeiTitel: "Veranstaltung vorbei",
+    vorbeiText:
+      "Diese Veranstaltung ist bereits vorbei. Eine Anmeldung ist nicht mehr möglich. " +
+      "Aktuelle Termine findest du unter „Events“.",
+    anmeldeschlussTitel: "Anmeldeschluss erreicht",
+    anmeldeschlussText:
+      "Die Anmeldefrist für diese Veranstaltung ist abgelaufen. " +
+      "Schreib uns gern — vielleicht finden wir noch eine Lösung.",
+    nochNichtTitel: "Anmeldung noch nicht geöffnet",
+    nochNichtText:
+      "Die Anmeldung für diese Veranstaltung startet erst in Kürze. " +
+      "Schau bitte etwas später noch einmal vorbei.",
     einleitung:
       "Stell zusammen, wer mitkommt. Der Preis rechnet sich unten sofort mit — " +
       "so weißt du vorher genau, woran du bist.",
@@ -291,13 +303,6 @@ export const de = {
        Aussage behauptet, die der Wert nicht mehr macht. */
     preisHinweis: "Gesamtpreis",
     keineAuswahl: "Wähle oben aus, wer mitkommt.",
-
-    nochNichtTitel: "Die Anmeldung öffnet in Kürze",
-    nochNichtText:
-      "Datum und Uhrzeit stehen noch nicht fest. Deshalb kannst du dich hier zwar den Preis " +
-      "ansehen, aber noch nicht verbindlich anmelden — es wird nichts abgeschickt und nichts " +
-      "gespeichert. Schreib uns, wenn wir dir Bescheid geben sollen, sobald es losgeht.",
-    nochNichtAktion: "Schreib uns",
 
     /* Der Wortlaut ist vom Betreiber vorgegeben und stimmt mit der
        Einverständniserklärung (public/dokumente/) und dem AGB-Abschnitt

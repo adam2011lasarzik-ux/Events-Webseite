@@ -30,7 +30,7 @@
    mitgeschickter Betrag wird an keiner Stelle gelesen.
    --------------------------------------------------------------- */
 
-import { terminSteht } from "@/lib/termin";
+import { anmeldeStatus } from "@/lib/termin";
 import { db } from "@/lib/db";
 import { belegtFilter } from "@/lib/plaetze";
 import { plaetzeReichen } from "@/lib/zahlungRegeln";
@@ -40,6 +40,7 @@ import { sitzungErstellen, ZahlungNichtEingerichtet } from "@/lib/zahlung";
 
 export type StartFehler =
   | "kein-termin"
+  | "anmeldung-zu"
   | "keine-plaetze"
   | "doppelt"
   | "nicht-eingerichtet"
@@ -63,15 +64,26 @@ export async function bezahlseiteFuerNutzlast(
 ): Promise<StartErgebnis> {
   const event = await db.event.findUnique({
     where: { id: nutzlast.eventId },
-    select: { id: true, maxPersonen: true, startAt: true },
+    select: {
+      id: true,
+      maxPersonen: true,
+      startAt: true,
+      endAt: true,
+      anmeldungAb: true,
+      anmeldungBis: true,
+    },
   });
   if (!event) return { fehler: "kein-termin" };
 
-  /* Dieselbe Regel wie beim Absenden (Entscheidung 2.5). Sie wird
-     hier erneut geprüft, weil zwischen dem Aufbau des Formulars und
-     dem Absenden Zeit vergeht: Wird der Termin im Adminbereich
-     entfernt, darf für diese Veranstaltung kein Geld mehr fließen. */
-  if (!terminSteht(event)) return { fehler: "kein-termin" };
+  /* Dasselbe Anmeldefenster wie beim Absenden (lib/termin.ts). Es wird
+     hier erneut geprüft, weil zwischen dem Aufbau des Formulars und dem
+     Absenden Zeit vergeht: Ist der Termin inzwischen vorbei, der
+     Anmeldeschluss überschritten oder der Termin im Adminbereich
+     entfernt worden, darf für diese Veranstaltung kein Geld mehr
+     fließen. */
+  const fenster = anmeldeStatus(event);
+  if (fenster === "kein-termin") return { fehler: "kein-termin" };
+  if (fenster !== "offen") return { fehler: "anmeldung-zu" };
 
   /* Je Veranstaltung und Adresse genau eine Anmeldung. Verbindlich
      entschieden wird das erst beim Zahlungseingang — dort greift der

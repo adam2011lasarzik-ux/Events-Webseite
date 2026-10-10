@@ -162,6 +162,23 @@ pruefe("… und dabei ist KEINE Anmeldung entstanden",
     where: { kontaktEmail: "pruefung-termin-zahlung@example.org" },
   })) === 0);
 
+/* ── T9: Vergangene Veranstaltung ist gesperrt ──────────────────
+   Der gemeldete Fehler (10.10.2026): Für ein Event, das schon vorbei
+   war, ließen sich noch Tickets kaufen. Die Bezahlseite darf dafür
+   nicht mehr erzeugt werden. */
+console.log("\nT9 · Zahlungsstart für eine bereits vergangene Veranstaltung");
+await db.event.update({
+  where: { id: buchbarVoll.id },
+  data: { startAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), endAt: null },
+});
+const vergangen = await bezahlseiteFuerNutzlast(nutzlast, buchbarVoll.titel);
+pruefe("Vorbei: Zahlung abgelehnt mit Grund „anmeldung-zu“",
+  "fehler" in vergangen && vergangen.fehler === "anmeldung-zu", JSON.stringify(vergangen));
+pruefe("… und auch hier ist KEINE Anmeldung entstanden",
+  (await db.registration.count({
+    where: { kontaktEmail: "pruefung-termin-zahlung@example.org" },
+  })) === 0);
+
 /* ── Aufräumen ──────────────────────────────────────────────── */
 await db.registration.deleteMany({ where: { event: { slug: { in: testSlugs } } } });
 await db.event.deleteMany({ where: { slug: { in: testSlugs } } });
