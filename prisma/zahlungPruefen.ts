@@ -17,7 +17,7 @@
    sich zwei Schlüssel voneinander unterscheiden lassen.
    --------------------------------------------------------------- */
 
-import { istTestschluessel } from "../lib/zahlungRegeln";
+import { schluesselPruefen, istLiveschluessel, type SchluesselUrteil } from "../lib/zahlungRegeln";
 
 interface Befund {
   name: string;
@@ -43,6 +43,12 @@ function angedeutet(wert: string): string {
 const schluessel = (process.env.ZAHLUNG_GEHEIMSCHLUESSEL ?? "").trim();
 const geheimnis = (process.env.ZAHLUNG_WEBHOOK_GEHEIMNIS ?? "").trim();
 const adresse = (process.env.OEFFENTLICHE_ADRESSE ?? "").trim();
+const echtbetriebFreigegeben =
+  (process.env.ZAHLUNG_ECHTBETRIEB ?? "").trim().toLowerCase() === "ja-echtes-geld";
+
+/* Welchen Modus die hinterlegten Werte ergeben — für die Schlussmeldung
+   und die Warnhinweise weiter unten. */
+let urteil: SchluesselUrteil = { ok: false, grund: "fehlt" };
 
 /* ── 1. Der Zahlungsschlüssel ─────────────────────────────────── */
 
@@ -50,24 +56,48 @@ if (
   pruefe(
     "Ein Zahlungsschlüssel ist hinterlegt",
     schluessel !== "",
-    "ZAHLUNG_GEHEIMSCHLUESSEL setzen — im Stripe-Dashboard bei eingeschaltetem " +
-      "Testmodus unter „Entwickler → API-Schlüssel“ (siehe docs/stripe-einrichten.md).",
+    "ZAHLUNG_GEHEIMSCHLUESSEL setzen — im Stripe-Dashboard unter " +
+      "„Entwickler → API-Schlüssel“ (siehe docs/stripe-einrichten.md).",
   )
 ) {
-  /* Der Riegel. Ein echter Schlüssel wird von lib/zahlung.ts ohnehin
-     abgewiesen — hier wird es nur früher und deutlicher gesagt, damit
-     niemand erst am fehlgeschlagenen Bezahlvorgang merkt, dass der
-     falsche Wert hinterlegt ist. */
-  const echt = /^(sk|rk)_live_/.test(schluessel);
+  /* Derselbe Riegel wie in lib/zahlung.ts, nur früher und deutlicher:
+     niemand soll erst am fehlgeschlagenen Bezahlvorgang merken, dass der
+     falsche Wert hinterlegt ist oder der Echtbetrieb versehentlich (nicht)
+     freigegeben wurde. */
+  urteil = schluesselPruefen(schluessel, echtbetriebFreigegeben);
   pruefe(
-    "Es ist ein TESTschlüssel, kein echter",
-    istTestschluessel(schluessel),
-    echt
-      ? "ACHTUNG: Das ist ein Schlüssel für den Echtbetrieb. Die Seite weist ihn ab — " +
-          "das ist so gewollt. Bitte den Testschlüssel eintragen (beginnt mit sk_test_)."
-      : "Der Schlüssel beginnt weder mit sk_test_ noch mit rk_test_. Vermutlich ist " +
-          "etwas beim Kopieren verloren gegangen.",
+    "Der Zahlungsschlüssel ist gültig und zum Modus passend",
+    urteil.ok,
+    urteil.ok
+      ? ""
+      : {
+          fehlt: "",
+          ungueltig:
+            "Der Schlüssel beginnt weder mit sk_test_ noch mit sk_live_. Vermutlich ist " +
+            "beim Kopieren etwas verloren gegangen.",
+          "live-ohne-freigabe":
+            "ACHTUNG: Das ist ein Schlüssel für den ECHTBETRIEB, aber ZAHLUNG_ECHTBETRIEB " +
+            "ist nicht gesetzt. Die Seite weist ihn ab — das ist so gewollt. Zum " +
+            "Scharfschalten ZAHLUNG_ECHTBETRIEB=ja-echtes-geld setzen (erst, wenn wirklich " +
+            "echtes Geld fließen soll), sonst einen Testschlüssel (sk_test_) eintragen.",
+        }[urteil.grund],
   );
+
+  /* Ein freigegebener Echtbetrieb ist kein Fehler, aber er gehört laut
+     gesagt: Ab hier fließt echtes Geld. */
+  if (urteil.ok && urteil.modus === "live") {
+    console.log(
+      "      ⚠️  ECHTBETRIEB freigegeben — mit diesem Schlüssel fließt ECHTES GELD.\n",
+    );
+  }
+  /* Umgekehrt: Flag gesetzt, aber (noch) ein Testschlüssel. Harmlos,
+     aber verwirrend — darum ein Hinweis, kein Fehler. */
+  if (echtbetriebFreigegeben && !istLiveschluessel(schluessel)) {
+    console.log(
+      "      Hinweis: ZAHLUNG_ECHTBETRIEB ist gesetzt, aber es liegt ein Testschlüssel vor.\n" +
+        "      Es bleibt beim Testbetrieb, bis ein Live-Schlüssel (sk_live_) eingetragen wird.\n",
+    );
+  }
 }
 
 /* ── 1b. Der Schlüssel für die Anmeldedaten ───────────────────── */
@@ -197,7 +227,8 @@ if (oertlich) {
 }
 
 if (schwer === 0) {
-  console.log("\nAlles vollständig. Die Zahlung ist eingerichtet — im Testbetrieb.\n");
+  const modus = urteil.ok && urteil.modus === "live" ? "im ECHTBETRIEB" : "im Testbetrieb";
+  console.log(`\nAlles vollständig. Die Zahlung ist eingerichtet — ${modus}.\n`);
   process.exit(0);
 }
 

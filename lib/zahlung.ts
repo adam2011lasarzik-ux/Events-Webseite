@@ -10,13 +10,16 @@
       ausschließlich auf der gehosteten Seite des Anbieters. Es werden
       keine Kartennummern, Prüfziffern oder Bankdaten entgegengenommen,
       weitergeleitet, protokolliert oder gespeichert.
-   2. NUR TESTBETRIEB. Ein echter Schlüssel wird abgewiesen. Der
-      Echtbetrieb ist damit keine vergessene Einstellung, sondern eine
-      bewusste spätere Änderung.
+   2. Echte Zahlungen sind ZWEIFACH gesichert. Ein Live-Schlüssel
+      allein genügt nicht — er wird abgewiesen, solange nicht zusätzlich
+      ZAHLUNG_ECHTBETRIEB ausdrücklich gesetzt ist. Der Echtbetrieb ist
+      damit keine vergessene Einstellung, sondern eine bewusste, zweifache
+      Handlung. Ein Testschlüssel funktioniert immer; ein versehentlich
+      eingetragener Live-Schlüssel bewegt niemals für sich allein Geld.
    --------------------------------------------------------------- */
 
 import Stripe from "stripe";
-import { istTestschluessel, posten } from "./zahlungRegeln";
+import { schluesselPruefen, posten } from "./zahlungRegeln";
 
 /** Fehler, die der Aufrufer verständlich behandeln kann. */
 export class ZahlungNichtEingerichtet extends Error {
@@ -26,6 +29,18 @@ export class ZahlungNichtEingerichtet extends Error {
 }
 
 let zugang: Stripe | null = null;
+
+/**
+ * Ist der Echtbetrieb ausdrücklich freigegeben?
+ *
+ * Bewusst eine schwer versehentlich zu setzende Zeichenkette und nicht
+ * bloß „1" oder „true": Wer sie setzt, hat gelesen, was sie bedeutet —
+ * ab hier fließt echtes Geld. Nicht gesetzt (der Normalfall) heißt:
+ * Testbetrieb, ein Live-Schlüssel wird abgewiesen.
+ */
+function echtbetriebFreigegeben(): boolean {
+  return (process.env.ZAHLUNG_ECHTBETRIEB ?? "").trim().toLowerCase() === "ja-echtes-geld";
+}
 
 /**
  * Den Zugang erst beim ersten Gebrauch aufbauen.
@@ -38,15 +53,23 @@ export function stripe(): Stripe {
   if (zugang) return zugang;
 
   const schluessel = (process.env.ZAHLUNG_GEHEIMSCHLUESSEL ?? "").trim();
-  if (!schluessel) {
-    throw new ZahlungNichtEingerichtet("Es ist kein Zahlungsschlüssel hinterlegt.");
-  }
-  if (!istTestschluessel(schluessel)) {
-    // Der Riegel. Absichtlich hart: lieber gar keine Zahlung als
-    // versehentlich eine echte.
-    throw new ZahlungNichtEingerichtet(
-      "Es ist kein Testschlüssel hinterlegt. Echte Zahlungen sind bewusst gesperrt.",
-    );
+
+  // Der Riegel, zweistufig. Ein Testschlüssel ist immer erlaubt; ein
+  // Live-Schlüssel nur, wenn der Echtbetrieb ausdrücklich freigegeben
+  // ist. Absichtlich hart: lieber gar keine Zahlung als versehentlich
+  // eine echte.
+  const urteil = schluesselPruefen(schluessel, echtbetriebFreigegeben());
+  if (!urteil.ok) {
+    const grund = {
+      fehlt: "Es ist kein Zahlungsschlüssel hinterlegt.",
+      ungueltig:
+        "Der Zahlungsschlüssel ist kein gültiger Stripe-Schlüssel (erwartet sk_test_/sk_live_).",
+      "live-ohne-freigabe":
+        "Es ist ein Schlüssel für den Echtbetrieb hinterlegt, aber der Echtbetrieb ist nicht " +
+        "ausdrücklich freigegeben. Echte Zahlungen sind bewusst gesperrt. Zum Scharfschalten " +
+        "ZAHLUNG_ECHTBETRIEB=ja-echtes-geld setzen — erst, wenn wirklich echtes Geld fließen soll.",
+    }[urteil.grund];
+    throw new ZahlungNichtEingerichtet(grund);
   }
 
   zugang = new Stripe(schluessel, {
@@ -450,9 +473,10 @@ export interface Erstattungsergebnis {
  * genau dort, wo er hingehört (dieselbe Erstattung derselben Zahlung),
  * und eine echte zweite Erstattung wird nicht mehr blockiert.
  *
- * Der Testmodus-Riegel gilt hier wie überall: stripe() weist jeden
- * Schlüssel ab, der kein Testschlüssel ist. Eine echte Erstattung ist
- * damit vor der bewussten Freischaltung nicht möglich.
+ * Der Riegel gilt hier wie überall: stripe() weist einen Live-Schlüssel
+ * ab, solange der Echtbetrieb nicht ausdrücklich freigegeben ist. Eine
+ * echte Erstattung ist damit vor der bewussten Freischaltung nicht
+ * möglich.
  */
 export async function erstattungAusloesen(
   zahlungId: string,

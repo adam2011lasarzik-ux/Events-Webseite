@@ -14,7 +14,7 @@ import "../schutz.mjs";
 import Stripe from "stripe";
 import { absenden, personen, BASIS, ANMELDEPFAD } from "./senden.mjs";
 import { db } from "../../lib/db.js";
-import { istTestschluessel, betragPasst } from "../../lib/zahlungRegeln.js";
+import { istTestschluessel, schluesselPruefen, betragPasst } from "../../lib/zahlungRegeln.js";
 import * as zw from "../zahlweg.mjs";
 import { neueAbsenderAdresse } from "../zahlweg.mjs";
 
@@ -85,6 +85,25 @@ await db.fehlbuchung.deleteMany({});
 pruefe("Testschlüssel wird erkannt", istTestschluessel("sk_test_abc"));
 pruefe("Echter Schlüssel wird NICHT als Testschlüssel gewertet",
   !istTestschluessel("sk_live_abc") && !istTestschluessel("pk_test_abc"));
+
+/* Der zweistufige Riegel (schluesselPruefen) als reine Regel:
+   Testschlüssel immer ok; Live-Schlüssel NUR mit ausdrücklicher Freigabe. */
+pruefe("schluesselPruefen: leer → fehlt",
+  schluesselPruefen("", false).grund === "fehlt");
+pruefe("schluesselPruefen: Testschlüssel → test (ohne Freigabe)",
+  schluesselPruefen("sk_test_abc", false).ok === true &&
+  schluesselPruefen("sk_test_abc", false).modus === "test");
+pruefe("schluesselPruefen: Live-Schlüssel OHNE Freigabe → abgewiesen",
+  schluesselPruefen("sk_live_abc", false).ok === false &&
+  schluesselPruefen("sk_live_abc", false).grund === "live-ohne-freigabe");
+pruefe("schluesselPruefen: Live-Schlüssel MIT Freigabe → live",
+  schluesselPruefen("sk_live_abc", true).ok === true &&
+  schluesselPruefen("sk_live_abc", true).modus === "live");
+pruefe("schluesselPruefen: Unfug → ungueltig",
+  schluesselPruefen("pk_test_abc", true).ok === false &&
+  schluesselPruefen("pk_test_abc", true).grund === "ungueltig");
+pruefe("schluesselPruefen: Freigabe allein macht einen Testschlüssel nicht live",
+  schluesselPruefen("sk_test_abc", true).modus === "test");
 /* Die Prüfungen zu `darfZahlen` sind am 26.09.2026 entfallen — samt
    der Funktion. Sie entschied, ob für eine GESPEICHERTE Anmeldung
    bezahlt werden darf; beim Zahlungsstart gibt es keine mehr. Was
@@ -349,12 +368,35 @@ pruefe("… und es entsteht keine zweite Anmeldung",
 // ── 12. Der Riegel gegen echte Zahlungen ───────────────────────
 const { zugangVergessen, stripe: zugang } = await import("../../lib/zahlung.js");
 const gemerkt = process.env.ZAHLUNG_GEHEIMSCHLUESSEL;
+const gemerktEcht = process.env.ZAHLUNG_ECHTBETRIEB;
+
+// a) Live-Schlüssel OHNE Freigabe: bleibt gesperrt.
+delete process.env.ZAHLUNG_ECHTBETRIEB;
 process.env.ZAHLUNG_GEHEIMSCHLUESSEL = "sk_live_echtes_konto";
 zugangVergessen();
 let abgewiesen = false;
 try { zugang(); } catch { abgewiesen = true; }
-pruefe("Ein ECHTER Schlüssel wird abgewiesen — keine echte Zahlung möglich", abgewiesen);
-process.env.ZAHLUNG_GEHEIMSCHLUESSEL = gemerkt;
+pruefe("Ein ECHTER Schlüssel ohne Freigabe wird abgewiesen — keine echte Zahlung möglich", abgewiesen);
+
+// b) Falsche Freigabe zählt nicht — nur der genaue Wert schaltet scharf.
+process.env.ZAHLUNG_ECHTBETRIEB = "ja";
+zugangVergessen();
+let abgewiesen2 = false;
+try { zugang(); } catch { abgewiesen2 = true; }
+pruefe("Eine beiläufige Freigabe („ja“) schaltet NICHT scharf", abgewiesen2);
+
+// c) Live-Schlüssel MIT ausdrücklicher Freigabe: wird aufgebaut.
+process.env.ZAHLUNG_ECHTBETRIEB = "ja-echtes-geld";
+zugangVergessen();
+let aufgebaut = false;
+try { zugang(); aufgebaut = true; } catch { aufgebaut = false; }
+pruefe("Ein echter Schlüssel MIT ausdrücklicher Freigabe wird akzeptiert", aufgebaut);
+
+// Zustand sauber zurücksetzen — sonst bezahlt der Rest der Prüfung „live“.
+if (gemerkt === undefined) delete process.env.ZAHLUNG_GEHEIMSCHLUESSEL;
+else process.env.ZAHLUNG_GEHEIMSCHLUESSEL = gemerkt;
+if (gemerktEcht === undefined) delete process.env.ZAHLUNG_ECHTBETRIEB;
+else process.env.ZAHLUNG_ECHTBETRIEB = gemerktEcht;
 zugangVergessen();
 
 console.log(`\n${n - schief.length} von ${n} in Ordnung.`);

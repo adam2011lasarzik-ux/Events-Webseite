@@ -373,9 +373,10 @@ das Gewerbe angemeldet und das Geschäftskonto eröffnet ist:
 **Einstellungen → Bankkonten und Währungen** → Geschäftskonto
 hinterlegen.
 
-Erst danach lässt sich der Echtbetrieb freischalten. Dafür muss
-zusätzlich der Riegel in `lib/zahlung.ts` bewusst gelöst werden — das
-ist Absicht: Der Echtbetrieb soll eine Entscheidung sein, keine
+Erst danach lässt sich der Echtbetrieb freischalten. Wie genau, steht
+im nächsten Abschnitt — kurz: ein Live-Schlüssel allein genügt nicht,
+es braucht zusätzlich die ausdrückliche Freigabe `ZAHLUNG_ECHTBETRIEB`.
+Das ist Absicht: Der Echtbetrieb soll eine Entscheidung sein, keine
 vergessene Einstellung.
 
 **Vorher zu klären, und zwar fachkundig:** AGB, Widerrufsrecht und
@@ -384,11 +385,69 @@ steuerliche Behandlung der Einnahmen. Das ist keine Programmierfrage.
 
 ---
 
+## Vom Test- in den Echtbetrieb
+
+Der Riegel gegen echte Zahlungen ist **zweistufig** und wird **nicht im
+Code** gelöst, sondern über Umgebungsvariablen:
+
+1. ein **Live-Schlüssel** (`sk_live_…`) als `ZAHLUNG_GEHEIMSCHLUESSEL`, **und**
+2. die ausdrückliche Freigabe `ZAHLUNG_ECHTBETRIEB="ja-echtes-geld"`.
+
+Fehlt die Freigabe, weist die Seite den Live-Schlüssel ab — ein
+versehentlich eingetragener Live-Schlüssel bewegt also niemals für sich
+allein Geld.
+
+**Schritt für Schritt (erst, wenn der volle Ablauf im Testmodus klappt):**
+
+1. **Live-Schlüssel holen.** Im Stripe-Dashboard den Testmodus-Schalter
+   (oben rechts) **ausschalten** → **Entwickler → API-Schlüssel** →
+   „Geheimer Schlüssel" (`sk_live_…`).
+
+2. **Live-Webhook anlegen.** Weiterhin im Live-Modus:
+   **Entwickler → Webhooks → Endpunkt hinzufügen**.
+   - Adresse: `https://veraevents.de/zahlung/rueckmeldung`
+   - Ereignisse: dieselben wie im Test-Webhook (mindestens
+     `checkout.session.completed`).
+   - Nach dem Anlegen das **Signing secret** (`whsec_…`) kopieren —
+     **das ist ein anderes als im Testmodus.**
+
+3. **Auf dem Server eintragen** (in `/var/www/vera/.env`, Datei bleibt
+   auf Rechte `600`, niemals nach GitHub):
+   ```
+   ZAHLUNG_GEHEIMSCHLUESSEL="sk_live_…"
+   ZAHLUNG_WEBHOOK_GEHEIMNIS="whsec_…(aus dem LIVE-Webhook)"
+   ZAHLUNG_ECHTBETRIEB="ja-echtes-geld"
+   ```
+
+4. **Prüfen, ohne Netz:**
+   ```
+   cd /var/www/vera && npm run zahlung:pruefen
+   ```
+   Erwartet: „Alles vollständig. Die Zahlung ist eingerichtet — **im
+   ECHTBETRIEB**." und die Warnzeile „⚠️ ECHTBETRIEB freigegeben".
+
+5. **Dienst neu starten:** `sudo systemctl restart vera`
+
+6. **Einmal mit der eigenen Karte testen.** Solange der Passwortschutz
+   noch steht, kann das nur der Betreiber. Eine echte Buchung über ~1 €
+   durchführen, danach im Stripe-Dashboard **Zahlungen** und in der
+   Bestätigungsmail prüfen — und die Zahlung anschließend erstatten
+   (Dashboard → die Zahlung → **Erstatten**, oder über den Adminbereich).
+
+7. **Live-Webhook kontrollieren:** Dashboard → **Entwickler → Webhooks**
+   → der Live-Endpunkt → beim letzten Versuch muss „200" stehen.
+
+**Zurück in den Testbetrieb** (z. B. wenn doch noch etwas fehlt):
+`ZAHLUNG_ECHTBETRIEB` leeren **oder** wieder einen `sk_test_`-Schlüssel
+eintragen, Dienst neu starten. Kein Code-Eingriff nötig.
+
+---
+
 ## Wenn etwas nicht klappt
 
 | Was du siehst | Woran es meistens liegt |
 |---|---|
-| „Es ist kein Testschlüssel hinterlegt" | `sk_live_…` statt `sk_test_…` eingetragen |
+| „Echte Zahlungen sind bewusst gesperrt" | `sk_live_…` eingetragen, aber `ZAHLUNG_ECHTBETRIEB` fehlt (im Testbetrieb gewollt) |
 | Zahlung geht durch, Anmeldung bleibt offen | Webhook fehlt, falsche Adresse oder falsches `whsec_` |
 | „Ungültige Unterschrift" im Protokoll | `ZAHLUNG_WEBHOOK_GEHEIMNIS` gehört zu einem anderen Endpunkt |
 | Nach dem Bezahlen landet man auf einer falschen Seite | `OEFFENTLICHE_ADRESSE` stimmt nicht oder endet auf `/` |

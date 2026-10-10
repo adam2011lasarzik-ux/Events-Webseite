@@ -54,6 +54,49 @@ export function istTestschluessel(schluessel: string): boolean {
 }
 
 /**
+ * Ein Zahlungsschlüssel für den ECHTBETRIEB?
+ *
+ * Das Gegenstück zu istTestschluessel. Stripe kennzeichnet auch
+ * Live-Schlüssel eindeutig (sk_live_ / rk_live_).
+ */
+export function istLiveschluessel(schluessel: string): boolean {
+  return /^(sk|rk)_live_/.test(schluessel.trim());
+}
+
+/** Das Urteil über einen hinterlegten Zahlungsschlüssel. */
+export type SchluesselUrteil =
+  | { ok: true; modus: "test" | "live" }
+  | { ok: false; grund: "fehlt" | "ungueltig" | "live-ohne-freigabe" };
+
+/**
+ * Darf mit diesem Schlüssel bezahlt werden — und in welchem Modus?
+ *
+ * Reine Regel, ohne Netz und ohne Zugriff auf process.env: OB der
+ * Echtbetrieb freigegeben ist, entscheidet der Aufrufer und reicht es
+ * als `echtbetriebFreigegeben` herein. So bleibt diese Datei prüfbar.
+ *
+ * Der Riegel ist bewusst ZWEISTUFIG: Ein Live-Schlüssel allein genügt
+ * NICHT. Echte Zahlungen brauchen zusätzlich eine ausdrückliche Freigabe
+ * (Umgebungsvariable ZAHLUNG_ECHTBETRIEB). So kann ein versehentlich
+ * eingetragener Live-Schlüssel niemals für sich allein echtes Geld
+ * bewegen — der Echtbetrieb bleibt eine bewusste, zweifache Handlung.
+ */
+export function schluesselPruefen(
+  schluessel: string,
+  echtbetriebFreigegeben: boolean,
+): SchluesselUrteil {
+  const s = schluessel.trim();
+  if (s === "") return { ok: false, grund: "fehlt" };
+  if (istTestschluessel(s)) return { ok: true, modus: "test" };
+  if (istLiveschluessel(s)) {
+    return echtbetriebFreigegeben
+      ? { ok: true, modus: "live" }
+      : { ok: false, grund: "live-ohne-freigabe" };
+  }
+  return { ok: false, grund: "ungueltig" };
+}
+
+/**
  * Aus einem Cent-Betrag die Beschriftung auf der Bezahlseite bauen.
  *
  * Ein einziger Posten statt einer Liste: Der verbindliche Betrag ist
